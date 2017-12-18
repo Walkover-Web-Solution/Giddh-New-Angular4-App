@@ -4,6 +4,7 @@ import { AppState } from 'app/store';
 import * as moment from 'moment/moment';
 import { TransactionsRequest } from 'app/models/api-models/Ledger';
 import { ModalDirective } from 'ngx-bootstrap';
+import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 
 @Component({
   selector: 'daybook',
@@ -12,7 +13,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 export class DaybookComponent {
   // public trxRequest: TransactionsRequest;
   public dateRange: string;
-public companyName:string;
+  public companyName: string;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   public datePickerOptions: any = {
     locale: {
@@ -49,17 +50,18 @@ public companyName:string;
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private _daybookActions: DaybookActions ) {
     // this.trxRequest = new TransactionsRequest();
-    let companyUniqueName, company;
+    let companyUniqueName;
+    let company;
     store.select(p => p.session.companyUniqueName)
       .subscribe(p => companyUniqueName = p);
 
     store.select(p => p.session.companies)
       .subscribe(p => {
-        company = p.find(q => q.uniqueName === companyUniqueName)
+        company = p.find(q => q.uniqueName === companyUniqueName);
       });
-      this.companyName=company.name;
+    this.companyName = company.name;
   }
   public selectedDate(value: any) {
     this.dateRange = `${moment(value.picker.startDate).format('DD-MM-YYYY')} - ${moment(value.picker.endDate).format('DD-MM-YYYY')}`;
@@ -72,7 +74,12 @@ public companyName:string;
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
   }
-  public closeAdvanceSearchPopup() {
-    this.advanceSearchModel.hide();
+  public closeAdvanceSearchPopup(obj) {
+    if (!obj.cancle) {
+      this.datePickerOptions.startDate = obj.fromDate;
+      this.datePickerOptions.endDate = obj.toDate;
+      this.store.dispatch(this._daybookActions.GetDaybook(obj.dataToSend, obj.fromDate, obj.toDate));
+      this.advanceSearchModel.hide();
+    }
   }
 }
