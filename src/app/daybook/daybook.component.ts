@@ -11,7 +11,7 @@ import { DaybookActions } from 'app/actions/daybook/daybook.actions';
   templateUrl: './daybook.component.html'
 })
 export class DaybookComponent {
-  // public trxRequest: TransactionsRequest;
+  public trxRequest: TransactionsRequest;
   public dateRange: string;
   public companyName: string;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
@@ -50,7 +50,7 @@ export class DaybookComponent {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  constructor(private store: Store<AppState>, private _daybookActions: DaybookActions ) {
+  constructor(private store: Store<AppState>, private _daybookActions: DaybookActions) {
     // this.trxRequest = new TransactionsRequest();
     let companyUniqueName;
     let company;
@@ -81,5 +81,10 @@ export class DaybookComponent {
       this.store.dispatch(this._daybookActions.GetDaybook(obj.dataToSend, obj.fromDate, obj.toDate));
       this.advanceSearchModel.hide();
     }
+  }
+  public go(obj) {
+    this.datePickerOptions.startDate = obj.fromDate;
+    this.datePickerOptions.endDate = obj.toDate;
+    this.store.dispatch(this._daybookActions.GetDaybook(obj.dataToSend, obj.fromDate, obj.toDate));
   }
 }
