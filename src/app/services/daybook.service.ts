@@ -9,10 +9,10 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
-import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
-import { DayBookResponseModel } from 'app/models/api-models/Daybook';
-import { DAYBOOK_SEARCH_API } from 'app/services/apiurls/daybook.api';
+import { ServiceConfig, IServiceConfigArgs } from '../services/service.config';
+import { DayBookRequestModel, DaybookQueryRequest } from '../models/api-models/DaybookRequest';
+import { DayBookResponseModel } from '../models/api-models/Daybook';
+import { DAYBOOK_SEARCH_API } from './apiurls/daybook.api';
 
 @Injectable()
 export class DaybookService {
@@ -22,16 +22,19 @@ export class DaybookService {
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
     private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
-  public GetDaybook(request: DayBookRequestModel, fromdate: string, todate: string): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
+  public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':fromDate', encodeURIComponent(fromdate))
-      .replace(':toDate', encodeURIComponent(todate)), request)
+      .replace(':page', queryRequest.page.toString())
+      .replace(':count', queryRequest.count.toString())
+      .replace(':from', encodeURIComponent(queryRequest.from))
+      .replace(':to', encodeURIComponent(queryRequest.to)), request)
       .map((res) => {
         let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res.json();
         data.request = request;
+        data.queryString = queryRequest;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request));

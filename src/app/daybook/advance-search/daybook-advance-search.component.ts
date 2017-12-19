@@ -2,7 +2,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
@@ -14,6 +14,7 @@ import { AppState } from 'app/store';
 import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 import { AccountService } from 'app/services/account.service';
 import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
@@ -28,9 +29,12 @@ const COMPARISON_FILTER = [
   templateUrl: './daybook-advance-search.component.html'
 })
 
-export class DaybookAdvanceSearchModelComponent implements OnInit {
+export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
 
+  @Input() public startDate: any;
+  @Input() public endDate: any;
   @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
+  @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent }) public dateRangePickerDir: DaterangePickerComponent;
 
   public advanceSearchObject: DayBookRequestModel = null;
   public advanceSearchForm: FormGroup;
@@ -42,6 +46,42 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
   public voucherTypeList: Observable<IOption[]>;
   public stockListDropDown$: Observable<IOption[]>;
   public comparisonFilterDropDown$: Observable<IOption[]>;
+
+  public datePickerOptions: any = {
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'Last 1 Day': [
+        moment().subtract(1, 'days'),
+        moment()
+      ],
+      'Last 7 Days': [
+        moment().subtract(6, 'days'),
+        moment()
+      ],
+      'Last 30 Days': [
+        moment().subtract(29, 'days'),
+        moment()
+      ],
+      'Last 6 Months': [
+        moment().subtract(6, 'months'),
+        moment()
+      ],
+      'Last 1 Year': [
+        moment().subtract(12, 'months'),
+        moment()
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
 
   private moment = moment;
   private fromDate: string = '';
@@ -129,6 +169,16 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
     });
   }
 
+  public ngOnChanges(changes: SimpleChanges) {
+    if (('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) &&
+      ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue)) {
+      this.datePickerOptions.startDate = changes.startDate.currentValue;
+      this.datePickerOptions.endDate = changes.endDate.currentValue;
+      this.fromDate = changes.startDate.currentValue;
+      this.endDate = changes.endDate.currentValue;
+    }
+  }
+
   public setVoucherTypes() {
     this.voucherTypeList = Observable.of([{
       label: 'Sales',
@@ -158,6 +208,11 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
   }
 
   public onCancel() {
+    this.datePickerOptions.startDate = this.startDate;
+    this.datePickerOptions.endDate = this.endDate;
+    this.fromDate = this.startDate;
+    this.endDate = this.endDate;
+    this.dateRangePickerDir.render();
     this.closeModelEvent.emit({
       cancle: true
     });
@@ -166,9 +221,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
   /**
    * onDateRangeSelected
    */
-  public onDateRangeSelected(data) {
-    this.fromDate = moment(data[0]).format('DD-MM-YYYY');
-    this.toDate = moment(data[1]).format('DD-MM-YYYY');
+  public onDateRangeSelected(value) {
+    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
   }
 
   /**
