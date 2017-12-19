@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
-import { CustomActions } from 'app/store/customActions';
-import { ToasterService } from 'app/services/toaster.service';
-import { BaseResponse } from 'app/models/api-models/BaseResponse';
-import { DaybookService } from 'app/services/daybook.service';
-import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
-import { DayBookResponseModel } from 'app/models/api-models/Daybook';
+import { CustomActions } from '../../store/customActions';
+import { ToasterService } from '../../services/toaster.service';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { DaybookService } from '../../services/daybook.service';
+import { DayBookRequestModel, DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
+import { DayBookResponseModel } from '../../models/api-models/Daybook';
 
 @Injectable()
 export class DaybookActions {
@@ -18,8 +18,7 @@ export class DaybookActions {
   @Effect() private GetDaybook$: Observable<Action> = this.action$
     .ofType(DaybookActions.GET_DAYBOOK_REQUEST)
     .switchMap((action: CustomActions) => {
-      debugger;
-      return this._daybookService.GetDaybook(action.payload, action.payload.fromDate, action.payload.toDate)
+      return this._daybookService.GetDaybook(action.payload.request, action.payload.queryRequest)
         .map((r) => this.validateResponse<DayBookResponseModel, DayBookRequestModel>(r, {
           type: DaybookActions.GET_DAYBOOK_RESPONSE,
           payload: r.body
@@ -34,10 +33,10 @@ export class DaybookActions {
     private _daybookService: DaybookService) {
   }
 
-  public GetDaybook(request: DayBookRequestModel, fromDate: string, toDate: string): CustomActions {
+  public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: DaybookActions.GET_DAYBOOK_REQUEST,
-      payload: { request, fromDate, toDate }
+      payload: { request, queryRequest }
     };
   }
 
