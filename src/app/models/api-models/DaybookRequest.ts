@@ -2,11 +2,8 @@ export class DaybookQueryRequest {
   public q: string = '';
   public page: number = 0;
   public count: number = 20;
-  public accountUniqueName: string = '';
   public from: string = '';
   public to: string = '';
-  public sort: string = 'asc';
-  public reversePage: boolean = false;
 }
 export interface DayBookRequestModel {
   amountLessThan: boolean;

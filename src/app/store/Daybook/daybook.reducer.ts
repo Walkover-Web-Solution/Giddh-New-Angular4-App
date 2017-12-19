@@ -4,7 +4,7 @@ import { DayBookResponseModel } from 'app/models/api-models/Daybook';
 import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 import { DayBookRequestModel, Inventory } from 'app/models/api-models/DaybookRequest';
 
-interface Daybook {
+export interface Daybook {
   data?: DayBookResponseModel;
   showLoader: boolean;
   noData: boolean;

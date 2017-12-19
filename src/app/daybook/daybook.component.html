@@ -12,7 +12,7 @@
       <div class="col-xs-2">
         <div class="row">
           <label>Period</label>
-          <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
+          <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
             (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
         </div>
       </div>
@@ -21,7 +21,7 @@
           <button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>
         </div>
       </div>
-      <button type="button" class="btn btn-success" (click)="go($event)">GO</button>
+      <button type="button" class="btn btn-success" (click)="go()">GO</button>
     </div>
   </div>
 </div>
@@ -38,7 +38,7 @@
   </div>
   <div class="text-center">
     <label>
-      <h4>{{dateRange}}</h4>
+      <h4>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</h4>
     </label>
   </div>
   <div class="table-responsive">
@@ -47,20 +47,20 @@
         <tr>
           <th>Date</th>
           <th>Particulars</th>
-          <th>Account</th>
+          <th>Vch. Name</th>
           <th>Vch. No.</th>
           <th>Debit Amt</th>
           <th>Credit Amt</th>
         </tr>
       </thead>
       <tbody class="ng-star-inserted">
-        <tr>
-          <td>02/06/2017</td>
-          <td>Bank Charges</td>
-          <td>Payment</td>
-          <td>3</td>
-          <td>1500.00</td>
-          <td>1000.00</td>
+        <tr *ngFor="let entry of (daybookData$ | async)?.entries">
+          <td>{{ entry.entryDate }}</td>
+          <td>{{ entry.particular.name }}</td>
+          <td>{{ entry.voucherName }}</td>
+          <td>{{ entry.voucherNo }}</td>
+          <td>{{ entry.debitAmount }}</td>
+          <td>{{ entry.creditAmount }}</td>
         </tr>
       </tbody>
     </table>
@@ -70,7 +70,8 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <daybook-advance-search-model (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
+      (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
     </div>
   </div>
 </div>
