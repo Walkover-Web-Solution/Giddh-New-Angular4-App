@@ -76,7 +76,7 @@ export class JournalComponent implements OnInit, OnDestroy {
   }
 
   public setAccount(acc: IOption) {
-    console.log('the selected acc is :', acc);
+    // console.log('the selected acc is :', acc);
     this.showLedgerAccountList = false;
     if (this.selectedInput === 'by') {
       this.journalRequestObject.by = acc.label;
@@ -101,7 +101,6 @@ export class JournalComponent implements OnInit, OnDestroy {
 
   public detectEnterKey(ev: KeyboardEvent, inputAmount: number, selectedAccount: string) {
     let target: any = _.cloneDeep(ev.target);
-    console.log('enter key is :', ev);
     if (ev.keyCode === 13) {
       if (this.selectedInput === 'by') {
         this.journalRequestObject.transactions.push({

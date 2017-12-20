@@ -43,7 +43,7 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="dmLi trialB">
+                                        <li class="dmLi trialB" *ngIf="userIsCompanyUser">
                                             <a [routerLink]="['/pages/accounting']">
                                                 <div class="media">
                                                     <div class="media-body">
