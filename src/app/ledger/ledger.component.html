@@ -112,7 +112,7 @@
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row" (click)="selectBankTxn(txn)" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                                                             <td class="col-xs-2">
-                                                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                                <input class="form-control" type="text"  [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                                             </td>
                                                             <td class="col-xs-7 select2-parent select2-ledger">
                                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [isFilterEnabled]="true"
@@ -165,7 +165,7 @@
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
                                                             <td class="col-xs-2">
-                                                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                                <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                                             </td>
                                                             <td class="col-xs-7 select2-parent select2-ledger">
                                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [isFilterEnabled]="true"
@@ -313,7 +313,7 @@
                                         <tr class="ledger-row compoundEntry">
 
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
-                                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
@@ -426,7 +426,7 @@
                                         <tr class="ledger-row compoundEntry">
 
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
-                                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
