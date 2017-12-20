@@ -97,14 +97,14 @@
 </div>
 
 <!-- pagination -->
-<div>
-  <div id="pagination">
-    <pagination [totalItems]="(daybookData$ | async)?.totalPages * (daybookData$ | async)?.count"
-                [itemsPerPage]="(daybookData$ | async)?.count"
-                [maxSize]="5" class="pagination-sm" [(ngModel)]="daybookQueryRequest.page"
-                (pageChanged)="pageChanged($event)"
-                [boundaryLinks]="true">
-    </pagination>
+<div style="text-align: center;">
+  <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
+    <!--<pagination [totalItems]="(daybookData$ | async)?.totalPages * (daybookData$ | async)?.count"-->
+                <!--[itemsPerPage]="(daybookData$ | async)?.count"-->
+                <!--[maxSize]="5" class="pagination-sm" [(ngModel)]="daybookQueryRequest.page"-->
+                <!--(pageChanged)="pageChanged($event)"-->
+                <!--[boundaryLinks]="true">-->
+    <!--</pagination>-->
   </div>
 </div>
 <!-- pagination -->

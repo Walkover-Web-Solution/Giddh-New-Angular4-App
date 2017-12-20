@@ -1,8 +1,7 @@
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Subscription } from 'rxjs/Rx';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
@@ -172,10 +171,10 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     if (('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) &&
       ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue)) {
-      this.datePickerOptions.startDate = changes.startDate.currentValue;
-      this.datePickerOptions.endDate = changes.endDate.currentValue;
+      this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
+      this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
       this.fromDate = changes.startDate.currentValue;
-      this.endDate = changes.endDate.currentValue;
+      this.toDate = changes.endDate.currentValue;
     }
   }
 
@@ -211,7 +210,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
     this.datePickerOptions.startDate = this.startDate;
     this.datePickerOptions.endDate = this.endDate;
     this.fromDate = this.startDate;
-    this.endDate = this.endDate;
+    this.toDate = this.endDate;
     this.dateRangePickerDir.render();
     this.closeModelEvent.emit({
       cancle: true
@@ -267,9 +266,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
         break;
       case 'inventory':
         this.advanceSearchForm.get('inventory.inventories').patchValue(values);
-        break;
-      case 'groupUniqueNames':
-        this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
         break;
       case 'groupUniqueNames':
         this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
