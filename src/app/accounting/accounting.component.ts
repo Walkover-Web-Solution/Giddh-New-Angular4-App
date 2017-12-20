@@ -1,3 +1,4 @@
+import { KeyboardService } from 'app/accounting/keyboard.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
@@ -10,16 +11,16 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 })
 
 export class AccountingComponent implements OnInit {
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _router: Router) {
+  constructor(private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private _router: Router,
+    private _keyboardService: KeyboardService) {
     //
   }
 
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key === 'F1') {
-      this._router.navigate(['/pages', 'accounting', 'purchase']);
-    }
-    console.log('the event is :', event);
+    this._keyboardService.setKey(event);
   }
   public ngOnInit(): void {
     let companyUniqueName = null;
