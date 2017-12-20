@@ -8,15 +8,16 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { DaybookAdvanceSearchModelComponent } from 'app/daybook/advance-search/daybook-advance-search.component';
 import { ShSelectModule } from 'app/theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule, PaginationModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [DaybookComponent, DaybookAdvanceSearchModelComponent],
   providers: [],
   imports: [CommonModule,
     ReactiveFormsModule, DecimalDigitsModule,
-    FormsModule,ModalModule,
+    FormsModule, ModalModule,
     BsDatepickerModule,
+    PaginationModule,
     DatepickerModule,
     Daterangepicker,
     DaybookRoutingModule,

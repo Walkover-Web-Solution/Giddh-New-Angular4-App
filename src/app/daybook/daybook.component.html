@@ -64,14 +64,27 @@
         </tr>
       </tbody>
     </table>
+
+  </div>
+
+</div>
+
+<!-- pagination -->
+<div>
+  <div id="pagination">
+    <pagination [totalItems]="(daybookData$ | async)?.totalPages * (daybookData$ | async)?.count" [itemsPerPage]="(daybookData$ | async)?.count"
+                [maxSize]="5" class="pagination-sm" [(ngModel)]="daybookQueryRequest.page" (pageChanged)="pageChanged($event)"
+                [boundaryLinks]="true">
+    </pagination>
   </div>
 </div>
+<!-- pagination -->
+
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
-      (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
     </div>
   </div>
 </div>
