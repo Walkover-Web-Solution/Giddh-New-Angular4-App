@@ -37,7 +37,7 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
