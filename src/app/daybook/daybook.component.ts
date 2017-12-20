@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import * as moment from 'moment/moment';
@@ -9,13 +9,16 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'daybook',
   templateUrl: './daybook.component.html'
 })
-export class DaybookComponent implements OnDestroy {
+export class DaybookComponent implements OnInit, OnDestroy {
   public companyName: string;
+  public isAllExpanded: boolean = false;
   public daybookQueryRequest: DaybookQueryRequest;
   public daybookData$: Observable<DayBookResponseModel>;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
@@ -57,7 +60,7 @@ export class DaybookComponent implements OnDestroy {
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _daybookActions: DaybookActions) {
+  constructor(private store: Store<AppState>, private _daybookActions: DaybookActions, private _companyActions: CompanyActions) {
     this.daybookQueryRequest = new DaybookQueryRequest();
     this.store.select(s => s.daybook.data).takeUntil(this.destroyed$).subscribe((data) => {
       if (data && data.entries.length) {
@@ -80,6 +83,16 @@ export class DaybookComponent implements OnDestroy {
     this.companyName = company.name;
 
     this.initialRequest();
+  }
+
+  public ngOnInit() {
+    // set state details
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'daybook/';
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
   }
 
   public selectedDate(value: any) {
@@ -110,6 +123,14 @@ export class DaybookComponent implements OnDestroy {
 
   public go() {
     this.store.dispatch(this._daybookActions.GetDaybook(null, this.daybookQueryRequest));
+  }
+
+  public toggleExpand() {
+    this.isAllExpanded = !this.isAllExpanded;
+    this.daybookData$ = this.daybookData$.map(sc => {
+      sc.entries.map(e => e.isExpanded = this.isAllExpanded);
+      return sc;
+    });
   }
 
   public initialRequest() {

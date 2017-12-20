@@ -12,8 +12,9 @@
       <div class="col-xs-2">
         <div class="row">
           <label>Period</label>
-          <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+          <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                 (hideDaterangepicker)="selectedDate($event)"
+                 (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker"/>
         </div>
       </div>
       <div class="col-xs-2">
@@ -22,6 +23,7 @@
         </div>
       </div>
       <button type="button" class="btn btn-success" (click)="go()">GO</button>
+      <button type="button" class="btn btn-success" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' : 'Expand All'}}</button>
     </div>
   </div>
 </div>
@@ -41,30 +43,55 @@
       <h4>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</h4>
     </label>
   </div>
-  <div class="table-responsive">
-    <table class="table table-bordered basic mrB">
+
+  <div class="table-container clearfix trial-balance">
+
+    <table class="tb-head table basic">
       <thead>
-        <tr>
-          <th>Date</th>
-          <th>Particulars</th>
-          <th>Vch. Name</th>
-          <th>Vch. No.</th>
-          <th>Debit Amt</th>
-          <th>Credit Amt</th>
-        </tr>
+      <tr>
+        <th class="col-xs-1">Date</th>
+        <th class="col-xs-3">Particular</th>
+        <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. Name</th>
+        <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
+        <th class="col-xs-2 text-right">Debit Amt</th>
+        <th class="col-xs-2 text-right">Credit Amt</th>
+
+      </tr>
       </thead>
-      <tbody class="ng-star-inserted">
-        <tr *ngFor="let entry of (daybookData$ | async)?.entries">
-          <td>{{ entry.entryDate }}</td>
-          <td>{{ entry.particular.name }}</td>
-          <td>{{ entry.voucherName }}</td>
-          <td>{{ entry.voucherNo }}</td>
-          <td>{{ entry.debitAmount }}</td>
-          <td>{{ entry.creditAmount }}</td>
-        </tr>
-      </tbody>
     </table>
 
+    <div>
+      <!-- loop over entries -->
+      <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries"
+               (click)="entry.isExpanded = !entry.isExpanded">
+        <div class="row row-2">
+          <div class="col-xs-1 group">{{ entry.entryDate }}</div>
+          <div class="col-xs-3 group">{{ entry.particular.name }}
+          </div>
+          <div class="col-xs-2 group text-right">{{ entry.voucherName }}
+          </div>
+          <div class="col-xs-2 group text-right">{{ entry.voucherNo }}</div>
+          <div class="col-xs-2 group text-right">{{ entry.debitAmount }}</div>
+          <div class="col-xs-2 group text-right">{{ entry.creditAmount }}
+          </div>
+        </div>
+
+        <!--entry details container-->
+        <ng-container *ngIf="entry.isExpanded">
+          <section class="row row-1 account" *ngFor="let details of entry.otherTransactions">
+            <div class="row row-2">
+              <div class="col-xs-6 group" style="padding-left: 20px;">{{ details.particular.name }}
+              </div>
+              <div class="col-xs-3 group">{{ details.type }}</div>
+              <div class="col-xs-3 group text-right">{{ details.amount }}
+              </div>
+            </div>
+          </section>
+        </ng-container>
+        <!--entry details container-->
+      </section>
+      <!-- loop over entries -->
+    </div>
   </div>
 
 </div>
@@ -72,8 +99,10 @@
 <!-- pagination -->
 <div>
   <div id="pagination">
-    <pagination [totalItems]="(daybookData$ | async)?.totalPages * (daybookData$ | async)?.count" [itemsPerPage]="(daybookData$ | async)?.count"
-                [maxSize]="5" class="pagination-sm" [(ngModel)]="daybookQueryRequest.page" (pageChanged)="pageChanged($event)"
+    <pagination [totalItems]="(daybookData$ | async)?.totalPages * (daybookData$ | async)?.count"
+                [itemsPerPage]="(daybookData$ | async)?.count"
+                [maxSize]="5" class="pagination-sm" [(ngModel)]="daybookQueryRequest.page"
+                (pageChanged)="pageChanged($event)"
                 [boundaryLinks]="true">
     </pagination>
   </div>
@@ -84,7 +113,8 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
+                                    (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
     </div>
   </div>
 </div>
