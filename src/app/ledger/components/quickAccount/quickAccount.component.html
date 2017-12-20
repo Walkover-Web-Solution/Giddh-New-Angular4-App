@@ -17,7 +17,8 @@
     <div class="clearfix mrT1 pdR2 pos-rel">
       <label>Account Unique Name</label>
       <input class="form-control" required name="accUnqName" type="text"
-             formControlName="uniqueName" placeholder="Enter Account Unique Name">
+             formControlName="uniqueName" [control]="newAccountForm.get('uniqueName')"
+             textCaseChangeDirective placeholder="Enter Account Unique Name">
       <i class="glyphicon glyphicon-random pos-abs"
          style="right:0px;top:30px;color:green" [tooltip]="'Auto Generate UniqueName'"
          [placement]="'top'" [tooltipAppendToBody]="true" (click)="generateUniqueName()"></i>
