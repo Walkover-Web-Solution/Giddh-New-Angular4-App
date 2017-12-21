@@ -162,8 +162,10 @@ export class CompanyActions {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
           return {type: 'EmptyAction'};
+        } else if (response.status === 'success') {
+          this._toasty.successToast('Application date updated successfully.', 'Success');
+          return this.SeApplicationDateResponse(response);
         }
-        return this.SeApplicationDateResponse(response);
       });
 
   @Effect()
