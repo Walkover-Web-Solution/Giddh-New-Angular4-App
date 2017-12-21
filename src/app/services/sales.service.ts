@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GenerateSalesRequest, InvoiceFormClass } from '../models/api-models/Sales';
 import { SALES_API_V2 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class SalesService {

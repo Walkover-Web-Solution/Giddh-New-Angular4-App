@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 export interface Account {
   name: string;
@@ -179,6 +179,21 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString = {reqObj};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /*
+  * SEND GSTR3B Email
+  * API: 'gstreturn/gstr3b-excel-export/email?monthYear=:month&gstin=:company_gstin&detailedSheet=:isNeedDetailSheet&email=:userEmail'
+  * Method: GET
+  */
+  public SendGSTR3BEmail(reqObj: { month: string, gstNumber: string, isNeedDetailSheet: string, email?: string }): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = {reqObj};
       return data;

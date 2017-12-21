@@ -132,6 +132,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
+    // Después del éxito de la entrada. llamar para transacciones bancarias
+    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+      if (data && data.yodleeAdded) {
+        this.getBankTransactions();
+      } else {
+        this.hideEledgerWrap();
+      }
+    });
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
@@ -687,6 +695,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
+    });
+
+    componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+      this.showQuickAccountModal();
     });
   }
 
