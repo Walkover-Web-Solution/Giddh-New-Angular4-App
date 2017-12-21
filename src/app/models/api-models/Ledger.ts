@@ -1,5 +1,5 @@
 import { ILedgerAdvanceSearchRequest } from './Ledger';
-import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IVoucherItem, ITotalItem } from '../interfaces/ledger.interface';
+import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
 
 /*
  * Model for ledger create api request
@@ -59,13 +59,14 @@ export class LedgerResponse {
   public generateInvoice: boolean;
   public invoiceGenerated: boolean;
   public invoiceNumber: string;
+  public invoiceNumberAgainstVoucher: string;
   public tag?: string;
   public taxes: string[];
   public total: IClosingBalance;
   public transactions: ILedgerTransactionItem[];
   public unconfirmedEntry: boolean;
   public uniqueName: string;
-  public voucher: IVoucherItem = { name: '', shortCode: '' };
+  public voucher: IVoucherItem = {name: '', shortCode: ''};
   public voucherNo: string;
   public voucherType?: string;
 }
@@ -88,6 +89,13 @@ export class MailLedgerRequest {
  */
 export class DownloadLedgerRequest {
   public invoiceNumber: string[];
+}
+
+export interface DownloadLedgerAttachmentResponse {
+  fileType: string;
+  name: string;
+  uniqueName: string;
+  uploadedFile: any;
 }
 
 /*
@@ -130,6 +138,7 @@ export class TransactionsResponse implements ITransactions {
   public totalItems: number;
   public totalPages: number;
 }
+
 export class TransactionsRequest {
   public q: string = '';
   public page: number = 0;
@@ -258,6 +267,7 @@ export interface ILedgerAdvanceSearchResponse {
   debitTransactions: DebitTransaction[];
   creditTransactions: any[];
 }
+
 export interface Inventory {
   includeInventory?: any;
   inventories: string[];

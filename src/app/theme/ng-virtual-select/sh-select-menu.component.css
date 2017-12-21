@@ -13,6 +13,7 @@
     border-right: 1px solid rgba(34, 36, 38, .15);
     border-radius: 0 0 2px 2px;
     min-width: max-content;
+    margin-top: 1px;
 }
 
 .item {
@@ -40,4 +41,12 @@
 
 .item>a {
     padding: 6px;
+}
+
+.no-result-link>a {
+    color: #10aae0 !important;
+}
+
+#noresult:hover {
+    background: transparent;
 }

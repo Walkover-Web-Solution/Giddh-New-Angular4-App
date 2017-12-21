@@ -5,16 +5,15 @@
 
 <div class="container-fluid">
     <h3 class="mrB1"><strong>Users</strong></h3>
-    <div class="box">
-        <div class="" *ngFor="let usrGrp of usersList">
+
+    <div class="box" *ngIf="currentUser">
+        <div *ngFor="let usrGrp of usersList">
             <div class="user_list">
                 <div class="row">
                     <div class="col-xs-2 user">
-                        <!-- hide due to unavailibility of API 
-                        <span class="pull-left"><input type="checkbox" /></span> -->
                         <div class="ellp">
                             <div class="ellp"><i class="fa fa-user pdR1"></i>{{usrGrp.name}}</div>
-                            <small class="mrL2">{{usrGrp.rows[0].userUniqueName}}</small>
+                            <small class="mrL2">{{usrGrp.rows[0].emailId}}</small>
                         </div>
                     </div>
                     <div class="col-xs-10">
@@ -41,8 +40,8 @@
                                     </div>
 
                                     <div class="icon-btn pull-left col-xs-2 mrT">
-                                        <button class="btn btn-xs" type="button"><i aria-hidden="true" class="fa fa-pencil" (click)="showModalForEdit(user)"></i></button>
-                                        <button class="btn btn-xs" type="button"><i aria-hidden="true" class="fa fa-trash-o" (click)="onRevokePermission(user.uniqueName)"></i></button>
+                                        <button class="btn btn-xs" type="button" (click)="showModalForEdit(user)"><i aria-hidden="true" class="fa fa-pencil"></i></button>
+                                        <button class="btn btn-xs" type="button" (click)="onRevokePermission(user.uniqueName)"><i aria-hidden="true" class="fa fa-trash-o"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -51,67 +50,6 @@
                 </div>
             </div>
         </div>
-
-
-
-        <!-- <table class="table">
-            <tbody>
-                <tr *ngFor="let usrGrp of usersList">
-                    <td>{{usrGrp.name}}
-                        <p>{{usrGrp.rows[0].userUniqueName}}</p>
-                    </td>
-                    <td>
-                        <table class="table">
-                            <tbody>
-                                <tr *ngFor="let user of usrGrp.rows; let i = index">
-                                    <td><input class="form-control" [value]="user.roleName"></td>
-                                    <td *ngIf="user.from || user.period">
-                                        <input *ngIf="user.from && user.to" class="form-control" value="{{user.from}} - {{user.to}}" />
-                                        <input *ngIf="user.period && user.duration" class="form-control" value="Past &nbsp;{{user.duration}} &nbsp; {{user.period}}S" />
-                                    </td>
-                                    <td *ngIf="user.ipsStr || user.cidrsStr">
-                                        <input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr">
-                                        <input *ngIf="user.cidrsStr" class="form-control" [value]="user.cidrsStr">
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-pencil cp mrR1" (click)="showModalForEdit(user)"></i>
-                                        <i (click)="onRevokePermission(user.uniqueName)" class="fa fa-trash cp"></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            </tbody>
-        </table> -->
-
-        <!-- <div *ngFor="let usrGrp of usersList">
-            <div class="lead mrB1">{{usrGrp.name}}</div>
-            <div class="mrB1"><i class="fa fa-user"></i> {{usrGrp.rows[0].userUniqueName}}</div>
-
-            <table width="100%" class="table bdrB">
-                <tbody>
-                    <tr *ngFor="let user of usrGrp.rows; let i = index">
-                        <td width="30%">&nbsp;</td>
-                        <td width="16%">
-                            <input class="form-control" [value]="user.roleName">
-                        </td>
-                        <td width="22%">
-                            <input *ngIf="user.from && user.to" class="form-control" value="{{user.from}} - {{user.to}}" />
-                            <input *ngIf="user.period && user.duration" class="form-control" value="Past &nbsp;{{user.duration}} &nbsp; {{user.period}}S" />
-                        </td>
-                        <td width="22%">
-                            <input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr">
-                            <input *ngIf="user.cidrsStr" class="form-control" [value]="user.cidrsStr">
-                        </td>
-                        <td width="10%" class="alC">
-                            <i class="fa fa-pencil cp mrR1" (click)="showModalForEdit(user)"></i>
-                            <i (click)="onRevokePermission(user.uniqueName)" class="fa fa-trash cp"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> -->
     </div>
 </div>
 

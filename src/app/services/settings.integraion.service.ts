@@ -1,12 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class SettingsIntegrationService {
@@ -15,7 +16,7 @@ export class SettingsIntegrationService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /*
@@ -24,7 +25,7 @@ export class SettingsIntegrationService {
   public GetSMSKey(): Observable<BaseResponse<SmsKeyClass, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<SmsKeyClass, string> = res.json();
       data.queryString = {};
       return data;
@@ -37,7 +38,7 @@ export class SettingsIntegrationService {
   public SaveSMSKey(model: SmsKeyClass): Observable<BaseResponse<string, SmsKeyClass>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<string, SmsKeyClass> = res.json();
       data.request = model;
       return data;
@@ -50,7 +51,7 @@ export class SettingsIntegrationService {
   public GetEmailKey(): Observable<BaseResponse<EmailKeyClass, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<EmailKeyClass, string> = res.json();
       data.queryString = {};
       return data;
@@ -63,7 +64,7 @@ export class SettingsIntegrationService {
   public SaveEmailKey(model: EmailKeyClass): Observable<BaseResponse<string, EmailKeyClass>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<string, EmailKeyClass> = res.json();
       data.request = model;
       return data;
@@ -76,7 +77,7 @@ export class SettingsIntegrationService {
   public GetRazorPayDetails(): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
@@ -88,7 +89,7 @@ export class SettingsIntegrationService {
   public SaveRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayDetailsResponse, RazorPayClass>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
       data.request = model;
       return data;
@@ -101,7 +102,7 @@ export class SettingsIntegrationService {
   public UpdateRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayDetailsResponse, RazorPayClass>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
       data.request = model;
       return data;
@@ -114,7 +115,7 @@ export class SettingsIntegrationService {
   public DeleteRazorPayDetails(): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));

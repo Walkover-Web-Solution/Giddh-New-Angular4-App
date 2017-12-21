@@ -244,13 +244,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         color: '#449d44'
       },
       modal: {
-        ondismiss: (a, b, c) => {
-          // debugger;
-        }
       }
     };
     options.handler = ((response) => {
-      // debugger;
+      //
     });
     let rzp1 = new (window as any).Razorpay(options);
     rzp1.open();

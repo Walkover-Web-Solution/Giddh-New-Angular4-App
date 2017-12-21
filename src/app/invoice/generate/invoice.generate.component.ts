@@ -1,7 +1,9 @@
+import { createSelector } from 'reselect';
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
@@ -14,16 +16,21 @@ import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
-const COUNTS = [12, 25, 50, 100];
-const COMPARISION_FILTER = [
-  { name: 'Greater Than', uniqueName: 'greaterThan' },
-  { name: 'Less Than', uniqueName: 'lessThan' },
-  { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
-  { name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals' },
-  { name: 'Equals', uniqueName: 'equals' }
+const COUNTS = [
+  { label: '12', value: '12' },
+  { label: '25', value: '25' },
+  { label: '50', value: '50' },
+  { label: '100', value: '100' }
+];
+
+const COMPARISON_FILTER = [
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
 ];
 
 @Component({
@@ -38,9 +45,9 @@ export class InvoiceGenerateComponent implements OnInit {
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
   public togglePrevGenBtn: boolean = false;
-  public counts: number[] = COUNTS;
+  public counts: IOption[] = COUNTS;
   public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-  public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
+  public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public ledgersData: GetAllLedgersOfInvoicesResponse;
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
@@ -54,6 +61,7 @@ export class InvoiceGenerateComponent implements OnInit {
   };
   public startDate: Date;
   public endDate: Date;
+  private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -63,13 +71,6 @@ export class InvoiceGenerateComponent implements OnInit {
     private _accountService: AccountService
   ) {
     // set initial values
-    this.startDate = new Date();
-    this.endDate = new Date();
-    this.startDate.setDate(this.startDate.getDate() - 30);
-    this.endDate.setDate(this.endDate.getDate());
-    this.ledgerSearchRequest.dateRange = [this.startDate, this.endDate];
-    this.ledgerSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
-    this.ledgerSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
   }
@@ -116,8 +117,15 @@ export class InvoiceGenerateComponent implements OnInit {
           this.getInvoiceTemplateDetails(o.templateUniqueName);
         }
       });
-    this.getLedgersOfInvoice();
 
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      this.universalDate = _.cloneDeep(dateObj);
+      if (this.universalDate) {
+        this.ledgerSearchRequest.dateRange = this.universalDate;
+      }
+      this.getLedgersOfInvoice();
+    })).subscribe();
   }
 
   public closeInvoiceModel(e) {
@@ -240,17 +248,17 @@ export class InvoiceGenerateComponent implements OnInit {
     if (o.description) {
       model.description = o.description;
     }
-    if (o.entryTotalBy === COMPARISION_FILTER[0].uniqueName) {
+    if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
       model.totalIsMore = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[1].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
       model.totalIsLess = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[2].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
       model.totalIsMore = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[3].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
       model.totalIsLess = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[4].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
       model.totalIsEqual = true;
     }
     return model;
@@ -258,9 +266,18 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
+    let fromDate = null;
+    let toDate = null;
+    if (this.universalDate && this.universalDate.length) {
+      fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+      toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    } else {
+      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate  = moment().format(GIDDH_DATE_FORMAT);
+    }
     return {
-      from: o.from,
-      to: o.to,
+      from: fromDate,
+      to: toDate,
       count: o.count,
       page: o.page
     };

@@ -1,6 +1,6 @@
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChildren, QueryList, AfterViewInit, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../../store/roots';
@@ -8,9 +8,8 @@ import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
-import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import * as _ from '../../../../lodash-optimized';
-import { AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
+import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
 
@@ -160,8 +159,14 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
           }
           if (grp.groups && grp.groups.length > 0) { allGrps.push(...grp.groups); }
         }
-        for (let grp of grps) {
-          if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); }
+        if (!activeGroup) {
+          for (let grp of grps) {
+            if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); }
+          }
+        } else {
+          for (let grp of grps) {
+            if (grp.uniqueName === activeGroup.uniqueName) { if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); } }
+          }
         }
         let newCOL = new ColumnGroupsAccountVM(null);
         newCOL.groups = [];
@@ -178,7 +183,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
         newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
         newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
-
         let col = this.polulateColms(allGrps);
         this.mc.columns.splice(1, 0, newCOL);
         if (col) {
@@ -240,6 +244,16 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
     let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+    // for (let index = 0; index < this.breadcrumbUniqueNamePath.length; index++) {
+    //   const uniqueName = this.breadcrumbUniqueNamePath[index];
+    //   if (uniqueName) {
+    //     this.mc.columns[index].uniqueName = uniqueName;
+    //     let grp = this.mc.columns[index].groups.find(p => p.uniqueName === uniqueName);
+    //     if (grp) {
+    //       grp.isOpen = true;
+    //     }
+    //   }
+    // }
     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
@@ -270,9 +284,28 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
+    // if (col.uniqueName) {
     this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
+    // } else {
+    //   let grp = col.groups.find(p => p.isOpen);
+    //   if (grp) {
+    //     this.getBreadCrumbPathFromGroup(this._groups, grp.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+    //     this.breadcrumbUniqueNamePath.pop();
+    //     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+    //     if (this.breadcrumbUniqueNamePath && this.breadcrumbUniqueNamePath.length > 0) {
+    //       debugger;
+    //       this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.breadcrumbUniqueNamePath[this.breadcrumbUniqueNamePath.length - 1]));
+    //     }
+    //   }
+    // }
+    // for (let index = 0; index < this.breadcrumbUniqueNamePath.length; index++) {
+    //   let inde = this.mc.columns[index].Items.findIndex(p => p.uniqueName === this.breadcrumbUniqueNamePath[index]);
+    //   this.mc.columns[index].Items[inde].isOpen = true;
+    // }
+    if (col.uniqueName) {
+      this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
+    }
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
   }

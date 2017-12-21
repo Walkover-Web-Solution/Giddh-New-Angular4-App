@@ -938,7 +938,7 @@ ______\////////////________
   }
   
   .themeBg {
-      background-color: #d35f29;
+      background-color: #ff5e01;
   }
   
   .modal-liq80 {
@@ -1577,11 +1577,11 @@ ______\////////////________
   
   .tb-head th:nth-child(3) th {
       border: none;
-      border-top: 1px solid #fff;
+      border-top: 1px solid #3d3d3d;
   }
   
   .tb-head th:nth-child(3) th:first-child {
-      border-right: 1px solid #fff;
+      border-right: 1px solid #3d3d3d;
   }
   
   .fl-none {
@@ -1806,7 +1806,7 @@ ______\////////////________
       left: 8px;
       width: 10px;
       height: 2px;
-      background-color: #d35f29;
+      background-color: #ff5e01;
       -webkit-transform-origin: 50% 50%;
       -ms-transform-origin: 50% 50%;
       transform-origin: 50% 50%;
@@ -2325,7 +2325,7 @@ ______\////////////________
   
   .account-card {
       width: 300px;
-      min-height: 193px;
+      min-height: 226px;
       float: left;
       display: inline-block;
       position: relative;
@@ -2341,7 +2341,7 @@ ______\////////////________
   .account-card:hover {
       background: #fff;
       box-shadow: 0 5px 14px 0 rgba(58, 58, 58, .18);
-      border-color: #d35f29;
+      border-color: #ff5e01;
   }
   
   .account-card>h1 {
@@ -2363,7 +2363,7 @@ ______\////////////________
   
   .account-card>.balance {
       color: #333;
-      font-size: 24px;
+      font-size: 18px;
       padding-bottom: 10px;
       line-height: normal;
   }
@@ -2373,6 +2373,7 @@ ______\////////////________
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      color: rgba(0, 0, 0, 0.6);
   }
   
   .account-card>.balances ul li {
@@ -2390,6 +2391,7 @@ ______\////////////________
   
   .account-card .account-date>label {
       color: #ff5f00;
+      text-decoration: underline;
   }
   
   .account-card .account-date>a {
@@ -2417,13 +2419,13 @@ ______\////////////________
   }
   
   .linked-accounts:nth-child(odd) .account-card>h1 {
-      border-bottom: 1px solid #d35f29;
+      border-bottom: 1px solid #ff5e01;
   }
   
   .linked-accounts>.title {
       margin-bottom: 5px;
       padding-bottom: 1px;
-      border-bottom: 2px solid #d35f29;
+      border-bottom: 2px solid #ff5e01;
       font-size: 18px;
   }
   
@@ -2536,7 +2538,7 @@ ______\////////////________
       transition: all 0.2s ease-in-out;
   }
   /*.audit-log:nth-child(even) {
-    background: #d35f29;
+    background: #ff5e01;
 }
 */
   
@@ -2732,7 +2734,7 @@ ______\////////////________
       background: #ffccb4;
   }
   /*.uncEntry > td {
-    border: 1px solid #d35f29 !important;
+    border: 1px solid #ff5e01 !important;
 }*/
   
   .isNotEditable {
@@ -3760,12 +3762,12 @@ ______\////////////________
   }
   
   .background-color-giddh {
-      background: #d35f29;
+      background: #ff5e01;
       height: 50px;
   }
   
   .color-giddh {
-      color: #d35f29;
+      color: #ff5e01;
   }
   
   .flying-div {
@@ -4236,7 +4238,7 @@ ______\////////////________
   }
   
   .glyphicon-filter.open {
-      color: #d35f29;
+      color: #ff5e01;
   }
   
   .create-proforma {
@@ -4428,7 +4430,7 @@ table.table-bordered.head thead th{
   .stock-items>li>a.active,
   .sub-grp>li>a.active,
   .stock-grp-list>li>a.active {
-      color: #d35f29!important;
+      color: #ff5e01!important;
   }
   
   .stock-grp.list {
@@ -4711,14 +4713,12 @@ table.table-bordered.head thead th{
   }
   
   #entryModal .modal-body {
-      padding: 0 20px 100px;
+      padding: 15px 20px 100px;
       overflow: hidden;
   }
   
-  .entrypanel label {
-      font-weight: 400;
+  .advanced label {
       font-size: 14px;
-      color: #ccc;
   }
   
   .cstuWrp {
@@ -4875,7 +4875,7 @@ table.table-bordered.head thead th{
   
   .subAccBox li a.active strong,
   .subAccBox li a:hover strong {
-      color: #d35f29 !important;
+      color: #ff5e01 !important;
   }
   
   .hamburger_menu a:hover {
