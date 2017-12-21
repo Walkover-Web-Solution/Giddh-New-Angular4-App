@@ -1,3 +1,5 @@
+// import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PermissionDataService } from './../permissions/permission-data.service';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { CommonModule } from '@angular/common';
@@ -33,6 +35,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -80,12 +83,14 @@ export function provideConfig() {
     DisableFormFieldModule,
     ShSelectModule,
     DecimalDigitsModule,
+    // BsDatepickerModule,
+    Daterangepicker,
     TextCaseChangeModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],
