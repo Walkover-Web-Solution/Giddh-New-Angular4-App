@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -60,6 +61,7 @@ export class InvoiceGenerateComponent implements OnInit {
   };
   public startDate: Date;
   public endDate: Date;
+  private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -69,13 +71,6 @@ export class InvoiceGenerateComponent implements OnInit {
     private _accountService: AccountService
   ) {
     // set initial values
-    this.startDate = new Date();
-    this.endDate = new Date();
-    this.startDate.setDate(this.startDate.getDate() - 30);
-    this.endDate.setDate(this.endDate.getDate());
-    this.ledgerSearchRequest.dateRange = [this.startDate, this.endDate];
-    this.ledgerSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
-    this.ledgerSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
   }
@@ -122,8 +117,15 @@ export class InvoiceGenerateComponent implements OnInit {
           this.getInvoiceTemplateDetails(o.templateUniqueName);
         }
       });
-    this.getLedgersOfInvoice();
 
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      this.universalDate = _.cloneDeep(dateObj);
+      if (this.universalDate) {
+        this.ledgerSearchRequest.dateRange = this.universalDate;
+      }
+      this.getLedgersOfInvoice();
+    })).subscribe();
   }
 
   public closeInvoiceModel(e) {
@@ -264,9 +266,18 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
+    let fromDate = null;
+    let toDate = null;
+    if (this.universalDate && this.universalDate.length) {
+      fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+      toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    } else {
+      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate  = moment().format(GIDDH_DATE_FORMAT);
+    }
     return {
-      from: o.from,
-      to: o.to,
+      from: fromDate,
+      to: toDate,
       count: o.count,
       page: o.page
     };
