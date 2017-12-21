@@ -23,7 +23,9 @@ export class CompanyActions {
   public static GET_STATE_DETAILS_RESPONSE = 'CompanyGetStateDetailsResponse';
   public static SET_STATE_DETAILS = 'CompanySetStateDetails';
   public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
+  public static GET_APPLICATION_DATE = 'GetApplicationDate';
   public static SET_APPLICATION_DATE = 'SetApplicationDate';
+  public static SET_APPLICATION_DATE_RESPONSE = 'SetApplicationDateResponse';
 
   public static CHANGE_COMPANY = 'CHANGE_COMPANY';
   public static CHANGE_COMPANY_RESPONSE = 'CHANGE_COMPANY_RESPONSE';
@@ -140,6 +142,30 @@ export class CompanyActions {
       return this.SetStateDetailsResponse(response);
     });
 
+    @Effect()
+    public GetApplicationDate$: Observable<Action> = this.action$
+      .ofType(CompanyActions.GET_APPLICATION_DATE)
+      .switchMap((action: CustomActions) => this._companyService.getApplicationDate())
+      .map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.SeApplicationDateResponse(response);
+      });
+
+    @Effect()
+    public SetApplicationDate$: Observable<Action> = this.action$
+      .ofType(CompanyActions.SET_APPLICATION_DATE)
+      .switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload))
+      .map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.SeApplicationDateResponse(response);
+      });
+
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.DELETE_COMPANY)
@@ -239,9 +265,22 @@ export class CompanyActions {
     };
   }
 
+  public GetApplicationDate(): CustomActions {
+    return {
+      type: CompanyActions.GET_APPLICATION_DATE,
+      payload: null
+    };
+  }
   public SetApplicationDate(value: any): CustomActions {
     return {
       type: CompanyActions.SET_APPLICATION_DATE,
+      payload: value
+    };
+  }
+
+  public SeApplicationDateResponse(value: BaseResponse<string, any>): CustomActions {
+    return {
+      type: CompanyActions.SET_APPLICATION_DATE_RESPONSE,
       payload: value
     };
   }
