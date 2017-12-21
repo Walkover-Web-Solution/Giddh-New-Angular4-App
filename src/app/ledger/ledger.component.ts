@@ -542,7 +542,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           applyApplicableTaxes: true,
           isInclusiveTax: true
         }],
-      voucherType: 'sal',
+      voucherType: null,
       entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
