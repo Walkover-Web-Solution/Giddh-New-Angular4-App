@@ -1,3 +1,4 @@
+import { PermissionDataService } from './../permissions/permission-data.service';
 import { LogsService } from './logs.service';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -36,6 +37,7 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -52,6 +54,7 @@ export class ServiceModule {
       ngModule: ServiceModule,
       providers: [
         GeneralService,
+        PermissionDataService,
         LoaderService,
         StorageService,
         ErrorHandler,

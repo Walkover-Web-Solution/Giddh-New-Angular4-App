@@ -5,6 +5,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
+import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -38,6 +40,7 @@ export enum userLoginStateEnum {
 export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
+  applicationDate: any;
   companyUniqueName: string;                   // current user | null
   companies: CompanyResponse[];
   isRefreshing: boolean;
@@ -74,6 +77,7 @@ const initialState = {
 const sessionInitialState: SessionState = {
   user: null,
   lastState: '',
+  applicationDate: null,
   companyUniqueName: '',
   companies: [],
   isCompanyCreated: false,
@@ -309,9 +313,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           user: data1.body
         });
       }
-      return {
-        ...state, user: null
-      };
+      return state;
     }
     case LoginActions.LogOut:
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT:
@@ -352,6 +354,17 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           lastState: setStateData.request.lastState,
           companyUniqueName: setStateData.request.companyUniqueName
         });
+      }
+      return state;
+    case CompanyActions.SET_APPLICATION_DATE_RESPONSE:
+      let dateResponse: BaseResponse<string, any> = action.payload;
+      if (dateResponse.status === 'success') {
+        let latestState = _.cloneDeep(state);
+        let data: any = dateResponse.body;
+        let fromDate: any = moment(data.fromDate, GIDDH_DATE_FORMAT);
+        let toDate: any = moment(data.toDate, GIDDH_DATE_FORMAT);
+        latestState.applicationDate = [fromDate._d, toDate._d];
+        return Object.assign({}, state, latestState);
       }
       return state;
     case CompanyActions.SET_CONTACT_NO: {

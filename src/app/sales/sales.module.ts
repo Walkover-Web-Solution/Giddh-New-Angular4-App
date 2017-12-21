@@ -47,7 +47,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     CommonModule,
     ReactiveFormsModule,
     SelectModule.forRoot(),
-    Select2Module.forRoot(),
+    // Select2Module.forRoot(),
     TaxControlModule.forRoot(),
     SalesRoutingModule,
     ModalModule,

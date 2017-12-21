@@ -9,7 +9,6 @@ export class UniqueNameDirective {
   public el: HTMLInputElement;
   @HostListener('keypress', ['$event'])
   public onKeyPress(event: KeyboardEvent) {
-    // debugger;
     if (event.which === 32) {
       event.preventDefault();
       this._toaster.clearAllToaster();

@@ -1,3 +1,4 @@
+import { NeedsAuthorization } from './decorators/needAuthorization';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
@@ -32,23 +33,24 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
-      { path: 'home', loadChildren: './home/home.module#HomeModule' },
-      { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule' },
-      { path: 'sales', loadChildren: './sales/sales.module#SalesModule' },
-      { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule' },
+      { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
+      { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
+      { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
+      { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
-      { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule' },
-      { path: 'search', loadChildren: './search/search.module#SearchModule' },
+      { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },
+      { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthorization] },
       {
         path: 'trial-balance-and-profit-loss',
         loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule',
-        canActivate: [NeedsAuthentication]
+        canActivate: [NeedsAuthentication, NeedsAuthorization]
       },
-      { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule' },
-      { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule' },
-      { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule' },
-      { path: 'settings', loadChildren: './settings/settings.module#SettingsModule' },
-      { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule' },
+      { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthorization] },
+      { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthorization] },
+      { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization] },
+      { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization] },
+      { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
+      { path: 'accounting', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]

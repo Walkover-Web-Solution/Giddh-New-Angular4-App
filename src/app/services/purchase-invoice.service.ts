@@ -1,12 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 export interface Account {
   name: string;
@@ -101,7 +102,7 @@ export class PurchaseInvoiceService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /*
@@ -113,7 +114,7 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let req = model;
-    return this._http.get(PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).map((res) => {
       let data: BaseResponse<IInvoicePurchaseResponse, string> = res.json();
       data.queryString = {};
       return data;
@@ -128,7 +129,7 @@ export class PurchaseInvoiceService {
   public GetTaxesForThisCompany(): Observable<BaseResponse<ITaxResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(PURCHASE_INVOICE_API.GET_TAXES.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.GET_TAXES.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
       let data: BaseResponse<ITaxResponse[], string> = res.json();
       data.queryString = {};
       return data;
@@ -147,7 +148,7 @@ export class PurchaseInvoiceService {
       uniqueNames: [model.entryUniqueName],
       taxes: model.taxes
     };
-    return this._http.post(PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).map((res) => {
+    return this._http.post(this.config.apiUrl + PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).map((res) => {
       let data: BaseResponse<IInvoicePurchaseItem, string> = res.json();
       data.queryString = {};
       return data;
@@ -162,7 +163,7 @@ export class PurchaseInvoiceService {
   public DownloadGSTR1Sheet(reqObj: { month: string, gstNumber: string, type: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = {reqObj};
       return data;
@@ -177,7 +178,22 @@ export class PurchaseInvoiceService {
   public DownloadGSTR1ErrorSheet(reqObj: { month: string, gstNumber: string, type: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString = {reqObj};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /*
+  * SEND GSTR3B Email
+  * API: 'gstreturn/gstr3b-excel-export/email?monthYear=:month&gstin=:company_gstin&detailedSheet=:isNeedDetailSheet&email=:userEmail'
+  * Method: GET
+  */
+  public SendGSTR3BEmail(reqObj: { month: string, gstNumber: string, isNeedDetailSheet: string, email?: string }): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = {reqObj};
       return data;
@@ -193,7 +209,7 @@ export class PurchaseInvoiceService {
       uniqueNames: entryUniqueName,
       taxes: taxUniqueName
     };
-    return this._http.put(PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).map((res) => {
+    return this._http.put(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = {};
       return data;
@@ -211,7 +227,7 @@ export class PurchaseInvoiceService {
       availItc: model.availItc
     };
 
-    return this._http.patch(PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
+    return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = {};
       return data;
@@ -228,7 +244,7 @@ export class PurchaseInvoiceService {
       sendToGstr2: model.sendToGstr2
     };
 
-    return this._http.patch(PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
+    return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = {};
       return data;

@@ -1,14 +1,14 @@
 <div class="container-fluid">
     <tabset id="settingTab">
         <tab heading="Trial Balance">
-            <tb [selectedCompany]="selectedCompany"></tb>
+            <tb [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
         </tab>
 
-        <tab heading="Profit &amp; Loss">
-            <pl [selectedCompany]="selectedCompany"></pl>
+        <tab heading="Profit &amp; Loss" (select)="CanPLLoad = true">
+            <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
         </tab>
-        <tab heading="Balance Sheet">
-            <bs [selectedCompany]="selectedCompany"></bs>
+        <tab heading="Balance Sheet" (select)="CanBSLoad = true">
+            <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
         </tab>
     </tabset>
 </div>
