@@ -361,8 +361,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       if (dateResponse.status === 'success') {
         let latestState = _.cloneDeep(state);
         let data: any = dateResponse.body;
-        let fromDate: any = moment(data.fromDate, GIDDH_DATE_FORMAT);
-        let toDate: any = moment(data.toDate, GIDDH_DATE_FORMAT);
+        let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
+        let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
         latestState.applicationDate = [fromDate._d, toDate._d];
         return Object.assign({}, state, latestState);
       }
