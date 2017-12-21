@@ -62,15 +62,25 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.change();
       }
     }
+
+    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
+    //   this.sum = 0;
+    //   this.prepareTaxObject();
+    //   this.change();
+    // }
   }
   /**
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
-    while (this.taxRenderData.length > 0) {
-      this.taxRenderData.pop();
+    // if updating don't recalculate
+    if (this.taxRenderData.length) {
+      return;
     }
+    // let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
+    // while (this.taxRenderData.length > 0) {
+    //   this.taxRenderData.pop();
+    // }
     this.taxes.map(tx => {
       let taxObj = new TaxControlData();
       taxObj.name = tx.name;
@@ -93,14 +103,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         taxObj.amount = tx.taxDetail[0].taxValue;
       }
-      let oldValue = null;
-      if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
-        oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
-      }
-      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1)) || (oldValue && oldValue.isChecked);
-      if (taxObj.amount && taxObj.amount > 0) {
-        this.taxRenderData.push(taxObj);
-      }
+      // let oldValue = null;
+      // if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
+      //   oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
+      // }
+      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
+      // if (taxObj.amount && taxObj.amount > 0) {
+      this.taxRenderData.push(taxObj);
+      // }
     });
   }
 
@@ -112,10 +122,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
-  }
-
-  public clicked(e) {
-    // debugger;
   }
 
   /**

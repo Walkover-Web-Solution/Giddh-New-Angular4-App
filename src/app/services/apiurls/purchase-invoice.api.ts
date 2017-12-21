@@ -1,5 +1,5 @@
-import { Configuration } from '../../app.constant';
-const COMMON = Configuration.ApiUrl + 'company/:companyUniqueName/';
+
+const COMMON = 'company/:companyUniqueName/';
 
 export const PURCHASE_INVOICE_API = {
   INVOICE_API: COMMON + 'invoices/purchase',  // GET AND PUT call
@@ -11,4 +11,5 @@ export const PURCHASE_INVOICE_API = {
   DOWNLOAD_GSTR1_ERROR_SHEET: COMMON + 'gstreturn/:error_sheet_Type?monthYear=:month&gstin=:company_gstin', // GET error_sheet_Type = (gstr1_error_export || gstr2_error_export)
   UPDATE_INVOICE: COMMON + 'accounts/:accountUniqueName/' + 'invoices/generate-purchase/:invoiceUniqueName', // PATCH
   DOWNLOAD_GSTR2_SHEET: COMMON + 'gstreturn/gstr2_data/file?monthYear=:month&gstin=:company_gstin', // GET
+  SEND_GSTR3B_EMAIL: COMMON + 'gstreturn/gstr3b-excel-export/email?monthYear=:month&gstin=:company_gstin&detailedSheet=:isNeedDetailSheet&email=:userEmail',
 };

@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
-import * as _ from '../lodash-optimized';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CompanyResponse } from '../models/api-models/Company';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 export class TemplateContentUISectionVisibility {
   public header: boolean = true;
   public table: boolean = false;
   public footer: boolean = false;
 }
+
+declare var _: any;
 
 @Injectable()
 
@@ -26,8 +29,11 @@ export class InvoiceUiDataService {
 
   private companyName: string;
   private companyAddress: string;
+  private _: any;
 
-  constructor() {
+  constructor( @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    this._ = config._;
+    _ = config._;
     //
   }
 
@@ -52,10 +58,10 @@ export class InvoiceUiDataService {
     if (defaultTemplate) {
       if (this.companyName) {
         defaultTemplate.sections[0].content[0].label = this.companyName;
-        defaultTemplate.sections[2].content[10].label = this.companyName;
+        defaultTemplate.sections[2].content[9].label = this.companyName;
       }
       if (this.companyAddress) {
-        defaultTemplate.sections[2].content[8].label = this.companyAddress;
+        defaultTemplate.sections[2].content[7].label = this.companyAddress;
       }
       this.customTemplate.next(_.cloneDeep(defaultTemplate));
     }
@@ -118,7 +124,7 @@ export class InvoiceUiDataService {
   public BRToNewLine(template) {
     template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
-    template.sections[2].content[10].label = template.sections[2].content[10].label.replace(/<br\s*[\/]?>/gi, '\n');
+    template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
     return template;
   }
 
@@ -128,11 +134,12 @@ export class InvoiceUiDataService {
   public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse) {
     if (customCreatedTemplates && customCreatedTemplates.length) {
       let allTemplates = _.cloneDeep(customCreatedTemplates);
-      let selectedTemplate = allTemplates.find((template) => template.uniqueName === uniqueName);
+      let selectedTemplateIndex = allTemplates.findIndex((template) => template.uniqueName === uniqueName);
+      let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
 
       if (selectedTemplate) {
-        // mode === 'create' &&
-        if ((selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
+        // &&
+        if (mode === 'create' && (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
           selectedTemplate.sections = _.cloneDeep(defaultTemplate.sections);
         }
 
@@ -140,10 +147,10 @@ export class InvoiceUiDataService {
           this.isCompanyNameVisible.next(true);
         }
         if (this.companyName && mode === 'create') {
-          selectedTemplate.sections[2].content[10].label = this.companyName;
+          selectedTemplate.sections[2].content[9].label = this.companyName;
         }
         if (this.companyAddress && mode === 'create') {
-          selectedTemplate.sections[2].content[8].label = this.companyAddress;
+          selectedTemplate.sections[2].content[7].label = this.companyAddress;
         }
         selectedTemplate.sections[0].content[0].label = this.companyName;
         if (!selectedTemplate.logoUniqueName) {

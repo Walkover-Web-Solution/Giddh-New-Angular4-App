@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Location } from '@angular/common';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
@@ -12,7 +11,13 @@ const INV_PAGE = [
 
 @Component({
   selector: 'invoice-page-dd',
-  templateUrl: './invoice.page.dd.component.html'
+  templateUrl: './invoice.page.dd.component.html',
+  styles: [`
+  .navbar-brand {
+    height: auto;
+    padding: 5px 15px;
+  }
+  `]
 })
 
 export class InvoicePageDDComponent {

@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, Component, ContentChild, ChangeDetectionStrategy, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
@@ -10,7 +10,7 @@ import { ShSelectMenuComponent } from './sh-select-menu.component';
 @Component({
   selector: 'sh-select',
   templateUrl: './sh-select.component.html',
-  styleUrls: [`./sh-select.component.css`],
+  styleUrls: ['./sh-select.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -21,6 +21,7 @@ import { ShSelectMenuComponent } from './sh-select-menu.component';
   ]
 })
 export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+  @Input() public idEl: string = '';
   @Input() public placeholder: string = 'Type to filter';
   @Input() public multiple: boolean = false;
   @Input() public mode: 'default' | 'inline' = 'default';
@@ -31,6 +32,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'auto';
   @Input() public ItemHeight: number = 41;
+  @Input() public NoFoundMsgHeight: number = 30;
+  @Input() public NoFoundLinkHeight: number = 30;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
@@ -74,7 +77,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     if (!Array.isArray(val)) {
       val = [val];
     }
-    if (val.length > 0) {
+    if (val.length > 0 && this.rows) {
       this._selectedValues = this.rows.filter(f => val.findIndex(p => p === f.value) !== -1);
     } else {
       this._selectedValues = val;
@@ -93,7 +96,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef, ) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef ) {
   }
 
   /**
@@ -104,7 +107,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public onDocumentClick(event) {
     if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
       this.isOpen = false;
-      if (this.selectedValues && this.selectedValues.length === 1) {
+      if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
         this.filter = this.selectedValues[0].label;
       } else {
         this.clearFilter();
@@ -317,6 +320,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public writeValue(value: any) {
     this.selectedValues = value;
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
   public propagateChange(_: any) {
@@ -332,7 +338,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public clearSingleSelection(event, option: IOption) {
-    // debugger;
     event.stopPropagation();
     this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
     this.onChange();

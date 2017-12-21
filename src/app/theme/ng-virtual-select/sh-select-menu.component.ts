@@ -6,7 +6,7 @@ import { IOption } from './sh-options.interface';
   selector: 'sh-select-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sh-select-menu.component.html',
-  styleUrls: [`./sh-select-menu.component.css`]
+  styleUrls: ['./sh-select-menu.component.css']
 })
 export class ShSelectMenuComponent implements OnChanges {
   @Input() public selectedValues: any[];
@@ -15,6 +15,8 @@ export class ShSelectMenuComponent implements OnChanges {
   @Input() public notFoundMsg: string;
   @Input() public noResultLinkEnabled: boolean;
   @Input() public ItemHeight: number;
+  @Input() public NoFoundMsgHeight: number;
+  @Input() public NoFoundLinkHeight: number;
 
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
   @Output() public noResultClicked = new EventEmitter<null>();

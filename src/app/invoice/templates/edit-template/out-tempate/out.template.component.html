@@ -611,7 +611,7 @@
                 <table cellpadding="0" cellspacing="0" class="subfooter">
                     <tbody>
                         <tr>
-                            <td *ngIf="inputTemplate.sections[2].content[5].display || inputTemplate.sections[2].content[6].display">
+                            <td *ngIf="inputTemplate.sections[2].content[5].display">
                                 <p *ngIf="inputTemplate.sections[2].content[5].display" style="margin-bottom: 15px;">
                                     <span style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[5].label"></span>
                                 </p>
@@ -622,15 +622,15 @@
                                 <!--<img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />-->
                                 <hr />
                                 <!--<strong><h3>{{inputTemplate.sections[2].content[5].display}}</h3></strong>-->
-                                <strong><small *ngIf="inputTemplate.sections[2].content[10].display" style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[10].label"></small><small *ngIf="!inputTemplate.sections[2].content[10].display"> &nbsp; </small></strong>
+                                <strong><small *ngIf="inputTemplate.sections[2].content[9].display" style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[9].label"></small><small *ngIf="!inputTemplate.sections[2].content[9].display"> &nbsp; </small></strong>
                                 <!--<p><small>(Signature)</small></p>-->
                             </td>
                         </tr>
-                        <tr *ngIf="inputTemplate.sections[2].content[7].display">
+                        <tr *ngIf="inputTemplate.sections[2].content[6].display">
                             <td>
                                 <strong>
-                                    <h4 *ngIf="inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="inputTemplate.sections[2].content[7].label"></h4>
-                                    <h4 *ngIf="!inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="inputTemplate.sections[2].content[6].label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="inputTemplate.sections[2].content[6].label"></h4>
+                                    <h4 *ngIf="!inputTemplate.sections[2].content[6].label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
                                 </strong>
                             </td>
                         </tr>
@@ -640,7 +640,7 @@
             </aside>
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                 <span *ngIf="inputTemplate.sections[0].content[0].display">{{inputTemplate.sections[0].content[0].label}}</span> <br>
-                <span *ngIf="inputTemplate.sections[2].content[8].display">{{inputTemplate.sections[2].content[8].label}}</span>
+                <span *ngIf="inputTemplate.sections[2].content[7].display">{{inputTemplate.sections[2].content[7].label}}</span>
             </footer>
         </div>
 

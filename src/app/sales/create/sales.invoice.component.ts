@@ -33,7 +33,7 @@ const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
     display: true,
-    label: 'Sno'
+    label: 'S.No'
   },
   {
     display: true,
@@ -73,7 +73,7 @@ const THEAD_ARR_READONLY = [
   },
   {
     display: true,
-    label: 'Taxable.'
+    label: 'Taxable'
   },
   {
     display: false,
@@ -406,6 +406,14 @@ export class SalesInvoiceComponent implements OnInit {
     // replace /n to br in case of message
     if (data.other.message2 && data.other.message2.length > 0) {
       data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
+    }
+
+    // replace /n to br for (shipping and billing)
+    if (data.account.shippingDetails.address && data.account.shippingDetails.address.length && data.account.shippingDetails.address[0].length > 0) {
+      data.account.shippingDetails.address[0] = data.account.shippingDetails.address[0].replace(/\n/g, '<br />');
+    }
+    if (data.account.billingDetails.address && data.account.billingDetails.address.length && data.account.billingDetails.address[0].length > 0) {
+      data.account.billingDetails.address[0] = data.account.billingDetails.address[0].replace(/\n/g, '<br />');
     }
 
     // convert date object

@@ -1,11 +1,11 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -29,6 +29,11 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
+import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { setTimeout } from 'timers';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'ledger',
@@ -38,6 +43,8 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
@@ -78,6 +85,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public trxRequest: TransactionsRequest;
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
   @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
   @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
@@ -119,12 +127,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    debugger;
     this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.trxRequest.page = 0;
 
     this.getTransactionData();
+    // Después del éxito de la entrada. llamar para transacciones bancarias
+    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+      if (data && data.yodleeAdded) {
+        this.getBankTransactions();
+      } else {
+        this.hideEledgerWrap();
+      }
+    });
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
@@ -205,16 +220,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
           }
           //#endregion
           // reset taxes and discount on selected account change
-          txn.tax = 0;
-          txn.taxes = [];
-          txn.discount = 0;
-          txn.discounts = [];
+          // txn.tax = 0;
+          // txn.taxes = [];
+          // txn.discount = 0;
+          // txn.discounts = [];
           return;
         }
       });
     });
     // check if selected account category allows to show taxationDiscountBox in newEntry popup
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+    this.newLedPanelCtrl.detactChanges();
   }
 
   public hideEledgerWrap() {
@@ -223,6 +239,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public pageChanged(event: any): void {
     this.trxRequest.page = event.page;
+    // this.lc.currentPage = event.page;
     this.getTransactionData();
   }
 
@@ -274,13 +291,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         // init transaction request and call for transaction data
+        this.trxRequest = new TransactionsRequest();
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
         this.lc.currentPage = lt.page;
+        this.lc.calculateReckonging(lt);
+        this.loadPaginationComponent(lt);
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
@@ -351,7 +372,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
-        this.lc.getUnderstandingText(acc.accountType, acc.uniqueName);
+        this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
 
@@ -374,6 +395,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
+
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions.startDate  = universalDate[0];
+        this.datePickerOptions.endDate  = universalDate[1];
+        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+      }
+    })).subscribe();
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -441,11 +472,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     if (unAccountedTrx) {
       this.selectBlankTxn(unAccountedTrx);
+
+      this.dropDowns.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
+        setTimeout(() => {
+          dd.show(null);
+        }, 0);
+      });
     } else {
       let newTrx = this.lc.addNewTransaction(event);
       this.lc.blankLedger.transactions.push(newTrx);
       this.selectBlankTxn(newTrx);
+      setTimeout(() => {
+        this.dropDowns.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
+          dd.show(null);
+        });
+      }, 0);
     }
+  }
+
+  public downloadAttachedFile(fileName: string, e: Event) {
+    e.stopPropagation();
+    this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+        return saveAs(blob, d.body.name);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
+    });
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {
@@ -456,8 +510,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
-      let blob = base64ToBlob(d.body, 'application/pdf', 512);
-      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
     });
   }
 
@@ -492,7 +550,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           applyApplicableTaxes: true,
           isInclusiveTax: true
         }],
-      voucherType: 'sal',
+      voucherType: null,
       entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
@@ -501,7 +559,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: ''
+      chequeClearanceDate: '',
+      invoiceNumberAgainstVoucher: '',
+      compoundTotal: 0
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -516,6 +576,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showUpdateLedgerModal(txn: ITransactionItem) {
+    let transactions: TransactionsResponse = null;
+    this.store.select(t => t.ledger.transactionsResponse).take(1).subscribe(trx => transactions = trx);
+
+    if (transactions) {
+      if (txn.isBaseAccount) {
+        // store the trx values in store
+        this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
+      } else {
+        // find trx from transactions array and store it in store
+        let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+        let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+        let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
+        let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
+        if (baseAccount) {
+          this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
+        } else {
+          // re activate account from url params
+          this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
+        }
+      }
+    }
     this.showUpdateLedgerForm = true;
     this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
     this.lc.selectedTxnUniqueName = txn.entryUniqueName;
@@ -609,14 +690,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
-    componentInstance.ledgerUnderStandingObj = this.lc.ledgerUnderStandingObj;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
-      // componentInstance.vm.resetVM();
-      // componentInstance.destroyed$.next(true);
-      // componentInstance.destroyed$.complete();
+      this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
+    });
+
+    componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+      this.showQuickAccountModal();
     });
   }
 
@@ -633,6 +715,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
       componentInstance.destroyed$.complete();
     });
 
+  }
+
+  public loadPaginationComponent(s) {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+    let viewContainerRef = this.paginationChild.viewContainerRef;
+    viewContainerRef.remove();
+
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as PaginationComponent;
+    componentInstance.totalItems = s.count * s.totalPages;
+    componentInstance.itemsPerPage = s.count;
+    componentInstance.maxSize = 5;
+    componentInstance.writeValue(s.page);
+    componentInstance.boundaryLinks = true;
+    componentInstance.pageChanged.subscribe(e => {
+      this.pageChanged(e);
+    });
   }
 
   /**

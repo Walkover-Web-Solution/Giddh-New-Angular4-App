@@ -1,6 +1,6 @@
-import { Configuration } from '../../app.constant';
-let COMMON_URL = Configuration.ApiUrl + 'company/:companyUniqueName/';
-let PART_A = Configuration.ApiUrl + 'v2/company/:companyUniqueName/';
+
+let COMMON_URL = 'company/:companyUniqueName/';
+let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';
 let URI_ONLY_FOR_INVOICE = PART_A + PART_B;
 

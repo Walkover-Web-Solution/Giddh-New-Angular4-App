@@ -75,10 +75,23 @@ export class DecimalDigitsDirective {
       // Checking Backspace etc.. keys because firefox doesn't pressing them while chrome does by default
       // tslint:disable-next-line:radix
       if (dotLength > 1 || (dotLength === 1 && e.key === '.') || (decimalLength > (parseInt(this.DecimalPlaces) - 1) &&
-        currentCursorPos > e.target.value.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) {
+          currentCursorPos > e.target.value.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) {
         e.preventDefault();
       }
     }
+  }
+
+  @HostListener('document:paste', ['$event'])
+  public onPress(event) {
+    if ('decimaldigitsdirective' in event.target.attributes) {
+      let cl = event.clipboardData.getData('text/plain');
+      cl = cl.replace(/,\s?/g, '');
+      let evt = new Event('input');
+      event.target.dispatchEvent(evt);
+      event.target.value = cl;
+      event.preventDefault();
+    }
+    return;
   }
 
   // tslint:disable-next-line:member-ordering
