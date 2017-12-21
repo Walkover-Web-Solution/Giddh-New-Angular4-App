@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
-import * as _ from '../lodash-optimized';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CompanyResponse } from '../models/api-models/Company';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 export class TemplateContentUISectionVisibility {
   public header: boolean = true;
   public table: boolean = false;
   public footer: boolean = false;
 }
+
+declare var _: any;
 
 @Injectable()
 
@@ -26,8 +29,11 @@ export class InvoiceUiDataService {
 
   private companyName: string;
   private companyAddress: string;
+  private _: any;
 
-  constructor() {
+  constructor( @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    this._ = config._;
+    _ = config._;
     //
   }
 
@@ -128,11 +134,12 @@ export class InvoiceUiDataService {
   public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse) {
     if (customCreatedTemplates && customCreatedTemplates.length) {
       let allTemplates = _.cloneDeep(customCreatedTemplates);
-      let selectedTemplate = allTemplates.find((template) => template.uniqueName === uniqueName);
+      let selectedTemplateIndex = allTemplates.findIndex((template) => template.uniqueName === uniqueName);
+      let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
 
       if (selectedTemplate) {
-        // mode === 'create' &&
-        if ((selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
+        // &&
+        if (mode === 'create' && (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
           selectedTemplate.sections = _.cloneDeep(defaultTemplate.sections);
         }
 

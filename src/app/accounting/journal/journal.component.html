@@ -1,0 +1,137 @@
+<div class="col-xs-10">
+  <div class="row">
+    <div class="col-xs-12 pdT2">
+      <span class="label label-default pd1 isActive">Journal</span> No.1
+      <div class="pull-right text-right">
+        {{journalRequestObject.entryData}}
+        <br> {{moment().format('dddd')}}
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <div class="table-responsive bdrT">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:80%;">Particulars</th>
+              <th>Debit</th>
+              <th>Credit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of journalRequestObject.transactions">
+              <td>{{transaction.particular}}
+                <br>
+                <small> &nbsp;
+                  <i>Cur Bal: 20,000 Dr.</i>
+                </small>
+              </td>
+              <td>
+                <span *ngIf="transaction.type==='debit'">{{transaction.amount}}</span>
+              </td>
+              <td>
+                <span *ngIf="transaction.type==='credit'">{{transaction.amount}}</span>
+              </td>
+            </tr>
+            <tr class="bdrT" *ngIf="!selectedInput">
+              <td>
+                <div class="input-group">
+                  <span class="input-group-addon custom-input-group-addon">
+                    <input type="text" (keyup)="selectInputType($event);" maxlength="1" class="form-control"> </span>
+                  <input type="text" class="form-control">
+                </div>
+              </td>
+              <td>
+              </td>
+              <td>
+              </td>
+            </tr>
+            <tr *ngIf="selectedInput === 'by'">
+              <td>
+                <div class="input-group">
+                  <span class="input-group-addon">By</span>
+                  <input type="text" class="form-control" name="by" [(ngModel)]="journalRequestObject.by" (focus)="showLedgerAccountList = true;">
+                </div>
+              </td>
+              <td>
+                <input type="text" class="form-control" #byAmountField decimalDigitsDirective (keyup)="detectEnterKey($event, byAmountField.value, journalRequestObject.by)">
+              </td>
+              <td>
+                  <!-- <input type="text" class="form-control" disabled> -->
+              </td>
+            </tr>
+            <tr *ngIf="selectedInput === 'to'">
+              <td>
+                <div class="input-group">
+                  <span class="input-group-addon">To</span>
+                  <input type="text" class="form-control" name="to" [(ngModel)]="journalRequestObject.to" (focus)="showLedgerAccountList = true;">
+                </div>
+              </td>
+              <td>
+                <!-- <input type="text" class="form-control" disabled> -->
+              </td>
+              <td>
+                <input type="text" class="form-control" #toAmountField decimalDigitsDirective (keyup)="detectEnterKey($event, toAmountField.value, journalRequestObject.to)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <div class="col-xs-4">
+        <div class="form-group">
+          <label>Narration:</label>
+          <textarea class="form-control" name="narration" (keyup)="detectEnterKeyOnNarration($event, submitButton)" [(ngModel)]="journalRequestObject.description" resize="false" rows="6"></textarea>
+        </div>
+      </div>
+      <div class="col-xs-3"></div>
+      <div class="col-xs-2">
+        <div [hidden]="!showSubmitButtonBox" class="bdr text-center mrT2" style="height:135px;width:100%;background:white;color:black;">
+          <p class="pdT2">Accept?</p>
+          <div class="pdT2">
+            <button class="btn btn-link" #submitButton (click)="createEntry();">Yes</button> |
+            <button class="btn btn-link" (click)="resetEntry();">No</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-3 bdrT bdrB pdT2 pdB2 mrT2">
+        <div class="row">
+          <div class="col-xs-2"></div>
+          <div class="col-xs-5">
+            <b>{{totalDebitAmount}}</b>
+          </div>
+          <div class="col-xs-5">
+            <b>{{totalCreditAmount}}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-xs-2" style="height:100vh;background:black;color:white;">
+  <div class="bdrL" [hidden]="!showLedgerAccountList" style="overflow-y:auto;height:100%;width:250px;background:white;position: absolute;left: -250px;z-index: 3;">
+    <h3 class="pd1 bdrB isActive">List of Ledger Accounts</h3>
+    <ul class="pdL1" style="color:black;">
+      <li class="cursor-pointer" (click)="setAccount(account);" *ngFor="let account of accounts">{{ account.label }}</li>
+    </ul>
+    <!-- <div *ngIf="accounts && accounts.length">
+      <ul class="grp_list" *vsFor="accounts; tagName:'li'; scrollParent:'.grp_list'; let _items = accounts">
+        <ng-container *ngFor="let item of _items;let i = index">
+          <li>
+            <div class="title">
+              <a class="ellp max250">{{item.label}}</a>
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+    </div> -->
+  </div>
+  <ul class="pd2">
+    <li>F1: Accounting Voucher</li>
+    <li>F2: Order Vouchers</li>
+    <li>F3: Payroll Voucher</li>
+    <li>F4: Date</li>
+    <li>F5: Company</li>
+    <li>F6: Contra</li>
+  </ul>
+</div>

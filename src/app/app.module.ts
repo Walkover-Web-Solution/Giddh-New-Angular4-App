@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionReducer, MetaReducer, Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import * as _ from './lodash-optimized';
 /*
  * Platform and Environment providers/pipes/pipes
  */
@@ -156,7 +157,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
     {
       provide: ServiceConfig,
-      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl }
+      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
     }
   ]
 })

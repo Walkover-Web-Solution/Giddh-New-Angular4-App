@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
+  public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
@@ -97,6 +98,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public markForDeleteCompany: CompanyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
+  public userIsCompanyUser: boolean = false;
   public userName: string;
   public isProd = ENV;
   public isElectron: boolean = isElectron;
@@ -161,6 +163,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //
     this.user$.subscribe((u) => {
       if (u) {
+        let userEmail = u.email;
+        let userEmailDomain = userEmail.replace(/.*@/, '');
+        if (userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1) {
+          this.userIsCompanyUser = true;
+        } else {
+          this.userIsCompanyUser = false;
+        }
         if (u.name.match(/\s/g)) {
           let name = u.name;
           let tmpName = name.split(' ');
