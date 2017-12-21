@@ -5,6 +5,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
+import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -335,12 +337,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       }
       return state;
     }
-    case CompanyActions.SET_APPLICATION_DATE: {
-      let stateData = action.payload;
-      let latestState = _.cloneDeep(state);
-      latestState.applicationDate = stateData;
-      return Object.assign({}, state, latestState);
-    }
     case CompanyActions.CHANGE_COMPANY_RESPONSE: {
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
       if (stateData.status === 'success') {
@@ -358,6 +354,17 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           lastState: setStateData.request.lastState,
           companyUniqueName: setStateData.request.companyUniqueName
         });
+      }
+      return state;
+    case CompanyActions.SET_APPLICATION_DATE_RESPONSE:
+      let dateResponse: BaseResponse<string, any> = action.payload;
+      if (dateResponse.status === 'success') {
+        let latestState = _.cloneDeep(state);
+        let data: any = dateResponse.body;
+        let fromDate: any = moment(data.fromDate, GIDDH_DATE_FORMAT);
+        let toDate: any = moment(data.toDate, GIDDH_DATE_FORMAT);
+        latestState.applicationDate = [fromDate._d, toDate._d];
+        return Object.assign({}, state, latestState);
       }
       return state;
     case CompanyActions.SET_CONTACT_NO: {
