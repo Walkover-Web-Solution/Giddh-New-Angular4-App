@@ -11,7 +11,8 @@ import { AuthKeyResponse, LinkedInRequestModel, SignupWithMobile, UserDetails, V
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http } from '@angular/http';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
 
 @Injectable()
 export class AuthenticationService {
@@ -56,6 +57,24 @@ export class AuthenticationService {
       // console.log(data);
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele));
+  }
+
+  public SignupWithPassword(modele: SignUpWithPassword): Observable<BaseResponse<VerifyMobileResponseModel, SignUpWithPassword>> {
+    return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithPassword, modele).map((res) => {
+      let data: BaseResponse<VerifyMobileResponseModel, SignUpWithPassword> = res.json();
+      data.request = modele;
+      // console.log(data);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, SignUpWithPassword>(e, modele));
+  }
+
+  public LoginWithPassword(modele: LoginWithPassword): Observable<BaseResponse<VerifyMobileResponseModel, LoginWithPassword>> {
+    return this._http.post(this.config.apiUrl + LOGIN_API.LoginWithPassword, modele).map((res) => {
+      let data: BaseResponse<VerifyMobileResponseModel, LoginWithPassword> = res.json();
+      data.request = modele;
+      // console.log(data);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, LoginWithPassword>(e, modele));
   }
 
   public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {

@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
-
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Domain } from '../models/domain';
 import { Http } from '@angular/http';
 import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
-import * as _ from '../lodash-optimized';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+declare var _: any;
 
 @Injectable()
 export class LocationService {
   private GoogleApiURL: string = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCaphDTQJXyr1lhnaXP_nm7a5dqgr5KVJU';
-
-  constructor(private _http: Http) {
+  private _: any;
+  constructor(private _http: Http, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    this._ = config._;
+    _ = config._;
   }
 
   public GetCity(location: GeoLocationSearch) {
