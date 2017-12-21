@@ -277,7 +277,7 @@ export class SalesInvoiceComponent implements OnInit {
             item.stocks.map(as => {
               accountsArray.push({
                 value: uuid.v4(),
-                label: item.name + '(' + as.uniqueName + ')',
+                label: `${item.name} (${as.name})`,
                 additional: Object.assign({}, item, { stock: as })
               });
             });
@@ -293,26 +293,14 @@ export class SalesInvoiceComponent implements OnInit {
       // listen for newly added stock and assign value
       this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
         if (o) {
-          let result: IOption = _.find(accountsArray, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stocks && (_.findIndex(item.additional.stocks, (stock) => stock.uniqueName === o.uniqueName) !== -1));
+          let result: IOption = _.find(accountsArray, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
           if (result && !_.isUndefined(this.entryIdx)) {
-            this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = o.linkedAc;
+            this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
             this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
           }
         }
       });
 
-    });
-
-    // logic to autoComplete
-    this.salesAccounts$.takeUntil(this.destroyed$).distinctUntilChanged((p, n) => {
-      if (p && n && p.length < n.length) {
-        return false;
-      }
-      return true;
-    }).subscribe((arr: IOption[]) => {
-      if (arr && arr.length) {
-        //
-      }
     });
   }
 
