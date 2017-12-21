@@ -9,7 +9,7 @@ import { COMPANY_API } from './apiurls/comapny.api';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class CompanyService {

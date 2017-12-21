@@ -9,7 +9,7 @@ import { SEARCH_API } from './apiurls/search.api';
 import { SearchRequest, SearchResponse } from '../models/api-models/Search';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class SearchService {

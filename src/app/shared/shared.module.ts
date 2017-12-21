@@ -7,7 +7,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header';
 import { FooterComponent } from './footer/footer.component';
@@ -36,6 +36,7 @@ import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -83,12 +84,13 @@ export function provideConfig() {
     ShSelectModule,
     DecimalDigitsModule,
     // BsDatepickerModule,
-    Daterangepicker
+    Daterangepicker,
+    TextCaseChangeModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],
