@@ -90,8 +90,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
 
             if (activeGroupTaxHierarchy.inheritedTaxes) {
-              let inheritedTaxes = activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes.map(j => j.uniqueName));
-              let allTaxes = applicableTaxes.filter(f => inheritedTaxes[0].indexOf(f) === -1);
+              let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+              let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
               // set value in tax group form
               this.taxGroupForm.setValue({taxes: allTaxes});
             } else {
