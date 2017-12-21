@@ -1,3 +1,4 @@
+import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -99,7 +100,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userName: string;
   public isProd = ENV;
   public isElectron: boolean = isElectron;
-  public universalDate: Date[];
   public isTodaysDateSelected: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -208,9 +208,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
 
     // Get universal date
-    this.store.select(p => p.session.applicationDate).subscribe((value: Date[]) => {
-      this.universalDate = _.cloneDeep(value);
-    });
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj && dateObj.length) {
+          this.datePickerOptions.startDate = moment(dateObj[0]);
+          this.datePickerOptions.endDate = moment(dateObj[1]);
+      }
+    })).take(1).subscribe();
   }
 
   public ngAfterViewInit() {
@@ -226,6 +229,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
+        this.store.dispatch(this.companyActions.GetApplicationDate());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -373,23 +377,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public setApplicationDate(ev) {
-    let data = ev ? ev : null;
+    let data = ev ? _.cloneDeep(ev) : null;
     if (data && data.picker) {
       this.isTodaysDateSelected = false;
-      let dates = [data.picker.startDate._d, data.picker.endDate._d];
+      let dates = {
+        fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
+      this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment().subtract(30, 'days'), moment()]);
-      today = [today[0]._d, today[1]._d];
       this.datePickerOptions.startDate = today[0];
       this.datePickerOptions.endDate = today[1];
-      this.store.dispatch(this.companyActions.SetApplicationDate(today));
+      let dates = {
+        fromDate: moment(today[0]).format(GIDDH_DATE_FORMAT),
+        toDate: moment(today[1]).format(GIDDH_DATE_FORMAT)
+      };
+      this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }
   }
 
   public jumpToToday() {
-    this.isTodaysDateSelected = true;
-    this.universalDate = null;
     this.setApplicationDate(null);
   }
 
