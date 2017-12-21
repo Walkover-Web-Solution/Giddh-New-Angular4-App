@@ -8,7 +8,8 @@
       <div class="row">
         <div class="col-xs-2">
           <div class="row">
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
+              (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
             <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
             <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
             <!--type="text" ng-model="cDate" options="opts" required="">-->
@@ -112,7 +113,7 @@
                           <tbody class="ledger-main">
                             <tr class="ledger-row" (click)="selectBankTxn(txn)" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                               <td class="col-xs-2">
-                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                               </td>
                               <td class="col-xs-7 select2-parent select2-ledger">
                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
@@ -140,14 +141,18 @@
                               </td>
 
                               <td class="col-xs-3 pos-rel">
-                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
+                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                  (click)="blankLedgerAmountClick()">
                               </td>
                             </tr>
                           </tbody>
                         </table>
                         <!--new ledge popup-->
                         <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
-                          <new-ledger-entry-panel #newLedPanel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                          <new-ledger-entry-panel #newLedPanel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
+                            [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
+                            [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()"
+                            (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                           </new-ledger-entry-panel>
                         </div>
                         <!-- end  -->
@@ -165,7 +170,7 @@
                           <tbody class="ledger-main">
                             <tr class="ledger-row">
                               <td class="col-xs-2">
-                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                               </td>
                               <td class="col-xs-7 select2-parent select2-ledger">
                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
@@ -322,7 +327,7 @@
                     <tr class="ledger-row compoundEntry">
 
                       <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
-                        <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                        <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                       </td>
                       <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
@@ -443,7 +448,7 @@
                     <tr class="ledger-row compoundEntry">
 
                       <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
-                        <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                        <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                       </td>
                       <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
