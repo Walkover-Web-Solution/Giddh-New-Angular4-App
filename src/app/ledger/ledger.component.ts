@@ -685,6 +685,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       componentRef.destroy();
       this.entryManipulated();
     });
+
+    componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+      this.showQuickAccountModal();
+    });
   }
 
   public loadQuickAccountComponent() {

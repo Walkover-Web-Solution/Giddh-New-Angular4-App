@@ -33,6 +33,7 @@ import { Configuration } from 'app/app.constant';
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+  @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
@@ -508,5 +509,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this._toasty.errorToast(d.message);
       }
     });
+  }
+
+  public showQuickAccountModal() {
+    this.showQuickAccountModalFromUpdateLedger.emit(true);
   }
 }
