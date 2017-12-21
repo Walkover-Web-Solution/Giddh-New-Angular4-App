@@ -108,7 +108,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
       uniqueName: [null, [Validators.required]],
       openingBalanceType: ['CREDIT'],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      hsnOrSac: [null],
+      hsnOrSac: ['sac'],
       hsnNumber: [{ value: null, disabled: false }],
       sacNumber: [{ value: null, disabled: false }]
     });
