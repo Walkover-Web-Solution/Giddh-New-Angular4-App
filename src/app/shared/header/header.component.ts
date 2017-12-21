@@ -1,3 +1,5 @@
+import { setTimeout } from 'timers';
+import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -20,6 +22,7 @@ import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +34,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
+  public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
@@ -46,6 +50,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     { name: 'ENGLISH', value: 'en' },
     { name: 'DUTCH', value: 'nl' }
   ];
+  public datePickerOptions: any = {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'Last 1 Day': [
+        moment().subtract(1, 'days'),
+        moment()
+      ],
+      'Last 7 Days': [
+        moment().subtract(6, 'days'),
+        moment()
+      ],
+      'Last 30 Days': [
+        moment().subtract(29, 'days'),
+        moment()
+      ],
+      'Last 6 Months': [
+        moment().subtract(6, 'months'),
+        moment()
+      ],
+      'Last 1 Year': [
+        moment().subtract(12, 'months'),
+        moment()
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
   public sideMenu: { isopen: boolean } = { isopen: false };
   public userMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
@@ -58,9 +98,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public markForDeleteCompany: CompanyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
+  public userIsCompanyUser: boolean = false;
   public userName: string;
   public isProd = ENV;
   public isElectron: boolean = isElectron;
+  public isTodaysDateSelected: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -121,6 +163,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //
     this.user$.subscribe((u) => {
       if (u) {
+        let userEmail = u.email;
+        let userEmailDomain = userEmail.replace(/.*@/, '');
+        if (userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1) {
+          this.userIsCompanyUser = true;
+        } else {
+          this.userIsCompanyUser = false;
+        }
         if (u.name.match(/\s/g)) {
           let name = u.name;
           let tmpName = name.split(' ');
@@ -166,6 +215,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+
+    // Get universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj && dateObj.length) {
+          this.datePickerOptions.startDate = moment(dateObj[0]);
+          this.datePickerOptions.endDate = moment(dateObj[1]);
+      }
+    })).take(1).subscribe();
   }
 
   public ngAfterViewInit() {
@@ -181,6 +238,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
+        this.store.dispatch(this.companyActions.GetApplicationDate());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -325,6 +383,32 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return;
     }
     this.flyAccounts.next(false);
+  }
+
+  public setApplicationDate(ev) {
+    let data = ev ? _.cloneDeep(ev) : null;
+    if (data && data.picker) {
+      this.isTodaysDateSelected = false;
+      let dates = {
+        fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
+      this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+    } else {
+      this.isTodaysDateSelected = true;
+      let today = _.cloneDeep([moment().subtract(30, 'days'), moment()]);
+      this.datePickerOptions.startDate = today[0];
+      this.datePickerOptions.endDate = today[1];
+      let dates = {
+        fromDate: moment(today[0]).format(GIDDH_DATE_FORMAT),
+        toDate: moment(today[1]).format(GIDDH_DATE_FORMAT)
+      };
+      this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+    }
+  }
+
+  public jumpToToday() {
+    this.setApplicationDate(null);
   }
 
   public ngOnDestroy() {

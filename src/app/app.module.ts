@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionReducer, MetaReducer, Store, StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as _ from './lodash-optimized';
 /*
  * Platform and Environment providers/pipes/pipes
@@ -131,6 +132,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     StoreRouterConnectingModule,
+    // StoreDevtoolsModule.instrument({
+    //   maxAge: 25
+    // }),
     ...CONDITIONAL_IMPORTS,
     /**
      * This section will import the `DevModuleModule` only in certain build types.
