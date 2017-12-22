@@ -6,3 +6,7 @@
     position: initial;
     margin-top: 1px;
 }
+
+table.width100 {
+    position: relative
+}

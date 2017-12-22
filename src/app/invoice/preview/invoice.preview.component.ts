@@ -19,6 +19,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
+import { createSelector } from 'reselect';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -36,10 +37,10 @@ const COMPARISON_FILTER = [
 ];
 
 const PREVIEW_OPTIONS = [
-  { label: 'Paid', value: 'paid'},
-  { label: 'Unpaid', value: 'unpaid'},
-  { label: 'Hold', value: 'hold'},
-  { label: 'Cancel', value: 'cancel'},
+  { label: 'Paid', value: 'paid' },
+  { label: 'Unpaid', value: 'unpaid' },
+  { label: 'Hold', value: 'hold' },
+  { label: 'Cancel', value: 'cancel' },
 ];
 
 @Component({
@@ -72,6 +73,7 @@ export class InvoicePreviewComponent implements OnInit {
   };
   public startDate: Date;
   public endDate: Date;
+  private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -81,15 +83,8 @@ export class InvoicePreviewComponent implements OnInit {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
   ) {
-    this.startDate = new Date();
-    this.endDate = new Date();
-    this.startDate.setDate(this.startDate.getDate() - 30);
-    this.endDate.setDate(this.endDate.getDate());
-    this.invoiceSearchRequest.dateRange = [this.startDate, this.endDate];
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
-    this.invoiceSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
-    this.invoiceSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.invoiceSearchRequest.entryTotalBy = '';
   }
 
@@ -140,7 +135,14 @@ export class InvoicePreviewComponent implements OnInit {
         }
       });
 
-    this.getInvoices();
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.invoiceSearchRequest.dateRange = this.universalDate;
+      }
+      this.getInvoices();
+    })).subscribe();
   }
 
   public getInvoiceTemplateDetails(templateUniqueName: string) {
@@ -303,9 +305,18 @@ export class InvoicePreviewComponent implements OnInit {
 
   public prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
+    let fromDate = null;
+    let toDate = null;
+    if (this.universalDate && this.universalDate.length) {
+      fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+      toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    } else {
+      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate  = moment().format(GIDDH_DATE_FORMAT);
+    }
     return {
-      from: o.from,
-      to: o.to,
+      from: fromDate,
+      to: toDate,
       count: o.count,
       page: o.page
     };

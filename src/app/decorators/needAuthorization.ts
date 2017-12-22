@@ -77,10 +77,13 @@ export class NeedsAuthorization implements CanActivate {
         if (indexOfHome !== -1) {
           this._router.navigate(['/pages/home']);
         } else {
-          let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0].name);
-          this._router.navigate([firstPermittedScope.key]);
+          if (permissions && permissions.length) {
+            let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0].name);
+            this._router.navigate([firstPermittedScope.key]);
+          } else {
+            this._router.navigate(['/login']);
+          }
         }
-
         return false;
       }
     } else {
@@ -96,7 +99,8 @@ export class NeedsAuthorization implements CanActivate {
     let requestedScope = SCOPE_TO_ROUTE_MAPPING.find((obj) => obj.key === path);
     if (requestedScope) {
       return requestedScope.value;
+    } else {
+      return null;
     }
-    return null;
   }
 }

@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -31,6 +31,9 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { setTimeout } from 'timers';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'ledger',
@@ -41,6 +44,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
@@ -128,6 +132,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
+    // Después del éxito de la entrada. llamar para transacciones bancarias
+    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+      if (data && data.yodleeAdded) {
+        this.getBankTransactions();
+      } else {
+        this.hideEledgerWrap();
+      }
+    });
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
@@ -383,6 +395,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
+
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions.startDate  = universalDate[0];
+        this.datePickerOptions.endDate  = universalDate[1];
+        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+      }
+    })).subscribe();
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -450,10 +472,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     if (unAccountedTrx) {
       this.selectBlankTxn(unAccountedTrx);
+
+      this.dropDowns.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
+        setTimeout(() => {
+          dd.show(null);
+        }, 0);
+      });
     } else {
       let newTrx = this.lc.addNewTransaction(event);
       this.lc.blankLedger.transactions.push(newTrx);
       this.selectBlankTxn(newTrx);
+      setTimeout(() => {
+        this.dropDowns.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
+          dd.show(null);
+        });
+      }, 0);
     }
   }
 
@@ -517,7 +550,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           applyApplicableTaxes: true,
           isInclusiveTax: true
         }],
-      voucherType: 'sal',
+      voucherType: null,
       entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
@@ -527,7 +560,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       generateInvoice: false,
       chequeNumber: '',
       chequeClearanceDate: '',
-      invoiceNumberAgainstVoucher: ''
+      invoiceNumberAgainstVoucher: '',
+      compoundTotal: 0
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -661,6 +695,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
+    });
+
+    componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+      this.showQuickAccountModal();
     });
   }
 
