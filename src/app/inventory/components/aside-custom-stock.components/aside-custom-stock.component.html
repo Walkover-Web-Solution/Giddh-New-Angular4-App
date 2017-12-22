@@ -4,7 +4,7 @@
         <h3 class="aside-title">Create Unit</h3>
     </div>
     <div class="aside-body pdT2">
-        <!-- (submitClicked)="addNewAcSubmit($event)" -->
-        <inventory-custom-stock> </inventory-custom-stock>
+        {{ asideClose }}
+        <inventory-custom-stock #customStock [isAsideClose]="asideClose"> </inventory-custom-stock>
     </div>
 </div>

@@ -192,7 +192,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (groupStockResponse.status === 'success') {
         groupArray = _.cloneDeep(state.groupsWithStocks);
-        if (groupStockResponse.request.isSelfParent) {
+        if (groupStockResponse.request.isSelfParent || !groupStockResponse.request.isSubGroup) {
           groupArray.push({
             name: groupStockResponse.body.name,
             uniqueName: groupStockResponse.body.uniqueName,
@@ -259,9 +259,13 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       if (resp.status === 'success') {
         let data: StockGroupResponse = action.payload.body;
         groupArray = _.cloneDeep(state.groupsWithStocks);
-        let activeGroup = _.cloneDeep(state.activeGroup);
+        // let activeGroup = _.cloneDeep(state.activeGroup);
+        let activeGroup = data;
         let stateActiveGrp: StockGroupResponse = null;
-        if (resp.request.isSelfParent) {
+        // if (resp.request.isSubGroup) {
+        //   activeGroup.parentStockGroup.uniqueName = resp.request.parentStockGroupUniqueName;
+        // }
+        if (resp.request.isSelfParent || !resp.request.isSubGroup) {
           groupArray.map(gr => {
             if (gr.uniqueName === activeGroup.uniqueName) {
               gr.name = resp.body.name;
