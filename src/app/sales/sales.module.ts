@@ -26,7 +26,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -58,7 +58,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SharedModule,
     LaddaModule,
     DigitsOnlyModule,
-    DecimalDigitsModule
+    DecimalDigitsModule,
+    ShSelectModule
   ],
   exports: [
     TooltipModule
