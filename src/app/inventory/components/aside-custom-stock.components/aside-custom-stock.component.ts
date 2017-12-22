@@ -4,6 +4,9 @@ import { AppState } from '../../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
+import { ViewChild } from '@angular/core/src/metadata/di';
+import { ElementRef } from '@angular/core/src/linker/element_ref';
+import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
 
 @Component({
   selector: 'aside-custom-stock',
@@ -42,6 +45,9 @@ import * as _ from '../../lodash-optimized';
 export class AsideCustomStockComponent implements OnInit {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  // @ViewChild('customStock') public customStock; 
+
+  public asideClose: boolean;
 
   constructor(
     private store: Store<AppState>
@@ -49,10 +55,12 @@ export class AsideCustomStockComponent implements OnInit {
   }
 
   public ngOnInit() {
-
+    this.asideClose = false;
   }
   public closeAsidePane(event) {
     this.closeAsideEvent.emit(event);
+    this.asideClose = true;
+    setTimeout(() => {this.asideClose = false}, 500);
   }
 
 }

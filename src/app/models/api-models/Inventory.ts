@@ -26,6 +26,7 @@ export class StockGroupRequest implements INameUniqueName {
   public name: string;
   public uniqueName: string;
   public parentStockGroupUniqueName?: string;
+  public isSubGroup?: boolean;
 }
 
 /**
@@ -132,6 +133,7 @@ export class StockDetailResponse implements IStockDetail {
   public stockUnitCode?: string;
   public name: string;
   public uniqueName: string;
+  public hsnNumber?: number;
 }
 
 /*
@@ -150,6 +152,7 @@ export class CreateStockRequest {
   public salesAccountDetails: IAccountDetails;
   public stockUnitCode: string;
   public uniqueName: string;
+  public hsnNumber?: number;
 }
 
 /*
