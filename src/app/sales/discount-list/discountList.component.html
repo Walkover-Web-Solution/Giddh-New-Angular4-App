@@ -1,4 +1,4 @@
-<span class="pr" [ngClass]="{'open': isMenuOpen}" (blur)="hideDiscountMenu()">
+<span class="pr" [ngClass]="{'open': isMenuOpen}" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">
   <label *ngIf="isHeadingVisible">Discount</label>
   <a (click)="isMenuOpen = !isMenuOpen" class="clearfix">
     <input type="number" name="" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
