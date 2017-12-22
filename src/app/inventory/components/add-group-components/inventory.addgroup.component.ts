@@ -1,6 +1,6 @@
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -19,6 +19,8 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
   templateUrl: './inventory.addgroup.component.html'
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
+  @Input() public addGroup: boolean;
+  
   public sub: Subscription;
   public groupsData$: Observable<IOption[]>;
   public parentStockSearchString: string;
@@ -66,15 +68,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     this.addGroupForm = this._fb.group({
       name: ['', [Validators.required]],
       uniqueName: ['', [Validators.required]],
-      parentStockGroupUniqueName: [{ value: '', disabled: false }, [Validators.required]],
-      isSelfParent: [false]
+      parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
+      isSubGroup: [false]
     });
+    
     // enable disable parentGroup select
-    this.addGroupForm.controls['isSelfParent'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
+    this.addGroupForm.controls['isSubGroup'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
-        this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
         this.addGroupForm.controls['parentStockGroupUniqueName'].enable();
       } else {
+        this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
         this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
         this.addGroupForm.setErrors({ groupNameInvalid: true });
       }
@@ -91,7 +94,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
     // check if active group is available if then fill form else reset form
     this.activeGroup$.takeUntil(this.destroyed$).subscribe(a => {
-      if (a) {
+      if (a && !this.addGroup) {
         let updGroupObj = new StockGroupRequest();
         updGroupObj.name = a.name;
         updGroupObj.uniqueName = a.uniqueName;
@@ -100,15 +103,23 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
           this.selectedGroup = { label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName };
           updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.uniqueName;
           this.parentStockSearchString = a.parentStockGroup.uniqueName;
-          updGroupObj.isSelfParent = false;
+          updGroupObj.isSubGroup = true;
         } else {
           updGroupObj.parentStockGroupUniqueName = '';
           this.parentStockSearchString = '';
-          updGroupObj.isSelfParent = true;
+          updGroupObj.isSubGroup = false;
         }
         this.addGroupForm.patchValue(updGroupObj);
+        
+        // if (!this.addGroup) {
+        //   this.addGroupForm.patchValue(updGroupObj);
+        // } else if (this.addGroup) {
+        
+        //   this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
+        // }
+        
       } else {
-        this.addGroupForm.patchValue({ name: '', uniqueName: '', isSelfParent: true });
+        this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
         this.parentStockSearchString = '';
       }
     });
@@ -116,23 +127,25 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     // reset add form and get all groups data
     this.createGroupSuccess$.subscribe(d => {
       if (d) {
-        this.addGroupForm.reset();
-        this.getParentGroupData();
+        if (this.addGroup) {
+          this.addGroupForm.reset();
+          this.getParentGroupData();
+        }
         // this.router.navigate(['/pages', 'inventory', 'add-group']);
       }
     });
   }
 
   public ngAfterViewInit() {
-    // this.activeGroup$.take(1).subscribe(a => {
-    //   if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
-    //     //
-    //   } else {
-    //     if (this.groupUniqueName) {
-    //       this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-    //     }
-    //   }
-    // });
+    this.activeGroup$.take(1).subscribe(a => {
+      if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
+        //
+      } else {
+        if (this.groupUniqueName) {
+          this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+        }
+      }
+    });
   }
   public getParentGroupData() {
     // parentgroup data
@@ -185,7 +198,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     let activeGrp = null;
     this.activeGroup$.take(1).subscribe(ag => activeGrp = ag);
     // if updating group don't generate uniqueName
-    if (activeGrp) {
+    if (!this.addGroup) {
       return true;
     }
     let val: string = this.addGroupForm.controls['name'].value;
@@ -215,7 +228,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     let uniqueNameField = this.addGroupForm.get('uniqueName');
     uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
     stockRequest = this.addGroupForm.value as StockGroupRequest;
-    if (!this.addGroupForm.value.isSelfParent && this.selectedGroup) {
+    if (!this.addGroupForm.value.isSubGroup && this.selectedGroup) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
@@ -230,7 +243,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
 
     stockRequest = this.addGroupForm.value as StockGroupRequest;
-    if (!this.addGroupForm.value.isSelfParent) {
+    if (this.addGroupForm.value.isSubGroup) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));

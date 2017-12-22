@@ -61,7 +61,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     DecimalDigitsModule
   ],
   exports: [
-    TooltipModule
+    TooltipModule,
+    SalesAddStockGroupComponent
   ],
   providers: []
 })

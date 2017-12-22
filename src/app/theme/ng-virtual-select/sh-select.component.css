@@ -127,8 +127,11 @@ i.close.icon.clear:hover::after {
     color: black;
 }
 
-.sh-select-disabled .selectedVal {
+.sh-select-disabled .selectedVal,
+.sh-select-disabled .form-control {
     background: #eee !important;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 .selectedVal {

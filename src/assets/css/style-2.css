@@ -404,7 +404,7 @@ header .navbar {
 }
 
 .parent-Group {
-    padding-left: 20px;
+    padding-top: 10px;
     line-height: normal;
 }
 
@@ -2046,17 +2046,8 @@ input[type=radio]:checked:after {
 }
 
 #inventory-sidebar {
-    background-color: #fff;
+    background-color: transparent;
     padding: 10px 0;
-}
-
-#inventory-sidebar .search-input input {
-    height: 36px;
-    background-color: #f8f8f8;
-    color: #616161;
-    border-color: #c3c3c3;
-    width: 100%;
-    padding-left: 10px;
 }
 
 #inventory-sidebar .input-group {

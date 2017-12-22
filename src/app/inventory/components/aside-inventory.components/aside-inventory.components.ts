@@ -5,6 +5,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { InventoryAction } from 'app/actions/inventory/inventory.actions';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'aside-inventory-stock-group',
@@ -49,6 +50,18 @@ import { InventoryAction } from 'app/actions/inventory/inventory.actions';
     .flexy-child-1{
       flex-grow: 1;
     }
+    .vmiddle {
+      position: absolute;
+      top: 50%;
+      bottom: 0;
+      left: 0;
+      display: table;
+      width: 100%;
+      right: 0;
+      transform: translateY(-50%);
+      text-align: center;
+      margin: 0 auto;
+    }
   `],
   templateUrl: './aside-inventory.components.html'
 })
@@ -59,11 +72,11 @@ export class AsideInventoryComponent implements OnInit {
 
   // public
   public isAddStockOpen: boolean = false;
-  public isAddServiceOpen: boolean = false;
+  public isAddGroupOpen: boolean = false;
   public hideFirstStep: boolean = false;
-
+  
   constructor(
-    private store: Store<AppState>, private inventoryAction: InventoryAction
+    private store: Store<AppState>
   ) {
   }
 
@@ -74,14 +87,13 @@ export class AsideInventoryComponent implements OnInit {
   public toggleGroupPane() {
     this.hideFirstStep = true;
     this.isAddStockOpen = false;
-    this.isAddServiceOpen = !this.isAddServiceOpen;
-    this.store.dispatch(this.inventoryAction.resetActiveGroup());
+    this.isAddGroupOpen = !this.isAddGroupOpen;
   }
 
   public closeAsidePane(e?: any) {
     this.hideFirstStep = false;
     this.isAddStockOpen = false;
-    this.isAddServiceOpen = false;
+    this.isAddGroupOpen = false;
     if (e) {
       //
     } else {

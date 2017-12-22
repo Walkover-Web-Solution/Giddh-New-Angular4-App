@@ -1,6 +1,6 @@
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
@@ -18,14 +18,10 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
   templateUrl: './inventory.customstock.component.html'
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy {
+  @Input() public isAsideClose: boolean;
+
   public stockUnitsDropDown$: Observable<IOption[]>;
   public activeGroupUniqueName$: Observable<string>;
-  public options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Choose a parent unit',
-    allowClear: true
-  };
   public stockUnit$: Observable<StockUnitRequest[]>;
   public editMode: boolean;
   public editCode: string;
@@ -99,9 +95,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   }
 
   public editUnit(item: StockUnitRequest) {
-    console.log(item);
     this.customUnitObj = Object.assign({}, item);
-    console.log(this.customUnitObj.name);
     this.setUnitName(this.customUnitObj.name);
     if (this.customUnitObj.parentStockUnit) {
       this.change(this.customUnitObj.parentStockUnit.code);
@@ -122,9 +116,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
     this.stockUnit$.find(p => {
       let unit = p.find(q => q.code === v);
       if (unit !== undefined) {
-        console.log(this.customUnitObj.parentStockUnit);
         this.customUnitObj.parentStockUnit = unit;
-        console.log(this.customUnitObj.parentStockUnit);
         return true;
       }
     }).subscribe();
@@ -132,15 +124,20 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    // this.clearFields();
   }
 
   public setUnitName(name) {
     let unit = this.stockUnitsList.filter((obj) => obj.value === name || obj.label === name);
-    console.log(unit);
     if (unit !== undefined && unit.length > 0) {
       this.customUnitObj.code = unit[0].value;
       this.customUnitObj.name = unit[0].value;
       this.selectedUnitName = unit[0].label;
+    }
+  }
+  public ngOnChanges(changes) {
+    if (this.isAsideClose) {
+      this.clearFields();
     }
   }
 }

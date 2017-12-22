@@ -47,12 +47,12 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
-module.exports = function (options) {
+module.exports = function(options) {
     const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
     const HOST = process.env.HOST || 'localapp.giddh.com';
     const PORT = process.env.PORT || 3000;
     const AppUrl = 'http://dev.giddh.com/electron';
-    const ApiUrl = 'http://apidev.giddh.com/';
+    const ApiUrl = 'http://apitest.giddh.com/';
     const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
         host: HOST,
         port: PORT,
@@ -221,7 +221,7 @@ module.exports = function (options) {
              *
              * See: https://webpack.github.io/docs/webpack-dev-server.html
              */
-            setup: function (app) {
+            setup: function(app) {
                 // For example, to define custom handlers for some paths:
                 // app.get('/some/path', function(req, res) {
                 //   res.json({ custom: 'response' });

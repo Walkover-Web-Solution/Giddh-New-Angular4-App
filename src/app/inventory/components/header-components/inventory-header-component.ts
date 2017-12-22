@@ -27,10 +27,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   <div class="stock-bar">
   <div class="col-xs-12 top_bar bdrB">
     <div class="pull-right">
-      <button (click)="toggleAccountAsidePane($event)" type="button" class="btn btn-default">Custom Stock Unit</button>
-      <button (click)="toggleInventoryAsidePane($event)" type="button" class="btn btn-primary dropdown-toggle">Button dropdown <span class="caret"></span></button>
-      <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
-      <button type="button" *ngIf="activeGroupName$ | async" class="btn btn-default" (click)="goToAddStock()">Add Stock</button>
+      <button (click)="toggleAccountAsidePane($event)" type="button" class="btn btn-primary">Custom Stock Unit</button>
+      <button (click)="toggleInventoryAsidePane($event)" type="button" class="btn btn-primary">New <span class="caret"></span></button>
+
     </div>
   </div>
 </div>
@@ -39,6 +38,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 <aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleInventoryAsidePane($event)"></aside-inventory-stock-group>  
 `
 })
+// <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
+// <button type="button" *ngIf="activeGroupName$ | async" class="btn btn-default" (click)="goToAddStock()">Add Stock</button>
 // [routerLink]="['custom-stock']"
 export class InventoryHearderComponent implements OnDestroy, OnInit {
   public activeGroupName$: Observable<string>;
@@ -53,12 +54,11 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
   }
 
   public goToAddGroup() {
-    this.store.dispatch(this.inventoryAction.resetActiveGroup());
-    // this.store.dispatch(this.inventoryAction.resetActiveStock());
+    // this.store.dispatch(this.inventoryAction.resetActiveGroup());
     this.router.navigate(['/pages', 'inventory', 'add-group']);
   }
   public goToAddStock() {
-    // this.store.dispatch(this.inventoryAction.resetActiveStock());
+    this.store.dispatch(this.inventoryAction.resetActiveStock());
     let groupName = null;
     this.activeGroupName$.take(1).subscribe(s => groupName = s);
     this.router.navigate(['/pages', 'inventory', 'add-group', groupName, 'add-stock']);
