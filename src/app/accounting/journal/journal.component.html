@@ -19,12 +19,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let transaction of journalRequestObject.transactions">
-              <td>{{transaction.particular}}
-                <br>
-                <small> &nbsp;
-                  <i>Cur Bal: 20,000 Dr.</i>
-                </small>
-              </td>
+              <td>{{transaction.particular}}</td>
               <td>
                 <span *ngIf="transaction.type==='debit'">{{transaction.amount}}</span>
               </td>
