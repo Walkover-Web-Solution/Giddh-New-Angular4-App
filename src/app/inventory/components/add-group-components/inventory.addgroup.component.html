@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group col-xs-12">
                         <label>Unique Name <sup>*</sup></label>
-                        <input type="text" name="uniqueName" UniqueNameDirective formControlName="uniqueName" class="form-control">
+                        <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addGroupForm.get('uniqueName')" formControlName="uniqueName" class="form-control">
                         <div class="checkbox">
                             <label for="isSelfParentUpdt">
                           <input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt" name="parentStockGroup">Is it a sub group?</label>
