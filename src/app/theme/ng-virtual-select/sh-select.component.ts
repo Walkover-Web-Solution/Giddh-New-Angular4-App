@@ -96,7 +96,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef ) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
   }
 
   /**
@@ -157,7 +157,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.clearFilter();
 
     if (!this.multiple) {
-      if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+      if (this._selectedValues.length === 0 || (this._selectedValues[0] && this._selectedValues[0].value === item.value)) {
         callChanges = false;
       }
     }
@@ -168,13 +168,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.selectSingle(item);
     }
 
-    if (callChanges) {
-      this.onChange();
-    }
+    // if (callChanges) {
+    //   this.onChange();
+    // }
   }
 
   public selectSingle(item) {
     this._selectedValues.splice(0, this.rows.length);
+    debugger;
     this._selectedValues.push(item);
     this.hide();
   }
@@ -349,7 +350,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       newValues = this._selectedValues.map(p => p.value);
       this.propagateChange(newValues);
       this.selected.emit(this._selectedValues);
+      this.cdRef.detectChanges();
     } else {
+      debugger;
       let newValue: IOption;
       if (this.selectedValues.length > 0) {
         newValue = this.selectedValues[0];
@@ -364,6 +367,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.filter = newValue.label;
       this.propagateChange(newValue.value);
       this.selected.emit(newValue);
+      this.cdRef.detectChanges();
     }
   }
 }
