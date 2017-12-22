@@ -103,38 +103,6 @@
         </div>
         <!--merge account-->
 
-
-
-
-
-
-
-        <!-- <div class="clearfix">
-            <div class="form-group col-xs-12">
-                <label class="d-block">Select A/c to merge with
-          <span class="primary_clr">{{(activeAccount$ | async)?.name}}</span>
-        </label>
-                <div class="clearfix">
-                    <div class="col-xs-11 row" #accountSelect2>
-                        <sh-select [options]="accounts$ | async" [isFilterEnabled]="true" (viewInitEvent)="loadAccountData()" [multiple]="true" [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
-                        <small class="clearfix">This option is risky and can not be undone</small>
-                    </div>
-                    <div class="pull-right">
-                        <button class="btn btn-primary" (click)="mergeAccounts()">Merge</button>
-                    </div>
-                </div>
-
-                <ul class="accmerge" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
-                    <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
-                        <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
-                        {{merged}}
-                        <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div> -->
-
         <!--move merged account-->
 
         <div class="col-xs-12 form-group" *ngIf="showDeleteMove">
@@ -146,15 +114,6 @@
                 <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
               </span>
         </div>
-
-
-        <!-- <div class="col-xs-12 horizontal-form" *ngIf="showDeleteMove">
-            <label class="d-block">Move to other A/c</label>
-            <div class="form-group col-xs-11 row">
-                <sh-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false" [(ngModel)]="selectedAccountForMove" [placeholder]="'Select Accounts'"></sh-select>
-            </div>
-            <button class="btn btn-primary pull-right" (click)="showMoveMergedAccountModal()">Move</button>
-        </div> -->
 
         <!--taxes-->
         <!-- Taxes collapse -->
