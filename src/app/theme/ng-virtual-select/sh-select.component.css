@@ -85,13 +85,14 @@ i.close.icon.clear:hover::after {
     right: 2px;
     padding-left: 2px;
     padding-right: 2px;
-    top: 0;
+    top: 47%;
     cursor: pointer;
     font-size: 25px;
     font-weight: 500;
-    line-height: 34px;
+    line-height: 100%;
     opacity: .5;
     color: black;
+    transform: translateY(-50%);
 }
 
 .sh-select-disabled {
