@@ -77,10 +77,9 @@ export class DiscountListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * hide menus on blur of span
+   * hide menus on outside click of span
    */
   public hideDiscountMenu() {
-    console.log ('in hideDiscountMenu', this.isMenuOpen);
     this.isMenuOpen = false;
   }
 

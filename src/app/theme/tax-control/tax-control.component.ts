@@ -118,6 +118,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     return index; // or item.id
   }
 
+  /**
+   * hide menus on outside click of span
+   */
+  public hideTaxPopup() {
+    this.showTaxPopup = false;
+  }
+
   public ngOnDestroy() {
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
