@@ -1,9 +1,8 @@
 <div id="shareModal">
     <div id="setupWizardModal">
-
-        <div class="modal-header themeBg pd2 pdL2 pdR2">
-            <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true" (click)="closeModal()" aria-label="Close"></i>
-            <h3 class="modal-title bg">Create New Company</h3>
+        <div class="modal-header">
+            <h3>Create New Company</h3>
+            <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
         </div>
         <!-- end header -->
 
@@ -24,14 +23,14 @@
             <hr>
             <div class="wizard-container">
                 <form-wizard #wizard>
-
                     <wizard-step [isActive]="!(isMobileVerified | async)" *ngIf="!(isMobileVerified | async)" [title]="'Add Mobile Number'">
                         <div class="wizard-step">
                             <div class=" clearfix">
                                 <h1 class="l8grey">Add Mobile Number</h1>
                                 <form #addForm="ngForm" class="mrT mrB1" name="mobileForm" novalidate>
                                     <div class="">
-                                        <sh-select [options]="countryCodeList" name="country" [(ngModel)]="country" (selected)="setCountryCode($event)" class="pull-left" style="display:inline-block;width: 80px;"></sh-select>
+                                        <sh-select [options]="countryCodeList" [placeholder]="'CC'" name="country" [(ngModel)]="country" (selected)="setCountryCode($event)" class="pull-left" style="width: 80px;"></sh-select>
+
                                         <input class="form-control max350 pull-left mrR1" required="true" placeholder="9998899988" [(ngModel)]="phoneNumber" name="phoneNumber" />
                                         <button class="btn btn-success mrL1" (click)="addNumber()" [disabled]="addForm.invalid">Add</button>
                                     </div>

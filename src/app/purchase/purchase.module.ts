@@ -1,3 +1,4 @@
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgModule } from '@angular/core';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
@@ -10,6 +11,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -25,7 +27,9 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
     BsDropdownModule,
     Daterangepicker,
     LaddaModule,
-    HighlightModule
+    HighlightModule,
+    TooltipModule,
+    ClickOutsideModule
   ]
 })
 export class PurchaseModule { }

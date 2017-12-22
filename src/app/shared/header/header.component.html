@@ -43,6 +43,16 @@
                                                 </div>
                                             </a>
                                         </li>
+                                        <li class="dmLi trialB" *ngIf="userIsCompanyUser">
+                                            <a [routerLink]="['/pages/accounting']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">ACCOUNTING VOUCHERS</div>
+                                                        <div class="subTitle">Create Accounting Vouchers</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
                                         <li class="dmLi" [checkPermission]="['MENU', 'REPORT']">
                                             <a [routerLink]="['trial-balance-and-profit-loss']">
                                                 <div class="media">
@@ -133,16 +143,16 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <!-- <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
-                      <a [routerLink]="['permissions']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Permissions</div>
-                            <div class="subTitle">Add and manage Roles</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li> -->
+                                        <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
+                                            <a [routerLink]="['permissions']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Permissions</div>
+                                                        <div class="subTitle">Add and manage Roles</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </perfect-scrollbar>
                             </div>
@@ -169,12 +179,15 @@
                     </div>
                 </li>
             </ul>
-
             <ul class="nav navbar-nav navbar-right" *ngIf="(selectedCompany | async)">
+                <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1" (click)="jumpToToday();">Go back to Today</button> </li>
+                <li>
+                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
+                </li>
                 <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
                     <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
                         <span class="icon-dropdown"></span>
-                        <div class="cText">
+                        <div class="cText text-right">
                             <span class="cName">{{ (selectedCompany | async)?.name }}</span>
                             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
                         </div>
@@ -228,7 +241,7 @@
             </ul>
         </div>
     </nav>
-    <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+    <accounts-side-bar [attachOutsideOnClick]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->

@@ -14,7 +14,7 @@
     </div>
 
     <!-- time span -->
-    <div class="form-group" (clickOutside)="methodForToggleSection('timeSpanSection')">
+    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
         <label *ngIf="isLblShow">Time Span</label>
         <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
             <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left ">
@@ -62,7 +62,7 @@
     </div>
     <!-- time span end -->
 
-    <div class="form-group" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
         <label *ngIf="isLblShow">IP Addresses</label>
         <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
             <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">

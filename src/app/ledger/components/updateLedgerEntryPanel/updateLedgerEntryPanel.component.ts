@@ -23,6 +23,7 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
+import { Configuration } from 'app/app.constant';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -32,6 +33,7 @@ import { LoaderService } from '../../../loader/loader.service';
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+  @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
@@ -96,7 +98,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
-          this.vm.flatternAccountList = _.cloneDeep(resp[0]);
+          this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = Observable.of(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
 
@@ -275,7 +277,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.companyName$.take(1).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
-        url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+        url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
         data: { company: companyUniqueName },
@@ -507,5 +509,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this._toasty.errorToast(d.message);
       }
     });
+  }
+
+  public showQuickAccountModal() {
+    this.showQuickAccountModalFromUpdateLedger.emit(true);
   }
 }
