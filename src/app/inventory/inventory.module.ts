@@ -24,6 +24,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { AsideCustomStockComponent } from 'app/inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from 'app/inventory/components/aside-inventory.components/aside-inventory.components';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
+import { TextCaseChangeModule } from 'app/shared/helpers/directives/textCaseChange/textCaseChange.module';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
 // import { CollapseModule } from 'ngx-bootstrap/collapse';
 // import { ModalModule } from 'ngx-bootstrap/modal';
@@ -75,7 +76,8 @@ import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.m
     ShSelectModule,
     SharedModule,
     ModalModule,
-    Daterangepicker
+    Daterangepicker,
+    TextCaseChangeModule
   ],
 })
 export class InventoryModule {

@@ -19,7 +19,7 @@
                             </div>
                             <div class="form-group col-xs-4">
                                 <label>Unique Name</label>
-                                <input type="text" name="uniqueName" UniqueNameDirective class="form-control" formControlName="uniqueName">
+                                <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addStockForm.get('uniqueName')" class="form-control" formControlName="uniqueName">
                             </div>
 
                             <div class="form-group col-xs-4">
