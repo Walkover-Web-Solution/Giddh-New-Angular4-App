@@ -73,6 +73,8 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
     //    this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
   }
 
@@ -91,7 +93,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   public updateRole(role: NewRoleClass) {
     let data = new NewRoleClass(role.name, role.scopes, role.isFixed, role.uniqueName, true);
     this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
-    this.router.navigate(['/pages', 'permissions', 'details']);
+    this.router.navigate(['/pages/permissions/details']);
   }
 
   public deleteRole(role: IRoleCommonResponseAndRequest) {

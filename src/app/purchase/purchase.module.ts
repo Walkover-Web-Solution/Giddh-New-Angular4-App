@@ -11,6 +11,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -27,7 +28,8 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
     Daterangepicker,
     LaddaModule,
     HighlightModule,
-    TooltipModule
+    TooltipModule,
+    ClickOutsideModule
   ]
 })
 export class PurchaseModule { }
