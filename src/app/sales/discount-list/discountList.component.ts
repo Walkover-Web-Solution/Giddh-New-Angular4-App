@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -6,6 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
+import { QuickAccountComponent } from 'app/ledger/components/quickAccount/quickAccount.component';
+import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'discount-list',
@@ -18,6 +21,8 @@ export class DiscountListComponent implements OnInit, OnDestroy {
   @Input() public isHeadingVisible: boolean = false;
   @Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
   @Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
   public discountTotal: number;
   public discountItem$: Observable<IFlattenGroupsAccountsDetail>;
@@ -26,7 +31,8 @@ export class DiscountListComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private ledgerActions: LedgerActions
+    private ledgerActions: LedgerActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
   ) {}
 
   public ngOnInit() {
@@ -45,6 +51,7 @@ export class DiscountListComponent implements OnInit, OnDestroy {
    * prepare discount obj
    */
   public prepareDiscountList(items) {
+    this.discountAccountsList = [];
     if (items.length > 0) {
       items.forEach((acc) => {
         let disObj: ILedgerDiscount = {
@@ -87,4 +94,30 @@ export class DiscountListComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
+  public addNewDiscount(e: any) {
+    e.preventDefault();
+    console.log ('bingo open dialog to add new account');
+    this.loadQuickAccountComponent();
+    this.quickAccountModal.show();
+  }
+
+  public loadQuickAccountComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.comingFromDiscountList = true;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.quickAccountModal.hide();
+      componentInstance.comingFromDiscountList = false;
+      componentInstance.newAccountForm.reset();
+      this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
+    });
+
+  }
+
 }
