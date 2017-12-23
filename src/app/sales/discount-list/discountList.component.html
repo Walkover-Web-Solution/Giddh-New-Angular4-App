@@ -3,7 +3,8 @@
   <a (click)="isMenuOpen = !isMenuOpen" class="clearfix">
     <input type="number" name="" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
   </a>
-  <ul class="dropdown-menu" *ngIf="isMenuOpen && discountAccountsList.length > 0" (click)="$event.stopPropagation()">
+  <ul class="dropdown-menu" *ngIf="isMenuOpen" (click)="$event.stopPropagation()">
+    <!-- && discountAccountsList.length > 0 -->
     <li>
       <table>
         <tr *ngFor="let discount of discountAccountsList;">
@@ -12,8 +13,10 @@
             <input type="number" class="form-control" (change)="change()" [(ngModel)]="discount.amount"/>
           </td>
         </tr>
-        <tr><td class="pd1" colspan="100%"><a href (click)="addNewDiscount($event)">Add New Discount</a></td></tr>
       </table>
+    </li>
+    <li>
+      <a class="pd1 btn-link" href (click)="addNewDiscount($event)">Add New Discount</a>
     </li>
   </ul>
 </span>
