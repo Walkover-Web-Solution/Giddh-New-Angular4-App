@@ -1,3 +1,4 @@
+import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -13,9 +14,15 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 export class SettingsComponent implements OnInit {
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private settingsProfileActions: SettingsProfileActions) {
+  public isUserSuperAdmin: boolean = false;
 
-  }
+  constructor(
+    private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private settingsProfileActions: SettingsProfileActions,
+    private _permissionDataService: PermissionDataService) {
+      this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
+    }
   public ngOnInit() {
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
