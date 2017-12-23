@@ -12,7 +12,12 @@ import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'discount-list',
-  templateUrl: 'discountList.component.html'
+  templateUrl: 'discountList.component.html',
+  styles: [`
+    .dropdown-menu>li>a.btn-link{
+      color: #10aae0;
+    }
+  `]
 })
 
 export class DiscountListComponent implements OnInit, OnDestroy {
@@ -97,7 +102,6 @@ export class DiscountListComponent implements OnInit, OnDestroy {
 
   public addNewDiscount(e: any) {
     e.preventDefault();
-    console.log ('bingo open dialog to add new account');
     this.loadQuickAccountComponent();
     this.quickAccountModal.show();
   }
