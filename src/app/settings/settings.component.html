@@ -14,7 +14,7 @@
                 <tab heading="Profile" (select)="profileSelected($event)">
                     <setting-profile></setting-profile>
                 </tab>
-                <tab heading="Permission">
+                <tab [disabled]="!isUserSuperAdmin" heading="Permission">
                   <setting-permission></setting-permission>
                 </tab>
                 <tab heading="Payment Details">Payment Details content</tab>
