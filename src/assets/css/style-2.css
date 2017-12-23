@@ -4366,3 +4366,11 @@ table td[class*=col-]:last-child {
 .dropdown-container .dropdown-menu li:last-child label {
     border-bottom: 0;
 }
+
+.universal_date label {
+    color: #fff;
+}
+
+.universal_date .btn-link {
+    color: #10aae0 !important;
+}
