@@ -221,6 +221,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (dateObj && dateObj.length) {
           this.datePickerOptions.startDate = moment(dateObj[0]);
           this.datePickerOptions.endDate = moment(dateObj[1]);
+          let dates = {
+            fromDate: moment(dateObj[0]).format(GIDDH_DATE_FORMAT),
+            toDate: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)
+          };
+          this.datePickerOptions.fromDate = dates.fromDate;
+          this.datePickerOptions.toDate = dates.toDate;
+          
+          if (_.isEqual(this.datePickerOptions.fromDate, this.datePickerOptions.fromDate)) {
+            this.isTodaysDateSelected = true;
+          } else {
+            this.isTodaysDateSelected = false;
+          }
+
+
       }
     })).take(1).subscribe();
   }
@@ -393,16 +407,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
         toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
+      this.datePickerOptions.fromDate = dates.fromDate;
+      this.datePickerOptions.toDate = dates.toDate;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
       this.isTodaysDateSelected = true;
-      let today = _.cloneDeep([moment().subtract(30, 'days'), moment()]);
+      let today = _.cloneDeep([moment().subtract(0, 'days'), moment()]);
+      // console.log(today);
       this.datePickerOptions.startDate = today[0];
       this.datePickerOptions.endDate = today[1];
       let dates = {
         fromDate: moment(today[0]).format(GIDDH_DATE_FORMAT),
         toDate: moment(today[1]).format(GIDDH_DATE_FORMAT)
       };
+      // console.log(dates);
+      this.datePickerOptions.fromDate = dates.fromDate;
+      this.datePickerOptions.toDate = dates.toDate;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }
   }
