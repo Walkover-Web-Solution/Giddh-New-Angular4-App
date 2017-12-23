@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewChecked, Input, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -8,12 +8,13 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { Scope, IRoleCommonResponseAndRequest, Permission } from '../../../models/api-models/Permission';
 import * as _ from '../../../lodash-optimized';
 import { NewRoleClass, NewPermissionObj, IPage, IPageStr } from '../../permission.utility';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   templateUrl: './permission.details.html'
 })
 
-export class PermissionDetailsComponent implements OnInit {
+export class PermissionDetailsComponent implements OnInit, OnDestroy {
   public pageList: IPageStr[];
   public newRole: any = {};
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -25,6 +26,7 @@ export class PermissionDetailsComponent implements OnInit {
   public allRolesOfPage: Permission[];
   public roleObj: NewRoleClass;
   public pageName: string = '';
+  public addUpdateRoleInProcess$: Observable<boolean>;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -33,10 +35,14 @@ export class PermissionDetailsComponent implements OnInit {
     private permissionActions: PermissionActions
   ) {
 
+    // listen for add/update
+    this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).takeUntil(this.destroyed$);
+
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
       this.allRoles = _.cloneDeep(permission.roles);
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
-        return o.uniqueName === 'super_admin_off_the_record';
+        return o.uniqueName === 'super_admin';
+        // 'super_admin_off_the_record'
       });
       this.adminPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'admin';
@@ -51,9 +57,23 @@ export class PermissionDetailsComponent implements OnInit {
     });
   }
 
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
   public ngOnInit() {
+
+    // listener for add update role case
+    this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
+      if (result) {
+        // uncomment below to redirect
+        // this.router.navigate(['/pages/permissions/list']);
+      }
+    });
+
     if (_.isEmpty(this.newRole)) {
-      this.router.navigate(['/pages', 'permissions', 'list']);
+      this.router.navigate(['/pages/permissions/list']);
     }else if (this.newRole.isUpdateCase) {
       this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), false, this.newRole.uniqueName, this.newRole.isUpdateCase);
     } else {
@@ -95,7 +115,7 @@ export class PermissionDetailsComponent implements OnInit {
     arr = _.forEach(data.scopes, (page: Scope) => {
       _.remove(page.permissions, (o: Permission) => !o.isSelected );
     });
-    return arr;
+    return _.filter(arr, (o: Scope) => o.permissions.length > 0 );
   }
 
   public addNewRole(): any {
@@ -114,7 +134,6 @@ export class PermissionDetailsComponent implements OnInit {
     return arr.map((o: Permission) => {
       return o = new NewPermissionObj(o.code, false);
     });
-    //  _.forEach(arr, (o: Permission) => o.isSelected = false);
   }
 
   public setScopeForCurrentRole(): Scope[] {
