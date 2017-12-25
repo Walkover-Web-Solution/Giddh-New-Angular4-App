@@ -32,7 +32,7 @@ export class JournalComponent implements OnInit, OnDestroy {
   public accounts: IOption[] = [];
   public allAccounts: IOption[] = [];
   public showLedgerAccountList: boolean = false;
-  public selectedInput: 'by' | 'to' = null;
+  public selectedInput: 'by' | 'to' = 'by';
   public journalRequestObject: any = {};
   public totalCreditAmount: number = 0;
   public totalDebitAmount: number = 0;
@@ -90,9 +90,9 @@ export class JournalComponent implements OnInit, OnDestroy {
     this.accounts = _.filter(allData, (o) => _.includes(o.label, str));
   }
   public selectInputType(ev: KeyboardEvent) {
-    if (ev.key === 'c') {
+    if (ev.key === 'c' || ev.key === 't') {
       this.selectedInput = 'to';
-    } else if (ev.key === 'd') {
+    } else if (ev.key === 'd' || ev.key === 'b') {
       this.selectedInput = 'by';
     } else {
       this.selectedInput = null;
@@ -142,6 +142,7 @@ export class JournalComponent implements OnInit, OnDestroy {
     if (this.totalCreditAmount === this.totalDebitAmount) {
       let data = _.cloneDeep(this.journalRequestObject);
       _.forEach(data.transactions, element => {
+        element.type = (element.type === 'debit') ? 'credit' : 'debit';
         element.particular = _.find(this.accounts, (el) => el.label === element.particular).value;
       });
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).particular;
