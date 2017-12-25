@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
     private companyActions: CompanyActions,
     private settingsProfileActions: SettingsProfileActions,
     private _permissionDataService: PermissionDataService) {
-      this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
+      this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
     }
   public ngOnInit() {
     let companyUniqueName = null;
