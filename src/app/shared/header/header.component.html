@@ -182,7 +182,6 @@
             <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
                 <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
                     <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.fromDate }} <br /> to {{ datePickerOptions.toDate}}</label>
-                    <!-- <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.startDate }} <br /> to {{ datePickerOptions.endDate}}</label> -->
                 </li>
 
                 <li class="mrT" *ngIf="isTodaysDateSelected" daterangepicker (applyDaterangepicker)="setApplicationDate($event)" [options]="datePickerOptions">

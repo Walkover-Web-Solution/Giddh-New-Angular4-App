@@ -227,8 +227,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           };
           this.datePickerOptions.fromDate = dates.fromDate;
           this.datePickerOptions.toDate = dates.toDate;
-          
-          if (_.isEqual(this.datePickerOptions.fromDate, this.datePickerOptions.fromDate)) {
+          let toDay = moment().format(GIDDH_DATE_FORMAT);
+
+          if (_.isEqual(this.datePickerOptions.fromDate, this.datePickerOptions.toDate) && _.isEqual(this.datePickerOptions.fromDate, toDay)) {
             this.isTodaysDateSelected = true;
           } else {
             this.isTodaysDateSelected = false;
@@ -413,14 +414,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment().subtract(0, 'days'), moment()]);
-      // console.log(today);
+      
       this.datePickerOptions.startDate = today[0];
       this.datePickerOptions.endDate = today[1];
       let dates = {
         fromDate: moment(today[0]).format(GIDDH_DATE_FORMAT),
         toDate: moment(today[1]).format(GIDDH_DATE_FORMAT)
       };
-      // console.log(dates);
       this.datePickerOptions.fromDate = dates.fromDate;
       this.datePickerOptions.toDate = dates.toDate;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
