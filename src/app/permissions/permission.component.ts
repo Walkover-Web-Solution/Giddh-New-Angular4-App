@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -9,12 +8,7 @@ import { Store } from '@ngrx/store';
   template: '<router-outlet></router-outlet>'
 })
 export class PermissionComponent implements OnInit {
-  constructor(private router: Router, private store: Store<AppState>, private companyActions: CompanyActions) {
-    this.router.events.subscribe((event: NavigationStart) => {
-      if (event.url === '/pages/permissions' || event.url === '/pages/permissions/') {
-        this.router.navigate(['/pages', 'permissions', 'list']);
-      }
-    });
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
   }
   public ngOnInit(): void {
     let companyUniqueName = null;
