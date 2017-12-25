@@ -11,12 +11,13 @@ export interface IScope {
 
 @Injectable()
 export class PermissionDataService {
-
+  private _isUserSuperAdmin: boolean = false;
   private _scopes: IScope[] = [];
   constructor(private store: Store<AppState>) {
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
       if (currentCompany && currentCompany.userEntityRoles && currentCompany.userEntityRoles.length) {
+        this.isUserSuperAdmin = currentCompany.userEntityRoles[0].role.uniqueName === 'super_admin' ? true : false;
         this.getData = currentCompany.userEntityRoles[0].role.scopes;
       }
     })).subscribe();
@@ -28,5 +29,13 @@ export class PermissionDataService {
 
   set getData(data: IScope[]) {
     this._scopes = data;
+  }
+
+  get isUserSuperAdmin(): boolean {
+    return this._isUserSuperAdmin;
+  }
+
+  set isUserSuperAdmin(info: boolean) {
+    this._isUserSuperAdmin = info;
   }
 }
