@@ -27,6 +27,9 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
     .grp_open {
       background: rgb(255, 255, 255);
     }
+    .grp_open li {
+      border: 0;
+    }
   `],
   template: `
     <ul class="list-unstyled stock-grp-list">

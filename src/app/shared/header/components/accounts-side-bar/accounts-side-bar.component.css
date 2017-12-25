@@ -9,3 +9,8 @@
     font-size: 13px;
     text-transform: lowercase;
 }
+
+.parent-Group {
+    padding-left: 20px;
+    padding-top: 0;
+}

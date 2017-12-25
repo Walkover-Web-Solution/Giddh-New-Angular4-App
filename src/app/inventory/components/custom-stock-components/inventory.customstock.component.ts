@@ -33,6 +33,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public companyProfile: any;
   public country: string;
   public selectedUnitName: string;
+  public isIndia: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -53,8 +54,12 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         this.companyProfile = _.cloneDeep(o);
         if (this.companyProfile.country) {
           this.country = this.companyProfile.country.toLocaleLowerCase();
+          if (this.country && this.country === 'india') {
+            this.isIndia = true;
+          }
         } else {
           this.country = 'india';
+          this.isIndia = true;
         }
       } else {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -82,7 +87,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public saveUnit(): any {
     if (!this.editMode) {
-      this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
+      if (this.isIndia) {
+        this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
+      }
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
     } else {
       this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(this.customUnitObj), this.editCode));
@@ -98,7 +105,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
     this.customUnitObj = Object.assign({}, item);
     this.setUnitName(this.customUnitObj.name);
     if (this.customUnitObj.parentStockUnit) {
-      this.change(this.customUnitObj.parentStockUnit.code);
+      this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
     }
     this.editCode = item.code;
     this.editMode = true;
@@ -106,7 +113,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public clearFields() {
     this.customUnitObj = new StockUnitRequest();
-    // this.customUnitObj = {};
+    this.customUnitObj.parentStockUnitCode = null;
     this.editMode = false;
     this.editCode = '';
 
