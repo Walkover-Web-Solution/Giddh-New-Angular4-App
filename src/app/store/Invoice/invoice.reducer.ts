@@ -17,6 +17,7 @@ export interface InvoiceState {
   visitedFromPreview: boolean;
   settings: InvoiceSetting;
   isLoadingInvoices: boolean;
+  isBulkInvoiceGenerated: boolean;
 }
 
 export const initialState: InvoiceState = {
@@ -29,23 +30,20 @@ export const initialState: InvoiceState = {
   visitedFromPreview: false,
   settings: null,
   isLoadingInvoices: false,
+  isBulkInvoiceGenerated: false
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
     switch (action.type) {
-        case INVOICE_ACTIONS.GET_ALL_INVOICES: {
-            // let newState = _.cloneDeep(state);
-            // newState.isLoadingInvoices = true;
-            // return Object.assign({}, state, newState);
-        }
         case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
           let newState = _.cloneDeep(state);
+          newState.isBulkInvoiceGenerated = false;
           let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
           if (res.status === 'success') {
             newState.invoices = res.body;
             return Object.assign({}, state, newState);
           }
-          return state;
+          return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
           let newState = _.cloneDeep(state);
@@ -119,7 +117,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             isInvoiceGenerated: false,
             invoiceTemplateConditions: null,
             invoiceData: null,
-            visitedFromPreview: false
+            visitedFromPreview: false,
+            isBulkInvoiceGenerated: false
           });
         }
         case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
@@ -140,20 +139,21 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
           return state;
         }
         case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let res: BaseResponse<string, GenerateBulkInvoiceRequest> = action.payload;
-            let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
-            if (res.status === 'success' && reqObj.length > 0) {
-              _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                _.forEach(item.entries, (uniqueName: string) => {
-                  newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
-                    return o.uniqueName !== uniqueName;
-                  });
+          let newState = _.cloneDeep(state);
+          newState.isBulkInvoiceGenerated = true;
+          let res: BaseResponse<string, GenerateBulkInvoiceRequest> = action.payload;
+          let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
+          if (res.status === 'success' && reqObj.length > 0) {
+            _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+              _.forEach(item.entries, (uniqueName: string) => {
+                newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                  return o.uniqueName !== uniqueName;
                 });
               });
-              return Object.assign({}, state, newState);
-            }
-            return state;
+            });
+            return Object.assign({}, state, newState);
+          }
+          return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
             let newState = _.cloneDeep(state);

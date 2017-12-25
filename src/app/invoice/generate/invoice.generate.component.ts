@@ -65,6 +65,7 @@ export class InvoiceGenerateComponent implements OnInit {
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  private isBulkInvoiceGenerated$: Observable<boolean>;
 
   constructor(
     private modalService: BsModalService,
@@ -76,6 +77,7 @@ export class InvoiceGenerateComponent implements OnInit {
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -118,6 +120,14 @@ export class InvoiceGenerateComponent implements OnInit {
           this.getInvoiceTemplateDetails(o.templateUniqueName);
         }
       });
+
+    // listen for bulk invoice generate after success call getLedgers
+    this.isBulkInvoiceGenerated$.subscribe(result => {
+      if (result) {
+        this.getLedgersOfInvoice();
+        this.toggleAllItems(false);
+      }
+    });
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
@@ -225,7 +235,6 @@ export class InvoiceGenerateComponent implements OnInit {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
     }else {
-      console.log ('error hardcoded: templateUniqueName');
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }
