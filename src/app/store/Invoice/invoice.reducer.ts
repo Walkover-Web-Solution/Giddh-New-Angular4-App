@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { INVOICE_ACTIONS, INVOICE } from '../../actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../customActions';
@@ -18,6 +18,7 @@ export interface InvoiceState {
   settings: InvoiceSetting;
   isLoadingInvoices: boolean;
   isBulkInvoiceGenerated: boolean;
+  isBulkInvoiceGeneratedWithoutErrors: boolean;
 }
 
 export const initialState: InvoiceState = {
@@ -30,14 +31,14 @@ export const initialState: InvoiceState = {
   visitedFromPreview: false,
   settings: null,
   isLoadingInvoices: false,
-  isBulkInvoiceGenerated: false
+  isBulkInvoiceGenerated: false,
+  isBulkInvoiceGeneratedWithoutErrors: false
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
     switch (action.type) {
         case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
           let newState = _.cloneDeep(state);
-          newState.isBulkInvoiceGenerated = false;
           let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
           if (res.status === 'success') {
             newState.invoices = res.body;
@@ -56,12 +57,15 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
         case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
+            newState.isBulkInvoiceGenerated = false;
+            newState.isBulkInvoiceGeneratedWithoutErrors = false;
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
             if (res.status === 'success') {
                 let body = _.cloneDeep(res.body);
                 if (body.results.length > 0) {
                   body.results.map((item: ILedgersInvoiceResult) => {
                     item.isSelected = (item.isSelected) ? true : false;
+                    item.hasGenerationErr = false;
                   });
                 }
                 newState.ledgers = body;
@@ -118,7 +122,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             invoiceTemplateConditions: null,
             invoiceData: null,
             visitedFromPreview: false,
-            isBulkInvoiceGenerated: false
+            isBulkInvoiceGenerated: false,
+            isBulkInvoiceGeneratedWithoutErrors: false
           });
         }
         case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
@@ -140,19 +145,56 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
         case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
           let newState = _.cloneDeep(state);
-          newState.isBulkInvoiceGenerated = true;
-          let res: BaseResponse<string, GenerateBulkInvoiceRequest> = action.payload;
+          let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
           let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
           if (res.status === 'success' && reqObj.length > 0) {
-            _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-              _.forEach(item.entries, (uniqueName: string) => {
+            // check for failed entries
+            if (_.isArray(res.body) && res.body.length > 0) {
+              let failedEntriesArr: string[] = [];
+              let needToRemoveEleArr: string[] = [];
+              _.forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+                _.forEach(item.failedEntries, (uniqueName: string) => {
+                  failedEntriesArr.push(uniqueName);
+                  newState.ledgers.results = _.map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    if (o.uniqueName === uniqueName) {
+                      o.hasGenerationErr = true;
+                      o.errMsg = item.reason;
+                    }
+                    return o;
+                  });
+                });
+              });
+              _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                _.forEach(item.entries, (uniqueName: string) => {
+                  // find index and push
+                  if (_.indexOf(failedEntriesArr, uniqueName) === -1) {
+                    needToRemoveEleArr.push(uniqueName);
+                  }
+                });
+              });
+
+              _.forEach(needToRemoveEleArr, (uniqueName: string) => {
                 newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                   return o.uniqueName !== uniqueName;
                 });
               });
-            });
+
+            }else if (typeof res.body === 'string') {
+              _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                _.forEach(item.entries, (uniqueName: string) => {
+                  newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    return o.uniqueName !== uniqueName;
+                  });
+                });
+              });
+              if (newState.ledgers.results.length === 0) {
+                newState.isBulkInvoiceGeneratedWithoutErrors = true;
+              }
+            }
+            newState.isBulkInvoiceGenerated = true;
             return Object.assign({}, state, newState);
           }
+          newState.isBulkInvoiceGenerated = true;
           return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {

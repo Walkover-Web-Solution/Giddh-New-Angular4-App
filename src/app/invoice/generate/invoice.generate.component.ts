@@ -66,6 +66,7 @@ export class InvoiceGenerateComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   private isBulkInvoiceGenerated$: Observable<boolean>;
+  private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
 
   constructor(
     private modalService: BsModalService,
@@ -78,6 +79,7 @@ export class InvoiceGenerateComponent implements OnInit {
     this.ledgerSearchRequest.count = 12;
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).takeUntil(this.destroyed$);
+    this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -121,11 +123,15 @@ export class InvoiceGenerateComponent implements OnInit {
         }
       });
 
-    // listen for bulk invoice generate after success call getLedgers
+    // listen for bulk invoice generate and successfully generate and do the things
     this.isBulkInvoiceGenerated$.subscribe(result => {
       if (result) {
-        this.getLedgersOfInvoice();
         this.toggleAllItems(false);
+      }
+    });
+    this.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
+      if (result) {
+        this.getLedgersOfInvoice();
       }
     });
 

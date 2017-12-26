@@ -1,141 +1,129 @@
 <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
-    <div class="form-group mrR1">
-        <label class="d-block">Account</label>
-        <div class="ng-select-wrap">
-            <!-- <ng-select
-            placeholder="Sales Account"
-            filterPlaceholder="Type to search..."
-            name="accountUniqueName"
-            [(ngModel)]="ledgerSearchRequest.accountUniqueName"
-            [options]="accounts$ | async"
-            >
-            <ng-template #optionTemplate let-option="option">
-              <div class="account-list-item">{{option?.label}}</div>
-              <div class="account-list-item fs12">{{option?.value}}</div>
-            </ng-template>
-          </ng-select> -->
-            <sh-select placeholder="Select Account" name="accountUniqueName" [(ngModel)]="ledgerSearchRequest.accountUniqueName" [options]="accounts$ | async" [ItemHeight]="33"></sh-select>
-        </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Account</label>
+    <div class="ng-select-wrap">
+      <sh-select placeholder="Select Account" name="accountUniqueName" [(ngModel)]="ledgerSearchRequest.accountUniqueName"  [options]="accounts$ | async" [ItemHeight]="33"></sh-select>
     </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Description</label>
-        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Description</label>
+    <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Count</label>
+    <sh-select placeholder="Select" name="count" [(ngModel)]="ledgerSearchRequest.count" [options]="counts" [ItemHeight]="33"></sh-select>
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Amount</label>
+    <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">&nbsp;</label>
+    <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">From - To</label>
+    <div class="input-group">
+      <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="ledgerSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required>
     </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Count</label>
-        <!-- <select class="form-control col-xs-2" name="count" [(ngModel)]="ledgerSearchRequest.count">
-          <option [ngValue]="'select'">Select</option>
-          <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
-        </select> -->
-        <sh-select placeholder="Select" name="count" [(ngModel)]="ledgerSearchRequest.count" [options]="counts" [ItemHeight]="33"></sh-select>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Amount</label>
-        <!-- <select class="form-control" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy">
-        <option [ngValue]="'select'">Please Select</option>
-        <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-      </select> -->
-        <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">&nbsp;</label>
-        <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">From - To</label>
-        <div class="input-group">
-            <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="ledgerSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required>
-        </div>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">&nbsp;</label>
-        <button class="btn btn-success">GO</button>
-    </div>
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">&nbsp;</label>
+    <button class="btn btn-success">GO</button>
+  </div>
 
 </form>
 
 
 <div class="clearfix top_bar">
-    <ul class="list-inline pull-left">
-        <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-default" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
-        <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-default" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
-        <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button></li>
-        <!-- <li><button class="btn btn-info" id="createNew" (click)="showInvoiceModal()">Create New</button></li> -->
-        <!-- <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li> -->
-    </ul>
-    <!-- <div class="form-group pull-right">
-    <input type="search" class="form-control maxW150" placeholder="Search">
-  </div> -->
+  <ul class="list-inline pull-left">
+    <li>
+      <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-default" (click)="generateBulkInvoice(false)">Generate Multiple</button>
+    </li>
+    <li>
+      <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-default" (click)="generateBulkInvoice(true)">Generate Compound</button>
+    </li>
+    <li>
+      <button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn"
+        class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button>
+    </li>
+  </ul>
 </div>
 
 <!--list of data  -->
 
 <div class="no-data" *ngIf="!ledgersData">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
-    <!-- <a class="btn btn-primary">Go to Sales</a> -->
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
 </div>
 
 <div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
+  <h1>No entries found within given criteria.</h1>
+  <h1>Do search with some other dates</h1>
 </div>
 
 <table class="table basic table-bordered" *ngIf="ledgersData && ledgersData.results.length > 0">
-    <thead class="t-h-bg1">
-        <tr>
-            <th style="width:3%" class="mh18_img">
-                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-            </th>
-            <th style="width:10%">Date</th>
-            <th style="width:23.5%">Particular</th>
-            <th style="width:7%">Amount</th>
-            <th style="width:30%">Description</th>
-            <th style="width:7%">Total</th>
-            <th style="width:20%">Account</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <td colspan="100%">
-                <div class="alC">
-                    <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                </div>
+  <thead class="t-h-bg1">
+    <tr>
+      <th style="width:3%">
+        <div class="mh18_img">
+          <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+          <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+        </div>
+      </th>
+      <th style="width:10%">Date</th>
+      <th style="width:23.5%">Particular</th>
+      <th style="width:7%">Amount</th>
+      <th style="width:30%">Description</th>
+      <th style="width:7%">Total</th>
+      <th style="width:20%">Account</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="100%">
+        <div class="alC">
+          <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+            [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <tr *ngFor="let item of ledgersData.results" [ngClass]="{'danger': item.hasGenerationErr}">
+      <td class="mh18_img">
+        <div class="mh18_img">
+          <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
+          <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+        </div>
+        <div *ngIf="item.hasGenerationErr">
+          <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
+        </div>
+      </td>
+      <td>{{item.entryDate}}</td>
+      <td colspan="2">
+        <table class="table nested_table">
+          <tr *ngFor="let transaction of item.transactions">
+            <td style="width:93%">
+              {{transaction.particular.name}}
             </td>
-        </tr>
-    </tfoot>
-    <tbody>
-        <!--ng-class="{'danger': checkTransaction(ledger.uniqueName)}"  -->
-        <tr *ngFor="let item of ledgersData.results">
-            <td class="mh18_img">
-                <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
-                <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+            <td style="width:23%;">
+              {{transaction.amount}}
             </td>
-            <td>{{item.entryDate}}</td>
-            <td colspan="2">
-                <table class="table nested_table">
-                    <tr *ngFor="let transaction of item.transactions">
-                        <td style="width:93%">
-                            {{transaction.particular.name}}
-                        </td>
-                        <td style="width:23%;">
-                            {{transaction.amount}}
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td>{{item.description}}</td>
-            <td>{{item.total.amount}}</td>
-            <td>{{item.account.name}}</td>
-    </tbody>
+          </tr>
+        </table>
+      </td>
+      <td>{{item.description}}</td>
+      <td>{{item.total.amount}}</td>
+      <td>{{item.account.name}}</td>
+  </tbody>
 </table>
 
 <!--modal dialog  -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-    <div class="modal-dialog gray modal-liquid">
-        <div class="modal-content">
-            <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
-        </div>
+  <div class="modal-dialog gray modal-liquid">
+    <div class="modal-content">
+      <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
     </div>
+  </div>
 </div>
