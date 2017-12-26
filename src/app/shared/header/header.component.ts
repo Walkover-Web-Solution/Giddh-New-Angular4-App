@@ -391,6 +391,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.sideMenu.isopen = event;
   }
 
+  public forceCloseSidebar(event) {
+    if (event.target.parentElement.classList.contains('acntAccordion')) {
+      return;
+    }
+    this.flyAccounts.next(false);
+  }
+
   public closeSidebar(targetId) {
     if (targetId === 'accountSearch' || targetId === 'expandAllGroups' || targetId === 'toggleAccounts') {
       return;

@@ -161,7 +161,7 @@
         </li>
 
         <!-- books search -->
-        <li>
+        <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
           <div class="ledger_search form-inline">
             <div class="form-group">
               <div class="input-group">
