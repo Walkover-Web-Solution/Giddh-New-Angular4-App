@@ -21,7 +21,8 @@ import {
   InvoiceTemplateDetailsResponse,
   GenerateInvoiceRequestClass,
   GenerateBulkInvoiceRequest,
-  CustomTemplateResponse
+  CustomTemplateResponse,
+  IBulkInvoiceGenerationFalingError
 } from '../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
@@ -114,17 +115,43 @@ export class InvoiceActions {
       }));
 
   // Generate Bulk Invoice
+  // @Effect()
+  // public GenerateBulkInvoice$: Observable<Action> = this.action$
+  //   .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
+  //   .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
+  //   .map(res => this.validateResponse<string, GenerateBulkInvoiceRequest[]>(res, {
+  //     type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
+  //     payload: res
+  //   }, true, {
+  //       type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
+  //       payload: res
+  //     }));
   @Effect()
   public GenerateBulkInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
     .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
-    .map(res => this.validateResponse<string, GenerateBulkInvoiceRequest[]>(res, {
-      type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
-      payload: res
-    }, true, {
-        type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
-        payload: res
-      }));
+    .map(response => {
+      return this.GenerateBulkInvoiceResponse(response);
+    });
+
+  @Effect()
+  public GenerateBulkInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        if (typeof data.body === 'string') {
+          this._toasty.successToast(data.body);
+        } else if (_.isArray(data.body) && data.body.length > 0) {
+          _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+            this._toasty.warningToast(item.reason);
+          });
+        }
+      }
+      return { type: 'EmptyAction' };
+    });
 
   // Delete Invoice
   @Effect()
@@ -573,10 +600,10 @@ export class InvoiceActions {
     };
   }
 
-  public GenerateBulkInvoiceResponse(): CustomActions {
+  public GenerateBulkInvoiceResponse(model: any): CustomActions {
     return {
       type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
-      payload: ''
+      payload: model
     };
   }
 
