@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-xs-3">
 
-                        <div class="form-group mrR1" (clickOutside)="showFromDatePicker=false;">
+                        <div class="form-group mrR1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
                             <label class="d-block">Date</label>
                             <div class="input-group">
                                 <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>

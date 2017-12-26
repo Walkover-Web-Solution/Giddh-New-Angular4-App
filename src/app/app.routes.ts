@@ -52,6 +52,7 @@ export const ROUTES: Routes = [
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization] },
       { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization] },
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
+      { path: 'accounting', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
