@@ -16,7 +16,15 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.compone
 
 @Component({
   selector: 'daybook',
-  templateUrl: './daybook.component.html'
+  templateUrl: './daybook.component.html',
+  styles:[`
+  .table-container section div>div {
+    padding: 8px 8px;
+  }
+  .trial-balance.table-container>div>section {
+    border-left: 0;
+  }
+  `]
 })
 export class DaybookComponent implements OnInit, OnDestroy {
   public companyName: string;
