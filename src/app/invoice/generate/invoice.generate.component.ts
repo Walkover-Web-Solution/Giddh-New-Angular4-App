@@ -17,6 +17,7 @@ import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -63,6 +64,9 @@ export class InvoiceGenerateComponent implements OnInit {
   public endDate: Date;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  private isBulkInvoiceGenerated$: Observable<boolean>;
+  private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
 
   constructor(
     private modalService: BsModalService,
@@ -73,21 +77,22 @@ export class InvoiceGenerateComponent implements OnInit {
     // set initial values
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).takeUntil(this.destroyed$);
+    this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+
     // Get accounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        data.body.results.map(d => {
-          // Select only sundry debtors account
-          if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ label: d.name, value: d.uniqueName });
-          }
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
+    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
+      let accounts: IOption[] = [];
+      _.forEach(data, (item) => {
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
+          accounts.push({ label: item.name, value: item.uniqueName });
+        }
+      });
+      this.accounts$ = Observable.of(accounts);
     });
 
     this.store.select(p => p.invoice.ledgers)
@@ -117,6 +122,18 @@ export class InvoiceGenerateComponent implements OnInit {
           this.getInvoiceTemplateDetails(o.templateUniqueName);
         }
       });
+
+    // listen for bulk invoice generate and successfully generate and do the things
+    this.isBulkInvoiceGenerated$.subscribe(result => {
+      if (result) {
+        this.toggleAllItems(false);
+      }
+    });
+    this.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
+      if (result) {
+        this.getLedgersOfInvoice();
+      }
+    });
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
@@ -209,6 +226,7 @@ export class InvoiceGenerateComponent implements OnInit {
       model.push(obj);
     });
     this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: action}, model));
+    this.selectedLedgerItems = [];
   }
 
   public setToday(model: string) {
@@ -223,7 +241,6 @@ export class InvoiceGenerateComponent implements OnInit {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
     }else {
-      console.log ('error hardcoded: templateUniqueName');
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }
