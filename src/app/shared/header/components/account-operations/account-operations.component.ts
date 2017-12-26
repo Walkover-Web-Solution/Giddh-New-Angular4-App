@@ -1,3 +1,4 @@
+import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -98,11 +99,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isGstEnabledAcc: boolean = false;
   public isHsnSacEnabledAcc: boolean = false;
   public showTaxes: boolean = false;
+  public isUserSuperAdmin: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-    private accountService: AccountService) {
+    private accountService: AccountService, _permissionDataService: PermissionDataService) {
+    this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
