@@ -9,7 +9,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -19,6 +19,8 @@ import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
+import { createSelector } from 'reselect';
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -36,10 +38,10 @@ const COMPARISON_FILTER = [
 ];
 
 const PREVIEW_OPTIONS = [
-  { label: 'Paid', value: 'paid'},
-  { label: 'Unpaid', value: 'unpaid'},
-  { label: 'Hold', value: 'hold'},
-  { label: 'Cancel', value: 'cancel'},
+  { label: 'Paid', value: 'paid' },
+  { label: 'Unpaid', value: 'unpaid' },
+  { label: 'Hold', value: 'hold' },
+  { label: 'Cancel', value: 'cancel' },
 ];
 
 @Component({
@@ -55,7 +57,7 @@ export class InvoicePreviewComponent implements OnInit {
 
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
-  public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+  public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
@@ -72,7 +74,9 @@ export class InvoicePreviewComponent implements OnInit {
   };
   public startDate: Date;
   public endDate: Date;
+  private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
 
   constructor(
     private modalService: BsModalService,
@@ -81,31 +85,22 @@ export class InvoicePreviewComponent implements OnInit {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
   ) {
-    this.startDate = new Date();
-    this.endDate = new Date();
-    this.startDate.setDate(this.startDate.getDate() - 30);
-    this.endDate.setDate(this.endDate.getDate());
-    this.invoiceSearchRequest.dateRange = [this.startDate, this.endDate];
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
-    this.invoiceSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
-    this.invoiceSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.invoiceSearchRequest.entryTotalBy = '';
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     // Get accounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        data.body.results.map(d => {
-          // Select only sundry debtors account
-          if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-          }
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
+    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
+      let accounts: IOption[] = [];
+      _.forEach(data, (item) => {
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
+          accounts.push({ label: item.name, value: item.uniqueName });
+        }
+      });
+      this.accounts$ = Observable.of(accounts);
     });
 
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
@@ -140,7 +135,14 @@ export class InvoicePreviewComponent implements OnInit {
         }
       });
 
-    this.getInvoices();
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.invoiceSearchRequest.dateRange = this.universalDate;
+      }
+      this.getInvoices();
+    })).subscribe();
   }
 
   public getInvoiceTemplateDetails(templateUniqueName: string) {
@@ -274,38 +276,47 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   public prepareModelForInvoiceApi() {
-    let model: InvoiceFilterClass = {};
+    let model: InvoiceFilterClassForInvoicePreview = {};
     let o = _.cloneDeep(this.invoiceSearchRequest);
     if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
     if (o.entryTotal) {
-      model.entryTotal = o.entryTotal;
+      model.balanceDue = o.entryTotal;
     }
     if (o.description) {
       model.description = o.description;
     }
     if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
-      model.totalIsMore = true;
+      model.balanceMoreThan = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
-      model.totalIsLess = true;
+      model.balanceLessThan = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
-      model.totalIsMore = true;
-      model.totalIsEqual = true;
+      model.balanceMoreThan = true;
+      model.balanceEqual = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
-      model.totalIsLess = true;
-      model.totalIsEqual = true;
+      model.balanceLessThan = true;
+      model.balanceEqual = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
-      model.totalIsEqual = true;
+      model.balanceEqual = true;
     }
     return model;
   }
 
   public prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
+    let fromDate = null;
+    let toDate = null;
+    if (this.universalDate && this.universalDate.length) {
+      fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+      toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    } else {
+      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate  = moment().format(GIDDH_DATE_FORMAT);
+    }
     return {
-      from: o.from,
-      to: o.to,
+      from: fromDate,
+      to: toDate,
       count: o.count,
       page: o.page
     };

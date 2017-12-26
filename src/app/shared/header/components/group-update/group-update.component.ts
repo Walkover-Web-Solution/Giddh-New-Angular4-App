@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -15,6 +15,7 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'group-update',
@@ -22,7 +23,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() public companyTaxDropDown: Observable<IOption[]>;
+  public companyTaxDropDown: Observable<IOption[]>;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
   public taxGroupForm: FormGroup;
@@ -77,6 +78,40 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
+
+    this.companyTaxDropDown = this.store.select(createSelector([
+        (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
+        (state: AppState) => state.groupwithaccounts.activeGroup,
+        (state: AppState) => state.company.taxes],
+      (activeGroupTaxHierarchy, activeGroup, taxes) => {
+        let arr: IOption[] = [];
+        if (taxes) {
+          if (activeGroup && taxes && activeGroupTaxHierarchy) {
+            let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
+
+            if (activeGroupTaxHierarchy.inheritedTaxes) {
+              let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+              let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+              // set value in tax group form
+              this.taxGroupForm.setValue({taxes: allTaxes});
+            } else {
+              this.taxGroupForm.setValue({taxes: applicableTaxes});
+            }
+
+            // prepare drop down options
+            return _.differenceBy(taxes.map(p => {
+              return {label: p.name, value: p.uniqueName};
+            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+              return {label: p.name, value: p.uniqueName};
+            }), 'value');
+          } else {
+            return taxes.map(p => {
+              return {label: p.name, value: p.uniqueName};
+            });
+          }
+        }
+        return arr;
+      })).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -95,8 +130,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
-        let taxes = a.applicableTaxes.map(at => at.uniqueName);
-        this.taxGroupForm.get('taxes').setValue(taxes);
         if (a.fixed) {
           this.groupDetailForm.get('name').disable();
           this.groupDetailForm.get('uniqueName').disable();
@@ -278,7 +311,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
     });
-    data.taxes = this.taxGroupForm.value.taxes;
+    data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
     data.uniqueName = activeGroup.uniqueName;
     this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     this.showEditTaxSection = false;

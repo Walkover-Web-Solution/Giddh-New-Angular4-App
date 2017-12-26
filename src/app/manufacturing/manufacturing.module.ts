@@ -14,6 +14,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     LaddaModule,
     SelectModule,
     DecimalDigitsModule,
-    ShSelectModule
+    ShSelectModule,
+    ClickOutsideModule
   ],
 })
 export class ManufacturingModule {

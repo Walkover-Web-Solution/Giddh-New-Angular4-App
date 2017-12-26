@@ -10,5 +10,6 @@ export const COMPANY_API = {
   TAX: 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: 'company/:companyUniqueName/users',
   GET_ALL_STATES:  'states',
-  GET_COUPON: 'coupon/:code'
+  GET_COUPON: 'coupon/:code',
+  UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings'
 };
