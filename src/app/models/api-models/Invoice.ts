@@ -65,6 +65,13 @@ export interface ILedgersInvoiceResult {
   uniqueName: string;
   isSelected?: boolean;
   invoiceNumber?: string;
+  hasGenerationErr?: boolean;
+  errMsg?: string;
+}
+
+export interface IBulkInvoiceGenerationFalingError {
+  failedEntries: string[];
+  reason: string;
 }
 
 export interface GetAllLedgersForInvoiceResponse extends IPagination {
