@@ -90,19 +90,19 @@ export class InvoiceService {
   * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
   */
 
-  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<string, GenerateBulkInvoiceRequest[]>> {
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<any, GenerateBulkInvoiceRequest[]>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     // create url
     let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<string, GenerateBulkInvoiceRequest[]> = res.json();
+        let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res.json();
         data.request = model;
         data.queryString = { reqObj };
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
+      .catch((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
   }
 
   /**

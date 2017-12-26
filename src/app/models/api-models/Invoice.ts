@@ -46,6 +46,16 @@ export class CommonPaginatedRequest {
   public dateRange?: Date[];
 }
 
+export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest {
+  public balanceMoreThan?: boolean;
+  public balanceLessThan?: boolean;
+  public balanceEqual?: boolean;
+  public description?: string;
+  public accountUniqueName?: string;
+  public balanceDue?: string;
+  public entryTotalBy?: string;
+}
+
 export class InvoiceFilterClass extends CommonPaginatedRequest {
   public totalIsMore?: boolean;
   public totalIsLess?: boolean;
@@ -65,6 +75,13 @@ export interface ILedgersInvoiceResult {
   uniqueName: string;
   isSelected?: boolean;
   invoiceNumber?: string;
+  hasGenerationErr?: boolean;
+  errMsg?: string;
+}
+
+export interface IBulkInvoiceGenerationFalingError {
+  failedEntries: string[];
+  reason: string;
 }
 
 export interface GetAllLedgersForInvoiceResponse extends IPagination {

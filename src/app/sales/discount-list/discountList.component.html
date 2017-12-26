@@ -1,9 +1,10 @@
-<span class="pr" [ngClass]="{'open': isMenuOpen}" (blur)="hideDiscountMenu()">
+<span class="pr" [ngClass]="{'open': isMenuOpen}" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">
   <label *ngIf="isHeadingVisible">Discount</label>
   <a (click)="isMenuOpen = !isMenuOpen" class="clearfix">
     <input type="number" name="" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
   </a>
-  <ul class="dropdown-menu" *ngIf="isMenuOpen && discountAccountsList.length > 0" (click)="$event.stopPropagation()">
+  <ul class="dropdown-menu" *ngIf="isMenuOpen" (click)="$event.stopPropagation()">
+    <!-- && discountAccountsList.length > 0 -->
     <li>
       <table>
         <tr *ngFor="let discount of discountAccountsList;">
@@ -14,5 +15,18 @@
         </tr>
       </table>
     </li>
+    <li>
+      <a class="pd1 btn-link" href (click)="addNewDiscount($event)">Add New Discount</a>
+    </li>
   </ul>
 </span>
+
+<!--quick account popup -->
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-content">
+      <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+    </div>
+  </div>
+</div>
+<!-- modal sections -->
