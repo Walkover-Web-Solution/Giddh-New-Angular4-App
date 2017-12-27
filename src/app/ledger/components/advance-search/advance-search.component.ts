@@ -105,7 +105,7 @@ export class AdvanceSearchModelComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({label: d.name, value: d.uniqueName});
+          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
         });
         this.accounts$ = Observable.of(accounts);
       }
@@ -117,7 +117,7 @@ export class AdvanceSearchModelComponent implements OnInit {
         let units = data.results;
 
         return units.map(unit => {
-          return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+          return {label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
         });
       }
     })).takeUntil(this.destroyed$);
@@ -127,7 +127,7 @@ export class AdvanceSearchModelComponent implements OnInit {
       if (data.status === 'success') {
         let groups: IOption[] = [];
         data.body.results.map(d => {
-          groups.push({label: d.groupName, value: d.groupUniqueName});
+          groups.push({label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName});
         });
         this.groups$ = Observable.of(groups);
       }
