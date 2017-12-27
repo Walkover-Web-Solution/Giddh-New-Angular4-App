@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const installOrRebuild = require('electron-builder/out/util/yarn').installOrRebuild;
+const installOrRebuild = require('electron-builder-lib/out/util/yarn').installOrRebuild;
 const printErrorAndExit = require('builder-util/out/promise').printErrorAndExit;
 
 const root = process.cwd();
