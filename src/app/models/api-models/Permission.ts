@@ -66,6 +66,7 @@ export class ShareRequestForm {
   public roleUniqueName?: string;
   public uniqueName?: string;
   public dateRange?: any;
+  public isLoggedInUser?: boolean;
 }
 
 export interface ISharedWithResponseForUI {
