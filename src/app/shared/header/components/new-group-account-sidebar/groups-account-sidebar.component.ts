@@ -282,6 +282,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   }
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
+    debugger;
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
     // if (col.uniqueName) {
