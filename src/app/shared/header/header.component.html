@@ -180,19 +180,16 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
-        <li *ngIf="!isTodaysDateSelected">
+        <!-- <li *ngIf="!isTodaysDateSelected">
           <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
           <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.fromDate }}
-            <br /> to {{ datePickerOptions.toDate}}</label>
-          <!-- <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.startDate }} <br /> to {{ datePickerOptions.endDate}}</label> -->
+          <br /> to {{ datePickerOptions.toDate}}</label>
         </li>
 
         <li class="mrT" *ngIf="isTodaysDateSelected" daterangepicker (applyDaterangepicker)="setApplicationDate($event)" [options]="datePickerOptions">
           <label class="d-block text-right btn-link cp">Today</label>
-          <!-- <label class="cp">{{datePickerOptions.startDate}}</label> -->
           <label class="cp">{{datePickerOptions.fromDate}}</label>
-          <!-- <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" /> -->
-        </li>
+        </li> -->
         <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
           <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
             <span class="icon-dropdown"></span>
