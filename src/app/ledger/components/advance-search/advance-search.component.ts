@@ -55,9 +55,10 @@ export class AdvanceSearchModelComponent implements OnInit {
   constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
 
     this.advanceSearchForm = this.fb.group({
+      uniqueNames: [[]],
+      isInvoiceGenerated: [null],
       accountUniqueNames: [[]],
       groupUniqueNames: [[]],
-      isInvoiceGenerated: [false],
       amountLessThan: [false],
       includeAmount: [false],
       amountEqualTo: [false],
@@ -74,17 +75,17 @@ export class AdvanceSearchModelComponent implements OnInit {
       particulars: [[]],
       vouchers: [[]],
       inventory: this.fb.group({
-        includeInventory: true,
+        includeInventory: false,
         inventories: [[]],
         quantity: null,
-        includeQuantity: true,
+        includeQuantity: false,
         quantityLessThan: false,
-        quantityEqualTo: true,
-        quantityGreaterThan: true,
-        includeItemValue: true,
+        quantityEqualTo: false,
+        quantityGreaterThan: false,
+        includeItemValue: false,
         itemValue: null,
-        includeItemLessThan: true,
-        includeItemEqualTo: true,
+        includeItemLessThan: false,
+        includeItemEqualTo: false,
         includeItemGreaterThan: false
       }),
     });
@@ -136,22 +137,22 @@ export class AdvanceSearchModelComponent implements OnInit {
   public setVoucherTypes() {
     this.voucherTypeList = Observable.of([{
       label: 'Sales',
-      value: 'sal'
+      value: 'sales'
     }, {
       label: 'Purchases',
-      value: 'pur'
+      value: 'purchase'
     }, {
       label: 'Receipt',
-      value: 'rcpt'
+      value: 'receipt'
     }, {
       label: 'Payment',
-      value: 'pay'
+      value: 'payment'
     }, {
       label: 'Journal',
-      value: 'jr'
+      value: 'journal'
     }, {
       label: 'Contra',
-      value: 'cntr'
+      value: 'contra'
     }, {
       label: 'Debit Note',
       value: 'debit note'

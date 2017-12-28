@@ -10,7 +10,7 @@
 
             <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
                 <label for="">Country</label>
-                <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"></sh-select>
+                <sh-select [options]="countrySource" (viewInitEvent)="onViewReady($event)" [isFilterEnabled]="true" formControlName="countryCode"></sh-select>
             </div>
 
         </div>
@@ -132,7 +132,8 @@
             <div class="row">
                 <div class="form-group" [ngClass]="{'col-xs-4':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
                     <label for="">Unique Name</label>
-                    <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
+                    <input type="text" class="form-control" [control]="addAccountForm.get('uniqueName')"
+                           textCaseChangeDirective UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
                 </div>
                 <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
                     <div class="" [ngClass]="{'row':!isMultipleCurrency}">

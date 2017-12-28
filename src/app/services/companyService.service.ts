@@ -9,7 +9,7 @@ import { COMPANY_API } from './apiurls/comapny.api';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class CompanyService {
@@ -101,6 +101,20 @@ export class CompanyService {
     }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
   }
 
+  public getApplicationDate(): Observable<BaseResponse<string, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<string, any> = res.json();
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+  }
+  public setApplicationDate(dateObj: {fromDate: string, toDate: string}): Observable<BaseResponse<string, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.put(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dateObj).map((res) => {
+      let data: BaseResponse<string, any> = res.json();
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj));
+  }
   public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
