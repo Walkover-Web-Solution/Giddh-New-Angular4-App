@@ -16,7 +16,7 @@ import { ExportLedgerComponent } from './components/exportLedger/exportLedger.co
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
-import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
+import { NgUploaderModule } from 'ngx-uploader';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -32,6 +32,7 @@ import { QuickAccountComponent } from './components/quickAccount/quickAccount.co
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
+import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
     BsDatepickerModule,
     DatepickerModule,
     ButtonsModule,
-    BsDropdownModule
+    BsDropdownModule,
+    TextCaseChangeModule
   ],
 })
 export class LedgerModule {

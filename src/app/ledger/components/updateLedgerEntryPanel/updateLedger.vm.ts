@@ -391,11 +391,4 @@ export class UpdateLedgerVm {
     this.selectedTaxes = [];
     this.discountArray = [];
   }
-
-  /** ledger custom filter **/
-  public ledgerCustomFilter(term: string, item: IOption): boolean {
-    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1)
-      || mergedAccounts.indexOf(term) > -1;
-  }
 }

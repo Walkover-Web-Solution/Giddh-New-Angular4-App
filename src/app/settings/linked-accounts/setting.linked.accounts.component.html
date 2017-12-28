@@ -17,7 +17,7 @@
                     <button class="btn btn-link mrL1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.accounts[i])"><i class="fa fa-refresh"></i> Refresh</button>
                 </h3>
                 <aside class="body">
-                    <aside (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
+                    <aside [attachOutsideOnClick]="true" (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
                         <aside class="title">{{card.name}}</aside>
                         <div class="reconnectDiv text-center" *ngIf="card.reconnect">
                             <div class="vmiddle">
