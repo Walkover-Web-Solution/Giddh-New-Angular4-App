@@ -1,4 +1,4 @@
-import { animate, Component, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, OnInit, state, style, transition, trigger, ViewChild, OnDestroy } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
@@ -110,7 +110,7 @@ const THEAD_ARR_READONLY = [
   ]
 })
 
-export class SalesInvoiceComponent implements OnInit {
+export class SalesInvoiceComponent implements OnInit, OnDestroy {
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -178,15 +178,16 @@ export class SalesInvoiceComponent implements OnInit {
     private _generalActions: GeneralActions
   ) {
 
+    this.invFormData = new InvoiceFormClass();
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.invFormData = new InvoiceFormClass();
+    this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
@@ -204,6 +205,11 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
   public ngOnInit() {
     // get selected company for autofill country
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
@@ -216,7 +222,6 @@ export class SalesInvoiceComponent implements OnInit {
     });
 
     // get account details and set it to local var
-    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
     this.selectedAccountDetails$.subscribe(o => {
       if (o) {
         this.assignValuesInForm(o);
