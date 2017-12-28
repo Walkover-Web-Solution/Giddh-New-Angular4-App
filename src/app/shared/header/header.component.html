@@ -4,10 +4,10 @@
     <div class="container-fluid pdL0">
       <ul class="nav navbar-nav">
         <li class="hamburger_menu cp" dropdown (isOpenChange)="sideBarStateChange($event)" [isOpen]="sideMenu.isopen">
-          <a dropdownToggle id="page-dropdown" (click)="false">
+          <a dropdownToggle href (click)="$event.preventDefault()">
             <i class="glyphicon glyphicon-menu-hamburger"></i>
           </a>
-          <ul id="topMenusBar" role="menu" class="dropdown-menu">
+          <ul *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
             <li>
               <div>
                 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
@@ -171,7 +171,7 @@
         </li>
 
         <!-- books search -->
-        <li>
+        <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
           <div class="ledger_search form-inline">
             <div class="form-group">
               <div class="input-group">
@@ -205,14 +205,14 @@
           <!-- <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" /> -->
         </li>
         <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
-          <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
+          <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
             <span class="icon-dropdown"></span>
             <div class="cText text-right">
               <span class="cName">{{ (selectedCompany | async)?.name }}</span>
               <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
             </div>
           </a>
-          <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
+          <ul id="companyList" class="company-list dropdown-menu" role="menu" *dropdownMenu>
             <li class="create-company" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
               <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
               <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)">
@@ -232,10 +232,10 @@
           </ul>
         </li>
         <li dropdown [isOpen]="userMenu.isopen" [tooltip]="(user$ | async)?.email" [placement]="'left'">
-          <a href (click)="false" id="user-dropdown" dropdownToggle>
+          <a href (click)="$event.preventDefault()" id="user-dropdown" dropdownToggle>
             {{userName | uppercase}}
           </a>
-          <ul class="dropdown-menu" aria-labelledby="user-dropdown">
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
             <li>
               <a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a>
             </li>
@@ -274,7 +274,6 @@
     <div class="modal-content fullScreenMy">
       <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
       </ng-template>
-      <!-- <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts> -->
     </div>
   </div>
 </div>
@@ -285,8 +284,6 @@
     <div class="modal-content">
       <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
       </ng-template>
-      <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
-      </company-add> -->
     </div>
   </div>
 </div>

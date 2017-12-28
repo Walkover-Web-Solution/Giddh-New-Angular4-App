@@ -52,13 +52,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').subscribe((company) => {
       if (company && company.companyUniqueName && company.companyUniqueName !== '') {
         if (company.lastState && company.lastState !== '') {
-          this.router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
-            if (ROUTES.findIndex(p => p.path.split('/')[0] === company.lastState.split('/')[0]) > -1) {
-              this.router.navigate([company.lastState]);
-            } else {
-              this.router.navigate(['home']);
-            }
-          });
+          if (company.lastState === '/accounting/journal') { // This is temporary, done by Arpit
+            this.router.navigate(['home']);
+          } else {
+            this.router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
+              if (ROUTES.findIndex(p => p.path.split('/')[0] === company.lastState.split('/')[0]) > -1) {
+                this.router.navigate([company.lastState]);
+              } else {
+                this.router.navigate(['home']);
+              }
+            });
+          }
         } else {
           if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
             if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {

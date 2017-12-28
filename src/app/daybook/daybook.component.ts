@@ -17,7 +17,7 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.compone
 @Component({
   selector: 'daybook',
   templateUrl: './daybook.component.html',
-  styles:[`
+  styles: [`
   .table-container section div>div {
     padding: 8px 8px;
   }
@@ -32,7 +32,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
   public daybookQueryRequest: DaybookQueryRequest;
   public daybookData$: Observable<DayBookResponseModel>;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-  @ViewChild('dateRangePickerCmp', {read: DaterangePickerComponent}) public dateRangePickerCmp: DaterangePickerComponent;
+  @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   public datePickerOptions: any = {
     locale: {
@@ -72,7 +72,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _daybookActions: DaybookActions,
-              private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
+    private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
     this.daybookQueryRequest = new DaybookQueryRequest();
     this.store.select(s => s.daybook.data).takeUntil(this.destroyed$).subscribe((data) => {
       if (data && data.entries) {
@@ -163,21 +163,23 @@ export class DaybookComponent implements OnInit, OnDestroy {
   public loadPaginationComponent(s) {
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-    let viewContainerRef = this.paginationChild.viewContainerRef;
-    viewContainerRef.remove();
+    if (this.paginationChild.viewContainerRef) {
+      let viewContainerRef = this.paginationChild.viewContainerRef;
+      viewContainerRef.remove();
 
-    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-    viewContainerRef.insert(componentInstanceView.hostView);
+      let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+      viewContainerRef.insert(componentInstanceView.hostView);
 
-    let componentInstance = componentInstanceView.instance as PaginationComponent;
-    componentInstance.totalItems = s.count * s.totalPages;
-    componentInstance.itemsPerPage = s.count;
-    componentInstance.maxSize = 5;
-    componentInstance.writeValue(s.page);
-    componentInstance.boundaryLinks = true;
-    componentInstance.pageChanged.subscribe(e => {
-      this.pageChanged(e);
-    });
+      let componentInstance = componentInstanceView.instance as PaginationComponent;
+      componentInstance.totalItems = s.count * s.totalPages;
+      componentInstance.itemsPerPage = s.count;
+      componentInstance.maxSize = 5;
+      componentInstance.writeValue(s.page);
+      componentInstance.boundaryLinks = true;
+      componentInstance.pageChanged.subscribe(e => {
+        this.pageChanged(e);
+      });
+    }
   }
 
   public ngOnDestroy() {
