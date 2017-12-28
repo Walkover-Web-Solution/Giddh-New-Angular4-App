@@ -27,7 +27,10 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { SelectComponent } from '../../theme/ng-select/select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { orderBy } from '../../lodash-optimized';
+import * as uuid from 'uuid';
+import { GeneralActions } from 'app/actions/general/general.actions';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -121,7 +124,7 @@ export class SalesInvoiceComponent implements OnInit {
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
-  public salesAccounts$: Observable<IOption[]>;
+  public salesAccounts$: Observable<IOption[]> = Observable.of(null);
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
@@ -145,6 +148,7 @@ export class SalesInvoiceComponent implements OnInit {
   public dueAmount: number;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
+  public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
 
   // modals related
   public modalConfig = {
@@ -170,7 +174,8 @@ export class SalesInvoiceComponent implements OnInit {
     private ledgerActions: LedgerActions,
     private salesService: SalesService,
     private _toasty: ToasterService,
-    private _companyService: CompanyService
+    private _companyService: CompanyService,
+    private _generalActions: GeneralActions
   ) {
 
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
@@ -180,9 +185,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
-    this.salesAccounts$ = this.store.select(p => p.sales.flattenSalesAc).takeUntil(this.destroyed$);
-    // get all flatten accounts
-    this.getAllFlattenAc();
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
 
     // bind countries
     contriesWithCodes.map(c => {
@@ -243,65 +246,62 @@ export class SalesInvoiceComponent implements OnInit {
       }
     });
 
-    // logic to autoComplete
-    this.salesAccounts$.takeUntil(this.destroyed$).distinctUntilChanged((p, n) => {
-      if (p && n && p.length < n.length) {
-        return false;
-      }
-      return true;
-    }).subscribe((arr: IOption[]) => {
-      if (arr && arr.length) {
-        // listen for newly added stock
-        this.newlyCreatedStockAc$.takeUntil(this.destroyed$).subscribe((o: any) => {
-          if (o) {
-            let result: IOption = _.find(arr, (item: IOption) => item.value === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName );
-            if (result && !_.isUndefined(this.entryIdx)) {
-              this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = o.linkedAc;
-              this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
-            }
+    // all flatten accounts
+    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
+
+      let accountsArray: IOption[] = [];
+      let accounts: INameUniqueName[] = [];
+      let bankaccounts: INameUniqueName[] = [];
+
+      _.forEach(data, (item) => {
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
+          accounts.push({ name: item.name, uniqueName: item.uniqueName });
+        }
+        // creating bank account list
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
+          bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
+        }
+
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
+          if (item.stocks) {
+            // normal entry
+            accountsArray.push({ value: uuid.v4(), label: item.name, additional: item });
+
+            // stock entry
+            item.stocks.map(as => {
+              accountsArray.push({
+                value: uuid.v4(),
+                label: `${item.name} (${as.name})`,
+                additional: Object.assign({}, item, { stock: as })
+              });
+            });
+          } else {
+            accountsArray.push({ value: uuid.v4(), label: item.name, additional: item });
           }
-        });
-      }
+        }
+      });
+      this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
+      this.accounts$ = Observable.of(accounts);
+      this.bankAccounts$ = Observable.of(bankaccounts);
+
+      // listen for newly added stock and assign value
+      this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
+        if (o) {
+          let result: IOption = _.find(accountsArray, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
+          if (result && !_.isUndefined(this.entryIdx)) {
+            this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
+            this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
+          }
+        }
+      });
+
     });
   }
 
   public getAllFlattenAc() {
-    this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: INameUniqueName[] = [];
-        let bankaccounts: INameUniqueName[] = [];
-        let accountsArray: IOption[] = [];
-        _.forEach(data.body.results, (item) => {
-          // creating account list only of sundrydebtors category
-          if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ name: item.name, uniqueName: item.uniqueName });
-          }
-          // creating bank account list
-          if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
-            bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
-          }
-          // revenuefromoperations, otherincome
-          // creating account list only from revenue and income category
-          if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
-            if (item.stocks) {
-              item.stocks.map(as => {
-                accountsArray.push({
-                  value: item.uniqueName,
-                  label: item.name,
-                  additional: Object.assign({}, item, { stock: as })
-                });
-              });
-              accountsArray.push({ value: item.uniqueName, label: item.name});
-            } else {
-              accountsArray.push({ value: item.uniqueName, label: item.name});
-            }
-          }
-        });
-        this.accounts$ = Observable.of(accounts);
-        this.bankAccounts$ = Observable.of(bankaccounts);
-        this.store.dispatch(this.salesAction.storeSalesFlattenAc(_.orderBy(accountsArray, 'text')));
-      }
-    });
+    // call to get flatten account from store
+    this.store.dispatch(this._generalActions.getFlattenAccount());
+    // this.store.dispatch(this.salesAction.storeSalesFlattenAc(_.orderBy(accountsArray, 'text')));
   }
 
   public onSelectBankCash(val: any, model: any) {
@@ -606,65 +606,73 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
-    if (selectedAcc.value) {
-      this.showTaxBox = false;
-      txn.applicableTaxes = [];
-      this.accountService.GetAccountDetailsV2(selectedAcc.value).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
-        if (data.status === 'success') {
-          let o = _.cloneDeep(data.body);
-          // assign taxes and create fluctuation
-          _.forEach(o.applicableTaxes, (item) => {
-            txn.applicableTaxes.push(item.uniqueName);
-          });
-          this.showTaxBox = true;
-          txn.accountName = o.name;
-          txn.accountUniqueName = o.uniqueName;
-          if (o.hsnNumber) {
-            txn.hsnNumber = o.hsnNumber;
-            txn.hsnOrSac = 'hsn';
-          }else {
-            txn.hsnNumber = null;
-          }
-          if (o.sacNumber) {
-            txn.sacNumber = o.sacNumber;
-            txn.hsnOrSac = 'sac';
-          }else {
-            txn.sacNumber = null;
-          }
-          txn.description = 'Entry generated by sales module';
-          if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
-            txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
-            // set rate auto
-            txn.rate = 0;
-            if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
-              txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
-            }
-            let obj: IStockUnit = {
-              id: selectedAcc.additional.stock.stockUnit.code,
-              text: selectedAcc.additional.stock.stockUnit.name
-            };
-            txn.stockList = [];
-            txn.stockList.push(obj);
-            txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
-            txn.isStockTxn = true;
+    if (selectedAcc.value && selectedAcc.additional.uniqueName) {
+      this.salesAccounts$.take(1).subscribe(idata => {
+        idata.map(fa => {
+          if (fa.value === selectedAcc.value) {
+            this.showTaxBox = false;
+            txn.applicableTaxes = [];
+            this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
+              if (data.status === 'success') {
+                let o = _.cloneDeep(data.body);
+                // assign taxes and create fluctuation
+                _.forEach(o.applicableTaxes, (item) => {
+                  txn.applicableTaxes.push(item.uniqueName);
+                });
+                this.showTaxBox = true;
+                txn.accountName = o.name;
+                txn.accountUniqueName = o.uniqueName;
+                if (o.hsnNumber) {
+                  txn.hsnNumber = o.hsnNumber;
+                  txn.hsnOrSac = 'hsn';
+                }else {
+                  txn.hsnNumber = null;
+                }
+                if (o.sacNumber) {
+                  txn.sacNumber = o.sacNumber;
+                  txn.hsnOrSac = 'sac';
+                }else {
+                  txn.sacNumber = null;
+                }
+                if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
+                  txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+                  // set rate auto
+                  txn.rate = 0;
+                  if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
+                    txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
+                  }
+                  let obj: IStockUnit = {
+                    id: selectedAcc.additional.stock.stockUnit.code,
+                    text: selectedAcc.additional.stock.stockUnit.name
+                  };
+                  txn.stockList = [];
+                  txn.stockList.push(obj);
+                  txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
+                  txn.isStockTxn = true;
+                } else {
+                  txn.isStockTxn = false;
+                  txn.stockUnit = null;
+                  txn.stockDetails = null;
+                  txn.stockList = [];
+                  // reset fields
+                  txn.rate = null;
+                  txn.quantity = null;
+                  txn.amount = 0;
+                  txn.taxableValue = 0;
+                }
+                // toggle stock related fields
+                this.toggleStockFields(txn);
+                return txn;
+              }else {
+                txn.isStockTxn = false;
+                this.toggleStockFields(txn);
+              }
+            });
           } else {
             txn.isStockTxn = false;
-            txn.stockUnit = null;
-            txn.stockDetails = null;
-            txn.stockList = [];
-            // reset fields
-            txn.rate = null;
-            txn.quantity = null;
-            txn.amount = 0;
-            txn.taxableValue = 0;
+            this.toggleStockFields(txn);
           }
-          // toggle stock related fields
-          this.toggleStockFields(txn);
-          return txn;
-        }else {
-          txn.isStockTxn = false;
-          this.toggleStockFields(txn);
-        }
+        });
       });
     }else {
       txn.isStockTxn = false;

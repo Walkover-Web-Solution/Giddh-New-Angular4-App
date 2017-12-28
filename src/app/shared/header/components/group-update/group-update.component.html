@@ -7,7 +7,8 @@
             </div>
             <div class="form-group col-xs-6">
                 <label>Unique Name</label>
-                <input type="text" class="form-control" UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
+                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')"
+                       textCaseChangeDirective UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
             </div>
         </div>
 
@@ -35,8 +36,8 @@
     <form name="moveGroupForm" class="horizontal-form" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
-        <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [customFilter]="customMoveGroupFilter" class="pull-left" style="width: calc(100% - 92px);">
-            <!--template for move group typeahead-->
+        <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [isFilterEnabled]="true"  class="pull-left" style="width: calc(100% - 92px);">
+            <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
             <ng-template #optionTemplate let-option="option">
                 <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
                     <div class="item">{{ option.label }}</div>
@@ -99,52 +100,6 @@
     </ng-container>
     <!-- taxes container -->
 </div>
-
-
-
-<!-- <div class="clearfix bdrB" *ngIf="isTaxableGroup$ | async">
-    <div class="mrT1">
-        <div class="dGryHead">
-            Taxes
-        </div>
-        <div class="pd2 clearfix">
-            <div class="tax-list-wrap">
-                <div class="tax-label"><label>All Applied Taxes</label></div>
-
-          <span class="tax-bullet" *ngFor="let tax of (activeGroup$ | async)?.applicableTaxes">{{ tax.name }}</span>
-
-          <p *ngIf="!(activeGroup$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
-          <button id="editTax" class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
-            <i class="glyphicon glyphicon-edit"></i>
-          </button>
-            </div>
-
-            <div class="edit-tax-section" *ngIf="showEditTaxSection">
-                <div class="tax-list-wrap mrB1">
-                    <div class="tax-label"><label>All Inherited Taxes</label></div>
-                    <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
-                        <ng-template #popTemplate>
-                            <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
-                        </ng-template>
-                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
-                  </span>
-                    </div>
-                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
-                </div>
-                <div class="tax-list-wrap">
-                    <div class="tax-label"><label>All Applicable Taxes</label></div>
-                    <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                        <div class="clearfix max350 mrT1">
-                            <sh-select formControlName="taxes" [placeholder]="'Select Taxes'" [options]="companyTaxDropDown | async" [multiple]="true">
-                            </sh-select>
-                        </div>
-                        <button type="submit" class="btn btn-success mrT1"> Save</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 <!--delete Group modal  -->
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">

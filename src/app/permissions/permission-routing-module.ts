@@ -19,6 +19,7 @@ const PERMISSION_ROUTES: Routes = [
     path: '',
     component: PermissionComponent,
     children: [
+      { path: '', pathMatch: 'full', redirectTo: 'list' },
       {
         path: 'list',
         component: PermissionListComponent,
@@ -34,7 +35,7 @@ const PERMISSION_ROUTES: Routes = [
       //   component: PermissionDetailsComponent,
       //   canActivate: [NeedsAuthentication]
       // },
-      {path: '*', redirectTo: 'list'}
+      // { path: '*', redirectTo: 'list' }
     ]
   }
 ];
