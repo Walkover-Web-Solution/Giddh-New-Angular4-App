@@ -272,7 +272,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     form.allowedIps = IpArr;
 
     if (this.selectedTimeSpan === 'Past Period') {
-      form.period = 'day';
+      if (form.duration) {
+        form.period = 'day';
+      } else {
+        form.period = null;
+      }
       form.from = null;
       form.to = null;
     } else {
