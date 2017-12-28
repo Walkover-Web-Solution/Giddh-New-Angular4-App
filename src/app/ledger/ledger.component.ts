@@ -420,7 +420,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
       this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
-        if (res.status === 'success' && res.body.length > 0) {
+        if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });

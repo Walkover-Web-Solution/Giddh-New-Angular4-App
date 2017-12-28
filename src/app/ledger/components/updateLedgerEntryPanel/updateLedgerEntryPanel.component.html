@@ -48,7 +48,7 @@
                     <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
                     <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
                     <!--(deselected)="deSelectAccount($event, txn)">-->
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" [isFilterEnabled]="true" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [customFilter]="vm.ledgerCustomFilter">
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -108,9 +108,7 @@
                       [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="pos-rel col-xs-6 select2-ledger">
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async"
-                      [isFilterEnabled]="true" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)"
-                      [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [customFilter]="vm.ledgerCustomFilter">
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
