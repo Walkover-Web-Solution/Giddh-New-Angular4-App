@@ -45,7 +45,6 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-
     this.store.select(p => p.settings).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
         // console.log('Found');
@@ -61,6 +60,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       if (source) {
         this.iframeSource = _.clone(source);
         this.connectBankModel.show();
+        this.connectBankModel.config.ignoreBackdropClick = true;
       }
     });
 
@@ -86,11 +86,13 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
     });
     this.connectBankModel.show();
+    this.connectBankModel.config.ignoreBackdropClick = true;
   }
 
   public closeModal() {
     this.connectBankModel.hide();
     this.iframeSource = undefined;
+    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
   public closeConfirmationModal(isUserAgree: boolean) {
@@ -137,7 +139,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onRefreshToken(account) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.loginId));
+    // this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.loginId));
+    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
   public onAccountSelect(account, data) {

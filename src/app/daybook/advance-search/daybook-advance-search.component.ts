@@ -1,22 +1,19 @@
-import { GroupService } from './../../../services/group.service';
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Subscription } from 'rxjs/Rx';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ILedgerAdvanceSearchRequest, Inventory } from './../../../models/api-models/Ledger';
-import { CompanyActions } from '../../../actions/company.actions';
-import { AppState } from './../../../store/roots';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { IOption } from './../../../theme/ng-select/option.interface';
-import { AccountService } from './../../../services/account.service';
-import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
+import { IOption } from 'app/theme/ng-select/option.interface';
+import { GroupService } from 'app/services/group.service';
+import { InventoryAction } from 'app/actions/inventory/inventory.actions';
+import { AppState } from 'app/store';
+import { DaybookActions } from 'app/actions/daybook/daybook.actions';
+import { AccountService } from 'app/services/account.service';
+import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
@@ -27,38 +24,75 @@ const COMPARISON_FILTER = [
   { label: 'Exclude', value: 'exclude' }
 ];
 @Component({
-  selector: 'advance-search-model',
-  templateUrl: './advance-search.component.html'
+  selector: 'daybook-advance-search-model',
+  templateUrl: './daybook-advance-search.component.html'
 })
 
-export class AdvanceSearchModelComponent implements OnInit {
+export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
 
-  @Input() public accountUniqueName: string;
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Input() public startDate: any;
+  @Input() public endDate: any;
+  @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
+  @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent }) public dateRangePickerDir: DaterangePickerComponent;
 
-  public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
+  public advanceSearchObject: DayBookRequestModel = null;
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
-  public showChequeDatePicker: boolean  = false;
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
+  public showChequeDatePicker: boolean = false;
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
   public stockListDropDown$: Observable<IOption[]>;
   public comparisonFilterDropDown$: Observable<IOption[]>;
 
+  public datePickerOptions: any = {
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'Last 1 Day': [
+        moment().subtract(1, 'days'),
+        moment()
+      ],
+      'Last 7 Days': [
+        moment().subtract(6, 'days'),
+        moment()
+      ],
+      'Last 30 Days': [
+        moment().subtract(29, 'days'),
+        moment()
+      ],
+      'Last 6 Months': [
+        moment().subtract(6, 'months'),
+        moment()
+      ],
+      'Last 1 Year': [
+        moment().subtract(12, 'months'),
+        moment()
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
+
   private moment = moment;
   private fromDate: string = '';
   private toDate: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
+  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
 
     this.advanceSearchForm = this.fb.group({
-      uniqueNames: [[]],
-      isInvoiceGenerated: [null],
       accountUniqueNames: [[]],
       groupUniqueNames: [[]],
+      isInvoiceGenerated: [false],
       amountLessThan: [false],
       includeAmount: [false],
       amountEqualTo: [false],
@@ -75,17 +109,17 @@ export class AdvanceSearchModelComponent implements OnInit {
       particulars: [[]],
       vouchers: [[]],
       inventory: this.fb.group({
-        includeInventory: false,
+        includeInventory: true,
         inventories: [[]],
         quantity: null,
-        includeQuantity: false,
+        includeQuantity: true,
         quantityLessThan: false,
-        quantityEqualTo: false,
-        quantityGreaterThan: false,
-        includeItemValue: false,
+        quantityEqualTo: true,
+        quantityGreaterThan: true,
+        includeItemValue: true,
         itemValue: null,
-        includeItemLessThan: false,
-        includeItemEqualTo: false,
+        includeItemLessThan: true,
+        includeItemEqualTo: true,
         includeItemGreaterThan: false
       }),
     });
@@ -105,7 +139,7 @@ export class AdvanceSearchModelComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
+          accounts.push({ label: d.name, value: d.uniqueName });
         });
         this.accounts$ = Observable.of(accounts);
       }
@@ -117,7 +151,7 @@ export class AdvanceSearchModelComponent implements OnInit {
         let units = data.results;
 
         return units.map(unit => {
-          return {label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+          return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
         });
       }
     })).takeUntil(this.destroyed$);
@@ -127,32 +161,42 @@ export class AdvanceSearchModelComponent implements OnInit {
       if (data.status === 'success') {
         let groups: IOption[] = [];
         data.body.results.map(d => {
-          groups.push({label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName});
+          groups.push({ label: d.groupName, value: d.groupUniqueName });
         });
         this.groups$ = Observable.of(groups);
       }
     });
   }
 
+  public ngOnChanges(changes: SimpleChanges) {
+    if (('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) &&
+      ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue)) {
+      this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
+      this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
+      this.fromDate = changes.startDate.currentValue;
+      this.toDate = changes.endDate.currentValue;
+    }
+  }
+
   public setVoucherTypes() {
     this.voucherTypeList = Observable.of([{
       label: 'Sales',
-      value: 'sales'
+      value: 'sal'
     }, {
       label: 'Purchases',
-      value: 'purchase'
+      value: 'pur'
     }, {
       label: 'Receipt',
-      value: 'receipt'
+      value: 'rcpt'
     }, {
       label: 'Payment',
-      value: 'payment'
+      value: 'pay'
     }, {
       label: 'Journal',
-      value: 'journal'
+      value: 'jr'
     }, {
       label: 'Contra',
-      value: 'contra'
+      value: 'cntr'
     }, {
       label: 'Debit Note',
       value: 'debit note'
@@ -163,28 +207,42 @@ export class AdvanceSearchModelComponent implements OnInit {
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(true);
+    this.datePickerOptions.startDate = this.startDate;
+    this.datePickerOptions.endDate = this.endDate;
+    this.fromDate = this.startDate;
+    this.toDate = this.endDate;
+    this.dateRangePickerDir.render();
+    this.closeModelEvent.emit({
+      cancle: true
+    });
   }
 
   /**
    * onDateRangeSelected
    */
-  public onDateRangeSelected(data) {
-    this.fromDate = moment(data[0]).format('DD-MM-YYYY');
-    this.toDate = moment(data[1]).format('DD-MM-YYYY');
+  public onDateRangeSelected(value) {
+    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
   }
 
   /**
    * onSearch
    */
   public onSearch() {
-    let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
+    let dataToSend = _.cloneDeep(this.advanceSearchForm.value) as DayBookRequestModel;
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
     }
+    let fromDate = this.fromDate;
+    let toDate = this.toDate;
     console.log('advanceSearchForm is :', dataToSend);
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
-    this.closeModelEvent.emit(true);
+    // this.store.dispatch(this._daybookActions.GetDaybook(dataToSend, this.fromDate, this.toDate));
+    this.closeModelEvent.emit({
+      dataToSend,
+      fromDate,
+      toDate,
+      cancle: false
+    });
     // this.advanceSearchForm.reset();
   }
 
@@ -199,22 +257,19 @@ export class AdvanceSearchModelComponent implements OnInit {
     switch (type) {
       case 'particulars':
         this.advanceSearchForm.get('particulars').patchValue(values);
-      break;
+        break;
       case 'accountUniqueNames':
         this.advanceSearchForm.get('accountUniqueNames').patchValue(values);
-      break;
+        break;
       case 'vouchers':
         this.advanceSearchForm.get('vouchers').patchValue(values);
-      break;
+        break;
       case 'inventory':
         this.advanceSearchForm.get('inventory.inventories').patchValue(values);
-      break;
+        break;
       case 'groupUniqueNames':
         this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
-      break;
-      case 'groupUniqueNames':
-        this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
-      break;
+        break;
     }
   }
 
@@ -235,109 +290,109 @@ export class AdvanceSearchModelComponent implements OnInit {
         this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'amount-lessThan':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(true);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'amount-greaterThanOrEquals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-lessThanOrEquals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(true);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-equals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-exclude':
         this.advanceSearchForm.get('includeAmount').patchValue(false);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-greaterThan':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-lessThan':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-greaterThanOrEquals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-lessThanOrEquals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-equals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-exclude':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-greaterThan':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-lessThan':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-greaterThanOrEquals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-lessThanOrEquals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-equals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-exclude':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
     }
   }
 
