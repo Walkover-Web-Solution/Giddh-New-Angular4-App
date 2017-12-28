@@ -469,7 +469,7 @@ export class GroupWithAccountsAction {
 
   public getFlattenGroupsAccounts(value?: FlattenGroupsAccountsRequest): CustomActions {
     return {
-      type: GroupWithAccountsAction.GET_GROUP_DETAILS,
+      type: GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS,
       payload: value
     };
   }
