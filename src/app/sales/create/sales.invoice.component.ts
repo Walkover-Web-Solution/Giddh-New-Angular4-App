@@ -209,7 +209,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  
+
   public ngOnInit() {
     // get selected company for autofill country
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
@@ -332,14 +332,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy {
     // this.invFormData.invoiceDetails.dueDate = new Date().setDate(new Date().getDate() + 10 );
     // fill address conditionally
     if (data.addresses.length > 0) {
+      let str = _.isNull(data.addresses[0].address) ? '' : data.addresses[0].address;
       // set billing
       this.invFormData.account.billingDetails.address = [];
-      this.invFormData.account.billingDetails.address.push(data.addresses[0].address);
+      this.invFormData.account.billingDetails.address.push(str);
       this.invFormData.account.billingDetails.stateCode = data.addresses[0].stateCode;
       this.invFormData.account.billingDetails.gstNumber = data.addresses[0].gstNumber;
       // set shipping
       this.invFormData.account.shippingDetails.address = [];
-      this.invFormData.account.shippingDetails.address.push(data.addresses[0].address);
+      this.invFormData.account.shippingDetails.address.push(str);
       this.invFormData.account.shippingDetails.stateCode = data.addresses[0].stateCode;
       this.invFormData.account.shippingDetails.gstNumber = data.addresses[0].gstNumber;
     }
