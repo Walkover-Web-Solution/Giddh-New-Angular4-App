@@ -215,9 +215,8 @@
                 [notFoundLink]="true"
                 (noResultsClicked)="onNoResultsClicked(entryIdx)"
                 [multiple]="false"
-                [isFilterEnabled]="true"
                 [ItemHeight]="67"
-                [customFilter]="CustomFilterForSearch"
+                [useInBuiltFilterForFlattenAc]="true"
                 >
                 <ng-template #optionTemplate let-option="option">
                   <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
