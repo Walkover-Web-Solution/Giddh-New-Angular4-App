@@ -33,6 +33,16 @@
                         </div>
                       </a>
                     </li>
+                    <li class="dmLi trialB">
+                      <a [routerLink]="['/pages/daybook']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Daybook</div>
+                            <div class="subTitle">All Recent Transactions</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
                     <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
                       <a [routerLink]="['/pages/sales']">
                         <div class="media">
@@ -165,7 +175,8 @@
           <div class="ledger_search form-inline">
             <div class="form-group">
               <div class="input-group">
-                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
+                  [formControl]="accountSearchControl" [value]="accountSearchValue">
                 <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
                   <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                 </div>
@@ -198,7 +209,7 @@
               <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
             </div>
           </a>
-          <ul id="companyList" class="company-list dropdown-menu" role="menu"  *dropdownMenu>
+          <ul id="companyList" class="company-list dropdown-menu" role="menu" *dropdownMenu>
             <li class="create-company" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
               <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
               <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)">
@@ -249,7 +260,8 @@
       </ul>
     </div>
   </nav>
-  <accounts-side-bar [attachOutsideOnClick]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+  <accounts-side-bar [attachOutsideOnClick]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue'
+    [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
