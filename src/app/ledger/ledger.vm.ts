@@ -197,37 +197,42 @@ export class LedgerVM {
    * @returns {bankTransactionsData} array
    */
   public getReadyBankTransactionsForUI(data: IELedgerResponse[]) {
-    this.bankTransactionsData = [];
-    this.showEledger = true;
-    forEach(data, (txn: IELedgerResponse) => {
-      let item: BlankLedgerVM;
-      item = cloneDeep(this.blankLedger);
-      item.entryDate = txn.date;
-      item.transactionId = txn.transactionId;
-      item.isBankTransaction = true;
-      forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
-        item.description = bankTxn.remarks.description;
-        if (bankTxn.type === 'DEBIT') {
-          item.voucherType = 'rcpt';
-        } else {
-          item.voucherType = 'pay';
-        }
-        if (bankTxn.remarks.chequeNumber) {
-          item.chequeNumber = bankTxn.remarks.chequeNumber;
-        }
-        // push transaction
-        item.transactions.map(transaction => {
-          if (transaction.type === bankTxn.type) {
-            transaction.amount = bankTxn.amount;
-            transaction.id = item.transactionId;
+    if (data.length > 0) {
+      this.bankTransactionsData = [];
+      this.showEledger = true;
+      forEach(data, (txn: IELedgerResponse) => {
+        let item: BlankLedgerVM;
+        item = cloneDeep(this.blankLedger);
+        item.entryDate = txn.date;
+        item.transactionId = txn.transactionId;
+        item.isBankTransaction = true;
+        forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
+          item.description = bankTxn.remarks.description;
+          if (bankTxn.type === 'DEBIT') {
+            item.voucherType = 'rcpt';
+          } else {
+            item.voucherType = 'pay';
           }
+          if (bankTxn.remarks.chequeNumber) {
+            item.chequeNumber = bankTxn.remarks.chequeNumber;
+          }
+          // push transaction
+          item.transactions.map(transaction => {
+            if (transaction.type === bankTxn.type) {
+              transaction.amount = bankTxn.amount;
+              transaction.id = item.transactionId;
+            }
+          });
+          item.transactions = remove(item.transactions, (n: any) => {
+            return n.type === bankTxn.type;
+          });
         });
-        item.transactions = remove(item.transactions, (n: any) => {
-          return n.type === bankTxn.type;
-        });
+        this.bankTransactionsData.push(item);
       });
-      this.bankTransactionsData.push(item);
-    });
+    }else {
+      this.bankTransactionsData = [];
+      this.showEledger = false;
+    }
   }
 
   /**
@@ -253,13 +258,6 @@ export class LedgerVM {
       delete bl['id'];
     });
     return requestObj;
-  }
-
-  /** ledger custom filter **/
-  public ledgerCustomFilter(term: string, item: IOption): boolean {
-    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1)
-      || mergedAccounts.indexOf(term) > -1;
   }
 }
 

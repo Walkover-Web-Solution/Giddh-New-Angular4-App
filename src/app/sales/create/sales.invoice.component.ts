@@ -204,12 +204,6 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
-  /** custom filter to search by uniquename **/
-  public CustomFilterForSearch(term: string, item: IOption): boolean {
-    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1) || mergedAccounts.indexOf(term) > -1;
-  }
-
   public ngOnInit() {
     // get selected company for autofill country
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
