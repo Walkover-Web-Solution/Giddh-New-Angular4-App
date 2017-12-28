@@ -101,6 +101,12 @@ export class SalesActions {
   ) {
   }
 
+  public resetAccountDetailsForSales(): CustomActions {
+    return {
+      type: SALES_ACTIONS.RESET_ACCOUNT_DETAILS
+    };
+  }
+
   public getAccountDetailsForSales(value: string): CustomActions {
     return {
       type: SALES_ACTIONS.GET_ACCOUNT_DETAILS,
