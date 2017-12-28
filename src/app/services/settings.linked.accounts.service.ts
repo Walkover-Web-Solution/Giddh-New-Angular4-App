@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { EBANKS } from './apiurls/settings.linked.accounts.api';
 import { IGetAllEbankAccountResponse, IGetEbankTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class SettingsLinkedAccountsService {

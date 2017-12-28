@@ -9,7 +9,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { ELEDGER_API } from './apiurls/eledger.api';
 import { EledgerMapRequest, EledgerResponse } from '../models/api-models/Eledger';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class EledgerService {

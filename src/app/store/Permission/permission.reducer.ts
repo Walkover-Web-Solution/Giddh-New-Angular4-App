@@ -8,136 +8,133 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
 
 export interface PermissionState {
-    roles: IRoleCommonResponseAndRequest[];
-    newRole: object;
-    pages: string[];
-    createPermissionInProcess: boolean;
-    permissions: GetAllPermissionResponse[];
+  roles: IRoleCommonResponseAndRequest[];
+  newRole: object;
+  pages: string[];
+  createPermissionInProcess: boolean;
+  addUpdateRoleInProcess: boolean;
+  permissions: GetAllPermissionResponse[];
 }
 
 export const initialState: PermissionState = {
-    roles: [],
-    newRole: {},
-    pages: [],
-    createPermissionInProcess: false,
-    permissions: []
+  roles: [],
+  newRole: {},
+  pages: [],
+  createPermissionInProcess: false,
+  addUpdateRoleInProcess: false,
+  permissions: []
 };
 
 export function PermissionReducer(state = initialState, action: CustomActions): PermissionState {
-    switch (action.type) {
-        case PERMISSION_ACTIONS.GET_ROLES:
-            {
-                return state;
-            }
-        case PERMISSION_ACTIONS.GET_ROLES_RESPONSE:
-            {
-                let newState = _.cloneDeep(state);
-                let res = action.payload as BaseResponse < IRoleCommonResponseAndRequest[],
-                    string > ;
-                if (res.status === 'success') {
-                    newState.roles = res.body;
-                    newState.roles = _.sortBy(newState.roles, [ (o) => o.name ]);
-                    newState.roles = _.sortBy(newState.roles, [ (o) => !o.isFixed ]);
-                    let sortedRoles = _.cloneDeep(newState);
-                    sortedRoles.roles.forEach((role) => {
-                        role.scopes = _.sortBy(role.scopes, [ (o) => o.name ]);
-                    });
+  switch (action.type) {
+    case PERMISSION_ACTIONS.GET_ROLES:
+      {
+        return state;
+      }
+    case PERMISSION_ACTIONS.GET_ROLES_RESPONSE:
+      {
+        let newState = _.cloneDeep(state);
+        let res = action.payload as BaseResponse<IRoleCommonResponseAndRequest[],
+          string>;
+        if (res.status === 'success') {
+          newState.roles = res.body;
+          newState.roles = _.sortBy(newState.roles, [(o) => o.name]);
+          newState.roles = _.sortBy(newState.roles, [(o) => !o.isFixed]);
+          let sortedRoles = _.cloneDeep(newState);
+          sortedRoles.roles.forEach((role) => {
+            role.scopes = _.sortBy(role.scopes, [(o) => o.name]);
+          });
 
-                    newState = sortedRoles;
-                    return Object.assign({}, state, newState);
-                }
-                return state;
-            }
-        case PERMISSION_ACTIONS.CREATE_ROLE:
-            {
-                return state;
-            }
-        case PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE:
-            {
-                let newState = _.cloneDeep(state);
-                let res = action.payload;
-                // newState.newRole = {};
-                if (res.status === 'success') {
-                    newState.roles.push(res.body);
-                    return Object.assign({}, state, newState);
-                }
-                return state;
-            }
-        case PERMISSION_ACTIONS.UPDATE_ROLE:
-            {
-                return state;
-            }
-        case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE:
-            {
-                let newState = _.cloneDeep(state);
-                let roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
-                if (roleIndx > -1) {
-                    newState.roles[roleIndx] = action.payload;
-                    return Object.assign({}, state, newState);
-                } else {
-                    return state;
-                }
-            }
-        case PERMISSION_ACTIONS.DELETE_ROLE:
-            {
-                return state;
-            }
-        case PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE:
-            {
-                // role is successfully deleted now remove deleted role from store
-                let newState = _.cloneDeep(state);
-                // res contains deleted role's uniqueName
-                newState.roles.splice(newState.roles.findIndex((role: IRoleCommonResponseAndRequest) => {
-                    return role.uniqueName === action.payload.queryString.roleUniqueName;
-                }), 1);
-                return Object.assign({}, state, newState);
-            }
-        case PERMISSION_ACTIONS.GET_ALL_PAGES:
-            {
-                return state;
-            }
-        case PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE:
-            {
-                let newState = _.cloneDeep(state);
-                let res = action.payload as BaseResponse<string[], string> ;
-                if (res.status === 'success') {
-                    newState.pages = res.body;
-                    return Object.assign({}, state, newState);
-                }
-                return state;
-            }
-        case PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE:
-            {
-                let newState = _.cloneDeep(state);
-                let res = action.payload as BaseResponse<GetAllPermissionResponse[], string> ;
-                if (res.status === 'success') {
-                    newState.permissions = res.body;
-                    return Object.assign({}, state, newState);
-                }
-                return state;
-            }
-        case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE:
-            {
-                let newState = _.cloneDeep(state);
-                let res = action.payload;
-                newState.newRole = res;
-                return Object.assign({}, state, newState);
-            }
-        case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE:
-        {
-            let newState = _.cloneDeep(state);
-            newState.newRole = {};
-            return Object.assign({}, state, newState);
+          newState = sortedRoles;
+          return Object.assign({}, state, newState);
         }
-        case AccountsAction.SHARE_ENTITY: {
-          return Object.assign({}, state, {createPermissionInProcess: true});
+        return state;
+      }
+    case PERMISSION_ACTIONS.CREATE_ROLE:
+      {
+        return { ...state, addUpdateRoleInProcess: true };
+      }
+    case PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE:
+      {
+        let newState = _.cloneDeep(state);
+        let res = action.payload;
+        return (res.status === 'success') ? { ...state, addUpdateRoleInProcess: false, roles: res.body } : { ...state, addUpdateRoleInProcess: false };
+      }
+    case PERMISSION_ACTIONS.UPDATE_ROLE:
+      {
+        return { ...state, addUpdateRoleInProcess: true };
+      }
+    case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE:
+      {
+        let newState = _.cloneDeep(state);
+        let roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
+        if (roleIndx > -1) {
+          newState.roles[roleIndx] = action.payload;
+          return { ...state, ...newState, addUpdateRoleInProcess: false };
+        } else {
+          return { ...state, addUpdateRoleInProcess: false };
         }
-        case AccountsAction.SHARE_ENTITY_RESPONSE: {
-          return Object.assign({}, state, {createPermissionInProcess: false});
+      }
+    case PERMISSION_ACTIONS.DELETE_ROLE:
+      {
+        return state;
+      }
+    case PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE:
+      {
+        // role is successfully deleted now remove deleted role from store
+        let newState = _.cloneDeep(state);
+        // res contains deleted role's uniqueName
+        newState.roles.splice(newState.roles.findIndex((role: IRoleCommonResponseAndRequest) => {
+          return role.uniqueName === action.payload.queryString.roleUniqueName;
+        }), 1);
+        return { ...state, ...newState };
+      }
+    case PERMISSION_ACTIONS.GET_ALL_PAGES:
+      {
+        return state;
+      }
+    case PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE:
+      {
+        let newState = _.cloneDeep(state);
+        let res = action.payload as BaseResponse<string[], string>;
+        if (res.status === 'success') {
+          newState.pages = res.body;
+          return Object.assign({}, state, newState);
         }
-        default:
-        {
-            return state;
+        return state;
+      }
+    case PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE:
+      {
+        let newState = _.cloneDeep(state);
+        let res = action.payload as BaseResponse<GetAllPermissionResponse[], string>;
+        if (res.status === 'success') {
+          newState.permissions = res.body;
+          return Object.assign({}, state, newState);
         }
+        return state;
+      }
+    case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE:
+      {
+        let newState = _.cloneDeep(state);
+        let res = action.payload;
+        newState.newRole = res;
+        return Object.assign({}, state, newState);
+      }
+    case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE:
+      {
+        let newState = _.cloneDeep(state);
+        newState.newRole = {};
+        return Object.assign({}, state, newState);
+      }
+    case AccountsAction.SHARE_ENTITY: {
+      return Object.assign({}, state, { createPermissionInProcess: true });
     }
+    case AccountsAction.SHARE_ENTITY_RESPONSE: {
+      return Object.assign({}, state, { createPermissionInProcess: false });
+    }
+    default:
+      {
+        return state;
+      }
+  }
 }
