@@ -33,6 +33,7 @@ import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/n
 import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { setTimeout } from 'timers';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'ledger',
@@ -394,6 +395,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
+
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions.startDate  = universalDate[0];
+        this.datePickerOptions.endDate  = universalDate[1];
+        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+      }
+    })).subscribe();
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -409,7 +420,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
       this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
-        if (res.status === 'success' && res.body.length > 0) {
+        if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
@@ -539,7 +550,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           applyApplicableTaxes: true,
           isInclusiveTax: true
         }],
-      voucherType: 'sal',
+      voucherType: null,
       entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
@@ -684,6 +695,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
+    });
+
+    componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+      this.showQuickAccountModal();
     });
   }
 

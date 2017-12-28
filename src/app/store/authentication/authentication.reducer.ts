@@ -1,3 +1,4 @@
+import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
@@ -5,6 +6,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
+import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -38,6 +41,7 @@ export enum userLoginStateEnum {
 export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
+  applicationDate: any;
   companyUniqueName: string;                   // current user | null
   companies: CompanyResponse[];
   isRefreshing: boolean;
@@ -74,6 +78,7 @@ const initialState = {
 const sessionInitialState: SessionState = {
   user: null,
   lastState: '',
+  applicationDate: null,
   companyUniqueName: '',
   companies: [],
   isCompanyCreated: false,
@@ -352,6 +357,17 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         });
       }
       return state;
+    case CompanyActions.SET_APPLICATION_DATE_RESPONSE:
+      let dateResponse: BaseResponse<string, any> = action.payload;
+      if (dateResponse.status === 'success') {
+        let latestState = _.cloneDeep(state);
+        let data: any = dateResponse.body;
+        let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
+        let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
+        latestState.applicationDate = [fromDate._d, toDate._d];
+        return Object.assign({}, state, latestState);
+      }
+      return state;
     case CompanyActions.SET_CONTACT_NO: {
       let s = _.cloneDeep(state);
       s.user.user.mobileNo = action.payload;
@@ -454,6 +470,18 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       return Object.assign({}, state, {
         userLoginState: action.payload
       });
+    }
+    case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        let d = _.cloneDeep(state);
+        let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
+        if (currentCompanyIndx !== -1) {
+          d.companies[currentCompanyIndx].country = response.body.country;
+          return Object.assign({}, state, d);
+        }
+      }
+      return state;
     }
     default:
       return state;

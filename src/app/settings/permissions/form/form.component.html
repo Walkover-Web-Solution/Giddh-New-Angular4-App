@@ -14,7 +14,7 @@
     </div>
 
     <!-- time span -->
-    <div class="form-group" (clickOutside)="methodForToggleSection('timeSpanSection')">
+    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
         <label *ngIf="isLblShow">Time Span</label>
         <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
             <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left ">
@@ -34,14 +34,16 @@
 
                 <section class="periods container-fluid mrB1" *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
                     <div class="row">
-                        <div class="col-xs-6">
-                            <label>From</label>
-                            <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" />
+                        <div class="col-xs-12">
+                            <label>From - To</label>
+                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue" (bsValueChange)="onSelectDateRange($event)" placeholder="Date range picker" type="text" class="form-control" bsDaterangepicker>
+                            
+                            <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
                         </div>
-                        <div class="col-xs-6">
+                        <!-- <div class="col-xs-6">
                             <label>To</label>
                             <input class="form-control " name="to" formControlName="to" type="text" placeholder="DD-MM-YYYY" />
-                        </div>
+                        </div> -->
                     </div>
                 </section>
 
@@ -62,7 +64,7 @@
     </div>
     <!-- time span end -->
 
-    <div class="form-group" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+    <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
         <label *ngIf="isLblShow">IP Addresses</label>
         <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
             <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">

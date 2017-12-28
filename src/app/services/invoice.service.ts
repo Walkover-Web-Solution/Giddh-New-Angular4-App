@@ -8,18 +8,19 @@ import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
-import * as _ from '../lodash-optimized';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
-
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
+declare var _: any;
 @Injectable()
 export class InvoiceService {
 
   private user: UserDetails;
   private companyUniqueName: string;
-
+  private _: any;
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
     @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    this._ = config._;
+    _ = config._;
   }
 
   /**
@@ -36,7 +37,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest> = res.json();
         data.request = model;
-        data.queryString = {model};
+        data.queryString = { model };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<IGetAllInvoicesResponse, CommonPaginatedRequest>(e, ''));
@@ -55,7 +56,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest> = res.json();
         data.request = model;
-        data.queryString = {reqObj};
+        data.queryString = { reqObj };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(e, reqObj, model));
@@ -89,19 +90,19 @@ export class InvoiceService {
   * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
   */
 
-  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<string, GenerateBulkInvoiceRequest[]>> {
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<any, GenerateBulkInvoiceRequest[]>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     // create url
     let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<string, GenerateBulkInvoiceRequest[]> = res.json();
+        let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res.json();
         data.request = model;
-        data.queryString = {reqObj};
+        data.queryString = { reqObj };
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
+      .catch((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
   }
 
   /**
@@ -115,7 +116,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<PreviewInvoiceResponseClass, string> = res.json();
         data.request = invoiceNumber;
-        data.queryString = {invoiceNumber, accountUniqueName};
+        data.queryString = { invoiceNumber, accountUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, string>(e, invoiceNumber));
@@ -131,7 +132,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<string, GenerateInvoiceRequestClass> = res.json();
         data.request = model;
-        data.queryString = {accountUniqueName};
+        data.queryString = { accountUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model));
@@ -181,7 +182,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res.json();
         data.request = templateUniqueName;
-        data.queryString = {templateUniqueName};
+        data.queryString = { templateUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<InvoiceTemplateDetailsResponse, string>(e, templateUniqueName));
@@ -198,7 +199,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
         data.request = invoiceNumber;
-        data.queryString = {invoiceNumber};
+        data.queryString = { invoiceNumber };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceNumber));
@@ -215,7 +216,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
         data.request = invoiceUniqueName;
-        data.queryString = {invoiceUniqueName, action};
+        data.queryString = { invoiceUniqueName, action };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceUniqueName));
@@ -246,7 +247,7 @@ export class InvoiceService {
     return this._http.delete(this.config.apiUrl + INVOICE_API.DELETE_WEBHOOK.replace(':companyUniqueName', this.companyUniqueName).replace(':webhookUniquename', uniquename))
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
-        data.queryString = {uniquename};
+        data.queryString = { uniquename };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -259,10 +260,10 @@ export class InvoiceService {
   public UpdateInvoiceEmail(emailId): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName), {emailAddress: emailId})
+    return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName), { emailAddress: emailId })
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
-        data.queryString = {emailId};
+        data.queryString = { emailId };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -278,7 +279,7 @@ export class InvoiceService {
     return this._http.post(this.config.apiUrl + INVOICE_API.SAVE_INVOICE_WEBHOOK.replace(':companyUniqueName', this.companyUniqueName), webhook)
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
-        data.queryString = {webhook};
+        data.queryString = { webhook };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -294,7 +295,7 @@ export class InvoiceService {
     return this._http.put(this.config.apiUrl + INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
-        data.queryString = {form};
+        data.queryString = { form };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -328,7 +329,7 @@ export class InvoiceService {
     return this._http.put(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
         let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
-        data.queryString = {form};
+        data.queryString = { form };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
@@ -356,7 +357,7 @@ export class InvoiceService {
   public DeleteInvoiceEmail(emailId): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName), {emailAddress: emailId})
+    return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName), { emailAddress: emailId })
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
         return data;
@@ -377,7 +378,7 @@ export class InvoiceService {
     return this._http.post(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
         let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
-        data.queryString = {form};
+        data.queryString = { form };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
@@ -393,7 +394,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
-      data.queryString = {accountUniqueName, dataToSend};
+      data.queryString = { accountUniqueName, dataToSend };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
@@ -408,7 +409,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
-      data.queryString = {accountUniqueName, dataToSend};
+      data.queryString = { accountUniqueName, dataToSend };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
