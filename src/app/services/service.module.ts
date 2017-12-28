@@ -24,6 +24,7 @@ import { ManufacturingService } from './manufacturing.service';
 import { SearchService } from './search.service';
 import { TlPlService } from './tl-pl.service';
 import { LedgerService } from './ledger.service';
+import { DaybookService } from './daybook.service';
 import { DashboardService } from './dashboard.service';
 import { SettingsIntegrationService } from './settings.integraion.service';
 import { SettingsProfileService } from './settings.profile.service';
@@ -37,7 +38,7 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -82,7 +83,8 @@ export class ServiceModule {
         SettingsLinkedAccountsService,
         PurchaseInvoiceService,
         SettingsFinancialYearService,
-        SettingsPermissionService
+        SettingsPermissionService,
+        DaybookService
       ]
     };
   }
