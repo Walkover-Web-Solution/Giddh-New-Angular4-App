@@ -31,6 +31,7 @@ export const ROUTES: Routes = [
   { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
+  { path: 'accounting', redirectTo: 'pages/accounting', pathMatch: 'full' },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
