@@ -24,23 +24,7 @@ const ERRLYTICS_KEY_DEV = '';
  * Webpack Constants
  */
 
-const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
-const HOST = process.env.HOST || 'localapp.giddh.com';
-const PORT = process.env.PORT || 3000;
-const HMR = helpers.hasProcessFlag('hot');
-const AppUrl = 'http://dev.giddh.com/electron';
-const ApiUrl = 'http://apitest.giddh.com/';
-const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
-    host: HOST,
-    port: PORT,
-    ENV: ENV,
-    HMR: HMR,
-    isElectron: false,
-    errlyticsNeeded: false,
-    errlyticsKey: ERRLYTICS_KEY_DEV,
-    AppUrl: AppUrl,
-    ApiUrl: ApiUrl
-});
+
 
 /**
  * Webpack configuration
@@ -52,7 +36,7 @@ module.exports = function (options) {
     const HOST = process.env.HOST || 'localapp.giddh.com';
     const PORT = process.env.PORT || 3000;
     const AppUrl = 'http://dev.giddh.com/electron';
-    const ApiUrl = 'http://apitest.giddh.com/';
+    const ApiUrl = 'http://apidev.giddh.com/';
     const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
         host: HOST,
         port: PORT,
