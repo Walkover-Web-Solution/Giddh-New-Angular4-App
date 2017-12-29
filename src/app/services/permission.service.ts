@@ -30,7 +30,7 @@ export class PermissionService {
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     return this._http.get(this.config.apiUrl + PERMISSION_API.GET_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res.json();
+      let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest[], string>(e));
@@ -43,7 +43,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + PERMISSION_API.CREATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res.json();
+      let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<CreateNewRoleResponse, CreateNewRoleRequest>(e, model));
@@ -56,7 +56,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', model.uniqueName), model).map((res) => {
-      let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res.json();
+      let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>(e, model));
@@ -69,7 +69,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + PERMISSION_API.DELETE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', roleUniqueName)).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.request = '';
       data.queryString = {roleUniqueName};
       return data;
@@ -81,7 +81,7 @@ export class PermissionService {
   */
   public GetAllPageNames(): Observable<BaseResponse<IPageStr[], string>> {
     return this._http.get(this.config.apiUrl + PERMISSION_API.GET_ALL_PAGE_NAMES).map((res) => {
-      let data: BaseResponse<IPageStr[], string> = res.json();
+      let data: BaseResponse<IPageStr[], string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e));
@@ -94,7 +94,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + PERMISSION_API.SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
@@ -107,7 +107,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + PERMISSION_API.UN_SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
@@ -120,7 +120,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PERMISSION_API.COMPANY_SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }

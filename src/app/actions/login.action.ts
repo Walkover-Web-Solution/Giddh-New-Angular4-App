@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptionsArgs } from '@angular/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
@@ -76,7 +76,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
@@ -103,7 +103,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
@@ -130,7 +130,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: 'EmptyAction'};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -148,7 +148,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       return this.LoginSuccess();
     });
@@ -168,7 +168,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: 'EmptyAction'};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -183,7 +183,7 @@ export class LoginActions {
       if (companies.body && companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         this._router.navigate(['/pages/new-user']);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       } else {
         if (stateDetail.body && stateDetail.status === 'success') {
           this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -195,7 +195,7 @@ export class LoginActions {
             // this.store.dispatch(replace(['/pages/home']));
             // if (ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
             this._router.navigate([stateDetail.body.lastState]);
-            return {type: 'EmptyAction'};
+            return { type: 'EmptyAction' };
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -207,7 +207,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             this._router.navigate([stateDetail.body.lastState]);
-            return {type: 'EmptyAction'};
+            return { type: 'EmptyAction' };
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -220,7 +220,7 @@ export class LoginActions {
           this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
           this._router.navigate(['/pages/home']);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
       }
       // return { type: 'EmptyAction' };
@@ -231,7 +231,7 @@ export class LoginActions {
     .ofType(LoginActions.LogOut)
     .map((action: CustomActions) => {
       this._router.navigate(['/login']);
-      return {type: 'EmptyAction'};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -249,7 +249,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       return this.LoginSuccess();
     });
@@ -269,7 +269,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       return this.LoginSuccess();
     });
@@ -278,12 +278,16 @@ export class LoginActions {
   public GoogleElectronLogin$: Observable<Action> = this.actions$
     .ofType(LoginActions.GoogleLoginElectron)
     .switchMap((action: CustomActions) => {
-      return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
+      return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', {
+        headers: action.payload,
+        responseType: 'json'
+      }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
     })
     .map(data => {
+      // debugger;
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -293,12 +297,16 @@ export class LoginActions {
   public LinkedInElectronLogin$: Observable<Action> = this.actions$
     .ofType(LoginActions.LinkedInLoginElectron)
     .switchMap((action: CustomActions) => {
-      return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', action.payload).map(p => p.json());
+      return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', {
+        headers: action.payload,
+        responseType: 'json'
+      }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
     })
     .map(data => {
+      // debugger;
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -345,7 +353,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: 'EmptyAction'};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -361,7 +369,7 @@ export class LoginActions {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: 'EmptyAction'};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -383,18 +391,18 @@ export class LoginActions {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: 'EmptyAction'};
+      return { type: 'EmptyAction' };
     });
 
   constructor(public _router: Router,
-              private actions$: Actions,
-              private auth: AuthenticationService,
-              public _toaster: ToasterService,
-              private store: Store<AppState>,
-              private comapnyActions: CompanyActions,
-              private _companyService: CompanyService,
-              private http: Http,
-              private _generalService: GeneralService) {
+    private actions$: Actions,
+    private auth: AuthenticationService,
+    public _toaster: ToasterService,
+    private store: Store<AppState>,
+    private comapnyActions: CompanyActions,
+    private _companyService: CompanyService,
+    private http: HttpClient,
+    private _generalService: GeneralService) {
   }
 
   public SignupWithEmailRequest(value: string): CustomActions {
@@ -544,14 +552,14 @@ export class LoginActions {
     };
   }
 
-  public GoogleElectronLogin(value: RequestOptionsArgs): CustomActions {
+  public GoogleElectronLogin(value: any): CustomActions {
     return {
       type: LoginActions.GoogleLoginElectron,
       payload: value
     };
   }
 
-  public LinkedInElectronLogin(value: RequestOptionsArgs): CustomActions {
+  public LinkedInElectronLogin(value: any): CustomActions {
     return {
       type: LoginActions.LinkedInLoginElectron,
       payload: value
