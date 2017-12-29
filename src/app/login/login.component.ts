@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
-import { Headers, RequestOptionsArgs } from '@angular/http';
+import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
@@ -50,10 +50,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   constructor(private _fb: FormBuilder,
-              private store: Store<AppState>,
-              private router: Router,
-              private loginAction: LoginActions,
-              private authService: AuthService) {
+    private store: Store<AppState>,
+    private router: Router,
+    private loginAction: LoginActions,
+    private authService: AuthService) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).takeUntil(this.destroyed$);
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.countryName, label: c.value});
+      this.countryCodeList.push({ value: c.countryName, label: c.value });
     });
     this.userLoginState$ = this.store.select(p => p.session.userLoginState);
     this.userDetails$ = this.store.select(p => p.session.user);
@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.twoWayOthForm = this._fb.group({
       otp: ['', [Validators.required]]
     });
-    this.setCountryCode({value: 'India', label: 'India'});
+    this.setCountryCode({ value: 'India', label: 'India' });
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -268,10 +268,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         });
         let token = await myApiOauth.getAccessToken(bodyParams);
-        let options: RequestOptionsArgs = {};
+        let options = { headers: null };
 
-        options.headers = new Headers();
-        options.headers.append('Access-Token', token.access_token);
+        options.headers['Access-Token'] = token.access_token;
+        options.headers = new HttpHeaders(options.headers);
 
         if (provider === 'google') {
           // google
