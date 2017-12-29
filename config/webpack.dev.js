@@ -29,7 +29,7 @@ const HOST = process.env.HOST || 'localapp.giddh.com';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const AppUrl = 'http://dev.giddh.com/electron';
-const ApiUrl = 'http://apidev.giddh.com/';
+const ApiUrl = 'http://apitest.giddh.com/';
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
     host: HOST,
     port: PORT,
@@ -52,7 +52,7 @@ module.exports = function (options) {
     const HOST = process.env.HOST || 'localapp.giddh.com';
     const PORT = process.env.PORT || 3000;
     const AppUrl = 'http://dev.giddh.com/electron';
-    const ApiUrl = 'http://apidev.giddh.com/';
+    const ApiUrl = 'http://apitest.giddh.com/';
     const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
         host: HOST,
         port: PORT,
