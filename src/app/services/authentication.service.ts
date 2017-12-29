@@ -112,7 +112,6 @@ export class AuthenticationService {
       headers: args.headers,
       responseType: 'json'
     }).map((res) => {
-      debugger;
       let data: BaseResponse<VerifyEmailResponseModel, string> = res as BaseResponse<VerifyEmailResponseModel, string>;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args));
@@ -132,7 +131,6 @@ export class AuthenticationService {
       headers: args.headers,
       responseType: 'json'
     }).map((res) => {
-      debugger;
       let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
       data.request = model;
       return data;
@@ -153,7 +151,7 @@ export class AuthenticationService {
   }
 
   public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
-    debugger;
+
     let sessionId = this._generalService.user.uniqueName;
 
     return this._http.get(this.config.apiUrl + LOGIN_API.FETCH_DETAILS
