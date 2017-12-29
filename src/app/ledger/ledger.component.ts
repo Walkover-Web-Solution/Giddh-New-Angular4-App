@@ -397,14 +397,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     // Refresh report data according to universal date
-    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj) {
-        let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate  = universalDate[0];
-        this.datePickerOptions.endDate  = universalDate[1];
-        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
-      }
-    })).subscribe();
+    // Temporary commenting
+    // this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+    //   if (dateObj) {
+    //     let universalDate = _.cloneDeep(dateObj);
+    //     this.datePickerOptions.startDate  = universalDate[0];
+    //     this.datePickerOptions.endDate  = universalDate[1];
+    //     this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+    //   }
+    // })).subscribe();
   }
 
   public initTrxRequest(accountUnq: string) {
