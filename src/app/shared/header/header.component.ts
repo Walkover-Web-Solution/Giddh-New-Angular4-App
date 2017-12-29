@@ -217,25 +217,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
 
     // Get universal date
-    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj && dateObj.length) {
-        this.datePickerOptions.startDate = moment(dateObj[0]);
-        this.datePickerOptions.endDate = moment(dateObj[1]);
-        let dates = {
-          fromDate: moment(dateObj[0]).format(GIDDH_DATE_FORMAT),
-          toDate: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)
-        };
-        this.datePickerOptions.fromDate = dates.fromDate;
-        this.datePickerOptions.toDate = dates.toDate;
+    // Temporary commenting
+  //   this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+  //     if (dateObj && dateObj.length) {
+  //       this.datePickerOptions.startDate = moment(dateObj[0]);
+  //       this.datePickerOptions.endDate = moment(dateObj[1]);
+  //       let dates = {
+  //         fromDate: moment(dateObj[0]).format(GIDDH_DATE_FORMAT),
+  //         toDate: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)
+  //       };
+  //       this.datePickerOptions.fromDate = dates.fromDate;
+  //       this.datePickerOptions.toDate = dates.toDate;
 
-        if (_.isEqual(this.datePickerOptions.fromDate, this.datePickerOptions.fromDate)) {
-          this.isTodaysDateSelected = true;
-        } else {
-          this.isTodaysDateSelected = false;
-        }
+  //       if (_.isEqual(this.datePickerOptions.fromDate, this.datePickerOptions.fromDate)) {
+  //         this.isTodaysDateSelected = true;
+  //       } else {
+  //         this.isTodaysDateSelected = false;
+  //       }
 
-      }
-    })).take(1).subscribe();
+  //     }
+  //   })).take(1).subscribe();
   }
 
   public ngAfterViewInit() {
