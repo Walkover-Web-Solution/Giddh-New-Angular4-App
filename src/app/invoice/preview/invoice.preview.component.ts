@@ -136,13 +136,14 @@ export class InvoicePreviewComponent implements OnInit {
       });
 
     // Refresh report data according to universal date
-    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj) {
-        this.universalDate = _.cloneDeep(dateObj);
-        this.invoiceSearchRequest.dateRange = this.universalDate;
-      }
-      this.getInvoices();
-    })).subscribe();
+    // Temporary commenting
+    // this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+    //   if (dateObj) {
+    //     this.universalDate = _.cloneDeep(dateObj);
+    //     this.invoiceSearchRequest.dateRange = this.universalDate;
+    //   }
+    //   this.getInvoices();
+    // })).subscribe();
   }
 
   public getInvoiceTemplateDetails(templateUniqueName: string) {
@@ -311,12 +312,13 @@ export class InvoicePreviewComponent implements OnInit {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
-      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate  = moment().format(GIDDH_DATE_FORMAT);
+      // Temporary commenting
+      // fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      // toDate  = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
-      from: fromDate,
-      to: toDate,
+      from: o.from,
+      to: o.to,
       count: o.count,
       page: o.page
     };
