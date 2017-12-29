@@ -86,7 +86,6 @@ export function provideConfig() {
     // BsDatepickerModule,
     Daterangepicker,
     TextCaseChangeModule
-    // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
