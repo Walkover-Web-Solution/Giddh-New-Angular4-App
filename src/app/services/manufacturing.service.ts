@@ -29,7 +29,7 @@ export class ManufacturingService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + MANUFACTURING_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName))
       .map((res) => {
-        let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res.json();
+        let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res;
         data.queryString = model;
         return data;
       })
@@ -45,7 +45,7 @@ export class ManufacturingService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
-      let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
+      let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res;
       data.request = model;
       data.queryString = {stockUniqueName};
       return data;
@@ -60,7 +60,7 @@ export class ManufacturingService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + MANUFACTURING_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).map((res) => {
-      let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
+      let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res;
       data.request = model;
       data.queryString = reqModal;
       return data;
@@ -75,7 +75,7 @@ export class ManufacturingService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + MANUFACTURING_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.request = '';
       data.queryString = {model};
       return data;
@@ -118,7 +118,7 @@ export class ManufacturingService {
 
     return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
       .map((res) => {
-        let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
+        let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res;
         data.request = model;
         data.queryString = model;
         return data;
@@ -135,7 +135,7 @@ export class ManufacturingService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)))
       .map((res) => {
-        let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res.json();
+        let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res;
         data.queryString = model;
         return data;
       })

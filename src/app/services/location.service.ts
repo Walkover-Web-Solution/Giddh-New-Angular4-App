@@ -1,6 +1,6 @@
 import { Injectable, Inject, Optional } from '@angular/core';
 import { Domain } from '../models/domain';
-import { Http } from '@angular/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 declare var _: any;
@@ -9,7 +9,7 @@ declare var _: any;
 export class LocationService {
   private GoogleApiURL: string = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCaphDTQJXyr1lhnaXP_nm7a5dqgr5KVJU';
   private _: any;
-  constructor(private _http: Http, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+  constructor(private _http: HttpClient, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this._ = config._;
     _ = config._;
   }
@@ -29,9 +29,9 @@ export class LocationService {
     } else {
       query += `components=country:${location.QueryString}`;
     }
-    return this._http.get(this.GoogleApiURL + '&' + query)
+    return this._http.get(this.GoogleApiURL + '&' + query, { responseType: 'json' })
       .map((res) => {
-        let r = res.json();
+        let r = res as any;
         let data = r.results.filter((i) => _.includes(i.types, 'locality'));
         return data;
       });
