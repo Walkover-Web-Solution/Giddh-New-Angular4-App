@@ -65,6 +65,8 @@ export class NeedsAuthorization implements CanActivate {
   constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return true;
+    /*
     let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope(state.url);
     if (requestedScopeNeedAuth) {
       let permissions: IScope[] = this._permissionDataService.getData;
@@ -89,10 +91,10 @@ export class NeedsAuthorization implements CanActivate {
     } else {
       return true;
     }
+    */
   }
 
   private mapUIRouteWithAPIScope(path: string): string {
-    console.log('the url is: ', path);
     if ((path.split('/').length) === 4) {
       path = path.substring(0, path.lastIndexOf('/'));
     }
