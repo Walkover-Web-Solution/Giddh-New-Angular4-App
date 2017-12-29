@@ -303,7 +303,6 @@ export class LoginActions {
       }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
     })
     .map(data => {
-      // debugger;
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
         return { type: 'EmptyAction' };
