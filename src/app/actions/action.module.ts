@@ -9,6 +9,7 @@ import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 
 import { AccountsAction } from './accounts.actions';
 import { SidebarAction } from './inventory/sidebar.actions';
+import { DaybookActions } from './daybook/daybook.actions';
 import { CustomStockUnitAction } from './inventory/customStockUnit.actions';
 import { PermissionActions } from './permission/permission.action';
 /**
@@ -59,6 +60,7 @@ import { SettingsPermissionActions } from './settings/permissions/settings.permi
       FlyAccountsActions,
       TBPlBsActions,
       LedgerActions,
+      DaybookActions,
       InvoiceActions,
       SettingsIntegrationActions,
       SettingsProfileActions,

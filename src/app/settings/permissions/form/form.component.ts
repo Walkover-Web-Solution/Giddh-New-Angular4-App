@@ -1,3 +1,4 @@
+import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'lodash';
 import isCidr from 'is-cidr';
 import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild, EventEmitter, Input, Output } from '@angular/core';
@@ -11,6 +12,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 // some local const
 const DATE_RANGE = 'daterange';
@@ -38,6 +41,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
   public selectedTimeSpan: string = 'Date Range';
   public selectedIPRange: string = 'IP Address';
   public createPermissionInProcess$: Observable<boolean>;
+  public dateRangePickerValue: Date[] = [];
   // private methods
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -59,6 +63,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     if (this.userdata) {
+      let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
+      let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
+      this.dateRangePickerValue = [from._d, to._d];
       this.initAcForm(this.userdata);
     }else {
       this.initAcForm();
@@ -106,11 +113,23 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onSelectDateRange(ev) {
+    if (ev && ev.length) {
+      let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
+      let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
+      this.permissionForm.patchValue({from, to});
+    }
+  }
+
   public togglePeriodOptionsVal(val: string) {
     if (val === DATE_RANGE) {
       this.selectedTimeSpan = 'Date Range';
     }else if (val === PAST_PERIOD) {
       this.selectedTimeSpan = 'Past Period';
+      this.dateRangePickerValue = [];
+      if (this.permissionForm) {
+        this.permissionForm.patchValue({from: null, to: null});
+      }
     }
   }
 
@@ -285,6 +304,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     obj.action = (this.isUpdtCase) ? 'update' : 'create';
+    this.dateRangePickerValue = [];
     obj.data = form;
     if (obj.action === 'create') {
       this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
