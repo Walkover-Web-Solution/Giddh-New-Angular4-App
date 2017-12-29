@@ -59,7 +59,6 @@ export class HttpWrapperService {
 
   public prepareOptions(options: any): any {
     this.showLoader();
-    debugger;
     let sessionId = this._generalService.sessionId;
     options = options || {};
 
