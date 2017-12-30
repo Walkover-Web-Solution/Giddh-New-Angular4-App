@@ -1,3 +1,4 @@
+import { GroupWithAccountsAction } from './../../../../actions/groupwithaccounts.actions';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
@@ -92,12 +93,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService) {
+              private _companyService: CompanyService, private _toaster: ToasterService, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-
+    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails('shareholdersfunds'));
     // bind state sources
     this.stateStream$.subscribe((data) => {
       let states: IOption[] = [];
