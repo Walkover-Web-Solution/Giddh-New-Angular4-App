@@ -28,7 +28,7 @@ function createWindow() {
   win.loadURL(indexUrl);
 
   // Open the DevTools.
-  if (DEV_SERVER || true) {
+  if (DEV_SERVER) {
     win.webContents.openDevTools();
   }
 
