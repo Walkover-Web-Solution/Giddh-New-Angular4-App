@@ -268,17 +268,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         });
         let token = await myApiOauth.getAccessToken(bodyParams);
-        let options = { headers: null };
-
-        options.headers['Access-Token'] = token.access_token;
-        options.headers = new HttpHeaders(options.headers);
-
         if (provider === 'google') {
           // google
-          this.store.dispatch(this.loginAction.GoogleElectronLogin(options));
+          this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
         } else {
           // linked in
-          this.store.dispatch(this.loginAction.LinkedInElectronLogin(options));
+          this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
         }
       } catch (e) {
         //
