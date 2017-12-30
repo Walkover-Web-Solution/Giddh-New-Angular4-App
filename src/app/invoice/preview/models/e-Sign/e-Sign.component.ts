@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
+import { forIn } from 'app/lodash-optimized';
 
 @Component({
   selector: 'e-sign-modal-component',
@@ -66,7 +67,7 @@ export class EsignModalComponent implements OnInit {
    * formOperation
    */
   public formOperation(eSignForm, action) {
-    _.forIn(this.eSignModel, (val, key) => {
+    forIn(this.eSignModel, (val, key) => {
       if (key !== 'AadhaarNumber' && action === 'add') {
         $(eSignForm).append('<input type="hidden" id=' + key + ' name=' + key + ' value=' + val + ' />');
       } else if (key !== 'AadhaarNumber' && action === 'remove') {
