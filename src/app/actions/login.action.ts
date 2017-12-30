@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
@@ -284,7 +284,6 @@ export class LoginActions {
       }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
     })
     .map(data => {
-      // debugger;
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
         return { type: 'EmptyAction' };
@@ -297,8 +296,14 @@ export class LoginActions {
   public LinkedInElectronLogin$: Observable<Action> = this.actions$
     .ofType(LoginActions.LinkedInLoginElectron)
     .switchMap((action: CustomActions) => {
+      let args: any = { headers: {} };
+      args.headers['cache-control'] = 'no-cache';
+      args.headers['Content-Type'] = 'application/json';
+      args.headers['Accept'] = 'application/json';
+      args.headers['Access-Token'] = action.payload;
+      args.headers = new HttpHeaders(args.headers);
       return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', {
-        headers: action.payload,
+        headers: args.headers,
         responseType: 'json'
       }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
     })
