@@ -121,7 +121,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
-    debugger;
+    // debugger;
     request.from = request.from;
     request.to = request.to;
     request.fy = request.fy;
