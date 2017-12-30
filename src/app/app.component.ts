@@ -28,7 +28,7 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private _generalService: GeneralService) {
     this.store.select(s => s.session).subscribe(ss => {
-      if (ss.user) {
+      if (ss.user && ss.user.session.id) {
         this._generalService.user = ss.user.user;
         if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
           this._generalService.sessionId = ss.user.session.id;
@@ -44,13 +44,9 @@ export class AppComponent implements AfterViewInit {
   public ngAfterViewInit() {
     this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').subscribe((company) => {
       if (company && company.companyUniqueName) {
-        if (company.lastState) {
+        if (company.lastState &&  ROUTES.findIndex(p => p.path.split('/')[0] === company.lastState.split('/')[0]) !== -1 ) {
           this.router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
-            if (ROUTES.findIndex(p => p.path.split('/')[0] === company.lastState.split('/')[0]) > -1) {
-              this.router.navigate([company.lastState]);
-            } else {
-              this.router.navigate(['home']);
-            }
+            this.router.navigate([company.lastState]);
           });
         } else {
           if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
