@@ -54,7 +54,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res.json();
+      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model));
@@ -67,7 +67,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniquename)), model).map((res) => {
-      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res.json();
+      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
       data.request = model;
       data.queryString = { stockGroupUniquename };
       return data;
@@ -81,7 +81,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + INVENTORY_API.DELETE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.request = stockGroupUniqueName;
       data.queryString = { stockGroupUniqueName };
       return data;
@@ -92,7 +92,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.GROUPS_STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))).map((res) => {
-      let data: BaseResponse<StockGroupResponse, string> = res.json();
+      let data: BaseResponse<StockGroupResponse, string> = res;
       data.request = stockGroupUniqueName;
       data.queryString = { stockGroupUniqueName };
       return data;
@@ -110,7 +110,7 @@ export class InventoryService {
   //     this.companyUniqueName = s.session.companyUniqueName;
   //   });
   //   return this._http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '').replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
-  //     let data: BaseResponse<GroupsWithStocksFlatten, string> = res.json();
+  //     let data: BaseResponse<GroupsWithStocksFlatten, string> = res;
   //     data.request = '';
   //     data.queryString = { q, page, count };
   //     return data;
@@ -120,7 +120,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res.json();
+      let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
       data.request = '';
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {}));
@@ -133,7 +133,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<StocksResponse, string> = res.json();
+      let data: BaseResponse<StocksResponse, string> = res;
       data.request = '';
       data.queryString = {};
       return data;
@@ -147,7 +147,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.MANUFACTURING_STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<StocksResponse, string> = res.json();
+      let data: BaseResponse<StocksResponse, string> = res;
       data.request = '';
       data.queryString = {};
       return data;
@@ -161,7 +161,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.CREATE_NEW_MANUFACTURING_STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<StocksResponse, string> = res.json();
+      let data: BaseResponse<StocksResponse, string> = res;
       data.request = '';
       data.queryString = {};
       return data;
@@ -175,7 +175,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', encodeURIComponent(page.toString())).replace(':count', encodeURIComponent(count.toString()))).map((res) => {
-      let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res.json();
+      let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
       data.request = '';
       data.queryString = { q, page, count };
       return data;
@@ -189,7 +189,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_UNIT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res.json();
+      let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model));
@@ -202,7 +202,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':uName', uName), model).map((res) => {
-      let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res.json();
+      let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res;
       data.request = model;
       data.queryString = { uName };
       return data;
@@ -216,7 +216,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + INVENTORY_API.DELETE_STOCK_UNIT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':uName', uName)).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.request = uName;
       data.queryString = { uName };
       return data;
@@ -230,7 +230,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.STOCK_UNIT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<StockUnitResponse[], string> = res.json();
+      let data: BaseResponse<StockUnitResponse[], string> = res;
       data.request = '';
       data.queryString = {};
       return data;
@@ -244,7 +244,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = encodeURIComponent(this._generalService.companyUniqueName);
     return this._http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)), model).map((res) => {
-      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
+      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res;
       data.request = model;
       data.queryString = { stockGroupUniqueName };
       return data;
@@ -258,7 +258,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
-      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
+      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res;
       data.request = model;
       data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
@@ -272,7 +272,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + INVENTORY_API.DELETE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.request = '';
       data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
@@ -286,7 +286,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVENTORY_API.STOCK_DETAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
-      let data: BaseResponse<StockDetailResponse, string> = res.json();
+      let data: BaseResponse<StockDetailResponse, string> = res;
       data.request = '';
       data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
@@ -300,7 +300,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVENTORY_API.GET_RATE_FOR_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.request = '';
       data.queryString = { stockUniqueName };
       return data;
@@ -321,7 +321,7 @@ export class InventoryService {
       .replace(':count', encodeURIComponent(stockReportRequest.count.toString()))
       .replace(':page', encodeURIComponent(stockReportRequest.page.toString())))
       .map((res) => {
-        let data: BaseResponse<StockReportResponse, StockReportRequest> = res.json();
+        let data: BaseResponse<StockReportResponse, StockReportRequest> = res;
         data.request = stockReportRequest;
         data.queryString = {
           stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
