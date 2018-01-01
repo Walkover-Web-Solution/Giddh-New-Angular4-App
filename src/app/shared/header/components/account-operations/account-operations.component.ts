@@ -44,7 +44,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
@@ -119,11 +119,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.activeAccount,
-        (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-        (state: AppState) => state.company.taxes],
+      (state: AppState) => state.groupwithaccounts.activeAccount,
+      (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+      (state: AppState) => state.company.taxes],
       (activeAccount, activeAccountTaxHierarchy, taxes) => {
         let arr: IOption[] = [];
+        // debugger;
         if (taxes) {
           if (activeAccount) {
             let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
@@ -141,22 +142,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let inheritedTaxes = _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                 // set value in tax group form
-                this.taxGroupForm.setValue({taxes: allTaxes});
+                this.taxGroupForm.setValue({ taxes: allTaxes });
               } else {
-                this.taxGroupForm.setValue({taxes: applicableTaxes});
+                this.taxGroupForm.setValue({ taxes: applicableTaxes });
               }
               return _.differenceBy(taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), 'value');
 
             } else {
               // set value in tax group form
-              this.taxGroupForm.setValue({taxes: applicableTaxes});
+              this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
               return taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               });
 
             }
@@ -185,6 +186,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnInit() {
+    this.activeAccount$.subscribe(a => {
+      if (a && a.parentGroups[0].uniqueName) {
+        let col = a.parentGroups[0].uniqueName;
+        this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+        this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+      }
+    });
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
@@ -210,7 +218,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let flattenGroupsList: IOption[] = [];
 
         grpsList.forEach(grp => {
-          flattenGroupsList.push({label: grp.name, value: grp.uniqueName});
+          flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
         });
         this.groupsList = flattenGroupsList;
       }
@@ -263,9 +271,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public ngAfterViewInit() {
 
     this.isTaxableAccount$ = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-        (state: AppState) => state.groupwithaccounts.activeGroup,
-        (state: AppState) => state.groupwithaccounts.activeAccount],
+      (state: AppState) => state.groupwithaccounts.groupswithaccounts,
+      (state: AppState) => state.groupwithaccounts.activeGroup,
+      (state: AppState) => state.groupwithaccounts.activeAccount],
       (groupswithaccounts, activeGroup, activeAccount) => {
         let result: boolean = false;
         if (groupswithaccounts && activeGroup && activeAccount) {
@@ -285,7 +293,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let accounts: IOption[] = [];
       if (a.status === 'success') {
         a.body.results.map(acc => {
-          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+          accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
         });
         let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
         if (accountIndex > -1) {
@@ -308,7 +316,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
   }
 
   public moveAccount() {
@@ -344,7 +352,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);

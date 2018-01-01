@@ -265,6 +265,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   }
 
   public onAccountClick(item: any, currentIndex: number) {
+    // debugger;
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
     let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
