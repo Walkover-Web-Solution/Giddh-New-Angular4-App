@@ -4,6 +4,7 @@ import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
+import * as _ from '../../../lodash-optimized';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -159,9 +160,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
-
   public filterData() {
     this.onPropertyChanged.emit(this.filterForm.value);
   }
-
+  public refreshData() {
+    let data = _.cloneDeep(this.filterForm.value);
+    data.refresh = true;
+    this.onPropertyChanged.emit(data);
+  }
 }

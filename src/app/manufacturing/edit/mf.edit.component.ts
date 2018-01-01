@@ -286,7 +286,7 @@ export class MfEditComponent implements OnInit {
     } else {
       manufacturingObj.otherExpenses = [objToPush];
     }
-    manufacturingObj.manufacturingMultipleOf = manufacturingObj.quantity;
+    // manufacturingObj.manufacturingMultipleOf = manufacturingObj.manufacturingMultipleOf;
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};
