@@ -25,7 +25,7 @@ export class SettingsTaxesService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
@@ -38,7 +38,7 @@ export class SettingsTaxesService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName, model).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
@@ -51,7 +51,7 @@ export class SettingsTaxesService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       data.request = taxUniqueName;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, taxUniqueName));

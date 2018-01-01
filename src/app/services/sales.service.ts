@@ -31,7 +31,7 @@ export class SalesService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<string, GenerateSalesRequest> = res.json();
+        let data: BaseResponse<string, GenerateSalesRequest> = res;
         data.request = model;
         return data;
       })

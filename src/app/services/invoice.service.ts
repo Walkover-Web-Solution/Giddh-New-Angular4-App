@@ -35,7 +35,7 @@ export class InvoiceService {
 
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), body)
       .map((res) => {
-        let data: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest> = res.json();
+        let data: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest> = res;
         data.request = model;
         data.queryString = { model };
         return data;
@@ -54,7 +54,7 @@ export class InvoiceService {
     let url = this.createQueryString(this.config.apiUrl + INVOICE_API.GET_ALL_LEDGERS_FOR_INVOICE, reqObj);
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest> = res.json();
+        let data: BaseResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest> = res;
         data.request = model;
         data.queryString = { reqObj };
         return data;
@@ -97,7 +97,7 @@ export class InvoiceService {
     let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res.json();
+        let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res;
         data.request = model;
         data.queryString = { reqObj };
         return data;
@@ -114,7 +114,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':invoiceNumber', invoiceNumber))
       .map((res) => {
-        let data: BaseResponse<PreviewInvoiceResponseClass, string> = res.json();
+        let data: BaseResponse<PreviewInvoiceResponseClass, string> = res;
         data.request = invoiceNumber;
         data.queryString = { invoiceNumber, accountUniqueName };
         return data;
@@ -130,7 +130,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVOICE_API_2.UPDATE_GENERATED_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<string, GenerateInvoiceRequestClass> = res.json();
+        let data: BaseResponse<string, GenerateInvoiceRequestClass> = res;
         data.request = model;
         data.queryString = { accountUniqueName };
         return data;
@@ -149,7 +149,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res.json();
+        let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res;
         data.request = model;
         return data;
       })
@@ -164,7 +164,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<GenerateInvoiceRequestClass, string> = res.json();
+        let data: BaseResponse<GenerateInvoiceRequestClass, string> = res;
         data.request = '';
         return data;
       })
@@ -180,7 +180,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVOICE_API_2.GET_INVOICE_TEMPLATE_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
       .map((res) => {
-        let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res.json();
+        let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res;
         data.request = templateUniqueName;
         data.queryString = { templateUniqueName };
         return data;
@@ -197,7 +197,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + INVOICE_API.DELETE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber))
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.request = invoiceNumber;
         data.queryString = { invoiceNumber };
         return data;
@@ -214,7 +214,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), action)
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.request = invoiceUniqueName;
         data.queryString = { invoiceUniqueName, action };
         return data;
@@ -231,7 +231,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
-        let data: BaseResponse<InvoiceSetting, string> = res.json();
+        let data: BaseResponse<InvoiceSetting, string> = res;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e));
@@ -246,7 +246,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + INVOICE_API.DELETE_WEBHOOK.replace(':companyUniqueName', this.companyUniqueName).replace(':webhookUniquename', uniquename))
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.queryString = { uniquename };
         return data;
       })
@@ -262,7 +262,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName), { emailAddress: emailId })
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.queryString = { emailId };
         return data;
       })
@@ -278,7 +278,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API.SAVE_INVOICE_WEBHOOK.replace(':companyUniqueName', this.companyUniqueName), webhook)
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.queryString = { webhook };
         return data;
       })
@@ -294,7 +294,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.queryString = { form };
         return data;
       })
@@ -310,7 +310,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
-        let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
+        let data: BaseResponse<RazorPayDetailsResponse, string> = res;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
@@ -328,7 +328,7 @@ export class InvoiceService {
     form = _.cloneDeep(newForm);
     return this._http.put(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
-        let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
+        let data: BaseResponse<RazorPayDetailsResponse, string> = res;
         data.queryString = { form };
         return data;
       })
@@ -344,7 +344,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -359,7 +359,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName), { emailAddress: emailId })
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -377,7 +377,7 @@ export class InvoiceService {
     form = _.cloneDeep(newForm);
     return this._http.post(this.config.apiUrl + INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
-        let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
+        let data: BaseResponse<RazorPayDetailsResponse, string> = res;
         data.queryString = { form };
         return data;
       })
@@ -393,7 +393,7 @@ export class InvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.queryString = { accountUniqueName, dataToSend };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
@@ -408,7 +408,7 @@ export class InvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.queryString = { accountUniqueName, dataToSend };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
