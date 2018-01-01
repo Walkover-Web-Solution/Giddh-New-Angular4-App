@@ -1,6 +1,6 @@
 import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -48,7 +48,7 @@ const PREVIEW_OPTIONS = [
   templateUrl: './invoice.preview.component.html',
   styleUrls: ['./invoice.preview.component.css'],
 })
-export class InvoicePreviewComponent implements OnInit {
+export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
@@ -103,9 +103,9 @@ export class InvoicePreviewComponent implements OnInit {
       this.accounts$ = Observable.of(accounts);
     });
 
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o && o.invoices) {
-        this.invoiceData = _.cloneDeep(o.invoices);
+    this.store.select(p => p.invoice.invoices).takeUntil(this.destroyed$).subscribe((o: GetAllInvoicesPaginatedResponse) => {
+      if (o) {
+        this.invoiceData = _.cloneDeep(o);
         _.map(this.invoiceData.results, (item: IInvoiceResult) => {
           item.isSelected = false;
           return o;
@@ -327,5 +327,10 @@ export class InvoicePreviewComponent implements OnInit {
       this.invoiceSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
       this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
