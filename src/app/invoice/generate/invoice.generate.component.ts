@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -38,7 +38,7 @@ const COMPARISON_FILTER = [
   styleUrls: ['./invoice.generate.component.css'],
   templateUrl: './invoice.generate.component.html'
 })
-export class InvoiceGenerateComponent implements OnInit {
+export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   public accounts$: Observable<IOption[]>;
@@ -341,5 +341,10 @@ export class InvoiceGenerateComponent implements OnInit {
     }else {
       this.togglePrevGenBtn = false;
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

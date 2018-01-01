@@ -25,7 +25,7 @@ export class DashboardService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + DASHBOARD_API.DASHBOARD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(fromDate)).replace(':to', encodeURIComponent(toDate)).replace(':interval', interval).replace(':refresh', refresh.toString())).map((res) => {
-      let data: BaseResponse<DashboardResponse, string> = res.json();
+      let data: BaseResponse<DashboardResponse, string> = res;
       data.queryString = {fromDate, toDate, interval, refresh};
       data.request = '';
       return data;
@@ -36,7 +36,7 @@ export class DashboardService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + DASHBOARD_API.GROUP_HISTORY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(fromDate)).replace(':to', encodeURIComponent(toDate)).replace(':interval', interval).replace(':refresh', refresh.toString()), model).map((res) => {
-      let data: BaseResponse<GroupHistoryResponse, GroupHistoryRequest> = res.json();
+      let data: BaseResponse<GroupHistoryResponse, GroupHistoryRequest> = res;
       data.request = model;
       data.queryString = {fromDate, toDate, interval, refresh};
       return data;
@@ -52,7 +52,7 @@ export class DashboardService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).map((res) => {
-      let data: BaseResponse<ClosingBalanceResponse, string> = res.json();
+      let data: BaseResponse<ClosingBalanceResponse, string> = res;
       data.queryString = {fromDate, toDate, groupUniqueName, refresh};
       data.request = '';
       return data;
@@ -63,7 +63,7 @@ export class DashboardService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + DASHBOARD_API.BANK_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<BankAccountsResponse[], string> = res.json();
+      let data: BaseResponse<BankAccountsResponse[], string> = res;
       data.request = '';
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, ''));
@@ -73,7 +73,7 @@ export class DashboardService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + DASHBOARD_API.REFRESH_BANK_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':loginId', loginId)).map((res) => {
-      let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
+      let data: BaseResponse<RefreshBankAccountResponse, string> = res;
       data.request = '';
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, ''));
@@ -83,7 +83,7 @@ export class DashboardService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + DASHBOARD_API.RECONNECT_BANK_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':loginId', loginId)).map((res) => {
-      let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
+      let data: BaseResponse<RefreshBankAccountResponse, string> = res;
       data.request = '';
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, ''));

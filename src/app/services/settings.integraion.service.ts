@@ -26,7 +26,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<SmsKeyClass, string> = res.json();
+      let data: BaseResponse<SmsKeyClass, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e));
@@ -39,7 +39,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<string, SmsKeyClass> = res.json();
+      let data: BaseResponse<string, SmsKeyClass> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
@@ -52,7 +52,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<EmailKeyClass, string> = res.json();
+      let data: BaseResponse<EmailKeyClass, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<EmailKeyClass, string>(e));
@@ -65,7 +65,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<string, EmailKeyClass> = res.json();
+      let data: BaseResponse<string, EmailKeyClass> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, EmailKeyClass>(e, model));
@@ -78,7 +78,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
+      let data: BaseResponse<RazorPayDetailsResponse, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
   }
@@ -90,7 +90,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
+      let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
@@ -103,7 +103,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
+      let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
@@ -116,7 +116,7 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
