@@ -35,14 +35,10 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     private permissionActions: PermissionActions
   ) {
 
-    // listen for add/update
-    this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).takeUntil(this.destroyed$);
-
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
       this.allRoles = _.cloneDeep(permission.roles);
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'super_admin';
-        // 'super_admin_off_the_record'
       });
       this.adminPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'admin';
@@ -63,14 +59,6 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-
-    // listener for add update role case
-    this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
-      if (result) {
-        // uncomment below to redirect
-        // this.router.navigate(['/pages/permissions/list']);
-      }
-    });
 
     if (_.isEmpty(this.newRole)) {
       this.router.navigate(['/pages/permissions/list']);
