@@ -400,9 +400,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate  = universalDate[0];
-        this.datePickerOptions.endDate  = universalDate[1];
-        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+        // this.datePickerOptions.startDate  = universalDate[0];
+        // this.datePickerOptions.endDate  = universalDate[1];
+
+        this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
+        this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.trxRequest.page = 0;
+
+        this.getTransactionData();
+        // this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
       }
     })).subscribe();
   }
