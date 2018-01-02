@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { InvoiceRoutingModule } from './invoice.routing.module';
+import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 // import { TooltipModule } from 'ngx-bootstrap/tooltip';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';

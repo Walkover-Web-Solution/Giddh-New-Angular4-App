@@ -30,7 +30,7 @@ export class TlPlService {
     return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {from: request.from, to: request.to, refresh: request.refresh})
       .map((res) => {
-        let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res.json();
+        let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
         data.request = request;
         return data;
       })
@@ -50,7 +50,7 @@ export class TlPlService {
     return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
-        let data: BaseResponse<AccountDetails, ProfitLossRequest> = res.json();
+        let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
         data.request = request;
         return data;
       })
@@ -70,7 +70,7 @@ export class TlPlService {
     return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
-        let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res.json();
+        let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res;
         data.request = request;
         return data;
       })
@@ -84,9 +84,9 @@ export class TlPlService {
     return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
       .map((res) => {
-        let data = this.b64toBlob(res.json().body, 'application/xml', 512);
+        let data = this.b64toBlob(res.body, 'application/xml', 512);
         saveAs(data, 'trialbalance.xlsx');
-        return res.json();
+        return res;
       })
       .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
@@ -101,9 +101,9 @@ export class TlPlService {
     return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
-        let data = this.b64toBlob(res.json().body, 'application/xml', 512);
+        let data = this.b64toBlob(res.body, 'application/xml', 512);
         saveAs(data, 'balancesheet.xlsx');
-        return res.json();
+        return res;
       })
       .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
@@ -118,9 +118,9 @@ export class TlPlService {
     return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
-        let data = this.b64toBlob(res.json().body, 'application/xml', 512);
+        let data = this.b64toBlob(res.body, 'application/xml', 512);
         saveAs(data, 'profitloss.xlsx');
-        return res.json();
+        return res;
       })
       .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }

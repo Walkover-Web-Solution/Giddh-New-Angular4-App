@@ -38,6 +38,9 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       }
       return state;
     }
+    case SALES_ACTIONS.RESET_ACCOUNT_DETAILS : {
+      return Object.assign({}, state, { acDtl: null });
+    }
     case SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE : {
       return Object.assign({}, state, {
         hierarchicalStockGroups: action.payload
