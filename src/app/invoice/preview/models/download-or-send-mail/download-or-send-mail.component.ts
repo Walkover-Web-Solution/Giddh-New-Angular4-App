@@ -46,6 +46,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
 
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
+      debugger;
       if (o && o.dataPreview) {
         this.base64Data = o.dataPreview;
         this.showPdfWrap = true;

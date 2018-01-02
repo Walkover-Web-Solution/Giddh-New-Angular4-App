@@ -110,7 +110,11 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
   public ngOnInit() {
-    this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+      if (a && a !== '') {
+        this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
+      }
+    });
   }
   public searchAccount(s: string) {
     this.Items = _.cloneDeep(this.ItemsSRC);

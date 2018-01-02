@@ -34,7 +34,7 @@ export class EledgerService {
       URL = URL + '?refresh=true';
     }
     return this._http.get(URL).map((res) => {
-      let data: BaseResponse<EledgerResponse[], string> = res.json();
+      let data: BaseResponse<EledgerResponse[], string> = res;
       data.queryString = {accountUniqueName, refresh};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<EledgerResponse[], string>(e, '', {accountUniqueName, refresh}));
@@ -48,7 +48,7 @@ export class EledgerService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + ELEDGER_API.TRASH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId)).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
+      let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, transactionId};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', {accountUniqueName, transactionId}));
@@ -63,7 +63,7 @@ export class EledgerService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + ELEDGER_API.MAP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId), model)
       .map((res) => {
-        let data: BaseResponse<string, EledgerMapRequest> = res.json();
+        let data: BaseResponse<string, EledgerMapRequest> = res;
         data.request = model;
         data.queryString = {accountUniqueName, transactionId};
         return data;

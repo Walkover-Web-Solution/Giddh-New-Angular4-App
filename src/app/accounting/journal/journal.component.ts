@@ -309,7 +309,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * watchMenuEvent
    */
   public watchKeyboardEvent(event) {
-    console.log(event);
+    // console.log(event);
     if (event) {
       let navigateTo =  _.find(this.navigateURL, (o) => o.code === event.key);
       //  this.navigateURL.find()

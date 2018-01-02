@@ -250,6 +250,20 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
   }
 
+  public onViewReady(ev) {
+    let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
+      if (accountCountry) {
+        if (accountCountry !== 'IN') {
+          this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        } else {
+          const addresses = this.addAccountForm.get('addresses') as FormArray;
+          if (addresses.controls.length === 0) {
+            this.addBlankGstForm();
+          }
+        }
+      }
+  }
+
   public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],

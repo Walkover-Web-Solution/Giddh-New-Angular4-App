@@ -57,8 +57,12 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
     case PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE:
       {
         let newState = _.cloneDeep(state);
+        newState.addUpdateRoleInProcess = false;
         let res = action.payload;
-        return (res.status === 'success') ? { ...state, addUpdateRoleInProcess: false, roles: res.body } : { ...state, addUpdateRoleInProcess: false };
+        if (res.status === 'success') {
+          newState.roles.push(res.body);
+        }
+        return { ...state, ...newState };
       }
     case PERMISSION_ACTIONS.UPDATE_ROLE:
       {
