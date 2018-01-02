@@ -285,8 +285,8 @@ export class InvoicePreviewComponent implements OnInit {
     if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
-    if (o.entryTotal) {
-      model.balanceDue = o.entryTotal;
+    if (o.balanceDue) {
+      model.balanceDue = o.balanceDue;
     }
     if (o.description) {
       model.description = o.description;
@@ -315,8 +315,8 @@ export class InvoicePreviewComponent implements OnInit {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
-      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate  = moment().format(GIDDH_DATE_FORMAT);
+      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
       from: this.isUniversalDateApplicable ? fromDate : o.from,
