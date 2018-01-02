@@ -1,3 +1,4 @@
+import { from } from 'rxjs/observable/from';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -66,6 +67,7 @@ export class InvoiceGenerateComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   private isBulkInvoiceGenerated$: Observable<boolean>;
+  private isUniversalDateApplicable: boolean = false;
   private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
 
   constructor(
@@ -137,11 +139,12 @@ export class InvoiceGenerateComponent implements OnInit {
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      this.universalDate = _.cloneDeep(dateObj);
-      if (this.universalDate) {
+      if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
         this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getLedgersOfInvoice();
       }
-      this.getLedgersOfInvoice();
     })).subscribe();
   }
 
@@ -157,6 +160,7 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public getLedgersByFilters(f: NgForm) {
     if (f.valid) {
+      this.isUniversalDateApplicable = false;
       this.selectedLedgerItems = [];
       this.getLedgersOfInvoice();
     }
@@ -293,8 +297,8 @@ export class InvoiceGenerateComponent implements OnInit {
       toDate  = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
-      from: fromDate,
-      to: toDate,
+      from: this.isUniversalDateApplicable ? fromDate : o.from,
+      to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
       page: o.page
     };
