@@ -1,7 +1,7 @@
 import { from } from 'rxjs/observable/from';
 import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -22,6 +22,8 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -55,7 +57,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+  @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
+  public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -86,6 +90,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
@@ -147,7 +152,27 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       }
     })).subscribe();
   }
+  public loadDownloadOrSendMailComponent() {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
+    let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
+    viewContainerRef.remove();
 
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+    componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    componentInstance.downloadOrSendMailEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    // componentInstance.totalItems = s.count * s.totalPages;
+    // componentInstance.itemsPerPage = s.count;
+    // componentInstance.maxSize = 5;
+    // componentInstance.writeValue(s.page);
+    // componentInstance.boundaryLinks = true;
+    // componentInstance.pageChanged.subscribe(e => {
+    //   this.pageChanged(e);
+    // });
+  }
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
@@ -205,6 +230,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
     this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
+    this.loadDownloadOrSendMailComponent();
     this.downloadOrSendMailModel.show();
   }
 

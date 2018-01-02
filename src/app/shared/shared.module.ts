@@ -18,7 +18,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateComponent, AccountUpdateNewComponent, CompanyAddComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateNewComponent, CompanyAddComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -59,7 +59,7 @@ export function provideConfig() {
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
+    ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective],
   imports: [
     CommonModule,
