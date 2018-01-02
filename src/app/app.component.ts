@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { ROUTES } from './app.routes';
 import { GeneralService } from './services/general.service';
+import { pick } from './lodash-optimized';
 
 /**
  * App Component
@@ -29,7 +30,9 @@ export class AppComponent implements AfterViewInit {
   constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private _generalService: GeneralService) {
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session.id) {
-        this._generalService.user = ss.user.user;
+        let a = pick(ss.user, ['isNewUser']);
+        a.isNewUser = true;
+        this._generalService.user = {...ss.user.user, ...a};
         if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
           this._generalService.sessionId = ss.user.session.id;
         }

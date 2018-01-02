@@ -29,6 +29,7 @@ export interface AuthenticationState {
   isLoggedInWithSocialAccount: boolean;
   isTwoWayAuthInProcess: boolean;
   isTwoWayAuthSuccess: boolean;
+  needsToRedirectToLedger: boolean;
 }
 
 export enum userLoginStateEnum {
@@ -73,6 +74,7 @@ const initialState = {
   isLoggedInWithSocialAccount: false,
   isTwoWayAuthInProcess: false,
   isTwoWayAuthSuccess: false,
+  needsToRedirectToLedger: false,
 };
 
 const sessionInitialState: SessionState = {
@@ -93,6 +95,12 @@ const sessionInitialState: SessionState = {
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
 
   switch (action.type) {
+    case LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER: {
+      return {...state, needsToRedirectToLedger: false};
+    }
+    case LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER: {
+      return {...state, needsToRedirectToLedger: true};
+    }
     case LoginActions.SignupWithEmailResponce:
       if (action.payload.status === 'success') {
         return Object.assign({}, state, {
@@ -192,7 +200,8 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         isVerifyEmailSuccess: false,
         user: null,
         isSocialLogoutAttempted: true,
-        isTwoWayAuthInProcess: false
+        isTwoWayAuthInProcess: false,
+        needsToRedirectToLedger: false
       });
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
       let newState = _.cloneDeep(state);

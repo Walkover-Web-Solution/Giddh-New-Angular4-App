@@ -34,6 +34,7 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.compone
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
+import { LoginActions } from 'app/actions/login.action';
 
 @Component({
   selector: 'ledger',
@@ -98,7 +99,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
     private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
     private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -112,6 +113,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
+    // reset redirect state from login action
+    this.store.dispatch(this._loginActions.ResetRedirectToledger());
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
