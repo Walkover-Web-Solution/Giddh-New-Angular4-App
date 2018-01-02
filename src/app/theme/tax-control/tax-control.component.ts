@@ -4,6 +4,7 @@ import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -26,6 +27,9 @@ export class TaxControlData {
     .form-control[readonly] {
       background: inherit !important;
     }
+    .single-item .dropdown-menu{
+      height: 50px !important;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -42,6 +46,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
   public sum: number = 0;
   private selectedTaxes: string[] = [];
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor() {
     //
@@ -49,6 +54,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit(): void {
     this.sum = 0;
+    this.taxRenderData = [];
     this.prepareTaxObject();
     this.change();
   }
@@ -121,14 +127,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * hide menus on outside click of span
    */
-  public hideTaxPopup() {
-    this.showTaxPopup = false;
+  public toggleTaxPopup(action: boolean) {
+    this.showTaxPopup = action;
   }
 
   public ngOnDestroy() {
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   /**

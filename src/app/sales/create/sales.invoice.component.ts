@@ -1,4 +1,4 @@
-import { animate, Component, OnInit, state, style, transition, trigger, ViewChild, OnDestroy } from '@angular/core';
+import { animate, Component, OnInit, state, style, transition, trigger, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
@@ -110,7 +110,7 @@ const THEAD_ARR_READONLY = [
   ]
 })
 
-export class SalesInvoiceComponent implements OnInit, OnDestroy {
+export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -210,6 +210,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public ngAfterViewInit() {
+    //
+  }
+
   public ngOnInit() {
     // get selected company for autofill country
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
@@ -231,6 +235,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy {
     // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
       if (o) {
+        this.showTaxBox = false;
         this.companyTaxesList$ = Observable.of(o);
         _.map(this.theadArrReadOnly, (item: IContentCommon) => {
           // show tax label
@@ -239,8 +244,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy {
           }
           return item;
         });
-        this.showTaxBox = true;
+      }else {
+        this.companyTaxesList$ = Observable.of([]);
       }
+      setTimeout(() => {
+        this.showTaxBox = true;
+      }, 500);
     });
 
     // listen for new add account utils
