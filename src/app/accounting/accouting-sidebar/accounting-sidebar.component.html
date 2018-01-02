@@ -1,0 +1,22 @@
+<div class="col-xs-2" style="height:100vh;background:black;color:white;">
+    <!-- [hidden]="!showLedgerAccountList" -->
+    <div class="bdrL account_listbar">
+        <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
+
+        <accounts-side-bar [noGroups]="isGroupToggle" [search]='accountSearch' [flyAccounts]="flyAccounts | async" (onSelectItem)="setAccount($event);"></accounts-side-bar>
+
+        <!-- <ul class="pdL1" style="color:black;">
+            <li class="cursor-pointer" (click)="setAccount(account);" *ngFor="let account of accounts">{{ account.label }}</li>
+        </ul> -->
+
+    </div>
+    <ul class="pd2">
+        <li>F1: Accounting Voucher</li>
+        <li>F2: Order Vouchers</li>
+        <li>F3: Payroll Voucher</li>
+        <li>F4: Date</li>
+        <li>F5: Company</li>
+        <li>F6: Contra</li>
+        <li><a [routerLink]="['/pages/accounting/purchase']">Purchase</a></li>
+    </ul>
+</div>

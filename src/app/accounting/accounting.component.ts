@@ -21,6 +21,7 @@ export class AccountingComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
     this._keyboardService.setKey(event);
+    // console.log(event);
   }
   public ngOnInit(): void {
     let companyUniqueName = null;
