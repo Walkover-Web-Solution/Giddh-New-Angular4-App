@@ -10,7 +10,7 @@
 
             <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
                 <label for="">Country</label>
-                <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"></sh-select>
+                <sh-select [options]="countrySource" (viewInitEvent)="onViewReady($event)" [isFilterEnabled]="true" formControlName="countryCode"></sh-select>
             </div>
 
         </div>
@@ -136,7 +136,7 @@
                            textCaseChangeDirective UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
                 </div>
                 <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
-                    <div class="" [ngClass]="{'row':!isMultipleCurrency}">
+                    <div class="" [ngClass]="{'row':!isMultipleCurrency || addAccountForm.get('country').value.countryCode === 'IN'}">
                         <label for="">Opening Balance</label>
                         <div class="input-group">
                             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" min="0" (click)="openingBalanceClick()" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
@@ -159,7 +159,7 @@
 
             </div>
 
-            <div class="row" *ngIf="isMultipleCurrency">
+            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== 'IN'">
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">

@@ -33,6 +33,16 @@
                                                 </div>
                                             </a>
                                         </li>
+                                        <li class="dmLi trialB">
+                                            <a [routerLink]="['/pages/daybook']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Daybook</div>
+                                                        <div class="subTitle">All Recent Transactions</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
                                         <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
                                             <a [routerLink]="['/pages/sales']">
                                                 <div class="media">
@@ -161,7 +171,7 @@
                 </li>
 
                 <!-- books search -->
-                <li>
+                <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
                     <div class="ledger_search form-inline">
                         <div class="form-group">
                             <div class="input-group">
@@ -180,19 +190,25 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
-                <li *ngIf="!isTodaysDateSelected">
+                <li [hidden]="isTodaysDateSelected">
                     <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
-                    <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.fromDate }}
-            <br /> to {{ datePickerOptions.toDate}}</label>
-                    <!-- <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.startDate }} <br /> to {{ datePickerOptions.endDate}}</label> -->
+                </li>
+                <li [hidden]="isTodaysDateSelected">
+                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
                 </li>
 
-                <li class="mrT" *ngIf="isTodaysDateSelected" daterangepicker (applyDaterangepicker)="setApplicationDate($event)" [options]="datePickerOptions">
-                    <label class="d-block text-right btn-link cp">Today</label>
-                    <!-- <label class="cp">{{datePickerOptions.startDate}}</label> -->
-                    <label class="cp">{{datePickerOptions.fromDate}}</label>
-                    <!-- <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" /> -->
+                <li [hidden]="!isTodaysDateSelected" class="mrT cp" (click)="openDateRangePicker();">
+                    <label class="d-block text-right btn-link">Today</label>
+                    <label>{{moment(datePickerOptions.startDate).format('DD-MM-YYYY')}}</label>
                 </li>
+
+                <!-- <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1" (click)="jumpToToday();">Go back to Today</button> </li>
+              <li *ngIf="!isTodaysDateSelected">
+                  <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
+              </li>
+              <li *ngIf="isTodaysDateSelected"  class="cursor-pointer">
+                  <label style="padding-top:15px;">{{moment(datePickerOptions.startDate).format('DD-MM-YYYY')}}</label>
+              </li> -->
                 <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
                     <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
                         <span class="icon-dropdown"></span>
@@ -205,7 +221,7 @@
                         <li class="create-company" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
                             <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
                             <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)">
-                <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh</button>
+                      <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh</button>
 
                         </li>
                         <li style="padding:0px;">
@@ -220,8 +236,8 @@
                 </li>
                 <li dropdown [isOpen]="userMenu.isopen" [tooltip]="(user$ | async)?.email" [placement]="'left'">
                     <a href (click)="$event.preventDefault()" id="user-dropdown" dropdownToggle>
-            {{userName | uppercase}}
-          </a>
+                  {{userName | uppercase}}
+                </a>
                     <ul class="dropdown-menu" role="menu" *dropdownMenu>
                         <li>
                             <a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a>
@@ -250,7 +266,7 @@
             </ul>
         </div>
     </nav>
-    <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()" [isRouter]="true"></accounts-side-bar>
+    <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->

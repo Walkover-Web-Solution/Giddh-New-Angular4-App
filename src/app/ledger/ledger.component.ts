@@ -400,9 +400,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate  = universalDate[0];
-        this.datePickerOptions.endDate  = universalDate[1];
-        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+        // this.datePickerOptions.startDate  = universalDate[0];
+        // this.datePickerOptions.endDate  = universalDate[1];
+
+        this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
+        this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.trxRequest.page = 0;
+
+        this.getTransactionData();
+        // this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
       }
     })).subscribe();
   }
@@ -420,7 +426,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
       this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
-        if (res.status === 'success' && res.body.length > 0) {
+        if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
@@ -692,7 +698,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
-      this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
+      // this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
     });

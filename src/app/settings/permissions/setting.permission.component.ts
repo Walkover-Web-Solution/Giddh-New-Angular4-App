@@ -1,3 +1,4 @@
+import { GeneralService } from './../../services/general.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { PermissionActions } from '../../actions/permission/permission.action';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
@@ -9,13 +10,13 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CompanyService } from '../../services/companyService.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
-import * as _ from 'lodash';
 import { ToasterService } from '../../services/toaster.service';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { digitsOnly } from '../../shared/helpers/customValidationHelper';
 import isCidr from 'is-cidr';
 import { ShareRequestForm, ISharedWithResponseForUI } from '../../models/api-models/Permission';
 import { ModalDirective } from 'ngx-bootstrap';
+import { forIn } from 'app/lodash-optimized';
 
 @Component({
   selector: 'setting-permission',
@@ -39,6 +40,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -47,8 +49,11 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     private _accountsAction: AccountsAction,
     private store: Store<AppState>,
     private _fb: FormBuilder,
-    private _toasty: ToasterService
-  ) {}
+    private _toasty: ToasterService,
+    private _generalService: GeneralService
+  ) {
+    this.loggedInUserEmail = this._generalService.user.email;
+  }
 
   public ngOnInit() {
     this.store.dispatch(this._permissionActions.GetRoles());
@@ -66,7 +71,10 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         let data = _.cloneDeep(s);
         let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userName');
         let arr = [];
-        _.forIn(sortedArr, (value, key) => {
+        forIn(sortedArr, (value, key) => {
+          if (value[0].emailId === this.loggedInUserEmail) {
+            value[0].isLoggedInUser = true;
+          }
           arr.push({ name: key, rows: value });
         });
         this.usersList = _.sortBy(arr, ['name']);
