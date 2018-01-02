@@ -1,3 +1,4 @@
+import { from } from 'rxjs/observable/from';
 import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
@@ -76,6 +77,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public endDate: Date;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
 
   constructor(
@@ -140,8 +142,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         this.invoiceSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getInvoices();
       }
-      this.getInvoices();
     })).subscribe();
   }
 
@@ -161,6 +164,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public getInvoicesByFilters(f: NgForm) {
     if (f.valid) {
+      this.isUniversalDateApplicable = false;
       this.getInvoices();
     }
   }
@@ -281,8 +285,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
-    if (o.entryTotal) {
-      model.balanceDue = o.entryTotal;
+    if (o.balanceDue) {
+      model.balanceDue = o.balanceDue;
     }
     if (o.description) {
       model.description = o.description;
@@ -311,12 +315,12 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
-      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate  = moment().format(GIDDH_DATE_FORMAT);
+      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
-      from: fromDate,
-      to: toDate,
+      from: this.isUniversalDateApplicable ? fromDate : o.from,
+      to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
       page: o.page
     };
