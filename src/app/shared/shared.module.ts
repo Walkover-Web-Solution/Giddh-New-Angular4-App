@@ -37,6 +37,7 @@ import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalD
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
+import { HighlightModule } from 'app/shared/helpers/pipes/highlightPipe/highlight.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -85,11 +86,13 @@ export function provideConfig() {
     DecimalDigitsModule,
     // BsDatepickerModule,
     Daterangepicker,
-    TextCaseChangeModule
+    TextCaseChangeModule,
+    HighlightModule
+    // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],
