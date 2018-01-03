@@ -29,7 +29,7 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private _generalService: GeneralService) {
     this.store.select(s => s.session).subscribe(ss => {
-      if (ss.user && ss.user.session.id) {
+      if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
         a.isNewUser = true;
         this._generalService.user = {...ss.user.user, ...a};
