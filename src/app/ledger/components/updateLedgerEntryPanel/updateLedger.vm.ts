@@ -256,9 +256,9 @@ export class UpdateLedgerVm {
 
   public generateCompoundTotal() {
     if (this.entryTotal.crTotal > this.entryTotal.drTotal) {
-      this.compoundTotal = Number((this.entryTotal.crTotal - this.entryTotal.drTotal).toFixed());
+      this.compoundTotal = Number((this.entryTotal.crTotal - this.entryTotal.drTotal).toFixed(2));
     } else {
-      this.compoundTotal = Number((this.entryTotal.drTotal - this.entryTotal.crTotal).toFixed());
+      this.compoundTotal = Number((this.entryTotal.drTotal - this.entryTotal.crTotal).toFixed(2));
     }
   }
 
