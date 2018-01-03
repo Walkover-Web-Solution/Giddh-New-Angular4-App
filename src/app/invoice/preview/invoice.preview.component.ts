@@ -104,7 +104,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({ label: `${item.name} (${item.uniqueName})`, value: item.uniqueName });
         }
       });
       this.accounts$ = Observable.of(accounts);
