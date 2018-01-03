@@ -1,0 +1,23 @@
+:host ::ng-deep .parent-Group {
+    padding-left: 0;
+    display: none;
+}
+
+:host ::ng-deep .acntAccordion .mainLiAclist .title:before {
+    content: none;
+}
+
+:host ::ng-deep .accountli {
+    margin: 7px;
+    text-transform: capitalize;
+}
+
+:host ::ng-deep .accounts-side-bar {
+    box-shadow: none;
+    overflow: auto;
+    width: 100%;
+}
+
+:host ::ng-deep .ul_0 {
+    height: 1000px;
+}
