@@ -13,7 +13,7 @@ import * as _ from '../../../lodash-optimized';
 })
 export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public today: Date = new Date();
-  public selectedDateOption: string = '1';
+  public selectedDateOption: string = '0';
   public filterForm: FormGroup;
   public search: string = '';
   public financialOptions: IOption[] = [];
@@ -106,7 +106,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       from: [''],
       to: [''],
       fy: [''],
-      selectedDateOption: ['1'],
+      selectedDateOption: ['0'],
       selectedFinancialYearOption: [''],
       refresh: [false]
     });
