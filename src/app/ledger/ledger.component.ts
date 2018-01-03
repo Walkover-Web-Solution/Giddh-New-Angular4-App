@@ -35,6 +35,7 @@ import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.compone
 import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
+import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 
 @Component({
   selector: 'ledger',
@@ -45,6 +46,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
+
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
@@ -619,6 +622,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showShareLedgerModal() {
+    this.sharLedger.clear();
     this.shareLedgerModal.show();
   }
 
