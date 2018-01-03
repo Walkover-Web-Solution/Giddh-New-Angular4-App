@@ -28,6 +28,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public showClear: boolean = true;
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
+  @Input() public notFoundLinkText: string = 'Create New';
   @Input() public notFoundLink: boolean = false;
   @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'auto';
@@ -35,7 +36,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public NoFoundMsgHeight: number = 30;
   @Input() public NoFoundLinkHeight: number = 30;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
-  @Input() public useInBuiltFilterForFlattenAc: boolean;
+  @Input() public useInBuiltFilterForFlattenAc: boolean = false;
+  @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -121,6 +123,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.rows = val;
   }
 
+  public filterByIOption(array: IOption[], term) {
+    let arr: any[];
+    arr = array.filter((item: IOption) => {
+      return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.value.toLocaleLowerCase(), term);
+    });
+    return arr.sort((a, b) => a.label.length - b.label.length );
+  }
+
   public filterByValue(array, term) {
     let arr: any[];
     arr = array.filter((item) => {
@@ -137,6 +147,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     const lowercaseFilter = filterProp.toLocaleLowerCase();
     if (this.useInBuiltFilterForFlattenAc && this._options) {
       this.filteredData = this.filterByValue(this._options, lowercaseFilter);
+    }else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
+      this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
     }else {
       this.filteredData = this._options ? this._options.filter(item => {
         if (this.customFilter) {

@@ -122,8 +122,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
-  public accounts$: Observable<INameUniqueName[]>;
-  public bankAccounts$: Observable<INameUniqueName[]>;
+  public accounts$: Observable<IOption[]>;
+  public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
@@ -179,6 +179,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
 
     this.invFormData = new InvoiceFormClass();
+    // set dates
+    this.invFormData.invoiceDetails.invoiceDate = new Date();
+
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -264,16 +267,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
 
       let accountsArray: IOption[] = [];
-      let accounts: INameUniqueName[] = [];
-      let bankaccounts: INameUniqueName[] = [];
+      let accounts: IOption[] = [];
+      let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          accounts.push({ name: item.name, uniqueName: item.uniqueName });
+          accounts.push({ label: item.name, value: item.uniqueName });
         }
         // creating bank account list
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
-          bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
+          bankaccounts.push({ label: item.name, value: item.uniqueName });
         }
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
@@ -295,8 +298,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
       this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
-      this.accounts$ = Observable.of(accounts);
-      this.bankAccounts$ = Observable.of(bankaccounts);
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
 
       // listen for newly added stock and assign value
       this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
@@ -318,12 +321,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // this.store.dispatch(this.salesAction.storeSalesFlattenAc(_.orderBy(accountsArray, 'text')));
   }
 
-  public onSelectBankCash(val: any, model: any) {
-    if (model.value) {
-      this.invFormData.account.name = model.value;
-    }
-  }
-
   public assignValuesInForm(data: AccountResponseV2) {
     // toggle all collapse
     this.isGenDtlCollapsed = false;
@@ -337,7 +334,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.invFormData.country.countryName = data.country.countryName;
 
     // set dates
-    // this.invFormData.invoiceDetails.invoiceDate = new Date();
+    this.invFormData.invoiceDetails.invoiceDate = new Date();
     // this.invFormData.invoiceDetails.dueDate = new Date().setDate(new Date().getDate() + 10 );
     // fill address conditionally
     if (data.addresses.length > 0) {
@@ -378,6 +375,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
     this.invFormData = new InvoiceFormClass();
+    this.typeaheadNoResultsOfCustomer = false;
+    this.invFormData.invoiceDetails.invoiceDate = new Date();
+    // toggle all collapse
+    this.isGenDtlCollapsed = true;
+    this.isMlngAddrCollapsed = true;
+    this.isOthrDtlCollapsed = true;
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -736,8 +739,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.typeaheadNoResultsOfCustomer = e;
   }
 
-  public onSelectCustomer(e: TypeaheadMatch): void {
-    this.getAccountDetails(e.item.uniqueName);
+  public onSelectCustomer(item: IOption): void {
+    this.typeaheadNoResultsOfCustomer = false;
+    if (item.value) {
+      this.getAccountDetails(item.value);
+    }
+  }
+
+  public onSelectBankCash(item: IOption) {
+    if (item.value) {
+      this.invFormData.account.name = item.label;
+      this.getAccountDetails(item.value);
+    }
   }
 
   public getAccountDetails(accountUniqueName: string) {
