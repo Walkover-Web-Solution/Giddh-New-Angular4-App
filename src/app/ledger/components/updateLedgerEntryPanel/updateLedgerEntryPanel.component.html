@@ -44,10 +44,6 @@
                       [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="col-xs-6 pos-rel select2-parent select2-ledger">
-                    <!--<ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect-->
-                    <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
-                    <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
-                    <!--(deselected)="deSelectAccount($event, txn)">-->
                     <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
@@ -249,7 +245,7 @@
                       </td>
                       <td class="text-right pItem">
                         <label class="primary_clr">Amount</label>
-                        <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (input)="vm.inventoryAmountChanged($event.target.value)"
+                        <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.inventoryAmountChanged($event.target.value)"
                           [(ngModel)]="vm.totalAmount" />
                       </td>
                       <td>
@@ -279,7 +275,7 @@
                       </td>
                       <td class="text-right pItem">
                         <label class="primary_clr">Total</label>
-                        <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal" (input)="vm.inventoryTotalChanged()"
+                        <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal" (change)="vm.inventoryTotalChanged()"
                         />
                       </td>
                     </tr>
