@@ -375,7 +375,7 @@
     </style>
 </head>
 
-<body *ngIf="inputTemplate.sections && inputTemplate.sections.length" [ngStyle]="{ 'font-family': inputTemplate.font}" style="padding: 20px;">
+<body *ngIf="inputTemplate.sections && inputTemplate.sections.length" [ngStyle]="{ 'font-family': inputTemplate.font, 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
         <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]" (click)="onClickSection('header')">
