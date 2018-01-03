@@ -638,7 +638,7 @@
 <div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <share-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
+      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
     </div>
   </div>
 </div>
