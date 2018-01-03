@@ -76,4 +76,10 @@ export class ShareLedgerComponent implements OnInit {
       this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
     }, 1000);
   }
+
+  public clear() {
+    this.email = '';
+    this.magicLink = '';
+    this.isCopied = false;
+  }
 }
