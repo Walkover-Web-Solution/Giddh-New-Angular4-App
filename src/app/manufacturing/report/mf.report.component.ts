@@ -116,15 +116,15 @@ export class MfReportComponent implements OnInit, OnDestroy {
 
   public getReports() {
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
-    this.mfStockSearchRequest = new MfStockSearchRequestClass();
-    if (this.isUniversalDateApplicable && this.universalDate) {
-      this.mfStockSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-      this.mfStockSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-      this.mfStockSearchRequest.dateRange =  this.universalDate;
-    } else {
-      this.mfStockSearchRequest.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      this.mfStockSearchRequest.to = moment().format(GIDDH_DATE_FORMAT);
-    }
+    // this.mfStockSearchRequest = new MfStockSearchRequestClass();
+    // if (this.isUniversalDateApplicable && this.universalDate) {
+    //   this.mfStockSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+    //   this.mfStockSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    //   this.mfStockSearchRequest.dateRange =  this.universalDate;
+    // } else {
+    //   this.mfStockSearchRequest.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    //   this.mfStockSearchRequest.to = moment().format(GIDDH_DATE_FORMAT);
+    // }
     this.initializeSearchReqObj();
   }
 
