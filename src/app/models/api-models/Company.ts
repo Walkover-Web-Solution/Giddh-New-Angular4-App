@@ -76,8 +76,12 @@ export interface UserEntityRole {
   to?: any;
   sharedBy: ICommonItem;
   duration?: any;
-  entity: ICommonItem;
+  entity: IEntityItem;
   role: Role;
+}
+
+interface IEntityItem extends ICommonItem {
+  entity: string;
 }
 
 export interface Role {
