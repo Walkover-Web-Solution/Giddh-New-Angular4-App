@@ -25,7 +25,7 @@ import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccount
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { orderBy } from '../../lodash-optimized';
-
+const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   { label: '12', value: '12' },
   { label: '25', value: '25' },
@@ -104,7 +104,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
+        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1 )) {
           accounts.push({ label: item.name, value: item.uniqueName });
         }
       });
