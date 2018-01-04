@@ -1,7 +1,9 @@
 <h1 class="page-title" *ngIf="(logs$ | async).length > 0"> Audit Logs</h1>
 <br/>
 <section class="audit-log" *ngFor="let log of (logs$ | async); let i = index">
-  <h1>{{log.operationType}}<span *ngIf="log.accountName != null"> - {{log.accountName}} ({{log.accountUniqueName}})</span></h1>
+  <h1>{{log.operationType}}
+    <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}} ({{log.accountUniqueName}})</span>
+  </h1>
   <div class="mrT border-top-btm clearfix">
     <div>
       <label class="pull-left">Entity:</label>
@@ -15,7 +17,7 @@
       <label class="pull-left mrL2">User:</label>
       <p class="pull-left mrL">{{log.user.name}}</p>
     </div>
-    <div *ngIf="log.groupName != null">
+    <div *ngIf="log && log.groupName && log.groupName != null">
       <label class="pull-left mrL2">Group:</label>
       <p class="pull-left mrL">{{log.groupName}}</p>
     </div>
@@ -23,11 +25,14 @@
       <label class="pull-left mrL2">Company:</label>
       <p class="pull-left mrL">{{log.companyName}}</p>
     </div>
-    <div *ngIf="log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
+    <div *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
       <label class="pull-left mrL2">Shared with:</label>
-      <p class="pull-left mrL">{{log.log.sharedWith.name}}<span ng-if="log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0"> | {{log.log.sharedWith.email}}</span></p>
+      <p class="pull-left mrL">{{log.log.sharedWith.name}}
+        <span ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+        | {{log.log.sharedWith.email}}</span>
+      </p>
     </div>
-    <div *ngIf="log.log.description != undefined && log.log.description.length > 0">
+    <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
       <label class="pull-left mrL2">Description:</label>
       <p class="pull-left mrL">{{log.log.description}}</p>
     </div>
@@ -55,7 +60,7 @@
       </tbody>
     </table>
   </div>
-  <div class="mrT text-center" *ngIf="log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+  <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
     <label>Updated</label>
     <table class="table table-bordered">
       <thead>
@@ -100,7 +105,7 @@
       </tbody>
     </table>
   </div>
-  <div class="mrT text-center" *ngIf="log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+  <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
     <label>Updated</label>
     <table class="table table-bordered">
       <thead>
