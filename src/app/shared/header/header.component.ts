@@ -380,7 +380,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public forceCloseSidebar(event) {
-    if (event.target.parentElement.classList.contains('acntAccordion')) {
+    if (event.target.parentElement.classList.contains('wrapAcList') ) {
       return;
     }
     this.flyAccounts.next(false);
