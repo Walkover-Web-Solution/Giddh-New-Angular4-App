@@ -94,9 +94,12 @@
           </div>
           <div class="form-group col-xs-2">
             <label>Invoice Date</label>
-            <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate"
+            <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" class="form-control" bsDatepicker
+            [(ngModel)]="invFormData.invoiceDetails.invoiceDate"
+            value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}">
+            <!-- <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate"
               class="form-control" readonly [value]="invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI "
-            />
+            /> -->
           </div>
           <div class="form-group col-xs-2">
             <label>Due Date</label>
