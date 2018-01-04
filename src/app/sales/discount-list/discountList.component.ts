@@ -45,10 +45,12 @@ export class DiscountListComponent implements OnInit, OnDestroy {
       if (o) {
         this.prepareDiscountList(o.accountDetails);
         this.discountItem$ = Observable.of(o);
-        this.change();
       }else {
+        this.discountItem$ = Observable.of(null);
+        this.discountAccountsList = [];
         this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
       }
+      this.change();
     });
   }
 

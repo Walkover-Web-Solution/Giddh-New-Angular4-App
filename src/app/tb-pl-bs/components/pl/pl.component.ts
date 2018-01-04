@@ -121,10 +121,11 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
+    // debugger;
     request.from = request.from;
     request.to = request.to;
     request.fy = request.fy;
-    //
+    request.refresh = request.refresh;
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }
 

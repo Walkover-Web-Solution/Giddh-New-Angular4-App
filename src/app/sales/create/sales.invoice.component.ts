@@ -1,4 +1,4 @@
-import { animate, Component, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, OnInit, state, style, transition, trigger, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
@@ -110,7 +110,7 @@ const THEAD_ARR_READONLY = [
   ]
 })
 
-export class SalesInvoiceComponent implements OnInit {
+export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -122,8 +122,8 @@ export class SalesInvoiceComponent implements OnInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
-  public accounts$: Observable<INameUniqueName[]>;
-  public bankAccounts$: Observable<INameUniqueName[]>;
+  public accounts$: Observable<IOption[]>;
+  public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
@@ -178,15 +178,19 @@ export class SalesInvoiceComponent implements OnInit {
     private _generalActions: GeneralActions
   ) {
 
+    this.invFormData = new InvoiceFormClass();
+    // set dates
+    this.invFormData.invoiceDetails.invoiceDate = new Date();
+
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.invFormData = new InvoiceFormClass();
+    this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
@@ -204,10 +208,13 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
-  /** custom filter to search by uniquename **/
-  public CustomFilterForSearch(term: string, item: IOption): boolean {
-    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1) || mergedAccounts.indexOf(term) > -1;
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  public ngAfterViewInit() {
+    //
   }
 
   public ngOnInit() {
@@ -222,7 +229,6 @@ export class SalesInvoiceComponent implements OnInit {
     });
 
     // get account details and set it to local var
-    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
     this.selectedAccountDetails$.subscribe(o => {
       if (o) {
         this.assignValuesInForm(o);
@@ -232,6 +238,7 @@ export class SalesInvoiceComponent implements OnInit {
     // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
       if (o) {
+        this.showTaxBox = false;
         this.companyTaxesList$ = Observable.of(o);
         _.map(this.theadArrReadOnly, (item: IContentCommon) => {
           // show tax label
@@ -240,8 +247,12 @@ export class SalesInvoiceComponent implements OnInit {
           }
           return item;
         });
-        this.showTaxBox = true;
+      }else {
+        this.companyTaxesList$ = Observable.of([]);
       }
+      setTimeout(() => {
+        this.showTaxBox = true;
+      }, 500);
     });
 
     // listen for new add account utils
@@ -256,16 +267,16 @@ export class SalesInvoiceComponent implements OnInit {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
 
       let accountsArray: IOption[] = [];
-      let accounts: INameUniqueName[] = [];
-      let bankaccounts: INameUniqueName[] = [];
+      let accounts: IOption[] = [];
+      let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          accounts.push({ name: item.name, uniqueName: item.uniqueName });
+          accounts.push({ label: item.name, value: item.uniqueName });
         }
         // creating bank account list
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
-          bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
+          bankaccounts.push({ label: item.name, value: item.uniqueName });
         }
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
@@ -287,8 +298,8 @@ export class SalesInvoiceComponent implements OnInit {
         }
       });
       this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
-      this.accounts$ = Observable.of(accounts);
-      this.bankAccounts$ = Observable.of(bankaccounts);
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
 
       // listen for newly added stock and assign value
       this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
@@ -310,12 +321,6 @@ export class SalesInvoiceComponent implements OnInit {
     // this.store.dispatch(this.salesAction.storeSalesFlattenAc(_.orderBy(accountsArray, 'text')));
   }
 
-  public onSelectBankCash(val: any, model: any) {
-    if (model.value) {
-      this.invFormData.account.name = model.value;
-    }
-  }
-
   public assignValuesInForm(data: AccountResponseV2) {
     // toggle all collapse
     this.isGenDtlCollapsed = false;
@@ -329,18 +334,19 @@ export class SalesInvoiceComponent implements OnInit {
     this.invFormData.country.countryName = data.country.countryName;
 
     // set dates
-    // this.invFormData.invoiceDetails.invoiceDate = new Date();
+    this.invFormData.invoiceDetails.invoiceDate = new Date();
     // this.invFormData.invoiceDetails.dueDate = new Date().setDate(new Date().getDate() + 10 );
     // fill address conditionally
     if (data.addresses.length > 0) {
+      let str = _.isNull(data.addresses[0].address) ? '' : data.addresses[0].address;
       // set billing
       this.invFormData.account.billingDetails.address = [];
-      this.invFormData.account.billingDetails.address.push(data.addresses[0].address);
+      this.invFormData.account.billingDetails.address.push(str);
       this.invFormData.account.billingDetails.stateCode = data.addresses[0].stateCode;
       this.invFormData.account.billingDetails.gstNumber = data.addresses[0].gstNumber;
       // set shipping
       this.invFormData.account.shippingDetails.address = [];
-      this.invFormData.account.shippingDetails.address.push(data.addresses[0].address);
+      this.invFormData.account.shippingDetails.address.push(str);
       this.invFormData.account.shippingDetails.stateCode = data.addresses[0].stateCode;
       this.invFormData.account.shippingDetails.gstNumber = data.addresses[0].gstNumber;
     }
@@ -369,6 +375,12 @@ export class SalesInvoiceComponent implements OnInit {
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
     this.invFormData = new InvoiceFormClass();
+    this.typeaheadNoResultsOfCustomer = false;
+    this.invFormData.invoiceDetails.invoiceDate = new Date();
+    // toggle all collapse
+    this.isGenDtlCollapsed = true;
+    this.isMlngAddrCollapsed = true;
+    this.isOthrDtlCollapsed = true;
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -727,8 +739,18 @@ export class SalesInvoiceComponent implements OnInit {
     this.typeaheadNoResultsOfCustomer = e;
   }
 
-  public onSelectCustomer(e: TypeaheadMatch): void {
-    this.getAccountDetails(e.item.uniqueName);
+  public onSelectCustomer(item: IOption): void {
+    this.typeaheadNoResultsOfCustomer = false;
+    if (item.value) {
+      this.getAccountDetails(item.value);
+    }
+  }
+
+  public onSelectBankCash(item: IOption) {
+    if (item.value) {
+      this.invFormData.account.name = item.label;
+      this.getAccountDetails(item.value);
+    }
   }
 
   public getAccountDetails(accountUniqueName: string) {
