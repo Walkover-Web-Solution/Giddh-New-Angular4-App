@@ -34,6 +34,8 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.compone
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
+import { LoginActions } from 'app/actions/login.action';
+import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 
 @Component({
   selector: 'ledger',
@@ -44,6 +46,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
+
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
@@ -98,7 +102,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
     private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
     private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -112,6 +116,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
+    // reset redirect state from login action
+    this.store.dispatch(this._loginActions.ResetRedirectToledger());
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -400,9 +406,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate  = universalDate[0];
-        this.datePickerOptions.endDate  = universalDate[1];
-        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
+        // this.datePickerOptions.startDate  = universalDate[0];
+        // this.datePickerOptions.endDate  = universalDate[1];
+
+        this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
+        this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.trxRequest.page = 0;
+
+        this.getTransactionData();
+        // this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
       }
     })).subscribe();
   }
@@ -420,7 +432,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
       this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
-        if (res.status === 'success' && res.body.length > 0) {
+        if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
@@ -610,6 +622,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showShareLedgerModal() {
+    this.sharLedger.clear();
     this.shareLedgerModal.show();
   }
 
@@ -692,7 +705,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
-      this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
+      // this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
     });

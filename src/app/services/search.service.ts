@@ -31,7 +31,7 @@ export class SearchService {
         .replace(':groupName', encodeURIComponent(request.groupName)),
       {from: request.fromDate, to: request.toDate, refresh: request.refresh})
       .map((res) => {
-        return res.json();
+        return res;
       })
       .catch((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e));
   }

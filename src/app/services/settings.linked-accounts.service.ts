@@ -24,7 +24,7 @@
 //       this.companyUniqueName = s.session.companyUniqueName;
 //     });
 //     return this._http.get(SETTINGS_LINKED_ACCOUNTS_API.BANK_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-//       let data: BaseResponse<BankAccountsResponse[], string> = res.json();
+//       let data: BaseResponse<BankAccountsResponse[], string> = res;
 //       data.request = '';
 //       return data;
 //     }).catch((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '', ));
@@ -44,7 +44,7 @@
 //       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
 //       .replace(':loginId', token)
 //     ).map((res) => {
-//       let data: BaseResponse<string, string> = res.json();
+//       let data: BaseResponse<string, string> = res;
 //       data.request = token;
 //       return data;
 //     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));

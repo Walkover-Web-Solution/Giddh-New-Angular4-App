@@ -10,21 +10,54 @@
         <div class="flex-row">
           <div class="flex-row-child">
             <div class="form-group noMarg">
-              <label>Customer Name or
-                <a class="mrR4 pdR4" href (click)="toggleAccountAsidePane($event)">+ Add Customer</a>
-              </label>
-              <input #custname autocomplete="off" name="customerName" [(ngModel)]="invFormData.customerName" [typeahead]="accounts$ | async"
-                typeaheadOptionField="name" placeholder="Search from accounts" typeaheadOptionsLimit="10" (typeaheadNoResults)="noResultsForCustomer($event)"
-                (typeaheadOnSelect)="onSelectCustomer($event)" class="form-control">
+              <label>Customer Name</label>
+              <sh-select
+                style="width: 400px;"
+                [options]="accounts$ | async"
+                [(ngModel)]="invFormData.customerName"
+                name="customerName"
+                (noOptionsFound)="noResultsForCustomer($event)"
+                (selected)="onSelectCustomer($event)"
+                [placeholder]="'Select Customer'"
+                [notFoundLink]="true"
+                [isFilterEnabled]="true"
+                (noResultsClicked)="toggleAccountAsidePane($event)"
+                [multiple]="false"
+                [ItemHeight]="67"
+                [notFoundLinkText]="'Add Customer'"
+                [useInBuiltFilterForIOptionTypeItems]="true"
+                >
+                <ng-template #optionTemplate let-option="option">
+                  <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                    <div class="item">{{ option.label }}</div>
+                    <div class="item_unq">{{ option.value }}</div>
+                  </a>
+                </ng-template>
+              </sh-select>
             </div>
           </div>
           <div class="flex-row-child mrL2" *ngIf="typeaheadNoResultsOfCustomer">
             <div class="form-group noMarg">
               <label>Add Entry Against</label>
-              <select (ngModelChange)="onSelectBankCash($event, custname)" class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
-                <option [ngValue]="'select'">Select Bank/Cash</option>
-                <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async">{{ bank.name }}</option>
-              </select>
+              <sh-select
+              style="width: 250px;"
+              name="account.uniqueName"
+              [options]="bankAccounts$ | async"
+              [(ngModel)]="invFormData.account.uniqueName"
+              (selected)="onSelectBankCash($event)"
+              [placeholder]="'Select Bank A/c'"
+              [notFoundLink]="false"
+              [multiple]="false"
+              [ItemHeight]="67"
+              [useInBuiltFilterForIOptionTypeItems]="true"
+              >
+                <ng-template #optionTemplate let-option="option">
+                  <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                    <div class="item">{{ option.label }}</div>
+                    <div class="item_unq">{{ option.value }}</div>
+                  </a>
+                </ng-template>
+              </sh-select>
             </div>
           </div>
         </div>
@@ -61,8 +94,8 @@
           </div>
           <div class="form-group col-xs-2">
             <label>Invoice Date</label>
-            <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.invoiceDetails.invoiceDate"
-              class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}"
+            <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate"
+              class="form-control" readonly [value]="invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI "
             />
           </div>
           <div class="form-group col-xs-2">
@@ -215,9 +248,8 @@
                 [notFoundLink]="true"
                 (noResultsClicked)="onNoResultsClicked(entryIdx)"
                 [multiple]="false"
-                [isFilterEnabled]="true"
                 [ItemHeight]="67"
-                [customFilter]="CustomFilterForSearch"
+                [useInBuiltFilterForFlattenAc]="true"
                 >
                 <ng-template #optionTemplate let-option="option">
                   <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">

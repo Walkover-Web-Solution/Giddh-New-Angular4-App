@@ -75,7 +75,7 @@ export class MfEditComponent implements OnInit {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
         if (manufacturingObj) {
-          this.selectedProductName = manufacturingObj.stockName;
+          this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
           manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
           manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
           manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
@@ -286,7 +286,7 @@ export class MfEditComponent implements OnInit {
     } else {
       manufacturingObj.otherExpenses = [objToPush];
     }
-    manufacturingObj.manufacturingMultipleOf = manufacturingObj.quantity;
+    // manufacturingObj.manufacturingMultipleOf = manufacturingObj.manufacturingMultipleOf;
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};

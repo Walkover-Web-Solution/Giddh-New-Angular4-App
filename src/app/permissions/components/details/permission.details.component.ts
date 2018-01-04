@@ -42,7 +42,6 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
       this.allRoles = _.cloneDeep(permission.roles);
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'super_admin';
-        // 'super_admin_off_the_record'
       });
       this.adminPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'admin';
@@ -68,7 +67,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
       if (result) {
         // uncomment below to redirect
-        // this.router.navigate(['/pages/permissions/list']);
+        this.router.navigate(['/pages/permissions/list']);
       }
     });
 

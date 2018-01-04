@@ -4,6 +4,7 @@ import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
+import * as _ from '../../../lodash-optimized';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -12,7 +13,7 @@ import * as moment from 'moment/moment';
 })
 export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public today: Date = new Date();
-  public selectedDateOption: string = '1';
+  public selectedDateOption: string = '0';
   public filterForm: FormGroup;
   public search: string = '';
   public financialOptions: IOption[] = [];
@@ -84,6 +85,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.financialOptions = value.financialYears.map(q => {
       return { label: q.uniqueName, value: q.uniqueName };
     });
+    this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+    this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
     this.filterForm.patchValue({
       to: value.activeFinancialYear.financialYearEnds,
       from: value.activeFinancialYear.financialYearStarts,
@@ -103,7 +106,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       from: [''],
       to: [''],
       fy: [''],
-      selectedDateOption: ['1'],
+      selectedDateOption: ['0'],
       selectedFinancialYearOption: [''],
       refresh: [false]
     });
@@ -146,6 +149,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     if (v.value) {
       let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
       let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
+      this.datePickerOptions.startDate = moment(financialYear.financialYearStarts, 'DD-MM-YYYY');
+      this.datePickerOptions.endDate = moment(financialYear.financialYearEnds, 'DD-MM-YYYY');
+
       this.filterForm.patchValue({
         to: financialYear.financialYearEnds,
         from: financialYear.financialYearStarts,
@@ -159,9 +165,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
-
   public filterData() {
     this.onPropertyChanged.emit(this.filterForm.value);
   }
-
+  public refreshData() {
+    let data = _.cloneDeep(this.filterForm.value);
+    data.refresh = true;
+    this.onPropertyChanged.emit(data);
+  }
 }

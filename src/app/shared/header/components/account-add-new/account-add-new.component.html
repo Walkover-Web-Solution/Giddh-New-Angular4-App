@@ -136,7 +136,7 @@
                            textCaseChangeDirective UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
                 </div>
                 <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
-                    <div class="" [ngClass]="{'row':!isMultipleCurrency}">
+                    <div class="" [ngClass]="{'row':!isMultipleCurrency || addAccountForm.get('country').value.countryCode === 'IN'}">
                         <label for="">Opening Balance</label>
                         <div class="input-group">
                             <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00">
@@ -162,7 +162,7 @@
                 </div>
             </div>
 
-            <div class="row" *ngIf="isMultipleCurrency">
+            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== 'IN'">
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
