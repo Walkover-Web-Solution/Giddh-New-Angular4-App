@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
+  public moment = moment;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
@@ -102,7 +103,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userName: string;
   public isProd = ENV;
   public isElectron: boolean = isElectron;
-  public isTodaysDateSelected: boolean = true;
+  public isTodaysDateSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -219,21 +220,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // Get universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj && dateObj.length) {
-        this.datePickerOptions.startDate = moment(dateObj[0]);
-        this.datePickerOptions.endDate = moment(dateObj[1]);
-        let dates = {
-          fromDate: moment(dateObj[0]).format(GIDDH_DATE_FORMAT),
-          toDate: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)
-        };
-        this.datePickerOptions.fromDate = dates.fromDate;
-        this.datePickerOptions.toDate = dates.toDate;
-
-        if (_.isEqual(this.datePickerOptions.fromDate, this.datePickerOptions.fromDate)) {
-          this.isTodaysDateSelected = true;
-        } else {
-          this.isTodaysDateSelected = false;
-        }
-
+          this.datePickerOptions.startDate = moment(dateObj[0]);
+          this.datePickerOptions.endDate = moment(dateObj[1]);
       }
     })).take(1).subscribe();
   }
@@ -392,7 +380,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public forceCloseSidebar(event) {
-    if (event.target.parentElement.classList.contains('acntAccordion')) {
+    if (event.target.parentElement.classList.contains('wrapAcList') ) {
       return;
     }
     this.flyAccounts.next(false);
@@ -413,24 +401,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
         toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
-      this.datePickerOptions.fromDate = dates.fromDate;
-      this.datePickerOptions.toDate = dates.toDate;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
       this.isTodaysDateSelected = true;
-      let today = _.cloneDeep([moment().subtract(0, 'days'), moment()]);
-      // console.log(today);
+      let today = _.cloneDeep([moment(), moment()]);
       this.datePickerOptions.startDate = today[0];
       this.datePickerOptions.endDate = today[1];
       let dates = {
         fromDate: moment(today[0]).format(GIDDH_DATE_FORMAT),
         toDate: moment(today[1]).format(GIDDH_DATE_FORMAT)
       };
-      // console.log(dates);
-      this.datePickerOptions.fromDate = dates.fromDate;
-      this.datePickerOptions.toDate = dates.toDate;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }
+  }
+
+  public openDateRangePicker() {
+    this.isTodaysDateSelected = false;
   }
 
   public jumpToToday() {

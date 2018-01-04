@@ -16,6 +16,8 @@ import * as moment from 'moment/moment';
 import * as _ from '../lodash-optimized';
 import { CHART_CALLED_FROM, API_TO_CALL } from '../actions/home/home.const';
 import { HomeActions } from '../actions/home/home.actions';
+import { Router } from '@angular/router';
+import { AccountService } from 'app/services/account.service';
 @Component({
   selector: 'home',  // <home></home>
   styleUrls: ['./home.component.scss'],
@@ -24,6 +26,7 @@ import { HomeActions } from '../actions/home/home.actions';
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
+  public needsToRedirectToLedger$: Observable<boolean>;
   public revenueChartData$: Observable<IRevenueChartClosingBalanceResponse>;
   public networthComparisionChartData$: Observable<IComparisionChartResponse>;
   public historyComparisionChartData$: Observable<IComparisionChartResponse>;
@@ -38,7 +41,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef, private _homeActions: HomeActions) {
+  constructor(
+    private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private cdRef: ChangeDetectorRef,
+    private _homeActions: HomeActions,
+    private _router: Router,
+    private _accountService: AccountService
+  ) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
     this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
@@ -46,8 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.historyComparisionChartData$ = this.store.select(p => p.home.history_comparisionChart).takeUntil(this.destroyed$);
     this.networthComparisionChartData$ = this.store.select(p => p.home.networth_comparisionChart).takeUntil(this.destroyed$);
     this.revenueChartData$ = this.store.select(p => p.home.revenueChart).takeUntil(this.destroyed$);
-
-    //
+    this.needsToRedirectToLedger$ = this.store.select(p => p.login.needsToRedirectToLedger).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -57,7 +66,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'home';
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
   }
 
   public ngAfterViewInit(): void {
@@ -70,6 +78,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           let res = c.find(p => p.uniqueName === a);
           if (res) {
             this.activeFinancialYear = res.activeFinancialYear;
+            this.needsToRedirectToLedger$.take(1).subscribe(result => {
+              if (result) {
+                this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+                  if (data.status === 'success' && data.body.results.length > 0) {
+                    this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
+                  }
+                });
+              }
+            });
           }
         });
         if (this.activeFinancialYear) {

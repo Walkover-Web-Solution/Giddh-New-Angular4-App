@@ -88,12 +88,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return Object.assign({}, state, {downloadInvoiceInProcess: false});
     case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
       let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
-      if (discountData.status === 'success') {
+      if (discountData.status === 'success' && discountData.body.results.length > 0) {
         return Object.assign({}, state, {
           discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
         });
+      }else {
+        return {...state, discountAccountsList: null };
       }
-      return state;
     case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
       return Object.assign({}, state, {
         ledgerCreateSuccess: false,
