@@ -24,6 +24,7 @@ import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { orderBy } from '../../lodash-optimized';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -107,7 +108,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
           accounts.push({ label: `${item.name} (${item.uniqueName})`, value: item.uniqueName });
         }
       });
-      this.accounts$ = Observable.of(accounts);
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
     });
 
     this.store.select(p => p.invoice.invoices).takeUntil(this.destroyed$).subscribe((o: GetAllInvoicesPaginatedResponse) => {

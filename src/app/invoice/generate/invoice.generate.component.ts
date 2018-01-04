@@ -19,6 +19,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { orderBy } from '../../lodash-optimized';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -94,7 +95,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
           accounts.push({ label: `${item.name} (${item.uniqueName})`, value: item.uniqueName });
         }
       });
-      this.accounts$ = Observable.of(accounts);
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
     });
 
     this.store.select(p => p.invoice.ledgers)
