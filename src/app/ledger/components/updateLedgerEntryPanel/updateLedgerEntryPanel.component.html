@@ -44,7 +44,9 @@
                       [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="col-xs-6 pos-rel select2-parent select2-ledger">
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async"
+                      #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)"
+                      [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -104,7 +106,9 @@
                       [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="pos-rel col-xs-6 select2-ledger">
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async"
+                      #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)"
+                      [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -248,21 +252,21 @@
                         <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.inventoryAmountChanged($event.target.value)"
                           [(ngModel)]="vm.totalAmount" />
                       </td>
-                      <td>
+                      <td *ngIf="vm.discountArray.length">
                         <label class="d-block">&nbsp;</label>
                         <label class="fs20">-</label>
                       </td>
-                      <td class="text-right pItem">
+                      <td class="text-right pItem" *ngIf="vm.discountArray.length">
                         <span auto-close="outsideClick">
                           <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray" (appliedDiscountEvent)="vm.addDiscountEntry($event)">
                           </update-ledger-discount>
                         </span>
                       </td>
-                      <td class="text-center">
+                      <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length && vm.discountArray.length">
                         <label class="d-block">&nbsp;</label>
                         <label class="fs20">+</label>
                       </td>
-                      <td class="pos-rel dropdown-container pItem">
+                      <td class="pos-rel dropdown-container pItem" *ngIf="(companyTaxesList$ | async)?.length">
                         <span auto-close="outsideClick">
                           <update-ledger-tax-control [taxes]="companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
                             [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
