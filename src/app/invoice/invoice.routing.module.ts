@@ -35,6 +35,7 @@ import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.d
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -91,16 +92,18 @@ const INVOICE_ROUTES: Routes = [
     SelectModule,
     LaddaModule,
     ShSelectModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    ElementViewChildModule
   ],
   exports: [
     RouterModule,
     TooltipModule
   ],
+  entryComponents: [DownloadOrSendInvoiceOnMailComponent],
   providers: [InvoiceUiDataService, {
     provide: FONT_PICKER_CONFIG,
     useValue: DEFAULT_FONT_PICKER_CONFIG
   }
-]
+  ]
 })
 export class InvoiceRoutingModule { }

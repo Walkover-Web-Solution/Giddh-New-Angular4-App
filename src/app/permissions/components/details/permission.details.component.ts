@@ -60,6 +60,14 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
+    // listener for add update role case
+    this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
+      if (result) {
+        // uncomment below to redirect
+        this.router.navigate(['/pages/permissions/list']);
+      }
+    });
+
     if (_.isEmpty(this.newRole)) {
       this.router.navigate(['/pages/permissions/list']);
     }else if (this.newRole.isUpdateCase) {

@@ -191,16 +191,26 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
-        <!-- <li *ngIf="!isTodaysDateSelected">
+        <li [hidden]="isTodaysDateSelected">
           <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
-          <label class="cp mrT" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)">{{datePickerOptions.fromDate }}
-          <br /> to {{ datePickerOptions.toDate}}</label>
+        </li>
+        <li [hidden]="isTodaysDateSelected">
+          <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
+            class="form-control date-range-picker mrT1" />
         </li>
 
-        <li class="mrT" *ngIf="isTodaysDateSelected" daterangepicker (applyDaterangepicker)="setApplicationDate($event)" [options]="datePickerOptions">
-          <label class="d-block text-right btn-link cp">Today</label>
-          <label class="cp">{{datePickerOptions.fromDate}}</label>
-        </li> -->
+        <li [hidden]="!isTodaysDateSelected" class="mrT cp" (click)="openDateRangePicker();">
+          <label class="d-block text-right btn-link">Today</label>
+          <label>{{moment(datePickerOptions.startDate).format('DD-MM-YYYY')}}</label>
+        </li>
+
+        <!-- <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1" (click)="jumpToToday();">Go back to Today</button> </li>
+              <li *ngIf="!isTodaysDateSelected">
+                  <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
+              </li>
+              <li *ngIf="isTodaysDateSelected"  class="cursor-pointer">
+                  <label style="padding-top:15px;">{{moment(datePickerOptions.startDate).format('DD-MM-YYYY')}}</label>
+              </li> -->
         <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
           <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
             <span class="icon-dropdown"></span>
@@ -260,7 +270,7 @@
       </ul>
     </div>
   </nav>
-  <accounts-side-bar [attachOutsideOnClick]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue'
+  <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue'
     [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 

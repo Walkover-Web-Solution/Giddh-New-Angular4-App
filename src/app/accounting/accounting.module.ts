@@ -15,14 +15,19 @@ import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { KeyboardService } from 'app/accounting/keyboard.service';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { AccountsSideBarComponent } from 'app/shared/header/components';
+import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
+import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/accounting-sidebar.component';
 
 @NgModule({
   declarations: [
     AccountingComponent,
     JournalComponent,
     PurchaseComponent,
+    AccountingSidebarComponent
   ],
-  exports: [RouterModule],
+  exports: [RouterModule, AccountingSidebarComponent],
   providers: [KeyboardService],
   imports: [
     AccountingRoutingModule,
@@ -37,7 +42,9 @@ import { KeyboardService } from 'app/accounting/keyboard.service';
     SelectModule,
     DecimalDigitsModule,
     ShSelectModule,
-    SharedModule
+    SharedModule,
+    ClickOutsideModule,
+    // Daterangepicker
   ],
 })
 export class AccountingModule {

@@ -2,7 +2,23 @@
   <div class="form-group mrR1">
     <label class="d-block">Account</label>
     <div class="ng-select-wrap">
-      <sh-select placeholder="Select Account" name="accountUniqueName" [(ngModel)]="ledgerSearchRequest.accountUniqueName"  [options]="accounts$ | async" [ItemHeight]="33"></sh-select>
+      <sh-select
+        name="accountUniqueName"
+        [options]="accounts$ | async"
+        [(ngModel)]="ledgerSearchRequest.accountUniqueName"
+        [placeholder]="'Select Account'"
+        [notFoundLink]="false"
+        [multiple]="false"
+        [ItemHeight]="67"
+        [useInBuiltFilterForIOptionTypeItems]="true"
+      >
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{ option.label }}</div>
+            <div class="item_unq">{{ option.value }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
     </div>
   </div>
   <div class="form-group mrR1">
