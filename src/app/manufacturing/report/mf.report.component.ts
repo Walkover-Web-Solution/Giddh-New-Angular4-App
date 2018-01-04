@@ -49,6 +49,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
   public startDate: Date;
   public endDate: Date;
   private universalDate: Date[];
+  private isUniversalDateApplicable: boolean = false;
   private destroyed$: ReplaySubject<boolean > = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -91,14 +92,14 @@ export class MfReportComponent implements OnInit, OnDestroy {
     });
 
     // Refresh report data according to universal date
-    // Temporary commenting
-    // this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-    //     this.universalDate = _.cloneDeep(dateObj);
-    //     if (this.universalDate) {
-    //       this.mfStockSearchRequest.dateRange = this.universalDate;
-    //     }
-    //     this.getReportDataOnFresh();
-    // })).subscribe();
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.mfStockSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getReportDataOnFresh();
+      }
+    })).subscribe();
   }
 
   public initializeSearchReqObj() {
@@ -115,15 +116,15 @@ export class MfReportComponent implements OnInit, OnDestroy {
 
   public getReports() {
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
-    this.mfStockSearchRequest = new MfStockSearchRequestClass();
-    if (this.universalDate) {
-      this.mfStockSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-      this.mfStockSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-      this.mfStockSearchRequest.dateRange =  this.universalDate;
-    } else {
-      this.mfStockSearchRequest.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      this.mfStockSearchRequest.to = moment().format(GIDDH_DATE_FORMAT);
-    }
+    // this.mfStockSearchRequest = new MfStockSearchRequestClass();
+    // if (this.isUniversalDateApplicable && this.universalDate) {
+    //   this.mfStockSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+    //   this.mfStockSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    //   this.mfStockSearchRequest.dateRange =  this.universalDate;
+    // } else {
+    //   this.mfStockSearchRequest.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    //   this.mfStockSearchRequest.to = moment().format(GIDDH_DATE_FORMAT);
+    // }
     this.initializeSearchReqObj();
   }
 
