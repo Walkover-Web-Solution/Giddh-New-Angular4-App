@@ -12,7 +12,7 @@ const webpackMerge = require('webpack-merge');
  * The settings that are common to prod and dev
 */
 const commonConfig = require('./webpack.common.js');
-
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /**
  * Webpack Plugins
  */
@@ -176,6 +176,7 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
+      // new BundleAnalyzerPlugin(),
       new SourceMapDevToolPlugin({
         filename: '[file].map[query]',
         moduleFilenameTemplate: '[resource-path]',
@@ -234,9 +235,9 @@ module.exports = function (env) {
        *
        * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
        */
-      new UglifyJsPlugin({
-        uglifyOptions: getUglifyOptions(supportES2015)
-      })
+      // new UglifyJsPlugin({
+      //   uglifyOptions: getUglifyOptions(supportES2015)
+      // })
 
     ],
 

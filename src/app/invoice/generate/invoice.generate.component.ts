@@ -1,6 +1,7 @@
+import { from } from 'rxjs/observable/from';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -17,6 +18,8 @@ import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { orderBy } from '../../lodash-optimized';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -37,7 +40,7 @@ const COMPARISON_FILTER = [
   styleUrls: ['./invoice.generate.component.css'],
   templateUrl: './invoice.generate.component.html'
 })
-export class InvoiceGenerateComponent implements OnInit {
+export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   public accounts$: Observable<IOption[]>;
@@ -63,6 +66,10 @@ export class InvoiceGenerateComponent implements OnInit {
   public endDate: Date;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  private isBulkInvoiceGenerated$: Observable<boolean>;
+  private isUniversalDateApplicable: boolean = false;
+  private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
 
   constructor(
     private modalService: BsModalService,
@@ -73,21 +80,22 @@ export class InvoiceGenerateComponent implements OnInit {
     // set initial values
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).takeUntil(this.destroyed$);
+    this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+
     // Get accounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        data.body.results.map(d => {
-          // Select only sundry debtors account
-          if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ label: d.name, value: d.uniqueName });
-          }
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
+    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
+      let accounts: IOption[] = [];
+      _.forEach(data, (item) => {
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
+          accounts.push({ label: `${item.name} (${item.uniqueName})`, value: item.uniqueName });
+        }
+      });
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
     });
 
     this.store.select(p => p.invoice.ledgers)
@@ -118,13 +126,26 @@ export class InvoiceGenerateComponent implements OnInit {
         }
       });
 
+    // listen for bulk invoice generate and successfully generate and do the things
+    this.isBulkInvoiceGenerated$.subscribe(result => {
+      if (result) {
+        this.toggleAllItems(false);
+      }
+    });
+    this.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
+      if (result) {
+        this.getLedgersOfInvoice();
+      }
+    });
+
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      this.universalDate = _.cloneDeep(dateObj);
-      if (this.universalDate) {
+      if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
         this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getLedgersOfInvoice();
       }
-      this.getLedgersOfInvoice();
     })).subscribe();
   }
 
@@ -140,6 +161,7 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public getLedgersByFilters(f: NgForm) {
     if (f.valid) {
+      this.isUniversalDateApplicable = false;
       this.selectedLedgerItems = [];
       this.getLedgersOfInvoice();
     }
@@ -209,6 +231,7 @@ export class InvoiceGenerateComponent implements OnInit {
       model.push(obj);
     });
     this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: action}, model));
+    this.selectedLedgerItems = [];
   }
 
   public setToday(model: string) {
@@ -223,7 +246,6 @@ export class InvoiceGenerateComponent implements OnInit {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
     }else {
-      console.log ('error hardcoded: templateUniqueName');
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }
@@ -276,8 +298,8 @@ export class InvoiceGenerateComponent implements OnInit {
       toDate  = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
-      from: fromDate,
-      to: toDate,
+      from: this.isUniversalDateApplicable ? fromDate : o.from,
+      to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
       page: o.page
     };
@@ -324,5 +346,10 @@ export class InvoiceGenerateComponent implements OnInit {
     }else {
       this.togglePrevGenBtn = false;
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
