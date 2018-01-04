@@ -1,6 +1,7 @@
+import { from } from 'rxjs/observable/from';
 import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -21,6 +22,9 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { orderBy } from '../../lodash-optimized';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -54,7 +58,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+  @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
+  public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -76,6 +82,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public endDate: Date;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
 
   constructor(
@@ -84,6 +91,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
@@ -97,10 +105,10 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({ label: `${item.name} (${item.uniqueName})`, value: item.uniqueName });
         }
       });
-      this.accounts$ = Observable.of(accounts);
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
     });
 
     this.store.select(p => p.invoice.invoices).takeUntil(this.destroyed$).subscribe((o: GetAllInvoicesPaginatedResponse) => {
@@ -140,11 +148,32 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         this.invoiceSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getInvoices();
       }
-      this.getInvoices();
     })).subscribe();
   }
+  public loadDownloadOrSendMailComponent() {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
+    let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
+    viewContainerRef.remove();
 
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+    componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    componentInstance.downloadOrSendMailEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    // componentInstance.totalItems = s.count * s.totalPages;
+    // componentInstance.itemsPerPage = s.count;
+    // componentInstance.maxSize = 5;
+    // componentInstance.writeValue(s.page);
+    // componentInstance.boundaryLinks = true;
+    // componentInstance.pageChanged.subscribe(e => {
+    //   this.pageChanged(e);
+    // });
+  }
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
@@ -161,6 +190,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public getInvoicesByFilters(f: NgForm) {
     if (f.valid) {
+      this.isUniversalDateApplicable = false;
       this.getInvoices();
     }
   }
@@ -201,6 +231,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
     this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
+    this.loadDownloadOrSendMailComponent();
     this.downloadOrSendMailModel.show();
   }
 
@@ -281,8 +312,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
-    if (o.entryTotal) {
-      model.balanceDue = o.entryTotal;
+    if (o.balanceDue) {
+      model.balanceDue = o.balanceDue;
     }
     if (o.description) {
       model.description = o.description;
@@ -311,12 +342,12 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
-      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate  = moment().format(GIDDH_DATE_FORMAT);
+      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
-      from: fromDate,
-      to: toDate,
+      from: this.isUniversalDateApplicable ? fromDate : o.from,
+      to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
       page: o.page
     };
