@@ -17,6 +17,9 @@ import { ToasterService } from '../services/toaster.service';
 import { AppState } from '../store/index';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
+import { sortBy } from 'app/lodash-optimized';
+import { AccountService } from 'app/services/account.service';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class LoginActions {
@@ -58,6 +61,9 @@ export class LoginActions {
   public static AddBalance = 'AddBalance';
   public static AddBalanceResponse = 'AddBalanceResponse';
   public static ResetTwoWayAuthModal = 'ResetTwoWayAuthModal';
+
+  public static NEEDS_TO_REDIRECT_TO_LEDGER = 'NEEDS_TO_REDIRECT_TO_LEDGER';
+  public static RESET_NEEDS_TO_REDIRECT_TO_LEDGER = 'RESET_NEEDS_TO_REDIRECT_TO_LEDGER';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -189,41 +195,20 @@ export class LoginActions {
           this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
           cmpUniqueName = stateDetail.body.companyUniqueName;
           if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-            this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
-            this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
-            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            // this.store.dispatch(replace(['/pages/home']));
-            // if (ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-            this._router.navigate([stateDetail.body.lastState]);
-            return { type: 'EmptyAction' };
+            return this.finalThingTodo(stateDetail, companies);
           } else {
-            let respState = new BaseResponse<StateDetailsResponse, string>();
-            respState.body = new StateDetailsResponse();
-            respState.body.companyUniqueName = companies.body[0].uniqueName;
-            respState.body.lastState = 'home';
-            respState.status = 'success';
-            respState.request = '';
-            this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
-            this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
-            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            this._router.navigate([stateDetail.body.lastState]);
-            return { type: 'EmptyAction' };
+            // old user fail safe scenerio
+            return this.doSameStuffs(companies);
           }
         } else {
-          let respState = new BaseResponse<StateDetailsResponse, string>();
-          respState.body = new StateDetailsResponse();
-          respState.body.companyUniqueName = companies.body[0].uniqueName;
-          respState.body.lastState = 'home';
-          respState.status = 'success';
-          respState.request = '';
-          this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
-          this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
-          this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-          this._router.navigate(['/pages/home']);
-          return { type: 'EmptyAction' };
+          /**
+          * if user is new and signed up by shared entity
+          * find the entity and redirect user according to terms.
+          * shared entities [GROUP, COMPANY, ACCOUNT]
+          */
+          return this.doSameStuffs(companies);
         }
       }
-      // return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -398,7 +383,10 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
-  constructor(public _router: Router,
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(
+    public _router: Router,
     private actions$: Actions,
     private auth: AuthenticationService,
     public _toaster: ToasterService,
@@ -406,7 +394,21 @@ export class LoginActions {
     private comapnyActions: CompanyActions,
     private _companyService: CompanyService,
     private http: HttpClient,
-    private _generalService: GeneralService) {
+    private _generalService: GeneralService,
+    private _accountService: AccountService
+  ) {
+  }
+
+  public SetRedirectToledger(): CustomActions {
+    return {
+      type: LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER
+    };
+  }
+
+  public ResetRedirectToledger(): CustomActions {
+    return {
+      type: LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER
+    };
   }
 
   public SignupWithEmailRequest(value: string): CustomActions {
@@ -641,5 +643,42 @@ export class LoginActions {
       type: LoginActions.AddBalanceResponse,
       payload: resp
     };
+  }
+
+  private doSameStuffs(companies) {
+    let respState = new BaseResponse<StateDetailsResponse, string>();
+    respState.body = new StateDetailsResponse();
+    companies.body = sortBy(companies.body, ['name']);
+    // now take first company from the companies
+    let company = companies.body[0];
+    respState.body.companyUniqueName = company.uniqueName;
+    respState.status = 'success';
+    respState.request = '';
+    respState.body.lastState = 'home';
+    // check for entity and override last state ['GROUP', 'ACCOUNT']
+    try {
+      if (company.userEntityRoles && company.userEntityRoles.length) {
+        let entityObj = company.userEntityRoles[0].entity;
+        if ( entityObj.entity === 'ACCOUNT' ) {
+          respState.body.lastState = `ledger/${entityObj.uniqueName}`;
+        }else if ( entityObj.entity === 'GROUP' ) {
+          // get a/c`s of group and set first a/c
+          this.store.dispatch(this.SetRedirectToledger());
+        }else {
+          respState.body.lastState = 'home';
+        }
+      }
+    } catch (error) {
+      respState.body.lastState = 'home';
+    }
+    return this.finalThingTodo(respState, companies);
+  }
+
+  private finalThingTodo(stateDetail: any, companies: any) {
+    this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
+    this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+    this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+    this._router.navigate([stateDetail.body.lastState]);
+    return { type: 'EmptyAction' };
   }
 }

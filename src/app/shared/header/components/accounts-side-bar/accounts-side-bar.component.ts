@@ -17,6 +17,9 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public flyAccounts: boolean;
   @Input() public search: string;
   @Input() public noGroups: boolean;
+  @Input() public isGroupToggle: boolean;
+  @Input() public isRouter: boolean;
+
   public flatAccountWGroupsList: IFlattenGroupsAccountsDetail[];
   public Items: IFlattenGroupsAccountItem[];
   public ItemsSRC: IFlattenGroupsAccountItem[];
@@ -24,6 +27,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
   public companyList$: Observable<any>;
   public showAccountList: boolean = true;
   @Output() public openAddAndManage: EventEmitter<boolean> = new EventEmitter();
+  @Output() public onSelectItem: EventEmitter<boolean> = new EventEmitter();
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -100,6 +104,9 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
     }
     if (s.search && !s.search.firstChange && s.search.currentValue !== s.search.previousValue) {
       // this.searchAccount(s.search.currentValue);
+    }
+    if (s.isGroupToggle) {
+      this.toggleNoGroups(s.noGroups.currentValue);
     }
   }
   public ngOnInit() {
