@@ -650,7 +650,8 @@ export class LoginActions {
     respState.body = new StateDetailsResponse();
     companies.body = sortBy(companies.body, ['name']);
     // now take first company from the companies
-    let company = companies.body[0];
+    let cArr = companies.body.sort((a, b) => a.name.length - b.name.length );
+    let company = cArr[0];
     respState.body.companyUniqueName = company.uniqueName;
     respState.status = 'success';
     respState.request = '';
@@ -658,7 +659,9 @@ export class LoginActions {
     // check for entity and override last state ['GROUP', 'ACCOUNT']
     try {
       if (company.userEntityRoles && company.userEntityRoles.length) {
-        let entityObj = company.userEntityRoles[0].entity;
+        // find sorted userEntityRoles
+        let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length );
+        let entityObj = entitiesArr[0].entity;
         if ( entityObj.entity === 'ACCOUNT' ) {
           respState.body.lastState = `ledger/${entityObj.uniqueName}`;
         }else if ( entityObj.entity === 'GROUP' ) {
