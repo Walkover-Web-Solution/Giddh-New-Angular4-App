@@ -99,6 +99,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
           }
           return state;
         }
+        case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
+          return { ...state, invoiceData: null };
+        }
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
           let newState = _.cloneDeep(state);
           let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
