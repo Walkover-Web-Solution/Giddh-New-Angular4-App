@@ -1,4 +1,4 @@
-<span (blur)="hideDiscountMenu()" >
+<span (blur)="hideDiscountMenu()" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()" >
   <label>Discount</label>
   <a (click)="discountMenu = !discountMenu" id="discount">
       <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
