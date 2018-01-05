@@ -150,12 +150,14 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     if (this.isSearchingGroups) {
       if (grps.length > 0) {
+        let newCOL = new ColumnGroupsAccountVM(null);
         let allGrps = [];
         let allAccount = [];
         for (let grp of grps) {
           if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
             grp.isOpen = true;
             grp.isActive = true;
+            newCOL.IsCreateNewBtnShowable = true;
           }
           if (grp.groups && grp.groups.length > 0) { allGrps.push(...grp.groups); }
         }
@@ -168,7 +170,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             if (grp.uniqueName === activeGroup.uniqueName) { if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); } }
           }
         }
-        let newCOL = new ColumnGroupsAccountVM(null);
         newCOL.groups = [];
         newCOL.accounts = [];
         for (let key of allGrps) {
