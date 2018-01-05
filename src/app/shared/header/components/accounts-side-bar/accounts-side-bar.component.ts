@@ -169,7 +169,9 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     this.Items = _.cloneDeep(this.Items);
-    this.cd.detectChanges();
+    if (!this.cd['destroyed']) {
+      this.cd.detectChanges();
+    }
   }
 
   public goToManageGroups() {
