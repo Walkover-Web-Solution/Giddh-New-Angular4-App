@@ -35,9 +35,6 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     private permissionActions: PermissionActions
   ) {
 
-    // listen for add/update
-    this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).takeUntil(this.destroyed$);
-
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
       this.allRoles = _.cloneDeep(permission.roles);
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
