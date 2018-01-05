@@ -20,7 +20,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { orderBy } from '../../lodash-optimized';
-
+const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   { label: '12', value: '12' },
   { label: '25', value: '25' },
@@ -91,8 +91,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          accounts.push({ label: `${item.name} (${item.uniqueName})`, value: item.uniqueName });
+        // o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' ||  o.uniqueName === 'revenuefromoperations' || o.uniqueName === 'otherincome'
+        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1 )) {
+          accounts.push({ label: item.name, value: item.uniqueName });
         }
       });
       this.accounts$ = Observable.of(orderBy(accounts, 'label'));

@@ -1,147 +1,79 @@
 <h1 class="page-title" style="margin-left:0; margin-bottom:15px;">
-    Apply Log Filters</h1>
+  Apply Log Filters</h1>
 <div class="clearfix mrT2">
-    <label>Filter By:</label>
-    <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedDateOption"></sh-select>
-    <!--<select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>-->
+  <label>Filter By:</label>
+  <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedDateOption"></sh-select>
+  <!--<select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
-    <label>From date</label>
-    <!-- <div class="input-group"> -->
-        <input type="text" name="from" #fromdp="bsDatepicker" bsDatepicker  [maxDate]="vm.maxDate"  [ngModel]="vm.selectedFromDate" [bsConfig]="bsConfig"
-            class="form-control" />
-        <!-- <span class="input-group-btn">
-            <button type="button" class="btn btn-default" (click)="vm.showFromDatePicker = !vm.showFromDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-            </button>
-        </span> -->
-    <!-- </div> -->
-    <!-- <div *ngIf="vm.showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+  <label>From date</label>
+  <input type="text" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker [maxDate]="vm.maxDate"
+    [(ngModel)]="vm.selectedFromDate" value="{{ vm.selectedFromDate | date: 'DD-MM-YYYY' }}" class="form-control" />
 
-        <ul class="my-dropdown-menu">
-            <li>
-                    <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="vm.selectedFromDate" (selectionDone)="vm.showFromDatePicker=!vm.showFromDatePicker"
-                    ></datepicker>
-                <input type="text"  #dp="bsDatepicker" bsDatepicker  />
-            </li>
-            <li style="padding:10px 9px 2px" class="ng-scope">
-                <span class="btn-group pull-left">
-                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('selectedFromDate');vm.showFromDatePicker = false;">Today</button>
-                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('selectedFromDate');vm.showFromDatePicker = false;">Clear</button>
-                </span>
-                <button type="button" class="btn btn-sm btn-success pull-right" (click)="vm.showFromDatePicker = false">Done</button>
-            </li>
-        </ul>
-
-    </div> -->
 </div>
 
-<div class="clearfix mrT2"  *ngIf="vm.selectedDateOption == '1'">
-    <label>To date</label>
-    <!-- <div class="input-group"> -->
-        <input type="text" name="to" #todp="bsDatepicker" bsDatepicker [ngModel]="vm.selectedToDate | date: 'dd-MM-yyyy'" [maxDate]="vm.maxDate" [bsConfig]="bsConfig"
-            class="form-control" />
-        <!-- <span class="input-group-btn">
-            <button type="button" class="btn btn-default" (click)="vm.showToDatePicker = !vm.showToDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-            </button>
-        </span> -->
-    <!-- </div> -->
-    <!-- <div *ngIf="vm.showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+<div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
+  <label>To date</label>
+  <input type="text" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker [maxDate]="vm.maxDate" [(ngModel)]="vm.selectedToDate"
+    value="{{ vm.selectedToDate | date: 'DD-MM-YYYY' }}" class="form-control" />
 
-        <ul class="my-dropdown-menu">
-            <li>
-                <datepicker name="toDate" (click)="$event.stopPropagation()" [(ngModel)]="vm.selectedToDate" (selectionDone)="vm.showToDatePicker=!vm.showToDatePicker"
-                    [maxDate]="vm.maxDate" [showWeeks]="false"></datepicker>
-            </li>
-            <li style="padding:10px 9px 2px" class="ng-scope">
-                <span class="btn-group pull-left">
-                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('selectedToDate');vm.showToDatePicker = false;">Today</button>
-                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('selectedToDate');vm.showToDatePicker = false;">Clear</button>
-                </span>
-                <button type="button" class="btn btn-sm btn-success pull-right" (click)="vm.showToDatePicker = false">Done</button>
-            </li>
-        </ul>
-
-    </div> -->
 </div>
 
-<div class="clearfix mrT2" (clickOutside)="vm.showLogDatePicker=false;" *ngIf="vm.selectedDateOption == '0'">
-    <!-- <label>Select Log Date or Entry Date</label> -->
-    <div class="row" style="margin-left:0">
-        <p class="input-group pull-left" for="entryDate">
-            <label>Entry Date
-                <input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.logOrEntry" value="entryDate" />
-            </label>
-        </p>
-        <p class="input-group pull-left mrL2" for="logDate">
-            <label>Log Date
-                <input id="logDate" type="radio" name="logDate" [(ngModel)]="vm.logOrEntry" value="logDate" />
-            </label>
-        </p>
-        <br/>
-    </div>
+<div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '0'">
+  <!-- <label>Select Log Date or Entry Date</label> -->
+  <div class="row" style="margin-left:0">
+    <p class="input-group pull-left" for="entryDate">
+      <label>Entry Date
+        <input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.logOrEntry" value="entryDate" />
+      </label>
+    </p>
+    <p class="input-group pull-left mrL2" for="logDate">
+      <label>Log Date
+        <input id="logDate" type="radio" name="logDate" [(ngModel)]="vm.logOrEntry" value="logDate" />
+      </label>
+    </p>
+    <br/>
+  </div>
 
-    <div class="input-group">
-        <input type="text" name="to" [ngModel]="vm.selectedLogDate | date: 'dd-MM-yyyy'" (focus)="vm.showLogDatePicker = true" class="form-control"
-        />
-        <span class="input-group-btn">
-            <button type="button" class="btn btn-default" (click)="vm.showLogDatePicker = !vm.showLogDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-            </button>
-        </span>
+  <div class="input-group">
+    <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker [maxDate]="vm.maxDate"
+     [(ngModel)]="vm.selectedLogDate"
+      value="{{ vm.selectedLogDate | date: 'DD-MM-YYYY' }}" class="form-control" />
+  </div>
 
-    </div>
-    <div *ngIf="vm.showLogDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-
-        <ul class="my-dropdown-menu">
-            <li>
-                <datepicker name="toDate" (click)="$event.stopPropagation()" [(ngModel)]="vm.selectedLogDate" (selectionDone)="vm.showLogDatePicker=!vm.showLogDatePicker"
-                    [maxDate]="vm.maxDate" [showWeeks]="false"></datepicker>
-            </li>
-            <li style="padding:10px 9px 2px" class="ng-scope">
-                <span class="btn-group pull-left">
-                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('selectedLogDate');vm.showLogDatePicker = false;">Today</button>
-                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('selectedLogDate');vm.showLogDatePicker = false;">Clear</button>
-                </span>
-                <button type="button" class="btn btn-sm btn-success pull-right" (click)="vm.showLogDatePicker = false">Done</button>
-            </li>
-        </ul>
-
-    </div>
 </div>
 
 <div class="clearfix mrT2">
-    <label>Select Operation</label>
-    <!-- <input type="text" class="form-control" /> -->
-    <sh-select [options]="vm.filters" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedOperation"></sh-select>
-    <!--<select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>-->
+  <label>Select Operation</label>
+  <!-- <input type="text" class="form-control" /> -->
+  <sh-select [options]="vm.filters" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedOperation"></sh-select>
+  <!--<select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
-    <label>Select Entity</label>
-    <sh-select [options]="vm.entities" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedEntity"></sh-select>
-    <!--<select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>-->
+  <label>Select Entity</label>
+  <sh-select [options]="vm.entities" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedEntity"></sh-select>
+  <!--<select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
-    <label>Select Account</label>
-    <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
-    <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
+  <label>Select Account</label>
+  <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
+  <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
-    <label>Select Group</label>
-    <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
-    <!--<select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
+  <label>Select Group</label>
+  <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
+  <!--<select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
 </div>
 
 
 <div class="clearfix mrT2">
-    <label>Select User</label>
-    <sh-select [options]="vm.users$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
-    <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
+  <label>Select User</label>
+  <sh-select [options]="vm.users$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
+  <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
 </div>
 
 <button class='btn btn-success pull-left mrT2' [ladda]="vm.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs
