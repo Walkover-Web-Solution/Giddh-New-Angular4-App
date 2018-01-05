@@ -54,6 +54,9 @@ export class LoginActions {
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
   public static AddNewMobileNo = 'AddNewMobileNo';
   public static AddNewMobileNoResponse = 'AddNewMobileNoResponse';
+
+  public static VerifyAddNewMobileNo = 'VerifyAddNewMobileNo';
+  public static VerifyAddNewMobileNoResponse = 'VerifyAddNewMobileNoResponse';
   public static FetchUserDetails = 'FetchUserDetails';
   public static FetchUserDetailsResponse = 'FetchUserDetailsResponse';
   public static SubscribedCompanies = 'SubscribedCompanies';
@@ -345,6 +348,27 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+    @Effect()
+  public verifyAddNewMobile$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyAddNewMobileNo)
+    .switchMap((action: CustomActions) =>
+      this.auth.VerifyOTP(action.payload as VerifyMobileModel)
+    )
+    .map(response => this.VerifyAddNewMobileNoResponce(response));
+
+  @Effect()
+  public verifyAddNewMobileResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyAddNewMobileNoResponse)
+    .map((action: CustomActions) => {
+      let response: BaseResponse<string, VerifyMobileModel> = action.payload;
+      if (response.status === 'error') {
+        this._toaster.errorToast(response.message, response.code);
+        return { type: 'EmptyAction' };
+      }
+      this._toaster.successToast(response.body);
+      return this.FetchUserDetails();
+    });
+
   @Effect()
   public FectchUserDetails$: Observable<Action> = this.actions$
     .ofType(LoginActions.FetchUserDetails)
@@ -602,6 +626,20 @@ export class LoginActions {
   public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): CustomActions {
     return {
       type: LoginActions.AddNewMobileNoResponse,
+      payload: value
+    };
+  }
+
+  public VerifyAddNewMobileNo(value: VerifyMobileModel): CustomActions {
+    return {
+      type: LoginActions.VerifyAddNewMobileNo,
+      payload: value
+    };
+  }
+
+  public VerifyAddNewMobileNoResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): CustomActions {
+    return {
+      type: LoginActions.VerifyAddNewMobileNoResponse,
       payload: value
     };
   }
