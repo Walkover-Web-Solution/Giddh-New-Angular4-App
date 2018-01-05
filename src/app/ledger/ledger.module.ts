@@ -33,6 +33,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChang
     DatepickerModule,
     ButtonsModule,
     BsDropdownModule,
-    TextCaseChangeModule
+    TextCaseChangeModule,
+    ClickOutsideModule
   ],
 })
 export class LedgerModule {
