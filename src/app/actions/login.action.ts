@@ -341,7 +341,7 @@ export class LoginActions {
     .ofType(LoginActions.AddNewMobileNoResponse)
     .map((action: CustomActions) => {
       if (action.payload.status === 'success') {
-        this._toaster.successToast(action.payload.body);
+        this._toaster.successToast('You will receive a verification code on your mobile shortly.');
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
@@ -352,7 +352,7 @@ export class LoginActions {
   public verifyAddNewMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyAddNewMobileNo)
     .switchMap((action: CustomActions) =>
-      this.auth.VerifyOTP(action.payload as VerifyMobileModel)
+      this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
     )
     .map(response => this.VerifyAddNewMobileNoResponce(response));
 
@@ -637,7 +637,7 @@ export class LoginActions {
     };
   }
 
-  public VerifyAddNewMobileNoResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): CustomActions {
+  public VerifyAddNewMobileNoResponce(value: BaseResponse<string, VerifyMobileModel>): CustomActions {
     return {
       type: LoginActions.VerifyAddNewMobileNoResponse,
       payload: value
