@@ -58,10 +58,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         return s.session.user.countryCode;
       }
     }).takeUntil(this.destroyed$);
-    this.isAddNewMobileNoInProcess$ = this.store.select(s => s.session.isAddNewMobileNoInProcess).takeUntil(this.destroyed$);
-    this.isAddNewMobileNoSuccess$ = this.store.select(s => s.session.isAddNewMobileNoSuccess).takeUntil(this.destroyed$);
-    this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.session.isVerifyAddNewMobileNoInProcess).takeUntil(this.destroyed$);
-    this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.session.isVerifyAddNewMobileNoSuccess).takeUntil(this.destroyed$);
+    this.isAddNewMobileNoInProcess$ = this.store.select(s => s.login.isAddNewMobileNoInProcess).takeUntil(this.destroyed$);
+    this.isAddNewMobileNoSuccess$ = this.store.select(s => s.login.isAddNewMobileNoSuccess).takeUntil(this.destroyed$);
+    this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).takeUntil(this.destroyed$);
+    this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).takeUntil(this.destroyed$);
     this.authenticateTwoWay$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.authenticateTwoWay;
@@ -114,6 +114,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public addNumber(no: string) {
+    this.oneTimePassword = '';
     const mobileRegex = /^[0-9]{1,10}$/;
     if (mobileRegex.test(no) && (no.length === 10)) {
       const request: SignupWithMobile = new SignupWithMobile();
