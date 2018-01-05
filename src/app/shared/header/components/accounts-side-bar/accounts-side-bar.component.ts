@@ -19,7 +19,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public noGroups: boolean;
   @Input() public isGroupToggle: boolean;
   @Input() public isRouter: boolean;
-  
+
   public flatAccountWGroupsList: IFlattenGroupsAccountsDetail[];
   public Items: IFlattenGroupsAccountItem[];
   public ItemsSRC: IFlattenGroupsAccountItem[];

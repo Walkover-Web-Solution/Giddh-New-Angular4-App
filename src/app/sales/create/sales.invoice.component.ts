@@ -179,9 +179,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
 
     this.invFormData = new InvoiceFormClass();
-    // set dates
-    this.invFormData.invoiceDetails.invoiceDate = new Date();
-
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -334,7 +331,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.invFormData.country.countryName = data.country.countryName;
 
     // set dates
-    this.invFormData.invoiceDetails.invoiceDate = new Date();
+    // this.invFormData.invoiceDetails.invoiceDate = new Date();
     // this.invFormData.invoiceDetails.dueDate = new Date().setDate(new Date().getDate() + 10 );
     // fill address conditionally
     if (data.addresses.length > 0) {
@@ -376,7 +373,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     f.form.reset();
     this.invFormData = new InvoiceFormClass();
     this.typeaheadNoResultsOfCustomer = false;
-    this.invFormData.invoiceDetails.invoiceDate = new Date();
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
