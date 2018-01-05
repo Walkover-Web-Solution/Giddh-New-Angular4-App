@@ -113,28 +113,27 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <!-- hide it as not yet implemented
-                                        <li class="dmLi" [checkPermission]="['MENU', 'RECURRING_ENTRY']">
+                                        <!-- <li class="dmLi" [checkPermission]="['MENU', 'RECURRING_ENTRY']">
                                             <a href="">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Recurring Entry</div>
-                                                        <div class="subTitle">Add and Edit Recurring Entries</div>
-                                                    </div>
+                                              <div class="media">
+                                                <div class="media-body">
+                                                  <div class="title">Recurring Entry</div>
+                                                  <div class="subTitle">Add and Edit Recurring Entries</div>
                                                 </div>
+                                              </div>
                                             </a>
-                                        </li>
+                                          </li>
+                                          <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
+                                            <a href="">
+                                              <div class="media">
+                                                <div class="media-body">
+                                                  <div class="title">Reports</div>
+                                                  <div class="subTitle">Generate and view Business Reports</div>
+                                                </div>
+                                              </div>
+                                            </a>
+                                          </li>
                                         -->
-                                        <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
-                                            <a href="">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Reports</div>
-                                                        <div class="subTitle">Generate and view Business Reports</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
                                         <li class="dmLi" ui-sref="audit-logs" [checkPermission]="['MENU', 'AUDIT_LOGS']">
                                             <a [routerLink]="['audit-logs']">
                                                 <div class="media">
