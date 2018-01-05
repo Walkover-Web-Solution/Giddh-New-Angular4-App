@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
-import { SignupWithMobile, UserDetails } from '../models/api-models/loginModels';
+import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { CompanyService } from '../services/companyService.service';
@@ -21,6 +21,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public expandLongCode: boolean = false;
   public twoWayAuth: boolean = false;
   public phoneNumber: string = '';
+  public oneTimePassword: string = '';
   public countryCode: string = '';
   public showVerificationBox: boolean = false;
   public amount: number = 0;
@@ -36,15 +37,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public contactNo$: Observable<string>;
   public countryCode$: Observable<string>;
   public isAddNewMobileNoInProcess$: Observable<boolean>;
-  public isMobileNoVerifiedSuccess$: Observable<boolean>;
+  public isAddNewMobileNoSuccess$: Observable<boolean>;
+  public isVerifyAddNewMobileNoInProcess$: Observable<boolean>;
+  public isVerifyAddNewMobileNoSuccess$: Observable<boolean>;
   public authenticateTwoWay$: Observable<boolean>;
   public selectedCompany: CompanyResponse = null;
   public user: UserDetails = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
-              private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
-              private _companyActions: CompanyActions) {
+    private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
+    private _companyActions: CompanyActions) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -56,7 +59,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       }
     }).takeUntil(this.destroyed$);
     this.isAddNewMobileNoInProcess$ = this.store.select(s => s.session.isAddNewMobileNoInProcess).takeUntil(this.destroyed$);
-    this.isMobileNoVerifiedSuccess$ = this.store.select(s => s.session.isMobileNoVerifiedSuccess).takeUntil(this.destroyed$);
+    this.isAddNewMobileNoSuccess$ = this.store.select(s => s.session.isAddNewMobileNoSuccess).takeUntil(this.destroyed$);
+    this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.session.isVerifyAddNewMobileNoInProcess).takeUntil(this.destroyed$);
+    this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.session.isVerifyAddNewMobileNoSuccess).takeUntil(this.destroyed$);
     this.authenticateTwoWay$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.authenticateTwoWay;
@@ -68,7 +73,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     // console.log(RazorPay);
     this.contactNo$.subscribe(s => this.phoneNumber = s);
     this.countryCode$.subscribe(s => this.countryCode = s);
-    this.isMobileNoVerifiedSuccess$.subscribe(s => this.showVerificationBox = s);
+    this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);
+    this.isVerifyAddNewMobileNoSuccess$.subscribe(s => {
+      if (s) {
+        this.oneTimePassword = '';
+        this.showVerificationBox = false;
+      }
+    });
     this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
     this.store.dispatch(this.loginAction.FetchUserDetails());
     this._loginService.GetAuthKey().subscribe(a => {
@@ -114,12 +125,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  public verifyNumber() {
+    const request: VerifyMobileModel = new VerifyMobileModel();
+    request.countryCode = Number(this.countryCode) || 91;
+    request.mobileNumber = this.phoneNumber;
+    request.oneTimePassword = this.oneTimePassword;
+    this.store.dispatch(this._loginAction.VerifyAddNewMobileNo(request));
+  }
+
   public getSubscriptionList() {
     this.store.dispatch(this._loginAction.SubscribedCompanies());
   }
 
   public changeTwoWayAuth() {
-    this._loginService.SetSettings({authenticateTwoWay: this.twoWayAuth}).subscribe(res => {
+    this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).subscribe(res => {
       if (res.status === 'success') {
         this._toasty.successToast(res.body);
       } else {
@@ -166,7 +185,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         }
       } else {
         this._toasty.errorToast(res.message, res.status);
-        this.payAlert.push({msg: res.message, type: 'warning'});
+        this.payAlert.push({ msg: res.message, type: 'warning' });
       }
     });
   }
@@ -176,36 +195,36 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     switch (type) {
       case 'cashback_discount':
         this.disableRazorPay = false;
-        return this.payAlert.push({msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {$scope.cbDiscount}`});
+        return this.payAlert.push({ msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {$scope.cbDiscount}` });
       case 'cashback':
         if (this.amount < this.coupRes.value) {
           this.disableRazorPay = true;
-          return this.payAlert.push({msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}`});
+          return this.payAlert.push({ msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}` });
         } else {
           this.disableRazorPay = false;
-          return this.payAlert.push({type: 'success', msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. ${this.coupRes.value}`});
+          return this.payAlert.push({ type: 'success', msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. ${this.coupRes.value}` });
         }
 
       case 'discount':
         let diff = this.amount - this.discount;
         if (diff < 100) {
           this.disableRazorPay = true;
-          return this.payAlert.push({msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}`});
+          return this.payAlert.push({ msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}` });
         } else {
           this.disableRazorPay = false;
-          return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
+          return this.payAlert.push({ type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}` });
         }
       case 'discount_amount':
         diff = this.amount - this.discount;
         if (diff < 100) {
           this.disableRazorPay = true;
-          return this.payAlert.push({msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}`});
+          return this.payAlert.push({ msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}` });
         } else if (this.amount < this.coupRes.value) {
           this.disableRazorPay = true;
-          return this.payAlert.push({msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}`});
+          return this.payAlert.push({ msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}` });
         } else {
           this.disableRazorPay = false;
-          return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
+          return this.payAlert.push({ type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}` });
         }
     }
   }

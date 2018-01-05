@@ -50,7 +50,9 @@ export interface SessionState {
   isCompanyCreationSuccess: boolean;
   isCompanyCreated: boolean;
   isAddNewMobileNoInProcess: boolean;
-  isMobileNoVerifiedSuccess: boolean;
+  isAddNewMobileNoSuccess: boolean;
+  isVerifyAddNewMobileNoInProcess: boolean;
+  isVerifyAddNewMobileNoSuccess: boolean;
   userLoginState: userLoginStateEnum;
 }
 
@@ -88,7 +90,9 @@ const sessionInitialState: SessionState = {
   isCompanyCreationSuccess: false,
   isRefreshing: false,
   isAddNewMobileNoInProcess: false,
-  isMobileNoVerifiedSuccess: false,
+  isAddNewMobileNoSuccess: false,
+  isVerifyAddNewMobileNoInProcess: false,
+  isVerifyAddNewMobileNoSuccess: false,
   userLoginState: userLoginStateEnum.notLoggedIn
 };
 
@@ -96,10 +100,10 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
 
   switch (action.type) {
     case LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return {...state, needsToRedirectToLedger: false};
+      return { ...state, needsToRedirectToLedger: false };
     }
     case LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return {...state, needsToRedirectToLedger: true};
+      return { ...state, needsToRedirectToLedger: true };
     }
     case LoginActions.SignupWithEmailResponce:
       if (action.payload.status === 'success') {
@@ -442,10 +446,29 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       return {
         ...state,
         isAddNewMobileNoInProcess: true,
-        isMobileNoVerifiedSuccess: false
       };
     case LoginActions.AddNewMobileNoResponse:
-      let resp: BaseResponse<string, SignupWithMobile> = action.payload;
+      let resp1: BaseResponse<string, SignupWithMobile> = action.payload;
+      if (resp1.status === 'success') {
+        return {
+          ...state,
+          isAddNewMobileNoInProcess: false,
+          isAddNewMobileNoSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: false,
+        isAddNewMobileNoSuccess: false
+      };
+
+    case LoginActions.VerifyAddNewMobileNo:
+      return {
+        ...state,
+        isVerifyAddNewMobileNoInProcess: true,
+      };
+    case LoginActions.VerifyAddNewMobileNoResponse:
+      let resp: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (resp.status === 'success') {
         return {
           ...state,
@@ -453,14 +476,14 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             contactNumber: resp.request.mobileNumber,
             countryCode: resp.request.countryCode
           }),
-          isAddNewMobileNoInProcess: false,
-          isMobileNoVerifiedSuccess: true
+          isVerifyAddNewMobileNoInProcess: false,
+          isVerifyAddNewMobileNoSuccess: true
         };
       }
       return {
         ...state,
-        isAddNewMobileNoInProcess: false,
-        isMobileNoVerifiedSuccess: false
+        isVerifyAddNewMobileNoInProcess: false,
+        isVerifyAddNewMobileNoSuccess: false
       };
     case LoginActions.FetchUserDetailsResponse:
       let userResp: BaseResponse<UserDetails, string> = action.payload;
