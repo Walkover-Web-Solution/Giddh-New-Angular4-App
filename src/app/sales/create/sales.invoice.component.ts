@@ -122,7 +122,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
-  public accounts$: Observable<IOption[]>;
+  // public accounts$: Observable<IOption[]>;
+  public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
   public accountAsideMenuState: string = 'out';
@@ -264,13 +265,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
 
       let accountsArray: IOption[] = [];
-      let accounts: IOption[] = [];
+      let accounts: INameUniqueName[] = [];
       let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
+        
+        /* commented by mustafa 
+         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
+           accounts.push({ label: item.name, value: item.uniqueName });
+         } 
+        */
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({ name: item.name, uniqueName: item.uniqueName });
         }
+        
         // creating bank account list
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
           bankaccounts.push({ label: item.name, value: item.uniqueName });
@@ -295,7 +303,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
       this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
-      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      
+      // this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      this.accounts$ = Observable.of(accounts);
       this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
 
       // listen for newly added stock and assign value
