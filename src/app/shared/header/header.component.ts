@@ -239,7 +239,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
-        this.store.dispatch(this.companyActions.GetApplicationDate());
+        // this.store.dispatch(this.companyActions.GetApplicationDate());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -380,7 +380,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public forceCloseSidebar(event) {
-    if (event.target.parentElement.classList.contains('acntAccordion')) {
+    if (event.target.parentElement.classList.contains('wrapAcList') ) {
       return;
     }
     this.flyAccounts.next(false);
