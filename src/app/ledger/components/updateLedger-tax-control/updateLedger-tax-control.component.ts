@@ -93,7 +93,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       // }
     });
   }
-
+  public toggleTaxPopup(action: boolean) {
+    this.showTaxPopup = action;
+  }
   public trackByFn(index) {
     return index; // or item.id
   }
