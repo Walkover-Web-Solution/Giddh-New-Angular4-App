@@ -238,6 +238,20 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.removeAllFiles();
   }
 
+  /**
+   * validatePrintSetting
+   */
+  public validatePrintSetting(val, idx, position) {
+    
+    let paddingCordinatesValue = [200,30,100,30];
+    let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
+    if (val > paddingCordinatesValue[idx]) {
+      this._toasty.errorToast(paddingCordinates[idx] + ' margin cannot be more than ' + paddingCordinatesValue[idx]);
+      let maxVal = paddingCordinatesValue[idx];
+      this.customTemplate[position] = maxVal;
+    }
+  }
+
   public ngOnDestroy() {
     // this._invoiceUiDataService.customTemplate.unsubscribe();
     // this.destroyed$.next(true);

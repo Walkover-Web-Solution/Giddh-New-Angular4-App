@@ -266,6 +266,14 @@
         "snap"
       ]
     },
+    "win": {
+
+    },
+    "nsis": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "menuCategory": "Accounting"
+    },
     "asar": true
   },
   "repository": {
