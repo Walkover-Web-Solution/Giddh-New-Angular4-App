@@ -40,8 +40,8 @@
                     <div class="form-group col-xs-1">
                         <div class="row">
                             <label class="d-block">Value</label>
-                            <input type="text" #numberField="ngModel" (keyup)="checkValueField(numberField.model)" pattern="^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"
-                            />
+                            <!-- #numberField="ngModel" (keyup)="checkValueField(numberField.model)" pattern="^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$" -->
+                            <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"/>
                             <!--<p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>-->
                         </div>
                     </div>
