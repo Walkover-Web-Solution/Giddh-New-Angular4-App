@@ -163,7 +163,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
   public loadPaginationComponent(s) {
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-    if (this.paginationChild.viewContainerRef) {
+    if (this.paginationChild && this.paginationChild.viewContainerRef) {
       let viewContainerRef = this.paginationChild.viewContainerRef;
       viewContainerRef.remove();
 
