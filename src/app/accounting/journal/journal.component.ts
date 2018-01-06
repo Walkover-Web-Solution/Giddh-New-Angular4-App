@@ -152,13 +152,13 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public onAccountBlur(ev, elem) {
     this.showLedgerAccountList = false;
-    this.isGroupToggle = false;
-    this.flyAccounts.next(false)
+    // this.isGroupToggle = false;
+    this.flyAccounts.next(true);
     this.selectedParticular = elem;
-    if (this.accountSearch) {
-      this.searchAccount('');
-      this.accountSearch = '';
-    }
+    // if (this.accountSearch) {
+    //   this.searchAccount('');
+    //   this.accountSearch = '';
+    // }
     // this.searchAccount('');
   }
 
@@ -177,8 +177,9 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.journalObj.transactions[idx].selectedAccount = accModel;
     setTimeout(() => {
       this.selectedParticular.focus();
-      this.showLedgerAccountList = false;
-    }, 100);
+      this.isGroupToggle = true;
+      // this.showLedgerAccountList = false;
+    }, 50);
   }
   
   /**

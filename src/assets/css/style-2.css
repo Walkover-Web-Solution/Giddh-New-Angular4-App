@@ -3160,24 +3160,6 @@ label {
     font-weight: normal;
 }
 
-
-/* .add-new-role-modal .dropdown-menu li label input[type="checkbox"]:after,
-#single_role table tbody tr td input[type="checkbox"]:after {
-    border-width: 1px;
-    top: 0;
-    width: 16px;
-    height: 16px
-}
-
-.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:checked:before,
-#single_role table tbody tr td input[type="checkbox"]:checked:before {
-    left: 3px;
-    top: 3px;
-    z-index: 1;
-    width: 11px;
-    height: 6px;
-} */
-
 #single_role .panel {
     border-radius: 0;
     margin-bottom: 40px;
