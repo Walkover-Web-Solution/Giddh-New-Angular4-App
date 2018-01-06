@@ -105,7 +105,7 @@
             </tr>
             <tr>
               <td class="nopad bdrL bdrR" colspan="3">
-                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup()" (click)="$event.stopPropagation()">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                   <tbody>
                     <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
                       <td class="width100" *ngIf="txn.type === 'DEBIT'">
@@ -162,7 +162,7 @@
                 </table>
               </td>
               <td colspan="3" class="nopad bdrL bdrR">
-                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup()" (click)="$event.stopPropagation()">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                   <tbody>
                     <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
                       <td class="width100" *ngIf="txn.type === 'CREDIT'">
