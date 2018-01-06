@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.2.7",
+  "version": "6.3.0",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -266,9 +266,7 @@
         "snap"
       ]
     },
-    "win": {
-
-    },
+    "win": {},
     "nsis": {
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
