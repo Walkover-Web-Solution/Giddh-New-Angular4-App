@@ -1,11 +1,11 @@
 <div id="" class="add-new-role-modal">
-    <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">Add Role </h3>
-        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closePopupEvent()"></i>
+    <div class="modal-header clearfix">
+        <h3>Add Role</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</span>
     </div>
-    <div class="modal-body pdT5 pdB5 pdL2 pdR2 clearfix" id="export-body">
+    <div class="modal-body clearfix" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
-            <div class="modal_wrap mrB2">
+            <div class="">
                 <div class="form-group">
                     <label>Role Name</label>
                     <input type="text" required name="name" class="form-control" [(ngModel)]="newRoleObj.name" placeholder="Role Name" #name="ngModel" />
@@ -45,9 +45,9 @@
           </select>
                     <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                 </div>
-                <div class="pull-right mrT5">
-                    <button type="submit" class="btn btn-md btn-success mrR1" [disabled]="!isFormValid">Next</button>
-                    <button type="button" class="btn btn-md btn-primary" (click)="closePopupEvent()">Cancel</button>
+                <div class="clearfix text-right mrT4">
+                    <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">Next</button>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">Cancel</button>
                 </div>
             </div>
         </form>
