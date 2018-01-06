@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
@@ -76,6 +76,13 @@ export class AppComponent implements AfterViewInit {
         }
       }
     });
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+          return;
+      }
+      window.scrollTo(0, 0);
+  });
   }
 
 }
