@@ -357,6 +357,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (event) {
       this.invoiceSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
       this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+      this.getInvoices();
     }
   }
 
