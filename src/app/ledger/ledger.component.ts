@@ -133,19 +133,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
-    this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
-    this.trxRequest.page = 0;
+    let from = moment(value.picker.startDate).format('DD-MM-YYYY');
+    let to = moment(value.picker.endDate).format('DD-MM-YYYY');
 
-    this.getTransactionData();
-    // Después del éxito de la entrada. llamar para transacciones bancarias
-    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-      if (data && data.yodleeAdded) {
-        this.getBankTransactions();
-      } else {
-        this.hideEledgerWrap();
-      }
-    });
+    if ((this.trxRequest.from !== from) || (this.trxRequest.to !== to)) {
+      this.trxRequest.from = from;
+      this.trxRequest.to = to;
+      this.trxRequest.page = 0;
+
+      this.getTransactionData();
+      // Después del éxito de la entrada. llamar para transacciones bancarias
+      this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+        if (data && data.yodleeAdded) {
+          this.getBankTransactions();
+        } else {
+          this.hideEledgerWrap();
+        }
+      });
+    }
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
