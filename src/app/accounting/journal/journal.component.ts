@@ -22,22 +22,22 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 
 const TransactionsType = [
-  { label: 'By', value: 'Debit'},
-  { label: 'To', value: 'Credit'},  
-]
+  { label: 'By', value: 'Debit' },
+  { label: 'To', value: 'Credit' },
+];
 
 const CustomShortcode = [
-  {code: 'F9', route: 'purchase'}
-]
+  { code: 'F9', route: 'purchase' }
+];
 @Component({
   templateUrl: './journal.component.html',
-  styleUrls: ['./journal.component.css','../accounting.component.css']
+  styleUrls: ['./journal.component.css', '../accounting.component.css']
 })
 
 export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
-  @ViewChild('particular') accountField: any;
+  @ViewChild('particular') public accountField: any;
 
   public accounts$: Observable<IOption[]>;
   public accounts: IOption[] = [];
@@ -51,7 +51,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public moment = moment;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public isGroupToggle: boolean;
-  public accountSearch:string = '';
+  public accountSearch: string = '';
   public selectedIdx: any;
   public isSelectedRow: boolean;
   public selectedParticular: any;
@@ -69,14 +69,14 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     private flyAccountActions: FlyAccountsActions,
     private _toaster: ToasterService, private _router: Router) {
     this.journalObj.transactions = [];
-    this._keyboardService.keyInformation.subscribe((key) => { 
-      this.watchKeyboardEvent(key); 
+    this._keyboardService.keyInformation.subscribe((key) => {
+      this.watchKeyboardEvent(key);
     });
   }
 
   public ngOnInit() {
 
-    /********** commented due to unused 
+    /********** commented due to unused
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
@@ -96,11 +96,10 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     this.refreshEntry();
     // this.newEntryObj();
-    // this.journalObj.entryDate = moment().format(GIDDH_DATE_FORMAT);    
+    // this.journalObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
     // this.journalObj.transactions[0].type = 'by';
   }
 
-  
   /**
    * newEntryObj() to push new entry object
    */
@@ -121,8 +120,8 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * selectRow() on entryObj focus/blur
    */
-  public selectRow(type:boolean, idx) {
-    this.isSelectedRow = type; 
+  public selectRow(type: boolean, idx) {
+    this.isSelectedRow = type;
     this.selectedIdx = idx;
   }
 
@@ -130,7 +129,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * selectEntryType() to validate Type i.e BY/TO
    */
   public selectEntryType(transactionObj, val, idx) {
-    if (val.length == 2 && (val.toLowerCase() !== "to" && val.toLowerCase() !== "by")) {
+    if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
       this._toaster.errorToast("Spell error, you can only use 'To/By'");
       transactionObj.type = 'to';
     } else {
@@ -144,7 +143,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public onAccountFocus() {
     this.showLedgerAccountList = true;
     this.isGroupToggle = true;
-    this.flyAccounts.next(true)
+    this.flyAccounts.next(true);
   }
 
   /**
@@ -153,7 +152,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public onAccountBlur(ev, elem) {
     this.showLedgerAccountList = false;
     this.isGroupToggle = false;
-    this.flyAccounts.next(false)
+    this.flyAccounts.next(false);
     this.selectedParticular = elem;
     if (this.accountSearch) {
       this.searchAccount('');
@@ -171,7 +170,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       name: acc.Name,
       UniqueName: acc.UniqueName,
       groupUniqueName: acc.groupUniqueName
-    }
+    };
     this.showLedgerAccountList = false;
     this.journalObj.transactions[idx].particular = accModel.UniqueName;
     this.journalObj.transactions[idx].selectedAccount = accModel;
@@ -180,7 +179,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showLedgerAccountList = false;
     }, 100);
   }
-  
+
   /**
    * searchAccount in accountList
    */
@@ -194,7 +193,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public validateTransation(amount, transactionObj, idx) {
     let indx = idx;
-    let lastIndx = this.journalObj.transactions.length-1;
+    let lastIndx = this.journalObj.transactions.length - 1;
     if (amount) {
       transactionObj.amount = Number(amount);
       transactionObj.total = transactionObj.amount;
@@ -224,7 +223,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
         submitBtnEle.focus();
       }, 100);
     } else {
-      this._toaster.errorToast('No transactions found.')
+      this._toaster.errorToast('No transactions found.');
       return;
     }
 
@@ -237,12 +236,12 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     let idx = 0;
     if (this.totalCreditAmount === this.totalDebitAmount) {
       let data = _.cloneDeep(this.journalObj);
-      
+
       _.forEach(data.transactions, element => {
         element.type = (element.type === 'by') ? 'credit' : 'debit';
         // element.particular = _.find(this.accounts, (el) => el.label === element.particular).value;
       });
-      data.transactions.splice(data.transactions.length-1, 1);
+      data.transactions.splice(data.transactions.length - 1, 1);
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
       let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
       data.transactions.splice(indexOfMaxAmountEntry, 1);
@@ -265,17 +264,17 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.totalDebitAmount = 0;
     this.newEntryObj();
     this.journalObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.journalDate = moment();    
+    this.journalDate = moment();
     this.journalObj.transactions[0].type = 'by';
     this.journalObj.voucherType = 'journal';
   }
-  
+
   /**
    * after init
    */
   public ngAfterViewInit() {
     setTimeout(() => {
-      this.flyAccounts.next(true);      
+      this.flyAccounts.next(true);
     }, 200);
   }
 
@@ -301,8 +300,8 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * onSelectDate
    */
   public onSelectDate(date) {
-    this.showFromDatePicker =! this.showFromDatePicker; 
-    this.journalObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT); 
+    this.showFromDatePicker = !this.showFromDatePicker;
+    this.journalObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**
@@ -311,14 +310,13 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public watchKeyboardEvent(event) {
     // console.log(event);
     if (event) {
-      let navigateTo =  _.find(this.navigateURL, (o) => o.code === event.key);
+      let navigateTo = _.find(this.navigateURL, (o: any) => o.code === event.key);
       //  this.navigateURL.find()
       if (navigateTo) {
-        console.log()
         this._router.navigate(['accounting', navigateTo.route]);
       }
       console.log(navigateTo);
     }
   }
-  
+
 }
