@@ -161,7 +161,7 @@
               <!-- reckoning -->
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal | number: '1.1-2'}}
+                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | number: '1.1-2'}}
                   <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.1-2' }}-->
                 </span>
               </td>
@@ -187,7 +187,7 @@
               <!-- reckoning -->
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.1-2' }}
+                  {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | number: '1.1-2' }}
                 </span>
               </td>
             </tr>
