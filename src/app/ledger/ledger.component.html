@@ -287,7 +287,7 @@
               <td class="col-xs-2"></td>
               <td class="col-xs-7">B/F Balance</td>
               <td class="col-xs-3">
-                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.1-2' }}</span>
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.2-2' }}</span>
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
               </td>
             </tr>
@@ -303,7 +303,7 @@
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                {{ txn.amount | number: '1.1-2' }}
+                {{ txn.amount | number: '1.2-2' }}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -406,7 +406,7 @@
               <td class="col-xs-7">B/F Balance</td>
               <td class="col-xs-3">
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
-                  {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.1-2'}}</span>
+                  {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.2-2'}}</span>
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
               </td>
             </tr>
@@ -423,7 +423,7 @@
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                {{txn.amount | number: '1.1-2'}}
+                {{txn.amount | number: '1.2-2'}}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -516,13 +516,13 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'"
                   class="">
-                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
+                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2' }}
                 </span>
               </td>
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.1-2' }}</span>
+                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.2-2' }}</span>
               </td>
             </tr>
           </tbody>
@@ -535,14 +535,14 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" tooltip="" [placement]="'top'">
                   C/F: Dr
-                  <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2'}}
+                  <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2'}}
                   </span>
                 </span>
               </td>
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.1-2' }}</span>
+                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.2-2' }}</span>
               </td>
             </tr>
           </tbody>
@@ -583,7 +583,7 @@
     </div>
     <div class="col-xs-3">
       <h1>Opening Balance</h1>
-      <h3>{{(lc.transactionData$ | async)?.forwardedBalance.amount | number:'1.1-2'}} {{ (lc.transactionData$ | async)?.forwardedBalance.type
+      <h3>{{(lc.transactionData$ | async)?.forwardedBalance.amount | number:'1.2-2'}} {{ (lc.transactionData$ | async)?.forwardedBalance.type
         === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
     </div>
 
@@ -593,16 +593,16 @@
         <span *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">Debit</span>
       </h1>
       <h3 class=" primary_clr" *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">
-        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
+        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'1.2-2'}}</h3>
       <h3 class=" primary_clr" *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">
-        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
-      <h1 class="mrT">Dr Total {{(lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h1>
-      <h1 class="mrT">Cr Total {{(lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h1>
+        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'1.2-2'}}</h3>
+      <h1 class="mrT">Dr Total {{(lc.transactionData$ | async)?.debitTotal | number:'1.2-2'}}</h1>
+      <h1 class="mrT">Cr Total {{(lc.transactionData$ | async)?.creditTotal | number:'1.2-2'}}</h1>
     </div>
 
     <div class="col-xs-3">
       <h1>Closing Balance</h1>
-      <h3>{{(lc.transactionData$ | async)?.closingBalance.amount | number:'1.1-2'}} {{ (lc.transactionData$ | async)?.closingBalance.type
+      <h3>{{(lc.transactionData$ | async)?.closingBalance.amount | number:'1.2-2'}} {{ (lc.transactionData$ | async)?.closingBalance.type
         === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
     </div>
 
