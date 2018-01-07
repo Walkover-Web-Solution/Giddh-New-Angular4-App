@@ -1,3 +1,4 @@
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
@@ -567,7 +568,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           isInclusiveTax: true
         }],
       voucherType: null,
-      entryDate: moment().format('DD-MM-YYYY'),
+      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
