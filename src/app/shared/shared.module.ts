@@ -38,6 +38,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { HighlightModule } from 'app/shared/helpers/pipes/highlightPipe/highlight.module';
+import { DigitsOnlyModule } from 'app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -84,6 +85,7 @@ export function provideConfig() {
     DisableFormFieldModule,
     ShSelectModule,
     DecimalDigitsModule,
+    DigitsOnlyModule,
     // BsDatepickerModule,
     Daterangepicker,
     TextCaseChangeModule,
