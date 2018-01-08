@@ -104,6 +104,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isProd = ENV;
   public isElectron: boolean = isElectron;
   public isTodaysDateSelected: boolean = false;
+  private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -127,6 +128,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
       if (user) {
+        this.loggedInUserEmail = user.user.email;
         return user.user;
       }
     })).takeUntil(this.destroyed$);
@@ -153,6 +155,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       });
       if (!selectedCmp) {
         return;
+      }
+      if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
+        this.userIsSuperUser = true;
+      } else {
+        this.userIsSuperUser = false;
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;

@@ -9,6 +9,7 @@ import { Scope, IRoleCommonResponseAndRequest, Permission } from '../../../model
 import * as _ from '../../../lodash-optimized';
 import { NewRoleClass, NewPermissionObj, IPage, IPageStr } from '../../permission.utility';
 import { Observable } from 'rxjs/Observable';
+import { ToasterService } from 'app/services/toaster.service';
 
 @Component({
   templateUrl: './permission.details.html'
@@ -32,7 +33,8 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private store: Store<AppState>,
     private _location: Location,
-    private permissionActions: PermissionActions
+    private permissionActions: PermissionActions,
+    private _toaster: ToasterService
   ) {
 
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
@@ -51,6 +53,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
       this.newRole = permission.newRole;
       this.pageList = permission.pages;
     });
+    this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).takeUntil(this.destroyed$);
   }
 
   public ngOnDestroy() {
@@ -117,6 +120,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
   public addNewRole(): any {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
+    if (data.scopes.length < 1) {
+      return this._toaster.errorToast('Atleast 1 scope should selected.');
+    }
     this.store.dispatch(this.permissionActions.CreateRole(data));
   }
 

@@ -1,3 +1,4 @@
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
@@ -51,6 +52,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
+  public universalDate$: Observable<any>;
   public datePickerOptions: any = {
     locale: {
       applyClass: 'btn-green',
@@ -111,7 +113,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).takeUntil(this.destroyed$);
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
@@ -255,7 +257,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.route.params.takeUntil(this.destroyed$).subscribe(params => {
+
+    Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+      let dateObj = resp[0];
+      let params = resp[1];
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions.startDate  = universalDate[0];
+        this.datePickerOptions.endDate  = universalDate[1];
+
+        this.trxRequest.from = universalDate[0];
+        this.trxRequest.to = universalDate[1];
+
+        this.trxRequest.page = 0;
+      }
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
         this.resetBlankTransaction();
@@ -291,8 +306,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
               moment()
             ]
           },
-          startDate: moment().subtract(30, 'days'),
-          endDate: moment()
+          startDate: this.trxRequest.from ? this.trxRequest.from : moment().subtract(30, 'days'),
+          endDate: this.trxRequest.to ? this.trxRequest.to : moment()
         };
         // set state details
         let companyUniqueName = null;
@@ -308,6 +323,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
+
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
         this.lc.currentPage = lt.page;
@@ -406,22 +422,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
-
-    // Refresh report data according to universal date
-    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj) {
-        let universalDate = _.cloneDeep(dateObj);
-        // this.datePickerOptions.startDate  = universalDate[0];
-        // this.datePickerOptions.endDate  = universalDate[1];
-
-        this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
-        this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
-        this.trxRequest.page = 0;
-
-        this.getTransactionData();
-        // this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
-      }
-    })).subscribe();
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -429,8 +429,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = 0;
     this.trxRequest.count = 15;
     this.trxRequest.accountUniqueName = accountUnq;
-    this.trxRequest.from = this.trxRequest.from || this.datePickerOptions.startDate.format('DD-MM-YYYY');
-    this.trxRequest.to = this.trxRequest.to || this.datePickerOptions.endDate.format('DD-MM-YYYY');
+    this.trxRequest.from = this.trxRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.trxRequest.to = this.trxRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     this.getTransactionData();
   }
 
@@ -568,7 +568,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           isInclusiveTax: true
         }],
       voucherType: null,
-      entryDate: moment().format('DD-MM-YYYY'),
+      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
