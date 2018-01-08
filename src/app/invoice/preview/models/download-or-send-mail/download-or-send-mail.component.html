@@ -1,7 +1,7 @@
 <div id="" class="">
     <div class="modal-header clearfix">
         <span *ngIf="showPdfWrap">
-        <button type="button" class="btn btn-md btn-info mrR1" (click)="onCancel('update')">Edit</button>
+        <button type="button" class="btn btn-md btn-info mrR1" *ngIf="showEditButton" (click)="onCancel('update')">Edit</button>
         <button type="button" class="btn btn-md btn-default mrR1" (click)="showEmailTextarea = !showEmailTextarea">Send Email</button>
         <button type="button" class="btn btn-md btn-default mrR1"  (click)="showEsign = !showEsign">E-Signature</button>
       </span>
