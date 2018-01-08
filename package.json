@@ -83,7 +83,7 @@
     "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
     "server": "npm run server:dev",
     "start:hmr": "npm run server:dev:hmr",
-    "start": "npm run server:aot:dev",
+    "start": "npm run server:dev",
     "start:aot": "npm run server:aot:dev",
     "start:electron": "npm run clean:dev && npm run prep:dev && node ./config/electron-dev",
     "start:main:dev": "webpack --config config/webpack.electron.js --env.live --progress --profile --watch",
