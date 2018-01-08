@@ -1,3 +1,5 @@
+import { TaxDetail } from './../../services/purchase-invoice.service';
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -44,6 +46,7 @@ export class SettingTaxesComponent implements OnInit {
   public records = []; // This array is just for generating dynamic ngModel
   public taxToEdit = []; // It is for edit toogle
   public showFromDatePicker: boolean = false;
+  public showDatePickerInTable: boolean = false;
   public selectedTax: string;
   public confirmationMessage: string;
   public confirmationFor: string;
@@ -71,6 +74,9 @@ export class SettingTaxesComponent implements OnInit {
   public ngOnInit() {
     this.store.select(p => p.company).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.taxes) {
+        _.map(o.taxes, (tax) => {
+          tax.taxDetail[0].date = moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT);
+        });
         this.onCancel();
         this.availableTaxes = _.cloneDeep(o.taxes);
       }
@@ -132,6 +138,7 @@ export class SettingTaxesComponent implements OnInit {
       if (this.confirmationFor === 'delete') {
         this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
       } else if (this.confirmationFor === 'edit') {
+        this.newTaxObj.taxDetail[0].date = moment(this.newTaxObj.taxDetail[0].date).format(GIDDH_DATE_FORMAT);
         this.store.dispatch(this._settingsTaxesActions.UpdateTax(this.newTaxObj));
       }
     }
