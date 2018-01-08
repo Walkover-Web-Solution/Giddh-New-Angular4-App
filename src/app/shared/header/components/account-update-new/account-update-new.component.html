@@ -34,8 +34,8 @@
                         <div class="form-group col-xs-6">
                             <label class="d-block">&nbsp;</label>
                             <div class="mrT1">
-                                <label>
-                  <input class="" type="checkbox" name="isComposite" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="isComposite"> Is Composite?</label>
+                                <label *ngIf="gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15">
+                  <input class="" type="checkbox" name="isComposite" formControlName="isComposite"> Is Composite?</label>
                                 <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
                                     <i class="fa fa-times"></i> Remove</a>
                             </div>
@@ -49,10 +49,10 @@
                         </div>
 
                         <div class="form-group col-xs-6">
-                            <div class="form-group">
+                            <div class="form-group" *ngIf="gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15">
                                 <label for="">Party Type <sup>*</sup></label>
                                 <div class="custom-select pos-rel">
-                                    <sh-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
+                                    <sh-select [options]="partyTypeSource" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
                                 </div>
                             </div>
                             <div class="form-group">
