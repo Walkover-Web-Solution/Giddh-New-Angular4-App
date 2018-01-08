@@ -87,12 +87,13 @@
 
     </div>
     <ul class="menu_list">
-        <li><a href="" class="isHidden">F1: Accounting Voucher</a></li>
-        <li><a href="">F2: Order Vouchers</a></li>
+        <!-- "isHidden" class  if user is not able to access the module-->
+        <li><a [routerLink]="['/pages/accounting/journal']" class="primary_clr">F1: Journal</a></li>
+        <li><a [routerLink]="['/pages/accounting/purchase']" class="">F9: Purchase</a></li>
+        <!-- <li><a href="">F2: Order Vouchers</a></li>
         <li><a href="">F3: Payroll Voucher</a></li>
         <li><a href="">F4: Date</a></li>
         <li><a href="">F5: Company</a></li>
-        <li><a href="">F6: Contra</a></li>
-        <li><a [routerLink]="['/pages/accounting/purchase']" class="primary_clr">F9: Purchase</a></li>
+        <li><a href="">F6: Contra</a></li> -->
     </ul>
 </div>
