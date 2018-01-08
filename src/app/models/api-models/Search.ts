@@ -39,6 +39,7 @@ export interface AccountFlat {
   uniqueName: string;
   name: string;
   parent: string;
+  isSelected?: boolean;
 }
 
 export interface GroupFlat {
