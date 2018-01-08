@@ -300,6 +300,7 @@ export class UpdateLedgerVm {
         this.stockTrxEntry.isUpdated = true;
       }
       this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
+      this.stockTrxEntry.inventory.rate = Number(Number(val) / this.stockTrxEntry.inventory.quantity);
     } else {
       // find account that's from category income || expenses
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {

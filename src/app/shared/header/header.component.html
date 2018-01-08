@@ -33,7 +33,7 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="dmLi trialB">
+                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'LEDGER']">
                                             <a [routerLink]="['/pages/daybook']">
                                                 <div class="media">
                                                     <div class="media-body">
@@ -53,7 +53,7 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="dmLi trialB" *ngIf="userIsCompanyUser">
+                                        <li class="dmLi trialB" *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
                                             <a [routerLink]="['/pages/accounting']">
                                                 <div class="media">
                                                     <div class="media-body">
@@ -103,7 +103,7 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                                             <a [routerLink]="['/pages/purchase/invoice']">
                                                 <div class="media">
                                                     <div class="media-body">
@@ -154,7 +154,7 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
+                                        <li class="dmLi" [hidden]="!userIsSuperUser">
                                             <a [routerLink]="['permissions']">
                                                 <div class="media">
                                                     <div class="media-body">
