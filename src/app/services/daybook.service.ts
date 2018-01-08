@@ -32,7 +32,7 @@ export class DaybookService {
       .replace(':from', encodeURIComponent(queryRequest.from))
       .replace(':to', encodeURIComponent(queryRequest.to)), request)
       .map((res) => {
-        let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res.json();
+        let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
         data.request = request;
         data.queryString = queryRequest;
         return data;
