@@ -4,12 +4,13 @@
 
 #mfReportTbl .table .table td {
     border: none;
-    text-align: center
+    text-align: center;
+    padding: 1px 0;
 }
 
 #mfReportTbl .table td {
-    vertical-align: middle;
-    text-transform: capitalize
+    vertical-align: top !important;
+    text-transform: capitalize;
 }
 
 #mfReportTbl .table td.noBdr {
