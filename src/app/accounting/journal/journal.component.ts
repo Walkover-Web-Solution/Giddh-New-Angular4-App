@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -38,7 +39,8 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
-
+  @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+  
   public accounts$: Observable<IOption[]>;
   public accounts: IOption[] = [];
   public allAccounts: IOption[] = [];
@@ -318,6 +320,16 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       console.log(navigateTo);
     }
+  }
+
+  public showManageGroupsModal() {
+    this.manageGroupsAccountsModal.show();
+  }
+  /**
+   * onShown
+   */
+  public onShown() {
+    
   }
 
 }
