@@ -36,6 +36,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public base64StringForModel: any;
   public showPdfWrap: boolean = false;
   public showEsign: boolean = false;
+  public showEditButton: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -47,6 +48,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
+        this.showEditButton = o.uniqueName ? true : false;
         this.base64Data = o.dataPreview;
         this.showPdfWrap = true;
         let str = 'data:application/pdf;base64,' + o.dataPreview;
