@@ -173,17 +173,15 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       if (this.vm.logOrEntry === 'logDate') {
         reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
         reqBody.entryDate = null;
-        reqBody.fromDate = null;
-        reqBody.toDate = null;
       } else if (this.vm.logOrEntry === 'entryDate') {
         reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
         reqBody.logDate = null;
-        reqBody.fromDate = null;
-        reqBody.toDate = null;
       }
     } else {
       reqBody.logDate = null;
       reqBody.entryDate = null;
+      reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
+      reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     }
     this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
   }
