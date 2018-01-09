@@ -525,7 +525,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
     }
     case AccountsAction.CREATE_ACCOUNTV2:
     case AccountsAction.CREATE_ACCOUNT: {
-      return Object.assign({}, state, { createAccountInProcess: true });
+      return Object.assign({}, state, { createAccountInProcess: true, createAccountIsSuccess: false });
     }
 
     case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
