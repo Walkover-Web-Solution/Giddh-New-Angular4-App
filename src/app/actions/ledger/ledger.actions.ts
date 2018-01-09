@@ -353,6 +353,13 @@ export class LedgerActions {
     };
   }
 
+  public LoadAdvanceSearchDataFlag(yesOrNo: boolean): CustomActions {
+    return {
+      type: LEDGER.SET_ADVANCE_SEARCH_DATA_FLAG,
+      payload: yesOrNo
+    };
+  }
+
   public ResetUpdateLedger(): CustomActions {
     return {
       type: LEDGER.RESET_UPDATE_TXN_ENTRY
