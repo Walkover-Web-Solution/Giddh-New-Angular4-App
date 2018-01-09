@@ -41,6 +41,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public customFilter: (term: string, options: IOption) => boolean;
   @Input() public useInBuiltFilterForFlattenAc: boolean = false;
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
+  @Input() public doNotReset: boolean = false;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -68,7 +69,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public rows: IOption[] = [];
   public _options: IOption[] = [];
   public isOpen: boolean;
-  public filter: string;
+  public filter: string = '';
   public filteredData: IOption[] = [];
   public _selectedValues: IOption[] = [];
   get selectedValues(): any[] {
@@ -115,6 +116,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.isOpen = false;
       if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
         this.filter = this.selectedValues[0].label;
+      } else if (this.doNotReset && this.filter !== '') {
+        this.propagateChange(this.filter);
       } else {
         this.clearFilter();
       }
@@ -334,11 +337,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public filterInputBlur(event) {
+    if (this.doNotReset && event && event.target && event.target.value) {
+      this.filter = event.target.value;
+      this.propagateChange(this.filter);
+    }
     if (event.relatedTarget && this.ele.nativeElement) {
       if (!this.ele.nativeElement.contains(event.relatedTarget)) {
         this.hide();
       }
-      // this.hide();
     }
   }
 
