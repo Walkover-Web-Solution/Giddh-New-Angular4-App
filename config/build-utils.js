@@ -75,7 +75,7 @@ function ngcWebpackSetup(prod, metadata) {
     metadata = DEFAULT_METADATA;
   }
 
-  const buildOptimizer = prod;
+  const buildOptimizer = prod && metadata.AOT;
   const sourceMap = false; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
     skipCodeGeneration: !metadata.AOT,
@@ -103,14 +103,16 @@ function ngcWebpackSetup(prod, metadata) {
     }
   };
 
-  const loaders = [
-    {
+  const loaders = [{
       test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-      use: metadata.AOT && buildOptimizer ? [buildOptimizerLoader, '@ngtools/webpack'] : ['@ngtools/webpack']
+      use: buildOptimizer ? [buildOptimizerLoader, '@ngtools/webpack'] : ['@ngtools/webpack']
     },
-    ...buildOptimizer
-      ? [{ test: /\.js$/, use: [buildOptimizerLoader] }]
-      : []
+    ...buildOptimizer ?
+    [{
+      test: /\.js$/,
+      use: [buildOptimizerLoader]
+    }] :
+    []
   ];
 
   return {
