@@ -149,7 +149,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
-    let diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    let diff: boolean;
+    if (this.selectedTaxes.length > 0) {
+      diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    } else {
+      diff = this.applicableTaxes.length > 0;
+    }
+
     if (diff) {
       this.isApplicableTaxesEvent.emit(false);
     } else {
