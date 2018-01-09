@@ -12,24 +12,23 @@
         </span>
       </ng-container>
       <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0" (click)="show($event);"
-        (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? ' ' : placeholder" [(ngModel)]="filter"
+        (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
         (ngModelChange)="updateFilter($event)">
     </div>
     <!--endregion-->
 
     <!--region single-->
     <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))"
-      (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
-      style="padding-right: 22px !important;">
+      (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)" style="padding-right: 22px !important;">
+
     <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
       <ng-container *ngIf="selectedValues?.length">
-
         <div *ngIf="!multiple">
           <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
         </div>
       </ng-container>
       <ng-container *ngIf="!selectedValues?.length">
-        <input class="form-control" [placeholder]="placeholder" style="padding-right: 22px !important;" />
+        <input class="form-control" [placeholder]="placeholder" [value]="filter" style="padding-right: 22px !important;" />
       </ng-container>
     </div>
     <!--endregion-->
@@ -38,5 +37,6 @@
   <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span>
   <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues" [optionTemplate]="optionTemplate"
     (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit()" [noResultLinkEnabled]="notFoundLink"
-    [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"></sh-select-menu>
+    [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight"
+    [NoFoundLinkHeight]="NoFoundLinkHeight"></sh-select-menu>
 </div>
