@@ -1,6 +1,7 @@
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { GroupService } from './../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerConfig, BsDaterangepickerComponent } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -11,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { IOption } from './../../../theme/ng-select/option.interface';
 import { AccountService } from './../../../services/account.service';
 import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -34,6 +35,8 @@ const COMPARISON_FILTER = [
 
 export class AdvanceSearchModelComponent implements OnInit {
 
+  @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
+  @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
   @Input() public accountUniqueName: string;
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -54,43 +57,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
-
-    this.advanceSearchForm = this.fb.group({
-      uniqueNames: [[]],
-      isInvoiceGenerated: [null],
-      accountUniqueNames: [[]],
-      groupUniqueNames: [[]],
-      amountLessThan: [false],
-      includeAmount: [false],
-      amountEqualTo: [false],
-      amountGreaterThan: [false],
-      amount: ['', Validators.required],
-      includeDescription: [false, Validators.required],
-      description: [null, Validators.required],
-      includeTag: [false, Validators.required],
-      includeParticulars: [false, Validators.required],
-      includeVouchers: [false, Validators.required],
-      chequeNumber: ['', Validators.required],
-      dateOnCheque: ['', Validators.required],
-      tags: this.fb.array([]),
-      particulars: [[]],
-      vouchers: [[]],
-      inventory: this.fb.group({
-        includeInventory: false,
-        inventories: [[]],
-        quantity: null,
-        includeQuantity: false,
-        quantityLessThan: false,
-        quantityEqualTo: false,
-        quantityGreaterThan: false,
-        includeItemValue: false,
-        itemValue: null,
-        includeItemLessThan: false,
-        includeItemEqualTo: false,
-        includeItemGreaterThan: false
-      }),
-    });
-
+    this.setAdvanceSearchForm();
     this.setVoucherTypes();
     this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
@@ -133,6 +100,58 @@ export class AdvanceSearchModelComponent implements OnInit {
         this.groups$ = Observable.of(groups);
       }
     });
+
+    this.store.select(p => p.ledger.loadAdvanceSearchData).takeUntil(this.destroyed$).subscribe((yesOrNo) => {
+      if (yesOrNo) {
+        this.onSearch();
+      } else {
+        if (this.dropDowns) {
+          this.dropDowns.forEach((el) => {
+            el.clear();
+          });
+        }
+        this.dateRangePicker.bsValue = [];
+        this.setAdvanceSearchForm();
+      }
+    });
+  }
+
+  public setAdvanceSearchForm() {
+    this.advanceSearchForm = this.fb.group({
+      uniqueNames: [[]],
+      isInvoiceGenerated: [null],
+      accountUniqueNames: [[]],
+      groupUniqueNames: [[]],
+      amountLessThan: [false],
+      includeAmount: [false],
+      amountEqualTo: [false],
+      amountGreaterThan: [false],
+      amount: ['', Validators.required],
+      includeDescription: [false, Validators.required],
+      description: [null, Validators.required],
+      includeTag: [false, Validators.required],
+      includeParticulars: [false, Validators.required],
+      includeVouchers: [false, Validators.required],
+      chequeNumber: ['', Validators.required],
+      dateOnCheque: ['', Validators.required],
+      tags: this.fb.array([]),
+      particulars: [[]],
+      vouchers: [[]],
+      inventory: this.fb.group({
+        includeInventory: false,
+        inventories: [[]],
+        quantity: null,
+        includeQuantity: false,
+        quantityLessThan: false,
+        quantityEqualTo: false,
+        quantityGreaterThan: false,
+        includeItemValue: false,
+        itemValue: null,
+        includeItemLessThan: false,
+        includeItemEqualTo: false,
+        includeItemGreaterThan: false
+      }),
+    });
   }
 
   public setVoucherTypes() {
@@ -171,8 +190,10 @@ export class AdvanceSearchModelComponent implements OnInit {
    * onDateRangeSelected
    */
   public onDateRangeSelected(data) {
-    this.fromDate = moment(data[0]).format('DD-MM-YYYY');
-    this.toDate = moment(data[1]).format('DD-MM-YYYY');
+    if (data && data.length) {
+      this.fromDate = moment(data[0]).format('DD-MM-YYYY');
+      this.toDate = moment(data[1]).format('DD-MM-YYYY');
+    }
   }
 
   /**
@@ -183,7 +204,6 @@ export class AdvanceSearchModelComponent implements OnInit {
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
     }
-    console.log('advanceSearchForm is :', dataToSend);
     this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
     this.closeModelEvent.emit(true);
     // this.advanceSearchForm.reset();
