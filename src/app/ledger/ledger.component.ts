@@ -272,6 +272,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.page = 0;
       }
       if (params['accountUniqueName']) {
+        this.store.dispatch(this._ledgerActions.LoadAdvanceSearchDataFlag(false));
         this.lc.accountUnq = params['accountUniqueName'];
         this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
@@ -660,9 +661,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
+    this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
+      if (yesOrNo) {
+        this.store.dispatch(this._ledgerActions.LoadAdvanceSearchDataFlag(true));
+      } else {
+        this.getTransactionData();
+      }
+    })).subscribe();
     // this.trxRequest = new TransactionsRequest();
     // this.trxRequest.accountUniqueName = this.lc.accountUnq;
-    this.getTransactionData();
   }
 
   public showQuickAccountModal() {

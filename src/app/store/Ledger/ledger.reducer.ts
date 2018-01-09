@@ -26,6 +26,8 @@ export interface LedgerState {
   isQuickAccountInProcess: boolean;
   isQuickAccountCreatedSuccessfully: boolean;
   transactionDetails: LedgerResponse;
+  isAdvanceSearchApplied: boolean;
+  loadAdvanceSearchData: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -39,7 +41,9 @@ export const initialState: LedgerState = {
   isTxnUpdateSuccess: false,
   isQuickAccountInProcess: false,
   isQuickAccountCreatedSuccessfully: false,
-  transactionDetails: null
+  transactionDetails: null,
+  isAdvanceSearchApplied: false,
+  loadAdvanceSearchData: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -66,11 +70,23 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         transactionInprogress: true
       });
     case LEDGER.GET_TRANSACTION_RESPONSE:
+    transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
+    if (transaction.status === 'success') {
+      return Object.assign({}, state, {
+        transactionInprogress: false,
+        transcationRequest: transaction.request,
+        transactionsResponse: transaction.body
+      });
+    }
+    return Object.assign({}, state, {
+      transactionInprogress: false
+    });
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
         return Object.assign({}, state, {
           transactionInprogress: false,
+          isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
           transactionsResponse: transaction.body
         });
@@ -78,6 +94,11 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return Object.assign({}, state, {
         transactionInprogress: false
       });
+    case LEDGER.SET_ADVANCE_SEARCH_DATA_FLAG: {
+      return Object.assign({}, state, {
+        loadAdvanceSearchData: action.payload
+      });
+    }
     case LEDGER.DOWNLOAD_LEDGER_INVOICE:
       return Object.assign({}, state, {downloadInvoiceInProcess: true});
     case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
