@@ -242,7 +242,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    * validatePrintSetting
    */
   public validatePrintSetting(val, idx, marginPosition) {
-    let paddingCordinatesValue = [200,30,100,30];
+    let paddingCordinatesValue = [200,50,100,50];
     let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
     if (val > paddingCordinatesValue[idx]) {
       let maxVal = paddingCordinatesValue[idx];
