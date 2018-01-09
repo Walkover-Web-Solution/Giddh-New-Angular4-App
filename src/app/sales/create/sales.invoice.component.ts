@@ -255,8 +255,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // listen for new add account utils
     this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
       if (o) {
-        this.invFormData.customerName = o.name;
-        this.getAccountDetails(o.uniqueName);
+        let item: IOption = {
+          label: o.name,
+          value: o.uniqueName
+        };
+        this.invFormData.customerName = item.label;
+        this.onSelectCustomer(item);
       }
     });
 
