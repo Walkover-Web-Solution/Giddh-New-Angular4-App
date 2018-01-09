@@ -100,6 +100,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isHsnSacEnabledAcc: boolean = false;
   public showTaxes: boolean = false;
   public isUserSuperAdmin: boolean = false;
+  private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -221,6 +222,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
         });
         this.groupsList = flattenGroupsList;
+        this.groupsListBackUp = flattenGroupsList;
       }
     });
 
@@ -238,7 +240,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupsList = _.filter(this.groupsList, (l => l.value !== a.uniqueName));
+        this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
         // this.taxGroupForm.get('taxes').reset();
         // let showAddForm: boolean = null;
         // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
