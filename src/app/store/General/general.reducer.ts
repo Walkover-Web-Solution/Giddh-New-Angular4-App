@@ -2,7 +2,7 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { Action, ActionReducer } from '@ngrx/store';
 import { GENERAL_ACTIONS } from '../../actions/general/general.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AccountMoveRequest, AccountRequestV2, AccountResponse, AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
+import { AccountMoveRequest, AccountRequestV2, AccountResponse, AccountResponseV2, FlattenAccountsResponse, AccountMergeRequest } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { States } from '../../models/api-models/Company';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
@@ -184,6 +184,20 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         };
       }
       return state;
+    }
+    case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
+      let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+      if (dd.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        dd.request.forEach(f => {
+          findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
+        });
+
+        return {
+          ...state,
+          groupswithaccounts: groupArray
+        };
+      }
     }
     default:
       return state;
@@ -381,4 +395,22 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
     }
   }
   return result;
+};
+
+const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
+  for (let grp of groups) {
+    let accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
+
+    if (accIndex > -1) {
+      grp.accounts.splice(accIndex, 1);
+      result = true;
+      return result;
+    }
+    if (grp.groups) {
+      result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
+      if (result) {
+        return result;
+      }
+    }
+  }
 };

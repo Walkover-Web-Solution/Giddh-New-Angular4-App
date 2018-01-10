@@ -6,7 +6,7 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
+import { AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountMergeRequest } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
@@ -509,10 +509,23 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         moveAccountSuccess: false
       });
     }
+    case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
+      let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+      if (dd.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        dd.request.forEach(f => {
+          findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
+        });
 
+        return {
+          ...state,
+          groupswithaccounts: groupArray
+        };
+      }
+    }
     case AccountsAction.CREATE_ACCOUNTV2:
     case AccountsAction.CREATE_ACCOUNT: {
-      return Object.assign({}, state, { createAccountInProcess: true });
+      return Object.assign({}, state, { createAccountInProcess: true, createAccountIsSuccess: false });
     }
 
     case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
@@ -790,4 +803,22 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
     }
   }
   return result;
+};
+
+const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
+  for (let grp of groups) {
+    let accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
+
+    if (accIndex > -1) {
+      grp.accounts.splice(accIndex, 1);
+      result = true;
+      return result;
+    }
+    if (grp.groups) {
+      result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
+      if (result) {
+        return result;
+      }
+    }
+  }
 };
