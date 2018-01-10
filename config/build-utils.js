@@ -75,7 +75,7 @@ function ngcWebpackSetup(prod, metadata) {
     metadata = DEFAULT_METADATA;
   }
 
-  const buildOptimizer = parseInt(prod && metadata.AOT) ||  true;
+  const buildOptimizer = parseInt(prod && metadata.AOT);
   if (helpers.hasNpmFlag('aot')) {
     console.log("Yes");
   } else {
