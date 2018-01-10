@@ -1,3 +1,4 @@
+import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { NeedsAuthorization } from './decorators/needAuthorization';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
@@ -14,6 +15,7 @@ export const ROUTES: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   { path: 'success', component: SuccessComponent },
+  { path: 'magic', component: MagicLinkComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
   { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
   { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },

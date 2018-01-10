@@ -1,0 +1,351 @@
+<!-- <!DOCTYPE html>
+    <html>
+    
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>magiclink</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    
+    <body class="bg-f9"> -->
+<section class="bg-bl">
+  <div class="container-fluid text-white text-center par" style="height:77px">
+    <div class="chi" style="font-size:26px">{{ledgerData.companyName}}</div>
+  </div>
+</section>
+<section class="container-fluid bg-f9">
+  <div id="web-bg" class="container" style="margin-top:25px">
+    <div class="row">
+      <div class="col-sm-12 col-md-3" style="padding-top:8px;padding-bottom:8px">
+        <div class="input-group stylish-input-group">
+          <input type="text" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="onDateRangeSelected($event)" class="form-control date-range-picker"/>
+          <!-- <input type="text" class="form-control" placeholder="01/01/2017 - 31/01/2017"> -->
+          <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div id="web-cont" class="col-md-6 text-center" style="font-size:25px;color:#6d6e70">
+        {{ledgerData.account.name}} A/c
+      </div>
+      <div class="col-md-3 col-sm-12" style="padding-bottom:8px;padding-top:8px">
+        <div class="input-group stylish-input-group">
+          <input type="text" class="form-control" placeholder="Search" name="searchText" [(ngModel)]="searchText" #particularSearch="ngModel">
+          <span class="input-group-addon">
+            <span class="fa fa-search"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="margin-top:40px">
+  <div id="mob-cont" class="container" style="padding-left:7%;padding-right:7%;">
+    <div class="row bg-wh" style="padding-bottom:10px;padding-top:10px">
+      <div class="col-xs-4">
+        <div style="font-size:12px;color:#262626">Opening</div>
+        <div>
+          <span class="fs-18" style="color:#262626">50,000</span>
+          <span style="font-size:16px;color:#262626">Dr.</span>
+        </div>
+      </div>
+      <div class="col-xs-4" style="font-size:11px;padding-top:15px">
+        <div class="text-center">
+          <div>--10,340 Dr.--></div>
+        </div>
+      </div>
+      <div class="col-xs-4 text-right">
+        <div style="font-size:12px;color:#262626">
+          Closing
+        </div>
+        <div>
+          <span style="font-size:16px;color:#262626">Cr.</span>
+          <span class="fs-18" style="color:#262626">60,340</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs device-small bg-gr" role="tablist">
+      <li class="nav-item wd" role="presentation">
+        <a class="nav-link active" href="#home" aria-controls="home" role="tab" data-toggle="tab">Debit</a>
+      </li>
+      <li class="nav-item text-right wd" role="presentation">
+        <a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Credit</a>
+      </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="row">
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active col-xs-12 col-md-6" id="home">
+          <div class="">
+            <table class="table table-bordered bg-wh">
+              <thead>
+                <tr class="bg-f9">
+                  <td colspan="3">
+                    <span id="cash">{{ledgerData.account.name}} is </span>
+                    <span id="rec">receiving</span>
+                  </td>
+                </tr>
+                <tr class="bg-yl">
+                  <td>Date</td>
+                  <td>Particular</td>
+                  <td class="text-right">Amount</td>
+                </tr>
+                <tr *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type == 'DEBIT' && ledgerData.ledgerTransactions.forwardedBalance.amount > 0">
+                  <td class="text-right" colspan="2">B/F</td>
+                  <td class="text-right">{{ledgerData.ledgerTransactions.forwardedBalance.amount}}</td>
+                </tr>
+                <tr *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type == 'CREDIT' && ledgerData.ledgerTransactions.forwardedBalance.amount > 0">
+                  <th colspan="100%">
+                    &nbsp;
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- *ngIf="ledger.hasDebit" -->
+                <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers" (click)="checkCompEntry(ledger)">
+                  <td colspan="100%" style="padding:0;border:0">
+                    <table style="width:100%">
+                      <tbody>
+                        <!-- ng-if="txn.type == 'DEBIT'" -->
+                        <tr class="text-left bdrB" *ngFor="let txn of ledger.transactions | filter: particularSearch.value">
+                          <td class="col-xs-3" style="padding:10px;">{{ledger.entryDate}}</td>
+                          <td class="col-xs-6 bdrL" style="padding:10px;">{{txn.particular.name}}</td>
+                          <td class="col-xs-3 bdrL pr" align="right" style="padding:10px;padding-right:30px;">{{txn.amount}}
+                            <span class="download-invoice-ledger pa" *ngIf="ledger.invoiceGenerated" (click)="downloadInvoice(ledger.invoiceNumber)">
+                              <i class="glyphicon glyphicon-download" style="font-size:15px"></i>
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr *ngIf="ledgerData.ledgerTransactions.ledgers.length < 1">
+                    <td colspan="100%" style="padding:0;border:0">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr class="text-left bdrB">
+                                    <td class="col-xs-3" style="padding:20px;min-height:42px"></td>
+                                    <td class="col-xs-6 bdrL" style="padding:20px;"></td>
+                                    <td class="col-xs-3 bdrL" style="padding:20px;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <!-- <tr>
+                  <td>01/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">2000</td>
+                </tr>
+                <tr>
+                  <td>02/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">4000</td>
+                </tr>
+                <tr>
+                  <td>05/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">5000</td>
+                </tr>
+                <tr>
+                  <td>20/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">2000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">3000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">5000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">3000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">5000</td>
+                </tr> -->
+                <tr>
+                  <td colspan="3" class="text-right">
+                    <u>72,520</u>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane col-xs-12 col-md-6" id="profile">
+          <div class="">
+            <table class="table table-bordered bg-wh">
+              <thead>
+                <tr class="bg-f9" style="border:none !important">
+                  <td colspan="3" class="text-right">
+                    <span id="cash">{{ledgerData.account.name}} is </span>
+                    <span id="rec">giving</span>
+                  </td>
+                </tr>
+                <tr class="bg-yl">
+                  <td>Date</td>
+                  <td>Particular</td>
+                  <td class="text-right">Amount</td>
+                </tr>
+              </thead>
+              <tbody>
+                  <!-- ng-if="ledger.hasCredit" -->
+                  <!-- ng-class="{compoundEntry: ledger.isCompoundEntry}"
+                  ng-click="checkCompEntry(ledger)" -->
+                  <!-- uib-tooltip="Total : {{ledger.total.amount}} {{ledger.total.type}}" tooltip-placement="top" -->
+                  <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers">
+                  <td colspan="100%" style="padding:0; border:0">
+                      <table style="width:100%;">
+                          <tbody>
+                              <!-- | filter:particularSearch -->
+                              <!-- ng-if="txn.type == 'CREDIT'" -->
+                              <tr class="text-left bdrB" *ngFor="let txn of ledger.transactions | filter: particularSearch.value">
+                                  <td class="col-xs-3" style="padding:10px;">{{ledger.entryDate}}</td>
+                                  <td class="col-xs-6 bdrL" style="padding:10px;">{{txn.particular.name}}</td>
+                                  <td class="col-xs-3 bdrL pr" align="right" style="padding:10px;padding-right:30px;">{{txn.amount}}
+                                      <!-- tooltip-append-to-body="true" ng-mouseover="$event.stopPropagation()" -->
+                                      <!-- uib-tooltip="Download invoice : {{ledger.invoiceNumber}}" -->
+                                      <span class="download-invoice-ledger pa" *ngIf="ledger.invoiceGenerated"
+                                          (click)="downloadInvoice(ledger.invoiceNumber)"
+                                          style="top:11px;right:2px;">
+                                      <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
+                                      </span>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </td>
+              </tr>
+                <!-- <tr>
+                  <td>01/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">2000</td>
+                </tr>
+                <tr>
+                  <td>02/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">4000</td>
+                </tr>
+                <tr>
+                  <td>05/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">4000</td>
+                </tr>
+                <tr>
+                  <td>20/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">2000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">3000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">5000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">3000</td>
+                </tr>
+                <tr>
+                  <td>22/01/17</td>
+                  <td>Sales</td>
+                  <td class="text-right">5000</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="text-right">C/F</td>
+                  <td class="text-right">60,340</td>
+                </tr> -->
+                <tr> 
+                  <td colspan="3" class="text-right">
+                    <u>72,520</u>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="web-cont" class="container-fluid" style="padding: 20px;background:#e5e5e5;margin:40px auto">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div style="color:#ff5f00;font-size:12px">
+          {{ledgerData.fromDate}} - {{ledgerData.toDate}}
+        </div>
+        <div class="fs-18">
+          <span style="color:#6d6e70">Total Transactions</span>
+          <span style="color:#ff5f00">{{ledgerData.ledgerTransactions.totalTransactions}}</span>
+        </div>
+        <div class="cl-f7 fs-18">
+          Dr {{ledgerData.ledgerTransactions.totalDebitTransactions}} &nbsp;&nbsp;&nbsp; Cr {{ledgerData.ledgerTransactions.totalCreditTransactions}}
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-4 cl-f7 fs-18">
+        <div>
+          Opening Balance
+        </div>
+        <div>
+          <span class="fs-24">{{ledgerData.ledgerTransactions.debitTotal}}</span> Dr.
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-4 end">
+        <div>
+          Net Total Credit
+        </div>
+        <div>
+          <span class="fs-24">{{ledgerData.ledgerTransactions.creditTotal}}</span>
+        </div>
+        <div class="cl-f7 fs-12">
+          Dr. Total {{ledgerData.ledgerTransactions.debitTotal}}
+        </div>
+        <div class="cl-f7 fs-12">
+          Cr. Total {{ledgerData.ledgerTransactions.creditTotal}}
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-4">
+        <div class="cl-f7 fs-18">
+          Closing Balance
+        </div>
+        <div class="cl-f7">
+          <span class="fs-24">{{ledgerData.ledgerTransactions.creditTotal}}</span> Cr.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- </body>
+        <script>
+          $(window).load(function () {
+            var viewportWidth = $(window).width();
+            if (viewportWidth > 767) {
+              $("#profile").addClass("active");
+            }
+          });
+        </script>
+        
+        </html> -->

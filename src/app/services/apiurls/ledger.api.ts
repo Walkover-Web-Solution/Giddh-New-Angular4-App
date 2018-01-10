@@ -20,4 +20,8 @@ export const LEDGER_API = {
   MAP_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId',
 
   ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=:sortingOrder&page=:page&count=:count',
+
+  GET_MAGIC_LINK_DATA: 'magic-link/:id', // Method: GET
+  GET_MAGIC_LINK_DATA_WITH_DATE: 'magic-link/:id?from=:from&to=:to', // Method: GET
+  MAGIC_LINK_DOWNLOAD_FILE: 'magic-link/:id/download-invoice/:invoiceNum' // Method: GET
 };
