@@ -273,6 +273,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
+        this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
         this.datePickerOptions = {
           locale: {
