@@ -28,8 +28,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { QuickAccountComponent } from 'app/ledger/components/quickAccount/quickAccount.component';
-import { TextCaseChangeModule } from 'app/shared/helpers/directives/textCaseChange/textCaseChange.module';
+import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -43,8 +42,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SalesAddStockComponent,
     SalesAddStockGroupComponent,
     CreateAccountModalComponent,
-    CreateAccountServiceComponent,
-    QuickAccountComponent
+    CreateAccountServiceComponent
   ],
   imports: [
     FormsModule,
@@ -65,12 +63,12 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     DigitsOnlyModule,
     DecimalDigitsModule,
     ShSelectModule,
-    TextCaseChangeModule
+    QuickAccountModule.forRoot()
   ],
   exports: [
     TooltipModule
   ],
-  entryComponents: [ QuickAccountComponent ],
+  entryComponents: [ ],
   providers: []
 })
 export class SalesModule {
