@@ -179,10 +179,17 @@ export class UpdateLedgerVm {
     }).length <= 1;
   }
 
-  public isThereStockEntry(): boolean {
+  public isThereStockEntry(uniqueName: string): boolean {
+    // check if entry with same stock added multiple times
+    let count: number = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName).length;
+
+    if (count > 1) {
+      return true;
+    }
+    // check if is there any stock entry or not
     return find(this.selectedLedger.transactions,
       (f: ILedgerTransactionItem) => {
-        if (f.particular.uniqueName) {
+        if (f.particular.uniqueName && f.particular.uniqueName !== uniqueName) {
           return !!(f.inventory && f.inventory.stock);
         }
       }
