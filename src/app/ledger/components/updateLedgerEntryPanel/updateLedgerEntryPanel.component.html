@@ -44,11 +44,9 @@
                       [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="col-xs-6 pos-rel select2-parent select2-ledger">
-                    <!--<ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect-->
-                    <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
-                    <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
-                    <!--(deselected)="deSelectAccount($event, txn)">-->
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async"
+                      #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)"
+                      [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -68,7 +66,7 @@
                   </td>
                   <td class="col-xs-3">
                     <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
-                      (input)="vm.onTxnAmountChange(txn)">
+                      (change)="vm.onTxnAmountChange(txn)">
                     <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
                       [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -108,7 +106,9 @@
                       [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="pos-rel col-xs-6 select2-ledger">
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [options]="vm.flatternAccountList4Select | async"
+                      #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)"
+                      [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -128,7 +128,7 @@
                   </td>
                   <td class="col-xs-3">
                     <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective
-                      [DecimalPlaces]="2" (input)="vm.onTxnAmountChange(txn)">
+                      [DecimalPlaces]="2" (change)="vm.onTxnAmountChange(txn)">
                     <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'"
                       tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -151,7 +151,7 @@
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                 <span *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
-                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.1-2'}}</span>
+                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.2-2'}}</span>
                 <ng-template #understandingTextCr>
                   {{ vm.ledgerUnderStandingObj.balanceText.cr }}
                 </ng-template>
@@ -161,8 +161,8 @@
               <!-- reckoning -->
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal | number: '1.1-2'}}
-                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.1-2' }}-->
+                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | number: '1.2-2'}}
+                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.2-2' }}-->
                 </span>
               </td>
             </tr>
@@ -176,7 +176,7 @@
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.1-2'}}</span>
+                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.2-2'}}</span>
                   <ng-template #understandingTextDr>
                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                   </ng-template>
@@ -187,7 +187,7 @@
               <!-- reckoning -->
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.1-2' }}
+                  {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | number: '1.2-2' }}
                 </span>
               </td>
             </tr>
@@ -217,9 +217,9 @@
                                 <td [ngClass]="{width55: vm.stockTrxEntry}" class="text-right">
                                   <label>Quantity</label>
                                   <input type="number" name="" class="form-control text-right" [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
-                                    [DecimalPlaces]="2" (input)="vm.inventoryQuantityChanged($event.target.value)" />
+                                    [DecimalPlaces]="2" (change)="vm.inventoryQuantityChanged($event.target.value)" />
                                 </td>
-                                <td class="text-right pItem" style="width: 150px;">
+                                <td class="text-right pItem" style="width: 300px;">
                                   <label>Unit</label>
                                   <select class="form-control text-right" [(ngModel)]="vm.stockTrxEntry.inventory.unit.code" (change)="vm.unitChanged($event.target.value)">
                                     <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">
@@ -239,7 +239,7 @@
                       <ng-template [ngIf]="vm.stockTrxEntry">
                         <td class="text-right" class="pItem">
                           <label>Price</label>
-                          <input type="text" name="" (input)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective [DecimalPlaces]="2"
+                          <input type="text" name="" (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective [DecimalPlaces]="2"
                             [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                         </td>
                       </ng-template>
@@ -249,24 +249,24 @@
                       </td>
                       <td class="text-right pItem">
                         <label class="primary_clr">Amount</label>
-                        <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (input)="vm.inventoryAmountChanged($event.target.value)"
+                        <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.inventoryAmountChanged($event.target.value)"
                           [(ngModel)]="vm.totalAmount" />
                       </td>
-                      <td>
+                      <td *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
                         <label class="d-block">&nbsp;</label>
                         <label class="fs20">-</label>
                       </td>
-                      <td class="text-right pItem">
+                      <td class="text-right pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
                         <span auto-close="outsideClick">
-                          <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray" (appliedDiscountEvent)="vm.addDiscountEntry($event)">
+                          <update-ledger-discount #discount [discountAccountsList$]="discountAccountsList$" [discountAccountsDetails]="vm.discountArray" (appliedDiscountEvent)="vm.addDiscountEntry($event)">
                           </update-ledger-discount>
                         </span>
                       </td>
-                      <td class="text-center">
+                      <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails?.length">
                         <label class="d-block">&nbsp;</label>
                         <label class="fs20">+</label>
                       </td>
-                      <td class="pos-rel dropdown-container pItem">
+                      <td class="pos-rel dropdown-container pItem" *ngIf="(companyTaxesList$ | async)?.length">
                         <span auto-close="outsideClick">
                           <update-ledger-tax-control [taxes]="companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
                             [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
@@ -279,7 +279,7 @@
                       </td>
                       <td class="text-right pItem">
                         <label class="primary_clr">Total</label>
-                        <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal" (input)="vm.inventoryTotalChanged()"
+                        <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal" (change)="vm.inventoryTotalChanged()"
                         />
                       </td>
                     </tr>
@@ -306,7 +306,7 @@
                   <button class="no-btn pdL0">More Details</button>
                 </td>
                 <td class="text-right">
-                  <span class="primary_clr">Compound Total: {{vm.compoundTotal | number: '1.1-2'}}</span>
+                  <span class="primary_clr">Compound Total: {{vm.compoundTotal | number: '1.2-2'}}</span>
                 </td>
               </tr>
             </tbody>

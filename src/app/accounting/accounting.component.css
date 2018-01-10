@@ -18,6 +18,10 @@
     width: 100%;
 }
 
+:host ::ng-deep #grp_acc_wrapper {
+    height: 100vh !important;
+}
+
 :host ::ng-deep .ul_0 {
-    height: 1000px;
+    height: 100vh;
 }
