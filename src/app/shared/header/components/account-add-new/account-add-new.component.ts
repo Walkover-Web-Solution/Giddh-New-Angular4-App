@@ -16,6 +16,7 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import { setTimeout } from 'timers';
 
 @Component({
   selector: 'account-add-new',
@@ -178,6 +179,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
             this.addAccountForm.get('currency').disable();
           }
         }
+      }
+    });
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
+      if (o) {
+        // this.resetAddAccountForm();
       }
     });
   }

@@ -90,6 +90,9 @@ export class UpdateLedgerVm {
           let checkTrxEntryIndex = findIndex(this.selectedLedger.transactions, t => t.particular.uniqueName === dx.particular.uniqueName);
           if (checkTrxEntryIndex > -1) {
             if (dx.amount > 0) {
+              if (dx.amount !== this.selectedLedger.transactions[checkTrxEntryIndex].amount) {
+                this.selectedLedger.transactions[checkTrxEntryIndex].isUpdated = true;
+              }
               this.selectedLedger.transactions[checkTrxEntryIndex].amount = dx.amount;
             } else {
               this.selectedLedger.transactions.splice(checkTrxEntryIndex, 1);
@@ -103,7 +106,7 @@ export class UpdateLedgerVm {
 
               trx.amount = dx.amount;
               trx.particular = dx.particular;
-
+              trx.isUpdated = true;
               if (index > -1) {
                 filterdDebitTrx[index] = trx;
                 this.selectedLedger.transactions = [...filterdDebitTrx, ...filterdCrditTrx];
@@ -176,10 +179,17 @@ export class UpdateLedgerVm {
     }).length <= 1;
   }
 
-  public isThereStockEntry(): boolean {
+  public isThereStockEntry(uniqueName: string): boolean {
+    // check if entry with same stock added multiple times
+    let count: number = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName).length;
+
+    if (count > 1) {
+      return true;
+    }
+    // check if is there any stock entry or not
     return find(this.selectedLedger.transactions,
       (f: ILedgerTransactionItem) => {
-        if (f.particular.uniqueName) {
+        if (f.particular.uniqueName && f.particular.uniqueName !== uniqueName) {
           return !!(f.inventory && f.inventory.stock);
         }
       }
@@ -253,9 +263,9 @@ export class UpdateLedgerVm {
 
   public generateCompoundTotal() {
     if (this.entryTotal.crTotal > this.entryTotal.drTotal) {
-      this.compoundTotal = Number((this.entryTotal.crTotal - this.entryTotal.drTotal).toFixed());
+      this.compoundTotal = Number((this.entryTotal.crTotal - this.entryTotal.drTotal).toFixed(2));
     } else {
-      this.compoundTotal = Number((this.entryTotal.drTotal - this.entryTotal.crTotal).toFixed());
+      this.compoundTotal = Number((this.entryTotal.drTotal - this.entryTotal.crTotal).toFixed(2));
     }
   }
 
@@ -269,6 +279,9 @@ export class UpdateLedgerVm {
   }
 
   public inventoryQuantityChanged(val: number) {
+    if (Number(this.stockTrxEntry.inventory.rate * val) !== this.stockTrxEntry.amount) {
+      this.stockTrxEntry.isUpdated = true;
+    }
     this.stockTrxEntry.amount = Number(this.stockTrxEntry.inventory.rate * val);
     this.stockTrxEntry.inventory.unit.rate = this.stockTrxEntry.amount;
     this.getEntryTotal();
@@ -278,6 +291,9 @@ export class UpdateLedgerVm {
   }
 
   public inventoryPriceChanged(val: number) {
+    if (Number(val * this.stockTrxEntry.inventory.quantity) !== this.stockTrxEntry.amount) {
+      this.stockTrxEntry.isUpdated = true;
+    }
     this.stockTrxEntry.amount = Number(val * this.stockTrxEntry.inventory.quantity);
     this.getEntryTotal();
     this.generatePanelAmount();
@@ -287,7 +303,11 @@ export class UpdateLedgerVm {
 
   public inventoryAmountChanged(val: string) {
     if (this.stockTrxEntry) {
+      if (this.stockTrxEntry.amount !== Number(Number(val).toFixed(2))) {
+        this.stockTrxEntry.isUpdated = true;
+      }
       this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
+      this.stockTrxEntry.inventory.rate = Number(Number(val) / this.stockTrxEntry.inventory.quantity);
     } else {
       // find account that's from category income || expenses
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
@@ -295,7 +315,10 @@ export class UpdateLedgerVm {
         return category === 'income' || category === 'expenses';
       });
       trx.amount = Number(Number(val).toFixed(2));
-      trx.isUpdated = true;
+      // trx.isUpdated = true;
+      if (trx.amount !== Number(Number(val).toFixed(2))) {
+        trx.isUpdated = true;
+      }
     }
     this.getEntryTotal();
     this.generatePanelAmount();
