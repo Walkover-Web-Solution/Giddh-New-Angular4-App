@@ -98,6 +98,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   private _sortReverse: boolean;
   private _sortType: string;
+  private selectedItems: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -106,7 +107,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
     this.searchResponse$ = this.store.select(p => p.search.value);
     // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-    this.searchResponseFiltered$ = this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => a['name'].toString().localeCompare(b['name'])));
+    this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+      return _.cloneDeep(p).map(j => {
+        j.isSelected = false;
+        return j;
+      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    });
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
@@ -269,13 +275,25 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.mailModal.show();
   }
 
+  public toggleSelection(item: AccountFlat) {
+    if (item.isSelected) {
+      this.selectedItems.push(item.uniqueName);
+    } else {
+      this.selectedItems = this.selectedItems.filter(p => p !== item.uniqueName);
+    }
+  }
+
   // Send Email/Sms for Accounts
   public send() {
     let accountsUnqList = [];
-    this.searchResponseFiltered$.take(1).subscribe(p => {
-      p.map(i => accountsUnqList.push(i.uniqueName));
-    });
-    accountsUnqList = _.uniq(accountsUnqList);
+    // this.searchResponseFiltered$.take(1).subscribe(p => {
+    //   p.map(i => {
+    //     if (i.isSelected) {
+    //       accountsUnqList.push(i.uniqueName);
+    //     }
+    //   });
+    // });
+    accountsUnqList = _.uniq(this.selectedItems);
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
     this.searchRequest$.take(1).subscribe(p => {

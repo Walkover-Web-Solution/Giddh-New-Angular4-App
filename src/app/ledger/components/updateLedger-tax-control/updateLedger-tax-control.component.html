@@ -1,4 +1,4 @@
-<span class="pr" [ngClass]="{'open': showTaxPopup}">
+<span class="pr" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
   <label *ngIf="showHeading">Tax %</label>
   <a id="tax" (click)="showTaxPopup = !showTaxPopup" class="clearfix">
     <div class="multi-select adjust">

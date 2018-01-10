@@ -6,9 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
-import { QuickAccountComponent } from 'app/ledger/components/quickAccount/quickAccount.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
+import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 
 @Component({
   selector: 'discount-list',
