@@ -94,7 +94,7 @@ export function provideConfig() {
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],
