@@ -54,6 +54,9 @@ export class LoginActions {
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
   public static AddNewMobileNo = 'AddNewMobileNo';
   public static AddNewMobileNoResponse = 'AddNewMobileNoResponse';
+
+  public static VerifyAddNewMobileNo = 'VerifyAddNewMobileNo';
+  public static VerifyAddNewMobileNoResponse = 'VerifyAddNewMobileNoResponse';
   public static FetchUserDetails = 'FetchUserDetails';
   public static FetchUserDetailsResponse = 'FetchUserDetailsResponse';
   public static SubscribedCompanies = 'SubscribedCompanies';
@@ -338,11 +341,32 @@ export class LoginActions {
     .ofType(LoginActions.AddNewMobileNoResponse)
     .map((action: CustomActions) => {
       if (action.payload.status === 'success') {
-        this._toaster.successToast(action.payload.body);
+        this._toaster.successToast('You will receive a verification code on your mobile shortly.');
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
       return { type: 'EmptyAction' };
+    });
+
+    @Effect()
+  public verifyAddNewMobile$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyAddNewMobileNo)
+    .switchMap((action: CustomActions) =>
+      this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
+    )
+    .map(response => this.VerifyAddNewMobileNoResponce(response));
+
+  @Effect()
+  public verifyAddNewMobileResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyAddNewMobileNoResponse)
+    .map((action: CustomActions) => {
+      let response: BaseResponse<string, VerifyMobileModel> = action.payload;
+      if (response.status === 'error') {
+        this._toaster.errorToast(response.message, response.code);
+        return { type: 'EmptyAction' };
+      }
+      this._toaster.successToast(response.body);
+      return this.FetchUserDetails();
     });
 
   @Effect()
@@ -602,6 +626,20 @@ export class LoginActions {
   public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): CustomActions {
     return {
       type: LoginActions.AddNewMobileNoResponse,
+      payload: value
+    };
+  }
+
+  public VerifyAddNewMobileNo(value: VerifyMobileModel): CustomActions {
+    return {
+      type: LoginActions.VerifyAddNewMobileNo,
+      payload: value
+    };
+  }
+
+  public VerifyAddNewMobileNoResponce(value: BaseResponse<string, VerifyMobileModel>): CustomActions {
+    return {
+      type: LoginActions.VerifyAddNewMobileNoResponse,
       payload: value
     };
   }

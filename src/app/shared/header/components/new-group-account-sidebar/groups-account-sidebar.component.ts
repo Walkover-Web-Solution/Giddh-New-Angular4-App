@@ -140,6 +140,23 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
           }
         }
       }
+      // check if searching in groups and have active group
+      if (this.isSearchingGroups) {
+        let activeGroup = null;
+        this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(a => activeGroup = a);
+
+        if (activeGroup) {
+          for (let m = 0; m < this.mc.columns.length; m++) {
+            let findedCol = this.mc.columns[m].groups.find(fg => fg.uniqueName === activeGroup.uniqueName);
+            if (findedCol) {
+              let fGrps = findedCol.groups.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+              let fAccs = findedCol.accounts.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+              this.mc.columns[m + 1].Items = [...fGrps, ...fAccs] as IGroupOrAccount[];
+              return;
+            }
+          }
+        }
+      }
     }
     this.columnsChanged.emit(this.mc);
   }
@@ -150,12 +167,14 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     if (this.isSearchingGroups) {
       if (grps.length > 0) {
+        let newCOL = new ColumnGroupsAccountVM(null);
         let allGrps = [];
         let allAccount = [];
         for (let grp of grps) {
           if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
             grp.isOpen = true;
             grp.isActive = true;
+            newCOL.IsCreateNewBtnShowable = true;
           }
           if (grp.groups && grp.groups.length > 0) { allGrps.push(...grp.groups); }
         }
@@ -168,7 +187,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             if (grp.uniqueName === activeGroup.uniqueName) { if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); } }
           }
         }
-        let newCOL = new ColumnGroupsAccountVM(null);
         newCOL.groups = [];
         newCOL.accounts = [];
         for (let key of allGrps) {

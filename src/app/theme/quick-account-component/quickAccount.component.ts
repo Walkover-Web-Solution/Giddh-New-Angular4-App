@@ -1,21 +1,21 @@
+import * as _ from 'app/lodash-optimized';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GroupService } from '../../../services/group.service';
+import { GroupService } from 'app/services/group.service';
 import { Observable } from 'rxjs/Observable';
-import { CompanyService } from '../../../services/companyService.service';
-import { ToasterService } from '../../../services/toaster.service';
-import { AccountRequestV2 } from '../../../models/api-models/Account';
+import { CompanyService } from 'app/services/companyService.service';
+import { AccountRequestV2 } from 'app/models/api-models/Account';
 import { Store, State } from '@ngrx/store';
-import { AppState } from '../../../store';
+import { AppState } from 'app/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
-import * as _ from '../../../lodash-optimized';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { GeneralActions } from '../../../actions/general/general.actions';
-import { States } from '../../../models/api-models/Company';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
+import { LedgerActions } from 'app/actions/ledger/ledger.actions';
+import { GeneralActions } from 'app/actions/general/general.actions';
+import { States } from 'app/models/api-models/Company';
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
+import { IFlattenGroupsAccountsDetail } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { ToasterService } from 'app/services/toaster.service';
 
 @Component({
   selector: 'quickAccount',

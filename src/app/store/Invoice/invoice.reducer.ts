@@ -12,6 +12,7 @@ export interface InvoiceState {
   base64Data: string;
   ledgers: GetAllLedgersOfInvoicesResponse;
   invoiceData: PreviewInvoiceResponseClass;
+  invoiceDataHasError: boolean;
   invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
   isInvoiceGenerated: boolean;
   visitedFromPreview: boolean;
@@ -26,6 +27,7 @@ export const initialState: InvoiceState = {
   base64Data: null,
   ledgers: null,
   invoiceData: null,
+  invoiceDataHasError: false,
   invoiceTemplateConditions: null,
   isInvoiceGenerated: false,
   visitedFromPreview: false,
@@ -95,18 +97,24 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
           let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
           if (res.status === 'success') {
             newState.invoiceData = res.body;
-            return Object.assign({}, state, newState);
+          }else {
+            newState.invoiceDataHasError = true;
           }
-          return state;
+          return { ...state, ...newState };
+        }
+        case INVOICE_ACTIONS.PREVIEW_INVOICE:
+        case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
+          return { ...state, invoiceData: null, invoiceDataHasError: false };
         }
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
           let newState = _.cloneDeep(state);
           let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
           if (res.status === 'success') {
             newState.invoiceData = res.body;
-            return Object.assign({}, state, newState);
+          }else {
+            newState.invoiceDataHasError = true;
           }
-          return state;
+          return { ...state, ...newState };
         }
         case INVOICE_ACTIONS.VISIT_FROM_PREVIEW: {
           return Object.assign({}, state, { visitedFromPreview: true });
