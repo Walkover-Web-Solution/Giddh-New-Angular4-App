@@ -341,7 +341,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       // if ther's stock entry
       if (e.additional.stock) {
         // check if we aleready have stock entry
-        if (this.vm.isThereStockEntry()) {
+        if (this.vm.isThereStockEntry(e.value)) {
           selectCmp.clear();
           txn.particular.uniqueName = null;
           txn.particular.name = null;
