@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -46,7 +46,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
   `],
   templateUrl: './aside.menu.account.component.html'
 })
-export class AsideMenuAccountComponent implements OnInit {
+export class AsideMenuAccountComponent implements OnInit, OnDestroy {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   public flatAccountWGroupsList$: Observable<IOption[]>;
@@ -108,5 +108,10 @@ export class AsideMenuAccountComponent implements OnInit {
 
   public closeAsidePane(event) {
     this.closeAsideEvent.emit(event);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

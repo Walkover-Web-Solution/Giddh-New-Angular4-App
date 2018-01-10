@@ -25,7 +25,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
-import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { GeneralActions } from '../actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -37,6 +36,7 @@ import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
+import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 
 @Component({
   selector: 'ledger',
@@ -273,6 +273,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
+        this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
         this.datePickerOptions = {
           locale: {

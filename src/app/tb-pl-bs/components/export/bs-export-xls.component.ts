@@ -10,13 +10,14 @@ import { ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
   template: `
     <div class="form-group xls-export">
       <a (click)="downloadBsXls()" *ngIf="enableDownload"><img
-        src="/assets/images/xls-icon.png"/></a>
+        src="{{ imgPath }}"/></a>
       <!--end form-group -->
   `
 })
 export class BsExportXlsComponent implements OnInit, OnDestroy {
   @Input() public fy: number;
   public enableDownload: boolean = true;
+  public imgPath: string = '';
   @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
 
   constructor(private store: Store<AppState>, private fb: FormBuilder, private _tbPlActions: TBPlBsActions) {
@@ -29,7 +30,7 @@ export class BsExportXlsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/xls-icon.png' : '../../../assets/images/xls-icon.png';
   }
 
   public ngOnDestroy() {

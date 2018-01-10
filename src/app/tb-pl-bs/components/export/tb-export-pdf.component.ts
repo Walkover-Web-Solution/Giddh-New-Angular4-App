@@ -85,7 +85,7 @@ class FormatPdf implements IFormatable {
   template: `
     <div class="form-group pdf-export" (clickOutside)="showPdf=false;">
       <a (click)="showPdf = !showPdf" *ngIf="enableDownload"><img
-        src="/assets/images/pdf-icon.png"/></a>
+        src="{{ imgPath }}"/></a>
       <div class="export-options" *ngIf="showPdf">
         <span class="arrow"></span>
         <ul class="list-unstyled">
@@ -108,6 +108,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
   public showPdf: boolean;
+  public imgPath: string = '';
   private exportData: ChildGroup[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private dataFormatter: DataFormatter;
@@ -135,7 +136,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/pdf-icon.png' : '../../../assets/images/pdf-icon.png';
   }
 
   public ngOnDestroy() {
