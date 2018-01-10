@@ -21,7 +21,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
   @Input() public discountAccountsDetails: ILedgerDiscount[];
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
   public discountTotal: number;
-  public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
+  @Input() public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
 
   @Input() public discountMenu: boolean;
   @Output() public appliedDiscountEvent: EventEmitter<UpdateLedgerDiscountData[]> = new EventEmitter();
@@ -31,7 +31,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
+    // this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {

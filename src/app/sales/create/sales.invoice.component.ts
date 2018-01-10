@@ -122,8 +122,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
-  // public accounts$: Observable<IOption[]>;
-  public accounts$: Observable<INameUniqueName[]>;
+  public accounts$: Observable<IOption[]>;
   public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
   public accountAsideMenuState: string = 'out';
@@ -256,8 +255,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // listen for new add account utils
     this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
       if (o) {
-        this.invFormData.customerName = o.name;
-        this.getAccountDetails(o.uniqueName);
+        let item: IOption = {
+          label: o.name,
+          value: o.uniqueName
+        };
+        this.invFormData.customerName = item.label;
+        this.onSelectCustomer(item);
       }
     });
 
@@ -265,20 +268,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
 
       let accountsArray: IOption[] = [];
-      let accounts: INameUniqueName[] = [];
+      let accounts: IOption[] = [];
       let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
-        
-        /* commented by mustafa 
-         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-           accounts.push({ label: item.name, value: item.uniqueName });
-         } 
-        */
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          accounts.push({ name: item.name, uniqueName: item.uniqueName });
+          accounts.push({ label: item.name, value: item.uniqueName });
         }
-        
         // creating bank account list
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
           bankaccounts.push({ label: item.name, value: item.uniqueName });
@@ -303,9 +299,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
       this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
-      
-      // this.accounts$ = Observable.of(orderBy(accounts, 'label'));
-      this.accounts$ = Observable.of(accounts);
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
       this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
 
       // listen for newly added stock and assign value
@@ -629,7 +623,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }, 700);
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number): void {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
       this.salesAccounts$.take(1).subscribe(idata => {
         idata.map(fa => {
@@ -701,6 +695,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }else {
       txn.isStockTxn = false;
       this.toggleStockFields(txn);
+      // txn.amount = 0;
+      // txn.accountName = null;
+      // txn.accountUniqueName = null;
+      // txn.hsnOrSac = 'sac';
+      // txn.total = 0;
+      // txn.sacNumber = null;
+      // txn.taxableValue = 0;
+      // txn.applicableTaxes = [];
+      this.resetTxn(entryIdx);
+    }
+  }
+
+  public resetTxn(entryIdx: number) {
+    if (this.invFormData.entries.length > 0 ) {
+      let invFormData = _.cloneDeep(this.invFormData);
+      let entry: SalesEntryClass = new SalesEntryClass();
+      invFormData.entries.splice(entryIdx, 1, entry);
+      this.invFormData = invFormData;
     }
   }
 

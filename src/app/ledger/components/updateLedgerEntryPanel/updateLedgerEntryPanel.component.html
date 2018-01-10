@@ -239,17 +239,17 @@
                                                 <label class="primary_clr">Amount</label>
                                                 <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount" />
                                             </td>
-                                            <td *ngIf="vm.discountArray.length">
+                                            <td *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">-</label>
                                             </td>
-                                            <td class="text-right pItem" *ngIf="vm.discountArray.length">
+                                            <td class="text-right pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
                                                 <span auto-close="outsideClick">
-                          <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray" (appliedDiscountEvent)="vm.addDiscountEntry($event)">
+                          <update-ledger-discount #discount [discountAccountsList$]="discountAccountsList$" [discountAccountsDetails]="vm.discountArray" (appliedDiscountEvent)="vm.addDiscountEntry($event)">
                           </update-ledger-discount>
                         </span>
                                             </td>
-                                            <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length && vm.discountArray.length">
+                                            <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails?.length">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">+</label>
                                             </td>
@@ -317,7 +317,7 @@
                                 <td class="pdR1">
                                     <label class="default_clr pull-left">Voucher Type</label>
                                 </td>
-                                <td class="select2-parent form-group">
+                                <td class="select2-parent">
                                     <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'"></sh-select>
                                 </td>
                                 <td class="pdL1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
