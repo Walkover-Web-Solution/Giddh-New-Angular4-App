@@ -93,7 +93,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       // }
     });
   }
-
+  public toggleTaxPopup(action: boolean) {
+    this.showTaxPopup = action;
+  }
   public trackByFn(index) {
     return index; // or item.id
   }
@@ -113,7 +115,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
-    let diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    let diff: boolean;
+    if (this.selectedTaxes.length > 0) {
+      diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    } else {
+      diff = this.applicableTaxes.length > 0;
+    }
+
     if (diff) {
       this.isApplicableTaxesEvent.emit(false);
     } else {

@@ -256,8 +256,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // listen for new add account utils
     this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
       if (o) {
-        this.invFormData.customerName = o.name;
-        this.getAccountDetails(o.uniqueName);
+        let item: IOption = {
+          label: o.name,
+          value: o.uniqueName
+        };
+        this.invFormData.customerName = item.label;
+        this.onSelectCustomer(item);
       }
     });
 
@@ -629,7 +633,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }, 700);
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number): void {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
       this.salesAccounts$.take(1).subscribe(idata => {
         idata.map(fa => {
@@ -701,6 +705,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }else {
       txn.isStockTxn = false;
       this.toggleStockFields(txn);
+      // txn.amount = 0;
+      // txn.accountName = null;
+      // txn.accountUniqueName = null;
+      // txn.hsnOrSac = 'sac';
+      // txn.total = 0;
+      // txn.sacNumber = null;
+      // txn.taxableValue = 0;
+      // txn.applicableTaxes = [];
+      this.resetTxn(entryIdx);
+    }
+  }
+
+  public resetTxn(entryIdx: number) {
+    if (this.invFormData.entries.length > 0 ) {
+      let invFormData = _.cloneDeep(this.invFormData);
+      let entry: SalesEntryClass = new SalesEntryClass();
+      invFormData.entries.splice(entryIdx, 1, entry);
+      this.invFormData = invFormData;
     }
   }
 
