@@ -28,12 +28,12 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { TextMaskModule } from 'angular2-text-mask';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
-import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 
 @NgModule({
   declarations: [
@@ -46,13 +46,12 @@ import { ClickOutsideModule } from 'ng-click-outside';
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
-    QuickAccountComponent,
     AdvanceSearchModelComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
   ],
-  entryComponents: [UpdateLedgerEntryPanelComponent, QuickAccountComponent, PaginationComponent],
+  entryComponents: [UpdateLedgerEntryPanelComponent, PaginationComponent],
   providers: [],
   imports: [
     CommonModule,
@@ -78,7 +77,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
     ButtonsModule,
     BsDropdownModule,
     TextCaseChangeModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    QuickAccountModule.forRoot()
   ],
 })
 export class LedgerModule {
