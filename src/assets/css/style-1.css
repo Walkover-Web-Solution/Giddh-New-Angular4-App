@@ -4714,7 +4714,7 @@ table.table-bordered.head thead th{
   
   #entryModal .modal-body {
       padding: 15px 20px 100px;
-      overflow: hidden;
+      overflow: auto;
   }
   
   .advanced label {

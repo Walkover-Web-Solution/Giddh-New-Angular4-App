@@ -317,7 +317,7 @@
                                 <td class="pdR1">
                                     <label class="default_clr pull-left">Voucher Type</label>
                                 </td>
-                                <td class="select2-parent">
+                                <td class="select2-parent form-group">
                                     <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'"></sh-select>
                                 </td>
                                 <td class="pdL1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
