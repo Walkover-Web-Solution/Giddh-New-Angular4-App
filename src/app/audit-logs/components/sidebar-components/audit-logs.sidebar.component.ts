@@ -5,7 +5,7 @@ import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
 import { AccountService } from '../../../services/account.service';
 import { AppState } from '../../../store';
-
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -30,7 +30,8 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
-  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
@@ -155,12 +156,13 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public getLogfilters() {
+    // debugger;
     let reqBody: LogsRequest = new LogsRequest();
-    reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
-    reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
+    // reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
+    // reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
     reqBody.entity = this.vm.selectedEntity === 'All' ? '' : this.vm.selectedEntity;
-    reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
+    // reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
     reqBody.userUniqueName = this.vm.selectedUserUnq;
     reqBody.accountUniqueName = this.vm.selectedAccountUnq;
     reqBody.groupUniqueName = this.vm.selectedGroupUnq;
@@ -171,17 +173,15 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       if (this.vm.logOrEntry === 'logDate') {
         reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
         reqBody.entryDate = null;
-        reqBody.fromDate = null;
-        reqBody.toDate = null;
       } else if (this.vm.logOrEntry === 'entryDate') {
-        reqBody.entryDate = this.vm.selectedEntryDate ? moment(this.vm.selectedEntryDate).format('DD-MM-YYYY') : '';
+        reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
         reqBody.logDate = null;
-        reqBody.fromDate = null;
-        reqBody.toDate = null;
       }
     } else {
       reqBody.logDate = null;
       reqBody.entryDate = null;
+      reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
+      reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     }
     this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
   }

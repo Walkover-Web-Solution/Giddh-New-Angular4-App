@@ -17,6 +17,7 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
@@ -35,7 +36,7 @@ export class AdvanceSearchModelComponent implements OnInit {
 
   @Input() public accountUniqueName: string;
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-
+  public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
@@ -93,7 +94,7 @@ export class AdvanceSearchModelComponent implements OnInit {
     this.setVoucherTypes();
     this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
-
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -101,10 +102,10 @@ export class AdvanceSearchModelComponent implements OnInit {
     this.store.dispatch(this.inventoryAction.GetStock());
     // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
 
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
+    this.flattenAccountListStream$.subscribe(data => {
+      if (data) {
         let accounts: IOption[] = [];
-        data.body.results.map(d => {
+        data.map(d => {
           accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
         });
         this.accounts$ = Observable.of(accounts);

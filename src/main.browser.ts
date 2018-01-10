@@ -22,37 +22,40 @@ import { Observable } from 'rxjs';
 
 const debuggerOn = true;
 
-Observable.prototype.debug = function(message: string) {
-    return this.do(
-        nextValue => {
-            if (debuggerOn) {
-                // console.log(message, nextValue);
-            }
-        },
-        error => {
-            if (debuggerOn) {
-                console.error(message, error);
-            }
-        },
-        () => {
-            if (debuggerOn) {
-                console.error('Observable completed - ', message);
-            }
-        }
-    );
+Observable.prototype.debug = function (message: string) {
+  return this.do(
+    nextValue => {
+      if (debuggerOn) {
+        // console.log(message, nextValue);
+      }
+    },
+    error => {
+      if (debuggerOn) {
+        console.error(message, error);
+      }
+    },
+    () => {
+      if (debuggerOn) {
+        console.error('Observable completed - ', message);
+      }
+    }
+  );
 };
 
 declare module 'rxjs/Observable' {
-    interface Observable<T> {
-        // tslint:disable-next-line:variable-name
-        debug: (...any) => Observable<T>;
-    }
+  interface Observable<T> {
+    // tslint:disable-next-line:variable-name
+    debug: (...any) => Observable<T>;
+  }
 }
 
 /**
  * Bootstrap our Angular app with a top level NgModule
  */
 export function main(): Promise<any> {
+  if (module.hot) {
+    module.hot.accept();
+  }
   return platformBrowserDynamic()
     .bootstrapModule(AppModule)
     .then(environment.decorateModuleRef)
@@ -74,6 +77,6 @@ switch (document.readyState) {
 }
 
 function _domReadyHandler() {
- document.removeEventListener('DOMContentLoaded', _domReadyHandler, false);
- main();
+  document.removeEventListener('DOMContentLoaded', _domReadyHandler, false);
+  main();
 }

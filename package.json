@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.2.7",
+  "version": "6.3.0",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -76,14 +76,14 @@
     "prep:dev": "ncp node_modules_electron dev",
     "prep:dist": "ncp node_modules_electron dist && rimraf dist/yarn.lock",
     "rimraf": "rimraf",
-    "server:dev:hmr": "npm run server:dev -- --hotOnly",
+    "server:dev:hmr": "npm run server:dev -- --hotOnly  --hot --inline",
     "server:aot:dev": "cross-env BUILD_AOT=0 npm run server:dev",
     "server:dev": "npm run webpack-dev-server -- --config config/webpack.dev.js --open --progress --profile --watch --content-base src/",
     "server:prod": "http-server dist -p 3000 -c-1 --cors",
     "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
     "server": "npm run server:dev",
     "start:hmr": "npm run server:dev:hmr",
-    "start": "npm run server:aot:dev",
+    "start": "npm run server:dev",
     "start:aot": "npm run server:aot:dev",
     "start:electron": "npm run clean:dev && npm run prep:dev && node ./config/electron-dev",
     "start:main:dev": "webpack --config config/webpack.electron.js --env.live --progress --profile --watch",
@@ -265,6 +265,12 @@
         "AppImage",
         "snap"
       ]
+    },
+    "win": {},
+    "nsis": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "menuCategory": "Accounting"
     },
     "asar": true
   },
