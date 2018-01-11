@@ -19,7 +19,7 @@
       <input class="form-control" required name="accUnqName" type="text" formControlName="uniqueName" [control]="newAccountForm.get('uniqueName')"
         textCaseChangeDirective placeholder="Enter Account Unique Name">
       <i class="glyphicon glyphicon-random pos-abs" style="right:0px;top:30px;color:green" [tooltip]="'Auto Generate UniqueName'"
-        [placement]="'top'" [tooltipAppendToBody]="true" (click)="generateUniqueName()"></i>
+        [placement]="'top'" container="body" (click)="generateUniqueName()"></i>
     </div>
     <section *ngIf="showGstBox" formArrayName="addresses">
       <div *ngFor="let gst of newAccountForm.get('addresses')['controls']; let i = index;" [formGroupName]="i">
