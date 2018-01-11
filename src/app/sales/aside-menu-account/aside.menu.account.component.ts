@@ -62,7 +62,6 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy {
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
-  public createAccountIsSuccess$: Observable<boolean>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -75,7 +74,6 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy {
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
     this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
     this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -93,12 +91,6 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy {
       }
       this.flatAccountWGroupsList$ = Observable.of(result);
       this.activeGroupUniqueName = 'sundrydebtors';
-    });
-
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
-        this.closeAsidePane(event);
-      }
     });
   }
 
