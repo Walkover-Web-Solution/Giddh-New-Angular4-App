@@ -37,6 +37,7 @@ import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'ledger',
@@ -99,6 +100,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   public showUpdateLedgerForm: boolean = false;
+  public isTransactionRequestInProcess$: Observable<boolean>;
+  public searchTermStream: Subject<string> = new Subject();
+  public showLoader: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -114,6 +118,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.universalDate$ = this.store.select(p => p.session.applicationDate).takeUntil(this.destroyed$);
+    this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).takeUntil(this.destroyed$);
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
@@ -263,8 +268,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       let params = resp[1];
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate  = universalDate[0];
-        this.datePickerOptions.endDate  = universalDate[1];
+        this.datePickerOptions.startDate = universalDate[0];
+        this.datePickerOptions.endDate = universalDate[1];
 
         this.trxRequest.from = universalDate[0];
         this.trxRequest.to = universalDate[1];
@@ -273,7 +278,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
-        this.ledgerSearchTerms.nativeElement.value = '';
+        this.showLoader = true;
+        // this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
         this.datePickerOptions = {
           locale: {
@@ -322,6 +328,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // init transaction request and call for transaction data
         this.trxRequest = new TransactionsRequest();
         this.initTrxRequest(params['accountUniqueName']);
+      }
+    });
+
+    this.isTransactionRequestInProcess$.subscribe(s => {
+      if (!s && this.showLoader) {
+        this.showLoader = false;
       }
     });
 
@@ -405,10 +417,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     // search
-    Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
+    // Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
+    //   .debounceTime(700)
+    //   .distinctUntilChanged()
+    //   .map((e: any) => e.target.value)
+    //   .subscribe(term => {
+    //     this.trxRequest.q = term;
+    //     this.trxRequest.page = 0;
+    //     this.getTransactionData();
+    //   });
+
+    this.searchTermStream
       .debounceTime(700)
       .distinctUntilChanged()
-      .map((e: any) => e.target.value)
       .subscribe(term => {
         this.trxRequest.q = term;
         this.trxRequest.page = 0;
@@ -737,6 +758,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public loadPaginationComponent(s) {
+    if (!this.paginationChild) {
+      return;
+    }
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
     let viewContainerRef = this.paginationChild.viewContainerRef;
@@ -761,6 +785,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
    */
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
+  }
+
+  public search(term: string): void {
+    this.searchTermStream.next(term);
   }
 
   /**
