@@ -164,7 +164,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
     let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
     componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
-    componentInstance.downloadOrSendMailEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
     // componentInstance.totalItems = s.count * s.totalPages;
     // componentInstance.itemsPerPage = s.count;
     // componentInstance.maxSize = 5;
