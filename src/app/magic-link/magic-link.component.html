@@ -114,15 +114,19 @@
                     <table style="width:100%">
                       <tbody>
                         <!-- ng-if="txn.type == 'DEBIT'" -->
+                        <!-- <ng-template> -->
                         <tr class="text-left bdrB" *ngFor="let txn of ledger.transactions | filter: particularSearch.value">
-                          <td class="col-xs-3" style="padding:10px;">{{ledger.entryDate}}</td>
-                          <td class="col-xs-6 bdrL" style="padding:10px;">{{txn.particular.name}}</td>
-                          <td class="col-xs-3 bdrL pr" align="right" style="padding:10px;padding-right:30px;">{{txn.amount}}
-                            <span class="download-invoice-ledger pa" *ngIf="ledger.invoiceGenerated" (click)="downloadInvoice(ledger.invoiceNumber)">
-                              <i class="glyphicon glyphicon-download" style="font-size:15px"></i>
-                            </span>
-                          </td>
+                          <!-- *ngIf="txn.type == 'DEBIT'" -->
+                          
+                              <td class="col-xs-3" style="padding:10px;">{{ledger.entryDate}}</td>
+                              <td class="col-xs-6 bdrL" style="padding:10px;">{{txn.particular.name}}</td>
+                              <td class="col-xs-3 bdrL pr" align="right" style="padding:10px;padding-right:30px;">{{txn.amount}}
+                                <span class="download-invoice-ledger pa" *ngIf="ledger.invoiceGenerated" (click)="downloadInvoice(ledger.invoiceNumber)">
+                                  <i class="glyphicon glyphicon-download" style="font-size:15px"></i>
+                                </span>
+                              </td>
                         </tr>
+                        <!-- </ng-template> -->
                       </tbody>
                     </table>
                   </td>
@@ -216,7 +220,10 @@
                           <tbody>
                               <!-- | filter:particularSearch -->
                               <!-- ng-if="txn.type == 'CREDIT'" -->
+                              <!-- <ng-template> -->
                               <tr class="text-left bdrB" *ngFor="let txn of ledger.transactions | filter: particularSearch.value">
+                                  <!-- *ngIf="txn.type == 'CREDIT' -->
+                                  
                                   <td class="col-xs-3" style="padding:10px;">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL" style="padding:10px;">{{txn.particular.name}}</td>
                                   <td class="col-xs-3 bdrL pr" align="right" style="padding:10px;padding-right:30px;">{{txn.amount}}
@@ -229,6 +236,7 @@
                                       </span>
                                   </td>
                               </tr>
+                            <!-- </ng-template> -->
                           </tbody>
                       </table>
                   </td>
