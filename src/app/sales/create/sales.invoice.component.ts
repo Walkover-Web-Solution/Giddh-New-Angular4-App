@@ -767,6 +767,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
     if (item.value) {
+      this.invFormData.customerName = item.label;
       this.getAccountDetails(item.value);
     }
   }
