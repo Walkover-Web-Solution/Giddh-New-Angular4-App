@@ -149,7 +149,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
-
+  public createAccountIsSuccess$: Observable<boolean>;
   // modals related
   public modalConfig = {
     animated: true,
@@ -188,6 +188,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
@@ -254,13 +255,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // listen for new add account utils
     this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
-      if (o) {
+      if (o && this.accountAsideMenuState === 'in') {
         let item: IOption = {
           label: o.name,
           value: o.uniqueName
         };
         this.invFormData.customerName = item.label;
         this.onSelectCustomer(item);
+      }
+    });
+
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
+      if (o && this.accountAsideMenuState === 'in') {
+        this.toggleAccountAsidePane();
       }
     });
 
@@ -760,6 +767,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
     if (item.value) {
+      this.invFormData.customerName = item.label;
       this.getAccountDetails(item.value);
     }
   }
