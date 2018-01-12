@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { IOption } from './../../../theme/ng-select/option.interface';
 import { AccountService } from './../../../services/account.service';
 import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges, OnDestroy, AfterViewInit } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -33,7 +33,7 @@ const COMPARISON_FILTER = [
   templateUrl: './advance-search.component.html'
 })
 
-export class AdvanceSearchModelComponent implements OnInit {
+export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
@@ -65,10 +65,8 @@ export class AdvanceSearchModelComponent implements OnInit {
   }
 
   public ngOnInit() {
-
     this.store.dispatch(this.inventoryAction.GetStock());
     // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
-
     this.flattenAccountListStream$.subscribe(data => {
       if (data) {
         let accounts: IOption[] = [];
@@ -100,20 +98,16 @@ export class AdvanceSearchModelComponent implements OnInit {
         this.groups$ = Observable.of(groups);
       }
     });
+  }
 
-    this.store.select(p => p.ledger.loadAdvanceSearchData).takeUntil(this.destroyed$).subscribe((yesOrNo) => {
-      if (yesOrNo) {
-        this.onSearch();
-      } else {
-        if (this.dropDowns) {
-          this.dropDowns.forEach((el) => {
-            el.clear();
-          });
-        }
-        this.dateRangePicker.bsValue = [];
-        this.setAdvanceSearchForm();
-      }
-    });
+  public resetAdvanceSearchModal() {
+    if (this.dropDowns) {
+      this.dropDowns.forEach((el) => {
+        el.clear();
+      });
+    }
+    this.dateRangePicker.bsValue = [];
+    this.setAdvanceSearchForm();
   }
 
   public setAdvanceSearchForm() {
@@ -371,5 +365,10 @@ export class AdvanceSearchModelComponent implements OnInit {
     if (!val) {
       this.advanceSearchForm.get('description').patchValue(null);
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

@@ -1,3 +1,4 @@
+import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -49,6 +50,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
+  @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
@@ -277,7 +279,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.page = 0;
       }
       if (params['accountUniqueName']) {
-        this.store.dispatch(this._ledgerActions.LoadAdvanceSearchDataFlag(false));
+        this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
         this.showLoader = true;
         // this.ledgerSearchTerms.nativeElement.value = '';
@@ -684,7 +686,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public entryManipulated() {
     this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
       if (yesOrNo) {
-        this.store.dispatch(this._ledgerActions.LoadAdvanceSearchDataFlag(true));
+        this.advanceSearchComp.onSearch();
       } else {
         this.getTransactionData();
       }
@@ -803,5 +805,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
    */
   public closeAdvanceSearchPopup() {
     this.advanceSearchModel.hide();
+    this.advanceSearchComp.ngOnDestroy();
   }
 }
