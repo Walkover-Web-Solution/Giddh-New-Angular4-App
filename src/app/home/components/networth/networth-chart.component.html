@@ -19,7 +19,9 @@
             </div>
             <!-- <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a> -->
             <div class="chart-div" google-chart chart="myChartData">
+                <perfect-scrollbar>
                 <chart [options]="options"></chart>
+                </perfect-scrollbar>
             </div>
             <!--<canvas id="line" class="chart-div chart chart-line" chart-data="chartData"-->
             <!--chart-labels="labels" chart-legend="true" chart-series="series" chart-options="chartOptions">-->
