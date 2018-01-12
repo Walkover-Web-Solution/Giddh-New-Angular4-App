@@ -27,7 +27,6 @@ export interface LedgerState {
   isQuickAccountCreatedSuccessfully: boolean;
   transactionDetails: LedgerResponse;
   isAdvanceSearchApplied: boolean;
-  loadAdvanceSearchData: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -42,8 +41,7 @@ export const initialState: LedgerState = {
   isQuickAccountInProcess: false,
   isQuickAccountCreatedSuccessfully: false,
   transactionDetails: null,
-  isAdvanceSearchApplied: false,
-  loadAdvanceSearchData: false
+  isAdvanceSearchApplied: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -74,6 +72,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     if (transaction.status === 'success') {
       return Object.assign({}, state, {
         transactionInprogress: false,
+        isAdvanceSearchApplied: false,
         transcationRequest: transaction.request,
         transactionsResponse: transaction.body
       });
@@ -94,11 +93,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return Object.assign({}, state, {
         transactionInprogress: false
       });
-    case LEDGER.SET_ADVANCE_SEARCH_DATA_FLAG: {
-      return Object.assign({}, state, {
-        loadAdvanceSearchData: action.payload
-      });
-    }
     case LEDGER.DOWNLOAD_LEDGER_INVOICE:
       return Object.assign({}, state, {downloadInvoiceInProcess: true});
     case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
