@@ -429,6 +429,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         return Object.assign({}, state, latestState);
       }
       return state;
+    case CompanyActions.RESET_APPLICATION_DATE: {
+      let latestState = _.cloneDeep(state);
+      latestState.applicationDate = null;
+      return Object.assign({}, state, latestState);
+    }
     case CompanyActions.SET_CONTACT_NO: {
       let s = _.cloneDeep(state);
       s.user.user.mobileNo = action.payload;

@@ -149,7 +149,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
-
+  public createAccountIsSuccess$: Observable<boolean>;
   // modals related
   public modalConfig = {
     animated: true,
@@ -188,6 +188,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
@@ -254,13 +255,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // listen for new add account utils
     this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
-      if (o) {
+      if (o && this.accountAsideMenuState === 'in') {
         let item: IOption = {
           label: o.name,
           value: o.uniqueName
         };
         this.invFormData.customerName = item.label;
         this.onSelectCustomer(item);
+      }
+    });
+
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
+      if (o && this.accountAsideMenuState === 'in') {
+        this.toggleAccountAsidePane();
       }
     });
 
@@ -478,14 +485,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       };
     }
 
-    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
+    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<InvoiceFormClass, GenerateSalesRequest>) => {
       if (response.status === 'success') {
         // reset form and other
         this.resetInvoiceForm(f);
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
-          this._toasty.successToast('Invoice Generated Successfully');
+          try {
+            this._toasty.successToast(`Ledger created successfully with uniquename: ${response.body.uniqueName}. Invoice generated successfully with invoice number: ${response.body.invoiceDetails.invoiceNumber}`);
+          } catch (error) {
+            this._toasty.successToast('Invoice Generated Successfully');
+          }
         }
       } else {
         this._toasty.errorToast(response.message, response.code);
@@ -655,7 +666,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
                   txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
-                  txn.rate = 0;
+                  txn.rate = null;
                   if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
                     txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
                   }
@@ -675,8 +686,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                   // reset fields
                   txn.rate = null;
                   txn.quantity = null;
-                  txn.amount = 0;
-                  txn.taxableValue = 0;
+                  txn.amount = null;
+                  txn.taxableValue = null;
                 }
                 // toggle stock related fields
                 this.toggleStockFields(txn);
@@ -760,6 +771,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
     if (item.value) {
+      this.invFormData.customerName = item.label;
       this.getAccountDetails(item.value);
     }
   }
