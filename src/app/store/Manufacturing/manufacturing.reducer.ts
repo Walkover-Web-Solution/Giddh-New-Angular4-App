@@ -12,18 +12,22 @@ export interface ManufacturingState {
     reportData: StocksResponse;
     stockWithRate: StockDetailResponse;
     stockToUpdate: string;
+    isMFReportLoading: boolean;
 }
 
 export const initialState: ManufacturingState = {
     reportData: null,
     stockWithRate: null,
-    stockToUpdate: null
+    stockToUpdate: null,
+    isMFReportLoading: false
 };
 
 export function ManufacturingReducer(state = initialState, action: CustomActions): ManufacturingState {
     switch (action.type) {
         case MANUFACTURING_ACTIONS.MF_REPORT: {
-            return state;
+            let newState = _.cloneDeep(state);
+            newState.isMFReportLoading = true;
+            return Object.assign({}, state, newState);
         }
         case MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -32,6 +36,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
                 let response = _.cloneDeep(res.body);
                 response.results = _.orderBy(res.body.results, [ (o) => o.voucherNumber ], 'desc');
                 newState.reportData = response;
+                newState.isMFReportLoading = false;
                 return Object.assign({}, state, newState);
             }
             return state;
