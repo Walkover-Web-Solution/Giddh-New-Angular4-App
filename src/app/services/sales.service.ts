@@ -25,16 +25,16 @@ export class SalesService {
    * @param model : InvoiceFormClass object
    * @param updateAccount: boolean flag
    */
-  public generateSales(model: GenerateSalesRequest): Observable<BaseResponse<string, GenerateSalesRequest>> {
+  public generateSales(model: GenerateSalesRequest): Observable<BaseResponse<InvoiceFormClass, GenerateSalesRequest>> {
     let accountUniqueName = model.invoice.account.uniqueName;
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<string, GenerateSalesRequest> = res;
+        let data: BaseResponse<InvoiceFormClass, GenerateSalesRequest> = res;
         data.request = model;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, GenerateSalesRequest>(e, model));
+      .catch((e) => this.errorHandler.HandleCatch<InvoiceFormClass, GenerateSalesRequest>(e, model));
   }
 }
