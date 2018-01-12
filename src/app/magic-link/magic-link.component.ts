@@ -2,12 +2,16 @@ import { from } from 'rxjs/observable/from';
 import { BaseResponse } from './../models/api-models/BaseResponse';
 import { IMagicLinkLedgerResponse, IMagicLinkLedgerRequest } from './../models/api-models/MagicLink';
 import { MagicLinkService } from './../services/magic-link.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import * as _ from 'lodash';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
+import { ToasterService } from 'app/services/toaster.service';
+import { DOCUMENT } from '@angular/platform-browser';
+import { ReplaySubject } from 'rxjs';
+import { WindowRef } from 'app/shared/helpers/window.object';
 
 @Component({
   selector: 'magic',
@@ -54,11 +58,16 @@ export class MagicLinkComponent implements OnInit {
   };
 
   public searchText: string = '';
+  public selectedTab: string = '';
+  public isResponsive:boolean = false;
+  public reckoningDebitTotal;
+  public reckoningCreditTotal;
   private id: string;
   private fromDate: string;
   private toDate: string;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private route: ActivatedRoute, private _magicLinkService: MagicLinkService) {
+  constructor(private route: ActivatedRoute, private _magicLinkService: MagicLinkService, private _toaster: ToasterService, @Inject(DOCUMENT) private document: Document, private winRef: WindowRef) {
     this.ledgerData.account = { name: '', uniqueName: '' };
     this.ledgerData.ledgerTransactions = {
       forwardedBalance: { amount: 0, type: '', description: '' },
@@ -87,10 +96,14 @@ export class MagicLinkComponent implements OnInit {
             if (response.status === 'success') {
               this.ledgerData = _.cloneDeep(response.body);
               this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
+              this.calReckoningTotal();
             }
           });
         }
       });
+      // this.document.body.classList.add('magicPage');
+      this.document.body.classList.remove('unresponsive');
+      this.onWindowResize();
   }
 
   public filterLedgers(ledgerTransactions) {
@@ -126,13 +139,23 @@ export class MagicLinkComponent implements OnInit {
       if (response.status === 'success') {
         this.ledgerData = _.cloneDeep(response.body);
         this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
+        this.calReckoningTotal();
       }
     });
   }
 
-  public checkCompEntry(wd) {
-    console.log('checkCompEntry called:', wd);
+  public checkCompEntry(ledger) {
+    let unq = ledger.uniqueName;
+    ledger.isCompoundEntry = true
+    _.each(this.ledgerData.ledgerTransactions.ledgers, (lgr) => {
+      if (unq == lgr.uniqueName) {
+        lgr.isCompoundEntry = true
+      } else {
+          lgr.isCompoundEntry = false
+      }
+    });
   }
+  
 
   public downloadInvoice(invoiceNumber) {
     this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).subscribe((response: BaseResponse<any, any>) => {
@@ -143,6 +166,7 @@ export class MagicLinkComponent implements OnInit {
       }
     });
   }
+  
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
@@ -162,5 +186,46 @@ export class MagicLinkComponent implements OnInit {
       offset += sliceSize;
     }
     return new Blob(byteArrays, { type: contentType });
+  }
+  
+  /**
+   * downloadPurchaseInvoice
+   */
+  public downloadPurchaseInvoice(invoiceNumber) {
+    this._toaster.errorToast("Invoice for "+invoiceNumber+ " cannot be downloaded now.");
+  }
+
+  // check if responsive mode ON
+  @HostListener('window:resize')
+  public onWindowResize() {
+   let width = this.winRef.nativeWindow.innerWidth;
+   if (width > 992) {
+     this.selectedTab = '';
+     this.isResponsive = false;
+   } else {
+     this.isResponsive = true;
+   }
+  }
+
+
+  /**
+   * calReckoningTotal
+   */
+  public calReckoningTotal() {
+    this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.debitTotal;
+    this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.creditTotal;
+    if (this.ledgerData.ledgerTransactions.balance.type == 'CREDIT') {
+      this.reckoningDebitTotal += this.ledgerData.ledgerTransactions.balance.amount;
+      this.reckoningCreditTotal += this.ledgerData.ledgerTransactions.forwardedBalance.amount;
+    } else if (this.ledgerData.ledgerTransactions.balance.type == 'DEBIT'){
+      this.reckoningCreditTotal += this.ledgerData.ledgerTransactions.balance.amount;
+      this.reckoningDebitTotal += this.ledgerData.ledgerTransactions.forwardedBalance.amount;
+    }
+  }
+  
+  public ngOnDestroy(): void {
+    this.document.body.classList.add('unresponsive');    
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
