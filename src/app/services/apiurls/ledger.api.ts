@@ -19,5 +19,5 @@ export const LEDGER_API = {
   // put call to map transaction
   MAP_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId',
 
-  ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=:sortingOrder&page=:page&count=:count',
+  ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=asc&page=:page&count=:count',
 };
