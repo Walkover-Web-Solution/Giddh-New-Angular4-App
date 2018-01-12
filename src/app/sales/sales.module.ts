@@ -29,6 +29,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
+import { VirtualScrollModule } from 'app/theme/ng-virtual-select/virtual-scroll';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -63,7 +64,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     DigitsOnlyModule,
     DecimalDigitsModule,
     ShSelectModule,
-    QuickAccountModule.forRoot()
+    QuickAccountModule.forRoot(),
+    VirtualScrollModule
   ],
   exports: [
     TooltipModule
