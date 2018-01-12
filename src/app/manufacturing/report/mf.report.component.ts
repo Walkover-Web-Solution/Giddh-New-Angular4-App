@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Select2OptionData } from '../../theme/select2';
@@ -42,7 +43,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
   public filtersForSearchOperation: IOption[] = filter1;
   public stockListDropDown: IOption[] = [];
   public reportData: StocksResponse = null;
-  public isReportLoading: boolean = true;
+  public isReportLoading$: Observable<boolean>;
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
   public moment = moment;
@@ -59,6 +60,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
+    this.isReportLoading$ = this.store.select(p => p.manufacturing.isMFReportLoading).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -79,7 +81,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
       }
     });
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      this.isReportLoading = false;
       if (o.reportData) {
         this.reportData = o.reportData;
       }
@@ -87,7 +88,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
 
     // Refresh stock list on company change
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).distinct((val) => val === 'companyUniqueName').subscribe((value: any) => {
-      this.isReportLoading = true;
       this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     });
 
