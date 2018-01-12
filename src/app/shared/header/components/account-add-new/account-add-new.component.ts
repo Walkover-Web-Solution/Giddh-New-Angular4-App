@@ -181,11 +181,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         }
       }
     });
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
-        // this.resetAddAccountForm();
-      }
-    });
   }
 
   public setCountryByCompany(company: CompanyResponse) {
