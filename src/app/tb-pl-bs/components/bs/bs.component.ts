@@ -47,7 +47,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
 })
 export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public showLoader: Observable<boolean>;
-  public data$: Observable<ProfitLossData>;
+  public data$: Observable<BalanceSheetData>;
   public request: ProfitLossRequest;
   public expandAll: boolean;
   public search: string;
