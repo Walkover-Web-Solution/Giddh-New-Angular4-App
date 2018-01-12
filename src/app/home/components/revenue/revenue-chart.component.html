@@ -10,7 +10,9 @@
         <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
       </div>
       <div class="chart-div" google-chart chart="myChartObject">
-        <chart [options]="options"></chart>
+        <perfect-scrollbar>
+          <chart [options]="options"></chart>
+        </perfect-scrollbar>
       </div>
       <!--<canvas id="pie" class="chart chart-pie" chart-data="chartData"-->
       <!--chart-labels="labels" chart-series="series">-->
