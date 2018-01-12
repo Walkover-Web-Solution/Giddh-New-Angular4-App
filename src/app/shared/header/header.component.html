@@ -10,7 +10,7 @@
                         <ul *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
                             <li>
                                 <div>
-                                    <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
+                                    <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                                         <ul class="dshUl clearfix list-inline ddMaxHeight">
                                             <li class="dmLi trialB" [checkPermission]="['MENU', 'DASHBOARD']">
                                                 <a [routerLink]="['home']">
@@ -170,7 +170,7 @@
                             </li>
                         </ul>
                     </li>
-    
+
                     <!-- books search -->
                     <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
                         <div class="ledger_search form-inline">
@@ -197,12 +197,12 @@
                     <li [hidden]="isTodaysDateSelected">
                         <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
                     </li>
-    
+
                     <li [hidden]="!isTodaysDateSelected" class="mrT cp" (click)="openDateRangePicker();">
                         <label class="d-block text-right btn-link">Today</label>
                         <label>{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
                     </li>
-    
+
                     <!-- <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1" (click)="jumpToToday();">Go back to Today</button> </li>
                   <li *ngIf="!isTodaysDateSelected">
                       <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
@@ -223,7 +223,7 @@
                                 <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
                                 <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)">
                     <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh</button>
-    
+
                             </li>
                             <li style="padding:0px;">
                                 <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
@@ -269,7 +269,7 @@
         </nav>
         <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
     </header>
-    
+
     <!--add and manage group account modal -->
     <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
         <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
@@ -288,7 +288,7 @@
             </div>
         </div>
     </div>
-    
+
     <!--delete company modal  -->
     <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
