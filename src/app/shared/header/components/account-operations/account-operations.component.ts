@@ -228,13 +228,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.showAddNewGroup$.subscribe(s => {
       if (s) {
-        this.breadcrumbPath.push('Create Group');
+        if (this.breadcrumbPath.indexOf('Create Group') === -1) {
+          this.breadcrumbPath.push('Create Group');
+        }
       }
     });
 
     this.showAddNewAccount$.subscribe(s => {
       if (s) {
-        this.breadcrumbPath.push('Create Account');
+        if (this.breadcrumbPath.indexOf('Create Account') === -1) {
+          this.breadcrumbPath.push('Create Account');
+        }
       }
     });
 
