@@ -266,11 +266,18 @@
         "snap"
       ]
     },
-    "win": {},
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
     "nsis": {
+      "oneClick": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "menuCategory": "Accounting"
+      "menuCategory": "Accounting",
+      "shortcutName": "Giddh",
+      "perMachine": false
     },
     "asar": true
   },
