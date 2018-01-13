@@ -654,6 +654,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public showShareLedgerModal() {
     this.sharLedger.clear();
     this.shareLedgerModal.show();
+    this.sharLedger.checkAccountSharedWith();
   }
 
   public hideShareLedgerModal() {
