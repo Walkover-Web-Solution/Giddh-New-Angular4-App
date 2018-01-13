@@ -51,15 +51,7 @@ export class FinancialYearComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.store.select(p => p.settings.financialYears).takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
-        this.financialYearObj = _.cloneDeep(o);
-      } else if (_.isNull(o)) {
-        this.store.dispatch(this._companyActions.RefreshCompanies());
-        // this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-      }
-    });
-
+  
     this.store.takeUntil(this.destroyed$).subscribe(s => {
       if (s.session) {
         this.currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
@@ -88,6 +80,14 @@ export class FinancialYearComponent implements OnInit {
 
   public getInitialFinancialYearData() {
     this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+    this.store.select(p => p.settings.financialYears).takeUntil(this.destroyed$).subscribe((o) => {
+      if (o) {
+        this.financialYearObj = _.cloneDeep(o);
+      } else if (_.isNull(o)) {
+        this.store.dispatch(this._companyActions.RefreshCompanies());
+        // this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+      }
+    });
   }
 
   public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
