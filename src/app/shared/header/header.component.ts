@@ -271,7 +271,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
         let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
-        this.dateRangePickerCmp.nativeElement.value = `${fromForDisplay} - ${toForDisplay}`;
+        if (this.dateRangePickerCmp) {
+          this.dateRangePickerCmp.nativeElement.value = `${fromForDisplay} - ${toForDisplay}`;
+        }
       }
     })).subscribe();
   }

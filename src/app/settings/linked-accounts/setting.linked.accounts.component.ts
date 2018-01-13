@@ -41,7 +41,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private _accountService: AccountService,
     private _sanitizer: DomSanitizer
   ) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+    //
   }
 
   public ngOnInit() {
@@ -53,7 +53,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).takeUntil(this.destroyed$).subscribe((o) => {
-      this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+      if (o) {
+        this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+      }
     });
 
     this.store.select(p => p.settings.linkedAccounts.iframeSource).takeUntil(this.destroyed$).subscribe((source) => {
@@ -74,6 +76,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.accounts$ = accounts;
       }
     });
+  }
+
+  public getInitialEbankInfo() {
+    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
   public connectBank() {
