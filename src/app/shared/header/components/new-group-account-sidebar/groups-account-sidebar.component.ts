@@ -12,6 +12,7 @@ import * as _ from '../../../../lodash-optimized';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'groups-account-sidebar',
@@ -19,6 +20,7 @@ import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked {
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
   public ScrollToElement = false;
   public viewPortItems: IGroupOrAccount[];
   public mc: GroupAccountSidebarVM;
