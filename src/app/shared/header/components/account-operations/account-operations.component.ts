@@ -1,3 +1,5 @@
+import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
+import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
@@ -47,6 +49,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
+  @ViewChild('shareAccountModalComp') public shareAccountModalComp: ShareAccountModalComponent;
+  @ViewChild('shareGroupModalComp') public shareGroupModalComp: ShareGroupModalComponent;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
@@ -509,6 +513,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showShareGroupModal() {
     this.shareGroupModal.show();
+    this.shareGroupModalComp.getGroupSharedWith();
   }
 
   public hideShareGroupModal() {
@@ -517,6 +522,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showShareAccountModal() {
     this.shareAccountModal.show();
+    this.shareAccountModalComp.getAccountSharedWith();
   }
 
   public hideShareAccountModal() {
