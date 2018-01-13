@@ -45,9 +45,6 @@ export class SettingIntegrationComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-    this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
-    this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).takeUntil(this.destroyed$).subscribe((o) => {
       // set sms form data
@@ -79,6 +76,12 @@ export class SettingIntegrationComponent implements OnInit {
         this.accounts$ = Observable.of(accounts);
       }
     });
+  }
+
+  public getInitialData() {
+    this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+    this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+    this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
   }
 
   public setDummyData() {

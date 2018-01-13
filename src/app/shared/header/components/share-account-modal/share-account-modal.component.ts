@@ -37,6 +37,12 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._permissionActions.GetAllPermissions());
   }
 
+  public getAccountSharedWith() {
+    this.activeAccount$.subscribe((acc) => {
+      this.store.dispatch(this.accountActions.sharedAccountWith(acc.uniqueName));
+    });
+  }
+
   public async shareAccount() {
     let activeAccount = await this.activeAccount$.first().toPromise();
     let userRole = {
