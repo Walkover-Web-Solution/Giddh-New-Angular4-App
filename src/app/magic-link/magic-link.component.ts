@@ -2,7 +2,7 @@ import { from } from 'rxjs/observable/from';
 import { BaseResponse } from './../models/api-models/BaseResponse';
 import { IMagicLinkLedgerResponse, IMagicLinkLedgerRequest } from './../models/api-models/MagicLink';
 import { MagicLinkService } from './../services/magic-link.service';
-import { Component, OnInit, ViewEncapsulation, Inject, HostListener } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import * as _ from 'lodash';
@@ -18,7 +18,7 @@ import { WindowRef } from 'app/shared/helpers/window.object';
   templateUrl: './magic-link.component.html',
   styleUrls: ['./magic-link.component.css']
 })
-export class MagicLinkComponent implements OnInit {
+export class MagicLinkComponent implements OnInit, OnDestroy {
 
   public ledgerData: IMagicLinkLedgerResponse = new IMagicLinkLedgerResponse();
   public datePickerOptions: any = {
@@ -59,7 +59,7 @@ export class MagicLinkComponent implements OnInit {
 
   public searchText: string = '';
   public selectedTab: string = '';
-  public isResponsive:boolean = false;
+  public isResponsive: boolean = false;
   public reckoningDebitTotal;
   public reckoningCreditTotal;
   private id: string;
@@ -146,18 +146,18 @@ export class MagicLinkComponent implements OnInit {
 
   public checkCompEntry(ledger) {
     let unq = ledger.uniqueName;
-    ledger.isCompoundEntry = true
+    ledger.isCompoundEntry = true;
     _.each(this.ledgerData.ledgerTransactions.ledgers, (lgr) => {
-      if (unq == lgr.uniqueName) {
-        lgr.isCompoundEntry = true
+      if (unq === lgr.uniqueName) {
+        lgr.isCompoundEntry = true;
       } else {
-          lgr.isCompoundEntry = false
+          lgr.isCompoundEntry = false;
       }
     });
   }
-  
 
   public downloadInvoice(invoiceNumber) {
+    console.log('invoiceNumber is :', invoiceNumber);
     this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).subscribe((response: BaseResponse<any, any>) => {
       if (response.status === 'success') {
         let blobData;
@@ -166,7 +166,7 @@ export class MagicLinkComponent implements OnInit {
       }
     });
   }
-  
+
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
@@ -187,12 +187,12 @@ export class MagicLinkComponent implements OnInit {
     }
     return new Blob(byteArrays, { type: contentType });
   }
-  
+
   /**
    * downloadPurchaseInvoice
    */
   public downloadPurchaseInvoice(invoiceNumber) {
-    this._toaster.errorToast("Invoice for "+invoiceNumber+ " cannot be downloaded now.");
+    this._toaster.errorToast('Invoice for ' + invoiceNumber + ' cannot be downloaded now.');
   }
 
   // check if responsive mode ON
@@ -206,7 +206,6 @@ export class MagicLinkComponent implements OnInit {
      this.isResponsive = true;
    }
   }
-
 
   /**
    * calReckoningTotal
@@ -222,9 +221,9 @@ export class MagicLinkComponent implements OnInit {
       this.reckoningDebitTotal += this.ledgerData.ledgerTransactions.forwardedBalance.amount;
     }
   }
-  
+
   public ngOnDestroy(): void {
-    this.document.body.classList.add('unresponsive');    
+    this.document.body.classList.add('unresponsive');
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

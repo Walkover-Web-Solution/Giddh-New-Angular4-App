@@ -24,7 +24,7 @@
                 <div class="col-md-3 col-sm-12">
                     <div class="row">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Ledger" name="searchText" [(ngModel)]="searchText" #particularSearch="ngModel">
+                            <input type="text" class="form-control" placeholder="Search Ledger" name="searchText" [(ngModel)]="searchText">
                             <span class="input-group-addon">
                       <span class="fa fa-search"></span>
                             </span>
@@ -107,7 +107,7 @@
                                             <table style="width:100%">
                                                 <tbody>
                                                     <!-- ng-if="txn.type == 'DEBIT'" -->
-                                                    <ng-container *ngFor="let txn of ledger.transactions">
+                                                    <ng-container *ngFor="let txn of ledger.transactions | filter: searchText">
                                                         <tr class="text-left bdrB" *ngIf="txn.type === 'DEBIT'">
                                                             <td class="col-xs-3">{{ledger.entryDate}}</td>
                                                             <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
@@ -183,7 +183,7 @@
                                         <td colspan="100%" style="padding:0; border:0">
                                             <table style="width:100%;">
                                                 <tbody>
-                                                    <ng-container *ngFor="let txn of ledger.transactions">
+                                                    <ng-container *ngFor="let txn of ledger.transactions | filter: searchText">
                                                         <tr class="text-left bdrB" *ngIf="txn.type === 'CREDIT'">
                                                             <td class="col-xs-3">{{ledger.entryDate}}</td>
                                                             <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
