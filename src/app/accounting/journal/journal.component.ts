@@ -40,7 +40,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-  
+
   public accounts$: Observable<IOption[]>;
   public accounts: IOption[] = [];
   public allAccounts: IOption[] = [];
@@ -174,7 +174,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public setAccount(acc) {
     let idx = this.selectedIdx;
     let account = _.filter(this.selectedAccList, (o) => o === acc.Name);
-    
+
     if (account.length > 0) {
       this._toaster.errorToast(account + ' Account already selected.');
       // return false;
@@ -220,18 +220,18 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public validateTransation(amount, transactionObj, idx) {
     let indx = idx;
     let lastIndx = this.journalObj.transactions.length - 1;
-    
+
     if (transactionObj.selectedAccount.UniqueName && !amount) {
-      let indx = idx+1;
+      let indx = idx + 1;
       this._toaster.errorToast('No amount entered for entry no. ' + indx);
       return;
     }
-    
+
     if (amount) {
       transactionObj.amount = Number(amount);
       transactionObj.total = transactionObj.amount;
     }
-    
+
     if (indx === lastIndx && this.journalObj.transactions[indx].selectedAccount.name) {
       this.newEntryObj();
     }
@@ -349,15 +349,15 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * onShown
    */
   public onShown() {
-    
+
   }
 
   /**
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function(obj, idx) {
-      if(obj && !obj.particular && !obj.amount) {
+    _.forEach(transactions, function (obj: any, idx) {
+      if (obj && !obj.particular && !obj.amount) {
         // transactions.splice(idx,1);
         transactions = _.without(transactions, obj)
       }

@@ -1,3 +1,4 @@
+import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -49,6 +50,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
+  @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
@@ -277,6 +279,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.page = 0;
       }
       if (params['accountUniqueName']) {
+        this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
         this.showLoader = true;
         // this.ledgerSearchTerms.nativeElement.value = '';
@@ -651,6 +654,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public showShareLedgerModal() {
     this.sharLedger.clear();
     this.shareLedgerModal.show();
+    this.sharLedger.checkAccountSharedWith();
   }
 
   public hideShareLedgerModal() {
@@ -681,9 +685,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
+    this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
+      if (yesOrNo) {
+        this.advanceSearchComp.onSearch();
+      } else {
+        this.getTransactionData();
+      }
+    })).subscribe();
     // this.trxRequest = new TransactionsRequest();
     // this.trxRequest.accountUniqueName = this.lc.accountUnq;
-    this.getTransactionData();
   }
 
   public showQuickAccountModal() {
@@ -796,5 +806,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
    */
   public closeAdvanceSearchPopup() {
     this.advanceSearchModel.hide();
+    this.advanceSearchComp.ngOnDestroy();
   }
 }

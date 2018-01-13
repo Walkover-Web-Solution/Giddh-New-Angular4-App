@@ -137,7 +137,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, { useHash: true, }),
     StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({
     //   maxAge: 25

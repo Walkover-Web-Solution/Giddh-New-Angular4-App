@@ -215,7 +215,7 @@
 <div bsModal #shareGroupModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <share-group-modal (closeShareGroupModal)="hideShareGroupModal()"></share-group-modal>
+      <share-group-modal #shareGroupModalComp (closeShareGroupModal)="hideShareGroupModal()"></share-group-modal>
     </div>
   </div>
 </div>
@@ -224,7 +224,7 @@
 <div bsModal #shareAccountModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <share-account-modal (closeShareAccountModal)="hideShareAccountModal()"></share-account-modal>
+      <share-account-modal #shareAccountModalComp (closeShareAccountModal)="hideShareAccountModal()"></share-account-modal>
     </div>
   </div>
 </div>

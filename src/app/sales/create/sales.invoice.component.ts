@@ -485,14 +485,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       };
     }
 
-    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
+    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<InvoiceFormClass, GenerateSalesRequest>) => {
       if (response.status === 'success') {
         // reset form and other
         this.resetInvoiceForm(f);
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
-          this._toasty.successToast('Invoice Generated Successfully');
+          try {
+            this._toasty.successToast(`Ledger created successfully with uniquename: ${response.body.uniqueName}. Invoice generated successfully with invoice number: ${response.body.invoiceDetails.invoiceNumber}`);
+          } catch (error) {
+            this._toasty.successToast('Invoice Generated Successfully');
+          }
         }
       } else {
         this._toasty.errorToast(response.message, response.code);
@@ -662,7 +666,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
                   txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
-                  txn.rate = 0;
+                  txn.rate = null;
                   if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
                     txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
                   }
@@ -682,8 +686,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                   // reset fields
                   txn.rate = null;
                   txn.quantity = null;
-                  txn.amount = 0;
-                  txn.taxableValue = 0;
+                  txn.amount = null;
+                  txn.taxableValue = null;
                 }
                 // toggle stock related fields
                 this.toggleStockFields(txn);
@@ -767,6 +771,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
     if (item.value) {
+      this.invFormData.customerName = item.label;
       this.getAccountDetails(item.value);
     }
   }
