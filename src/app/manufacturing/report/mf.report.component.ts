@@ -125,7 +125,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     //   this.mfStockSearchRequest.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
     //   this.mfStockSearchRequest.to = moment().format(GIDDH_DATE_FORMAT);
     // }
-    this.initializeSearchReqObj();
+    // this.initializeSearchReqObj();
   }
 
   public pageChanged(event: any): void {
