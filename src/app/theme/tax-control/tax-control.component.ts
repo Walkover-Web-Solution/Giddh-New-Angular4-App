@@ -30,6 +30,17 @@ export class TaxControlData {
     .single-item .dropdown-menu{
       height: 50px !important;
     }
+    :host .dropdown-menu{
+      min-width: 200px;
+      height: inherit;
+      padding: 0;
+      overflow: auto;
+    }
+    .fakeLabel{
+      cursor: pointer;
+      padding: 5px 10px;
+      line-height: 24px;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
