@@ -84,8 +84,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public taxRenderData: string[] = [];
   constructor() {
     super();
-    this.amount = 0;
-    this.total = 0;
+    this.amount = null;
+    this.total = null;
     this.isStockTxn = false;
     this.hsnOrSac = 'sac';
   }
@@ -247,6 +247,7 @@ export class InvoiceFormClass {
   public totalTax?: any;
   public invoiceDetails: InvoiceDetailsClass;
   public other?: OtherSalesItemClass;
+  public uniqueName?: string;
   public country: CountryClass;
   constructor() {
     this.invoiceDetails = new InvoiceDetailsClass();
