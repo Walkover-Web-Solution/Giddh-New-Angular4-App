@@ -53,13 +53,14 @@
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="isReportLoading" class="clearfix">
+    <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
         <p class="lead alC mrT4">Loading...</p>
     </section>
-    <section *ngIf="!isReportLoading && reportData && reportData.results.length === 0" class="clearfix">
-        <p class="lead alC mrT4">No result found!</p>
-    </section>
-    <section *ngIf="!isReportLoading && reportData && reportData.results.length > 0">
+    <div class="no-data mart100 col-xs-12" *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
+    </div>
+    <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
         <div class="" id="mfReportTbl">
             <div class="col-xs-12">
                 <table class="table basic table-bordered">

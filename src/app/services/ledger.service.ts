@@ -226,7 +226,7 @@ export class LedgerService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      .replace(':fromDate', from).replace(':toDate', to).replace(':sortingOrder', sortingOrder).replace(':page', page).replace(':count', encodeURIComponent(count)), model)
+      .replace(':fromDate', from).replace(':toDate', to).replace(':page', page).replace(':count', encodeURIComponent(count)), model)
       .map((res) => {
         let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
         data.request = model;
