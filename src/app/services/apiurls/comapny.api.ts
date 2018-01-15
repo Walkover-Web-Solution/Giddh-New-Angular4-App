@@ -11,5 +11,6 @@ export const COMPANY_API = {
   GET_COMPANY_USERS: 'company/:companyUniqueName/users',
   GET_ALL_STATES:  'states',
   GET_COUPON: 'coupon/:code',
-  UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings'
+  UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
+  CONTACT_FORM: 'contact/submitDetails'
 };

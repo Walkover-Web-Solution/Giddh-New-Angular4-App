@@ -1,5 +1,3 @@
-import { FilterPipe } from './magic-link/search.pipe';
-import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
@@ -98,8 +96,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NoContentComponent,
     DummyComponent,
     SuccessComponent,
-    FilterPipe,
-    MagicLinkComponent,
     NewUserComponent,
     LoaderComponent,
     SocialLoginCallbackComponent

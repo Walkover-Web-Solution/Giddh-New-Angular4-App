@@ -267,7 +267,7 @@
         </div>
     </section>
     <!--total section-->
-    <section class="ledger-stat mrT3" *ngIf="(ledgerData.ledgerTransactions.totalDebitTransactions > 0 || ledgerData.ledgerTransactions.totalCreditTransactions > 0) && !isResponsive">
+    <section class="ledger-stat" *ngIf="(ledgerData.ledgerTransactions.totalDebitTransactions > 0 || ledgerData.ledgerTransactions.totalCreditTransactions > 0) && !isResponsive">
         <div class="container">
             <div class="col-xs-3">
                 <!--<span class="primary_clr mrB1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
@@ -301,4 +301,117 @@
             </div>
         </div>
     </section>
+
+    <section id="web_footer">
+        <section class="cmnPd80 ylwBg homeBtmhalf">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <h3 class="arvo">Giddh <strong>automates the accounting</strong> on behalf of <span class="companyName"><strong>{{ledgerData.companyName}}</strong></span>.</h3>
+                        <h4 class="arvo">We would love to extend our support via <a href="https://muneem.co" target="_blank" class="green" style="text-decoration: underline;">Muneem</a> for any query related to your ledger with <span class="companyName">{{companyName}}</span>.</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cmnPd80 sub_footer">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <h3 class="arvo">Giddh is the future of online accounting software (but-obvious GST ready).</h3>
+                        <h3 class="arvo">Do you have any question with Giddh?</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- footer start -->
+        <section id="footer">
+            <section id="contact">
+                <div class="container">
+                    <div class="row pr">
+                        <div id="footer-mascot" class="visible-md-block visible-lg-block"></div>
+
+                        <div class="col-md-5 pull-right col-sm-12 col-xs-12" [hidden]="formSubmitted">
+                            <h4 class="headerline mrB2">Tell us!</h4>
+                            <form novalidate name="contactForm">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="name">Full Name *</label>
+                                            <input name="contactForm.name" placeholder="Full Name*" [(ngModel)]="cForm.name" type="text" required class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="message">Contact Number *</label>
+                                            <input class="form-control" placeholder="Contact Number *" type="text" decimalDigitsDirective name="contactForm.number" [(ngModel)]="cForm.number" minlength="7" maxlength="12" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="form-group">
+                                        <label for="email">Email Address *</label>
+                                        <input name="contactForm.email" placeholder="Email Address *" [(ngModel)]="cForm.email" type="email" required class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="form-group">
+                                        <label for="message">Message</label>
+                                        <textarea name="contactForm.message" placeholder="Message" [(ngModel)]="cForm.message" class="form-control"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="control-group">
+                                    <div class="form-group">
+                                        <div theme="'light'" ="cForm.myRecaptchaResponse">
+                                        </div>
+                                        <div vc-recaptcha theme="'light'" key="captchaKey" ng-model="cForm.myRecaptchaResponse">
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- [disabled]="contactForm.invalid" -->
+                                <button (click)="submitForm(cForm)" class="btn btn-default btn-lg" [disabled]="true" type="submit">Submit</button>
+
+                            </form>
+
+                        </div>
+
+                        <div class="col-md-5 col-sm-12 col-xs-12" *ngIf="formSubmitted">
+                            <h4 class="headerline">{{responseMsg}}</h4>
+                        </div>
+
+                        <div class="col-md-5 col-sm-12 col-xs-12" [ngClass]="{'mrT4': isResponsive}">
+                            <h4 class="headerline">Contact Us</h4>
+
+                            <div class="social">
+                                <!-- <a ng-repeat="list in socialList" href="{{list.url}}">
+                                <div class="scicn {{list.class}}">{{list.name}}</div>
+                            </a> -->
+                            </div>
+                            <div class="inconsolata">
+                                <p>405-406, Capt. C. S. Naidu Arcade,</p>
+                                <p>Near Greater Kailash Hospital, 10/2 Old Palasia,</p>
+                                <p>Indore, Madhya Pradesh 452018</p>
+                                <p class="mrT3">Sales : <a class="white" href="mailto:shubhendra@giddh.com">shubhendra@giddh.com</a><br /> Support : <a class="white" href="mailto:support@giddh.com">support@giddh.com</a><br>
+                                    <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:07939593939">079 39 59 3939</a>
+                                    <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:08033037089">080 33 03 7089</a>
+                                </p>
+                                <div id="farzi"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- end of contact -->
+        <app-footer></app-footer>
+    </section>
+    <!-- end of footer -->
+
 </section>
