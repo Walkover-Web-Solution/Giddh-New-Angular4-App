@@ -13,6 +13,8 @@ import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { IGroupsWithAccounts } from '../models/interfaces/groupsWithAccounts.interface';
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
+import { GeneralService } from 'app/services/general.service';
+import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -164,6 +166,7 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
         this._toasty.successToast('Sub group added successfully', 'Success');
       }
       return {
@@ -339,6 +342,7 @@ export class GroupWithAccountsAction {
           type: 'EmptyAction'
         };
       } else {
+        this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
         this._toasty.successToast('Group Updated Successfully');
         return {
           type: 'EmptyAction'
@@ -398,7 +402,8 @@ export class GroupWithAccountsAction {
     private _accountService: AccountService,
     private _toasty: ToasterService,
     private store: Store<AppState>,
-    private _generalActions: GeneralActions) {
+    private _generalActions: GeneralActions,
+  private _generalService: GeneralService) {
     //
   }
 

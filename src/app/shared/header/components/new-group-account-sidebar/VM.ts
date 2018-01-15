@@ -1,6 +1,12 @@
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
+import { eventsConst } from 'app/shared/header/components/eventsConst';
+import { GroupCreateRequest, GroupResponse, GroupUpateRequest } from 'app/models/api-models/Group';
+import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { ChangeDetectorRef } from '@angular/core';
+import * as _ from 'lodash';
+import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];
   public parentIndex: number;
@@ -9,6 +15,10 @@ export class GroupAccountSidebarVM {
   public grpCategory: string;
   public selectedGrp: ColumnGroupsAccountVM;
   public keyWord: string;
+
+  constructor(private _cdRef: ChangeDetectorRef) {
+
+  }
   public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
     this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
     this.columns.push(new ColumnGroupsAccountVM(item));
@@ -16,6 +26,59 @@ export class GroupAccountSidebarVM {
     if (isSearching) {
       let colLength = this.columns.length;
       this.columns[colLength - 1].IsCreateNewBtnShowable = true;
+    }
+  }
+
+  public handleEvents(eventType: eventsConst, payload: any) {
+    let columnLength = this.columns.length;
+    switch (eventType) {
+      case eventsConst.groupAdded: {
+        let resp: BaseResponse<GroupResponse, GroupCreateRequest> = payload;
+        let grp: IGroupOrAccount = {
+          accounts: [],
+          groups: [],
+          isGroup: true,
+          name: resp.body.name,
+          uniqueName: resp.body.uniqueName,
+          isVisible: true
+        };
+        let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
+        Items.push(grp);
+        this.columns[columnLength - 1].Items = Items;
+      }
+
+      case eventsConst.groupUpdated: {
+        let resp: BaseResponse<GroupResponse, GroupUpateRequest> = payload;
+        let Items = _.cloneDeep(this.columns[columnLength - 2].Items);
+        this.columns[columnLength - 2].Items = Items.map(p => {
+          if (p.uniqueName === resp.queryString.groupUniqueName) {
+            p = {
+              ...p,
+              name: resp.body.name,
+              uniqueName: resp.body.uniqueName
+            };
+          }
+          return p;
+        });
+      }
+      default:
+        break;
+    }
+  }
+
+  public activeGroupFromGroupListBackup(groups: GroupsWithAccountsResponse[], uniqueName: string, result: GroupsWithAccountsResponse) {
+    for (let grp of groups) {
+      if (grp.uniqueName === uniqueName) {
+        result = grp;
+        return result;
+      }
+
+      if (grp.groups) {
+        result = this.activeGroupFromGroupListBackup(grp.groups, uniqueName, result);
+        if (result) {
+          return result;
+        }
+      }
     }
   }
 }
