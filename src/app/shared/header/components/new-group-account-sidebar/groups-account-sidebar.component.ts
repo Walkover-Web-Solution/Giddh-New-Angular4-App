@@ -35,6 +35,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   @Input() public activeGroup: Observable<GroupResponse>;
   public isUpdateGroupSuccess$: Observable<boolean>;
   public isUpdateAccountSuccess$: Observable<boolean>;
+
+  public isDeleteGroupSuccess$: Observable<boolean>;
   public activeGroupUniqueName: Observable<string>;
   @Input() public padLeft: number = 30;
   @Input() public isSearchingGroups: boolean = false;

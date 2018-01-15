@@ -40,6 +40,7 @@ export interface CurrentGroupAndAccountState {
   isCreateGroupSuccess?: boolean;
   isUpdateGroupInProcess?: boolean;
   isUpdateGroupSuccess?: boolean;
+  isDeleteGroupSuccess?: boolean;
   isGroupNameAvailable?: boolean;
   fetchingAccUniqueName: boolean;
   isAccountNameAvailable?: boolean;
@@ -98,7 +99,8 @@ const initialState: CurrentGroupAndAccountState = {
   fetchingGrpUniqueName: false,
   fetchingAccUniqueName: false,
   flattenGroupsAccounts: [],
-  newlyCreatedAccount: null
+  newlyCreatedAccount: null,
+  isDeleteGroupSuccess: false
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {

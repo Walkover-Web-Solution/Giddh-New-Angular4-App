@@ -61,6 +61,14 @@ export class GroupAccountSidebarVM {
           return p;
         });
       }
+
+      case eventsConst.groupDeleted: {
+        let resp: BaseResponse<string, string> = payload;
+        let Items = _.cloneDeep(this.columns[columnLength - 2].Items);
+        this.columns[columnLength - 2].Items = Items.filter(p => p.uniqueName !== resp.request);
+        this.columns.pop();
+      }
+
       default:
         break;
     }
