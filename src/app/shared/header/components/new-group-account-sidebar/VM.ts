@@ -9,9 +9,14 @@ export class GroupAccountSidebarVM {
   public grpCategory: string;
   public selectedGrp: ColumnGroupsAccountVM;
   public keyWord: string;
-  public selectGroup(item: IGroupsWithAccounts, currentIndex: number) {
+  public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
     this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
     this.columns.push(new ColumnGroupsAccountVM(item));
+
+    if (isSearching) {
+      let colLength = this.columns.length;
+      this.columns[colLength - 1].IsCreateNewBtnShowable = true;
+    }
   }
 }
 
