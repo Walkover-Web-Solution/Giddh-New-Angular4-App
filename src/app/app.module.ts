@@ -1,3 +1,5 @@
+import { FilterPipe } from './magic-link/search.pipe';
+import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
@@ -50,6 +52,7 @@ import { DecoratorsModule } from './decorators/decorators.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { Configuration } from 'app/app.constant';
 import { ServiceConfig } from 'app/services/service.config';
+import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -95,6 +98,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NoContentComponent,
     DummyComponent,
     SuccessComponent,
+    FilterPipe,
+    MagicLinkComponent,
     NewUserComponent,
     LoaderComponent,
     SocialLoginCallbackComponent
@@ -104,6 +109,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
    */
   imports: [
     BrowserModule,
+    Daterangepicker,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
