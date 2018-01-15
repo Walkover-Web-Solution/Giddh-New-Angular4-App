@@ -370,6 +370,7 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        this._generalService.eventHandler.next({ name: eventsConst.groupDeleted, payload: action.payload });
         this._toasty.successToast(action.payload.body, '');
         if (action.payload.queryString.parentUniqueName) {
           this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
