@@ -53,7 +53,7 @@ import { ServiceConfig } from 'app/services/service.config';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' }
+  { provide: APP_BASE_HREF, useValue: isElectron ? '/' : AppUrl }
 ];
 
 interface InternalStateType {
@@ -131,7 +131,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, }),
+    RouterModule.forRoot(ROUTES, { useHash: isElectron }),
     StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({
     //   maxAge: 25
