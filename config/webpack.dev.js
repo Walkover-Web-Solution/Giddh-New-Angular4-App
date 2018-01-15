@@ -34,7 +34,7 @@ module.exports = function (options) {
   const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
   const HOST = process.env.HOST || 'dev.giddh.com';
   const PORT = process.env.PORT || 80;
-  const AppUrl = 'http://dev.giddh.com';
+  const AppUrl = 'http://dev.giddh.com/';
   // const ApiUrl = 'http://apitest.giddh.com/';
   const ApiUrl = 'http://apidev.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
@@ -47,7 +47,8 @@ module.exports = function (options) {
     errlyticsNeeded: false,
     errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
-    ApiUrl: ApiUrl
+    ApiUrl: ApiUrl,
+    APP_FOLDER: 'electron/'
   });
 
   return webpackMerge(commonConfig({
@@ -146,6 +147,7 @@ module.exports = function (options) {
         'errlyticsKey': ERRLYTICS_KEY_DEV,
         'AppUrl': JSON.stringify(METADATA.AppUrl),
         'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+        'APP_FOLDER': JSON.stringify(METADATA.APP_FOLDER),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
