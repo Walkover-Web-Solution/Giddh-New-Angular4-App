@@ -90,7 +90,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.imgPath = isElectron ? 'assets/images/csv.png' : '../../../assets/images/csv.png';
+    this.imgPath = isElectron ? 'assets/images/csv.png' : ApiUrl + APP_FOLDER + 'assets/images/csv.png';
   }
 
   public ngOnDestroy() {

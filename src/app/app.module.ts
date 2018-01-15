@@ -53,7 +53,7 @@ import { ServiceConfig } from 'app/services/service.config';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: isElectron ? '/' : AppUrl }
+  { provide: APP_BASE_HREF, useValue: isElectron ? '/' : AppUrl + APP_FOLDER }
 ];
 
 interface InternalStateType {
