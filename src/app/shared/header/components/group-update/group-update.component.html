@@ -20,7 +20,7 @@
 
         <div class="form-group text-right">
 
-            <button class="btn btn-danger" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE</button>
+            <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE</button>
 
             <button class="btn btn-primary" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update</button>
 
