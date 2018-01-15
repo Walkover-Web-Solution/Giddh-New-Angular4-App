@@ -180,4 +180,18 @@ export class CompanyService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e));
   }
+
+
+  /**
+   * ContactFrom
+   */
+  public ContactFrom(formObj): Observable<BaseResponse<any, any>> {
+    let domainURL = 'http://giddh.com/'
+    return this._http.post(domainURL + COMPANY_API.CONTACT_FORM, formObj)
+      .map((res) => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
+
 }

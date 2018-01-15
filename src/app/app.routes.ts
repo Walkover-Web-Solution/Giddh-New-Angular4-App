@@ -16,7 +16,7 @@ export const ROUTES: Routes = [
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
-  { path: 'magic', component: MagicLinkComponent },
+  { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
   { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
   { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
   { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
