@@ -12,6 +12,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { Subject } from 'rxjs/Subject';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.component';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -27,7 +28,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   @ViewChild('myModel') public myModel: ElementRef;
   @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false };
-  @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
+  @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarComponent;
 
   public breadcrumbPath: string[] = [];
   public breadcrumbUniquePath: string[] = [];
@@ -106,7 +107,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
   public ScrollToRight() {
     if (this.directiveScroll) {
-      this.directiveScroll.scrollToRight();
+      this.directiveScroll.directiveRef.scrollToRight();
     }
   }
 

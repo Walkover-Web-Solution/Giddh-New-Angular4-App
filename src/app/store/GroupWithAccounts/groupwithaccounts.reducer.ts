@@ -154,7 +154,15 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         let newData = prepare(data.body);
         return Object.assign({}, state, {
           isGroupWithAccountsLoading: false,
-          groupswithaccounts: newData
+          groupswithaccounts: newData,
+          activeGroup: null,
+          activeGroupUniqueName: null,
+          activeAccount: null,
+          showAddNew: false,
+          showAddNewAccount: false,
+          showAddNewGroup: false,
+          showEditGroup: false,
+          showEditAccount: false
         });
       }
       return state;
