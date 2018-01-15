@@ -32,9 +32,9 @@ const ERRLYTICS_KEY_DEV = '';
  */
 module.exports = function (options) {
   const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
-  const HOST = process.env.HOST || 'localapp.giddh.com';
-  const PORT = process.env.PORT || 3000;
-  const AppUrl = 'http://dev.giddh.com/electron';
+  const HOST = process.env.HOST || 'dev.giddh.com';
+  const PORT = process.env.PORT || 80;
+  const AppUrl = 'http://dev.giddh.com';
   // const ApiUrl = 'http://apitest.giddh.com/';
   const ApiUrl = 'http://apidev.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
