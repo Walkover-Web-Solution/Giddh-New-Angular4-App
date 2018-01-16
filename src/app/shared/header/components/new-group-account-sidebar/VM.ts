@@ -45,6 +45,7 @@ export class GroupAccountSidebarVM {
         let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
         Items.push(grp);
         this.columns[columnLength - 1].Items = Items;
+        break;
       }
 
       case eventsConst.groupUpdated: {
@@ -60,13 +61,27 @@ export class GroupAccountSidebarVM {
           }
           return p;
         });
+        break;
       }
 
       case eventsConst.groupDeleted: {
         let resp: BaseResponse<string, string> = payload;
-        let Items = _.cloneDeep(this.columns[columnLength - 2].Items);
-        this.columns[columnLength - 2].Items = Items.filter(p => p.uniqueName !== resp.request);
+        let cols = _.cloneDeep(this.columns);
+        this.columns = cols.map(col => {
+          let findItemIndex = col.Items.findIndex(f => f.uniqueName === resp.queryString.parentUniqueName);
+
+          if (findItemIndex > -1) {
+            col.Items[findItemIndex].groups = col.Items[findItemIndex].groups.filter(p => p.uniqueName !== resp.request);
+          }
+
+          if (col.uniqueName === resp.queryString.parentUniqueName) {
+            col.Items = col.Items.filter(p => p.uniqueName !== resp.request);
+            col.groups = col.groups.filter(p => p.uniqueName !== resp.request);
+          }
+          return col;
+        });
         this.columns.pop();
+        break;
       }
 
       default:

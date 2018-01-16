@@ -40,6 +40,7 @@ export interface CurrentGroupAndAccountState {
   isCreateGroupSuccess?: boolean;
   isUpdateGroupInProcess?: boolean;
   isUpdateGroupSuccess?: boolean;
+  isDeleteGroupInProcess?: boolean;
   isDeleteGroupSuccess?: boolean;
   isGroupNameAvailable?: boolean;
   fetchingAccUniqueName: boolean;
@@ -100,7 +101,8 @@ const initialState: CurrentGroupAndAccountState = {
   fetchingAccUniqueName: false,
   flattenGroupsAccounts: [],
   newlyCreatedAccount: null,
-  isDeleteGroupSuccess: false
+  isDeleteGroupSuccess: false,
+  isDeleteGroupInProcess: false,
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -279,7 +281,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         isCreateGroupInProcess: false,
         isCreateGroupSuccess: false,
         isUpdateGroupInProcess: false,
-        isUpdateGroupSuccess: false
+        isUpdateGroupSuccess: false,
+        isDeleteGroupSuccess: false,
+        isDeleteGroupInProcess: false
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
@@ -476,6 +480,13 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         });
       }
       return state;
+
+    case GroupWithAccountsAction.DELETE_GROUP:
+      return {
+        ...state,
+        isDeleteGroupInProcess: true,
+        isDeleteGroupSuccess: false
+      };
     case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
       let g: BaseResponse<string, string> = action.payload;
       if (g.status === 'success') {
@@ -483,10 +494,16 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         removeGroupFunc(groupArray, g.request, null);
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
-          activeGroup: { uniqueName: g.queryString.parentUniqueName }
+          activeGroup: { uniqueName: g.queryString.parentUniqueName },
+          isDeleteGroupInProcess: false,
+          isDeleteGroupSuccess: true
         });
       }
-      return state;
+      return {
+        ...state,
+        isDeleteGroupInProcess: false,
+        isDeleteGroupSuccess: false
+      };
     case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
       let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
       if (m.status === 'success') {
