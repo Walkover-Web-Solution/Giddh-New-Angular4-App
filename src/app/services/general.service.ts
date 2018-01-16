@@ -6,7 +6,7 @@ import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GeneralService {
-  public eventHandler: ReplaySubject<{ name: eventsConst, payload: any }> = new ReplaySubject();
+  public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
   private _user: UserDetails;
   private _companyUniqueName: string;
   private _sessionId: string;
