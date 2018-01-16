@@ -284,6 +284,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
+
+    if (gstVal.length !== 15) {
+      gstForm.get('partyType').reset('NOT APPLICABLE');
+    }
+
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));

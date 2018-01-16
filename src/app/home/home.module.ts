@@ -13,6 +13,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartModule } from 'angular2-highcharts';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { LaddaModule } from 'angular2-ladda';
+import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 export function highchartsFactory() {
   const hc = require('highcharts');
@@ -21,6 +22,11 @@ export function highchartsFactory() {
 
   return hc;
 }
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: false,
+  suppressScrollY: true
+};
 
 @NgModule({
   declarations: [
@@ -39,6 +45,10 @@ export function highchartsFactory() {
       provide: HighchartsStatic,
       useFactory: highchartsFactory
     },
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
   ],
   imports: [
     CommonModule,
@@ -46,7 +56,8 @@ export function highchartsFactory() {
     HomeRoutingModule,
     ModalModule,
     ChartModule,
-    LaddaModule
+    LaddaModule,
+    PerfectScrollbarModule
   ],
 })
 export class HomeModule {
