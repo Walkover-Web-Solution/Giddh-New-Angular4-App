@@ -134,7 +134,7 @@
                 <div class="form-group col-xs-4" *ngIf="invFormData.country.countryName === 'India'">
                   <div>
                     <label>State</label>
-                    <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.billingDetails.stateCode"></ng-select>
+                    <ng-select #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.billingDetails.stateCode"></ng-select>
                   </div>
                   <div class="mrT2">
                     <label>GSTIN</label>
@@ -155,7 +155,8 @@
                 <div class="form-group col-xs-4" *ngIf="invFormData.country.countryName === 'India'">
                   <div>
                     <label>State</label>
-                    <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>
+                    <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async"
+                      [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>
                   </div>
                   <div class="mrT2">
                     <label>GSTIN</label>
