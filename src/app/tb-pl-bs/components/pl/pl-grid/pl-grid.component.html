@@ -129,12 +129,12 @@
               </th>
               <th class="col-xs-4">
                 <strong class="pdL2 pdR1">
-                  <span class="pull-right" [ngClass]="{'success': (plData?.closingBalance>-1), 'error':(plData?.closingBalance<0)}">{{ plData?.closingBalance | number:'1.2-2' }}</span>
+                  <span class="pull-right" [ngClass]="{'success': (plData?.closingBalanceClass), 'error':!(plData?.closingBalanceClass)}">{{ plData?.closingBalance | number:'1.2-2' }}</span>
                 </strong>
               </th>
               <th class="col-xs-4">
                 <strong class="pdL2 pdR1">
-                  <span class="pull-right " [ngClass]="{'success': (plData?.frowardBalance>-1), 'error':(plData?.frowardBalance<0)}">{{ plData?.frowardBalance | number:'1.2-2' }}</span>
+                  <span class="pull-right " [ngClass]="{'success': (plData?.frowardBalanceClass), 'error':!(plData?.frowardBalanceClass)}">{{ plData?.frowardBalance | number:'1.2-2' }}</span>
                 </strong>
               </th>
             </tr>
