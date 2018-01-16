@@ -297,6 +297,7 @@ export class GroupWithAccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
+        this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
         this._toasty.successToast('Group moved successfully', '');
         return this.getGroupDetails(data.request.parentGroupUniqueName);
       }
@@ -405,7 +406,7 @@ export class GroupWithAccountsAction {
     private _toasty: ToasterService,
     private store: Store<AppState>,
     private _generalActions: GeneralActions,
-  private _generalService: GeneralService) {
+    private _generalService: GeneralService) {
     //
   }
 
