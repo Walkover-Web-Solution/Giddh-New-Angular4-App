@@ -32,9 +32,9 @@ const ERRLYTICS_KEY_DEV = '';
  */
 module.exports = function (options) {
   const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
-  const HOST = process.env.HOST || 'dev.giddh.com';
-  const PORT = process.env.PORT || 80;
-  const AppUrl = 'http://dev.giddh.com/';
+  const HOST = process.env.HOST || 'localapp.giddh.com';
+  const PORT = process.env.PORT || 3000;
+  const AppUrl = 'http://localapp.giddh.com:3000/';
   // const ApiUrl = 'http://apitest.giddh.com/';
   const ApiUrl = 'http://apidev.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
@@ -48,7 +48,7 @@ module.exports = function (options) {
     errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl,
-    APP_FOLDER: 'electron/'
+    APP_FOLDER: ''
   });
 
   return webpackMerge(commonConfig({
