@@ -69,7 +69,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
-        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userName');
+        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
         let arr = [];
         forIn(sortedArr, (value, key) => {
           if (value[0].emailId === this.loggedInUserEmail) {
