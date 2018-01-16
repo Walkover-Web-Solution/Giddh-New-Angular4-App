@@ -56,16 +56,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this._permissionActions.GetRoles());
-
-    this.store.take(1).subscribe(s => {
-      this.selectedCompanyUniqueName = s.session.companyUniqueName;
-      this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-      if (s.session.user) {
-        this.currentUser = s.session.user.user;
-      }
-    });
-
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
@@ -81,6 +71,17 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
       }
     });
 
+  }
+
+  public getInitialData() {
+    this.store.dispatch(this._permissionActions.GetRoles());
+    this.store.take(1).subscribe(s => {
+      this.selectedCompanyUniqueName = s.session.companyUniqueName;
+      this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+      if (s.session.user) {
+        this.currentUser = s.session.user.user;
+      }
+    });
   }
 
   public prepareDataForUI(data: ShareRequestForm[]) {
