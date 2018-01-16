@@ -85,8 +85,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       val = [val];
     }
     if (val.length > 0 && this.rows) {
-      // this._selectedValues = this.rows.filter(f => val.findIndex(p => p === f.value) !== -1);
-      // console.log (this._selectedValues, this.selectedValues);
+      this._selectedValues = this.rows.filter(f => val.findIndex(p => p === f.value) !== -1);
     } else {
       this._selectedValues = val;
     }
@@ -325,9 +324,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.onHide.emit();
       }
-    } else if (this.isOpen && this.doNotReset && this.filter !== '') {
-      this.isOpen = false;
-      this.onHide.emit();
     } else {
       this.isOpen = false;
       if (this.selectedValues && this.selectedValues.length === 1) {
@@ -341,12 +337,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public filterInputBlur(event) {
+    if (this.doNotReset && event && event.target && event.target.value) {
+      this.filter = event.target.value;
+      this.propagateChange(this.filter);
+    }
     if (event.relatedTarget && this.ele.nativeElement) {
-      if (this.ele.nativeElement.contains(event.relatedTarget)) {
-        return false;
-      } else if (this.doNotReset && event && event.target && event.target.value) {
-        return false;
-      } else {
+      if (!this.ele.nativeElement.contains(event.relatedTarget)) {
         this.hide();
       }
     }
@@ -418,7 +414,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         };
       }
       this.filter = newValue.label;
-      this.propagateChange(newValue);
+      this.propagateChange(newValue.value);
       this.selected.emit(newValue);
     }
   }
