@@ -2,7 +2,7 @@ import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interfa
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 import { eventsConst } from 'app/shared/header/components/eventsConst';
-import { GroupCreateRequest, GroupResponse, GroupUpateRequest } from 'app/models/api-models/Group';
+import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupResponse, MoveGroupRequest } from 'app/models/api-models/Group';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
@@ -77,6 +77,22 @@ export class GroupAccountSidebarVM {
           if (col.uniqueName === resp.queryString.parentUniqueName) {
             col.Items = col.Items.filter(p => p.uniqueName !== resp.request);
             col.groups = col.groups.filter(p => p.uniqueName !== resp.request);
+          }
+          return col;
+        });
+        this.columns.pop();
+        break;
+      }
+
+      case eventsConst.groupMoved: {
+        let data = payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
+        let cols = _.cloneDeep(this.columns);
+        this.columns = cols.map((col, colIndex) => {
+          let itemIndex = col.Items.findIndex(f => f.uniqueName === data.queryString.groupUniqueName);
+
+          if (itemIndex > -1) {
+            col.Items = col.Items.filter(p => p.uniqueName !== data.queryString.groupUniqueName);
+            this.columns[itemIndex - 1].groups = this.columns[itemIndex - 1].groups.filter(p => p.uniqueName !== data.queryString.groupUniqueName);
           }
           return col;
         });
