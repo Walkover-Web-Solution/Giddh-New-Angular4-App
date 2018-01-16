@@ -35,7 +35,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-    private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
+    private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
+    this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
+    this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
+    this.bsConfig.showWeekNumbers = false;
+
     this.vm = new AuditLogsSidebarVM();
     this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
     this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
