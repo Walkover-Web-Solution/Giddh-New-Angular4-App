@@ -75,14 +75,15 @@ export class SettingTaxesComponent implements OnInit {
     this.store.select(p => p.company).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.taxes) {
         _.map(o.taxes, (tax) => {
-          tax.taxDetail[0].date = moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT);
+          _.each(tax.taxDetail, (t) => {
+            t.date = moment(t.date, GIDDH_DATE_FORMAT);
+          });
         });
         this.onCancel();
         this.availableTaxes = _.cloneDeep(o.taxes);
       }
     });
     this.getFlattenAccounts('');
-    // console.log('hello from SettingTaxesComponent');
   }
 
   public onSubmit(data) {
@@ -99,7 +100,6 @@ export class SettingTaxesComponent implements OnInit {
       this.accounts$.forEach((obj) => {
         if (obj.value === dataToSave.account) {
           let accountObj = obj.label.split(' - ');
-          // console.log(accountObj);
           dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
         }
       });
@@ -138,7 +138,9 @@ export class SettingTaxesComponent implements OnInit {
       if (this.confirmationFor === 'delete') {
         this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
       } else if (this.confirmationFor === 'edit') {
-        this.newTaxObj.taxDetail[0].date = moment(this.newTaxObj.taxDetail[0].date).format(GIDDH_DATE_FORMAT);
+        _.each(this.newTaxObj.taxDetail, (tax) => {
+          tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
+        });
         this.store.dispatch(this._settingsTaxesActions.UpdateTax(this.newTaxObj));
       }
     }
