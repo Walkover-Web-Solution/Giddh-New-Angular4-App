@@ -256,6 +256,16 @@ const prepareProfitLossData = (data) => {
     plData.inProfit = false;
     // plData.incomeTotal += plData.closingBalance;
   }
+  if (data.closingBalance.type === 'CREDIT' ) {
+    plData.closingBalanceClass = true;
+  } else {
+    plData.closingBalanceClass = false;
+  }
+  if (data.forwardedBalance.type === 'CREDIT' ) {
+    plData.frowardBalanceClass = true;
+  } else {
+    plData.frowardBalanceClass = false;
+  }
   return plData;
 };
 
