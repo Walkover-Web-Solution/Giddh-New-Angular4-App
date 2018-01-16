@@ -29,6 +29,10 @@ export class ShareLedgerComponent implements OnInit {
   }
 
   public ngOnInit() {
+    //
+  }
+
+  public checkAccountSharedWith() {
     this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
     this.store.select(state => state.ledger.activeAccountSharedWith).subscribe((data) => {
       this.activeAccountSharedWith = _.cloneDeep(data);

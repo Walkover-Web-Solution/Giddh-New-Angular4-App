@@ -71,8 +71,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     this.initProfileObj();
+  }
+
+  public getInitialProfileData() {
+    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
   }
 
   public initProfileObj() {

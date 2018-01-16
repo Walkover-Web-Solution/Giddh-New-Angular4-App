@@ -26,6 +26,7 @@ export interface LedgerState {
   isQuickAccountInProcess: boolean;
   isQuickAccountCreatedSuccessfully: boolean;
   transactionDetails: LedgerResponse;
+  isAdvanceSearchApplied: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -39,7 +40,8 @@ export const initialState: LedgerState = {
   isTxnUpdateSuccess: false,
   isQuickAccountInProcess: false,
   isQuickAccountCreatedSuccessfully: false,
-  transactionDetails: null
+  transactionDetails: null,
+  isAdvanceSearchApplied: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -66,11 +68,24 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         transactionInprogress: true
       });
     case LEDGER.GET_TRANSACTION_RESPONSE:
+    transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
+    if (transaction.status === 'success') {
+      return Object.assign({}, state, {
+        transactionInprogress: false,
+        isAdvanceSearchApplied: false,
+        transcationRequest: transaction.request,
+        transactionsResponse: transaction.body
+      });
+    }
+    return Object.assign({}, state, {
+      transactionInprogress: false
+    });
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
         return Object.assign({}, state, {
           transactionInprogress: false,
+          isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
           transactionsResponse: transaction.body
         });

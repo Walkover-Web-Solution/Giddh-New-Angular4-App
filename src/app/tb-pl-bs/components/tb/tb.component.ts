@@ -37,7 +37,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
         <span></span>
         <span></span>
         <span></span>
-       <h1>loading ledger</h1>
+       <h1>loading trial balance</h1>
       </div>
     </div>
     <div *ngIf="(data$ | async) && !(showLoader | async)">
