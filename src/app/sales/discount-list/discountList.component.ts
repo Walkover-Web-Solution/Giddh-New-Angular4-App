@@ -17,9 +17,6 @@ import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAc
     .dropdown-menu>li>a.btn-link{
       color: #10aae0;
     }
-    :host .dropdown-menu{
-      overflow: auto;
-    }
   `]
 })
 
