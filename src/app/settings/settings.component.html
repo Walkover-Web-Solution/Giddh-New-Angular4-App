@@ -5,21 +5,21 @@
                 <tab heading="Taxes">
                     <setting-taxes></setting-taxes>
                 </tab>
-                <tab heading="Integration">
-                    <setting-integration></setting-integration>
+                <tab heading="Integration" (select)="integrationSelected($event)">
+                    <setting-integration #integrationComponent></setting-integration>
                 </tab>
-                <tab heading="Linked Accounts">
-                    <setting-linked-accounts></setting-linked-accounts>
+                <tab heading="Linked Accounts" (select)="linkedAccountSelected($event)">
+                    <setting-linked-accounts #eBankComp></setting-linked-accounts>
                 </tab>
                 <tab heading="Profile" (select)="profileSelected($event)">
-                    <setting-profile></setting-profile>
+                    <setting-profile #profileComponent></setting-profile>
                 </tab>
                 <tab heading="Payment Details">Payment Details content</tab>
-                <tab heading="Financial Year">
-                    <financial-year></financial-year>
+                <tab heading="Financial Year" (select)="financialYearSelected($event)">
+                    <financial-year #financialYearComp></financial-year>
                 </tab>
-                <tab *ngIf="isUserSuperAdmin" heading="Permission">
-                    <setting-permission></setting-permission>
+                <tab *ngIf="isUserSuperAdmin" (select)="permissionTabSelected($event)" heading="Permission">
+                    <setting-permission #permissionComp></setting-permission>
                 </tab>
             </tabset>
         </div>
