@@ -342,6 +342,7 @@ export class GroupWithAccountsAction {
           type: 'EmptyAction'
         };
       } else {
+        debugger;
         this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
         this._toasty.successToast('Group Updated Successfully');
         return {
