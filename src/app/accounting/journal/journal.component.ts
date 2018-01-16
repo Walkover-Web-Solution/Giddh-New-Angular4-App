@@ -40,7 +40,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-  
+
   public accounts$: Observable<IOption[]>;
   public accounts: IOption[] = [];
   public allAccounts: IOption[] = [];
@@ -52,7 +52,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public showConfirmationBox: boolean = false;
   public moment = moment;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-  public isGroupToggle: boolean;
+  public noGroups: boolean;
   public accountSearch: string = '';
   public selectedIdx: any;
   public isSelectedRow: boolean;
@@ -60,6 +60,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public showFromDatePicker: boolean = false;
   public journalDate: any;
   public navigateURL: any = CustomShortcode;
+  public selectedAccList: any = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -115,7 +116,12 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       taxes: [],
       total: 0,
       discounts: [],
-      selectedAccount: null
+      selectedAccount: {
+        name: '',
+        UniqueName: '',
+        groupUniqueName: '',
+        account: ''
+      }
     });
   }
 
@@ -144,7 +150,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public onAccountFocus() {
     this.showLedgerAccountList = true;
-    this.isGroupToggle = true;
+    this.noGroups = true;
     this.flyAccounts.next(true);
   }
 
@@ -153,42 +159,59 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public onAccountBlur(ev, elem) {
     this.showLedgerAccountList = false;
-    // this.isGroupToggle = false;
-    this.flyAccounts.next(true);
+    this.noGroups = false;
+    this.flyAccounts.next(false);
     this.selectedParticular = elem;
-    // if (this.accountSearch) {
-    //   this.searchAccount('');
-    //   this.accountSearch = '';
-    // }
-    // this.searchAccount('');
+    if (this.accountSearch) {
+      this.searchAccount('');
+      this.accountSearch = '';
+    }
   }
 
   /**
-   * setAccount in particular, on accountList click
+   * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
     let idx = this.selectedIdx;
-    let accModel = {
-      name: acc.Name,
-      UniqueName: acc.UniqueName,
-      groupUniqueName: acc.groupUniqueName
-    };
-    this.showLedgerAccountList = false;
-    this.journalObj.transactions[idx].particular = accModel.UniqueName;
-    this.journalObj.transactions[idx].selectedAccount = accModel;
+    let account = _.filter(this.selectedAccList, (o) => o === acc.Name);
+
+    if (account.length > 0) {
+      this._toaster.errorToast(account + ' Account already selected.');
+      // return false;
+    } else {
+      let accModel = {
+        name: acc.Name,
+        UniqueName: acc.UniqueName,
+        groupUniqueName: acc.groupUniqueName,
+        account: acc.Name
+      };
+      this.journalObj.transactions[idx].particular = accModel.UniqueName;
+      this.journalObj.transactions[idx].selectedAccount = accModel;
+      this.selectedAccList.push(acc.Name);
+    }
     setTimeout(() => {
       this.selectedParticular.focus();
-      this.isGroupToggle = true;
-      // this.showLedgerAccountList = false;
+      this.noGroups = true;
+      this.showLedgerAccountList = false;
+      if (account.length > 0) {
+        this.journalObj.transactions[idx].selectedAccount.account = '';
+      }
     }, 50);
   }
 
   /**
    * searchAccount in accountList
    */
-  public searchAccount(str: string) {
-    this.accountSearch = str;
-    this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(str));
+  public searchAccount(str) {
+    let keyword = str;
+    // this.noGroups = true;
+    if (keyword) {
+      this.accountSearch = keyword;
+      this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(keyword));
+    } else {
+      this.noGroups = true;
+      this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(''));
+    }
   }
 
   /**
@@ -197,20 +220,26 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public validateTransation(amount, transactionObj, idx) {
     let indx = idx;
     let lastIndx = this.journalObj.transactions.length - 1;
+
+    if (transactionObj.selectedAccount.UniqueName && !amount) {
+      let indx = idx + 1;
+      this._toaster.errorToast('No amount entered for entry no. ' + indx);
+      return;
+    }
+
     if (amount) {
       transactionObj.amount = Number(amount);
       transactionObj.total = transactionObj.amount;
     }
 
-    let isLastEntry = this.validateEntry(this.journalObj.transactions[lastIndx]);
-    if (indx === lastIndx && isLastEntry) {
+    if (indx === lastIndx && this.journalObj.transactions[indx].selectedAccount.name) {
       this.newEntryObj();
     }
 
     let debitTransactions = _.filter(this.journalObj.transactions, (o) => o.type === 'by');
-    this.totalDebitAmount = _.sumBy(debitTransactions, (o) => o.amount);
+    this.totalDebitAmount = _.sumBy(debitTransactions, (o) => Number(o.amount));
     let creditTransactions = _.filter(this.journalObj.transactions, (o) => o.type === 'to');
-    this.totalCreditAmount = _.sumBy(creditTransactions, (o) => o.amount);
+    this.totalCreditAmount = _.sumBy(creditTransactions, (o) => Number(o.amount));
   }
 
   /**
@@ -226,7 +255,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
         submitBtnEle.focus();
       }, 100);
     } else {
-      this._toaster.errorToast('No transactions found.');
+      this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
       return;
     }
 
@@ -237,14 +266,15 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public saveEntry() {
     let idx = 0;
-    if (this.totalCreditAmount === this.totalDebitAmount) {
-      let data = _.cloneDeep(this.journalObj);
+    let data = _.cloneDeep(this.journalObj);
+    data.transactions = this.removeBlankTransaction(data.transactions);
 
+    if (this.totalCreditAmount === this.totalDebitAmount) {
       _.forEach(data.transactions, element => {
         element.type = (element.type === 'by') ? 'credit' : 'debit';
         // element.particular = _.find(this.accounts, (el) => el.label === element.particular).value;
       });
-      data.transactions.splice(data.transactions.length - 1, 1);
+
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
       let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
       data.transactions.splice(indexOfMaxAmountEntry, 1);
@@ -270,6 +300,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.journalDate = moment();
     this.journalObj.transactions[0].type = 'by';
     this.journalObj.voucherType = 'journal';
+    this.selectedAccList = [];
   }
 
   /**
@@ -279,17 +310,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       this.flyAccounts.next(true);
     }, 200);
-  }
-
-  /**
-   * validateEntry
-   */
-  public validateEntry(items) {
-    if (items.particular && items.amount) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   /**
@@ -318,7 +338,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       if (navigateTo) {
         this._router.navigate(['accounting', navigateTo.route]);
       }
-      console.log(navigateTo);
+      // console.log(navigateTo);
     }
   }
 
@@ -329,7 +349,20 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * onShown
    */
   public onShown() {
-    
+
+  }
+
+  /**
+   * removeBlankTransaction
+   */
+  public removeBlankTransaction(transactions) {
+    _.forEach(transactions, function (obj: any, idx) {
+      if (obj && !obj.particular && !obj.amount) {
+        // transactions.splice(idx,1);
+        transactions = _.without(transactions, obj)
+      }
+    });
+    return transactions;
   }
 
 }
