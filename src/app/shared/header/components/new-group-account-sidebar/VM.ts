@@ -10,6 +10,7 @@ import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAcco
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
 import { AccountResponseV2, AccountRequestV2 } from 'app/models/api-models/Account';
+import { _localeFactory } from '@angular/core/src/application_module';
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];
   public parentIndex: number;
@@ -165,6 +166,13 @@ export class GroupAccountSidebarVM {
           return p;
         });
         break;
+      }
+
+      case eventsConst.accountDeleted: {
+        let resp: BaseResponse<string, string> = payload;
+        let columnsLength = this.columns.length;
+        this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items.filter(f => f.uniqueName !== resp.request);
+        this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts.filter(f => f.uniqueName !== resp.request);
       }
 
       default:
