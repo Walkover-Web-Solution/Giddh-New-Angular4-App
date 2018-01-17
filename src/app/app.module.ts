@@ -1,10 +1,11 @@
+import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { FilterPipe } from './magic-link/search.pipe';
 import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -165,6 +166,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: ServiceConfig,
       useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GiddhHttpInterceptor,
+      multi: true
     }
   ]
 })
