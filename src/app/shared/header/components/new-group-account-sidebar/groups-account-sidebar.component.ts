@@ -321,24 +321,24 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     //   this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
     //   this.mc.selectGroup(item, currentIndex);
     // } else {
-      if (currentIndex === 0) {
-        this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-        this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        this.mc.selectGroup(item, currentIndex, true);
-        return;
-      }
-
-      let grpsBck: GroupsWithAccountsResponse[];
-      this.groupsListBackupStream$.take(1).subscribe(s => grpsBck = s);
-
-      this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-
-      let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
-      if (listBckup) {
-        item.groups = listBckup.groups;
-        item.accounts = listBckup.accounts;
-      }
+    if (currentIndex === 0) {
+      this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+      this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
       this.mc.selectGroup(item, currentIndex, true);
+      return;
+    }
+
+    let grpsBck: GroupsWithAccountsResponse[];
+    this.groupsListBackupStream$.take(1).subscribe(s => grpsBck = s);
+
+    this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+
+    let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
+    if (listBckup) {
+      item.groups = listBckup.groups;
+      item.accounts = listBckup.accounts;
+    }
+    this.mc.selectGroup(item, currentIndex, true);
     // }
 
     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
@@ -347,10 +347,12 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   }
 
   public onAccountClick(item: any, currentIndex: number) {
-    // debugger;
+    let grpsBck: GroupsWithAccountsResponse[];
+    this.groupsListBackupStream$.take(1).subscribe(s => grpsBck = s);
+
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
-    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+    let parentGrp = this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     if (parentGrp) {
       if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
