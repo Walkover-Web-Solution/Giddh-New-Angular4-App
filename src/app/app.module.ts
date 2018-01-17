@@ -1,6 +1,4 @@
 import { GiddhHttpInterceptor } from './services/http.interceptor';
-import { FilterPipe } from './magic-link/search.pipe';
-import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
@@ -99,8 +97,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NoContentComponent,
     DummyComponent,
     SuccessComponent,
-    FilterPipe,
-    MagicLinkComponent,
     NewUserComponent,
     LoaderComponent,
     SocialLoginCallbackComponent
@@ -138,7 +134,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, { useHash: isElectron }),
+    RouterModule.forRoot(ROUTES, { useHash: isElectron, enableTracing: true }),
     StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({
     //   maxAge: 25
