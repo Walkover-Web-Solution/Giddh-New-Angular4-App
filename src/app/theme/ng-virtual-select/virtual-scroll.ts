@@ -18,6 +18,7 @@ export interface ChangeEvent {
   `,
   styles: [`
     :host {
+      display: block;
       overflow: auto;
       overflow-y: auto;
       position: relative;
@@ -113,10 +114,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   }
 
   public ngAfterViewInit() {
-    let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
-    setTimeout(() => {
-      this.scrollInto(item);
-    }, 50);
+    if (this.selectedValues && this.selectedValues.length > 0) {
+      let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
+      setTimeout(() => {
+        this.scrollInto(item);
+      }, 50);
+    }
   }
 
   public refresh() {
