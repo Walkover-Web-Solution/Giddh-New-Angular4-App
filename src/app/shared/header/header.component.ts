@@ -1,7 +1,7 @@
 import { setTimeout } from 'timers';
-import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -23,6 +23,7 @@ import { userLoginStateEnum } from '../../store/authentication/authentication.re
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
+import { DaterangePickerComponent } from 'app/theme/ng2-daterangepicker/daterangepicker.component';
 
 @Component({
   selector: 'app-header',
@@ -44,6 +45,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
+  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
@@ -104,6 +107,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isProd = ENV;
   public isElectron: boolean = isElectron;
   public isTodaysDateSelected: boolean = false;
+  public isDateRangeSelected: boolean = false;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -123,6 +127,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private zone: NgZone,
     private route: ActivatedRoute,
     private _generalActions: GeneralActions) {
+
+    // Reset old stored application date
+    this.store.dispatch(this.companyActions.ResetApplicationDate());
 
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
@@ -168,6 +175,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+    this.store.dispatch(this.companyActions.GetApplicationDate());
     //
     this.user$.subscribe((u) => {
       if (u) {
@@ -223,14 +231,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
-
-    // Get universal date
-    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj && dateObj.length) {
-          this.datePickerOptions.startDate = moment(dateObj[0]);
-          this.datePickerOptions.endDate = moment(dateObj[1]);
-      }
-    })).take(1).subscribe();
   }
 
   public ngAfterViewInit() {
@@ -246,13 +246,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
-        // this.store.dispatch(this.companyActions.GetApplicationDate());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
       this.showAddCompanyModal();
     }
     this.store.dispatch(this.loginAction.FetchUserDetails());
+
+    // Get universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj && dateObj.length) {
+        if (!this.isDateRangeSelected) {
+          this.datePickerOptions.startDate = moment(dateObj[0]);
+          this.datePickerOptions.endDate = moment(dateObj[1]);
+          this.isDateRangeSelected = true;
+          const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+          const to: any = moment().format(GIDDH_DATE_FORMAT);
+          const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+          const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+
+          if (from === fromFromStore && to === toFromStore) {
+            this.isTodaysDateSelected = true;
+          }
+        }
+        let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
+        let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
+        if (this.dateRangePickerCmp) {
+          this.dateRangePickerCmp.nativeElement.value = `${fromForDisplay} - ${toForDisplay}`;
+        }
+      }
+    })).subscribe();
   }
 
   public ngAfterViewChecked() {
@@ -415,8 +438,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.datePickerOptions.startDate = today[0];
       this.datePickerOptions.endDate = today[1];
       let dates = {
-        fromDate: moment(today[0]).format(GIDDH_DATE_FORMAT),
-        toDate: moment(today[1]).format(GIDDH_DATE_FORMAT)
+        fromDate: null,
+        toDate: null,
+        duration: 1,
+        period: 'MONTH'
       };
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }

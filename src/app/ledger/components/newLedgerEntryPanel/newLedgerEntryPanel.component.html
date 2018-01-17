@@ -15,7 +15,7 @@
                                         <td *ngIf="currentTxn.unitRate">
                                             <label>Unit</label>
                                             <select class="form-control" style="width: 100px;" (change)="unitChanged($event.target.value)" [value]="currentTxn.inventory.unit.code">
-                        <option *ngFor="let item of currentTxn.unitRate" [value]="item.stockUnitCode">{{item.stockUnitCode}}
+                        <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">{{item.stockUnitCode}}
                         </option>
                       </select>
                                         </td>
@@ -102,7 +102,7 @@
                                     <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber" />
                                 </td>
                                 <td>
-                                    <label class="default_clr">Cheque Date</label>
+                                    <label class="default_clr">Cheque Clearance Date</label>
                                     <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate" />
                                 </td>
                             </tr>
