@@ -3323,20 +3323,6 @@ label {
     margin: 0;
 }
 
-
-/* sales universal styles */
-
-.tax-list-dd-wrap .dropdown-menu {
-    min-width: 200px;
-}
-
-.tax-list-dd-wrap .dropdown-menu li label {
-    clear: both;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-
 /*************************************************** Custom Invoice CSS  ****************************************************/
 
 #customInvoice .templateEditor input[type="checkbox"] {
