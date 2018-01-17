@@ -14,6 +14,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GeneralService } from 'app/services/general.service';
+import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Component({
   selector: 'groups-account-sidebar',
@@ -44,6 +45,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   public breadcrumbUniqueNamePath: string[] = [];
   @Output() public breadcrumbPathChanged = new EventEmitter();
   public activeAccount: Observable<AccountResponseV2>;
+
+  @Output() public resetSearchString: EventEmitter<boolean> = new EventEmitter();
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -143,6 +146,12 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     this._generalServices.eventHandler.takeUntil(this.destroyed$).subscribe(s => {
       this.mc.handleEvents(s.name, s.payload);
+
+      // reset search string when you're in search case for move group
+      if (s.name === eventsConst.groupMoved) {
+        this.resetSearchString.emit(true);
+      }
+
       let groups: IGroupsWithAccounts[];
       this.store.select(state => state.general.groupswithaccounts).take(1).subscribe(grp => groups = grp);
 
