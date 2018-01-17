@@ -84,7 +84,7 @@ module.exports = function (env) {
     errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl,
-    APP_FOLDER: 'electron/'
+    APP_FOLDER: 'app/'
 
   });
 
