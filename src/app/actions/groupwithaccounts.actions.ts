@@ -65,6 +65,8 @@ export class GroupWithAccountsAction {
   public static DELETE_GROUP = 'GroupDelete';
   public static DELETE_GROUP_RESPONSE = 'GroupDeleteResponse';
 
+  public static GEN_ADD_AND_MANAGE_UI = 'GEN_ADD_AND_MANAGE_UI';
+
   @Effect()
   public ApplyGroupTax$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX)
@@ -299,6 +301,10 @@ export class GroupWithAccountsAction {
         let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
         this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
         this._toasty.successToast('Group moved successfully', '');
+        this.store.dispatch({
+          type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
+          payload: data.request.parentGroupUniqueName
+        });
         return this.getGroupDetails(data.request.parentGroupUniqueName);
       }
       return {
