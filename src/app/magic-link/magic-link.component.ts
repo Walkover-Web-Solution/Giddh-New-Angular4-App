@@ -68,6 +68,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private route: ActivatedRoute, private _magicLinkService: MagicLinkService, private _toaster: ToasterService, @Inject(DOCUMENT) private document: Document, private winRef: WindowRef) {
+    console.log('coming inside magic link constructor');
     this.ledgerData.account = { name: '', uniqueName: '' };
     this.ledgerData.ledgerTransactions = {
       forwardedBalance: { amount: 0, type: '', description: '' },
@@ -82,6 +83,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    console.log('coming inside magic link ngOnInit');
     this.route.queryParams
       .filter(params => params.id)
       .subscribe(params => {
