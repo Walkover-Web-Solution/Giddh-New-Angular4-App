@@ -64,6 +64,14 @@ export class FakeDiscountItem {
   public name: string;
 }
 
+export interface ITaxList {
+  name: string;
+  uniqueName: string;
+  amount: number;
+  isChecked: boolean;
+  isDisabled?: boolean;
+}
+
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public discount: any[];
   public hsnOrSac: string;
@@ -81,7 +89,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public stockDetails?: any;
   public stockList?: IStockUnit[] = [];
   public applicableTaxes: string[] = [];
-  public taxRenderData: string[] = [];
+  public taxRenderData: ITaxList[] = [];
   constructor() {
     super();
     this.amount = null;
