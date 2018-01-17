@@ -307,7 +307,7 @@ export class UpdateLedgerVm {
         this.stockTrxEntry.isUpdated = true;
       }
       this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
-      this.stockTrxEntry.inventory.rate = Number(Number(val) / this.stockTrxEntry.inventory.quantity);
+      this.stockTrxEntry.inventory.rate = Number((Number(val) / this.stockTrxEntry.inventory.quantity).toFixed(2));
     } else {
       // find account that's from category income || expenses
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
@@ -385,7 +385,7 @@ export class UpdateLedgerVm {
     let requestObj: LedgerResponse = cloneDeep(this.selectedLedger);
     let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
     requestObj.voucherType = requestObj.voucher.shortCode;
-    requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
+    requestObj.transactions = requestObj.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName) : [];
     requestObj.generateInvoice = this.selectedLedger.generateInvoice;
     requestObj.transactions.map(trx => {
       if (trx.inventory && trx.inventory.stock) {

@@ -1,8 +1,9 @@
+import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -54,7 +55,7 @@ import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.m
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' }
+  { provide: APP_BASE_HREF, useValue: isElectron ? '/' : AppUrl + APP_FOLDER }
 ];
 
 interface InternalStateType {
@@ -133,7 +134,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, { useHash: isElectron }),
     StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({
     //   maxAge: 25
@@ -161,6 +162,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: ServiceConfig,
       useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GiddhHttpInterceptor,
+      multi: true
     }
   ]
 })
