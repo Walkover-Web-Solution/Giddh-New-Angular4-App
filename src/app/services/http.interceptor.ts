@@ -21,8 +21,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     if (this.isOnline) {
       return next.handle(request);
     } else {
-      // this._toasterService.clearAllToaster();
-      this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
+      setTimeout(() => {
+        this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
+      }, 100);
       return Observable.empty();
     }
   }
