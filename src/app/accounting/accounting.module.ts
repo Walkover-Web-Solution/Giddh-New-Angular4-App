@@ -19,13 +19,16 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { AccountsSideBarComponent } from 'app/shared/header/components';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/accounting-sidebar.component';
+import { AccountListComponent } from 'app/accounting/account-list/accounts-list.component';
+import { TooltipModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
     AccountingComponent,
     JournalComponent,
     PurchaseComponent,
-    AccountingSidebarComponent
+    AccountingSidebarComponent,
+    AccountListComponent
   ],
   exports: [RouterModule, AccountingSidebarComponent],
   providers: [KeyboardService],
@@ -44,6 +47,7 @@ import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/acc
     ShSelectModule,
     SharedModule,
     ClickOutsideModule,
+    TooltipModule
     // Daterangepicker
   ],
 })

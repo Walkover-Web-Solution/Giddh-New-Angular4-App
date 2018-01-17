@@ -44,7 +44,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public accounts$: Observable<IOption[]>;
   public accounts: IOption[] = [];
   public allAccounts: IOption[] = [];
-  public showLedgerAccountList: boolean = false;
+  public showLedgerAccountList: boolean = true;
   public selectedInput: 'by' | 'to' = 'by';
   public journalObj: BlankLedgerVM = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
@@ -79,17 +79,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnInit() {
 
-    /********** commented due to unused
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        data.body.results.map(d => {
-          accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-        });
-        this.accounts = this.allAccounts = accounts;
-      }
-    }); **********/
-
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
@@ -98,9 +87,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     this.refreshEntry();
-    // this.newEntryObj();
-    // this.journalObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    // this.journalObj.transactions[0].type = 'by';
+
   }
 
   /**
@@ -158,7 +145,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * onAccountBlur() to hide accountList
    */
   public onAccountBlur(ev, elem) {
-    this.showLedgerAccountList = false;
+    // this.showLedgerAccountList = false;
     this.noGroups = false;
     this.flyAccounts.next(false);
     this.selectedParticular = elem;
