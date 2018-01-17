@@ -36,7 +36,7 @@
     <form name="moveGroupForm" class="horizontal-form" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
-        <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [isFilterEnabled]="true"  class="pull-left" style="width: calc(100% - 92px);">
+        <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [isFilterEnabled]="true"  class="pull-left" style="width: calc(100% - 92px);">
             <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
             <ng-template #optionTemplate let-option="option">
                 <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
