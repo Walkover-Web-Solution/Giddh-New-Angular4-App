@@ -73,28 +73,21 @@
     </div>
 </div>
 
+
+
 <div class="sidebar_menu col-xs-2 pd0">
-    <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
+
+    <div class="bdrL account_listbar pos_rel" *ngIf="showLedgerAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-
-        <accounts-side-bar [isGroupToggle]="true" [noGroups]="noGroups" [search]='accountSearch' [flyAccounts]="flyAccounts | async" (onSelectItem)="setAccount($event);" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
-
-        <!-- <ul class="pdL1" style="color:black;">
-            <li class="cursor-pointer" (click)="setAccount(account);" *ngFor="let account of accounts">{{ account.label }}</li>
-        </ul> -->
-
+        <accounts-list [search]="accountSearch" [grpFilter]="" [isOpen]="showLedgerAccountList"></accounts-list>
     </div>
-    <ul class="menu_list">
-        <!-- "isHidden" class  if user is not able to access the module-->
-        <li><a [routerLink]="['/pages/accounting/journal']" class="primary_clr">F1: Journal</a></li>
-        <li><a [routerLink]="['/pages/accounting/purchase']" class="">F9: Purchase</a></li>
-        <!-- <li><a href="">F2: Order Vouchers</a></li>
-        <li><a href="">F3: Payroll Voucher</a></li>
-        <li><a href="">F4: Date</a></li>
-        <li><a href="">F5: Company</a></li>
-        <li><a href="">F6: Contra</a></li> -->
-    </ul>
+    <accounting-sidebar></accounting-sidebar>
+
 </div>
+
+<!-- <accounting-sidebar [AccountListOpen]="showLedgerAccountList"></accounting-sidebar> -->
+
+
 
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
