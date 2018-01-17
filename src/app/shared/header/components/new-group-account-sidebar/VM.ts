@@ -7,6 +7,8 @@ import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
+import { AppState } from 'app/store';
+import { Store } from '@ngrx/store';
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];
   public parentIndex: number;
@@ -16,7 +18,7 @@ export class GroupAccountSidebarVM {
   public selectedGrp: ColumnGroupsAccountVM;
   public keyWord: string;
 
-  constructor(private _cdRef: ChangeDetectorRef) {
+  constructor(private _cdRef: ChangeDetectorRef, private store: Store<AppState>) {
 
   }
   public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
@@ -87,16 +89,31 @@ export class GroupAccountSidebarVM {
       case eventsConst.groupMoved: {
         let data = payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
         let cols = _.cloneDeep(this.columns);
-        this.columns = cols.map((col, colIndex) => {
-          let itemIndex = col.Items.findIndex(f => f.uniqueName === data.queryString.groupUniqueName);
-
-          if (itemIndex > -1) {
-            col.Items = col.Items.filter(p => p.uniqueName !== data.queryString.groupUniqueName);
-            this.columns[itemIndex - 1].groups = this.columns[itemIndex - 1].groups.filter(p => p.uniqueName !== data.queryString.groupUniqueName);
-          }
-          return col;
-        });
         this.columns.pop();
+        this.columns.forEach((col, colIndex) => {
+          let itemIndex = col.Items.findIndex(f => f.uniqueName === data.request.parentGroupUniqueName);
+          if (itemIndex > -1) {
+            // remove all columns first
+            this.columns.splice(colIndex, this.columns.length - 1);
+            let fCol = col;
+            // add new parent column of finded item
+            this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
+
+            let newCol = fCol.Items.find(j => j.uniqueName === data.request.parentGroupUniqueName);
+            let grpsBck: GroupsWithAccountsResponse[];
+            this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+
+            let listBckup = this.activeGroupFromGroupListBackup(grpsBck, newCol.uniqueName, null);
+            if (listBckup) {
+              newCol.groups = listBckup.groups;
+              newCol.accounts = listBckup.accounts;
+            }
+            // add sub column of last added column
+            this.columns.push(new ColumnGroupsAccountVM(newCol as IGroupsWithAccounts));
+
+            return;
+          }
+        });
         break;
       }
 
