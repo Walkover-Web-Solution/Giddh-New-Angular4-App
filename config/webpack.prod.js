@@ -6,11 +6,11 @@ const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
 /**
  * Used to merge webpack configs
-*/
+ */
 const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
-*/
+ */
 const commonConfig = require('./webpack.common.js');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /**
@@ -51,14 +51,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 function getUglifyOptions(supportES2015) {
   const uglifyCompressOptions = {
-    pure_getters: true, /* buildOptimizer */
+    pure_getters: true,
+    /* buildOptimizer */
     // PURE comments work best with 3 passes.
     // See https://github.com/webpack/webpack/issues/2899#issuecomment-317425926.
-    passes: 3         /* buildOptimizer */
+    passes: 3 /* buildOptimizer */
   };
   return {
     ecma: supportES2015 ? 6 : 5,
-    warnings: false,    // TODO verbose based on option?
+    warnings: false, // TODO verbose based on option?
     ie8: false,
     mangle: true,
     compress: uglifyCompressOptions,
@@ -72,7 +73,7 @@ function getUglifyOptions(supportES2015) {
 module.exports = function (env) {
   const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
-  const AppUrl = 'https://giddh.com/new/';
+  const AppUrl = 'https://giddh.com/';
   const ApiUrl = 'https://api.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'giddh.com',
@@ -83,13 +84,16 @@ module.exports = function (env) {
     errlyticsNeeded: true,
     errlyticsKey: ERRLYTICS_KEY_PROD,
     AppUrl: AppUrl,
-    ApiUrl: ApiUrl
-
+    ApiUrl: ApiUrl,
+    APP_FOLDER: 'app/'
   });
 
   // set environment suffix so these environments are loaded.
   METADATA.envFileSuffix = METADATA.E2E ? 'e2e.prod' : 'prod';
-  return webpackMerge(commonConfig({ env: ENV, metadata: METADATA }), {
+  return webpackMerge(commonConfig({
+    env: ENV,
+    metadata: METADATA
+  }), {
 
     /**
      * Options affecting the output of the compilation.
@@ -196,29 +200,30 @@ module.exports = function (env) {
       new HashedModuleIdsPlugin(),
       new ModuleConcatenationPlugin(),
       /**
-         * Plugin: DefinePlugin
-         * Description: Define free variables.
-         * Useful for having development builds with debug logging or adding global constants.
-         *
-         * Environment helpers
-         *
-         * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-         */
-        // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-        new DefinePlugin({
+       * Plugin: DefinePlugin
+       * Description: Define free variables.
+       * Useful for having development builds with debug logging or adding global constants.
+       *
+       * Environment helpers
+       *
+       * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+       */
+      // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
+      new DefinePlugin({
+        'ENV': JSON.stringify(METADATA.ENV),
+        'HMR': METADATA.HMR,
+        'isElectron': false,
+        'errlyticsNeeded': true,
+        'errlyticsKey': ERRLYTICS_KEY_PROD,
+        'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+        'APP_FOLDER': JSON.stringify(METADATA.APP_FOLDER),
+        'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
-          'HMR': METADATA.HMR,
-          'isElectron': false,
-          'errlyticsNeeded': true,
-          'errlyticsKey': ERRLYTICS_KEY_PROD,
-          'AppUrl': JSON.stringify(METADATA.AppUrl),
-          'ApiUrl': JSON.stringify(METADATA.ApiUrl),
-          'process.env': {
-            'ENV': JSON.stringify(METADATA.ENV),
-            'NODE_ENV': JSON.stringify(METADATA.ENV),
-            'HMR': METADATA.HMR
-          }
-        }),
+          'NODE_ENV': JSON.stringify(METADATA.ENV),
+          'HMR': METADATA.HMR
+        }
+      }),
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         title: METADATA.title,

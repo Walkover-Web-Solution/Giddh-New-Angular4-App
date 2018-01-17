@@ -1,6 +1,7 @@
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { GroupService } from './../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerConfig, BsDaterangepickerComponent } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -11,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { IOption } from './../../../theme/ng-select/option.interface';
 import { AccountService } from './../../../services/account.service';
 import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges, OnDestroy, AfterViewInit } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -32,8 +33,10 @@ const COMPARISON_FILTER = [
   templateUrl: './advance-search.component.html'
 })
 
-export class AdvanceSearchModelComponent implements OnInit {
+export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
 
+  @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
+  @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
   @Input() public accountUniqueName: string;
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -54,7 +57,60 @@ export class AdvanceSearchModelComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
+    this.setAdvanceSearchForm();
+    this.setVoucherTypes();
+    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+  }
 
+  public ngOnInit() {
+    this.store.dispatch(this.inventoryAction.GetStock());
+    // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
+    this.flattenAccountListStream$.subscribe(data => {
+      if (data) {
+        let accounts: IOption[] = [];
+        data.map(d => {
+          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
+        });
+        this.accounts$ = Observable.of(accounts);
+      }
+    });
+
+    this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
+      let data = _.cloneDeep(allStocks);
+      if (data && data.results) {
+        let units = data.results;
+
+        return units.map(unit => {
+          return {label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+        });
+      }
+    })).takeUntil(this.destroyed$);
+
+    // Get groups with accounts
+    this._groupService.GetFlattenGroupsAccounts().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let groups: IOption[] = [];
+        data.body.results.map(d => {
+          groups.push({label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName});
+        });
+        this.groups$ = Observable.of(groups);
+      }
+    });
+  }
+
+  public resetAdvanceSearchModal() {
+    if (this.dropDowns) {
+      this.dropDowns.forEach((el) => {
+        el.clear();
+      });
+    }
+    this.dateRangePicker.bsValue = [];
+    this.setAdvanceSearchForm();
+  }
+
+  public setAdvanceSearchForm() {
     this.advanceSearchForm = this.fb.group({
       uniqueNames: [[]],
       isInvoiceGenerated: [null],
@@ -89,49 +145,6 @@ export class AdvanceSearchModelComponent implements OnInit {
         includeItemEqualTo: false,
         includeItemGreaterThan: false
       }),
-    });
-
-    this.setVoucherTypes();
-    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
-    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-  }
-
-  public ngOnInit() {
-
-    this.store.dispatch(this.inventoryAction.GetStock());
-    // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
-
-    this.flattenAccountListStream$.subscribe(data => {
-      if (data) {
-        let accounts: IOption[] = [];
-        data.map(d => {
-          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
-    });
-
-    this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
-      let data = _.cloneDeep(allStocks);
-      if (data && data.results) {
-        let units = data.results;
-
-        return units.map(unit => {
-          return {label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
-        });
-      }
-    })).takeUntil(this.destroyed$);
-
-    // Get groups with accounts
-    this._groupService.GetFlattenGroupsAccounts().takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let groups: IOption[] = [];
-        data.body.results.map(d => {
-          groups.push({label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName});
-        });
-        this.groups$ = Observable.of(groups);
-      }
     });
   }
 
@@ -171,8 +184,10 @@ export class AdvanceSearchModelComponent implements OnInit {
    * onDateRangeSelected
    */
   public onDateRangeSelected(data) {
-    this.fromDate = moment(data[0]).format('DD-MM-YYYY');
-    this.toDate = moment(data[1]).format('DD-MM-YYYY');
+    if (data && data.length) {
+      this.fromDate = moment(data[0]).format('DD-MM-YYYY');
+      this.toDate = moment(data[1]).format('DD-MM-YYYY');
+    }
   }
 
   /**
@@ -183,7 +198,6 @@ export class AdvanceSearchModelComponent implements OnInit {
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
     }
-    console.log('advanceSearchForm is :', dataToSend);
     this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
     this.closeModelEvent.emit(true);
     // this.advanceSearchForm.reset();
@@ -351,5 +365,10 @@ export class AdvanceSearchModelComponent implements OnInit {
     if (!val) {
       this.advanceSearchForm.get('description').patchValue(null);
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
