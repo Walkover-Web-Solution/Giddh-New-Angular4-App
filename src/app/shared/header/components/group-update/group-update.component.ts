@@ -16,6 +16,7 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'group-update',
@@ -51,6 +52,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public accountList: any[];
   public showTaxes: boolean = false;
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
+  @ViewChild('moveToGroupDropDown') public moveToGroupDropDown: ShSelectComponent;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -251,6 +253,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     grpObject.parentGroupUniqueName = this.moveGroupForm.value.moveto;
     this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGroupUniqueName));
     this.moveGroupForm.reset();
+
+    if (this.moveToGroupDropDown) {
+      this.moveToGroupDropDown.clear();
+    }
   }
 
   public deleteGroup() {
