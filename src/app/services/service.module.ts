@@ -1,3 +1,4 @@
+import { MagicLinkService } from './magic-link.service';
 import { PermissionDataService } from './../permissions/permission-data.service';
 import { LogsService } from './logs.service';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -77,6 +78,7 @@ export class ServiceModule {
         LogsService,
         TlPlService,
         LedgerService,
+        MagicLinkService,
         SettingsIntegrationService,
         SettingsProfileService,
         SettingsTaxesService,

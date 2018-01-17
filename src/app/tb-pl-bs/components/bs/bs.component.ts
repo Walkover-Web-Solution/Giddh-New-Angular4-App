@@ -32,7 +32,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
            <span></span>
            <span></span>
            <span></span>
-          <h1>loading ledger</h1>
+          <h1>loading balance sheet</h1>
         </div>
     </div>
     <div *ngIf="!(showLoader | async)">
@@ -47,7 +47,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
 })
 export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public showLoader: Observable<boolean>;
-  public data$: Observable<ProfitLossData>;
+  public data$: Observable<BalanceSheetData>;
   public request: ProfitLossRequest;
   public expandAll: boolean;
   public search: string;
