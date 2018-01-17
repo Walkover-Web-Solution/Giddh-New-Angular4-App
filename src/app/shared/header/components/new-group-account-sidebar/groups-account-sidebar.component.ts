@@ -90,7 +90,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       this.mc.handleEvents(s.name, s.payload);
 
       // reset search string when you're in search case for move group
-      if (s.name === eventsConst.groupMoved) {
+      if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved) {
         this.resetSearchString.emit(true);
       }
 

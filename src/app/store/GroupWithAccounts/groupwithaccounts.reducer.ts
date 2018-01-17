@@ -545,6 +545,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
           groupswithaccounts: groupArray,
           moveAccountSuccess: true,
           activeAccount: null,
+          activeGroup: { uniqueName: mAcc.request.uniqueName },
+          activeGroupUniqueName: mAcc.request.uniqueName,
           showEditGroup: true,
           showEditAccount: false,
           showAddNewAccount: false
@@ -734,6 +736,8 @@ const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, ac
     for (let grp of groups) {
       if (grp.uniqueName === uniqueName) {
         let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+        grp.isOpen = false;
+        grp.isActive = false;
         result = grp.accounts[index];
         grp.accounts.splice(index, 1);
         return result;
