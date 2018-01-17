@@ -158,10 +158,18 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       let activeGroup: GroupResponse;
       this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(grp => activeGroup = grp);
 
+      let activeAccount;
+      this.store.select(state => state.groupwithaccounts.activeAccount).take(1).subscribe(acc => activeAccount = acc);
+
       this.breadcrumbPath = [];
       this.breadcrumbUniqueNamePath = [];
 
-      this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+      if (!activeAccount) {
+        this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+      } else {
+        this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+      }
+
       this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     });
   }

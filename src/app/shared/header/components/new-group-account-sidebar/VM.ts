@@ -35,6 +35,9 @@ export class GroupAccountSidebarVM {
   public handleEvents(eventType: eventsConst, payload: any) {
     let columnLength = this.columns.length;
     switch (eventType) {
+      /**
+       * group operations
+       */
       case eventsConst.groupAdded: {
         let resp: BaseResponse<GroupResponse, GroupCreateRequest> = payload;
         let grp: IGroupOrAccount = {
@@ -129,6 +132,9 @@ export class GroupAccountSidebarVM {
         break;
       }
 
+      /**
+       * account operations
+       */
       case eventsConst.accountAdded: {
         let resp: BaseResponse<AccountResponseV2, AccountRequestV2> = payload;
         let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
@@ -142,6 +148,22 @@ export class GroupAccountSidebarVM {
         };
         Items.push(acc);
         this.columns[columnLength - 1].Items = Items;
+        break;
+      }
+
+      case eventsConst.accountUpdated: {
+        let resp: BaseResponse<AccountResponseV2, AccountRequestV2> = payload;
+        let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
+        this.columns[columnLength - 1].Items = Items.map(p => {
+          if (p.uniqueName === resp.queryString.accountUniqueName) {
+            p = {
+              ...p,
+              name: resp.body.name,
+              uniqueName: resp.body.uniqueName
+            };
+          }
+          return p;
+        });
         break;
       }
 
