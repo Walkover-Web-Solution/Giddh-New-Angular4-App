@@ -48,7 +48,7 @@ module.exports = function (options) {
     errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl,
-    APP_FOLDER: 'electron/'
+    APP_FOLDER: 'app/'
   });
 
   return webpackMerge(commonConfig({
