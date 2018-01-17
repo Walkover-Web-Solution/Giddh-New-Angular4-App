@@ -262,8 +262,12 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   public prepareModelForLedgerApi() {
     let model: InvoiceFilterClass = {};
     let o = _.cloneDeep(this.ledgerSearchRequest);
-    if (o.accountUniqueName) {
-      model.accountUniqueName = o.accountUniqueName;
+    if (o && o.accountUniqueName) {
+      try {
+        model.accountUniqueName = o.accountUniqueName.value;
+      } catch (error) {
+        model.accountUniqueName = o.accountUniqueName;
+      }
     }
     if (o.entryTotal) {
       model.entryTotal = o.entryTotal;
