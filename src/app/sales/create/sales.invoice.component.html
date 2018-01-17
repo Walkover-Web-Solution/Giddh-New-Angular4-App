@@ -336,9 +336,16 @@
           <td>
             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
           </td>
-          <td class="tax-list-dd-wrap dropdown-container" *ngIf="showTaxBox">
-            <tax-control class="salesTax" [taxes]="companyTaxesList$ | async" [applicableTaxes]="transaction.applicableTaxes" [taxRenderData]="transaction.taxRenderData" [showTaxPopup]="false" [showHeading]="false" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
-            </tax-control>
+          <td class="tax-list-dd-wrap dropdown-container">
+            <sales-tax-list
+              class="salesTax"
+              [showTaxPopup]="false"
+              [taxes]="companyTaxesList$ | async"
+              [applicableTaxes]="transaction.applicableTaxes"
+              [taxListAutoRender]="transaction.taxRenderData"
+              (selectedTaxEvent)="selectedTaxEvent($event, entry)"
+              (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+            </sales-tax-list>
           </td>
           <td>
             <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total"
