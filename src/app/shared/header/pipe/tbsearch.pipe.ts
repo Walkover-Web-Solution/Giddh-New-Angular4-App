@@ -43,6 +43,7 @@ export class TbsearchPipe implements PipeTransform {
   public performSearch(input: ChildGroup[]) {
     if (input) {
       for (let grp of input) {
+        grp.isIncludedInSearch = false;
         grp = this.search(grp, this.srch);
         if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1) {
           grp.isVisible = true;
@@ -58,6 +59,7 @@ export class TbsearchPipe implements PipeTransform {
     if (input) {
       let hasAnyVisible = false;
       for (let grp of input.childGroups) {
+        grp.isIncludedInSearch = false;
         grp = this.search(grp, s);
         if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1 ||
           this.checkIndex(grp.groupName.toLowerCase(), s.toLowerCase()) && this.checkIndex(grp.uniqueName.toLowerCase(), s.toLowerCase())
@@ -70,14 +72,29 @@ export class TbsearchPipe implements PipeTransform {
           grp.isIncludedInSearch = false;
         }
       }
-      for (const acc of input.accounts) {
-        if (this.checkIndex(acc.name.toLowerCase(), s.toLowerCase()) && this.checkIndex(acc.uniqueName.toLowerCase(), s.toLowerCase())) {
-          acc.isIncludedInSearch = true;
-          acc.isVisible = true;
-          hasAnyVisible = true;
-        } else {
-          acc.isIncludedInSearch = false;
-          acc.isVisible = false;
+      if (this.checkIndex(input.groupName.toLowerCase(), s.toLowerCase())) {
+        // debugger;
+        hasAnyVisible = true;
+        input.isIncludedInSearch = true;
+        for (const acc of input.accounts) {
+          if ((this.checkIndex(acc.name.toLowerCase(), s.toLowerCase()) && this.checkIndex(acc.uniqueName.toLowerCase(), s.toLowerCase())) || input.isIncludedInSearch) {
+            acc.isIncludedInSearch = true;
+            acc.isVisible = true;
+          } else {
+            acc.isIncludedInSearch = true;
+            acc.isVisible = true;
+          }
+        }
+      } else {
+        for (const acc of input.accounts) {
+          if ((this.checkIndex(acc.name.toLowerCase(), s.toLowerCase()) && this.checkIndex(acc.uniqueName.toLowerCase(), s.toLowerCase())) || input.isIncludedInSearch) {
+            acc.isIncludedInSearch = true;
+            acc.isVisible = true;
+            hasAnyVisible = true;
+          } else {
+            acc.isIncludedInSearch = false;
+            acc.isVisible = false;
+          }
         }
       }
       if (hasAnyVisible) {
