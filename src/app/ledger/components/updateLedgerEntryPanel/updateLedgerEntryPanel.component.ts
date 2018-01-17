@@ -221,15 +221,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
           });
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
-          if (this.vm.selectedLedger.total.type === 'DEBIT') {
-            // if (!(some(this.vm.selectedLedger.transactions, { type: 'CREDIT' }))) {
-            this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-            // }
-          } else {
-            // if (!(some(this.vm.selectedLedger.transactions, { type: 'DEBIT' }))) {
-            this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
-            // }
-          }
+
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
           this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
           this.vm.getEntryTotal();
