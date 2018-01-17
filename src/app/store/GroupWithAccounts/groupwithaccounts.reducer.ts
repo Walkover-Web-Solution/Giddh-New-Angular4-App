@@ -516,7 +516,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         isMoveGroupInProcess: true,
         isMoveGroupSuccess: false
       };
-    case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
+    case GroupWithAccountsAction.MOVE_GROUP_RESPONSE: {
       let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
       if (m.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
@@ -525,6 +525,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
           activeGroup: { uniqueName: m.request.parentGroupUniqueName },
+          activeGroupUniqueName: m.request.parentGroupUniqueName,
           isMoveGroupInProcess: false,
           isMoveGroupSuccess: true
         });
@@ -534,6 +535,16 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         isMoveGroupInProcess: false,
         isMoveGroupSuccess: false
       };
+    }
+    case GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI: {
+      let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+      genAddAndManageUi(groupArray, action.payload, null);
+      return {
+        ...state,
+        groupswithaccounts: groupArray
+      };
+    }
+
     case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
       let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
       if (mAcc.status === 'success') {
@@ -868,6 +879,26 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
     if (grp.groups) {
       result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
       if (result) {
+        return result;
+      }
+    }
+  }
+};
+
+const genAddAndManageUi = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
+  for (let grp of groups) {
+    if (grp.uniqueName === uniqueName) {
+      grp.isActive = true;
+      grp.isOpen = true;
+      result = true;
+      return result;
+    }
+
+    if (grp.groups) {
+      result = genAddAndManageUi(grp.groups, uniqueName, result);
+
+      if (result) {
+        grp.isOpen = true;
         return result;
       }
     }
