@@ -246,16 +246,8 @@ export class AccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {type: 'EmptyAction'};
       } else {
+        this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
         this._toasty.successToast('Account Updated Successfully');
-        let groupSearchString: string;
-        this.store.take(1).subscribe(a => {
-          groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
-        });
-        if (groupSearchString) {
-          // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
-        } else {
-          // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-        }
 
         setTimeout(this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm()), 1000);
         this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
