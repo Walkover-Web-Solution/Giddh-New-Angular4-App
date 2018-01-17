@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
+import { AccountResponseV2, AccountRequestV2 } from 'app/models/api-models/Account';
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];
   public parentIndex: number;
@@ -125,6 +126,22 @@ export class GroupAccountSidebarVM {
             return;
           }
         }
+        break;
+      }
+
+      case eventsConst.accountAdded: {
+        let resp: BaseResponse<AccountResponseV2, AccountRequestV2> = payload;
+        let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
+        let acc: IGroupOrAccount = {
+          accounts: [],
+          groups: [],
+          isGroup: false,
+          name: resp.body.name,
+          uniqueName: resp.body.uniqueName,
+          isVisible: true
+        };
+        Items.push(acc);
+        this.columns[columnLength - 1].Items = Items;
         break;
       }
 
