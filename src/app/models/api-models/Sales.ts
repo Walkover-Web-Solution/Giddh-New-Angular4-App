@@ -64,6 +64,14 @@ export class FakeDiscountItem {
   public name: string;
 }
 
+export interface ITaxList {
+  name: string;
+  uniqueName: string;
+  amount: number;
+  isChecked: boolean;
+  isDisabled?: boolean;
+}
+
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public discount: any[];
   public hsnOrSac: string;
@@ -81,11 +89,11 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public stockDetails?: any;
   public stockList?: IStockUnit[] = [];
   public applicableTaxes: string[] = [];
-  public taxRenderData: string[] = [];
+  public taxRenderData: ITaxList[] = [];
   constructor() {
     super();
-    this.amount = 0;
-    this.total = 0;
+    this.amount = null;
+    this.total = null;
     this.isStockTxn = false;
     this.hsnOrSac = 'sac';
   }
@@ -247,6 +255,7 @@ export class InvoiceFormClass {
   public totalTax?: any;
   public invoiceDetails: InvoiceDetailsClass;
   public other?: OtherSalesItemClass;
+  public uniqueName?: string;
   public country: CountryClass;
   constructor() {
     this.invoiceDetails = new InvoiceDetailsClass();

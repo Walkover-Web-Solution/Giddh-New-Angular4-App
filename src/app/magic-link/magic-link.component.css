@@ -1,0 +1,172 @@
+#magicLink {
+    font-size: 14px;
+}
+
+.nav-link>.active {
+    background-color: #f26122;
+}
+
+#demo {
+    padding-top: 25.833px;
+    font-size: 26px;
+    color: #fff;
+    font-weight: regular;
+}
+
+.account_name {
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.rec {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.nav-tabs>li>a {
+    color: #000;
+}
+
+.bg-f9 {
+    background: #f9f9f9;
+}
+
+.bg-gr {
+    background: #ccc;
+}
+
+.bg-wh {
+    background: #fff;
+}
+
+.bg-yl {
+    background: #fff7ea;
+}
+
+.wid-50 {
+    width: 50%;
+}
+
+.bg-bl {
+    background: #27273b;
+}
+
+.fs-18 {
+    font-size: 18px;
+}
+
+.download-invoice-ledger {
+    position: absolute;
+}
+
+#transaction_table table th[class*=col-]:last-child {
+    border-right: 1px solid #ddd !important;
+}
+
+#transaction_table table td[class*=col-],
+table th[class*=col-] {
+    padding: 8px;
+}
+
+.compoundEntry td,
+.compoundEntry td .form-control {
+    background: #fddfa4 !important;
+    border-left: 1px solid #ccc;
+}
+
+.nav.nav-tabs {
+    padding: 0;
+    border: 0;
+}
+
+.nav-tabs>li>a {
+    border-radius: 0;
+}
+
+.nav-tabs>li>a.active,
+.nav-tabs>li>a.active:focus,
+.nav-tabs>li>a.active:hover {
+    background-color: #f26122;
+    color: #fff !important;
+}
+
+.table-bordered {
+    border: 0;
+}
+
+.pd350 {
+    padding-bottom: 350px;
+}
+
+
+/* --------------- Responsive Fixes --------------- */
+
+
+/* small device */
+
+@media (max-width: 992px) {
+    .device-big {
+        display: none;
+    }
+    .device-small {
+        display: block;
+    }
+    #web-cont {
+        display: none;
+    }
+    #web-bg {
+        background-color: #fff;
+    }
+}
+
+
+/* big device */
+
+@media only screen and (min-width: 993px) {
+    .device-big,
+    .tab-content>.tab-pane {
+        display: block;
+    }
+    .device-small {
+        display: none;
+    }
+    .tab-content>.tab-pane {
+        display: inline;
+    }
+    #mob-cont {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 993px) {
+    .col-md-6 {
+        width: 50%;
+    }
+    .ledger_book:before {
+        content: ' ';
+        height: 100%;
+        position: absolute;
+        width: 0;
+        border-left: 1px solid #ccc;
+        top: 0;
+        bottom: 0;
+        z-index: 9;
+        margin: 0 auto;
+        left: 0px;
+        right: 0;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .container {
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+}
+
+
+/* --------------- / Responsive Fixes --------------- */
