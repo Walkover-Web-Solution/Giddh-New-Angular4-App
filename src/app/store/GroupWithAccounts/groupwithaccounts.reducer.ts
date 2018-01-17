@@ -42,6 +42,8 @@ export interface CurrentGroupAndAccountState {
   isUpdateGroupSuccess?: boolean;
   isDeleteGroupInProcess?: boolean;
   isDeleteGroupSuccess?: boolean;
+  isMoveGroupInProcess?: boolean;
+  isMoveGroupSuccess?: boolean;
   isGroupNameAvailable?: boolean;
   fetchingAccUniqueName: boolean;
   isAccountNameAvailable?: boolean;
@@ -103,6 +105,8 @@ const initialState: CurrentGroupAndAccountState = {
   newlyCreatedAccount: null,
   isDeleteGroupSuccess: false,
   isDeleteGroupInProcess: false,
+  isMoveGroupSuccess: false,
+  isMoveGroupInProcess: false,
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -283,7 +287,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         isUpdateGroupInProcess: false,
         isUpdateGroupSuccess: false,
         isDeleteGroupSuccess: false,
-        isDeleteGroupInProcess: false
+        isDeleteGroupInProcess: false,
+        isMoveGroupInProcess: false,
+        isMoveGroupSuccess: false
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
@@ -504,6 +510,12 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         isDeleteGroupInProcess: false,
         isDeleteGroupSuccess: false
       };
+    case GroupWithAccountsAction.MOVE_GROUP:
+      return {
+        ...state,
+        isMoveGroupInProcess: true,
+        isMoveGroupSuccess: false
+      };
     case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
       let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
       if (m.status === 'success') {
@@ -512,10 +524,16 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
-          activeGroup: { uniqueName: m.request.parentGroupUniqueName }
+          activeGroup: { uniqueName: m.request.parentGroupUniqueName },
+          isMoveGroupInProcess: false,
+          isMoveGroupSuccess: true
         });
       }
-      return state;
+      return {
+        ...state,
+        isMoveGroupInProcess: false,
+        isMoveGroupSuccess: false
+      };
     case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
       let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
       if (mAcc.status === 'success') {
