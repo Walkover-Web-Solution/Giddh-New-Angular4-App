@@ -443,10 +443,11 @@ export class AccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         let data: BaseResponse<string, AccountMoveRequest> = action.payload;
+        this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
         this._toasty.successToast('Account moved successfully', '');
-        // let activeGrp: GroupResponse = null;
-        // this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
-        // this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
+        let activeGrp: GroupResponse = null;
+        this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
+        this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
       }
       return {
         type: 'EmptyAction'
@@ -524,11 +525,11 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
-        this._toasty.successToast(action.payload.body, '');
         let activeGroup: GroupResponse = null;
         this.store.take(1).subscribe(s => activeGroup = s.groupwithaccounts.activeGroup);
-        return this.groupWithAccountsAction.getGroupDetails(activeGroup.uniqueName);
+        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(activeGroup.uniqueName));
+        this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
+        this._toasty.successToast(action.payload.body, '');
       }
       return {
         type: 'EmptyAction'
