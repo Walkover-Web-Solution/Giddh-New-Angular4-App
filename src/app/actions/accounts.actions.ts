@@ -14,6 +14,8 @@ import { Injectable } from '@angular/core';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
+import { GeneralService } from 'app/services/general.service';
+import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Injectable()
 export class AccountsAction {
@@ -139,6 +141,7 @@ export class AccountsAction {
           type: 'EmptyAction'
         };
       } else {
+        this._generalServices.eventHandler.next({name: eventsConst.accountAdded, payload: action.payload});
         this._toasty.successToast('Account Created Successfully');
       }
       let groupSearchString: string;
@@ -544,7 +547,8 @@ export class AccountsAction {
               private _toasty: ToasterService,
               private store: Store<AppState>,
               private groupWithAccountsAction: GroupWithAccountsAction,
-              private _generalActions: GeneralActions) {
+              private _generalActions: GeneralActions,
+            private _generalServices: GeneralService) {
   }
 
   public createAccount(value: string, account: AccountRequest): CustomActions {
