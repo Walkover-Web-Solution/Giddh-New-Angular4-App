@@ -86,64 +86,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   public ngOnInit() {
     this.resetData();
 
-    this.isUpdateGroupSuccess$.subscribe(a => {
-      if (a) {
-        let activeGroup = null;
-        let groups = null;
-        this.activeGroup.take(1).subscribe(ac => activeGroup = ac);
-        this.store.select(p => p.general.groupswithaccounts).take(1).subscribe(grp => groups = grp);
-        if (activeGroup && groups) {
-          this.breadcrumbPath = [];
-          this.breadcrumbUniqueNamePath = [];
-          this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-          this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        }
-        setTimeout(() => {
-          this.ScrollToElement = true;
-        }, 0);
-      }
-    });
-
-    this.isDeleteGroupSuccess$.subscribe(a => {
-      if (a) {
-        let activeGroup = null;
-        let groups = null;
-        this.activeGroup.take(1).subscribe(ac => activeGroup = ac);
-        this.store.select(p => p.general.groupswithaccounts).take(1).subscribe(grp => groups = grp);
-        if (activeGroup && groups) {
-          this.breadcrumbPath = [];
-          this.breadcrumbUniqueNamePath = [];
-          this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-          this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        }
-        setTimeout(() => {
-          this.ScrollToElement = true;
-        }, 0);
-      }
-    });
-    // this.isUpdateAccountSuccess$.subscribe(a => {
-    //   if (a) {
-    //     if (this.isSearchingGroups) {
-    //       this.breadcrumbPath = [];
-    //       this.breadcrumbPathChanged.emit(this.breadcrumbPath);
-    //     } else {
-    //       let activeAccount = null;
-    //       let groups = null;
-    //       this.activeAccount.take(1).subscribe(ac => activeAccount = ac);
-    //       this.store.select(p => p.groupwithaccounts.groupswithaccounts).take(1).subscribe(grp => groups = grp);
-    //       if (activeAccount && groups) {
-    //         this.breadcrumbPath = [];
-    //         this.breadcrumbUniqueNamePath = [];
-    //         this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
-    //         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-    //       }
-    //       setTimeout(() => {
-    //         this.ScrollToElement = true;
-    //       }, 0);
-    //     }
-    //   }
-    // });
-
     this._generalServices.eventHandler.takeUntil(this.destroyed$).subscribe(s => {
       this.mc.handleEvents(s.name, s.payload);
 
