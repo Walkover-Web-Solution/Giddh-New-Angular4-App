@@ -33,7 +33,7 @@
                                                     </div>
                                                 </a>
                                             </li>
-                                            <li class="dmLi trialB" [checkPermission]="['MENU', 'LEDGER']">
+                                            <li class="dmLi trialB" *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
                                                 <a [routerLink]="['/pages/daybook']">
                                                     <div class="media">
                                                         <div class="media-body">
