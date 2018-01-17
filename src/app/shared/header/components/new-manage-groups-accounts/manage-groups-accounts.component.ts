@@ -27,7 +27,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public showForm: boolean = false;
   @ViewChild('myModel') public myModel: ElementRef;
   @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false };
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
   @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarComponent;
 
   public breadcrumbPath: string[] = [];
@@ -44,10 +44,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef,
-              private renderer: Renderer2) {
+    private renderer: Renderer2) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).takeUntil(this.destroyed$);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
-    this.psConfig = {maxScrollbarLength: 80};
+    this.psConfig = { maxScrollbarLength: 80 };
   }
 
   @HostListener('window:resize', ['$event'])
@@ -86,14 +86,16 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     this.breadcrumbUniquePath = [];
   }
 
-  public resetGroupSearchString() {
+  public resetGroupSearchString(needToFireRequest: boolean = true) {
     // this.store.dispatch(this.groupWithAccountsAction.resetGroupAndAccountsSearchString());
-    this.groupSearchTerms.next('');
+    if (needToFireRequest) {
+      this.groupSearchTerms.next('');
+      this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+    }
     this.breadcrumbPath = [];
     this.breadcrumbUniquePath = [];
     this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
-    this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+    // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
   }
 
   public closePopupEvent() {

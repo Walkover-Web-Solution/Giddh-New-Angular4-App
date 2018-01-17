@@ -319,13 +319,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
     groupList.forEach(el => {
-      if (el.accounts) {
+      if (el && el.accounts) {
         if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
           result = true;
           return;
         }
       }
-      if (el.groups) {
+      if (el && el.groups) {
         result = this.getAccountFromGroup(el.groups, uniqueName, result);
       }
     });
