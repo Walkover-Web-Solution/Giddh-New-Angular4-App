@@ -417,7 +417,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         };
       }
       this.filter = newValue.label;
-      this.propagateChange(newValue);
+      this.propagateChange(newValue.value);
       this.selected.emit(newValue);
     }
   }

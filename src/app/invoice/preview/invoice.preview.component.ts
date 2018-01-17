@@ -310,11 +310,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     let model: InvoiceFilterClassForInvoicePreview = {};
     let o = _.cloneDeep(this.invoiceSearchRequest);
     if (o && o.accountUniqueName) {
-      try {
-        model.accountUniqueName = o.accountUniqueName.value;
-      } catch (error) {
-        model.accountUniqueName = o.accountUniqueName;
-      }
+      model.accountUniqueName = o.accountUniqueName;
     }
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
