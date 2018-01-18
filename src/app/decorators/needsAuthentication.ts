@@ -15,6 +15,7 @@ export class NeedsAuthentication implements CanActivate {
         this._router.navigate(['/new-user']);
       }
       if (p === userLoginStateEnum.notLoggedIn) {
+        console.log('NeedsAuthentication');
         this._router.navigate(['/login']);
       }
       // console.log('from nedd authentication' + (p === userLoginStateEnum.userLoggedIn));
