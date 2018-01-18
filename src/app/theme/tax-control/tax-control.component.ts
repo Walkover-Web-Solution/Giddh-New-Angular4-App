@@ -30,6 +30,17 @@ export class TaxControlData {
     .single-item .dropdown-menu{
       height: 50px !important;
     }
+    :host .dropdown-menu{
+      min-width: 200px;
+      height: inherit;
+      padding: 0;
+      overflow: auto;
+    }
+    .fakeLabel{
+      cursor: pointer;
+      padding: 5px 10px;
+      line-height: 24px;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -149,7 +160,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
-    let diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    let diff: boolean;
+    if (this.selectedTaxes.length > 0) {
+      diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    } else {
+      diff = this.applicableTaxes.length > 0;
+    }
+
     if (diff) {
       this.isApplicableTaxesEvent.emit(false);
     } else {

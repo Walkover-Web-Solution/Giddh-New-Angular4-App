@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ComponentFactoryResolver, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ComponentFactoryResolver, ViewChild, ElementRef, Renderer, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -6,9 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
-import { QuickAccountComponent } from 'app/ledger/components/quickAccount/quickAccount.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
+import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 
 @Component({
   selector: 'discount-list',
@@ -17,17 +17,20 @@ import { ModalDirective } from 'ngx-bootstrap';
     .dropdown-menu>li>a.btn-link{
       color: #10aae0;
     }
+    :host .dropdown-menu{
+      overflow: auto;
+    }
   `]
 })
 
 export class DiscountListComponent implements OnInit, OnDestroy {
 
   @Input() public isMenuOpen: boolean = false;
-  @Input() public isHeadingVisible: boolean = false;
   @Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
   @Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
+  @ViewChild('disInptEle') public disInptEle: ElementRef;
 
   public discountTotal: number;
   public discountItem$: Observable<IFlattenGroupsAccountsDetail>;
@@ -37,7 +40,7 @@ export class DiscountListComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private ledgerActions: LedgerActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {}
 
   public ngOnInit() {
@@ -52,6 +55,12 @@ export class DiscountListComponent implements OnInit, OnDestroy {
       }
       this.change();
     });
+  }
+
+  public discountInputBlur(event) {
+    if (event && event.relatedTarget && !this.disInptEle.nativeElement.contains(event.relatedTarget)) {
+      this.hideDiscountMenu();
+    }
   }
 
   /**
@@ -95,6 +104,10 @@ export class DiscountListComponent implements OnInit, OnDestroy {
    */
   public hideDiscountMenu() {
     this.isMenuOpen = false;
+  }
+
+  public toggleDiscountMenu() {
+    this.isMenuOpen = (this.isMenuOpen) ? false : true;
   }
 
   public ngOnDestroy(): void {

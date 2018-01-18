@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -46,7 +46,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
   `],
   templateUrl: './aside.menu.account.component.html'
 })
-export class AsideMenuAccountComponent implements OnInit {
+export class AsideMenuAccountComponent implements OnInit, OnDestroy {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   public flatAccountWGroupsList$: Observable<IOption[]>;
@@ -62,7 +62,6 @@ export class AsideMenuAccountComponent implements OnInit {
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
-  public createAccountIsSuccess$: Observable<boolean>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -75,7 +74,6 @@ export class AsideMenuAccountComponent implements OnInit {
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
     this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
     this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -94,12 +92,6 @@ export class AsideMenuAccountComponent implements OnInit {
       this.flatAccountWGroupsList$ = Observable.of(result);
       this.activeGroupUniqueName = 'sundrydebtors';
     });
-
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
-        this.closeAsidePane(event);
-      }
-    });
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
@@ -108,5 +100,10 @@ export class AsideMenuAccountComponent implements OnInit {
 
   public closeAsidePane(event) {
     this.closeAsideEvent.emit(event);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

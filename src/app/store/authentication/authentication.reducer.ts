@@ -30,6 +30,10 @@ export interface AuthenticationState {
   isTwoWayAuthInProcess: boolean;
   isTwoWayAuthSuccess: boolean;
   needsToRedirectToLedger: boolean;
+  isAddNewMobileNoInProcess: boolean;
+  isAddNewMobileNoSuccess: boolean;
+  isVerifyAddNewMobileNoInProcess: boolean;
+  isVerifyAddNewMobileNoSuccess: boolean;
 }
 
 export enum userLoginStateEnum {
@@ -49,8 +53,6 @@ export interface SessionState {
   isCompanyCreationInProcess: boolean;
   isCompanyCreationSuccess: boolean;
   isCompanyCreated: boolean;
-  isAddNewMobileNoInProcess: boolean;
-  isMobileNoVerifiedSuccess: boolean;
   userLoginState: userLoginStateEnum;
 }
 
@@ -74,6 +76,10 @@ const initialState = {
   isLoggedInWithSocialAccount: false,
   isTwoWayAuthInProcess: false,
   isTwoWayAuthSuccess: false,
+  isAddNewMobileNoInProcess: false,
+  isAddNewMobileNoSuccess: false,
+  isVerifyAddNewMobileNoInProcess: false,
+  isVerifyAddNewMobileNoSuccess: false,
   needsToRedirectToLedger: false,
 };
 
@@ -87,8 +93,6 @@ const sessionInitialState: SessionState = {
   isCompanyCreationInProcess: false,
   isCompanyCreationSuccess: false,
   isRefreshing: false,
-  isAddNewMobileNoInProcess: false,
-  isMobileNoVerifiedSuccess: false,
   userLoginState: userLoginStateEnum.notLoggedIn
 };
 
@@ -96,10 +100,10 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
 
   switch (action.type) {
     case LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return {...state, needsToRedirectToLedger: false};
+      return { ...state, needsToRedirectToLedger: false };
     }
     case LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return {...state, needsToRedirectToLedger: true};
+      return { ...state, needsToRedirectToLedger: true };
     }
     case LoginActions.SignupWithEmailResponce:
       if (action.payload.status === 'success') {
@@ -201,7 +205,11 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         user: null,
         isSocialLogoutAttempted: true,
         isTwoWayAuthInProcess: false,
-        needsToRedirectToLedger: false
+        needsToRedirectToLedger: false,
+        isAddNewMobileNoInProcess: false,
+        isAddNewMobileNoSuccess: false,
+        isVerifyAddNewMobileNoInProcess: false,
+        isVerifyAddNewMobileNoSuccess: false
       });
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
       let newState = _.cloneDeep(state);
@@ -261,6 +269,50 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         isTwoWayAuthSuccess: false
       };
     }
+    case LoginActions.AddNewMobileNo:
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: true,
+        isAddNewMobileNoSuccess: false
+      };
+    case LoginActions.AddNewMobileNoResponse:
+      let resp1: BaseResponse<string, SignupWithMobile> = action.payload;
+      if (resp1.status === 'success') {
+        return {
+          ...state,
+          isAddNewMobileNoInProcess: false,
+          isAddNewMobileNoSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: false,
+        isAddNewMobileNoSuccess: false
+      };
+
+    case LoginActions.VerifyAddNewMobileNo:
+      return {
+        ...state,
+        isVerifyAddNewMobileNoInProcess: true,
+      };
+    case LoginActions.VerifyAddNewMobileNoResponse:
+      let resp: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+      if (resp.status === 'success') {
+        return {
+          ...state,
+          user: Object.assign({}, state.user, {
+            contactNumber: resp.request.mobileNumber,
+            countryCode: resp.request.countryCode
+          }),
+          isVerifyAddNewMobileNoInProcess: false,
+          isVerifyAddNewMobileNoSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isVerifyAddNewMobileNoInProcess: false,
+        isVerifyAddNewMobileNoSuccess: false
+      };
     default:
       return state;
   }
@@ -377,6 +429,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         return Object.assign({}, state, latestState);
       }
       return state;
+    case CompanyActions.RESET_APPLICATION_DATE: {
+      let latestState = _.cloneDeep(state);
+      latestState.applicationDate = null;
+      return Object.assign({}, state, latestState);
+    }
     case CompanyActions.SET_CONTACT_NO: {
       let s = _.cloneDeep(state);
       s.user.user.mobileNo = action.payload;
@@ -437,31 +494,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         return Object.assign({}, state, newState);
       }
       return state;
-
-    case LoginActions.AddNewMobileNo:
-      return {
-        ...state,
-        isAddNewMobileNoInProcess: true,
-        isMobileNoVerifiedSuccess: false
-      };
-    case LoginActions.AddNewMobileNoResponse:
-      let resp: BaseResponse<string, SignupWithMobile> = action.payload;
-      if (resp.status === 'success') {
-        return {
-          ...state,
-          user: Object.assign({}, state.user, {
-            contactNumber: resp.request.mobileNumber,
-            countryCode: resp.request.countryCode
-          }),
-          isAddNewMobileNoInProcess: false,
-          isMobileNoVerifiedSuccess: true
-        };
-      }
-      return {
-        ...state,
-        isAddNewMobileNoInProcess: false,
-        isMobileNoVerifiedSuccess: false
-      };
     case LoginActions.FetchUserDetailsResponse:
       let userResp: BaseResponse<UserDetails, string> = action.payload;
       if (userResp.status === 'success') {
