@@ -26,7 +26,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public showForm: boolean = false;
   @ViewChild('myModel') public myModel: ElementRef;
   @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false };
   @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
 
   public breadcrumbPath: string[] = [];

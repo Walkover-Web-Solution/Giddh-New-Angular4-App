@@ -24,6 +24,7 @@ import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
 import { Configuration } from 'app/app.constant';
+import { IFlattenGroupsAccountsDetail } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -54,6 +55,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public selectedLedgerStream$: Observable<LedgerResponse>;
   public activeAccount$: Observable<AccountResponse>;
+  public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
@@ -71,6 +73,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
+    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).shareReplay();
     this.closeUpdateLedgerModal.takeUntil(this.destroyed$);
   }
 
@@ -218,15 +221,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
           });
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
-          if (this.vm.selectedLedger.total.type === 'DEBIT') {
-            if (!(some(this.vm.selectedLedger.transactions, { type: 'CREDIT' }))) {
-              this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-            }
-          } else {
-            if (!(some(this.vm.selectedLedger.transactions, { type: 'DEBIT' }))) {
-              this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
-            }
-          }
+
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
           this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
           this.vm.getEntryTotal();
@@ -338,7 +336,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       // if ther's stock entry
       if (e.additional.stock) {
         // check if we aleready have stock entry
-        if (this.vm.isThereStockEntry()) {
+        if (this.vm.isThereStockEntry(e.value)) {
           selectCmp.clear();
           txn.particular.uniqueName = null;
           txn.particular.name = null;

@@ -39,6 +39,14 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._permissionActions.GetAllPermissions());
   }
 
+  public getGroupSharedWith() {
+    this.activeGroup$.subscribe((group) => {
+      if (group) {
+        this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(group.uniqueName));
+      }
+    });
+  }
+
   public async shareGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
     let userRole = {

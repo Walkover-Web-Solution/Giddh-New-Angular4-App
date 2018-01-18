@@ -49,7 +49,7 @@ class FormatCsv implements IFormatable {
   template: `
     <div class="form-group export" (clickOutside)="showCsvDownloadOptions=false;">
       <a title="" download="" (click)="showCsvDownloadOptions = !showCsvDownloadOptions" *ngIf="enableDownload"><img
-        src="/assets/images/csv.png" class="csv"/></a>
+        src="{{ imgPath }}" class="csv"/></a>
       <div class="export-options" *ngIf="showCsvDownloadOptions">
         <span class="arrow"></span>
         <ul class="list-unstyled">
@@ -74,6 +74,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 
   public showCsvDownloadOptions: boolean;
   public enableDownload: boolean = true;
+  public imgPath: string = '';
 
   private dataFormatter: DataFormatter;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -89,7 +90,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/csv.png' : AppUrl + APP_FOLDER + 'assets/images/csv.png';
   }
 
   public ngOnDestroy() {
