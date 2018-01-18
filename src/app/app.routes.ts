@@ -37,8 +37,6 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
-      { path: 'success', component: SuccessComponent },
-      { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
       { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
       { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
       { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },

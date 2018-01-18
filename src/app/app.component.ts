@@ -45,38 +45,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').subscribe((company) => {
-      if (company && company.companyUniqueName) {
-        if (company.lastState &&  ROUTES.findIndex(p => p.path.split('/')[0] === company.lastState.split('/')[0]) !== -1 ) {
-          this.router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
-            this.router.navigate([company.lastState]);
-          });
-        } else {
-          if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
-              let path = [];
-              let parament = {};
-              this.activatedRoute.firstChild.firstChild.url.subscribe(p => {
-                if (p.length > 0) {
-                  path = [p[0].path];
-                  parament = {queryParams: p[0].parameters};
-                }
-              });
-              if (path.length > 0 && parament) {
-                this.router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
-                  if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
-                    this.router.navigate([path[0]], parament);
-                  } else {
-                    this.router.navigate(['home']);
-                  }
-                });
-              }
-            }
-          }
-        }
-      }
-    });
-
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
           return;
