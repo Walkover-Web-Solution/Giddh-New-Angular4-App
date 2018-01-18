@@ -330,6 +330,7 @@ export class LoginActions {
       if (response.body.companyUniqueName) {
         if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
           this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+            console.log('CHANGE_COMPANY 1');
             this._router.navigate([response.body.lastState]);
           });
         } else {
@@ -346,6 +347,7 @@ export class LoginActions {
               if (path.length > 0 && parament) {
                 this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                   if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
+                    console.log('CHANGE_COMPANY 2');
                     this._router.navigate([path[0]], parament);
                   } else {
                     this._router.navigate(['home']);
@@ -715,6 +717,7 @@ export class LoginActions {
   }
 
   private doSameStuffs(companies) {
+    console.log('doSameStuffs');
     let respState = new BaseResponse<StateDetailsResponse, string>();
     respState.body = new StateDetailsResponse();
     companies.body = sortBy(companies.body, ['name']);
@@ -747,6 +750,7 @@ export class LoginActions {
   }
 
   private finalThingTodo(stateDetail: any, companies: any) {
+    console.log('finalThingTodo');
     this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
     this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
