@@ -102,34 +102,34 @@ export class GroupAccountSidebarVM {
       }
 
       case eventsConst.groupMoved: {
-        let data = payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
-        this.columns.pop();
+        // let data = payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
+        // this.columns.pop();
 
-        for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
-          let col = this.columns[colIndex];
-          let itemIndex = col.Items.findIndex(f => f.uniqueName === data.request.parentGroupUniqueName);
-          if (itemIndex > -1) {
-            // remove all columns first
-            this.columns.splice(colIndex, this.columns.length - 1);
-            let fCol = col;
-            // add new parent column of finded item
-            this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
+        // for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
+        //   let col = this.columns[colIndex];
+        //   let itemIndex = col.Items.findIndex(f => f.uniqueName === data.request.parentGroupUniqueName);
+        //   if (itemIndex > -1) {
+        //     // remove all columns first
+        //     this.columns.splice(colIndex, this.columns.length - 1);
+        //     let fCol = col;
+        //     // add new parent column of finded item
+        //     this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
 
-            let newCol = fCol.Items.find(j => j.uniqueName === data.request.parentGroupUniqueName);
-            let grpsBck: GroupsWithAccountsResponse[];
-            this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+        //     let newCol = fCol.Items.find(j => j.uniqueName === data.request.parentGroupUniqueName);
+        //     let grpsBck: GroupsWithAccountsResponse[];
+        //     this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
 
-            let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.parentGroupUniqueName, null);
-            if (listBckup) {
-              newCol.groups = listBckup.groups;
-              newCol.accounts = listBckup.accounts;
-            }
-            // add sub column of last added column
-            this.columns.push(new ColumnGroupsAccountVM(newCol as IGroupsWithAccounts));
+        //     let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.parentGroupUniqueName, null);
+        //     if (listBckup) {
+        //       newCol.groups = listBckup.groups;
+        //       newCol.accounts = listBckup.accounts;
+        //     }
+        //     // add sub column of last added column
+        //     this.columns.push(new ColumnGroupsAccountVM(newCol as IGroupsWithAccounts));
 
-            return;
-          }
-        }
+        //     return;
+        //   }
+        // }
         break;
       }
 
@@ -176,34 +176,34 @@ export class GroupAccountSidebarVM {
       }
 
       case eventsConst.accountMoved: {
-        let data = payload as BaseResponse<string, AccountMoveRequest>;
-        this.columns.pop();
+        // let data = payload as BaseResponse<string, AccountMoveRequest>;
+        // this.columns.pop();
 
-        for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
-          let col = this.columns[colIndex];
-          let itemIndex = col.Items.findIndex(f => f.uniqueName === data.request.uniqueName);
-          if (itemIndex > -1) {
-            // remove all columns first
-            this.columns.splice(colIndex, this.columns.length - 1);
-            let fCol = col;
-            // add new parent column of finded item
-            this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
+        // for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
+        //   let col = this.columns[colIndex];
+        //   let itemIndex = col.Items.findIndex(f => f.uniqueName === data.request.uniqueName);
+        //   if (itemIndex > -1) {
+        //     // remove all columns first
+        //     this.columns.splice(colIndex, this.columns.length - 1);
+        //     let fCol = col;
+        //     // add new parent column of finded item
+        //     this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
 
-            let newCol = fCol.Items.find(j => j.uniqueName === data.request.uniqueName);
-            let grpsBck: GroupsWithAccountsResponse[];
-            this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+        //     let newCol = fCol.Items.find(j => j.uniqueName === data.request.uniqueName);
+        //     let grpsBck: GroupsWithAccountsResponse[];
+        //     this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
 
-            let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.uniqueName, null);
-            if (listBckup) {
-              newCol.groups = listBckup.groups;
-              newCol.accounts = listBckup.accounts;
-            }
-            // add sub column of last added column
-            this.columns.push(new ColumnGroupsAccountVM(newCol as IGroupsWithAccounts));
+        //     let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.uniqueName, null);
+        //     if (listBckup) {
+        //       newCol.groups = listBckup.groups;
+        //       newCol.accounts = listBckup.accounts;
+        //     }
+        //     // add sub column of last added column
+        //     this.columns.push(new ColumnGroupsAccountVM(newCol as IGroupsWithAccounts));
 
-            return;
-          }
-        }
+        //     return;
+        //   }
+        // }
         break;
       }
 

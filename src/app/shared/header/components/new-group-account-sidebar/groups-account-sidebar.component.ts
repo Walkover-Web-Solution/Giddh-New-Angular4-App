@@ -89,11 +89,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     this._generalServices.eventHandler.takeUntil(this.destroyed$).subscribe(s => {
       this.mc.handleEvents(s.name, s.payload);
 
-      // reset search string when you're in search case for move group
-      if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved) {
-        this.resetSearchString.emit(true);
-      }
-
       let groups: IGroupsWithAccounts[];
       this.store.select(state => state.general.groupswithaccounts).take(1).subscribe(grp => groups = grp);
 
@@ -102,6 +97,14 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
       let activeAccount;
       this.store.select(state => state.groupwithaccounts.activeAccount).take(1).subscribe(acc => activeAccount = acc);
+
+      // reset search string when you're in search case for move group
+      if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved) {
+        this.resetSearchString.emit(true);
+        this.groups = groups;
+        this.isSearchingGroups = false;
+        this.resetData();
+      }
 
       this.breadcrumbPath = [];
       this.breadcrumbUniqueNamePath = [];

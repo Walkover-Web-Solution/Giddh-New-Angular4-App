@@ -537,7 +537,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
       };
     }
     case GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI: {
-      let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+      let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(action.payload.groups);
       genAddAndManageUi(groupArray, action.payload, null);
       return {
         ...state,

@@ -299,12 +299,16 @@ export class GroupWithAccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
+
+        // let groups;
+        // this.store.select(g => g.general.groupswithaccounts).take(1).subscribe(grps => groups = grps);
+        // this.store.dispatch({
+        //   type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
+        //   payload: { groups, groupUniqueName: data.request.parentGroupUniqueName }
+        // });
+
         this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
         this._toasty.successToast('Group moved successfully', '');
-        this.store.dispatch({
-          type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
-          payload: data.request.parentGroupUniqueName
-        });
         return this.getGroupDetails(data.request.parentGroupUniqueName);
       }
       return {
