@@ -6,5 +6,6 @@ export enum eventsConst {
   accountAdded,
   accountUpdated,
   accountDeleted,
-  accountMoved
+  accountMoved,
+  accountMerged
 }
