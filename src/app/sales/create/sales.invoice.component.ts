@@ -122,10 +122,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
-<<<<<<< HEAD
-=======
-  // public accounts$: Observable<IOption[]>;
->>>>>>> 2528209c... <minor> fix: prod issue in sales module sh-select
   public accounts$: Observable<IOption[]>;
   public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
