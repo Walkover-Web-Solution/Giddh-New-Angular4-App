@@ -91,7 +91,7 @@ export class GroupWithAccountsAction {
           grouName = s.groupwithaccounts.activeGroup.uniqueName;
         }
       });
-      return this.getGroupDetails(grouName);
+      return this.getTaxHierarchy(grouName);
     });
 
   @Effect()

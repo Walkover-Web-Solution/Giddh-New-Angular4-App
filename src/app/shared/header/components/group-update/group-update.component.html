@@ -32,7 +32,7 @@
 
 
 <!--move group-->
-<div class="col-xs-12 form-group m" *ngIf="(activeGroup$ | async)">
+<div class="col-xs-12 form-group m" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
     <form name="moveGroupForm" class="horizontal-form" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
