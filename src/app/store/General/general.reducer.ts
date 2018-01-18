@@ -276,7 +276,6 @@ const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccoun
   }
   for (let grp of groups) {
     if (grp.uniqueName === parentUniqueName) {
-      grp.isOpen = true;
       grp.groups.push(gData);
       result = true;
       return result;
