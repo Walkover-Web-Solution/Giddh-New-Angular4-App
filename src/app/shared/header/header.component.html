@@ -31,16 +31,16 @@
                                                         <div class="subTitle">Manage your company settings.</div>
                                                     </div>
                                                 </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'LEDGER']">
-                                            <a [routerLink]="['/pages/daybook']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Daybook</div>
-                                                        <div class="subTitle">All Recent Transactions</div>
+                                                </a>
+                                            </li>
+                                            <li class="dmLi trialB" *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
+                                                <a [routerLink]="['/pages/daybook']">
+                                                    <div class="media">
+                                                        <div class="media-body">
+                                                            <div class="title">Daybook</div>
+                                                            <div class="subTitle">All Recent Transactions</div>
+                                                        </div>
                                                     </div>
-                                                </div>
                                             </a>
                                         </li>
                                         <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
