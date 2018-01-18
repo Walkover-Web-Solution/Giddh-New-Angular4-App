@@ -326,6 +326,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       }
     } else if (this.isOpen && this.doNotReset && this.filter !== '') {
       this.isOpen = false;
+      this.propagateChange(this.filter);
       this.onHide.emit();
     } else {
       this.isOpen = false;

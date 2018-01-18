@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { TaxResponse } from 'app/models/api-models/Company';
 import { ITaxList } from 'app/models/api-models/Sales';
 import { findIndex, forEach, indexOf, each, find } from 'app/lodash-optimized';
@@ -32,6 +32,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showTaxPopup: boolean = false;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
+  @ViewChild('taxListUl') public taxListUl: ElementRef;
 
   public sum: number = 0;
   public taxList: ITaxList[] = [];
@@ -77,6 +78,12 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   public reCalculate() {
     this.distendFn();
+  }
+
+  public taxInputBlur(event) {
+    if (event && event.relatedTarget && !this.taxListUl.nativeElement.contains(event.relatedTarget)) {
+      this.toggleTaxPopup(false);
+    }
   }
 
   /**
