@@ -33,7 +33,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
            <span></span>
            <span></span>
            <span></span>
-          <h1>loading ledger</h1>
+          <h1>loading profit & loss </h1>
         </div>
     </div>
     <div *ngIf="!(showLoader | async)">
@@ -121,10 +121,11 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
+    // debugger;
     request.from = request.from;
     request.to = request.to;
     request.fy = request.fy;
-    //
+    request.refresh = request.refresh;
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }
 

@@ -41,11 +41,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private _accountService: AccountService,
     private _sanitizer: DomSanitizer
   ) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+    //
   }
 
   public ngOnInit() {
-
     this.store.select(p => p.settings).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
         // console.log('Found');
@@ -54,13 +53,16 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).takeUntil(this.destroyed$).subscribe((o) => {
-      this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+      if (o) {
+        this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+      }
     });
 
     this.store.select(p => p.settings.linkedAccounts.iframeSource).takeUntil(this.destroyed$).subscribe((source) => {
       if (source) {
         this.iframeSource = _.clone(source);
         this.connectBankModel.show();
+        this.connectBankModel.config.ignoreBackdropClick = true;
       }
     });
 
@@ -76,6 +78,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
   }
 
+  public getInitialEbankInfo() {
+    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+  }
+
   public connectBank() {
     // get token info
     this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
@@ -86,11 +92,13 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
     });
     this.connectBankModel.show();
+    this.connectBankModel.config.ignoreBackdropClick = true;
   }
 
   public closeModal() {
     this.connectBankModel.hide();
     this.iframeSource = undefined;
+    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
   public closeConfirmationModal(isUserAgree: boolean) {
@@ -137,7 +145,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onRefreshToken(account) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.loginId));
+    // this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.loginId));
+    this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
   public onAccountSelect(account, data) {

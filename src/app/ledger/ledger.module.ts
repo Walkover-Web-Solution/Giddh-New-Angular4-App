@@ -16,7 +16,7 @@ import { ExportLedgerComponent } from './components/exportLedger/exportLedger.co
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
-import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
+import { NgUploaderModule } from 'ngx-uploader';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -28,11 +28,12 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { TextMaskModule } from 'angular2-text-mask';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
-import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 
 @NgModule({
   declarations: [
@@ -45,13 +46,12 @@ import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChang
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
-    QuickAccountComponent,
     AdvanceSearchModelComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
   ],
-  entryComponents: [UpdateLedgerEntryPanelComponent, QuickAccountComponent, PaginationComponent],
+  entryComponents: [UpdateLedgerEntryPanelComponent, PaginationComponent],
   providers: [],
   imports: [
     CommonModule,
@@ -76,7 +76,9 @@ import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChang
     DatepickerModule,
     ButtonsModule,
     BsDropdownModule,
-    TextCaseChangeModule
+    TextCaseChangeModule,
+    ClickOutsideModule,
+    QuickAccountModule.forRoot()
   ],
 })
 export class LedgerModule {

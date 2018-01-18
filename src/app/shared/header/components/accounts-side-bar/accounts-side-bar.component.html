@@ -1,21 +1,16 @@
-<div class="accounts-side-bar greyBg">
-    <div class="" ng-click="$event.stopPropagation()" *ngIf="flyAccounts" style="height: 600px">
-        <div class="pd1" *ngIf="(isFlyAccountInProcess$ | async)">
+<div class="accounts-side-bar greyBg wrapAcList" ng-click="$event.stopPropagation()">
+    <div *ngIf="flyAccounts" style="height: 550px" class="wrapAcList" id="grp_acc_wrapper">
+        <div class="pd1 wrapAcList" *ngIf="(isFlyAccountInProcess$ | async)">
             Loading Accounts...
         </div>
         <!-- searchbar end -->
-        <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !(isFlyAccountInProcess$ | async)">
+        <div class="pdL1 pdR1 mrB1 wrapAcList" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !(isFlyAccountInProcess$ | async)">
             <h4 class="list-group-item-heading">Oops, there is no accounts in
                 <strong>selected company</strong>
                 <a (click)="goToManageGroups()">+ add new</a>
             </h4>
         </div>
-        <!--<div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">-->
-        <!--<h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>-->
-        <!--</div>-->
-        <!-- <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height
-      additional-height="80"> -->
-        <div class="menu acList">
+        <div class="menu acList wrapAcList">
             <div class="loader" *ngIf="!showAccountList && ( companyList$ | async ).length > 0">
                 <span></span>
                 <span></span>
@@ -23,71 +18,33 @@
                 <span></span>
                 <span></span>
             </div>
-            <ul class="acntAccordion" *ngIf="showAccountList">
-                <li>
-                    <!-- <ul id="ul_0" class="mainUl accBox" style="border-left:none">
-              <li class="mainLiAclist parent-Group" *ngFor="let account of (flatAccountWGroupsList)" id="li_{{account.groupUniqueName}}">
-                <div class="title  LIB{{account.groupUniqueName}}" (click)="account.isOpen = !account.isOpen" [ngClass]="{'active' : account.isOpen || account.groupUniqueName === selectedGroupUname}">
-                  <a class="ellp max250">{{account.groupName}}</a>
-                </div>
-                <ul class="accBox subAccBox" *ngIf="account.isOpen" id="ul_{{account.groupUniqueName}}">
-                  <li class="inrPrnt cp" *ngFor="let accDtl of account.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top">
-                    <a>
-                      <div class="clearfix">
-                        <strong>
-                          <span class="ellp max250" (click)="flyAccounts = false" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span>
-                        </strong>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul> -->
-                    <ng-container *ngIf="Items">
-                        <ul class="ul_0" *vsFor="Items; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+            <ng-container *ngIf="showAccountList && Items">
+                <ul class="ul_0 acntAccordion wrapAcList" *vsFor="Items; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
 
-                            <ng-container *ngFor="let item of _items;let i = index">
-                                <!-- {{item.name}} -->
+                    <ng-container *ngFor="let item of _items;let i = index">
 
-                                <li *ngIf="item.isGroup" class="mainLiAclist parent-Group">
-                                    <div class="title  LIB{{item.UniqueName}}" (click)="toggleGroup(item,i + _startIndex,$event)" [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
-                                        <a class="ellp max250">{{item.Name}}</a>
-                                    </div>
-                                </li>
-                                <li *ngIf="!item.isGroup" class="inrPrnt cp accountli">
-                                    <a>
-                                        <div class="clearfix" tooltip="{{item.UniqueName}}" container="body">
-                                            <strong>
-                        <span class="ellp max250" (click)="flyAccounts = false" [routerLink]="['/ledger',item.UniqueName]">{{item.Name}}</span>
-                      </strong>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ng-container>
-                        </ul>
+                        <li *ngIf="item.isGroup" class="mainLiAclist parent-Group">
+                            <div class="title  LIB{{item.UniqueName}}" (click)="toggleGroup(item,i + _startIndex,$event)" [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
+                                <a class="ellp max250">{{item.Name}}</a>
+                            </div>
+                        </li>
+                        <li *ngIf="!item.isGroup" class="inrPrnt cp accountli">
+                            <a>
+                                <div class="clearfix" tooltip="{{item.UniqueName}}" container="body">
+                                    <strong>
+                    <span class="ellp max250" (click)="flyAccounts = false" *ngIf="isRouter" [routerLink]="['/ledger',item.UniqueName]">{{item.Name}}</span>
+                    <span class="ellp max250" (mousedown)="flyAccounts = true;onSelectItem.emit(item)" *ngIf="!isRouter" [innerHTML]="item.Name+' ' + '(' + item.UniqueName + ')'"></span>
+                  </strong>
+                                </div>
+                            </a>
+                        </li>
                     </ng-container>
-                </li>
-                <!--<a href="javascript:void(0)" class="load-more"-->
-                <!--ng-click="loadMoreGrpWithAcc(selectedCompany.uniqueName, search.acnt);$event.stopPropagation()"-->
-                <!--ng-if="gwaList.currentPage < gwaList.totalPages">Load More</a>-->
-            </ul>
+                </ul>
+            </ng-container>
 
         </div>
-        <div style="height: 50px;"></div>
-        <!-- </perfect-scrollbar> -->
-        <!--<div class="text-center bc-wrap" ng-if="currentState == 'company.content.ledgerContent'">-->
-        <!--&lt;!&ndash;breadcrumbs&ndash;&gt;-->
-        <!--<div>-->
-        <!--<ol class="breadcrumb">-->
-        <!--<li ng-repeat="(key,value) in accountToShow.parentGroups" ng-class="{active:$last}">-->
-        <!--<a href="javascript:void(0)">{{value.name}}</a>-->
-        <!--</li>-->
-        <!--&lt;!&ndash;<li>Bank Accounts</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>ICICI Bank Ltd</li>&ndash;&gt;-->
-        <!--</ol>-->
-        <!--</div>-->
-        <!--&lt;!&ndash;/breadcrumbs&ndash;&gt;-->
-        <!--</div>-->
+        <!-- <div style="height: 50px;"></div> -->
+
     </div>
 
 

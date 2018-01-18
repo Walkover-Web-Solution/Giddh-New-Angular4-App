@@ -1,3 +1,5 @@
+import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
@@ -24,7 +26,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
-import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { GeneralActions } from '../actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -34,6 +35,10 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.compone
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
+import { LoginActions } from 'app/actions/login.action';
+import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
+import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'ledger',
@@ -44,9 +49,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
+  @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
+
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
+  public universalDate$: Observable<any>;
   public datePickerOptions: any = {
     locale: {
       applyClass: 'btn-green',
@@ -93,12 +102,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   public showUpdateLedgerForm: boolean = false;
+  public isTransactionRequestInProcess$: Observable<boolean>;
+  public searchTermStream: Subject<string> = new Subject();
+  public showLoader: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
     private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
     private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -107,11 +119,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).takeUntil(this.destroyed$);
+    this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).takeUntil(this.destroyed$);
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
+    // reset redirect state from login action
+    this.store.dispatch(this._loginActions.ResetRedirectToledger());
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -127,19 +142,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
-    this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
-    this.trxRequest.page = 0;
+    let from = moment(value.picker.startDate).format('DD-MM-YYYY');
+    let to = moment(value.picker.endDate).format('DD-MM-YYYY');
 
-    this.getTransactionData();
-    // Después del éxito de la entrada. llamar para transacciones bancarias
-    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-      if (data && data.yodleeAdded) {
-        this.getBankTransactions();
-      } else {
-        this.hideEledgerWrap();
-      }
-    });
+    if ((this.trxRequest.from !== from) || (this.trxRequest.to !== to)) {
+      this.trxRequest.from = from;
+      this.trxRequest.to = to;
+      this.trxRequest.page = 0;
+
+      this.getTransactionData();
+      // Después del éxito de la entrada. llamar para transacciones bancarias
+      this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+        if (data && data.yodleeAdded) {
+          this.getBankTransactions();
+        } else {
+          this.hideEledgerWrap();
+        }
+      });
+    }
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
@@ -244,9 +264,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.route.params.takeUntil(this.destroyed$).subscribe(params => {
+
+    Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+      let dateObj = resp[0];
+      let params = resp[1];
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions.startDate = universalDate[0];
+        this.datePickerOptions.endDate = universalDate[1];
+
+        this.trxRequest.from = universalDate[0];
+        this.trxRequest.to = universalDate[1];
+
+        this.trxRequest.page = 0;
+      }
       if (params['accountUniqueName']) {
+        this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
+        this.showLoader = true;
+        // this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
         this.datePickerOptions = {
           locale: {
@@ -280,8 +316,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
               moment()
             ]
           },
-          startDate: moment().subtract(30, 'days'),
-          endDate: moment()
+          startDate: this.trxRequest.from ? this.trxRequest.from : moment().subtract(30, 'days'),
+          endDate: this.trxRequest.to ? this.trxRequest.to : moment()
         };
         // set state details
         let companyUniqueName = null;
@@ -297,6 +333,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
+
+    this.isTransactionRequestInProcess$.subscribe(s => {
+      if (!s && this.showLoader) {
+        this.showLoader = false;
+      }
+    });
+
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
         this.lc.currentPage = lt.page;
@@ -377,10 +420,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     // search
-    Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
+    // Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
+    //   .debounceTime(700)
+    //   .distinctUntilChanged()
+    //   .map((e: any) => e.target.value)
+    //   .subscribe(term => {
+    //     this.trxRequest.q = term;
+    //     this.trxRequest.page = 0;
+    //     this.getTransactionData();
+    //   });
+
+    this.searchTermStream
       .debounceTime(700)
       .distinctUntilChanged()
-      .map((e: any) => e.target.value)
       .subscribe(term => {
         this.trxRequest.q = term;
         this.trxRequest.page = 0;
@@ -395,16 +447,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
-
-    // Refresh report data according to universal date
-    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj) {
-        let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate  = universalDate[0];
-        this.datePickerOptions.endDate  = universalDate[1];
-        this.selectedDate({ picker : { startDate: universalDate[0], endDate: universalDate[1] } });
-      }
-    })).subscribe();
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -412,15 +454,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = 0;
     this.trxRequest.count = 15;
     this.trxRequest.accountUniqueName = accountUnq;
-    this.trxRequest.from = this.trxRequest.from || this.datePickerOptions.startDate.format('DD-MM-YYYY');
-    this.trxRequest.to = this.trxRequest.to || this.datePickerOptions.endDate.format('DD-MM-YYYY');
+    this.trxRequest.from = this.trxRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.trxRequest.to = this.trxRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     this.getTransactionData();
   }
 
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
       this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
-        if (res.status === 'success' && res.body.length > 0) {
+        if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
@@ -551,7 +593,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           isInclusiveTax: true
         }],
       voucherType: null,
-      entryDate: moment().format('DD-MM-YYYY'),
+      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
@@ -610,7 +652,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showShareLedgerModal() {
+    this.sharLedger.clear();
     this.shareLedgerModal.show();
+    this.sharLedger.checkAccountSharedWith();
   }
 
   public hideShareLedgerModal() {
@@ -641,9 +685,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
+    this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
+      if (yesOrNo) {
+        this.advanceSearchComp.onSearch();
+      } else {
+        this.getTransactionData();
+      }
+    })).subscribe();
     // this.trxRequest = new TransactionsRequest();
     // this.trxRequest.accountUniqueName = this.lc.accountUnq;
-    this.getTransactionData();
   }
 
   public showQuickAccountModal() {
@@ -692,7 +742,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
-      this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
+      // this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
     });
@@ -718,6 +768,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public loadPaginationComponent(s) {
+    if (!this.paginationChild) {
+      return;
+    }
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
     let viewContainerRef = this.paginationChild.viewContainerRef;
@@ -744,10 +797,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.advanceSearchModel.show();
   }
 
+  public search(term: string): void {
+    this.searchTermStream.next(term);
+  }
+
   /**
    * closeAdvanceSearchPopup
    */
   public closeAdvanceSearchPopup() {
     this.advanceSearchModel.hide();
+    this.advanceSearchComp.ngOnDestroy();
   }
 }

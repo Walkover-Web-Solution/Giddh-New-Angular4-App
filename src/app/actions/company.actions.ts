@@ -8,6 +8,7 @@ import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
+import { GeneralService } from 'app/services/general.service';
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
@@ -26,6 +27,7 @@ export class CompanyActions {
   public static GET_APPLICATION_DATE = 'GetApplicationDate';
   public static SET_APPLICATION_DATE = 'SetApplicationDate';
   public static SET_APPLICATION_DATE_RESPONSE = 'SetApplicationDateResponse';
+  public static RESET_APPLICATION_DATE = 'ResetApplicationDate';
 
   public static CHANGE_COMPANY = 'CHANGE_COMPANY';
   public static CHANGE_COMPANY_RESPONSE = 'CHANGE_COMPANY_RESPONSE';
@@ -59,7 +61,14 @@ export class CompanyActions {
       // set newly created company as active company
       let stateDetailsObj = new StateDetailsRequest();
       stateDetailsObj.companyUniqueName = response.request.uniqueName;
-      stateDetailsObj.lastState = 'home';
+      /**
+       * if user is signed up on their own take him to sales module
+       */
+      if (this._generalService.user.isNewUser) {
+        stateDetailsObj.lastState = 'sales';
+      }else {
+        stateDetailsObj.lastState = 'home';
+      }
       this.store.dispatch(this.SetStateDetails(stateDetailsObj));
 
       return this.RefreshCompanies();
@@ -208,9 +217,13 @@ export class CompanyActions {
       return {type: 'EmptyAction'};
     });
 
-  constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
-
-  }
+  constructor(
+    private action$: Actions,
+    private _companyService: CompanyService,
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _generalService: GeneralService
+  ) {}
 
   public CreateCompany(value: CompanyRequest): CustomActions {
     return {
@@ -284,6 +297,12 @@ export class CompanyActions {
     return {
       type: CompanyActions.SET_APPLICATION_DATE_RESPONSE,
       payload: value
+    };
+  }
+
+  public ResetApplicationDate(): CustomActions {
+    return {
+      type: CompanyActions.RESET_APPLICATION_DATE,
     };
   }
 

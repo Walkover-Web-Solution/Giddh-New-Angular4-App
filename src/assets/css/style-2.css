@@ -3036,16 +3036,8 @@ label {
 }
 
 .onHover {
-    opacity: 0;
-    z-index: -1;
-    position: absolute;
-    transition: all 0.5s ease;
-}
-
-.role:hover .onHover {
-    opacity: 1;
-    z-index: 9;
-    position: relative
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 .custom-select select {
@@ -3156,30 +3148,9 @@ label {
     right: 0;
 }
 
-.add-new-role-modal .dropdown-menu li {
-    padding: 4px 0;
-}
-
 .add-new-role-modal .dropdown-menu li label {
     color: #858585;
     font-weight: normal;
-}
-
-.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:after,
-#single_role table tbody tr td input[type="checkbox"]:after {
-    border-width: 1px;
-    top: 0;
-    width: 16px;
-    height: 16px
-}
-
-.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:checked:before,
-#single_role table tbody tr td input[type="checkbox"]:checked:before {
-    left: 3px;
-    top: 3px;
-    z-index: 1;
-    width: 11px;
-    height: 6px;
 }
 
 #single_role .panel {
@@ -3188,7 +3159,7 @@ label {
 }
 
 #single_role .panel-heading {
-    background: #d4602a;
+    background: #ccc;
     color: #fff;
     border-radius: 0;
 }
@@ -3346,19 +3317,6 @@ label {
 }
 
 
-/* sales universal styles */
-
-.tax-list-dd-wrap .dropdown-menu {
-    min-width: 200px;
-}
-
-.tax-list-dd-wrap .dropdown-menu li label {
-    clear: both;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-
 /*************************************************** Custom Invoice CSS  ****************************************************/
 
 #customInvoice .templateEditor input[type="checkbox"] {
@@ -3384,6 +3342,7 @@ label {
 #customInvoice .templateEditor .btn-group-lg>.btn {
     border-radius: 0;
     border: 0;
+    box-shadow: none;
     background: #e5e5e5;
 }
 
@@ -4376,4 +4335,12 @@ table td[class*=col-]:last-child {
 
 .noHover:hover td {
     background: #fff !important;
+}
+
+.universal_date label {
+    color: #fff;
+}
+
+.universal_date .btn-link {
+    color: #10aae0 !important;
 }

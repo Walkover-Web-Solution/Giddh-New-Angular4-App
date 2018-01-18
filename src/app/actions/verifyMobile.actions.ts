@@ -8,7 +8,6 @@ import { Actions, Effect } from '@ngrx/effects';
 import { CompanyResponse } from '../models/api-models/Company';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
 import { CustomActions } from '../store/customActions';
 

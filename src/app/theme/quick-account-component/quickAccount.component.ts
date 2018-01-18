@@ -1,21 +1,21 @@
+import * as _ from 'app/lodash-optimized';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GroupService } from '../../../services/group.service';
+import { GroupService } from 'app/services/group.service';
 import { Observable } from 'rxjs/Observable';
-import { CompanyService } from '../../../services/companyService.service';
-import { ToasterService } from '../../../services/toaster.service';
-import { AccountRequestV2 } from '../../../models/api-models/Account';
+import { CompanyService } from 'app/services/companyService.service';
+import { AccountRequestV2 } from 'app/models/api-models/Account';
 import { Store, State } from '@ngrx/store';
-import { AppState } from '../../../store';
+import { AppState } from 'app/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
-import * as _ from '../../../lodash-optimized';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { GeneralActions } from '../../../actions/general/general.actions';
-import { States } from '../../../models/api-models/Company';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
+import { LedgerActions } from 'app/actions/ledger/ledger.actions';
+import { GeneralActions } from 'app/actions/general/general.actions';
+import { States } from 'app/models/api-models/Company';
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
+import { IFlattenGroupsAccountsDetail } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { ToasterService } from 'app/services/toaster.service';
 
 @Component({
   selector: 'quickAccount',
@@ -32,12 +32,13 @@ export class QuickAccountComponent implements OnInit {
   public isQuickAccountCreatedSuccessfully$: Observable<boolean>;
   public showGstBox: boolean = false;
   public newAccountForm: FormGroup;
+  public comingFromDiscountList: boolean = false;
 
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _groupService: GroupService,
-              private _companyService: CompanyService, private _toaster: ToasterService,
-              private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
+    private _companyService: CompanyService, private _toaster: ToasterService,
+    private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
     this.isQuickAccountInProcess$ = this.store.select(p => p.ledger.isQuickAccountInProcess).takeUntil(this.destroyed$);
     this.isQuickAccountCreatedSuccessfully$ = this.store.select(p => p.ledger.isQuickAccountCreatedSuccessfully).takeUntil(this.destroyed$);
     this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
@@ -47,16 +48,22 @@ export class QuickAccountComponent implements OnInit {
         let groupsListArray: IOption[] = [];
         result.body.results = this.removeFixedGroupsFromArr(result.body.results);
         result.body.results.forEach(a => {
-          groupsListArray.push({label: a.groupName, value: a.groupUniqueName});
+          groupsListArray.push({ label: a.groupName, value: a.groupUniqueName });
         });
         this.flattenGroupsArray = groupsListArray;
+
+        // coming from discount list set hardcoded discount list
+        if (this.comingFromDiscountList) {
+          // "uniqueName":"discount"
+          this.newAccountForm.get('groupUniqueName').patchValue('discount');
+        }
       }
     });
     this.statesStream$.subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = Observable.of(states);
@@ -74,7 +81,7 @@ export class QuickAccountComponent implements OnInit {
       addresses: this._fb.array([
         this._fb.group({
           gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-          stateCode: [{value: '', disabled: false}]
+          stateCode: [{ value: '', disabled: false }]
         })
       ]),
     });

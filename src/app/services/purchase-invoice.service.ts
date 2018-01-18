@@ -115,7 +115,7 @@ export class PurchaseInvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let req = model;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).map((res) => {
-      let data: BaseResponse<IInvoicePurchaseResponse, string> = res.json();
+      let data: BaseResponse<IInvoicePurchaseResponse, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e));
@@ -130,7 +130,7 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.GET_TAXES.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-      let data: BaseResponse<ITaxResponse[], string> = res.json();
+      let data: BaseResponse<ITaxResponse[], string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<ITaxResponse[], string>(e));
@@ -149,7 +149,7 @@ export class PurchaseInvoiceService {
       taxes: model.taxes
     };
     return this._http.post(this.config.apiUrl + PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).map((res) => {
-      let data: BaseResponse<IInvoicePurchaseItem, string> = res.json();
+      let data: BaseResponse<IInvoicePurchaseItem, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseItem, string>(e));
@@ -164,7 +164,7 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -179,7 +179,7 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -194,7 +194,7 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -210,7 +210,7 @@ export class PurchaseInvoiceService {
       taxes: taxUniqueName
     };
     return this._http.put(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -228,7 +228,7 @@ export class PurchaseInvoiceService {
     };
 
     return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -245,7 +245,7 @@ export class PurchaseInvoiceService {
     };
 
     return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));

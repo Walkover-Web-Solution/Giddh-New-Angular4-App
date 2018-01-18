@@ -1,137 +1,106 @@
 <div class="col-xs-10">
-  <div class="row">
-    <div class="col-xs-12 pdT2">
-      <span class="label label-default pd1 isActive">Journal</span> No.1
-      <div class="pull-right text-right">
-        {{journalRequestObject.entryData}}
-        <br> {{moment().format('dddd')}}
-      </div>
-    </div>
-    <div class="col-xs-12">
-      <div class="table-responsive bdrT">
-        <table class="table">
-          <thead>
-            <tr>
-              <th style="width:80%;">Particulars</th>
-              <th>Debit</th>
-              <th>Credit</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let transaction of journalRequestObject.transactions">
-              <td>{{transaction.particular}}
-                <br>
-                <small> &nbsp;
-                  <i>Cur Bal: 20,000 Dr.</i>
-                </small>
-              </td>
-              <td>
-                <span *ngIf="transaction.type==='debit'">{{transaction.amount}}</span>
-              </td>
-              <td>
-                <span *ngIf="transaction.type==='credit'">{{transaction.amount}}</span>
-              </td>
-            </tr>
-            <tr class="bdrT" *ngIf="!selectedInput">
-              <td>
-                <div class="input-group">
-                  <span class="input-group-addon custom-input-group-addon">
-                    <input type="text" (keyup)="selectInputType($event);" maxlength="1" class="form-control"> </span>
-                  <input type="text" class="form-control">
-                </div>
-              </td>
-              <td>
-              </td>
-              <td>
-              </td>
-            </tr>
-            <tr *ngIf="selectedInput === 'by'">
-              <td>
-                <div class="input-group">
-                  <span class="input-group-addon">By</span>
-                  <input type="text" class="form-control" name="by" [(ngModel)]="journalRequestObject.by" (focus)="showLedgerAccountList = true;">
-                </div>
-              </td>
-              <td>
-                <input type="text" class="form-control" #byAmountField decimalDigitsDirective (keyup)="detectEnterKey($event, byAmountField.value, journalRequestObject.by)">
-              </td>
-              <td>
-                  <!-- <input type="text" class="form-control" disabled> -->
-              </td>
-            </tr>
-            <tr *ngIf="selectedInput === 'to'">
-              <td>
-                <div class="input-group">
-                  <span class="input-group-addon">To</span>
-                  <input type="text" class="form-control" name="to" [(ngModel)]="journalRequestObject.to" (focus)="showLedgerAccountList = true;">
-                </div>
-              </td>
-              <td>
-                <!-- <input type="text" class="form-control" disabled> -->
-              </td>
-              <td>
-                <input type="text" class="form-control" #toAmountField decimalDigitsDirective (keyup)="detectEnterKey($event, toAmountField.value, journalRequestObject.to)">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="col-xs-12">
-      <div class="col-xs-4">
-        <div class="form-group">
-          <label>Narration:</label>
-          <textarea class="form-control" name="narration" (keyup)="detectEnterKeyOnNarration($event, submitButton)" [(ngModel)]="journalRequestObject.description" resize="false" rows="6"></textarea>
-        </div>
-      </div>
-      <div class="col-xs-3"></div>
-      <div class="col-xs-2">
-        <div [hidden]="!showSubmitButtonBox" class="bdr text-center mrT2" style="height:135px;width:100%;background:white;color:black;">
-          <p class="pdT2">Accept?</p>
-          <div class="pdT2">
-            <button class="btn btn-link" #submitButton (click)="createEntry();">Yes</button> |
-            <button class="btn btn-link" (click)="resetEntry();">No</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-3 bdrT bdrB pdT2 pdB2 mrT2">
+    <div class="col-xs-12 bg_wrap">
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-5">
-            <b>{{totalDebitAmount}}</b>
-          </div>
-          <div class="col-xs-5">
-            <b>{{totalCreditAmount}}</b>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-xs-2" style="height:100vh;background:black;color:white;">
-  <div class="bdrL" [hidden]="!showLedgerAccountList" style="overflow-y:auto;height:100%;width:250px;background:white;position: absolute;left: -250px;z-index: 3;">
-    <h3 class="pd1 bdrB isActive">List of Ledger Accounts</h3>
-    <ul class="pdL1" style="color:black;">
-      <li class="cursor-pointer" (click)="setAccount(account);" *ngFor="let account of accounts">{{ account.label }}</li>
-    </ul>
-    <!-- <div *ngIf="accounts && accounts.length">
-      <ul class="grp_list" *vsFor="accounts; tagName:'li'; scrollParent:'.grp_list'; let _items = accounts">
-        <ng-container *ngFor="let item of _items;let i = index">
-          <li>
-            <div class="title">
-              <a class="ellp max250">{{item.label}}</a>
+            <div class="clearfix pdT2">
+                <span class="btn label isActive">Journal</span>
+                <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
+                    <input type="text" [ngModel]="moment(journalDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control text-right appearance_none" />
+                    <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                        <datepicker [(ngModel)]="journalDate" (selectionDone)="onSelectDate($event)" [showWeeks]="false"></datepicker>
+                    </div>
+                    {{moment(journalDate).format('dddd')}}
+                </div>
             </div>
-          </li>
-        </ng-container>
-      </ul>
-    </div> -->
-  </div>
-  <ul class="pd2">
-    <li>F1: Accounting Voucher</li>
-    <li>F2: Order Vouchers</li>
-    <li>F3: Payroll Voucher</li>
-    <li>F4: Date</li>
-    <li>F5: Company</li>
-    <li>F6: Contra</li>
-  </ul>
+            <div class="clearfix" [style.min-height.vh]="61">
+                <div class="table-responsive bdrT">
+                    <table class="table entry_table">
+                        <thead>
+                            <tr>
+                                <th> &nbsp; </th>
+                                <th style="width:80%;">Particulars</th>
+                                <th class="text-right">Debit</th>
+                                <th class="text-right">Credit</th>
+                            </tr>
+                        </thead>
+                        <br />
+                        <tbody>
+                            <tr *ngFor="let transaction of journalObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
+                                <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i)" (blur)="selectRow(false,null)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
+                                        value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
+                                <td><input type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event)" (focus)="onAccountFocus(); selectRow(true,i)"
+                                        (blur)="selectRow(true,i);onAccountBlur($event, particular);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keyup)="showLedgerAccountList=true;flyAccounts.next(true);noGroups=true;" /></td>
+                                <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
+                                <td>
+                                    <input *ngIf="transaction.type === 'by'" type="text" [required]="transaction.particular" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="validateTransation(transaction.amount,transaction, i)"
+                                        (blur)="selectRow(false,null);validateTransation(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" />
+                                </td>
+                                <td>
+                                    <input *ngIf="transaction.type === 'to'" type="text" class="form-control text-right" [required]="transaction.particular" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="validateTransation(transaction.amount,transaction, i)"
+                                        (blur)="selectRow(false,null);validateTransation(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label>Narration:</label>
+                        <textarea class="form-control" name="narration" (keyup.enter)="openConfirmBox(submitButton)" (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="journalObj.description" resize="false" rows="6"></textarea>
+                    </div>
+                </div>
+
+                <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
+                    <div class="">
+                        <h1>Accept?</h1>
+                        <div class="pdT2">
+                            <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button> |
+                            <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
+                            <br />
+                            <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3 total_box text-right pull-right">
+                    <span><strong>{{totalDebitAmount}}</strong></span>
+                    <span><strong>{{totalCreditAmount}}</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar_menu col-xs-2 pd0">
+    <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
+        <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
+
+        <accounts-side-bar [isGroupToggle]="true" [noGroups]="noGroups" [search]='accountSearch' [flyAccounts]="flyAccounts | async" (onSelectItem)="setAccount($event);" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+
+        <!-- <ul class="pdL1" style="color:black;">
+            <li class="cursor-pointer" (click)="setAccount(account);" *ngFor="let account of accounts">{{ account.label }}</li>
+        </ul> -->
+
+    </div>
+    <ul class="menu_list">
+        <!-- "isHidden" class  if user is not able to access the module-->
+        <li><a [routerLink]="['/pages/accounting/journal']" class="primary_clr">F1: Journal</a></li>
+        <li><a [routerLink]="['/pages/accounting/purchase']" class="">F9: Purchase</a></li>
+        <!-- <li><a href="">F2: Order Vouchers</a></li>
+        <li><a href="">F3: Payroll Voucher</a></li>
+        <li><a href="">F4: Date</a></li>
+        <li><a href="">F5: Company</a></li>
+        <li><a href="">F6: Contra</a></li> -->
+    </ul>
+</div>
+
+<!--add and manage group account modal -->
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
+    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+        <div class="modal-content fullScreenMy">
+            <app-manage-groups-accounts></app-manage-groups-accounts>
+        </div>
+    </div>
 </div>

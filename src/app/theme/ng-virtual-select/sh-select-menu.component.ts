@@ -13,6 +13,7 @@ export class ShSelectMenuComponent implements OnChanges {
   @Input() public isOpen: boolean;
   @Input() public optionTemplate: TemplateRef<any>;
   @Input() public notFoundMsg: string;
+  @Input() public notFoundLinkText: string = 'Create New';
   @Input() public noResultLinkEnabled: boolean;
   @Input() public ItemHeight: number;
   @Input() public NoFoundMsgHeight: number;

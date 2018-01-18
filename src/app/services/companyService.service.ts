@@ -29,7 +29,7 @@ export class CompanyService {
   public CreateCompany(company: CompanyRequest): Observable<BaseResponse<CompanyResponse, CompanyRequest>> {
     return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company)
       .map((res) => {
-        let data: BaseResponse<CompanyResponse, CompanyRequest> = res.json();
+        let data: BaseResponse<CompanyResponse, CompanyRequest> = res;
         data.request = company;
         return data;
       })
@@ -43,7 +43,7 @@ export class CompanyService {
     this.user = this._generalService.user;
     return this._http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName))
       .map((res) => {
-        let data: BaseResponse<CompanyResponse[], string> = res.json();
+        let data: BaseResponse<CompanyResponse[], string> = res;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, ''));
@@ -55,7 +55,7 @@ export class CompanyService {
   public DeleteCompany(uniqueName: string): Observable<BaseResponse<string, string>> {
     return this._http.delete(this.config.apiUrl + COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName))
       .map((res) => {
-        let data: BaseResponse<string, string> = res.json();
+        let data: BaseResponse<string, string> = res;
         data.queryString = {uniqueName};
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
@@ -72,7 +72,7 @@ export class CompanyService {
       url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
     }
     return this._http.get(url).map((res) => {
-      let data: BaseResponse<StateDetailsResponse, string> = res.json();
+      let data: BaseResponse<StateDetailsResponse, string> = res;
       data.queryString = cmpUniqueName;
       data.request = cmpUniqueName;
       return data;
@@ -87,7 +87,7 @@ export class CompanyService {
       url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
     }
     return this._http.get(url).map((res) => {
-      let data: BaseResponse<StateDetailsResponse, string> = res.json();
+      let data: BaseResponse<StateDetailsResponse, string> = res;
       return data;
     });
   }
@@ -95,7 +95,7 @@ export class CompanyService {
   // Effects need to be review
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
     return this._http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
-      let data: BaseResponse<string, StateDetailsRequest> = res.json();
+      let data: BaseResponse<string, StateDetailsRequest> = res;
       data.request = stateDetails;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
@@ -104,14 +104,14 @@ export class CompanyService {
   public getApplicationDate(): Observable<BaseResponse<string, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<string, any> = res.json();
+      let data: BaseResponse<string, any> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
   }
-  public setApplicationDate(dateObj: {fromDate: string, toDate: string}): Observable<BaseResponse<string, any>> {
+  public setApplicationDate(dateObj: {fromDate?: string, toDate?: string, duration?: number, period?: string}): Observable<BaseResponse<string, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dateObj).map((res) => {
-      let data: BaseResponse<string, any> = res.json();
+      let data: BaseResponse<string, any> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj));
   }
@@ -119,7 +119,7 @@ export class CompanyService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<TaxResponse[], string> = res.json();
+      let data: BaseResponse<TaxResponse[], string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e));
   }
@@ -128,7 +128,7 @@ export class CompanyService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_USERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
+      let data: BaseResponse<AccountSharedWithResponse[], string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e));
   }
@@ -141,7 +141,7 @@ export class CompanyService {
         .replace(':from', encodeURIComponent(request.params.from))
         .replace(':to', encodeURIComponent(request.params.to))
       , request.data).map((res) => {
-      return res.json();
+      return res;
     }).catch((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e));
   }
 
@@ -153,7 +153,7 @@ export class CompanyService {
         .replace(':from', encodeURIComponent(request.params.from))
         .replace(':to', encodeURIComponent(request.params.to))
       , request.data).map((res) => {
-      return res.json();
+      return res;
     }).catch((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e));
   }
 
@@ -162,7 +162,7 @@ export class CompanyService {
    */
   public getAllStates(): Observable<BaseResponse<States[], string>> {
     return this._http.get(this.config.apiUrl + COMPANY_API.GET_ALL_STATES).map((res) => {
-      let data: BaseResponse<States[], string> = res.json();
+      let data: BaseResponse<States[], string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<States[], string>(e));
   }
@@ -176,8 +176,22 @@ export class CompanyService {
   public getCoupon(couponCode: string): Observable<BaseResponse<GetCouponResp, string>> {
     return this._http.get(this.config.apiUrl + COMPANY_API.GET_COUPON
       .replace(':code', encodeURIComponent(couponCode))).map((res) => {
-      let data: BaseResponse<GetCouponResp, string> = res.json();
+      let data: BaseResponse<GetCouponResp, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e));
   }
+
+
+  /**
+   * ContactFrom
+   */
+  public ContactFrom(formObj): Observable<BaseResponse<any, any>> {
+    let domainURL = 'http://giddh.com/'
+    return this._http.post(domainURL + COMPANY_API.CONTACT_FORM, formObj)
+      .map((res) => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
+
 }
