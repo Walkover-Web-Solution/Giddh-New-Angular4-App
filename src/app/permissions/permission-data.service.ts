@@ -17,7 +17,10 @@ export class PermissionDataService {
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
       if (currentCompany && currentCompany.userEntityRoles && currentCompany.userEntityRoles.length) {
-        this.isUserSuperAdmin = currentCompany.userEntityRoles[0].role.uniqueName === 'super_admin' ? true : false;
+        let superAdminIndx = currentCompany.userEntityRoles.findIndex((role) => {
+         return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
+        });
+        this.isUserSuperAdmin = superAdminIndx !== -1 ? true : false;
         this.getData = currentCompany.userEntityRoles[0].role.scopes;
       }
     })).subscribe();

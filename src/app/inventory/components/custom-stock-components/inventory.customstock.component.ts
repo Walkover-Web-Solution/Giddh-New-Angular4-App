@@ -1,6 +1,6 @@
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
@@ -18,14 +18,10 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
   templateUrl: './inventory.customstock.component.html'
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy {
+  @Input() public isAsideClose: boolean;
+
   public stockUnitsDropDown$: Observable<IOption[]>;
   public activeGroupUniqueName$: Observable<string>;
-  public options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Choose a parent unit',
-    allowClear: true
-  };
   public stockUnit$: Observable<StockUnitRequest[]>;
   public editMode: boolean;
   public editCode: string;
@@ -36,6 +32,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public stockUnitsList = StockUnits;
   public companyProfile: any;
   public country: string;
+  public selectedUnitName: string;
+  public isIndia: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -56,8 +54,12 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         this.companyProfile = _.cloneDeep(o);
         if (this.companyProfile.country) {
           this.country = this.companyProfile.country.toLocaleLowerCase();
+          if (this.country && this.country === 'india') {
+            this.isIndia = true;
+          }
         } else {
           this.country = 'india';
+          this.isIndia = true;
         }
       } else {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -85,6 +87,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public saveUnit(): any {
     if (!this.editMode) {
+      if (this.isIndia) {
+        this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
+      }
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
     } else {
       this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(this.customUnitObj), this.editCode));
@@ -98,13 +103,17 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public editUnit(item: StockUnitRequest) {
     this.customUnitObj = Object.assign({}, item);
+    this.setUnitName(this.customUnitObj.name);
+    if (this.customUnitObj.parentStockUnit) {
+      this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
+    }
     this.editCode = item.code;
     this.editMode = true;
   }
 
   public clearFields() {
     this.customUnitObj = new StockUnitRequest();
-    this.customUnitObj.name = null;
+    this.customUnitObj.parentStockUnitCode = null;
     this.editMode = false;
     this.editCode = '';
 
@@ -112,7 +121,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public change(v) {
     this.stockUnit$.find(p => {
-      let unit = p.find(q => q.code === v.value);
+      let unit = p.find(q => q.code === v);
       if (unit !== undefined) {
         this.customUnitObj.parentStockUnit = unit;
         return true;
@@ -122,13 +131,20 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    // this.clearFields();
   }
 
   public setUnitName(name) {
-    let unit = this.stockUnitsList.filter((obj) => obj.value === name.value || obj.label === name.value);
-    console.log(unit);
+    let unit = this.stockUnitsList.filter((obj) => obj.value === name || obj.label === name);
     if (unit !== undefined && unit.length > 0) {
       this.customUnitObj.code = unit[0].value;
+      this.customUnitObj.name = unit[0].value;
+      this.selectedUnitName = unit[0].label;
+    }
+  }
+  public ngOnChanges(changes) {
+    if (this.isAsideClose) {
+      this.clearFields();
     }
   }
 }
