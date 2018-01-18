@@ -1,4 +1,13 @@
-<section class="container nopad">
+
+<div class="loader mrT4" *ngIf="showLoader">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<section class="container nopad" *ngIf="!showLoader">
 
   <!--ledger table-->
   <div class="ledgHead transactions-page mrT3 pos-rel">
@@ -38,7 +47,7 @@
 
             <div class="mrL2 col-xs-6 pos-rel pull-right">
               <div class="row">
-                <input type="search" class="form-control" placeholder="Search ledger" #ledgerSearchTerms>
+                <input type="search" class="form-control" (keyup)="search(ledgerSearchTerms.value)" placeholder="Search ledger" #ledgerSearchTerms>
                 <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
               </div>
             </div>
@@ -105,7 +114,7 @@
             </tr>
             <tr>
               <td class="nopad bdrL bdrR" colspan="3">
-                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup()" (click)="$event.stopPropagation()">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                   <tbody>
                     <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
                       <td class="width100" *ngIf="txn.type === 'DEBIT'">
@@ -118,7 +127,7 @@
                               <td class="col-xs-7 select2-parent select2-ledger">
                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                                   [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                                  [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67" [customFilter]="lc.ledgerCustomFilter">
+                                  [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                   <ng-template #optionTemplate let-option="option">
                                     <ng-container *ngIf="!option.additional?.stock">
                                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -162,7 +171,7 @@
                 </table>
               </td>
               <td colspan="3" class="nopad bdrL bdrR">
-                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup()" (click)="$event.stopPropagation()">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                   <tbody>
                     <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
                       <td class="width100" *ngIf="txn.type === 'CREDIT'">
@@ -175,7 +184,7 @@
                               <td class="col-xs-7 select2-parent select2-ledger">
                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                                   [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                                  [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67" [customFilter]="lc.ledgerCustomFilter">
+                                  [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                   <ng-template #optionTemplate let-option="option">
                                     <ng-container *ngIf="!option.additional?.stock">
                                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -287,7 +296,7 @@
               <td class="col-xs-2"></td>
               <td class="col-xs-7">B/F Balance</td>
               <td class="col-xs-3">
-                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.1-2' }}</span>
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.2-2' }}</span>
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
               </td>
             </tr>
@@ -303,7 +312,7 @@
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                {{ txn.amount | number: '1.1-2' }}
+                {{ txn.amount | number: '1.0-2' }}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -333,7 +342,7 @@
 
                         <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                           [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67" [customFilter]="lc.ledgerCustomFilter">
+                          [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                           <ng-template #optionTemplate let-option="option">
                             <ng-container *ngIf="!option.additional?.stock">
                               <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -406,7 +415,7 @@
               <td class="col-xs-7">B/F Balance</td>
               <td class="col-xs-3">
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
-                  {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.1-2'}}</span>
+                  {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.2-2'}}</span>
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
               </td>
             </tr>
@@ -423,7 +432,7 @@
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                {{txn.amount | number: '1.1-2'}}
+                {{txn.amount | number: '1.0-2'}}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -454,7 +463,7 @@
 
                         <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                           [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67" [customFilter]="lc.ledgerCustomFilter">
+                          [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                           <ng-template #optionTemplate let-option="option">
                             <ng-container *ngIf="!option.additional?.stock">
                               <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -516,13 +525,13 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'"
                   class="">
-                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
+                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2' }}
                 </span>
               </td>
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.1-2' }}</span>
+                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.2-2' }}</span>
               </td>
             </tr>
           </tbody>
@@ -535,14 +544,14 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" tooltip="" [placement]="'top'">
                   C/F: Dr
-                  <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2'}}
+                  <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2'}}
                   </span>
                 </span>
               </td>
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.1-2' }}</span>
+                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.2-2' }}</span>
               </td>
             </tr>
           </tbody>
@@ -571,7 +580,7 @@
 </section>
 
 <!--total section-->
-<section class="ledger-stat mrT3" *ngIf="(lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+<section class="ledger-stat mrT3" *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
   <div class="container">
     <div class="col-xs-3">
       <!--<span class="primary_clr mrB1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
@@ -583,7 +592,7 @@
     </div>
     <div class="col-xs-3">
       <h1>Opening Balance</h1>
-      <h3>{{(lc.transactionData$ | async)?.forwardedBalance.amount | number:'1.1-2'}} {{ (lc.transactionData$ | async)?.forwardedBalance.type
+      <h3>{{(lc.transactionData$ | async)?.forwardedBalance.amount | number:'1.2-2'}} {{ (lc.transactionData$ | async)?.forwardedBalance.type
         === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
     </div>
 
@@ -593,16 +602,16 @@
         <span *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">Debit</span>
       </h1>
       <h3 class=" primary_clr" *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">
-        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
+        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'1.2-2'}}</h3>
       <h3 class=" primary_clr" *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">
-        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
-      <h1 class="mrT">Dr Total {{(lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h1>
-      <h1 class="mrT">Cr Total {{(lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h1>
+        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'1.2-2'}}</h3>
+      <h1 class="mrT">Dr Total {{(lc.transactionData$ | async)?.debitTotal | number:'1.2-2'}}</h1>
+      <h1 class="mrT">Cr Total {{(lc.transactionData$ | async)?.creditTotal | number:'1.2-2'}}</h1>
     </div>
 
     <div class="col-xs-3">
       <h1>Closing Balance</h1>
-      <h3>{{(lc.transactionData$ | async)?.closingBalance.amount | number:'1.1-2'}} {{ (lc.transactionData$ | async)?.closingBalance.type
+      <h3>{{(lc.transactionData$ | async)?.closingBalance.amount | number:'1.2-2'}} {{ (lc.transactionData$ | async)?.closingBalance.type
         === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
     </div>
 
@@ -638,7 +647,7 @@
 <div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <share-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
+      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
     </div>
   </div>
 </div>
@@ -657,7 +666,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <advance-search-model [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
+      <advance-search-model #advanceSearchComp [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
     </div>
   </div>
 </div>

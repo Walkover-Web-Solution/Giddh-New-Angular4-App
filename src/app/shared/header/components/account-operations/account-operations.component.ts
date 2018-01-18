@@ -1,3 +1,6 @@
+import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
+import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
+import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -43,9 +46,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
+  @ViewChild('shareAccountModalComp') public shareAccountModalComp: ShareAccountModalComponent;
+  @ViewChild('shareGroupModalComp') public shareGroupModalComp: ShareGroupModalComponent;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
@@ -98,11 +103,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isGstEnabledAcc: boolean = false;
   public isHsnSacEnabledAcc: boolean = false;
   public showTaxes: boolean = false;
+  public isUserSuperAdmin: boolean = false;
+  private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-              private accountService: AccountService) {
+    private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
+    private accountService: AccountService, _permissionDataService: PermissionDataService) {
+    this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
@@ -116,11 +124,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.activeAccount,
-        (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-        (state: AppState) => state.company.taxes],
+      (state: AppState) => state.groupwithaccounts.activeAccount,
+      (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+      (state: AppState) => state.company.taxes],
       (activeAccount, activeAccountTaxHierarchy, taxes) => {
         let arr: IOption[] = [];
+        // debugger;
         if (taxes) {
           if (activeAccount) {
             let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
@@ -138,22 +147,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let inheritedTaxes = _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                 // set value in tax group form
-                this.taxGroupForm.setValue({taxes: allTaxes});
+                this.taxGroupForm.setValue({ taxes: allTaxes });
               } else {
-                this.taxGroupForm.setValue({taxes: applicableTaxes});
+                this.taxGroupForm.setValue({ taxes: applicableTaxes });
               }
               return _.differenceBy(taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), 'value');
 
             } else {
               // set value in tax group form
-              this.taxGroupForm.setValue({taxes: applicableTaxes});
+              this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
               return taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               });
 
             }
@@ -182,6 +191,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnInit() {
+    this.activeAccount$.subscribe(a => {
+      if (a && a.parentGroups[0].uniqueName) {
+        let col = a.parentGroups[0].uniqueName;
+        this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+        this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+      }
+    });
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
@@ -207,15 +223,32 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let flattenGroupsList: IOption[] = [];
 
         grpsList.forEach(grp => {
-          flattenGroupsList.push({label: grp.name, value: grp.uniqueName});
+          flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
         });
         this.groupsList = flattenGroupsList;
+        this.groupsListBackUp = flattenGroupsList;
+      }
+    });
+
+    this.showAddNewGroup$.subscribe(s => {
+      if (s) {
+        if (this.breadcrumbPath.indexOf('Create Group') === -1) {
+          this.breadcrumbPath.push('Create Group');
+        }
+      }
+    });
+
+    this.showAddNewAccount$.subscribe(s => {
+      if (s) {
+        if (this.breadcrumbPath.indexOf('Create Account') === -1) {
+          this.breadcrumbPath.push('Create Account');
+        }
       }
     });
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupsList = _.filter(this.groupsList, (l => l.value !== a.uniqueName));
+        this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
         // this.taxGroupForm.get('taxes').reset();
         // let showAddForm: boolean = null;
         // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
@@ -260,9 +293,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public ngAfterViewInit() {
 
     this.isTaxableAccount$ = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-        (state: AppState) => state.groupwithaccounts.activeGroup,
-        (state: AppState) => state.groupwithaccounts.activeAccount],
+      (state: AppState) => state.groupwithaccounts.groupswithaccounts,
+      (state: AppState) => state.groupwithaccounts.activeGroup,
+      (state: AppState) => state.groupwithaccounts.activeAccount],
       (groupswithaccounts, activeGroup, activeAccount) => {
         let result: boolean = false;
         if (groupswithaccounts && activeGroup && activeAccount) {
@@ -282,7 +315,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let accounts: IOption[] = [];
       if (a.status === 'success') {
         a.body.results.map(acc => {
-          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+          accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
         });
         let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
         if (accountIndex > -1) {
@@ -305,7 +338,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
   }
 
   public moveAccount() {
@@ -341,7 +374,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -480,6 +513,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showShareGroupModal() {
     this.shareGroupModal.show();
+    this.shareGroupModalComp.getGroupSharedWith();
   }
 
   public hideShareGroupModal() {
@@ -488,6 +522,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showShareAccountModal() {
     this.shareAccountModal.show();
+    this.shareAccountModalComp.getAccountSharedWith();
   }
 
   public hideShareAccountModal() {

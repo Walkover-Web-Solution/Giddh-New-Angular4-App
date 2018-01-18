@@ -21,16 +21,16 @@
                         </div>
                     </form>
                     <!--shared with array-->
-                    <div class="col-xs-8 mrB2" *ngIf="(activeAccountSharedWith$ | async)?.length > 0">
+                    <div class="col-xs-8 mrB2" *ngIf="activeAccountSharedWith?.length > 0">
                         <div class="row">
                             <ul class="shared_list">
-                                <li *ngFor="let val of (activeAccountSharedWith$ | async)" class="clearfix">
+                                <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
                                     <span class="pull-left">
-                            <small class="Useremail">{{ val.userEmail }}</small>
+                            <small class="Useremail">{{ val.emailId }}</small>
                             </span>
                                     <span class="form-inline">
                             <span class="delIcon pull-right">
-                            <i (click)="unShareAccount(val.userEmail)" class="fa fa-times"
+                            <i (click)="unShareAccount(val.uniqueName, val.emailId)" class="fa fa-times"
                                aria-hidden="true"></i>
                             </span>
                                     </span>

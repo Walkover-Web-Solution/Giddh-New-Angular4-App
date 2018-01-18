@@ -26,7 +26,7 @@ export class SettingsProfileService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<SmsKeyClass, string> = res.json();
+      let data: BaseResponse<SmsKeyClass, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e));
@@ -39,7 +39,7 @@ export class SettingsProfileService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<any, any> = res.json();
+      let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));

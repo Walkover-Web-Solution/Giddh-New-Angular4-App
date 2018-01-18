@@ -124,15 +124,15 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="col-xs-9 font-selector mrT1">
                     <div class="row">
-                        <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
-                            [fpPresetFonts]="presetFonts">
+                        <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
+                            [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts">
                             {{font.family}}
                             <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
                         </div>
                     </div>
                 </div>
             </li>
-            <!--<li [hidden]="templateUISectionVisibility.print" (click)="onChangeVisibility('print')">
+            <li [hidden]="templateUISectionVisibility.print" (click)="onChangeVisibility('print')">
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.print">
@@ -140,7 +140,7 @@
 
                 <div class="clearfix mrT1">
                     <div class="printTool pos-rel">
-                        <p>Page margins</p>
+                        <p>Page margins (in pixel)</p>
                         <table class="table mr0">
                             <thead>
                                 <tr>
@@ -152,10 +152,14 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.topMargin' (ngModelChange)='onValueChange(null, null)' /></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.leftMargin' (ngModelChange)='onValueChange(null, null)' /></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.bottomMargin' (ngModelChange)='onValueChange(null, null)' /></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.rightMargin' (ngModelChange)='onValueChange(null, null)' /></td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.topMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.topMargin, 0, "topMargin")'
+                                        /></td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.leftMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.leftMargin, 1, "leftMargin")'
+                                        /></td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.bottomMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.bottomMargin, 2, "bottomMargin")'
+                                        /></td>
+                                    <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control" [(ngModel)]='customTemplate.rightMargin' (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.rightMargin, 3, "rightMargin")'
+                                        /></td>
                                     <td><a href="javascript:void(0);" class="pdR1" (click)="resetPrintSetting()">Reset</a></td>
                                 </tr>
                             </tbody>
@@ -164,7 +168,7 @@
                     </div>
                 </div>
 
-            </li>-->
+            </li>
         </ul>
     </div>
 </div>

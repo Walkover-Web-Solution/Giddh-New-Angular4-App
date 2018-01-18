@@ -170,7 +170,10 @@ export class AccountsAction {
           type: 'EmptyAction'
         };
       }
-      return this.sharedAccountWith(data.body.uniqueName);
+      // return this.sharedAccountWith(data.body.uniqueName); // JIRA CARD EL-351
+      return {
+        type: 'EmptyAction'
+      };
     });
   @Effect()
   public GetAccountUniqueName$: Observable<Action> = this.action$

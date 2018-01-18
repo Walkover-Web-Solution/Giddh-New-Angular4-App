@@ -4,6 +4,7 @@ import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -26,6 +27,20 @@ export class TaxControlData {
     .form-control[readonly] {
       background: inherit !important;
     }
+    .single-item .dropdown-menu{
+      height: 50px !important;
+    }
+    :host .dropdown-menu{
+      min-width: 200px;
+      height: inherit;
+      padding: 0;
+      overflow: auto;
+    }
+    .fakeLabel{
+      cursor: pointer;
+      padding: 5px 10px;
+      line-height: 24px;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -42,6 +57,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
   public sum: number = 0;
   private selectedTaxes: string[] = [];
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor() {
     //
@@ -49,6 +65,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit(): void {
     this.sum = 0;
+    this.taxRenderData.splice(0, this.taxRenderData.length);
     this.prepareTaxObject();
     this.change();
   }
@@ -121,14 +138,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * hide menus on outside click of span
    */
-  public hideTaxPopup() {
-    this.showTaxPopup = false;
+  public toggleTaxPopup(action: boolean) {
+    this.showTaxPopup = action;
   }
 
   public ngOnDestroy() {
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   /**
@@ -141,7 +160,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
-    let diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    let diff: boolean;
+    if (this.selectedTaxes.length > 0) {
+      diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    } else {
+      diff = this.applicableTaxes.length > 0;
+    }
+
     if (diff) {
       this.isApplicableTaxesEvent.emit(false);
     } else {

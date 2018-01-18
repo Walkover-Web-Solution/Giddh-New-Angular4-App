@@ -143,7 +143,10 @@ export class GroupWithAccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return { type: 'EmptyAction' };
       }
-      return this.sharedGroupWith(data.body.uniqueName);
+      // return this.sharedGroupWith(data.body.uniqueName); // JIRA CARD EL-351
+      return {
+        type: 'EmptyAction'
+      };
     });
 
   @Effect()
@@ -469,7 +472,7 @@ export class GroupWithAccountsAction {
 
   public getFlattenGroupsAccounts(value?: FlattenGroupsAccountsRequest): CustomActions {
     return {
-      type: GroupWithAccountsAction.GET_GROUP_DETAILS,
+      type: GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS,
       payload: value
     };
   }

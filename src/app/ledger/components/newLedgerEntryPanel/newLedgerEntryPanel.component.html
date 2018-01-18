@@ -14,8 +14,8 @@
                                         </td>
                                         <td *ngIf="currentTxn.unitRate">
                                             <label>Unit</label>
-                                            <select class="form-control" style="width: 60px;" (change)="unitChanged($event.target.value)" [value]="currentTxn.inventory.unit.code">
-                        <option *ngFor="let item of currentTxn.unitRate" [value]="item.stockUnitCode">{{item.stockUnitCode}}
+                                            <select class="form-control" style="width: 100px;" (change)="unitChanged($event.target.value)" [value]="currentTxn.inventory.unit.code">
+                        <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">{{item.stockUnitCode}}
                         </option>
                       </select>
                                         </td>
@@ -54,8 +54,8 @@
                         </td>
                         <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length" class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
                             <!--tax control component-->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes"
-                            [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes" (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes"
+                                (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
                             </tax-control>
                         </td>
                         <td class="text-center">
@@ -85,7 +85,7 @@
                         <button class="no-btn pdL0">More Details</button>
                     </td>
                     <td class="text-right">
-                        <span class="primary_color">Compound Total: {{ blankLedger.compoundTotal | number: '1.1-2' }}</span>
+                        <span class="primary_color">Compound Total: {{ blankLedger.compoundTotal | number: '1.2-2' }}</span>
                     </td>
                 </tr>
             </tbody>
@@ -102,7 +102,7 @@
                                     <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber" />
                                 </td>
                                 <td>
-                                    <label class="default_clr">Cheque Date</label>
+                                    <label class="default_clr">Cheque Clearance Date</label>
                                     <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate" />
                                 </td>
                             </tr>
@@ -123,8 +123,8 @@
                         </td>
 
                         <td class="pdL1" *ngIf="(blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
-                          <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
-                      </td>
+                            <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -167,7 +167,8 @@
                 </div>
                 <div class="pull-right">
                     <label class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
-            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+              (uploadOutput)="onUploadOutput($event)">
             <label for="invoiceFile" class="cp fs16">
               <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                     </label>

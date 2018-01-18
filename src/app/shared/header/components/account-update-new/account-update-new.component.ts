@@ -76,10 +76,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
-    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
-    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
-    {value: 'SEZ', label: 'SEZ'}
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
@@ -92,7 +92,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
@@ -103,19 +103,19 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = Observable.of(states);
     });
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({value: c.value, label: c.value});
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
 
     this.store.select(s => s.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((profile) => {
@@ -150,8 +150,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{value: '', disabled: false}],
-      sacNumber: [{value: '', disabled: false}]
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }]
     });
     // fill form with active account
     this.activeAccount$.subscribe(acc => {
@@ -250,11 +250,25 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
   }
 
+  public onViewReady(ev) {
+    let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
+    if (accountCountry) {
+      if (accountCountry !== 'IN') {
+        this.addAccountForm.controls['addresses'] = this._fb.array([]);
+      } else {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        if (addresses.controls.length === 0) {
+          this.addBlankGstForm();
+        }
+      }
+    }
+  }
+
   public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{value: '', disabled: false}],
+      stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
@@ -303,6 +317,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
+
+    if (gstVal.length !== 15) {
+      gstForm.get('partyType').reset('NOT APPLICABLE');
+    }
+
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
@@ -374,7 +393,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
 
     this.submitClicked.emit({
-      value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName},
+      value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName },
       accountRequest: this.addAccountForm.value
     });
   }

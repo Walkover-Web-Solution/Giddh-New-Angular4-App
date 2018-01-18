@@ -1,3 +1,4 @@
+import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { NeedsAuthorization } from './decorators/needAuthorization';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
@@ -15,6 +16,7 @@ export const ROUTES: Routes = [
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
+  { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
   { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
   { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
   { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
@@ -28,14 +30,17 @@ export const ROUTES: Routes = [
   { path: 'social-login-callback', component: SocialLoginCallbackComponent },
   { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
   { path: 'sales', redirectTo: 'pages/sales', pathMatch: 'full' },
+  { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
+  { path: 'accounting', redirectTo: 'pages/accounting', pathMatch: 'full' },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
       { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
       { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
+      { path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization] },
       { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },

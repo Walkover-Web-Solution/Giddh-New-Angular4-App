@@ -1,3 +1,4 @@
+import { MagicLinkService } from './magic-link.service';
 import { PermissionDataService } from './../permissions/permission-data.service';
 import { LogsService } from './logs.service';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -24,6 +25,7 @@ import { ManufacturingService } from './manufacturing.service';
 import { SearchService } from './search.service';
 import { TlPlService } from './tl-pl.service';
 import { LedgerService } from './ledger.service';
+import { DaybookService } from './daybook.service';
 import { DashboardService } from './dashboard.service';
 import { SettingsIntegrationService } from './settings.integraion.service';
 import { SettingsProfileService } from './settings.profile.service';
@@ -76,13 +78,15 @@ export class ServiceModule {
         LogsService,
         TlPlService,
         LedgerService,
+        MagicLinkService,
         SettingsIntegrationService,
         SettingsProfileService,
         SettingsTaxesService,
         SettingsLinkedAccountsService,
         PurchaseInvoiceService,
         SettingsFinancialYearService,
-        SettingsPermissionService
+        SettingsPermissionService,
+        DaybookService
       ]
     };
   }

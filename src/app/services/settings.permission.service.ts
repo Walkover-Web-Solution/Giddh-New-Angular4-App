@@ -25,7 +25,7 @@ export class SettingsPermissionService {
   public GetUsersWithCompanyPermissions(companyUniqueName: string): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_PERMISSION_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -38,7 +38,7 @@ export class SettingsPermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + SETTINGS_PERMISSION_API.UPDATE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ueruniquename', model.uniqueName), model).map((res) => {
-      let data: BaseResponse<IUpdatePermissionResponse, ShareRequestForm> = res.json();
+      let data: BaseResponse<IUpdatePermissionResponse, ShareRequestForm> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IUpdatePermissionResponse, ShareRequestForm>(e, model));

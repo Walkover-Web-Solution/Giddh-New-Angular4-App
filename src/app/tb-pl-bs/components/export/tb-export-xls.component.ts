@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
   template: `
     <div class="form-group xls-export" (clickOutside)="showTbXls=false;">
       <a (click)="showTbXls = !showTbXls" *ngIf="enableDownload"><img
-        src="/assets/images/xls-icon.png"/></a>
+        src="{{ imgPath }}"/></a>
       <div class="export-options" *ngIf="showTbXls">
         <span class="arrow"></span>
         <ul class="list-unstyled">
@@ -29,7 +29,7 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
   @Output() public tbExportXLSEvent = new EventEmitter<string>();
 
   public showTbXls: boolean;
-
+  public imgPath: string = '';
   constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
 
   }
@@ -42,7 +42,7 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/xls-icon.png' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.png';
   }
 
   public ngOnDestroy() {
