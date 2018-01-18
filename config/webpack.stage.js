@@ -84,7 +84,7 @@ module.exports = function (env) {
     errlyticsKey: ERRLYTICS_KEY_TEST,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl,
-    APP_FOLDER: 'new/'
+    APP_FOLDER: 'app/'
 
   });
 
