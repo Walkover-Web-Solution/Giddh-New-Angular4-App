@@ -108,7 +108,7 @@ export class CompanyService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
   }
-  public setApplicationDate(dateObj: {fromDate: string, toDate: string}): Observable<BaseResponse<string, any>> {
+  public setApplicationDate(dateObj: {fromDate?: string, toDate?: string, duration?: number, period?: string}): Observable<BaseResponse<string, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dateObj).map((res) => {
       let data: BaseResponse<string, any> = res;

@@ -28,7 +28,8 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { QuickAccountComponent } from 'app/ledger/components/quickAccount/quickAccount.component';
+import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
+import { SalesTaxListComponent } from 'app/sales/tax-list/sales.tax.list.component';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -42,7 +43,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SalesAddStockComponent,
     SalesAddStockGroupComponent,
     CreateAccountModalComponent,
-    CreateAccountServiceComponent
+    CreateAccountServiceComponent,
+    SalesTaxListComponent
   ],
   imports: [
     FormsModule,
@@ -62,12 +64,13 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     LaddaModule,
     DigitsOnlyModule,
     DecimalDigitsModule,
-    ShSelectModule
+    ShSelectModule,
+    QuickAccountModule.forRoot()
   ],
   exports: [
     TooltipModule
   ],
-  entryComponents: [ QuickAccountComponent ],
+  entryComponents: [ ],
   providers: []
 })
 export class SalesModule {

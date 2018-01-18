@@ -27,6 +27,7 @@ export class CompanyActions {
   public static GET_APPLICATION_DATE = 'GetApplicationDate';
   public static SET_APPLICATION_DATE = 'SetApplicationDate';
   public static SET_APPLICATION_DATE_RESPONSE = 'SetApplicationDateResponse';
+  public static RESET_APPLICATION_DATE = 'ResetApplicationDate';
 
   public static CHANGE_COMPANY = 'CHANGE_COMPANY';
   public static CHANGE_COMPANY_RESPONSE = 'CHANGE_COMPANY_RESPONSE';
@@ -296,6 +297,12 @@ export class CompanyActions {
     return {
       type: CompanyActions.SET_APPLICATION_DATE_RESPONSE,
       payload: value
+    };
+  }
+
+  public ResetApplicationDate(): CustomActions {
+    return {
+      type: CompanyActions.RESET_APPLICATION_DATE,
     };
   }
 

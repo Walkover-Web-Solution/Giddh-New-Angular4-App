@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../../../lodash-optimized';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
@@ -36,21 +37,27 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public base64StringForModel: any;
   public showPdfWrap: boolean = false;
   public showEsign: boolean = false;
-
+  public showEditButton: boolean = false;
+  public isErrOccured$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>,
-  ) { }
+  ) {
+    this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).takeUntil(this.destroyed$).distinctUntilChanged();
+  }
 
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
+        this.showEditButton = o.uniqueName ? true : false;
         this.base64Data = o.dataPreview;
         this.showPdfWrap = true;
         let str = 'data:application/pdf;base64,' + o.dataPreview;
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
+      }else {
+        this.showPdfWrap = false;
       }
     });
   }

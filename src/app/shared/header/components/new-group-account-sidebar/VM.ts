@@ -28,6 +28,7 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
   public hLevel: number;
   public Items: IGroupOrAccount[];
   public SelectedItem: IGroupOrAccount;
+  public IsCreateNewBtnShowable: boolean = false;
   // tslint:disable-next-line:no-empty
   constructor(grp: IGroupsWithAccounts) {
     if (grp) {
