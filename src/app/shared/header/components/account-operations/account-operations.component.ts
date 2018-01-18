@@ -261,9 +261,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         //   this.taxGroupForm.get('taxes').setValue(taxes);
         //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         // }
-        if (this.columnsRef) {
-          if (this.columnsRef.columns[1]) {
-            let col = this.columnsRef.columns[1].uniqueName;
+        if (this.breadcrumbUniquePath) {
+          if (this.breadcrumbUniquePath[0]) {
+            let col = this.breadcrumbUniquePath[0];
             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
           }
