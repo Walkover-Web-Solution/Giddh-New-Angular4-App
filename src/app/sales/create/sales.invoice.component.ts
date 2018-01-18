@@ -122,6 +122,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
+<<<<<<< HEAD
+=======
+  // public accounts$: Observable<IOption[]>;
+>>>>>>> 2528209c... <minor> fix: prod issue in sales module sh-select
   public accounts$: Observable<IOption[]>;
   public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
@@ -274,6 +278,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2528209c... <minor> fix: prod issue in sales module sh-select
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
           accounts.push({ label: item.name, value: item.uniqueName });
         }
@@ -300,9 +308,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       });
+<<<<<<< HEAD
       this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
+=======
+>>>>>>> 2528209c... <minor> fix: prod issue in sales module sh-select
       this.accounts$ = Observable.of(orderBy(accounts, 'label'));
       this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
+      this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
 
       // listen for newly added stock and assign value
       this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
