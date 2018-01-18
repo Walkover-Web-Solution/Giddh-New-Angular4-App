@@ -13,6 +13,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { Subject } from 'rxjs/Subject';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.component';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -61,7 +62,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     // search groups
     this.groupSearchTerms
       .debounceTime(700)
-      .distinctUntilChanged()
       .subscribe(term => {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
       });
@@ -92,6 +92,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
       this.groupSearchTerms.next('');
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     }
+
     this.breadcrumbPath = [];
     this.breadcrumbUniquePath = [];
     this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
