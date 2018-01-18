@@ -9,3 +9,31 @@
     font-size: 13px;
     text-transform: lowercase;
 }
+
+
+/* width */
+
+.acntAccordion::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* Track */
+
+.acntAccordion::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+.acntAccordion::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* Handle on hover */
+
+.acntAccordion::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

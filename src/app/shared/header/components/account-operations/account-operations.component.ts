@@ -1,3 +1,5 @@
+import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
+import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
@@ -47,6 +49,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
+  @ViewChild('shareAccountModalComp') public shareAccountModalComp: ShareAccountModalComponent;
+  @ViewChild('shareGroupModalComp') public shareGroupModalComp: ShareGroupModalComponent;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
@@ -100,6 +104,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isHsnSacEnabledAcc: boolean = false;
   public showTaxes: boolean = false;
   public isUserSuperAdmin: boolean = false;
+  private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -221,12 +226,29 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
         });
         this.groupsList = flattenGroupsList;
+        this.groupsListBackUp = flattenGroupsList;
+      }
+    });
+
+    this.showAddNewGroup$.subscribe(s => {
+      if (s) {
+        if (this.breadcrumbPath.indexOf('Create Group') === -1) {
+          this.breadcrumbPath.push('Create Group');
+        }
+      }
+    });
+
+    this.showAddNewAccount$.subscribe(s => {
+      if (s) {
+        if (this.breadcrumbPath.indexOf('Create Account') === -1) {
+          this.breadcrumbPath.push('Create Account');
+        }
       }
     });
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupsList = _.filter(this.groupsList, (l => l.value !== a.uniqueName));
+        this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
         // this.taxGroupForm.get('taxes').reset();
         // let showAddForm: boolean = null;
         // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
@@ -491,6 +513,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showShareGroupModal() {
     this.shareGroupModal.show();
+    this.shareGroupModalComp.getGroupSharedWith();
   }
 
   public hideShareGroupModal() {
@@ -499,6 +522,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showShareAccountModal() {
     this.shareAccountModal.show();
+    this.shareAccountModalComp.getAccountSharedWith();
   }
 
   public hideShareAccountModal() {

@@ -61,6 +61,7 @@ declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
 declare var AppUrl: string;
+declare var APP_FOLDER: string;
 declare var ApiUrl: string;
 declare var isElectron: boolean;
 declare var errlyticsNeeded: boolean;
@@ -83,6 +84,7 @@ interface GlobalEnvironment {
   isElectron: boolean;
   errlyticsNeeded: boolean;
   errlyticsKey: string;
+  APP_FOLDER: string;
 }
 
 interface Es6PromiseLoader {
@@ -94,9 +96,9 @@ type FactoryPromise = () => Promise<any>;
 
 type AsyncRoutes = {
   [component: string]: Es6PromiseLoader |
-    Function |
-    FactoryEs6PromiseLoader |
-    FactoryPromise;
+  Function |
+  FactoryEs6PromiseLoader |
+  FactoryPromise;
 };
 
 type IdleCallbacks = Es6PromiseLoader |

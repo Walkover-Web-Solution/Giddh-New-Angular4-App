@@ -5,6 +5,9 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, C
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
+import { startsWith, concat, includes } from 'app/lodash-optimized';
+
+const FLATTEN_SEARCH_TERM = 'flatten';
 
 // noinspection TsLint
 @Component({
@@ -38,6 +41,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public customFilter: (term: string, options: IOption) => boolean;
   @Input() public useInBuiltFilterForFlattenAc: boolean = false;
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
+  @Input() public doNotReset: boolean = false;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -65,7 +69,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public rows: IOption[] = [];
   public _options: IOption[] = [];
   public isOpen: boolean;
-  public filter: string;
+  public filter: string = '';
   public filteredData: IOption[] = [];
   public _selectedValues: IOption[] = [];
   get selectedValues(): any[] {
@@ -81,7 +85,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       val = [val];
     }
     if (val.length > 0 && this.rows) {
-      this._selectedValues = this.rows.filter(f => val.findIndex(p => p === f.value) !== -1);
+      this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value ) !== -1 );
     } else {
       this._selectedValues = val;
     }
@@ -112,6 +116,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.isOpen = false;
       if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
         this.filter = this.selectedValues[0].label;
+      } else if (this.doNotReset && this.filter !== '') {
+        this.propagateChange(this.filter);
       } else {
         this.clearFilter();
       }
@@ -123,30 +129,44 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.rows = val;
   }
 
-  public filterByIOption(array: IOption[], term) {
-    let arr: any[];
-    arr = array.filter((item: IOption) => {
-      return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.value.toLocaleLowerCase(), term);
+  public filterByIOption(array: IOption[], term: string, action: string = 'default') {
+
+    let filteredArr: any[];
+    let startsWithArr: any[];
+    let includesArr: any[] = [];
+
+    filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
+
+    startsWithArr  = filteredArr.filter(function(item){
+      if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
+        return item;
+      }else {
+        includesArr.push(item);
+      }
     });
-    return arr.sort((a, b) => a.label.length - b.label.length );
+    startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length );
+    includesArr = includesArr.sort((a, b) => a.label.length - b.label.length );
+
+    return concat(startsWithArr, includesArr);
   }
 
-  public filterByValue(array, term) {
-    let arr: any[];
-    arr = array.filter((item) => {
-      let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
-      return _.includes(item.label.toLocaleLowerCase(), term) ||
-        _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) ||
-        _.includes(mergedAccounts, term);
-    });
-    // return a.additional.uniqueName.length - b.additional.uniqueName.length;
-    return arr.sort((a, b) => a.label.length - b.label.length );
+  public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
+    if (action === FLATTEN_SEARCH_TERM) {
+      return array.filter((item) => {
+        let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+        return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
+      });
+    }else {
+      return array.filter((item: IOption) => {
+        return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
+      });
+    }
   }
 
   public updateFilter(filterProp) {
     const lowercaseFilter = filterProp.toLocaleLowerCase();
     if (this.useInBuiltFilterForFlattenAc && this._options) {
-      this.filteredData = this.filterByValue(this._options, lowercaseFilter);
+      this.filteredData = this.filterByIOption(this._options, lowercaseFilter, FLATTEN_SEARCH_TERM);
     }else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
       this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
     }else {
@@ -154,7 +174,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         if (this.customFilter) {
           return this.customFilter(lowercaseFilter, item);
         }
-        return !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1;
+        return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
       }).sort((a, b) => a.label.length - b.label.length ) : [];
     }
     if (this.filteredData.length === 0) {
@@ -304,6 +324,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.onHide.emit();
       }
+    } else if (this.isOpen && this.doNotReset && this.filter !== '') {
+      this.isOpen = false;
+      this.propagateChange(this.filter);
+      this.onHide.emit();
     } else {
       this.isOpen = false;
       if (this.selectedValues && this.selectedValues.length === 1) {
@@ -318,10 +342,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public filterInputBlur(event) {
     if (event.relatedTarget && this.ele.nativeElement) {
-      if (!this.ele.nativeElement.contains(event.relatedTarget)) {
+      if (this.ele.nativeElement.contains(event.relatedTarget)) {
+        return false;
+      } else if (this.doNotReset && event && event.target && event.target.value) {
+        return false;
+      } else {
         this.hide();
       }
-      // this.hide();
     }
   }
 
