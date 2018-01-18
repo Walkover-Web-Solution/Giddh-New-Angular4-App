@@ -98,7 +98,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       let activeAccount;
       this.store.select(state => state.groupwithaccounts.activeAccount).take(1).subscribe(acc => activeAccount = acc);
 
-      // reset search string when you're in search case for move group
+      // reset search string when you're in search case for move group || move account || merge account
       if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved || s.name === eventsConst.accountMerged) {
         this.resetSearchString.emit(true);
         this.groups = groups;
