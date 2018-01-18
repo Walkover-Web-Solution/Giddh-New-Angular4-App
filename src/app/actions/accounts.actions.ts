@@ -473,6 +473,7 @@ export class AccountsAction {
       } else {
         this._toasty.successToast(action.payload.body, '');
         let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+        this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
         return this.getAccountDetails(data.queryString.accountUniqueName);
       }
       return {
