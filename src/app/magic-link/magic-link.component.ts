@@ -12,6 +12,8 @@ import { ToasterService } from 'app/services/toaster.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { ReplaySubject } from 'rxjs';
 import { WindowRef } from 'app/shared/helpers/window.object';
+import { underStandingTextData } from 'app/ledger/underStandingTextData';
+import { CompanyService } from 'app/services/companyService.service';
 
 @Component({
   selector: 'magic',
@@ -62,12 +64,16 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   public isResponsive: boolean = false;
   public reckoningDebitTotal;
   public reckoningCreditTotal;
+  public responseMsg: string;
+  public formSubmitted: boolean = false;
+  public cForm: any = {};
   private id: string;
   private fromDate: string;
   private toDate: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private route: ActivatedRoute, private _magicLinkService: MagicLinkService, private _toaster: ToasterService, @Inject(DOCUMENT) private document: Document, private winRef: WindowRef) {
+  constructor(private route: ActivatedRoute, private _magicLinkService: MagicLinkService, private _toaster: ToasterService, private _companyService: CompanyService, @Inject(DOCUMENT) private document: Document, private winRef: WindowRef) {
+    console.log('coming inside magic link constructor');
     this.ledgerData.account = { name: '', uniqueName: '' };
     this.ledgerData.ledgerTransactions = {
       forwardedBalance: { amount: 0, type: '', description: '' },
@@ -82,6 +88,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    console.log('coming inside magic link ngOnInit');
     this.route.queryParams
       .filter(params => params.id)
       .subscribe(params => {
@@ -104,6 +111,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
       // this.document.body.classList.add('magicPage');
       this.document.body.classList.remove('unresponsive');
       this.onWindowResize();
+      this.cForm = {};
   }
 
   public filterLedgers(ledgerTransactions) {
@@ -139,6 +147,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
       if (response.status === 'success') {
         this.ledgerData = _.cloneDeep(response.body);
         this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
+        // this.getUnderstandingText(this.ledgerData, this.ledgerData.account.name);
         this.calReckoningTotal();
       }
     });
@@ -227,4 +236,37 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
+  public validateEmail(emailStr) {
+    let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return pattern.test(emailStr);
+  }
+    
+
+  public submitForm(formObj) {
+    // console.log(formObj);
+    let form = _.cloneDeep(formObj);
+    if (!(this.validateEmail(form.email))) {
+      this._toaster.warningToast("Enter valid Email ID", "Warning");
+      return false;
+    }
+    this._companyService.ContactFrom(form);
+    this.formSubmitted = true;
+    this.responseMsg = "Thanks! we will get in touch with you soon";
+  }
+
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+    if (data) {
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
+      // this.ledgerUnderStandingObj = _.cloneDeep(data);
+    }
+  }
+
+
+
 }
