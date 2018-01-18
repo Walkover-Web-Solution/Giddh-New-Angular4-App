@@ -66,10 +66,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
-    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
-    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
-    {value: 'SEZ', label: 'SEZ'}
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
@@ -84,7 +84,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.stateStream$.subscribe((data) => {
@@ -92,7 +92,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = Observable.of(states);
@@ -101,12 +101,12 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
 
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({value: c.value, label: c.value});
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
 
     this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
@@ -135,7 +135,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
       if (a) {
         if (a !== 'IN') {
-          this.addAccountForm.controls['addresses'] = this._fb.array([]);
+          let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
+          let lengthofFormArray = addressFormArray.controls.length;
+          for (let index = 0; index < lengthofFormArray; index++) {
+            addressFormArray.removeAt(index);
+          }
         } else {
           const addresses = this.addAccountForm.get('addresses') as FormArray;
           if (addresses.controls.length === 0) {
@@ -211,8 +215,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{value: '', disabled: false}],
-      sacNumber: [{value: '', disabled: false}]
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }]
     });
   }
 
@@ -220,7 +224,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{value: '', disabled: false}],
+      stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
@@ -237,15 +241,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       this.isAccountNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
-            this.addAccountForm.patchValue({uniqueName: val});
+            this.addAccountForm.patchValue({ uniqueName: val });
           } else {
             let num = 1;
-            this.addAccountForm.patchValue({uniqueName: val + num});
+            this.addAccountForm.patchValue({ uniqueName: val + num });
           }
         }
       });
     } else {
-      this.addAccountForm.patchValue({uniqueName: ''});
+      this.addAccountForm.patchValue({ uniqueName: '' });
     }
   }
 
@@ -347,6 +351,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
+    debugger;
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
