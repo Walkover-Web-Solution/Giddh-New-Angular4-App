@@ -39,7 +39,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
                 newState.reportData = response;
                 return Object.assign({}, state, newState);
             }
-            return state;
+            return Object.assign({}, state, newState);
         }
         case MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE: {
             return state;
