@@ -445,9 +445,7 @@ export class AccountsAction {
         let data: BaseResponse<string, AccountMoveRequest> = action.payload;
         this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
         this._toasty.successToast('Account moved successfully', '');
-        let activeGrp: GroupResponse = null;
-        this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
-        this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
+        this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
       }
       return {
         type: 'EmptyAction'
