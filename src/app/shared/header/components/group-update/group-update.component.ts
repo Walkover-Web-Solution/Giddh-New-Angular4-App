@@ -57,7 +57,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+    private companyActions: CompanyActions, private accountsAction: AccountsAction) {
     this.groupList$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
@@ -82,34 +82,40 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
 
     this.companyTaxDropDown = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
-        (state: AppState) => state.groupwithaccounts.activeGroup,
-        (state: AppState) => state.company.taxes],
+      (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
+      (state: AppState) => state.groupwithaccounts.activeGroup,
+      (state: AppState) => state.company.taxes],
       (activeGroupTaxHierarchy, activeGroup, taxes) => {
         let arr: IOption[] = [];
         if (taxes) {
-          if (activeGroup && taxes && activeGroupTaxHierarchy) {
+          if (activeGroup) {
             let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
 
-            if (activeGroupTaxHierarchy.inheritedTaxes) {
-              let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-              let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
-              // set value in tax group form
-              this.taxGroupForm.setValue({taxes: allTaxes});
-            } else {
-              this.taxGroupForm.setValue({taxes: applicableTaxes});
-            }
+            if (activeGroupTaxHierarchy) {
 
-            // prepare drop down options
-            return _.differenceBy(taxes.map(p => {
-              return {label: p.name, value: p.uniqueName};
-            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return {label: p.name, value: p.uniqueName};
-            }), 'value');
-          } else {
-            return taxes.map(p => {
-              return {label: p.name, value: p.uniqueName};
-            });
+              if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
+                let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                // set value in tax group form
+                this.taxGroupForm.setValue({ taxes: allTaxes });
+              } else {
+                this.taxGroupForm.setValue({ taxes: applicableTaxes });
+              }
+
+              // prepare drop down options
+              return _.differenceBy(taxes.map(p => {
+                return { label: p.name, value: p.uniqueName };
+              }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+                return { label: p.name, value: p.uniqueName };
+              }), 'value');
+            } else {
+              // set value in tax group form
+              this.taxGroupForm.setValue({ taxes: applicableTaxes });
+
+              return taxes.map(p => {
+                return { label: p.name, value: p.uniqueName };
+              });
+            }
           }
         }
         return arr;
@@ -131,17 +137,15 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+        this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
         if (a.fixed) {
           this.groupDetailForm.get('name').disable();
           this.groupDetailForm.get('uniqueName').disable();
           this.groupDetailForm.get('description').disable();
-          this.taxGroupForm.disable();
         } else {
           this.groupDetailForm.get('name').enable();
           this.groupDetailForm.get('uniqueName').enable();
           this.groupDetailForm.get('description').enable();
-          this.taxGroupForm.enable();
         }
       }
     });
@@ -155,7 +159,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
         grpsList.forEach(grp => {
           if (grp.uniqueName !== activeGroupUniqueName) {
-            flattenGroupsList.push({label: grp.name, value: grp.uniqueName});
+            flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
           }
         });
         this.groupsList = flattenGroupsList;
@@ -178,7 +182,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.activeGroupSelected$.subscribe((p) => {
-      this.taxGroupForm.patchValue({taxes: p});
+      this.taxGroupForm.patchValue({ taxes: p });
     });
     this.activeGroupTaxHierarchy$.subscribe((a) => {
       let activeAccount: AccountResponseV2 = null;
@@ -215,7 +219,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
