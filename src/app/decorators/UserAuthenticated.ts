@@ -14,6 +14,7 @@ export class UserAuthenticated implements CanActivate {
     return this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').map(p => {
       if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
         if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
+          console.log('UserAuthenticated');
           this._router.navigate([p.lastState]);
         } else {
           this._router.navigate(['home']);
