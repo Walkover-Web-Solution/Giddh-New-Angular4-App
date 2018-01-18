@@ -17,6 +17,11 @@
       <thead>
         <tr>
           <th class="col-xs-2">
+            <div>
+              Select
+            </div>
+          </th>
+          <th class="col-xs-2">
             <div (click)="sortType = 'name'; sortReverse = !sortReverse">
               Name
               <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
@@ -69,12 +74,13 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of searchResponseFiltered$ | async">
+          <td><input type="checkbox" (change)="toggleSelection(item)" [(ngModel)]="item.isSelected"></td>
           <td>{{item.name}}</td>
           <td>{{item.uniqueName}}</td>
           <td class="alR">
             <span *ngIf="item.openingBalance > 0">
-          <span class="text-success pull-left" *ngIf="item.openBalanceType === 'DEBIT'">DR</span>
-            <span class="text-danger pull-left" *ngIf="item.openBalanceType === 'CREDIT'">CR</span> &nbsp;
+              <span class="text-success pull-left" *ngIf="item.openBalanceType === 'DEBIT'">DR</span>
+              <span class="text-danger pull-left" *ngIf="item.openBalanceType === 'CREDIT'">CR</span> &nbsp;
             </span>
             {{item.openingBalance.toFixed(2) }}
           </td>
@@ -82,8 +88,8 @@
           <td class="alR">{{item.creditTotal.toFixed(2)}}</td>
           <td class="alR">
             <span *ngIf="item.closingBalance > 0">
-            <span class="text-success pull-left" *ngIf="item.closeBalanceType === 'DEBIT'">DR</span>
-            <span class="text-danger pull-left" *ngIf="item.closeBalanceType === 'CREDIT'">CR</span> &nbsp;
+              <span class="text-success pull-left" *ngIf="item.closeBalanceType === 'DEBIT'">DR</span>
+              <span class="text-danger pull-left" *ngIf="item.closeBalanceType === 'CREDIT'">CR</span> &nbsp;
             </span>
             {{item.closingBalance.toFixed(2) }}
           </td>
@@ -102,9 +108,12 @@
     <div class="modal-content">
       <div class="noBrdRdsModal">
         <div class="modal-header">
-          <label class="form-label mrT1"><h3 class="modal-title">{{messageBody.header.set}}</h3></label>
-          <button type="button" class="close" (click)="mailModal.hide()" aria-label="Close"><span
-            aria-hidden="true">&times;</span></button>
+          <label class="form-label mrT1">
+            <h3 class="modal-title">{{messageBody.header.set}}</h3>
+          </label>
+          <button type="button" class="close" (click)="mailModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div class="modal-body" style="height:400px">
           <!-- 		<h1 class="mrB1" ng-if="messageBody.type == 'Email'">Enter Subject:</h1>

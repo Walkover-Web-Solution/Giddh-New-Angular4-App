@@ -76,8 +76,12 @@ export interface UserEntityRole {
   to?: any;
   sharedBy: ICommonItem;
   duration?: any;
-  entity: ICommonItem;
+  entity: IEntityItem;
   role: Role;
+}
+
+interface IEntityItem extends ICommonItem {
+  entity: string;
 }
 
 export interface Role {
@@ -128,7 +132,7 @@ export interface ActiveFinancialYear {
  */
 export class TaxResponse implements ITax {
   public account?: INameUniqueName;
-  public accounts?: INameUniqueName;
+  public accounts?: INameUniqueName[];
   public taxType?: string = '';
   public duration: string = '';
   public taxDetail: ITaxDetail[];

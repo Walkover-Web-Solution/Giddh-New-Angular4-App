@@ -1,6 +1,7 @@
+import { from } from 'rxjs/observable/from';
 import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -9,7 +10,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -20,7 +21,11 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
-
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { orderBy } from '../../lodash-optimized';
+const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   { label: '12', value: '12' },
   { label: '25', value: '25' },
@@ -47,16 +52,18 @@ const PREVIEW_OPTIONS = [
   templateUrl: './invoice.preview.component.html',
   styleUrls: ['./invoice.preview.component.css'],
 })
-export class InvoicePreviewComponent implements OnInit {
+export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+  @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
+  public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
-  public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+  public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
@@ -75,6 +82,8 @@ export class InvoicePreviewComponent implements OnInit {
   public endDate: Date;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private isUniversalDateApplicable: boolean = false;
+  private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
 
   constructor(
     private modalService: BsModalService,
@@ -82,30 +91,29 @@ export class InvoicePreviewComponent implements OnInit {
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
     this.invoiceSearchRequest.entryTotalBy = '';
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     // Get accounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        data.body.results.map(d => {
-          // Select only sundry debtors account
-          if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-          }
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
+    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
+      let accounts: IOption[] = [];
+      _.forEach(data, (item) => {
+        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1 )) {
+          accounts.push({ label: item.name, value: item.uniqueName });
+        }
+      });
+      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o && o.invoices) {
-        this.invoiceData = _.cloneDeep(o.invoices);
+    this.store.select(p => p.invoice.invoices).takeUntil(this.destroyed$).subscribe((o: GetAllInvoicesPaginatedResponse) => {
+      if (o) {
+        this.invoiceData = _.cloneDeep(o);
         _.map(this.invoiceData.results, (item: IInvoiceResult) => {
           item.isSelected = false;
           return o;
@@ -140,11 +148,32 @@ export class InvoicePreviewComponent implements OnInit {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         this.invoiceSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getInvoices();
       }
-      this.getInvoices();
     })).subscribe();
   }
+  public loadDownloadOrSendMailComponent() {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
+    let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
+    viewContainerRef.remove();
 
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+    componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
+    // componentInstance.totalItems = s.count * s.totalPages;
+    // componentInstance.itemsPerPage = s.count;
+    // componentInstance.maxSize = 5;
+    // componentInstance.writeValue(s.page);
+    // componentInstance.boundaryLinks = true;
+    // componentInstance.pageChanged.subscribe(e => {
+    //   this.pageChanged(e);
+    // });
+  }
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
@@ -161,6 +190,7 @@ export class InvoicePreviewComponent implements OnInit {
 
   public getInvoicesByFilters(f: NgForm) {
     if (f.valid) {
+      this.isUniversalDateApplicable = false;
       this.getInvoices();
     }
   }
@@ -201,6 +231,7 @@ export class InvoicePreviewComponent implements OnInit {
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
     this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
+    this.loadDownloadOrSendMailComponent();
     this.downloadOrSendMailModel.show();
   }
 
@@ -276,29 +307,29 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   public prepareModelForInvoiceApi() {
-    let model: InvoiceFilterClass = {};
+    let model: InvoiceFilterClassForInvoicePreview = {};
     let o = _.cloneDeep(this.invoiceSearchRequest);
-    if (o.accountUniqueName) {
+    if (o && o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
-    if (o.entryTotal) {
-      model.entryTotal = o.entryTotal;
+    if (o.balanceDue) {
+      model.balanceDue = o.balanceDue;
     }
     if (o.description) {
       model.description = o.description;
     }
     if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
-      model.totalIsMore = true;
+      model.balanceMoreThan = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
-      model.totalIsLess = true;
+      model.balanceLessThan = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
-      model.totalIsMore = true;
-      model.totalIsEqual = true;
+      model.balanceMoreThan = true;
+      model.balanceEqual = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
-      model.totalIsLess = true;
-      model.totalIsEqual = true;
+      model.balanceLessThan = true;
+      model.balanceEqual = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
-      model.totalIsEqual = true;
+      model.balanceEqual = true;
     }
     return model;
   }
@@ -311,12 +342,12 @@ export class InvoicePreviewComponent implements OnInit {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
-      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate  = moment().format(GIDDH_DATE_FORMAT);
+      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
-      from: fromDate,
-      to: toDate,
+      from: this.isUniversalDateApplicable ? fromDate : o.from,
+      to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
       page: o.page
     };
@@ -326,6 +357,12 @@ export class InvoicePreviewComponent implements OnInit {
     if (event) {
       this.invoiceSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
       this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+      this.getInvoices();
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

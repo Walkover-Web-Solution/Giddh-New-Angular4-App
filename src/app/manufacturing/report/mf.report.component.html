@@ -40,27 +40,27 @@
                     <div class="form-group col-xs-1">
                         <div class="row">
                             <label class="d-block">Value</label>
-                            <input type="text" #numberField="ngModel" (keyup)="checkValueField(numberField.model)" pattern="^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"
-                            />
-                            <!--<p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>-->
+                            <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"/>
                         </div>
                     </div>
                     <div class="form-group pull-left mrL2">
                         <label class="d-block">&nbsp;</label>
-                        <button class="btn btn-success" type="submit" [disabled]="mfStockSearchRequestForm.invalid">Go</button>
+                        <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
+                        <button class="btn btn-success" type="submit">Go</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="isReportLoading" class="clearfix">
+    <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
         <p class="lead alC mrT4">Loading...</p>
     </section>
-    <section *ngIf="!isReportLoading && reportData && reportData.results.length === 0" class="clearfix">
-        <p class="lead alC mrT4">No result found!</p>
-    </section>
-    <section *ngIf="!isReportLoading && reportData && reportData.results.length > 0">
+    <div class="no-data mart100 col-xs-12" *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
+    </div>
+    <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
         <div class="" id="mfReportTbl">
             <div class="col-xs-12">
                 <table class="table basic table-bordered">

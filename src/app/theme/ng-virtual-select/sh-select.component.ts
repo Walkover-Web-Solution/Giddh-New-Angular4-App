@@ -5,6 +5,9 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, C
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
+import { startsWith, concat, includes } from 'app/lodash-optimized';
+
+const FLATTEN_SEARCH_TERM = 'flatten';
 
 // noinspection TsLint
 @Component({
@@ -28,6 +31,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public showClear: boolean = true;
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
+  @Input() public notFoundLinkText: string = 'Create New';
   @Input() public notFoundLink: boolean = false;
   @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'auto';
@@ -35,6 +39,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public NoFoundMsgHeight: number = 30;
   @Input() public NoFoundLinkHeight: number = 30;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
+  @Input() public useInBuiltFilterForFlattenAc: boolean = false;
+  @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
+  @Input() public doNotReset: boolean = false;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -62,7 +69,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public rows: IOption[] = [];
   public _options: IOption[] = [];
   public isOpen: boolean;
-  public filter: string;
+  public filter: string = '';
   public filteredData: IOption[] = [];
   public _selectedValues: IOption[] = [];
   get selectedValues(): any[] {
@@ -78,7 +85,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       val = [val];
     }
     if (val.length > 0 && this.rows) {
-      this._selectedValues = this.rows.filter(f => val.findIndex(p => p === f.value) !== -1);
+      this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value ) !== -1 );
     } else {
       this._selectedValues = val;
     }
@@ -96,7 +103,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef ) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
   }
 
   /**
@@ -109,6 +116,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.isOpen = false;
       if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
         this.filter = this.selectedValues[0].label;
+      } else if (this.doNotReset && this.filter !== '') {
+        this.propagateChange(this.filter);
       } else {
         this.clearFilter();
       }
@@ -120,14 +129,54 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.rows = val;
   }
 
+  public filterByIOption(array: IOption[], term: string, action: string = 'default') {
+
+    let filteredArr: any[];
+    let startsWithArr: any[];
+    let includesArr: any[] = [];
+
+    filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
+
+    startsWithArr  = filteredArr.filter(function(item){
+      if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
+        return item;
+      }else {
+        includesArr.push(item);
+      }
+    });
+    startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length );
+    includesArr = includesArr.sort((a, b) => a.label.length - b.label.length );
+
+    return concat(startsWithArr, includesArr);
+  }
+
+  public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
+    if (action === FLATTEN_SEARCH_TERM) {
+      return array.filter((item) => {
+        let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+        return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
+      });
+    }else {
+      return array.filter((item: IOption) => {
+        return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
+      });
+    }
+  }
+
   public updateFilter(filterProp) {
     const lowercaseFilter = filterProp.toLocaleLowerCase();
-    this.filteredData = this._options ? this._options.filter(item => {
-      if (this.customFilter) {
-        return this.customFilter(lowercaseFilter, item);
-      }
-      return !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1;
-    }) : [];
+    if (this.useInBuiltFilterForFlattenAc && this._options) {
+      this.filteredData = this.filterByIOption(this._options, lowercaseFilter, FLATTEN_SEARCH_TERM);
+    }else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
+      this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
+    }else {
+      this.filteredData = this._options ? this._options.filter(item => {
+        if (this.customFilter) {
+          return this.customFilter(lowercaseFilter, item);
+        }
+        return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+      }).sort((a, b) => a.label.length - b.label.length ) : [];
+    }
     if (this.filteredData.length === 0) {
       this.noOptionsFound.emit(true);
     }
@@ -275,6 +324,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.onHide.emit();
       }
+    } else if (this.isOpen && this.doNotReset && this.filter !== '') {
+      this.isOpen = false;
+      this.onHide.emit();
     } else {
       this.isOpen = false;
       if (this.selectedValues && this.selectedValues.length === 1) {
@@ -289,10 +341,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public filterInputBlur(event) {
     if (event.relatedTarget && this.ele.nativeElement) {
-      if (!this.ele.nativeElement.contains(event.relatedTarget)) {
+      if (this.ele.nativeElement.contains(event.relatedTarget)) {
+        return false;
+      } else if (this.doNotReset && event && event.target && event.target.value) {
+        return false;
+      } else {
         this.hide();
       }
-      // this.hide();
     }
   }
 

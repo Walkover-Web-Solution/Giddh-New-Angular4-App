@@ -17,6 +17,9 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public flyAccounts: boolean;
   @Input() public search: string;
   @Input() public noGroups: boolean;
+  @Input() public isGroupToggle: boolean;
+  @Input() public isRouter: boolean;
+
   public flatAccountWGroupsList: IFlattenGroupsAccountsDetail[];
   public Items: IFlattenGroupsAccountItem[];
   public ItemsSRC: IFlattenGroupsAccountItem[];
@@ -24,6 +27,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
   public companyList$: Observable<any>;
   public showAccountList: boolean = true;
   @Output() public openAddAndManage: EventEmitter<boolean> = new EventEmitter();
+  @Output() public onSelectItem: EventEmitter<boolean> = new EventEmitter();
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -101,9 +105,16 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
     if (s.search && !s.search.firstChange && s.search.currentValue !== s.search.previousValue) {
       // this.searchAccount(s.search.currentValue);
     }
+    if (s.isGroupToggle) {
+      this.toggleNoGroups(s.noGroups.currentValue);
+    }
   }
   public ngOnInit() {
-    this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+      if (a && a !== '') {
+        this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
+      }
+    });
   }
   public searchAccount(s: string) {
     this.Items = _.cloneDeep(this.ItemsSRC);
@@ -158,7 +169,9 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     this.Items = _.cloneDeep(this.Items);
-    this.cd.detectChanges();
+    if (!this.cd['destroyed']) {
+      this.cd.detectChanges();
+    }
   }
 
   public goToManageGroups() {

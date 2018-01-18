@@ -26,6 +26,7 @@ export interface LedgerState {
   isQuickAccountInProcess: boolean;
   isQuickAccountCreatedSuccessfully: boolean;
   transactionDetails: LedgerResponse;
+  isAdvanceSearchApplied: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -39,7 +40,8 @@ export const initialState: LedgerState = {
   isTxnUpdateSuccess: false,
   isQuickAccountInProcess: false,
   isQuickAccountCreatedSuccessfully: false,
-  transactionDetails: null
+  transactionDetails: null,
+  isAdvanceSearchApplied: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -66,11 +68,24 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         transactionInprogress: true
       });
     case LEDGER.GET_TRANSACTION_RESPONSE:
+    transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
+    if (transaction.status === 'success') {
+      return Object.assign({}, state, {
+        transactionInprogress: false,
+        isAdvanceSearchApplied: false,
+        transcationRequest: transaction.request,
+        transactionsResponse: transaction.body
+      });
+    }
+    return Object.assign({}, state, {
+      transactionInprogress: false
+    });
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
         return Object.assign({}, state, {
           transactionInprogress: false,
+          isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
           transactionsResponse: transaction.body
         });
@@ -88,12 +103,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return Object.assign({}, state, {downloadInvoiceInProcess: false});
     case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
       let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
-      if (discountData.status === 'success') {
+      if (discountData.status === 'success' && discountData.body.results.length > 0) {
         return Object.assign({}, state, {
           discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
         });
+      }else {
+        return {...state, discountAccountsList: null };
       }
-      return state;
     case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
       return Object.assign({}, state, {
         ledgerCreateSuccess: false,

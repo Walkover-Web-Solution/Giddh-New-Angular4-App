@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
 
-    <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
+    <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height [scrollIndicators]="true">
       <!-- start of tab set -->
       <tabset>
 
@@ -184,11 +184,11 @@
 
           <div class="pd2 clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
             <hr>
-            <h1 class="mrT2">Enter Verfication Code</h1>
+            <h1 class="mrT2">Enter verification Code</h1>
             <div class="max350 mrT">
-              <input class="form-control" type="text" placeholder="Verification Code" ng-model="mobNum.verificationCode" />
+              <input class="form-control" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword"/>
             </div>
-            <button class="btn btn-success mrT" ng-click="verifyNumber(mobNum.verificationCode)">Verify</button>
+            <button class="btn btn-success mrT" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify</button>
           </div>
           <section>
             <div class="container adjust-width pull-left">
