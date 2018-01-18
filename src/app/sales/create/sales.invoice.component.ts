@@ -122,6 +122,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
+  // public accounts$: Observable<IOption[]>;
   public accounts$: Observable<IOption[]>;
   public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
@@ -274,6 +275,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
+
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
           accounts.push({ label: item.name, value: item.uniqueName });
         }
@@ -488,7 +490,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           this._toasty.successToast(response.body);
         } else {
           try {
-            this._toasty.successToast(`Ledger created successfully with uniquename: ${response.body.uniqueName}. Invoice generated successfully with invoice number: ${response.body.invoiceDetails.invoiceNumber}`);
+            this._toasty.successToast(`Entry created successfully with invoice number: ${response.body.invoiceDetails.invoiceNumber}`);
           } catch (error) {
             this._toasty.successToast('Invoice Generated Successfully');
           }
@@ -790,7 +792,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public removeTransaction(entryIdx: number) {
-    if (this.invFormData.entries.length > 0 ) {
+    if (this.invFormData.entries.length > 1 ) {
       this.invFormData.entries = remove(this.invFormData.entries, (entry, index) => {
         return index !== entryIdx;
       });
