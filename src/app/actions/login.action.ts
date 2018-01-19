@@ -4,7 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { CompanyActions } from './company.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
@@ -327,6 +327,38 @@ export class LoginActions {
         dummyResponse.status = 'success';
         return this.ChangeCompanyResponse(dummyResponse);
       }
+      if (response.body.companyUniqueName) {
+        if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
+          this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+            console.log('CHANGE_COMPANY 1');
+            this._router.navigate([response.body.lastState]);
+          });
+        } else {
+          if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
+            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+              let path = [];
+              let parament = {};
+              this.activatedRoute.firstChild.firstChild.url.take(1).subscribe(p => {
+                if (p.length > 0) {
+                  path = [p[0].path];
+                  parament = { queryParams: p[0].parameters };
+                }
+              });
+              if (path.length > 0 && parament) {
+                this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                  if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
+                    console.log('CHANGE_COMPANY 2');
+                    this._router.navigate([path[0]], parament);
+                  } else {
+                    this._router.navigate(['home']);
+                  }
+                });
+              }
+            }
+          }
+        }
+      }
+
       return this.ChangeCompanyResponse(response);
     });
 
@@ -348,7 +380,7 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
-    @Effect()
+  @Effect()
   public verifyAddNewMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyAddNewMobileNo)
     .switchMap((action: CustomActions) =>
@@ -419,7 +451,8 @@ export class LoginActions {
     private _companyService: CompanyService,
     private http: HttpClient,
     private _generalService: GeneralService,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private activatedRoute: ActivatedRoute
   ) {
   }
 
@@ -684,11 +717,12 @@ export class LoginActions {
   }
 
   private doSameStuffs(companies) {
+    console.log('doSameStuffs');
     let respState = new BaseResponse<StateDetailsResponse, string>();
     respState.body = new StateDetailsResponse();
     companies.body = sortBy(companies.body, ['name']);
     // now take first company from the companies
-    let cArr = companies.body.sort((a, b) => a.name.length - b.name.length );
+    let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
     let company = cArr[0];
     respState.body.companyUniqueName = company.uniqueName;
     respState.status = 'success';
@@ -698,14 +732,14 @@ export class LoginActions {
     try {
       if (company.userEntityRoles && company.userEntityRoles.length) {
         // find sorted userEntityRoles
-        let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length );
+        let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length);
         let entityObj = entitiesArr[0].entity;
-        if ( entityObj.entity === 'ACCOUNT' ) {
+        if (entityObj.entity === 'ACCOUNT') {
           respState.body.lastState = `ledger/${entityObj.uniqueName}`;
-        }else if ( entityObj.entity === 'GROUP' ) {
+        } else if (entityObj.entity === 'GROUP') {
           // get a/c`s of group and set first a/c
           this.store.dispatch(this.SetRedirectToledger());
-        }else {
+        } else {
           respState.body.lastState = 'home';
         }
       }
@@ -716,6 +750,7 @@ export class LoginActions {
   }
 
   private finalThingTodo(stateDetail: any, companies: any) {
+    console.log('finalThingTodo');
     this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
     this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
