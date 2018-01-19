@@ -204,8 +204,8 @@
                     </tr>
                     <tr class="noHover bdrT table_label" style="border-color:#ccc;">
                         <td><strong>Input Stock Name</strong></td>
-                        <td><strong>Stock Quantity</strong></td>
                         <td><strong>Stock Unit</strong></td>
+                        <td><strong>Stock Quantity</strong></td>
                         <td colspan="1"></td>
                     </tr>
 
@@ -231,7 +231,7 @@
                             <sh-select [options]="stockUnitsDropDown$ | async" formControlName="linkedStockUnitCode" [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33"></sh-select>
                         </td>
                         <td>
-                            <input type="text" formControlName="linkedQuantity" decimalDigitsDirective [DecimalPlaces]="4" name="quantity" placeholder="Stock Quantity" class="form-control">
+                            <input type="text" formControlName="linkedQuantity" decimalDigitsDirective [DecimalPlaces]="4" name="quantity" placeholder="Add Quantity" class="form-control">
                         </td>
                         <td>
                             <button type="button" *ngIf="!editModeForLinkedStokes" class="btn btn-sm btn-success pull-left" (click)="addItemInLinkedStocks()" [disabled]="addStockForm.controls['manufacturingDetails'].controls['linkedStockUniqueName'].invalid ||
