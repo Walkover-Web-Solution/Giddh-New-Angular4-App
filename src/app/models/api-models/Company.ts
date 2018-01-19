@@ -132,7 +132,7 @@ export interface ActiveFinancialYear {
  */
 export class TaxResponse implements ITax {
   public account?: INameUniqueName;
-  public accounts?: INameUniqueName;
+  public accounts?: INameUniqueName[];
   public taxType?: string = '';
   public duration: string = '';
   public taxDetail: ITaxDetail[];

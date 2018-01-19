@@ -1,8 +1,9 @@
+import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -50,6 +51,7 @@ import { DecoratorsModule } from './decorators/decorators.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { Configuration } from 'app/app.constant';
 import { ServiceConfig } from 'app/services/service.config';
+import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -104,6 +106,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
    */
   imports: [
     BrowserModule,
+    Daterangepicker,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -131,7 +134,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, { useHash: isElectron }),
+    RouterModule.forRoot(ROUTES, { useHash: isElectron, enableTracing: true }),
     StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({
     //   maxAge: 25
@@ -159,6 +162,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: ServiceConfig,
       useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GiddhHttpInterceptor,
+      multi: true
     }
   ]
 })

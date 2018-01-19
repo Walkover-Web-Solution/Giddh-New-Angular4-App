@@ -39,7 +39,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
   public getAccountSharedWith() {
     this.activeAccount$.subscribe((acc) => {
-      this.store.dispatch(this.accountActions.sharedAccountWith(acc.uniqueName));
+      if (acc) {
+        this.store.dispatch(this.accountActions.sharedAccountWith(acc.uniqueName));
+      }
     });
   }
 

@@ -5,7 +5,7 @@ import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { FakeDiscountItem, GenerateSalesRequest, InvoiceFormClass, IStockUnit, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
+import { FakeDiscountItem, GenerateSalesRequest, InvoiceFormClass, IStockUnit, SalesEntryClass, SalesTransactionItemClass, ITaxList } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs/Observable';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { AccountService } from '../../services/account.service';
@@ -28,7 +28,7 @@ import { SelectComponent } from '../../theme/ng-select/select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { orderBy } from '../../lodash-optimized';
+import { orderBy, remove } from '../../lodash-optimized';
 import * as uuid from 'uuid';
 import { GeneralActions } from 'app/actions/general/general.actions';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
@@ -122,6 +122,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
+  // public accounts$: Observable<IOption[]>;
   public accounts$: Observable<IOption[]>;
   public bankAccounts$: Observable<IOption[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
@@ -133,7 +134,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public activeGroupUniqueName$: Observable<string>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public selectedTaxes: string[] = [];
-  public showTaxBox: boolean = false;
   public stockList: IStockUnit[] = [];
   public allKindOfTxns: boolean = false;
   public showCreateAcModal: boolean = false;
@@ -236,7 +236,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
       if (o) {
-        this.showTaxBox = false;
         this.companyTaxesList$ = Observable.of(o);
         _.map(this.theadArrReadOnly, (item: IContentCommon) => {
           // show tax label
@@ -248,9 +247,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       }else {
         this.companyTaxesList$ = Observable.of([]);
       }
-      setTimeout(() => {
-        this.showTaxBox = true;
-      }, 500);
     });
 
     // listen for new add account utils
@@ -279,6 +275,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       let bankaccounts: IOption[] = [];
 
       _.forEach(data, (item) => {
+
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
           accounts.push({ label: item.name, value: item.uniqueName });
         }
@@ -305,9 +302,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       });
-      this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
       this.accounts$ = Observable.of(orderBy(accounts, 'label'));
       this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
+      this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
 
       // listen for newly added stock and assign value
       this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
@@ -485,14 +482,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       };
     }
 
-    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
+    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<InvoiceFormClass, GenerateSalesRequest>) => {
       if (response.status === 'success') {
         // reset form and other
         this.resetInvoiceForm(f);
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
-          this._toasty.successToast('Invoice Generated Successfully');
+          try {
+            this._toasty.successToast(`Entry created successfully with invoice number: ${response.body.invoiceDetails.invoiceNumber}`);
+          } catch (error) {
+            this._toasty.successToast('Invoice Generated Successfully');
+          }
         }
       } else {
         this._toasty.errorToast(response.message, response.code);
@@ -635,16 +636,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.salesAccounts$.take(1).subscribe(idata => {
         idata.map(fa => {
           if (fa.value === selectedAcc.value) {
-            this.showTaxBox = false;
-            txn.applicableTaxes = [];
             this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
+                txn.applicableTaxes = [];
                 // assign taxes and create fluctuation
                 _.forEach(o.applicableTaxes, (item) => {
                   txn.applicableTaxes.push(item.uniqueName);
                 });
-                this.showTaxBox = true;
                 txn.accountName = o.name;
                 txn.accountUniqueName = o.uniqueName;
                 if (o.hsnNumber) {
@@ -662,7 +661,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
                   txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
-                  txn.rate = 0;
+                  txn.rate = null;
                   if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
                     txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
                   }
@@ -682,8 +681,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                   // reset fields
                   txn.rate = null;
                   txn.quantity = null;
-                  txn.amount = 0;
-                  txn.taxableValue = 0;
+                  txn.amount = null;
+                  txn.taxableValue = null;
                 }
                 // toggle stock related fields
                 this.toggleStockFields(txn);
@@ -702,24 +701,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }else {
       txn.isStockTxn = false;
       this.toggleStockFields(txn);
-      // txn.amount = 0;
-      // txn.accountName = null;
-      // txn.accountUniqueName = null;
-      // txn.hsnOrSac = 'sac';
-      // txn.total = 0;
-      // txn.sacNumber = null;
-      // txn.taxableValue = 0;
-      // txn.applicableTaxes = [];
-      this.resetTxn(entryIdx);
-    }
-  }
-
-  public resetTxn(entryIdx: number) {
-    if (this.invFormData.entries.length > 0 ) {
-      let invFormData = _.cloneDeep(this.invFormData);
-      let entry: SalesEntryClass = new SalesEntryClass();
-      invFormData.entries.splice(entryIdx, 1, entry);
-      this.invFormData = invFormData;
+      txn.amount = null;
+      txn.accountName = null;
+      txn.accountUniqueName = null;
+      txn.hsnOrSac = 'sac';
+      txn.total = null;
+      txn.sacNumber = null;
+      txn.taxableValue = 0;
+      txn.applicableTaxes = [];
     }
   }
 
@@ -803,11 +792,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public removeTransaction(entryIdx: number) {
-    if (this.invFormData.entries.length > 0 ) {
-      // lodash remove method
-      let invFormData = _.cloneDeep(this.invFormData);
-      invFormData.entries.splice(entryIdx, 1);
-      this.invFormData = invFormData;
+    if (this.invFormData.entries.length > 1 ) {
+      this.invFormData.entries = remove(this.invFormData.entries, (entry, index) => {
+        return index !== entryIdx;
+      });
     }else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
