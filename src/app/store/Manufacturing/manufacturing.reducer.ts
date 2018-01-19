@@ -31,15 +31,15 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
         }
         case MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE: {
             let newState = _.cloneDeep(state);
+            newState.isMFReportLoading = false;
             let res: BaseResponse<StocksResponse, IMfStockSearchRequest> = action.payload;
             if (res.status === 'success') {
                 let response = _.cloneDeep(res.body);
                 response.results = _.orderBy(res.body.results, [ (o) => o.voucherNumber ], 'desc');
                 newState.reportData = response;
-                newState.isMFReportLoading = false;
                 return Object.assign({}, state, newState);
             }
-            return state;
+            return Object.assign({}, state, newState);
         }
         case MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE: {
             return state;
