@@ -20,7 +20,7 @@ import { AccountsSideBarComponent } from 'app/shared/header/components';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { AccountListComponent } from 'app/accounting/account-list/accounts-list.component';
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,8 @@ import { TooltipModule } from 'ngx-bootstrap';
     ShSelectModule,
     SharedModule,
     ClickOutsideModule,
-    TooltipModule
+    TooltipModule,
+    TypeaheadModule
     // Daterangepicker
   ],
 })

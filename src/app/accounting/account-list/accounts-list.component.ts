@@ -29,6 +29,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public search: string;
   @Input() public grpFilter: string = '';
   @Input() public isOpen: boolean = false;
+  @Input() public activeIdx: string = null;
   @Output() public openAddAndManage: EventEmitter<boolean> = new EventEmitter();
   @Output() public onSelectItem: EventEmitter<boolean> = new EventEmitter();
 
@@ -37,6 +38,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public companyList$: Observable<any>;
   public showAccountList: boolean = true;
   public noResult: boolean = false;
+  public activeAccIdx:string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -54,18 +56,17 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     if(s.isOpen) {
       this.showAccountList = !this.showAccountList;
     }
-    if (s.search && s.search.currentValue !== s.search.previousValue) {
+    if (s.search) {
       this.searchAccount(s.search.currentValue)
+    }
+    if (s.activeIdx) {
+      this.activeAccIdx = s.activeIdx.currentValue;
     }
 
   }
 
   public ngOnInit() {
-
-  }
-
-  public ngAfterViewInit() {
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+   this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
         if (data.status === 'success') {
@@ -78,6 +79,10 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       });
       }
     });
+  }
+
+  public ngAfterViewInit() {
+ 
   }
 
   public searchAccount(s: string) {
@@ -95,25 +100,16 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  public toggleNoGroups(noGroups: boolean) {
-
-  }
-
-  public goToManageGroups() {
-    this.openAddAndManage.emit(true);
-  }
 
   public getSize(item, index) {
     return 30;
   }
 
-  public toggleGroup(group: IFlattenGroupsAccountItem, index, event: Event) {
-
-  }
 
   public ngOnDestroy() {
     // this.destroyed$.next(true);
     // this.destroyed$.complete();
   }
+
 }
 
