@@ -638,7 +638,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public deleteAccount() {
     let activeAccUniqueName = null;
     this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
     this.hideDeleteAccountModal();
   }
 
