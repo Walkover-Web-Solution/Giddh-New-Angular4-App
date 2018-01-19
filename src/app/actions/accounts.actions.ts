@@ -512,7 +512,7 @@ export class AccountsAction {
   @Effect()
   public DeleteAccount$: Observable<Action> = this.action$
     .ofType(AccountsAction.DELETE_ACCOUNT)
-    .switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload))
+    .switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName))
     .map(response => {
       return this.deleteAccountResponse(response);
     });
@@ -524,9 +524,7 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        let activeGroup: GroupResponse = null;
-        this.store.take(1).subscribe(s => activeGroup = s.groupwithaccounts.activeGroup);
-        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(activeGroup.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
         this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
         this._toasty.successToast(action.payload.body, '');
       }
@@ -773,10 +771,10 @@ export class AccountsAction {
     };
   }
 
-  public deleteAccount(accountUniqueName: string): CustomActions {
+  public deleteAccount(accountUniqueName: string, groupUniqueName: string): CustomActions {
     return {
       type: AccountsAction.DELETE_ACCOUNT,
-      payload: accountUniqueName
+      payload: { accountUniqueName, groupUniqueName }
     };
   }
 

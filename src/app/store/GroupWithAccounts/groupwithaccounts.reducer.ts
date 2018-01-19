@@ -477,12 +477,14 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         return state;
       }
     case AccountsAction.DELETE_ACCOUNT_RESPONSE:
-      let d: BaseResponse<string, string> = action.payload;
+      let d: BaseResponse<string, any> = action.payload;
       if (d.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        removeAccountFunc(groupArray, state.activeGroup.uniqueName, d.request, null);
+        removeAccountFunc(groupArray, d.request.accountUniqueName, d.request.groupUniqueName, null);
         return Object.assign({}, state, {
-          groupswithaccounts: groupArray
+          groupswithaccounts: groupArray,
+          activeAccount: null,
+          activeGroup: { uniqueName: d.request.groupUniqueName }
         });
       }
       return state;

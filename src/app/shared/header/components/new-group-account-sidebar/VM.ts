@@ -169,10 +169,10 @@ export class GroupAccountSidebarVM {
       }
 
       case eventsConst.accountDeleted: {
-        let resp: BaseResponse<string, string> = payload;
+        let resp: BaseResponse<string, any> = payload;
         let columnsLength = this.columns.length;
-        this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items.filter(f => f.uniqueName !== resp.request);
-        this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts.filter(f => f.uniqueName !== resp.request);
+        this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items.filter(f => f.uniqueName !== resp.request.accountUniqueName);
+        this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts.filter(f => f.uniqueName !== resp.request.accountUniqueName);
       }
 
       case eventsConst.accountMoved: {
