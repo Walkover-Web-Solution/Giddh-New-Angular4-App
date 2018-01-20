@@ -8,17 +8,15 @@
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
   <label>From date</label>
-  <!-- [maxDate]="vm.maxDate" -->
   <input type="text" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker
-    [(ngModel)]="vm.selectedFromDate" class="form-control" [placement]="'right'" />
+    [(ngModel)]="vm.selectedFromDate" class="form-control" />
 
 </div>
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
   <label>To date</label>
-  <!-- [maxDate]="vm.maxDate" -->
   <input type="text" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker [(ngModel)]="vm.selectedToDate"
-     class="form-control" [placement]="'right'"/>
+     class="form-control" />
 
 </div>
 
@@ -39,8 +37,8 @@
   </div>
 
   <div class="input-group">
-    <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker [maxDate]="vm.maxDate"
-     [(ngModel)]="vm.selectedLogDate" class="form-control" />
+    <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker
+     [(ngModel)]="vm.selectedLogDate" class="form-control" [placement]="'right'"/>
   </div>
 
 </div>
