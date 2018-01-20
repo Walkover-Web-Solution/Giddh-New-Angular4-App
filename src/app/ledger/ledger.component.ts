@@ -344,7 +344,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (lt) {
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
-        this.loadPaginationComponent(lt);
+        setTimeout(() => {
+          this.loadPaginationComponent(lt);
+        }, 400);
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
