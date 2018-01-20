@@ -235,7 +235,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
     }
     let fromDate = this.fromDate;
     let toDate = this.toDate;
-    console.log('advanceSearchForm is :', dataToSend);
     // this.store.dispatch(this._daybookActions.GetDaybook(dataToSend, this.fromDate, this.toDate));
     this.closeModelEvent.emit({
       dataToSend,
