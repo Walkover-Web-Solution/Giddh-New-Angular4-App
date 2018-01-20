@@ -235,7 +235,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
-      console.log('header component');
       if (s === userLoginStateEnum.notLoggedIn) {
         this.router.navigate(['/login']);
       } else if (s === userLoginStateEnum.newUserLoggedIn) {
