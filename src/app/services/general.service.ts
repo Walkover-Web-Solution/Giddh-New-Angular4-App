@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
+import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GeneralService {
+  public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
   private _user: UserDetails;
   private _companyUniqueName: string;
   private _sessionId: string;
