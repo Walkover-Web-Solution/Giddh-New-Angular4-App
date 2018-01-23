@@ -80,9 +80,11 @@ var app = new Vue({
     formSubmitted: false,
     searchText: '',
     cForm: {},
-    txn: {}
+    txn: {},
+    folderPath: ''
   },
   mounted() {
+    this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
     var id = this.getParameterByName('id');
     this.getMagicLinkData(id)
   },
