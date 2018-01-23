@@ -1,0 +1,33 @@
+<div class="accounts-side-bar greyBg wrapAcList">
+    <div class="wrapAcList">
+        <!-- <div class="pd1 l8grey" [hidden]="!noResult">
+            <h4>Loading Accounts...</h4>
+            <div class="loader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div> -->
+        <!-- searchbar end -->
+        <div class="pd1 l8grey" [hidden]="!noResult">
+            <h4>Oops, there is no accounts in selected company. <br /><br /> <button class="btn-primary btn">+ Add new</button></h4>
+        </div>
+        <div class="menu acList wrapAcList">
+
+            <ng-container>
+                <ul class="ul_0 acntAccordion wrapAcList" *vsFor="Items; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+                    <ng-container *ngFor="let item of _items;let i = index">
+                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIdx }">
+                            <a>
+                                <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
+                            </a>
+                        </li>
+                    </ng-container>
+                </ul>
+            </ng-container>
+
+        </div>
+    </div>
+</div>
