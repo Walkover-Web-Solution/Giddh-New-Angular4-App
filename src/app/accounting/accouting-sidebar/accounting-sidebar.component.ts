@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -22,37 +22,30 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 
 
 @Component({
+  selector: 'accounting-sidebar',
   templateUrl: './accounting-sidebar.component.html',
-  styleUrls: ['../accounting.component.css']
+  styleUrls: ['./accounting-sidebar.component.css']
 })
 
 export class AccountingSidebarComponent {
-  
+
+  @Input() public AccountListOpen: boolean;
+
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public isGroupToggle: boolean;
   public accountSearch:string = '';
+  public grpUniqueName: string = '';
+  public showAccountList: boolean = true;
 
   constructor() {
 
   }
 
-    /**
-   * setAccount in particular, on accountList click
-   */
-  public setAccount(acc) {
-    // let idx = this.selectedIdx;
-    // let accModel = {
-    //   name: acc.Name,
-    //   UniqueName: acc.UniqueName,
-    //   groupUniqueName: acc.groupUniqueName
-    // }
-    // this.showLedgerAccountList = false;
-    // this.journalObj.transactions[idx].particular = accModel.name;
-    // this.journalObj.transactions[idx].selectedAccount = accModel;
-    // setTimeout(() => {
-    //   this.selectedParticular.focus();
-    //   this.showLedgerAccountList = false;
-    // }, 100);
+  public ngOnChanges(s) {
+    console.log(s);
+    if (s.AccountListOpen) {
+      this.showAccountList = !this.showAccountList;
+    }
   }
-  
+
 }

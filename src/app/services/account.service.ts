@@ -207,13 +207,13 @@ export class AccountService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e));
   }
 
-  public DeleteAccount(accountUniqueName: string): Observable<BaseResponse<string, string>> {
+  public DeleteAccount(accountUniqueName: string, groupUniqueName: string): Observable<BaseResponse<string, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + ACCOUNTS_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
-      let data: BaseResponse<string, string> = res;
-      data.request = accountUniqueName;
-      data.queryString = { accountUniqueName };
+      let data: BaseResponse<string, any> = res;
+      data.request = { accountUniqueName, groupUniqueName };
+      data.queryString = accountUniqueName;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName }));
   }
