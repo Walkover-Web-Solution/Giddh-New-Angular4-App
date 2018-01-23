@@ -93,7 +93,7 @@ export class SettingsFinancialYearService {
   /*
   * Add Financial Year
   * API: 'company/:companyUniqueName/financial-year'
-  * Method: PATCH
+  * Method: POST
   */
   public AddFinancialYear(fromYear: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
     this.user = this._generalService.user;
