@@ -1,5 +1,5 @@
 import { GiddhHttpInterceptor } from './services/http.interceptor';
-import { SuccessComponent } from './settings/linked-accounts/success.component';
+// import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -96,7 +96,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PageComponent,
     NoContentComponent,
     DummyComponent,
-    SuccessComponent,
+    // SuccessComponent,
     NewUserComponent,
     LoaderComponent,
     SocialLoginCallbackComponent
