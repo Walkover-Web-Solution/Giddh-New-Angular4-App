@@ -4,60 +4,45 @@
 <head>
   <style>
     body {
+      height: 100vh;
       background: #f4f5f8;
     }
-    .loader {
-      width: 50px;
-      height: 50px;
-      border-radius: 100%;
+
+    .giddh-spinner {
+      animation: rotate 1.5s infinite linear;
+      background: #221F1F none repeat scroll 0 0;
+      border: 7px solid #C63B13;
+      border-radius: 50%;
+      box-shadow: 0 -10px 0 14px #fff inset;
+      box-sizing: border-box;
+      height: 60px;
+      width: 60px;
+      margin: 0 auto 38%;
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .vertical-center-spinner {
+      width: 60px;
+      margin-left: auto;
+      margin-right: auto;
       position: relative;
-      margin: 0 auto;
-      top: 100px;
-    }
-
-    #loader-1:before,
-    #loader-1:after {
-      content: "";
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      width: 100%;
-      height: 100%;
-      border-radius: 100%;
-      border: 10px solid transparent;
-      border-top-color: #ff5f00;
-    }
-
-    #loader-1:before {
-      z-index: 100;
-      animation: spin 1s infinite;
-    }
-
-    #loader-1:after {
-      border: 10px solid #ccc;
-    }
-
-    @keyframes spin {
-      0% {
-        -webkit-transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        -o-transform: rotate(0deg);
-        transform: rotate(0deg);
-      }
-
-      100% {
-        -webkit-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        transform: rotate(360deg);
-      }
+      top: 38%;
+      transform: translateY(50%);
     }
 
   </style>
 </head>
 
 <body>
-  <p class="loader" id="loader-1"></p>
+  <div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>
   <div id="app">
     <section class="bg-f9" id="magicLink">
       <section class="bg-bl">
