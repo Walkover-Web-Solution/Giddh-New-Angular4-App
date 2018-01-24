@@ -65,7 +65,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
           if (value[0].emailId === this.loggedInUserEmail) {
             value[0].isLoggedInUser = true;
           }
-          arr.push({ name: key, rows: value });
+          arr.push({ name: value[0].userName, rows: value });
         });
         this.usersList = _.sortBy(arr, ['name']);
       }
