@@ -2,9 +2,62 @@
 <html>
 
 <head>
+  <style>
+    body {
+      background: #f4f5f8;
+    }
+    .loader {
+      width: 50px;
+      height: 50px;
+      border-radius: 100%;
+      position: relative;
+      margin: 0 auto;
+      top: 100px;
+    }
+
+    #loader-1:before,
+    #loader-1:after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+      border: 10px solid transparent;
+      border-top-color: #ff5f00;
+    }
+
+    #loader-1:before {
+      z-index: 100;
+      animation: spin 1s infinite;
+    }
+
+    #loader-1:after {
+      border: 10px solid #ccc;
+    }
+
+    @keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+
+  </style>
 </head>
 
 <body>
+  <p class="loader" id="loader-1"></p>
   <div id="app">
     <section class="bg-f9" id="magicLink">
       <section class="bg-bl">
@@ -466,77 +519,112 @@
     </section>
   </div>
 
-      <script>
-        var folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
+  <script>
+    document.getElementById("app").style.display = 'none';
 
-        var jquery = document.createElement('script');
-        jquery.src = '../'+folderPath+'assets/js/jquery-1.11.3.min.js';
-        document.head.appendChild(jquery);
+    var folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
 
-        jquery.onload = function () {
+    var jquery = document.createElement('script');
+    jquery.src = '../' + folderPath + 'assets/js/jquery-1.11.3.min.js';
+    document.head.appendChild(jquery);
 
-          var vue = document.createElement('script');
-          vue.src = '../'+folderPath+'assets/magic-link-assets/vue.min.js';
-          document.head.appendChild(vue);
+    jquery.onload = function () {
 
-          vue.onload = function () {
+      var toaster = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/magic-link-assets/v-toaster.css'
+      });
+      $('head').append(toaster);
 
-            var moment = document.createElement('script');
-            moment.src = '../'+folderPath+'assets/magic-link-assets/moment.min.js';
-            document.head.appendChild(moment);
+      var bootstrap = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/css/bootstrap.css'
+      });
+      $('head').append(bootstrap);
 
-            var popper = document.createElement('script');
-            popper.src = '../'+folderPath+'assets/magic-link-assets/popper.min.js';
-            document.head.appendChild(popper);
+      var awesome = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/css/font-awesome.css'
+      });
+      $('head').append(awesome);
 
-            var bootstrap = document.createElement('script');
-            bootstrap.src = '../'+folderPath+'assets/magic-link-assets/bootstrap.min.js';
-            document.head.appendChild(bootstrap);
-            
-            var axios = document.createElement('script');
-            axios.src = '../'+folderPath+'assets/magic-link-assets/axios.min.js';
-            document.head.appendChild(axios);
-            
-            var daterangepicker = document.createElement('script');
-            daterangepicker.src = '../'+folderPath+'assets/magic-link-assets/daterangepicker.min.js';
-            document.head.appendChild(daterangepicker);
-            
-            var FileSaver = document.createElement('script');
-            FileSaver.src = '../'+folderPath+'assets/magic-link-assets/FileSaver.min.js';
-            document.head.appendChild(FileSaver);
+      var daterangepicker = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/magic-link-assets/daterangepicker.min.css'
+      });
+      $('head').append(daterangepicker);
 
-            var toaster = document.createElement('script');
-            toaster.src = '../'+folderPath+'assets/magic-link-assets/v-toaster.js';
-            document.head.appendChild(toaster);
-            
+      var style1 = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/css/style-1.css'
+      });
+      $('head').append(style1);
+
+      var style2 = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/css/style-2.css'
+      });
+      $('head').append(style2);
+
+      var magic = $("<link />", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: '../' + folderPath + 'assets/magic-link-assets/magic.css'
+      });
+      $('head').append(magic);
+
+      var moment = document.createElement('script');
+      moment.src = '../' + folderPath + 'assets/magic-link-assets/moment.min.js';
+      document.head.appendChild(moment);
+
+      moment.onload = function () {
+        var daterangepicker = document.createElement('script');
+        daterangepicker.src = '../' + folderPath + 'assets/magic-link-assets/daterangepicker.min.js';
+        document.head.appendChild(daterangepicker);
+
+        var vue = document.createElement('script');
+        vue.src = '../' + folderPath + 'assets/magic-link-assets/vue.min.js';
+        document.head.appendChild(vue);
+
+        vue.onload = function () {
+
+          var popper = document.createElement('script');
+          popper.src = '../' + folderPath + 'assets/magic-link-assets/popper.min.js';
+          document.head.appendChild(popper);
+
+          var bootstrap = document.createElement('script');
+          bootstrap.src = '../' + folderPath + 'assets/magic-link-assets/bootstrap.min.js';
+          document.head.appendChild(bootstrap);
+
+          var FileSaver = document.createElement('script');
+          FileSaver.src = '../' + folderPath + 'assets/magic-link-assets/FileSaver.min.js';
+          document.head.appendChild(FileSaver);
+
+          var toaster = document.createElement('script');
+          toaster.src = '../' + folderPath + 'assets/magic-link-assets/v-toaster.js';
+          document.head.appendChild(toaster);
+
+          var axios = document.createElement('script');
+          axios.src = '../' + folderPath + 'assets/magic-link-assets/axios.min.js';
+          document.head.appendChild(axios);
+
+          axios.onload = function () {
             var magic = document.createElement('script');
-            magic.src = '../'+folderPath+'assets/magic-link-assets/magic-link-script.js';
+            magic.src = '../' + folderPath + 'assets/magic-link-assets/magic-link-script.js';
             document.head.appendChild(magic);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/magic-link-assets/v-toaster.css' });
-            $('head').append(link);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/css/bootstrap.css' });
-            $('head').append(link);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/css/font-awesome.css' });
-            $('head').append(link);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/magic-link-assets/daterangepicker.min.css' });
-            $('head').append(link);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/css/style-1.css' });
-            $('head').append(link);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/css/style-2.css' });
-            $('head').append(link);
-
-            var link = $("<link />",{ rel: "stylesheet", type: "text/css", href: '../'+folderPath+'assets/magic-link-assets/magic.css' });
-            $('head').append(link);
           }
-        };
-        
-      </script>
+        }
+      }
+    };
+
+  </script>
 
 </body>
+
 </html>
