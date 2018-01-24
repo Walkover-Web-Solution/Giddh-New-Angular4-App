@@ -13,6 +13,8 @@ import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { IGroupsWithAccounts } from '../models/interfaces/groupsWithAccounts.interface';
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
+import { GeneralService } from 'app/services/general.service';
+import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -63,6 +65,8 @@ export class GroupWithAccountsAction {
   public static DELETE_GROUP = 'GroupDelete';
   public static DELETE_GROUP_RESPONSE = 'GroupDeleteResponse';
 
+  public static GEN_ADD_AND_MANAGE_UI = 'GEN_ADD_AND_MANAGE_UI';
+
   @Effect()
   public ApplyGroupTax$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX)
@@ -87,7 +91,7 @@ export class GroupWithAccountsAction {
           grouName = s.groupwithaccounts.activeGroup.uniqueName;
         }
       });
-      return this.getGroupDetails(grouName);
+      return this.getTaxHierarchy(grouName);
     });
 
   @Effect()
@@ -164,6 +168,7 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
         this._toasty.successToast('Sub group added successfully', 'Success');
       }
       return {
@@ -294,6 +299,15 @@ export class GroupWithAccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
+
+        // let groups;
+        // this.store.select(g => g.general.groupswithaccounts).take(1).subscribe(grps => groups = grps);
+        // this.store.dispatch({
+        //   type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
+        //   payload: { groups, groupUniqueName: data.request.parentGroupUniqueName }
+        // });
+
+        this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
         this._toasty.successToast('Group moved successfully', '');
         return this.getGroupDetails(data.request.parentGroupUniqueName);
       }
@@ -339,6 +353,7 @@ export class GroupWithAccountsAction {
           type: 'EmptyAction'
         };
       } else {
+        this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
         this._toasty.successToast('Group Updated Successfully');
         return {
           type: 'EmptyAction'
@@ -366,6 +381,7 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        this._generalService.eventHandler.next({ name: eventsConst.groupDeleted, payload: action.payload });
         this._toasty.successToast(action.payload.body, '');
         if (action.payload.queryString.parentUniqueName) {
           this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
@@ -398,7 +414,8 @@ export class GroupWithAccountsAction {
     private _accountService: AccountService,
     private _toasty: ToasterService,
     private store: Store<AppState>,
-    private _generalActions: GeneralActions) {
+    private _generalActions: GeneralActions,
+    private _generalService: GeneralService) {
     //
   }
 

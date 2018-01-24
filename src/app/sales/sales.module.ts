@@ -68,7 +68,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     QuickAccountModule.forRoot()
   ],
   exports: [
-    TooltipModule
+    TooltipModule,
+    SalesAddStockGroupComponent
   ],
   entryComponents: [ ],
   providers: []

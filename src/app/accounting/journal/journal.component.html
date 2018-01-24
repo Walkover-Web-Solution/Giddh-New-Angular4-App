@@ -6,7 +6,7 @@
                 <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
                     <input type="text" [ngModel]="moment(journalDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control text-right appearance_none" />
                     <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <datepicker [(ngModel)]="journalDate" (selectionDone)="onSelectDate($event)" [showWeeks]="false"></datepicker>
+                        <datepicker [(ngModel)]="journalDate" (selectionDone)="setDate($event)" [showWeeks]="false"></datepicker>
                     </div>
                     {{moment(journalDate).format('dddd')}}
                 </div>
@@ -28,15 +28,15 @@
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i)" (blur)="selectRow(false,null)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
                                 <td><input type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event)" (focus)="onAccountFocus(); selectRow(true,i)"
-                                        (blur)="selectRow(true,i);onAccountBlur($event, particular);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keyup)="showLedgerAccountList=true;flyAccounts.next(true);noGroups=true;" /></td>
+                                        (blur)="selectRow(true,i);onAccountBlur($event, particular);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keyup)="showLedgerAccountList=true;" /></td>
                                 <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
                                 <td>
-                                    <input *ngIf="transaction.type === 'by'" type="text" [required]="transaction.particular" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="validateTransation(transaction.amount,transaction, i)"
-                                        (blur)="selectRow(false,null);validateTransation(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" />
+                                    <input *ngIf="transaction.type === 'by'" type="text" min="0" [required]="transaction.particular" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
+                                        (blur)="selectRow(false,null);addNewEntry(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" />
                                 </td>
                                 <td>
-                                    <input *ngIf="transaction.type === 'to'" type="text" class="form-control text-right" [required]="transaction.particular" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="validateTransation(transaction.amount,transaction, i)"
-                                        (blur)="selectRow(false,null);validateTransation(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" />
+                                    <input *ngIf="transaction.type === 'to'" type="text" min="0" class="form-control text-right" [required]="transaction.particular" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
+                                        (blur)="selectRow(false,null);addNewEntry(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" />
                                 </td>
                             </tr>
                         </tbody>
@@ -73,31 +73,22 @@
     </div>
 </div>
 
+
+
 <div class="sidebar_menu col-xs-2 pd0">
     <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-
-        <accounts-side-bar [isGroupToggle]="true" [noGroups]="noGroups" [search]='accountSearch' [flyAccounts]="flyAccounts | async" (onSelectItem)="setAccount($event);" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
-
-        <!-- <ul class="pdL1" style="color:black;">
-            <li class="cursor-pointer" (click)="setAccount(account);" *ngFor="let account of accounts">{{ account.label }}</li>
-        </ul> -->
-
+        <accounts-list [search]="accountSearch" [grpFilter]="" [isOpen]="showLedgerAccountList" (onSelectItem)="setAccount($event)"></accounts-list>
     </div>
-    <ul class="menu_list">
-        <!-- "isHidden" class  if user is not able to access the module-->
-        <li><a [routerLink]="['/pages/accounting/journal']" class="primary_clr">F1: Journal</a></li>
-        <li><a [routerLink]="['/pages/accounting/purchase']" class="">F9: Purchase</a></li>
-        <!-- <li><a href="">F2: Order Vouchers</a></li>
-        <li><a href="">F3: Payroll Voucher</a></li>
-        <li><a href="">F4: Date</a></li>
-        <li><a href="">F5: Company</a></li>
-        <li><a href="">F6: Contra</a></li> -->
-    </ul>
+
+    <accounting-sidebar></accounting-sidebar>
 </div>
 
+
+
+
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog">
     <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
         <div class="modal-content fullScreenMy">
             <app-manage-groups-accounts></app-manage-groups-accounts>
