@@ -84,6 +84,8 @@ var app = new Vue({
     folderPath: ''
   },
   mounted() {
+    document.getElementById("loader-1").style.display = 'none';
+    document.getElementById("app").style.display = 'block';
     this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
     var id = this.getParameterByName('id');
     this.getMagicLinkData(id)
