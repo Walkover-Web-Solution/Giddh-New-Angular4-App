@@ -24,7 +24,7 @@
                     <div class="col-xs-3 row">
                         <div class="form-group pos-rel">
                             <label class="d-block">Quantity</label>
-                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
+                            <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
                             <small class="pos-abs" style="right:0;">Multiple of <span *ngIf="manufacturingDetails.multipleOf">{{manufacturingDetails.multipleOf | json}}</span></small>
                         </div>
                     </div>
