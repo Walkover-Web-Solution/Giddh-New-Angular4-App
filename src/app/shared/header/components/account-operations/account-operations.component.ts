@@ -261,9 +261,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         //   this.taxGroupForm.get('taxes').setValue(taxes);
         //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         // }
-        if (this.columnsRef) {
-          if (this.columnsRef.columns[1]) {
-            let col = this.columnsRef.columns[1].uniqueName;
+        if (this.breadcrumbUniquePath) {
+          if (this.breadcrumbUniquePath[0]) {
+            let col = this.breadcrumbUniquePath[0];
             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
           }
@@ -638,7 +638,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public deleteAccount() {
     let activeAccUniqueName = null;
     this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
     this.hideDeleteAccountModal();
   }
 

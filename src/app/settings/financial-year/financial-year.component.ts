@@ -1,3 +1,4 @@
+import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -10,6 +11,8 @@ import { SettingsFinancialYearActions } from '../../actions/settings/financial-y
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
 import { ActiveFinancialYear } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import { createSelector } from 'reselect';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -51,7 +54,7 @@ export class FinancialYearComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-  
+
     this.store.takeUntil(this.destroyed$).subscribe(s => {
       if (s.session) {
         this.currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
@@ -68,26 +71,38 @@ export class FinancialYearComponent implements OnInit {
         }
       }
     });
+  }
 
-    let endYear = moment().year();
+  public setYearRange() {
+    let endYear = moment().subtract(1, 'year').year();
     let startYear = moment().subtract(7, 'year').year();
     let yearArray = _.range(startYear, endYear);
-
     this.yearOptions = yearArray.map(q => {
       return { label: q, value: q };
     });
   }
 
   public getInitialFinancialYearData() {
+    this.setYearRange();
     this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-    this.store.select(p => p.settings.financialYears).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
+      this.setYearRange();
       if (o) {
         this.financialYearObj = _.cloneDeep(o);
+        let yearOptions = _.cloneDeep(this.yearOptions);
+        o.financialYears.forEach((fYear) => {
+          let year = moment(fYear.financialYearStarts, GIDDH_DATE_FORMAT).year();
+          let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
+          if (yearIndx !== -1) {
+            yearOptions.splice(yearIndx, 1);
+          }
+        });
+        this.yearOptions = _.cloneDeep(yearOptions);
       } else if (_.isNull(o)) {
         this.store.dispatch(this._companyActions.RefreshCompanies());
-        // this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+        this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
       }
-    });
+    })).takeUntil(this.destroyed$).subscribe();
   }
 
   public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {

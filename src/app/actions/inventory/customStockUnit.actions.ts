@@ -20,7 +20,7 @@ export class CustomStockUnitAction {
           return this.validateResponse(r, {
             type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE,
             payload: r
-          }, true, '', {
+          }, true, 'Unit Added Successfully', {
             type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE,
             payload: r
           });
@@ -44,7 +44,7 @@ export class CustomStockUnitAction {
         .map((r) => this.validateResponse(r, {
           type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE,
           payload: action.payload
-        }, true));
+        }, true, 'Unit Updated Successfully'));
     });
 
   @Effect() private DeleteStockUnit$: Observable<Action> = this.action$

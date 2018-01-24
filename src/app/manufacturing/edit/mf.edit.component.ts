@@ -97,7 +97,7 @@ export class MfEditComponent implements OnInit {
 
     // Get group with accounts
     this.groupsList$.subscribe(data => {
-      if (data.length) {
+      if (data && data.length) {
         let GroupWithAccResponse = _.cloneDeep(data);
         this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(response => {
           if (response.status === 'success') {
@@ -207,6 +207,7 @@ export class MfEditComponent implements OnInit {
 
   public getStocksWithRate(data) {
     this.selectedProductName = data.label;
+    this.manufacturingDetails.manufacturingMultipleOf = 1;
     if (data.value) {
       let selectedValue = _.cloneDeep(data.value);
       this.selectedProduct = selectedValue;

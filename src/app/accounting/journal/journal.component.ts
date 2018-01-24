@@ -30,6 +30,7 @@ const TransactionsType = [
 const CustomShortcode = [
   { code: 'F9', route: 'purchase' }
 ];
+
 @Component({
   templateUrl: './journal.component.html',
   styleUrls: ['./journal.component.css', '../accounting.component.css']
@@ -41,18 +42,13 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('particular') public accountField: any;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public accounts$: Observable<IOption[]>;
-  public accounts: IOption[] = [];
-  public allAccounts: IOption[] = [];
-  public showLedgerAccountList: boolean = false;
+  public showLedgerAccountList: boolean = true;
   public selectedInput: 'by' | 'to' = 'by';
   public journalObj: BlankLedgerVM = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
   public totalDebitAmount: number = 0;
   public showConfirmationBox: boolean = false;
   public moment = moment;
-  public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-  public noGroups: boolean;
   public accountSearch: string = '';
   public selectedIdx: any;
   public isSelectedRow: boolean;
@@ -60,7 +56,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public showFromDatePicker: boolean = false;
   public journalDate: any;
   public navigateURL: any = CustomShortcode;
-  public selectedAccList: any = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -79,17 +74,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnInit() {
 
-    /********** commented due to unused
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        data.body.results.map(d => {
-          accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-        });
-        this.accounts = this.allAccounts = accounts;
-      }
-    }); **********/
-
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
@@ -98,9 +82,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     this.refreshEntry();
-    // this.newEntryObj();
-    // this.journalObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    // this.journalObj.transactions[0].type = 'by';
+
   }
 
   /**
@@ -150,8 +132,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public onAccountFocus() {
     this.showLedgerAccountList = true;
-    this.noGroups = true;
-    this.flyAccounts.next(true);
   }
 
   /**
@@ -159,8 +139,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public onAccountBlur(ev, elem) {
     this.showLedgerAccountList = false;
-    this.noGroups = false;
-    this.flyAccounts.next(false);
     this.selectedParticular = elem;
     if (this.accountSearch) {
       this.searchAccount('');
@@ -173,29 +151,19 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public setAccount(acc) {
     let idx = this.selectedIdx;
-    let account = _.filter(this.selectedAccList, (o) => o === acc.Name);
+    let accModel = {
+      name: acc.name,
+      UniqueName: acc.uniqueName,
+      groupUniqueName: acc.parentGroups[acc.parentGroups.length-1],
+      account: acc.name
+    };
+    this.journalObj.transactions[idx].particular = accModel.UniqueName;
+    this.journalObj.transactions[idx].selectedAccount = accModel;
 
-    if (account.length > 0) {
-      this._toaster.errorToast(account + ' Account already selected.');
-      // return false;
-    } else {
-      let accModel = {
-        name: acc.Name,
-        UniqueName: acc.UniqueName,
-        groupUniqueName: acc.groupUniqueName,
-        account: acc.Name
-      };
-      this.journalObj.transactions[idx].particular = accModel.UniqueName;
-      this.journalObj.transactions[idx].selectedAccount = accModel;
-      this.selectedAccList.push(acc.Name);
-    }
     setTimeout(() => {
       this.selectedParticular.focus();
-      this.noGroups = true;
+      console.log(this.selectedParticular.nextElementSibling);
       this.showLedgerAccountList = false;
-      if (account.length > 0) {
-        this.journalObj.transactions[idx].selectedAccount.account = '';
-      }
     }, 50);
   }
 
@@ -203,29 +171,15 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    let keyword = str;
-    // this.noGroups = true;
-    if (keyword) {
-      this.accountSearch = keyword;
-      this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(keyword));
-    } else {
-      this.noGroups = true;
-      this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(''));
-    }
+    this.accountSearch = str;
   }
 
   /**
-   * validateTransation() on amount, event => Blur, Enter, Tab
+   * onAmountField() on amount, event => Blur, Enter, Tab
    */
-  public validateTransation(amount, transactionObj, idx) {
+  public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
     let lastIndx = this.journalObj.transactions.length - 1;
-
-    if (transactionObj.selectedAccount.UniqueName && !amount) {
-      let indx = idx + 1;
-      this._toaster.errorToast('No amount entered for entry no. ' + indx);
-      return;
-    }
 
     if (amount) {
       transactionObj.amount = Number(amount);
@@ -267,12 +221,14 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public saveEntry() {
     let idx = 0;
     let data = _.cloneDeep(this.journalObj);
-    data.transactions = this.removeBlankTransaction(data.transactions);
-
+    // data.transactions = this.removeBlankTransaction(data.transactions);
+    data.transactions = this.validateTransaction(data.transactions);
+    if (!data.transactions) {
+      return;
+    }
     if (this.totalCreditAmount === this.totalDebitAmount) {
       _.forEach(data.transactions, element => {
         element.type = (element.type === 'by') ? 'credit' : 'debit';
-        // element.particular = _.find(this.accounts, (el) => el.label === element.particular).value;
       });
 
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
@@ -289,8 +245,6 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public refreshEntry() {
     this.journalObj.transactions = [];
-    // this.journalObj = new BlankLedgerVM();
-    // console.log(this.journalObj);
     this.showConfirmationBox = false;
     this.showLedgerAccountList = false;
     this.totalCreditAmount = 0;
@@ -300,16 +254,13 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.journalDate = moment();
     this.journalObj.transactions[0].type = 'by';
     this.journalObj.voucherType = 'journal';
-    this.selectedAccList = [];
   }
 
   /**
    * after init
    */
   public ngAfterViewInit() {
-    setTimeout(() => {
-      this.flyAccounts.next(true);
-    }, 200);
+
   }
 
   /**
@@ -319,10 +270,11 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   /**
-   * onSelectDate
+   * setDate
    */
-  public onSelectDate(date) {
+  public setDate(date) {
     this.showFromDatePicker = !this.showFromDatePicker;
     this.journalObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
@@ -331,25 +283,12 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * watchMenuEvent
    */
   public watchKeyboardEvent(event) {
-    // console.log(event);
     if (event) {
       let navigateTo = _.find(this.navigateURL, (o: any) => o.code === event.key);
-      //  this.navigateURL.find()
       if (navigateTo) {
         this._router.navigate(['accounting', navigateTo.route]);
       }
-      // console.log(navigateTo);
     }
-  }
-
-  public showManageGroupsModal() {
-    this.manageGroupsAccountsModal.show();
-  }
-  /**
-   * onShown
-   */
-  public onShown() {
-
   }
 
   /**
@@ -358,11 +297,35 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public removeBlankTransaction(transactions) {
     _.forEach(transactions, function (obj: any, idx) {
       if (obj && !obj.particular && !obj.amount) {
-        // transactions.splice(idx,1);
         transactions = _.without(transactions, obj)
       }
     });
     return transactions;
   }
+
+  /**
+   * validateTransaction
+   */
+  public validateTransaction(transactions) {
+    let validEntry = this.removeBlankTransaction(transactions);
+    let entryIsValid = true;
+    _.forEach(validEntry, function (obj, idx) {
+      if (obj.particular && !obj.amount) {
+        obj.amount = 0;
+      } else if (obj && !obj.particular) {
+        this.entryIsValid = false;
+        return false;
+      } 
+    });
+
+    if (entryIsValid) {
+      return validEntry;
+    } else {
+      this._toaster.errorToast("Particular can't be blank");
+      return false;
+    }
+
+  }
+
 
 }
