@@ -347,7 +347,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     let grpObject = new AccountMoveRequest();
     grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
-    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+
+    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
     this.moveAccountForm.reset();
   }
 
