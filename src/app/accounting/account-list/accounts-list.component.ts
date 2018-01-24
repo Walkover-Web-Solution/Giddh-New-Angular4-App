@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { IFlattenGroupsAccountsDetail, IFlattenGroupsAccountItem, IFlattenGroupsAccountsDetailItem } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
+import { SalesActions } from 'app/actions/sales/sales.action';
 
 @Component({
   selector: 'accounts-list',
@@ -24,25 +25,30 @@ import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 
 export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
 
-
-  @Input() public flyAccounts: boolean;
   @Input() public search: string;
-  @Input() public grpFilter: string = '';
-  @Input() public isOpen: boolean = false;
   @Input() public activeIdx: string = null;
   @Output() public openAddAndManage: EventEmitter<boolean> = new EventEmitter();
   @Output() public onSelectItem: EventEmitter<boolean> = new EventEmitter();
+  @Input() public grpUniqueName: string;
+  @Input() public filterByGrp: boolean = false;
+  @Input() public showStockItem: boolean;
+  @Input() public showAccountList:boolean;
+  @Input() public voucher: string;
 
-  public Items: any[];
+  public accounts: any[];
   public isFlyAccountInProcess$: Observable<boolean>;
   public companyList$: Observable<any>;
-  public showAccountList: boolean = true;
+  // public showAccountList: boolean = true;
   public noResult: boolean = false;
   public activeAccIdx:string = '';
+  public grpFlattenAccounts: any[] = [];
+  public flattenAccounts: any[] = [];
+  public showStockList: boolean = false;
+  public stockList: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef, private _accountService: AccountService) {
+  constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef, private _accountService: AccountService,  private _salesActions: SalesActions) {
   
     this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
 
@@ -53,16 +59,29 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(s: SimpleChanges) {
-    if(s.isOpen) {
-      this.showAccountList = !this.showAccountList;
-    }
-    if (s.search) {
+
+    if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3 ) {
       this.searchAccount(s.search.currentValue)
+    } else if ((s.search && !s.search.currentValue) || (s.filterByGrp && !s.filterByGrp.currentValue) && this.flattenAccounts.length){
+      this.renderAccountList(this.flattenAccounts);
     }
+
     if (s.activeIdx) {
       this.activeAccIdx = s.activeIdx.currentValue;
     }
+    
+    if (s.grpUniqueName && s.grpUniqueName.currentValue && s.filterByGrp) {
+      let groupUniqueNames = s.grpUniqueName.currentValue;
+      this.getFlattenGrpofAccounts(groupUniqueNames);
+    }
 
+    if (s.showStockItem && s.showStockItem.currentValue) {
+      this.showStockList = true;
+    }
+
+    if (s.voucher && s.voucher.currentValue) {
+      this.getFlattenGrpofAccounts(s.voucher.currentValue)
+    }
   }
 
   public ngOnInit() {
@@ -70,11 +89,8 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
         if (data.status === 'success') {
-          let accounts: any[] = [];
-          data.body.results.map(d => {
-            accounts.push(d);
-          });
-          this.Items = accounts;
+          this.renderAccountList(data.body.results);
+          this.flattenAccounts = data.body.results;
         }
       });
       }
@@ -86,17 +102,13 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public searchAccount(s: string) {
-    let accounts: any[] = [];
     this._accountService.GetFlattenAccounts(s, '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.body.count) {
-        data.body.results.map(d => {
-          accounts.push(d);
-        });
+        this.renderAccountList(data.body.results);
         this.noResult = false;
       } else {
         this.noResult = true;
       }
-      this.Items = accounts;
     });
   }
 
@@ -109,6 +121,48 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnDestroy() {
     // this.destroyed$.next(true);
     // this.destroyed$.complete();
+  }
+
+  /**
+   * renderAccontList
+   */
+  public renderAccountList(data) {
+    let accounts: any[] = [];
+    data.map(d => {
+      accounts.push(d);
+    });
+    this.accounts = accounts;  
+    console.log(accounts, 'accounts');
+  }
+
+  /**
+   * getFlattenGrpofAccounts
+   */
+  public getFlattenGrpofAccounts(grpUniqueName) {
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [grpUniqueName] }).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.renderAccountList(data.body.results);
+        this.sortStockItems(data.body.results);
+      } else {
+        this.noResult = true;
+      }
+    });
+  }
+
+  /**
+   * sortStockItems
+   */
+  public sortStockItems(ItemArr) {
+    let stockAccountArr = [];
+    _.forEach(ItemArr, function(obj) {
+      if (obj.stocks) {
+        _.forEach(obj.stocks, function(stock) {
+          stockAccountArr.push(stock);
+        });
+      }
+    });
+    console.log(stockAccountArr, 'stocks');
+    this.stockList = stockAccountArr;
   }
 
 }

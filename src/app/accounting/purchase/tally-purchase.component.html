@@ -1,0 +1,169 @@
+<div class="col-xs-10">
+    <div class="col-xs-12 bg_wrap">
+        <div class="row">
+            <div class="clearfix pdT2">
+                <span class="btn label isActive">Purchase</span>
+                <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
+                    <input type="text" placeholder="Entry date" decimalDigitsDirective [ngModel]="moment(purchaseDate).format('DD-MM-YYYY')" readonly (focus)="showFromDatePicker = true;" class="form-control text-right appearance_none" />
+                    <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                        <datepicker [(ngModel)]="purchaseDate" (selectionDone)="setDate($event)" [showWeeks]="false"></datepicker>
+                    </div>
+                    {{moment(purchaseDate).format('dddd')}}
+                </div>
+            </div>
+
+            <!-- invoice num -->
+            <div class="clearfix form-inline mrB">
+                <div class="mx-300 form-group">
+                    <label>Supplier Invoice No:</label> <input type="text" placeholder="Invoice no." [(ngModel)]="inventoryItem.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" decimalDigitsDirective style="max-width:200px"
+                    />
+                </div>
+
+                <!-- key not available in request 
+                    <div class="mx-300 form-group" (clickOutside)="showInvoiceDate=false;">
+                    <span>Date: </span>
+                    <input type="text" [ngModel]="moment(purchaseDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance_none max-height28" />
+                    <div *ngIf="showInvoiceDate" style="position: absolute; z-index:10; min-height:290px;">
+                        <datepicker [(ngModel)]="purchaseDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
+                    </div>
+                </div> -->
+            </div>
+            <!-- /invoice num -->
+
+
+            <!-- party acc name -->
+            <div class="mx-300 clearfix form-inline mrB">
+                <div class="form-group">
+                    <label>Party A/c Name:<sup>*</sup></label>
+                    <input type="text" placeholder="Party account" class="form-control max-height28 appearance_none" (ngModelChange)="searchAccount($event)" [(ngModel)]="creditorAcc.name" (focus)="getFlattenGrpAccounts(null, false);accountType = 'creditor'" (blur)="showAccountList=false"
+                        style="max-width:200px" />
+                </div>
+            </div>
+            <!-- /party acc name -->
+
+            <!-- operating cost acc only -->
+            <div class="mx-300 clearfix form-inline mrB">
+                <div class="form-group">
+                    <label>Purchase Ledger:<sup>*</sup></label> <input type="text" placeholder="Purchase account" (focus)="accountType = 'debitor'" [(ngModel)]="debtorAcc.name" (focus)="getFlattenGrpAccounts('purchases', true)" (blur)="showAccountList=false"
+                        class="form-control max-height28 appearance_none" style="max-width:200px" />
+                </div>
+            </div>
+            <!-- /operating cost acc only -->
+
+
+            <!--  purchase as INVOICE -->
+            <div class="clearfix mrT1" [style.min-height.vh]="61" *ngIf="gridType == 'invoice'">
+                <div class="table-responsive bdrT">
+                    <table class="table entry_table">
+                        <thead>
+                            <tr>
+                                <th style="width:70%;">Name of Item</th>
+                                <th class="text-right">Quantity</th>
+                                <th class="text-right">Rate</th>
+                                <th class="text-left">Per</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <br />
+                        <tbody>
+                            <tr *ngFor="let transaction of inventoryItem.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
+                                <td><input type="text" class="form-control" #particular [(ngModel)]="transaction.inventory.stock.name" (ngModelChange)="searchStock($event)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (focus)="showStockList.next(true); selectRow(true,i);"
+                                        (blur)="selectRow(true,i);onStockItemBlur($event, particular);showStockList.next(false)" (keyup)="showStockList.next(true)" /></td>
+                                <td>
+                                    <input type="text" class="form-control text-right" [(ngModel)]="transaction.inventory.quantity" (ngModelChange)="changeQuantity(i, $event)" (focus)="selectRow(true,i)" (blur)="selectRow(false,null);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
+                                        decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control text-right" [(ngModel)]="transaction.inventory.unit.rate" (ngModelChange)="changePrice(i,$event)" (focus)="selectRow(true,i)" (blur)="selectRow(false,null)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
+                                        decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control text-left" [(ngModel)]="transaction.inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectRow(true,i)" (blur)="selectRow(false,null)" [disabled]="!transaction.inventory.stock.name" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control text-right" #toAmountField [(ngModel)]="transaction.amount" (ngModelChange)="amountChanged(i)" (focus)="selectRow(true,i)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (blur)="selectRow(false,null);addNewEntry(transaction.amount,transaction, i)"
+                                        [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr *ngFor="let transaction of accountsTransaction;let i=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
+                                <td colspan="2"><input type="text" class="form-control" #particular [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event)" (focus)="onAccountFocus(); selectAccountRow(true,i)" (blur)="selectAccountRow(true,i);"
+                                        [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}" (keyup)="showLedgerAccountList=true;" /></td>
+                                <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
+                                <td>
+                                    <input type="text" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.inventory.unit.rate" (focus)="selectAccountRow(true,i)" (blur)="selectAccountRow(false,null);" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                    />
+                                </td>
+                                <td><input type="text" class="form-control" [value]="'%'" readonly /></td>
+                                <td>
+                                    <input type="text" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectAccountRow(true,i)" (blur)="selectAccountRow(false,null);" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--  purchase as INVOICE -->
+
+
+
+            <div class="clearfix">
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label>Narration:</label>
+                        <textarea class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)" (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="inventoryItem.description" resize="false" rows="6"></textarea>
+                    </div>
+                </div>
+
+                <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
+                    <div class="">
+                        <h1>Accept?</h1>
+                        <div class="pdT2">
+                            <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button> |
+                            <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
+                            <br />
+                            <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3 total_box text-right pull-right">
+                    <!-- <span><strong>{{totalDebitAmount}}</strong></span> -->
+                    <span><strong>{{totalCreditAmount}}</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="sidebar_menu col-xs-2 pd0">
+
+    <div class="bdrL account_listbar pos_rel" [hidden]="!showAccountList">
+        <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
+        <accounts-list [search]="accountSearch" [grpUniqueName]="groupFlattenAccount" [filterByGrp]="filterByGrp" (onSelectItem)="setAccount($event)"></accounts-list>
+    </div>
+
+
+    <div class="bdrL account_listbar pos_rel" [hidden]="!(showStockList | async)">
+        <h3 class="pd1 bdrB primary_clr">List of Stock Items</h3>
+        <accounts-list [search]="stockSearch" [grpUniqueName]="groupFlattenAccount" [voucher]="'purchases'" [filterByGrp]="filterByGrp" [showStockItem]="(showStockList | async)" (onSelectItem)="onSelectStock($event)"></accounts-list>
+    </div>
+
+    <accounting-sidebar></accounting-sidebar>
+</div>
+
+
+
+
+<!--add and manage group account modal -->
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog">
+    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+        <div class="modal-content fullScreenMy">
+            <app-manage-groups-accounts></app-manage-groups-accounts>
+        </div>
+    </div>
+</div>

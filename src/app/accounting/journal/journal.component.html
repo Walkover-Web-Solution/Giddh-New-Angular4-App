@@ -78,7 +78,7 @@
 <div class="sidebar_menu col-xs-2 pd0">
     <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <accounts-list [search]="accountSearch" [grpFilter]="" [isOpen]="showLedgerAccountList" (onSelectItem)="setAccount($event)"></accounts-list>
+        <accounts-list [search]="accountSearch" [showStockItem]="false" (onSelectItem)="setAccount($event)"></accounts-list>
     </div>
 
     <accounting-sidebar></accounting-sidebar>

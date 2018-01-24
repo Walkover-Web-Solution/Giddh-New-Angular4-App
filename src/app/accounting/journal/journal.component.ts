@@ -49,13 +49,15 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public totalDebitAmount: number = 0;
   public showConfirmationBox: boolean = false;
   public moment = moment;
-  public accountSearch: string = '';
+  public accountSearch: string;
   public selectedIdx: any;
   public isSelectedRow: boolean;
   public selectedParticular: any;
   public showFromDatePicker: boolean = false;
   public journalDate: any;
   public navigateURL: any = CustomShortcode;
+  public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  // public groupFlattenAccount: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -132,6 +134,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public onAccountFocus() {
     this.showLedgerAccountList = true;
+    // this.showStockList.next(false);
   }
 
   /**
@@ -140,6 +143,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public onAccountBlur(ev, elem) {
     this.showLedgerAccountList = false;
     this.selectedParticular = elem;
+    // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
