@@ -143,13 +143,13 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       return state;
     }
     case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
-      let d: BaseResponse<string, string> = action.payload;
+      let d: BaseResponse<string, any> = action.payload;
       if (d.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-        let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request);
+        let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
         let parentGroupsLength = accountForDelete.parentGroups.length;
-        removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request, null);
+        removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
         let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
         flattenAccountsArray.splice(index, 1);
         return {
@@ -276,7 +276,6 @@ const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccoun
   }
   for (let grp of groups) {
     if (grp.uniqueName === parentUniqueName) {
-      grp.isOpen = true;
       grp.groups.push(gData);
       result = true;
       return result;
