@@ -1,5 +1,5 @@
 import { JournalComponent } from './journal/journal.component';
-import { PurchaseComponent } from './purchase/purchase.component';
+import { TallyPurchaseComponent } from './purchase/tally-purchase.component';
 import { AccountingComponent } from './accounting.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -15,7 +15,7 @@ import { MfReportComponent } from './report/mf.report.component';
         children: [
           { path: '', redirectTo: 'journal', pathMatch: 'full' },
           { path: 'journal', component: JournalComponent },
-          { path: 'purchase', component: PurchaseComponent }
+          { path: 'purchase', component: TallyPurchaseComponent }
         ]
       }
     ])

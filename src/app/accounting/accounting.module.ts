@@ -1,6 +1,6 @@
 import { VsForDirective } from './../theme/ng2-vs-for/ng2-vs-for';
 import { SharedModule } from './../shared/shared.module';
-import { PurchaseComponent } from './purchase/purchase.component';
+import { TallyPurchaseComponent } from './purchase/tally-purchase.component';
 import { JournalComponent } from './journal/journal.component';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
@@ -26,7 +26,7 @@ import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
   declarations: [
     AccountingComponent,
     JournalComponent,
-    PurchaseComponent,
+    TallyPurchaseComponent,
     AccountingSidebarComponent,
     AccountListComponent
   ],
