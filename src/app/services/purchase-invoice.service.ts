@@ -201,8 +201,6 @@ export class PurchaseInvoiceService {
   }
 
   public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Observable<BaseResponse<any, string>> {
-    console.log('ENTRY', entryUniqueName);
-    console.log('TAX', taxUniqueName);
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let req = {

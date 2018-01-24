@@ -390,6 +390,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       delete accountRequest['hsnOrSac'];
       delete accountRequest['hsnNumber'];
       delete accountRequest['sacNumber'];
+
+      accountRequest.addresses = accountRequest.addresses.map(f => {
+        if (!f.partyType || f.partyType === '') {
+          f.partyType = 'NOT APPLICABLE';
+        }
+        return f;
+      });
     }
 
     this.submitClicked.emit({
