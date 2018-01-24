@@ -294,12 +294,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.isTaxableAccount$ = this.store.select(createSelector([
       (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-      (state: AppState) => state.groupwithaccounts.activeGroup,
       (state: AppState) => state.groupwithaccounts.activeAccount],
-      (groupswithaccounts, activeGroup, activeAccount) => {
+      (groupswithaccounts, activeAccount) => {
         let result: boolean = false;
-        if (groupswithaccounts && activeGroup && activeAccount) {
-          result = this.getAccountFromGroup(groupswithaccounts, activeGroup.uniqueName, false);
+        let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        if (groupswithaccounts && activeGroupUniqueName && activeAccount) {
+          result = this.getAccountFromGroup(groupswithaccounts, activeGroupUniqueName, false);
         } else {
           result = false;
         }
