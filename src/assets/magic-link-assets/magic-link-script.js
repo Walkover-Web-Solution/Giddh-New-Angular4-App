@@ -83,7 +83,7 @@ var app = new Vue({
     txn: {},
     folderPath: ''
   },
-  mounted() {
+  mounted: function() {
     document.getElementById("loader-1").style.display = 'none';
     document.getElementById("app").style.display = 'block';
     this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
@@ -113,10 +113,7 @@ var app = new Vue({
             this.ledgerData = response.data.body;
             this.dateRange.startDate = moment(this.ledgerData.startDate, 'DD-MM-YYYY');
             this.dateRange.endDate = moment(this.ledgerData.endDate, 'DD-MM-YYYY');
-            // Add tooltip feature.
-            this.$nextTick(function () {
-              $('[data-toggle="tooltip"]').tooltip();
-            });
+            $('tr').tooltip('hide');
           }
         })
         .catch(e => {
