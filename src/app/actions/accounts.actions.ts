@@ -429,7 +429,8 @@ export class AccountsAction {
     .switchMap((action: CustomActions) =>
       this._accountService.AccountMove(
         action.payload.body,
-        action.payload.accountUniqueName
+        action.payload.accountUniqueName,
+        action.payload.activeGroupUniqueName
       )
     )
     .map(response => {
@@ -705,13 +706,14 @@ export class AccountsAction {
     };
   }
 
-  public moveAccount(value: AccountMoveRequest, accountUniqueName: string): CustomActions {
+  public moveAccount(value: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): CustomActions {
     return {
       type: AccountsAction.MOVE_ACCOUNT,
       payload: Object.assign({}, {
         body: value
       }, {
-          accountUniqueName
+          accountUniqueName,
+          activeGroupUniqueName
         })
     };
   }
