@@ -154,7 +154,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     let accModel = {
       name: acc.name,
       UniqueName: acc.uniqueName,
-      groupUniqueName: acc.parentGroups[acc.parentGroups.length-1],
+      groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
       account: acc.name
     };
     this.journalObj.transactions[idx].particular = accModel.UniqueName;
@@ -260,7 +260,7 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * after init
    */
   public ngAfterViewInit() {
-
+    //
   }
 
   /**
@@ -295,9 +295,9 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function (obj: any, idx) {
+    _.forEach(transactions, function(obj: any, idx) {
       if (obj && !obj.particular && !obj.amount) {
-        transactions = _.without(transactions, obj)
+        transactions = _.without(transactions, obj);
       }
     });
     return transactions;
@@ -309,13 +309,13 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
   public validateTransaction(transactions) {
     let validEntry = this.removeBlankTransaction(transactions);
     let entryIsValid = true;
-    _.forEach(validEntry, function (obj, idx) {
+    _.forEach(validEntry, function(obj: any, idx) {
       if (obj.particular && !obj.amount) {
         obj.amount = 0;
       } else if (obj && !obj.particular) {
         this.entryIsValid = false;
         return false;
-      } 
+      }
     });
 
     if (entryIsValid) {
@@ -326,6 +326,5 @@ export class JournalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
-
 
 }
