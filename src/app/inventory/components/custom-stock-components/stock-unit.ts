@@ -1,178 +1,178 @@
 export const StockUnits = [
   {
-    label: 'Bags',
+    label: 'BAGS',
     value: 'BAG'
   },
 {
-    label: 'Bale',
+    label: 'BALE',
     value: 'BAL'
 },
 {
-    label: 'Bundles',
+    label: 'BUNDLES',
     value: 'BDL'
 },
 {
-    label: 'Buckles',
+    label: 'BUCKLES',
     value: 'BKL'
 },
 {
-    label: 'Billion of units',
+    label: 'BILLION OF UNITS',
     value: 'BOU'
 },
 {
-    label: 'Box',
+    label: 'BOX',
     value: 'BOX'
 },
 {
-    label: 'Bottles',
+    label: 'BOTTLES',
     value: 'BTL'
 },
 {
-    label: 'Bunches',
+    label: 'BUNCHES',
     value: 'BUN'
 },
 {
-    label: 'Cans',
+    label: 'CANS',
     value: 'CAN'
 },
 {
-    label: 'Cubic meters',
+    label: 'CUBIC METERS',
     value: 'CBM'
 },
 {
-    label: 'Cubic Centimeters',
+    label: 'CUBIC CENTIMETERS',
     value: 'CCM'
 },
 {
-    label: 'Centimeters',
+    label: 'CENTIMETERS',
     value: 'CMS'
 },
 {
-    label: 'Cartons',
+    label: 'CARTONS',
     value: 'CTN'
 },
 {
-    label: 'Dozens',
+    label: 'DOZENS',
     value: 'DOZ'
 },
 {
-    label: 'Drums',
+    label: 'DRUMS',
     value: 'DRM'
 },
 {
-    label: 'Great Gross',
+    label: 'GREAT GROSS',
     value: 'GGK'
 },
 {
-    label: 'Grammes',
+    label: 'GRAMMES',
     value: 'GMS'
 },
 {
-    label: 'Gross',
+    label: 'GROSS',
     value: 'GRS'
 },
 {
-    label: 'Gross Yards',
+    label: 'GROSS YARDS',
     value: 'GYD'
 },
 {
-    label: 'Kilograms',
+    label: 'KILOGRAMS',
     value: 'KGS'
 },
 {
-    label: 'Kilolitre',
+    label: 'KILOLITRE',
     value: 'KLR'
 },
 {
-    label: 'Kilometre',
+    label: 'KILOMETRE',
     value: 'KME'
 },
 {
-    label: 'Mililitre',
+    label: 'MILILITRE',
     value: 'MLT'
 },
 {
-    label: 'Meters',
+    label: 'METERS',
     value: 'MTR'
 },
 {
-    label: 'Metric Ton',
+    label: 'METRIC TON',
     value: 'MTS'
 },
 {
-    label: 'Numbers',
+    label: 'NUMBERS',
     value: 'NOS'
 },
 {
-    label: 'Packs',
+    label: 'PACKS',
     value: 'PAC'
 },
 {
-    label: 'Pieces',
+    label: 'PIECES',
     value: 'PCS'
 },
 {
-    label: 'Pairs',
+    label: 'PAIRS',
     value: 'PRS'
 },
 {
-    label: 'Quintal',
+    label: 'QUINTAL',
     value: 'QTL'
 },
 {
-    label: 'Rolls',
+    label: 'ROLLS',
     value: 'ROL'
 },
 {
-    label: 'Sets',
+    label: 'SETS',
     value: 'SET'
 },
 {
-    label: 'Square Feet',
+    label: 'SQUARE FEET',
     value: 'SQF'
 },
 {
-    label: 'Square Meters',
+    label: 'SQUARE METERS',
     value: 'SQM'
 },
 {
-    label: 'Square Yards',
+    label: 'SQUARE YARDS',
     value: 'SQY'
 },
 {
-    label: 'Tablets',
+    label: 'TABLETS',
     value: 'TBS'
 },
 {
-    label: 'Ten Gross',
+    label: 'TEN GROSS',
     value: 'TGM'
 },
 {
-    label: 'Thousands',
+    label: 'THOUSANDS',
     value: 'THD'
 },
 {
-    label: 'Tonnes',
+    label: 'TONNES',
     value: 'TON'
 },
 {
-    label: 'Tubes',
+    label: 'TUBES',
     value: 'TUB'
 },
 {
-    label: 'US Gallons',
+    label: 'US GALLONS',
     value: 'UGS'
 },
 {
-    label: 'Units',
+    label: 'UNITS',
     value: 'UNT'
 },
 {
-    label: 'Yards',
+    label: 'YARDS',
     value: 'YDS'
 },
 {
-    label: 'Others',
+    label: 'OTHERS',
     value: 'OTH'
 }
 ];

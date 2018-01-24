@@ -404,7 +404,7 @@ header .navbar {
 }
 
 .parent-Group {
-    padding-top: 10px;
+    padding-left: 20px;
     line-height: normal;
 }
 
@@ -639,11 +639,9 @@ header {
     text-transform: capitalize;
 }
 
-
-/* 
 .basic>tbody>tr>td a {
     color: #ff5e01;
-} */
+}
 
 .delt {
     text-align: center;
@@ -2046,8 +2044,17 @@ input[type=radio]:checked:after {
 }
 
 #inventory-sidebar {
-    background-color: transparent;
+    background-color: #fff;
     padding: 10px 0;
+}
+
+#inventory-sidebar .search-input input {
+    height: 36px;
+    background-color: #f8f8f8;
+    color: #616161;
+    border-color: #c3c3c3;
+    width: 100%;
+    padding-left: 10px;
 }
 
 #inventory-sidebar .input-group {
@@ -3316,7 +3323,6 @@ label {
     margin: 0;
 }
 
-
 /*************************************************** Custom Invoice CSS  ****************************************************/
 
 #customInvoice .templateEditor input[type="checkbox"] {
@@ -4317,24 +4323,6 @@ table td[class*=col-]:last-child {
 
 .dropdown-container .dropdown-menu li:last-child label {
     border-bottom: 0;
-}
-
-
-/* ======================================= INVENTORY CSS ===================================== */
-
-.form_header {
-    padding: 12px 20px;
-    background: #e5e5e5;
-    color: #333333;
-}
-
-.form_body {
-    background: #fff;
-    padding: 20px;
-}
-
-.noHover:hover td {
-    background: #fff !important;
 }
 
 .universal_date label {
