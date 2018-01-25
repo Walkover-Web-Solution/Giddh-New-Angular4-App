@@ -49,7 +49,7 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Filing Date</label>
-                <sh-select placeholder="Select Date" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" [ItemHeight]="33"></sh-select>
             </div>
         </div>
         <div class="row">
