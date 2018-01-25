@@ -14,6 +14,13 @@ Vue.filter('currency', function (value) {
 Vue.component('date-range-picker', {
   props: ['id', 'range'],
   template: '<div class="input-group"><input type="text" :id="id" :name="id" class="form-control" /><span class="input-group-addon"><span class="fa fa-calendar"></span></span></div>',
+  watch: {
+    range: function(val, oldVal){
+      var input = $('input[name="' + this.id + '"]');
+      input.data('daterangepicker').setStartDate(val.startDate);
+      input.data('daterangepicker').setEndDate(val.endDate);
+    }
+},
   mounted: function () {
     var self = this;
     var input = $('input[name="' + this.id + '"]');
@@ -41,7 +48,10 @@ Vue.component('date-range-picker', {
         ]
       },
       startDate: this.range.startDate,
-      endDate: this.range.endDate
+      endDate: this.range.endDate,
+      locale: {
+        format: 'D-MMM-YY'
+      },
     });
     input.on('apply.daterangepicker', function (ev, picker) {
       var dateObj = {
@@ -97,7 +107,7 @@ var app = new Vue({
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    getMagicLinkData(id, from, to) {
+    getMagicLinkData: function(id, from, to) {
       var url = '';
       var apiBaseUrl = this.getApi();
       if (from && to) {
@@ -111,8 +121,9 @@ var app = new Vue({
           // JSON responses are automatically parsed.
           if (response.data.status === 'success') {
             this.ledgerData = response.data.body;
-            this.dateRange.startDate = moment(this.ledgerData.startDate, 'DD-MM-YYYY');
-            this.dateRange.endDate = moment(this.ledgerData.endDate, 'DD-MM-YYYY');
+            this.dateRange = {};
+            this.dateRange.startDate = moment(this.ledgerData.fromDate, 'DD-MM-YYYY');
+            this.dateRange.endDate = moment(this.ledgerData.toDate, 'DD-MM-YYYY');
             $('tr').tooltip('hide');
           }
         })
@@ -123,7 +134,7 @@ var app = new Vue({
         this.$toaster.error('Magic link ID not found.');
       }
     },
-    getParameterByName(name, url) {
+    getParameterByName: function(name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
       var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -132,7 +143,7 @@ var app = new Vue({
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
-    checkCompEntry(ledger) {
+    checkCompEntry: function(ledger) {
       var unq = ledger.uniqueName;
       ledger.isCompoundEntry = true;
       var ledgerData = this.ledgerData;
@@ -149,7 +160,7 @@ var app = new Vue({
     customFilter: function (txn) {
       return txn.particular.name.indexOf(this.searchText) != -1;
     },
-    filterBy(list, value) {
+    filterBy: function(list, value) {
       return list.filter(function (txn) {
         return txn.particular.name.toLowerCase().includes(value) || String(txn.amount).includes(value);
       });
