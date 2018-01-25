@@ -44,39 +44,34 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showAccountList: boolean = true;
-  public selectedInput: 'by' | 'to' = 'by';
-  public inventoryItem: BlankLedgerVM = new BlankLedgerVM();
+  public TransactionType: 'by' | 'to' = 'by';
+  public purchaseReq: BlankLedgerVM = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
   public totalDebitAmount: number = 0;
   public showConfirmationBox: boolean = false;
   public moment = moment;
   public accountSearch: string = '';
-  public selectedIdx: any;
+  public stockSearch: string;
+  public selectedStockIdx: any;
   public isSelectedRow: boolean;
-  public selectedParticular: any;
+  public selectedInput: any;
   public showFromDatePicker: boolean = false;
-  public purchaseDate: any;
+  public entryDate: any;
   public navigateURL: any = CustomShortcode;
   public showInvoiceDate: boolean = false;
-  public gridType: string = 'invoice';
-  public groupFlattenAccount: string;
-  public partyAccUniqName: string = '';
+  public purchaseType: string = 'invoice';
+  public groupUniqueName: string;
   public filterByGrp: boolean = false;
   public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-  public stockSearch: string;
   public selectedAcc:object;
   public accountType: string;
   public accountsTransaction = [];
   public selectedAccIdx:any;
-  public creditorAcc: any = {
-    name: '',
-    uniqueName: ''
-  };
-  public debtorAcc: any = {
-    name: '',
-    uniqueName: ''
-  };
-  
+  public creditorAcc: any = {};
+  public debtorAcc: any = {};
+  public stockTotal = null;
+  public accountsTotal = null;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -86,7 +81,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
     private _toaster: ToasterService, private _router: Router, private _salesActions: SalesActions) {
-    this.inventoryItem.transactions = [];
+    this.purchaseReq.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
     });
@@ -100,35 +95,31 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.refreshEntry();
-        // this.store.dispatch(this._ledgerActions.ResetLedger());
       }
     });
-
-
     this.refreshEntry();
-
   }
 
   /**
-   * newEntryObj() to push new entry object
+   * newRowType() to push new object
    */
-  public newEntryObj(type) {
+  public newRowType(type) {
     let entryObj = {
-      amount: 0,
+      amount: null,
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'DEBIT',
+      type: 'CREDIT',
       taxes: [],
-      total: 0,
+      total: null,
       discounts: [],
       inventory: {
         unit: {
           stockUnitCode: '',
           code: '',
-          rate: 0,
+          rate: null,
         },
-        quantity: 0,
+        quantity: null,
         stock: {
           uniqueName: '',
           name: '',
@@ -137,12 +128,10 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
       selectedAccount: {
         name: '',
         uniqueName: ''
-        // groupUniqueName: '',
-        // account: ''
       }
     }
     if (type == 'stock') {
-      this.inventoryItem.transactions.push(entryObj);
+      this.purchaseReq.transactions.push(entryObj);
     } else if (type == 'account'){
       this.accountsTransaction.push(entryObj);
     }
@@ -154,7 +143,8 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public selectRow(type: boolean, idx) {
     this.isSelectedRow = type;
-    this.selectedIdx = idx;
+    this.selectedStockIdx = idx;
+    this.selectedAccIdx = null;
   }
 
   /**
@@ -163,6 +153,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   public selectAccountRow(type: boolean, idx) {
     this.isSelectedRow = type;
     this.selectedAccIdx = idx;
+    this.selectedStockIdx = null;
   }
 
   /**
@@ -190,7 +181,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public onStockItemBlur(ev, elem) {
     this.showAccountList = false;
-    this.selectedParticular = elem;
+    this.selectedInput = elem;
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
@@ -201,9 +192,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
-    let idx = this.selectedIdx;
-    // console.log(this.selectedIdx);
-    console.log(acc);
+    let idx = this.selectedAccIdx;
     this.selectedAcc = acc;
     if (this.accountType === 'creditor') {
       this.creditorAcc = acc;
@@ -211,19 +200,19 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
       this.debtorAcc = acc;
     }
     this.accountType = null;
-    let accModel = {
-      name: acc.name,
-      UniqueName: acc.uniqueName,
-      groupUniqueName: acc.parentGroups[acc.parentGroups.length-1],
-      account: acc.name
-    };
-    this.accountsTransaction[idx].particular = accModel.UniqueName;
-    this.accountsTransaction[idx].selectedAccount = accModel;
-
+    if (this.selectedAccIdx > -1) {
+      let accModel = {
+        name: acc.name,
+        UniqueName: acc.uniqueName,
+        groupUniqueName: acc.parentGroups[acc.parentGroups.length-1],
+        account: acc.name
+      };
+      this.accountsTransaction[idx].particular = accModel.UniqueName;
+      this.accountsTransaction[idx].selectedAccount = accModel;      
+    }
     setTimeout(() => {
-      this.selectedParticular.focus();
-      console.log(this.selectedParticular.nextElementSibling);
-      // this.showLedgerAccountList = false;
+      this.selectedInput.focus();
+      console.log(this.selectedInput.nextElementSibling);
       this.showAccountList = false;
     }, 50);
   }
@@ -247,9 +236,9 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * onAmountField() on amount, event => Blur, Enter, Tab
    */
-  public addNewEntry(amount, transactionObj, idx) {
+  public addNewStock(amount, transactionObj, idx) {
     let indx = idx;
-    let lastIndx = this.inventoryItem.transactions.length - 1;
+    let lastIndx = this.purchaseReq.transactions.length - 1;
 
     if (amount) {
       transactionObj.amount = Number(amount);
@@ -257,22 +246,14 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     if (transactionObj.inventory.quantity) {
-      this.inventoryItem.transactions[indx].inventory.quantity = _.cloneDeep(Number(transactionObj.inventory.quantity));
+      this.purchaseReq.transactions[indx].inventory.quantity = _.cloneDeep(Number(transactionObj.inventory.quantity));
     }
 
-    if (indx === lastIndx && this.inventoryItem.transactions[indx].inventory.stock.name) {
-      this.newEntryObj('stock');
-    } else {
-      this.newEntryObj('account');
+    if (indx === lastIndx && this.purchaseReq.transactions[indx].inventory.stock.name) {
+      this.newRowType('stock');
+    } else if (indx === lastIndx && !this.purchaseReq.transactions[indx].inventory.stock.name) {
+      this.newRowType('account');
     }
-
-    this.totalCreditAmount = _.sumBy(this.inventoryItem.transactions, (o) => Number(o.amount));
-    this.totalDebitAmount = _.sumBy(this.inventoryItem.transactions, (o) => Number(o.amount));
-
-    // let debitTransactions = _.filter(this.inventoryItem.transactions, (o) => o.type === 'by');
-    // this.totalDebitAmount = _.sumBy(debitTransactions, (o) => Number(o.amount));
-    // let creditTransactions = _.filter(this.inventoryItem.transactions, (o) => o.type === 'to');
-    // this.totalCreditAmount = _.sumBy(creditTransactions, (o) => Number(o.amount));
   }
 
   /**
@@ -280,8 +261,8 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
     this.showConfirmationBox = true;
-    if (this.inventoryItem.description) {
-      this.inventoryItem.description = this.inventoryItem.description.replace(/(?:\r\n|\r|\n)/g, '');
+    if (this.purchaseReq.description) {
+      this.purchaseReq.description = this.purchaseReq.description.replace(/(?:\r\n|\r|\n)/g, '');
     }
     setTimeout(() => {
       submitBtnEle.focus();
@@ -293,7 +274,10 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public saveEntry() {
     let idx = 0;
-    let data = _.cloneDeep(this.inventoryItem);
+    let data = _.cloneDeep(this.purchaseReq);
+    let transactions = _.concat(data.transactions, this.accountsTransaction);
+    console.log(transactions);
+    // return;
     if (!this.creditorAcc.uniqueName) {
       return this._toaster.errorToast("Party A/c Name can't be blank.");
     } else if (!this.debtorAcc.uniqueName) {
@@ -321,16 +305,18 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    * refreshEntry
    */
   public refreshEntry() {
-    this.inventoryItem.transactions = [];
+    this.purchaseReq.transactions = [];
+    this.accountsTransaction = [];
     this.showConfirmationBox = false;
     this.showAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
-    this.newEntryObj('stock');
-    this.inventoryItem.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.purchaseDate = moment();
-    this.inventoryItem.transactions[0].type = 'DEBIT';
-    this.inventoryItem.voucherType = 'purchase';
+    this.newRowType('stock');
+    this.newRowType('account');
+    this.purchaseReq.entryDate = moment().format(GIDDH_DATE_FORMAT);
+    this.entryDate = moment();
+    this.purchaseReq.transactions[0].type = 'CREDIT';
+    this.purchaseReq.voucherType = 'purchase';
     this.creditorAcc = {};
     this.debtorAcc = {};
   }
@@ -355,7 +341,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public setDate(date) {
     this.showFromDatePicker = !this.showFromDatePicker;
-    this.inventoryItem.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
+    this.purchaseReq.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**
@@ -363,7 +349,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public setInvoiceDate(date) {
     this.showInvoiceDate = !this.showInvoiceDate;
-    // this.inventoryItem.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**
@@ -419,7 +404,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public getFlattenGrpAccounts(groupUniqueName, filter) {
     this.showAccountList = true;
-    this.groupFlattenAccount = groupUniqueName;
+    this.groupUniqueName = groupUniqueName;
     this.filterByGrp = filter;
     this.showStockList.next(false);
   }
@@ -428,10 +413,13 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    * onSelectStock
    */
   public onSelectStock(item) {
-    let idx = this.selectedIdx;
+    let idx = this.selectedStockIdx;
     let entryItem = _.cloneDeep(item);
     this.prepareEntry(entryItem, idx);
-    this.showStockList.next(false);
+    setTimeout(() => {
+      this.selectedInput.focus();
+      this.showStockList.next(false);
+    }, 50);
   }
 
   /**
@@ -444,27 +432,26 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
       rate: 0
     };
     if (item.accountStockDetails.unitRates.length) {
-      this.inventoryItem.transactions[idx].inventory.unit = item.accountStockDetails.unitRates[0];
-      this.inventoryItem.transactions[idx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
-      this.inventoryItem.transactions[idx].inventory.unit.stockUnitCode = item.stockUnit.name;
+      this.purchaseReq.transactions[idx].inventory.unit = item.accountStockDetails.unitRates[0];
+      this.purchaseReq.transactions[idx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.purchaseReq.transactions[idx].inventory.unit.stockUnitCode = item.stockUnit.name;
       
     } else if (!item.accountStockDetails.unitRates.length) {
-      this.inventoryItem.transactions[idx].inventory.unit = defaultUnit;
+      this.purchaseReq.transactions[idx].inventory.unit = defaultUnit;
     }
-    this.inventoryItem.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-    this.inventoryItem.transactions[idx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
-    this.inventoryItem.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.purchaseReq.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+    this.purchaseReq.transactions[idx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
+    this.purchaseReq.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
   }
 
   /**
    * calculateAmount
    */
   public changeQuantity(idx, val) {
-    let entry = this.inventoryItem.transactions[idx];
-    this.inventoryItem.transactions[idx].inventory.quantity = Number(val);
-    this.inventoryItem.transactions[idx].amount = Number((this.inventoryItem.transactions[idx].inventory.unit.rate * this.inventoryItem.transactions[idx].inventory.quantity).toFixed(2));
-    // this.calculateTotal();
-    // this.calculateCompoundTotal();
+    let entry = this.purchaseReq.transactions[idx];
+    this.purchaseReq.transactions[idx].inventory.quantity = Number(val);
+    this.purchaseReq.transactions[idx].amount = Number((this.purchaseReq.transactions[idx].inventory.unit.rate * this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
+    this.amountChanged(idx);
   }
 
 
@@ -472,27 +459,56 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    * changePrice
    */
   public changePrice(idx, val) {
-    this.inventoryItem.transactions[idx].inventory.unit.rate = Number(_.cloneDeep(val));
-    this.inventoryItem.transactions[idx].amount = Number((this.inventoryItem.transactions[idx].inventory.unit.rate * this.inventoryItem.transactions[idx].inventory.quantity).toFixed(2));
+    this.purchaseReq.transactions[idx].inventory.unit.rate = Number(_.cloneDeep(val));
+    this.purchaseReq.transactions[idx].amount = Number((this.purchaseReq.transactions[idx].inventory.unit.rate * this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
+    this.amountChanged(idx);
   }
 
   /**
    * amountChanged
    */
   public amountChanged(idx) {
-    if (this.inventoryItem.transactions[idx] && this.inventoryItem.transactions[idx].inventory.stock && this.inventoryItem.transactions[idx].inventory.quantity) {
-      if (this.inventoryItem.transactions[idx].inventory.quantity) {
-        this.inventoryItem.transactions[idx].inventory.unit.rate = Number((this.inventoryItem.transactions[idx].amount / this.inventoryItem.transactions[idx].inventory.quantity).toFixed(2));
+    if (this.purchaseReq.transactions[idx] && this.purchaseReq.transactions[idx].inventory.stock && this.purchaseReq.transactions[idx].inventory.quantity) {
+      if (this.purchaseReq.transactions[idx].inventory.quantity) {
+        this.purchaseReq.transactions[idx].inventory.unit.rate = Number((this.purchaseReq.transactions[idx].amount / this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
       }
     }
+    let stockTotal = _.sumBy(this.purchaseReq.transactions,  (o) => Number(o.amount));
+    this.stockTotal = stockTotal;
   }
-  
+
+  public calculateRate(idx, val) {
+    if (val) {
+      this.accountsTransaction[idx].amount = Number( this.stockTotal * val / 100);
+    }
+    this.calculateAmount();    
+  }
+
+
+  public changeTotal(idx, val) {
+    if (val) {
+      this.accountsTransaction[idx].inventory.unit.rate = 0
+    }
+    this.calculateAmount();
+  }
 
   /**
-   * addAccountEntry
+   * calculateAmount
    */
-  public addAccountEntry() {
-    this.accountsTransaction.push
+  public calculateAmount() {
+    let Total = _.sumBy(this.accountsTransaction,  (o) => Number(o.amount));
+    this.accountsTotal = Total;
+  }
+
+  /**
+   * changeStock
+   */
+  public changeStock(idx,val) {
+    if(!val) {
+      this.purchaseReq.transactions.splice(idx, 1);
+      this.amountChanged(idx);
+      // this.showStockList.next(false);
+    }
   }
 
 }
