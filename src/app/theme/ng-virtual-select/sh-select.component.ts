@@ -39,6 +39,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public NoFoundMsgHeight: number = 30;
   @Input() public NoFoundLinkHeight: number = 30;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
+  @Input() public customSorting: (a: IOption, b: IOption) => number;
   @Input() public useInBuiltFilterForFlattenAc: boolean = false;
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
   @Input() public doNotReset: boolean = false;
@@ -170,12 +171,18 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
       this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
     }else {
-      this.filteredData = this._options ? this._options.filter(item => {
+      let filteredData = this._options ? this._options.filter(item => {
         if (this.customFilter) {
           return this.customFilter(lowercaseFilter, item);
         }
         return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
-      }).sort((a, b) => a.label.length - b.label.length ) : [];
+      }) : [];
+
+      if (this.customSorting) {
+        this.filteredData = filteredData.sort(this.customSorting);
+      } else {
+        this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length );
+      }
     }
     if (this.filteredData.length === 0) {
       this.noOptionsFound.emit(true);
