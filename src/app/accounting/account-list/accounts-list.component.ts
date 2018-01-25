@@ -34,11 +34,11 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showStockItem: boolean;
   @Input() public showAccountList:boolean;
   @Input() public voucher: string;
-
+  @Input() public type: 'account' | 'stock';
+  
   public accounts: any[];
   public isFlyAccountInProcess$: Observable<boolean>;
   public companyList$: Observable<any>;
-  // public showAccountList: boolean = true;
   public noResult: boolean = false;
   public activeAccIdx:string = '';
   public grpFlattenAccounts: any[] = [];
