@@ -21,6 +21,7 @@ import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
+import { TallyModuleService } from 'app/accounting/tally-service';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -45,7 +46,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public showLedgerAccountList: boolean = true;
   public selectedInput: 'by' | 'to' = 'by';
-  public journalObj: BlankLedgerVM = new BlankLedgerVM();
+  public requestObj: BlankLedgerVM = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
   public totalDebitAmount: number = 0;
   public showConfirmationBox: boolean = false;
@@ -60,6 +61,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   // public groupFlattenAccount: string = '';
 
+  public voucherType: string = null;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -68,10 +71,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private store: Store<AppState>,
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
-    private _toaster: ToasterService, private _router: Router) {
-    this.journalObj.transactions = [];
+    private _toaster: ToasterService, private _router: Router, private _tallyModuleService: TallyModuleService) {
+    this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
+    });
+
+    this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+      this.voucherType = d.page;
     });
   }
 
@@ -92,7 +99,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * newEntryObj() to push new entry object
    */
   public newEntryObj() {
-    this.journalObj.transactions.push({
+    this.requestObj.transactions.push({
       amount: 0,
       particular: '',
       applyApplicableTaxes: false,
@@ -162,8 +169,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
       account: acc.name
     };
-    this.journalObj.transactions[idx].particular = accModel.UniqueName;
-    this.journalObj.transactions[idx].selectedAccount = accModel;
+    this.requestObj.transactions[idx].particular = accModel.UniqueName;
+    this.requestObj.transactions[idx].selectedAccount = accModel;
 
     setTimeout(() => {
       this.selectedParticular.focus();
@@ -184,20 +191,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
-    let lastIndx = this.journalObj.transactions.length - 1;
+    let lastIndx = this.requestObj.transactions.length - 1;
 
     if (amount) {
       transactionObj.amount = Number(amount);
       transactionObj.total = transactionObj.amount;
     }
 
-    if (indx === lastIndx && this.journalObj.transactions[indx].selectedAccount.name) {
+    if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
       this.newEntryObj();
     }
 
-    let debitTransactions = _.filter(this.journalObj.transactions, (o) => o.type === 'by');
+    let debitTransactions = _.filter(this.requestObj.transactions, (o) => o.type === 'by');
     this.totalDebitAmount = _.sumBy(debitTransactions, (o) => Number(o.amount));
-    let creditTransactions = _.filter(this.journalObj.transactions, (o) => o.type === 'to');
+    let creditTransactions = _.filter(this.requestObj.transactions, (o) => o.type === 'to');
     this.totalCreditAmount = _.sumBy(creditTransactions, (o) => Number(o.amount));
   }
 
@@ -205,10 +212,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * openConfirmBox() to save entry
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
-    if (this.journalObj.transactions.length > 2) {
+    if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
-      if (this.journalObj.description) {
-        this.journalObj.description = this.journalObj.description.replace(/(?:\r\n|\r|\n)/g, '');
+      if (this.requestObj.description) {
+        this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
       }
       setTimeout(() => {
         submitBtnEle.focus();
@@ -225,7 +232,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public saveEntry() {
     let idx = 0;
-    let data = _.cloneDeep(this.journalObj);
+    let data = _.cloneDeep(this.requestObj);
     // data.transactions = this.removeBlankTransaction(data.transactions);
     data.transactions = this.validateTransaction(data.transactions);
     if (!data.transactions) {
@@ -249,16 +256,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * refreshEntry
    */
   public refreshEntry() {
-    this.journalObj.transactions = [];
+    this.requestObj.transactions = [];
     this.showConfirmationBox = false;
     this.showLedgerAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.newEntryObj();
-    this.journalObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
+    this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.journalDate = moment();
-    this.journalObj.transactions[0].type = 'by';
-    this.journalObj.voucherType = 'journal';
+    this.requestObj.transactions[0].type = 'by';
+    this.requestObj.voucherType = 'journal';
   }
 
   /**
@@ -281,7 +288,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setDate(date) {
     this.showFromDatePicker = !this.showFromDatePicker;
-    this.journalObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
+    this.requestObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**

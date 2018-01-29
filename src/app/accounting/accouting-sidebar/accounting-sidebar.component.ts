@@ -36,6 +36,7 @@ export class AccountingSidebarComponent implements OnChanges {
   public accountSearch: string = '';
   public grpUniqueName: string = '';
   public showAccountList: boolean = true;
+  public selectedVoucher: string = null;
 
   constructor(private _tallyModuleService: TallyModuleService) {
     //
@@ -53,6 +54,7 @@ export class AccountingSidebarComponent implements OnChanges {
       page: pageName,
       gridType: grid
     });
+    this.selectedVoucher = pageName;
   }
 
 }

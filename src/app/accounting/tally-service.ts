@@ -14,8 +14,16 @@ export interface IPageInfo {
 export class TallyModuleService {
 
   public selectedPageInfo: Subject<IPageInfo> = new Subject();
+  public transactionObj: object = {};
 
   public onSelectedPage(info: IPageInfo) {
     this.selectedPageInfo.next(info);
+  }
+
+  /**
+   * prepareTransactions
+   */
+  public prepareTransactions(transactionObj) {
+    //
   }
 }
