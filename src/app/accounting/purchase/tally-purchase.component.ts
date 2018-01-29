@@ -157,6 +157,16 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   /**
+   * getFlattenGrpAccounts
+   */
+  public getFlattenGrpAccounts(groupUniqueName, filter) {
+    this.showAccountList = true;
+    this.groupUniqueName = groupUniqueName;
+    this.filterByGrp = filter;
+    this.showStockList.next(false);
+  }
+
+  /**
    * selectEntryType() to validate Type i.e BY/TO
    */
   public selectEntryType(transactionObj, val, idx) {
@@ -168,24 +178,12 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  /**
-   * onAccountFocus() to show accountList
-   */
-  public onAccountFocus() {
-    this.showAccountList = true;
-    // this.showStockList.next(false);
-  }
-
-  /**
-   * onStockItemBlur() to hide accountList
-   */
   public onStockItemBlur(ev, elem) {
-    this.showAccountList = false;
     this.selectedInput = elem;
-    if (this.accountSearch) {
-      this.searchAccount('');
-      this.accountSearch = '';
-    }
+    // if (!this.stockSearch) {
+    //   this.searchStock('');
+    //   this.stockSearch = '';
+    // }
   }
 
   /**
@@ -193,13 +191,14 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   public setAccount(acc) {
     let idx = this.selectedAccIdx;
-    this.selectedAcc = acc;
+
     if (this.accountType === 'creditor') {
       this.creditorAcc = acc;
+      return this.accountType = null;
     } else if (this.accountType === 'debitor') {
       this.debtorAcc = acc;
     }
-    this.accountType = null;
+
     if (this.selectedAccIdx > -1) {
       let accModel = {
         name: acc.name,
@@ -212,7 +211,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     }
     setTimeout(() => {
       this.selectedInput.focus();
-      console.log(this.selectedInput.nextElementSibling);
       this.showAccountList = false;
     }, 50);
   }
@@ -231,10 +229,8 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     this.stockSearch = str;
   }
 
-
-
   /**
-   * onAmountField() on amount, event => Blur, Enter, Tab
+   * addNewStock
    */
   public addNewStock(amount, transactionObj, idx) {
     let indx = idx;
@@ -270,38 +266,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   /**
-   * saveEntry
-   */
-  public saveEntry() {
-    let idx = 0;
-    let data = _.cloneDeep(this.purchaseReq);
-    let transactions = _.concat(data.transactions, this.accountsTransaction);
-    console.log(transactions);
-    // return;
-    if (!this.creditorAcc.uniqueName) {
-      return this._toaster.errorToast("Party A/c Name can't be blank.");
-    } else if (!this.debtorAcc.uniqueName) {
-      return this._toaster.errorToast("Purchase Ledger can't be blank.");
-    }
-    // data.transactions = this.removeBlankTransaction(data.transactions);
-    data.transactions = this.validateTransaction(data.transactions);
-    if (!data.transactions) {
-      return;
-    }
-    if (this.totalCreditAmount === this.totalDebitAmount) {
-      // _.forEach(data.transactions, element => {
-      //   element.type = (element.type === 'by') ? 'credit' : 'debit';
-      // });
-
-      let accUniqueName: string = this.creditorAcc.uniqueName;
-      this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
-      this.showStockList.next(false);
-    } else {
-      this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-    }
-  }
-
-  /**
    * refreshEntry
    */
   public refreshEntry() {
@@ -319,6 +283,8 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     this.purchaseReq.voucherType = 'purchase';
     this.creditorAcc = {};
     this.debtorAcc = {};
+    this.stockTotal = null;
+    this.accountsTotal = null;
   }
 
   /**
@@ -366,48 +332,32 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * removeBlankTransaction
    */
-  public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function (obj: any, idx) {
-      if (obj && !obj.inventory.stock.UniqueName && !obj.amount) {
-        transactions = _.without(transactions, obj)
-      }
-    });
+  public removeBlankTransaction(transactions, type) {
+    if (type == 'stock') {
+      _.forEach(transactions, function (obj: any, idx) {
+        if (obj && !obj.inventory.stock.name && !obj.amount) {
+          transactions = _.without(transactions, obj)
+        }
+      });
+    } else if (type == 'account') {
+      _.forEach(transactions, function (obj: any, idx) {
+        if (obj && !obj.particular && !obj.amount) {
+          transactions = _.without(transactions, obj)
+        }
+      });
+    }
     return transactions;
   }
 
   /**
    * validateTransaction
    */
-  public validateTransaction(transactions) {
-    let validEntry = this.removeBlankTransaction(transactions);
-    let entryIsValid = true;
-    _.forEach(validEntry, function (obj, idx) {
-      if (obj.particular && !obj.amount) {
-        obj.amount = 0;
-      } else if (obj && !obj.particular) {
-        this.entryIsValid = false;
-        return false;
-      } 
-    });
-
-    if (entryIsValid) {
-      return validEntry;
-    } else {
-      this._toaster.errorToast("Particular can't be blank");
-      return false;
-    }
-
+  public validateTransaction(transactions, type) {
+    let validEntry = this.removeBlankTransaction(transactions, type);
+    return validEntry;
   }
 
-  /**
-   * getFlattenGrpAccounts
-   */
-  public getFlattenGrpAccounts(groupUniqueName, filter) {
-    this.showAccountList = true;
-    this.groupUniqueName = groupUniqueName;
-    this.filterByGrp = filter;
-    this.showStockList.next(false);
-  }
+
   
   /**
    * onSelectStock
@@ -487,7 +437,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public changeTotal(idx, val) {
     if (val) {
-      this.accountsTransaction[idx].inventory.unit.rate = 0
+      this.accountsTransaction[idx].inventory.unit.rate = null;
     }
     this.calculateAmount();
   }
@@ -506,9 +456,43 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   public changeStock(idx,val) {
     if(!val) {
       this.purchaseReq.transactions.splice(idx, 1);
+      this.showStockList.next(false);
+      if (!this.purchaseReq.transactions.length) {
+        this.newRowType('stock');
+      }
       this.amountChanged(idx);
-      // this.showStockList.next(false);
     }
   }
 
+  
+  /**
+   * saveEntry
+   */
+  public saveEntry() {
+    if (!this.creditorAcc.uniqueName) {
+      return this._toaster.errorToast("Party A/c Name can't be blank.");
+    }
+  
+    let idx = 0;
+    let data = _.cloneDeep(this.purchaseReq);
+
+    data.transactions = this.validateTransaction(data.transactions, 'stock');
+    let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
+
+    if (!data.transactions.length) {
+      return this._toaster.errorToast('Atleast 1 stock entry required.')
+    }
+
+    let transactions = _.concat(data.transactions, accountsTransaction);
+    console.log(transactions);
+
+
+    if (this.totalCreditAmount === this.totalDebitAmount) {
+      let accUniqueName: string = this.creditorAcc.uniqueName;
+      this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+      this.showStockList.next(false);
+    } else {
+      this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+    }
+  }
 }
