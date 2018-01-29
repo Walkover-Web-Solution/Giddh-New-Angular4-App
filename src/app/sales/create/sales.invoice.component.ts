@@ -811,8 +811,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
     this.selectedTaxes = arr;
     entry.taxList = arr;
+    entry.taxes = [];
     if (this.selectedTaxes.length > 0) {
-      entry.taxes = [];
       this.companyTaxesList$.take(1).subscribe(data => {
         data.map((item: any) => {
           if ( _.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0 ) {
