@@ -33,11 +33,12 @@ const CustomShortcode = [
 ];
 
 @Component({
-  templateUrl: './tally-purchase.component.html',
-  styleUrls: ['./tally-purchase.component.css', '../accounting.component.css']
+  selector: 'account-as-invoice',
+  templateUrl: './invoice-grid.component.html',
+  styleUrls: ['./invoice-grid.component.css', '../accounting.component.css']
 })
 
-export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
@@ -63,10 +64,10 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   public groupUniqueName: string;
   public filterByGrp: boolean = false;
   public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-  public selectedAcc:object;
+  public selectedAcc: object;
   public accountType: string;
   public accountsTransaction = [];
-  public selectedAccIdx:any;
+  public selectedAccIdx: any;
   public creditorAcc: any = {};
   public debtorAcc: any = {};
   public stockTotal = null;
@@ -85,7 +86,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
     });
-    
       // this.store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
   }
 
@@ -129,13 +129,13 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
         name: '',
         uniqueName: ''
       }
-    }
-    if (type == 'stock') {
+    };
+
+    if (type === 'stock') {
       this.purchaseReq.transactions.push(entryObj);
-    } else if (type == 'account'){
+    } else if (type === 'account') {
       this.accountsTransaction.push(entryObj);
     }
-   
   }
 
   /**
@@ -203,11 +203,11 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
-        groupUniqueName: acc.parentGroups[acc.parentGroups.length-1],
+        groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
         account: acc.name
       };
       this.accountsTransaction[idx].particular = accModel.UniqueName;
-      this.accountsTransaction[idx].selectedAccount = accModel;      
+      this.accountsTransaction[idx].selectedAccount = accModel;
     }
     setTimeout(() => {
       this.selectedInput.focus();
@@ -291,7 +291,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    * after init
    */
   public ngAfterViewInit() {
-
+    //
   }
 
   /**
@@ -333,16 +333,16 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions, type) {
-    if (type == 'stock') {
-      _.forEach(transactions, function (obj: any, idx) {
+    if (type === 'stock') {
+      _.forEach(transactions, function(obj: any, idx) {
         if (obj && !obj.inventory.stock.name && !obj.amount) {
-          transactions = _.without(transactions, obj)
+          transactions = _.without(transactions, obj);
         }
       });
-    } else if (type == 'account') {
-      _.forEach(transactions, function (obj: any, idx) {
+    } else if (type === 'account') {
+      _.forEach(transactions, function(obj: any, idx) {
         if (obj && !obj.particular && !obj.amount) {
-          transactions = _.without(transactions, obj)
+          transactions = _.without(transactions, obj);
         }
       });
     }
@@ -357,8 +357,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     return validEntry;
   }
 
-
-  
   /**
    * onSelectStock
    */
@@ -385,7 +383,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
       this.purchaseReq.transactions[idx].inventory.unit = item.accountStockDetails.unitRates[0];
       this.purchaseReq.transactions[idx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
       this.purchaseReq.transactions[idx].inventory.unit.stockUnitCode = item.stockUnit.name;
-      
+
     } else if (!item.accountStockDetails.unitRates.length) {
       this.purchaseReq.transactions[idx].inventory.unit = defaultUnit;
     }
@@ -403,7 +401,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     this.purchaseReq.transactions[idx].amount = Number((this.purchaseReq.transactions[idx].inventory.unit.rate * this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
     this.amountChanged(idx);
   }
-
 
   /**
    * changePrice
@@ -431,9 +428,8 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     if (val) {
       this.accountsTransaction[idx].amount = Number( this.stockTotal * val / 100);
     }
-    this.calculateAmount();    
+    this.calculateAmount();
   }
-
 
   public changeTotal(idx, val) {
     if (val) {
@@ -453,8 +449,8 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * changeStock
    */
-  public changeStock(idx,val) {
-    if(!val) {
+  public changeStock(idx, val) {
+    if (!val) {
       this.purchaseReq.transactions.splice(idx, 1);
       this.showStockList.next(false);
       if (!this.purchaseReq.transactions.length) {
@@ -464,7 +460,6 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  
   /**
    * saveEntry
    */
@@ -472,7 +467,7 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     if (!this.creditorAcc.uniqueName) {
       return this._toaster.errorToast("Party A/c Name can't be blank.");
     }
-  
+
     let idx = 0;
     let data = _.cloneDeep(this.purchaseReq);
 
@@ -480,12 +475,11 @@ export class TallyPurchaseComponent implements OnInit, OnDestroy, AfterViewInit 
     let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
 
     if (!data.transactions.length) {
-      return this._toaster.errorToast('Atleast 1 stock entry required.')
+      return this._toaster.errorToast('Atleast 1 stock entry required.');
     }
 
     let transactions = _.concat(data.transactions, accountsTransaction);
     console.log(transactions);
-
 
     if (this.totalCreditAmount === this.totalDebitAmount) {
       let accUniqueName: string = this.creditorAcc.uniqueName;
