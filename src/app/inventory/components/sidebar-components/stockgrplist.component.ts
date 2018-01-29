@@ -15,25 +15,15 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
       color: #d35f29 !important;
     }
     .stock-grp-list>li>div, .sub-grp>li>div {
-      text-transform: capitalize;
-      padding-left: 15px;
+      text-transform: uppercase;
     }
     .stock-items>li>div {
       text-transform: capitalize;
     }
-    .stock-grp-list li>i:focus {
-      outline:0;
-    }
-    .grp_open {
-      background: rgb(255, 255, 255);
-    }
-    .grp_open li {
-      border: 0;
-    }
   `],
   template: `
-    <ul class="list-unstyled stock-grp-list">
-      <li (click)="OpenGroup(grp,$event)" class="pdL" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups">
+    <ul class="list-unstyled stock-grp-list mrT1">
+      <li (click)="OpenGroup(grp,$event)" class="pdL" [ngClass]="{'isParent': grp.childStockGroups.length > 0}" *ngFor="let grp of Groups">
         <div [routerLink]="[ 'add-group', grp.uniqueName ]" [ngClass]="{'active': (activeGroupUniqueName$ | async) === grp.uniqueName}">{{grp.name}}</div>
         <i *ngIf="grp.childStockGroups.length > 0" [routerLink]="[ 'add-group', grp.uniqueName ]" class="icon-arrow-down" [ngClass]="{'open': grp.isOpen}"></i>
         <stock-list [Groups]='grp'>
