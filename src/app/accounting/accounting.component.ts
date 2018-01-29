@@ -15,7 +15,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 export class AccountingComponent implements OnInit {
 
   public gridType: string = 'voucher';
-  public selectedPage: string = 'voucher';
+  public selectedPage: string = 'journal';
 
   constructor(private store: Store<AppState>,
     private companyActions: CompanyActions,
@@ -26,6 +26,7 @@ export class AccountingComponent implements OnInit {
         this.gridType = d.gridType;
         this.selectedPage = d.page;
       });
+
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -41,6 +42,20 @@ export class AccountingComponent implements OnInit {
     stateDetailsRequest.lastState = 'accounting';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+  }
+
+  /**
+   * setAccount to send accountObj to service
+   */
+  public setAccount(accountObj) {
+    //
+  }
+
+  /**
+   * setStock to send stockObj to service
+   */
+  public setStock(stockObj) {
+    //
   }
 
 }
