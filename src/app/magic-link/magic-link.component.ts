@@ -106,18 +106,18 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
           });
         }
       });
-      // this.document.body.classList.add('magicPage');
-      this.document.body.classList.remove('unresponsive');
-      this.onWindowResize();
-      this.cForm = {};
+    // this.document.body.classList.add('magicPage');
+    this.document.body.classList.remove('unresponsive');
+    this.onWindowResize();
+    this.cForm = {};
   }
 
   public filterLedgers(ledgerTransactions) {
-    return _.each(ledgerTransactions, (lgr) => {
+    return _.each(ledgerTransactions, (lgr: any) => {
       lgr.hasDebit = false;
       lgr.hasCredit = false;
       if (lgr.transactions.length > 0) {
-        return _.each(lgr.transactions, (txn) => {
+        return _.each(lgr.transactions, (txn: any) => {
           if (txn.type === 'DEBIT') {
             return lgr.hasDebit = true;
           } else if (txn.type === 'CREDIT') {
@@ -158,7 +158,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
       if (unq === lgr.uniqueName) {
         lgr.isCompoundEntry = true;
       } else {
-          lgr.isCompoundEntry = false;
+        lgr.isCompoundEntry = false;
       }
     });
   }
@@ -205,13 +205,13 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   // check if responsive mode ON
   @HostListener('window:resize')
   public onWindowResize() {
-   let width = this.winRef.nativeWindow.innerWidth;
-   if (width > 992) {
-     this.selectedTab = '';
-     this.isResponsive = false;
-   } else {
-     this.isResponsive = true;
-   }
+    let width = this.winRef.nativeWindow.innerWidth;
+    if (width > 992) {
+      this.selectedTab = '';
+      this.isResponsive = false;
+    } else {
+      this.isResponsive = true;
+    }
   }
 
   /**
@@ -220,10 +220,10 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   public calReckoningTotal() {
     this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.debitTotal;
     this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.creditTotal;
-    if (this.ledgerData.ledgerTransactions.balance.type == 'CREDIT') {
+    if (this.ledgerData.ledgerTransactions.balance.type === 'CREDIT') {
       this.reckoningDebitTotal += this.ledgerData.ledgerTransactions.balance.amount;
       this.reckoningCreditTotal += this.ledgerData.ledgerTransactions.forwardedBalance.amount;
-    } else if (this.ledgerData.ledgerTransactions.balance.type == 'DEBIT'){
+    } else if (this.ledgerData.ledgerTransactions.balance.type === 'DEBIT') {
       this.reckoningCreditTotal += this.ledgerData.ledgerTransactions.balance.amount;
       this.reckoningDebitTotal += this.ledgerData.ledgerTransactions.forwardedBalance.amount;
     }
@@ -236,21 +236,20 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   }
 
   public validateEmail(emailStr) {
-    let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return pattern.test(emailStr);
   }
-    
 
   public submitForm(formObj) {
     // console.log(formObj);
     let form = _.cloneDeep(formObj);
     if (!(this.validateEmail(form.email))) {
-      this._toaster.warningToast("Enter valid Email ID", "Warning");
+      this._toaster.warningToast('Enter valid Email ID', 'Warning');
       return false;
     }
     this._companyService.ContactFrom(form);
     this.formSubmitted = true;
-    this.responseMsg = "Thanks! we will get in touch with you soon";
+    this.responseMsg = 'Thanks! we will get in touch with you soon';
   }
 
   public getUnderstandingText(selectedLedgerAccountType, accountName) {
@@ -264,7 +263,5 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
       // this.ledgerUnderStandingObj = _.cloneDeep(data);
     }
   }
-
-
 
 }

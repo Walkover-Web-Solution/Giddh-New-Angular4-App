@@ -14,6 +14,13 @@ Vue.filter('currency', function (value) {
 Vue.component('date-range-picker', {
   props: ['id', 'range'],
   template: '<div class="input-group"><input type="text" :id="id" :name="id" class="form-control" /><span class="input-group-addon"><span class="fa fa-calendar"></span></span></div>',
+  watch: {
+    range: function(val, oldVal){
+      var input = $('input[name="' + this.id + '"]');
+      input.data('daterangepicker').setStartDate(val.startDate);
+      input.data('daterangepicker').setEndDate(val.endDate);
+    }
+},
   mounted: function () {
     var self = this;
     var input = $('input[name="' + this.id + '"]');
@@ -41,7 +48,10 @@ Vue.component('date-range-picker', {
         ]
       },
       startDate: this.range.startDate,
-      endDate: this.range.endDate
+      endDate: this.range.endDate,
+      locale: {
+        format: 'D-MMM-YY'
+      },
     });
     input.on('apply.daterangepicker', function (ev, picker) {
       var dateObj = {
@@ -83,7 +93,7 @@ var app = new Vue({
     txn: {},
     folderPath: ''
   },
-  mounted() {
+  mounted: function() {
     document.getElementById("loader-1").style.display = 'none';
     document.getElementById("app").style.display = 'block';
     this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
@@ -97,7 +107,7 @@ var app = new Vue({
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    getMagicLinkData(id, from, to) {
+    getMagicLinkData: function(id, from, to) {
       var url = '';
       var apiBaseUrl = this.getApi();
       if (from && to) {
@@ -111,12 +121,10 @@ var app = new Vue({
           // JSON responses are automatically parsed.
           if (response.data.status === 'success') {
             this.ledgerData = response.data.body;
-            this.dateRange.startDate = moment(this.ledgerData.startDate, 'DD-MM-YYYY');
-            this.dateRange.endDate = moment(this.ledgerData.endDate, 'DD-MM-YYYY');
-            // Add tooltip feature.
-            this.$nextTick(function () {
-              $('[data-toggle="tooltip"]').tooltip();
-            });
+            this.dateRange = {};
+            this.dateRange.startDate = moment(this.ledgerData.fromDate, 'DD-MM-YYYY');
+            this.dateRange.endDate = moment(this.ledgerData.toDate, 'DD-MM-YYYY');
+            $('tr').tooltip('hide');
           }
         })
         .catch(e => {
@@ -126,7 +134,7 @@ var app = new Vue({
         this.$toaster.error('Magic link ID not found.');
       }
     },
-    getParameterByName(name, url) {
+    getParameterByName: function(name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
       var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -135,7 +143,7 @@ var app = new Vue({
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
-    checkCompEntry(ledger) {
+    checkCompEntry: function(ledger) {
       var unq = ledger.uniqueName;
       ledger.isCompoundEntry = true;
       var ledgerData = this.ledgerData;
@@ -152,7 +160,7 @@ var app = new Vue({
     customFilter: function (txn) {
       return txn.particular.name.indexOf(this.searchText) != -1;
     },
-    filterBy(list, value) {
+    filterBy: function(list, value) {
       return list.filter(function (txn) {
         return txn.particular.name.toLowerCase().includes(value) || String(txn.amount).includes(value);
       });
@@ -252,19 +260,19 @@ var app = new Vue({
       switch (window.location.hostname) {
         case 'localapp.giddh.com':
         case 'dev.giddh.com':
-          apiBaseUrl = 'http://apidev.giddh.com';
+          apiBaseUrl = 'http://apidev.giddh.com/';
           break;
         case 'test.giddh.com':
-          apiBaseUrl = 'http://apitest.giddh.com';
+          apiBaseUrl = 'http://apitest.giddh.com/';
           break;
         case 'stage.giddh.com':
-          apiBaseUrl = 'http://spi.giddh.com';
+          apiBaseUrl = 'http://spi.giddh.com/';
           break;
         case 'giddh.com':
-          apiBaseUrl = 'https://api.giddh.com';
+          apiBaseUrl = 'https://api.giddh.com/';
           break;
         default:
-          apiBaseUrl = 'http://apidev.giddh.com';
+          apiBaseUrl = 'http://apidev.giddh.com/';
       }
       return apiBaseUrl;
     }

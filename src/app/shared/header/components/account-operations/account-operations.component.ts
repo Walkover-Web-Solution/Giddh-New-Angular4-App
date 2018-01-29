@@ -294,12 +294,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.isTaxableAccount$ = this.store.select(createSelector([
       (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-      (state: AppState) => state.groupwithaccounts.activeGroup,
       (state: AppState) => state.groupwithaccounts.activeAccount],
-      (groupswithaccounts, activeGroup, activeAccount) => {
+      (groupswithaccounts, activeAccount) => {
         let result: boolean = false;
-        if (groupswithaccounts && activeGroup && activeAccount) {
-          result = this.getAccountFromGroup(groupswithaccounts, activeGroup.uniqueName, false);
+        let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        if (groupswithaccounts && activeGroupUniqueName && activeAccount) {
+          result = this.getAccountFromGroup(groupswithaccounts, activeGroupUniqueName, false);
         } else {
           result = false;
         }
@@ -347,7 +347,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     let grpObject = new AccountMoveRequest();
     grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
-    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+
+    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
     this.moveAccountForm.reset();
   }
 
