@@ -5,7 +5,6 @@ import { InventoryAddGroupComponent } from './components/add-group-components/in
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
 import { InventoryStockReportComponent } from './components/stock-report-component/inventory.stockreport.component';
-import { InventoryUpdateGroupComponent } from 'app/inventory/components/update-group-component/inventory.updategroup.component';
 
 @NgModule({
   imports: [
@@ -13,10 +12,10 @@ import { InventoryUpdateGroupComponent } from 'app/inventory/components/update-g
       {
         path: '', component: InventoryComponent,
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'add-stock' },
-          { path: 'add-group', pathMatch: 'full', component: InventoryUpdateGroupComponent },
-          { path: 'add-group/:groupUniqueName', pathMatch: 'full', component: InventoryUpdateGroupComponent },
-          { path: 'add-stock', pathMatch: 'full', component: InventoryAddStockComponent },
+          { path: '', pathMatch: 'full' },
+          { path: 'add-group', pathMatch: 'full', component: InventoryAddGroupComponent },
+          { path: 'add-group/:groupUniqueName', pathMatch: 'full', component: InventoryAddGroupComponent, },
+          { path: 'add-group/:groupUniqueName/add-stock', pathMatch: 'full', component: InventoryAddStockComponent },
           { path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent },
           { path: 'add-group/:groupUniqueName/stock-report/:stockUniqueName', component: InventoryStockReportComponent },
           { path: 'custom-stock', component: InventoryCustomStockComponent },
