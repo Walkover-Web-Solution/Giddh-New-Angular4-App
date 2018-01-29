@@ -1,19 +1,2 @@
 <account-as-voucher *ngIf="gridType === 'voucher'"></account-as-voucher>
 <account-as-invoice *ngIf="gridType === 'invoice'"></account-as-invoice>
-
-<div class="sidebar_menu col-xs-2 pd0">
-    <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
-        <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <accounts-list [search]="accountSearch" [showStockItem]="false" (onSelectItem)="setAccount($event)"></accounts-list>
-    </div>
-
-    <accounting-sidebar></accounting-sidebar>
-</div>
-
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog">
-    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
-        <div class="modal-content fullScreenMy">
-            <app-manage-groups-accounts></app-manage-groups-accounts>
-        </div>
-    </div>
-</div>
