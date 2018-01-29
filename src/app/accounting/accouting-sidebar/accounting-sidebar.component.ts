@@ -1,3 +1,4 @@
+import { TallyModuleService } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { CreatedBy } from './../../models/api-models/Invoice';
 import { IParticular, LedgerRequest } from './../../models/api-models/Ledger';
@@ -11,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -20,25 +21,24 @@ import * as moment from 'moment';
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 
-
 @Component({
   selector: 'accounting-sidebar',
   templateUrl: './accounting-sidebar.component.html',
   styleUrls: ['./accounting-sidebar.component.css']
 })
 
-export class AccountingSidebarComponent {
+export class AccountingSidebarComponent implements OnChanges {
 
   @Input() public AccountListOpen: boolean;
 
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public isGroupToggle: boolean;
-  public accountSearch:string = '';
+  public accountSearch: string = '';
   public grpUniqueName: string = '';
   public showAccountList: boolean = true;
 
-  constructor() {
-
+  constructor(private _tallyModuleService: TallyModuleService) {
+    //
   }
 
   public ngOnChanges(s) {
@@ -46,6 +46,13 @@ export class AccountingSidebarComponent {
     if (s.AccountListOpen) {
       this.showAccountList = !this.showAccountList;
     }
+  }
+
+  public setSelectedPage(pageName: string, grid: string) {
+    this._tallyModuleService.onSelectedPage({
+      page: pageName,
+      gridType: grid
+    });
   }
 
 }
