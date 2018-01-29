@@ -1,3 +1,4 @@
+import { TallyModuleService } from './tally-service';
 import { KeyboardService } from 'app/accounting/keyboard.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, HostListener } from '@angular/core';
@@ -7,15 +8,24 @@ import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({
-  template: '<router-outlet></router-outlet>'
+  templateUrl: './accounting.component.html',
+  styleUrls: ['./accounting.component.css']
 })
 
 export class AccountingComponent implements OnInit {
+
+  public gridType: string = 'voucher';
+  public selectedPage: string = 'voucher';
+
   constructor(private store: Store<AppState>,
     private companyActions: CompanyActions,
     private _router: Router,
-    private _keyboardService: KeyboardService) {
-    //
+    private _keyboardService: KeyboardService,
+    private _tallyModuleService: TallyModuleService) {
+      this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+        this.gridType = d.gridType;
+        this.selectedPage = d.page;
+      });
   }
 
   @HostListener('document:keyup', ['$event'])
