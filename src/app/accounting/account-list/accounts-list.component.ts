@@ -32,15 +32,15 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public grpUniqueName: string;
   @Input() public filterByGrp: boolean = false;
   @Input() public showStockItem: boolean;
-  @Input() public showAccountList:boolean;
+  @Input() public showAccountList: boolean;
   @Input() public voucher: string;
   @Input() public type: 'account' | 'stock';
-  
+
   public accounts: any[];
   public isFlyAccountInProcess$: Observable<boolean>;
   public companyList$: Observable<any>;
   public noResult: boolean = false;
-  public activeAccIdx:string = '';
+  public activeAccIdx: string = '';
   public grpFlattenAccounts: any[] = [];
   public flattenAccounts: any[] = [];
   public showStockList: boolean = false;
@@ -49,19 +49,19 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef, private _accountService: AccountService,  private _salesActions: SalesActions) {
-  
+
     this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
 
     this.companyList$ = this.store.select(state => {
       return state.session.companies;
     }).takeUntil(this.destroyed$);
-    
+
   }
 
   public ngOnChanges(s: SimpleChanges) {
 
     if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3 ) {
-      this.searchAccount(s.search.currentValue)
+      this.searchAccount(s.search.currentValue);
     } else if ((s.search && !s.search.currentValue) || (s.filterByGrp && !s.filterByGrp.currentValue) && this.flattenAccounts.length){
       this.renderAccountList(this.flattenAccounts);
     }
@@ -69,7 +69,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     if (s.activeIdx) {
       this.activeAccIdx = s.activeIdx.currentValue;
     }
-    
+
     if (s.grpUniqueName && s.grpUniqueName.currentValue && s.filterByGrp) {
       let groupUniqueNames = s.grpUniqueName.currentValue;
       this.getFlattenGrpofAccounts(groupUniqueNames);
@@ -80,7 +80,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     if (s.voucher && s.voucher.currentValue) {
-      this.getFlattenGrpofAccounts(s.voucher.currentValue)
+      this.getFlattenGrpofAccounts(s.voucher.currentValue);
     }
   }
 
@@ -98,7 +98,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngAfterViewInit() {
- 
+
   }
 
   public searchAccount(s: string) {
@@ -112,11 +112,9 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-
   public getSize(item, index) {
     return 30;
   }
-
 
   public ngOnDestroy() {
     // this.destroyed$.next(true);
@@ -131,7 +129,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     data.map(d => {
       accounts.push(d);
     });
-    this.accounts = accounts;  
+    this.accounts = accounts;
     console.log(accounts, 'accounts');
   }
 
@@ -166,4 +164,3 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 }
-
