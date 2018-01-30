@@ -94,6 +94,7 @@ $themeClr: #fe5f00;
     }
 }
 
+
 // styles
 .form-group {
     .form-control {
@@ -144,6 +145,10 @@ $themeClr: #fe5f00;
     }
     &.noMarg {
         @include marg(A, 0);
+    }
+    .form-control.voucher-selector{
+      width: 200px;
+      text-transform: capitalize;
     }
 }
 
