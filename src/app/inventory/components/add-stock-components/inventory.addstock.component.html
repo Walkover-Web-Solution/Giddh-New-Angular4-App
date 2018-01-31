@@ -78,7 +78,7 @@
                                                 <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="UnitDropDownOptions" formControlName="stockUnitCode"></select2>-->
                                             </div>
                                             <div class="form-group col-xs-5">
-                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" [disabled]="!addStockForm.controls['enablePurchase'].value" />
+                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                             </div>
                                         </div>
                                         <div class="pull-right mrT pdR2">
@@ -120,7 +120,7 @@
                                                 <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="UnitDropDownOptions" formControlName="stockUnitCode"></select2>-->
                                             </div>
                                             <div class="form-group col-xs-5">
-                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" [disabled]="!addStockForm.controls['enableSales'].value" />
+                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                             </div>
                                         </div>
                                         <div class="pull-right mrT pdR2">
@@ -139,12 +139,13 @@
                         <div class="row">
                             <div class="form-group col-xs-6">
                                 <label>Select Parent Group <sup>*</sup></label>
-                                <sh-select [options]="groupsData$ | async" formControlName="parentGroup" required [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)"></sh-select>
+                                <sh-select [options]="groupsData$ | async" formControlName="parentGroup" required [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)" [notFoundLinkText]="'Add New'" (noOptionsFound)="addNewGroup()" [notFoundLink]="true"
+                                    [isFilterEnabled]="true"></sh-select>
                             </div>
 
                             <div class="form-group col-xs-6">
                                 <label>HSN Code</label>
-                                <input type="text" class="form-control" formControlName="hsnNumber">
+                                <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="hsnNumber">
                             </div>
                         </div>
 
@@ -204,8 +205,8 @@
                     </tr>
                     <tr class="noHover bdrT table_label" style="border-color:#ccc;">
                         <td><strong>Input Stock Name</strong></td>
-                        <td><strong>Stock Quantity</strong></td>
                         <td><strong>Stock Unit</strong></td>
+                        <td><strong>Stock Quantity</strong></td>
                         <td colspan="1"></td>
                     </tr>
 
