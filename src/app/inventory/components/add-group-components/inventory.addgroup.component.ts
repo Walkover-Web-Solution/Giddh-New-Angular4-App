@@ -20,7 +20,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public addGroup: boolean;
-  
+
   public sub: Subscription;
   public groupsData$: Observable<IOption[]>;
   public parentStockSearchString: string;
@@ -71,7 +71,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
       parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
       isSubGroup: [false]
     });
-    
+
     // enable disable parentGroup select
     this.addGroupForm.controls['isSubGroup'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
@@ -110,14 +110,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
           updGroupObj.isSubGroup = false;
         }
         this.addGroupForm.patchValue(updGroupObj);
-        
+
         // if (!this.addGroup) {
         //   this.addGroupForm.patchValue(updGroupObj);
         // } else if (this.addGroup) {
-        
+
         //   this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
         // }
-        
+
       } else {
         this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
         this.parentStockSearchString = '';
@@ -261,6 +261,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
     this.addGroupForm.reset();
     this.router.navigateByUrl('/pages/inventory');
+  }
+
+  /**
+   * validateUniqueName
+   */
+  public validateUniqueName(unqName) {
+    if (unqName) {
+      let val = uniqueNameInvalidStringReplace(unqName);
+      this.addGroupForm.patchValue({ uniqueName: val });
+    }
   }
 
 }
