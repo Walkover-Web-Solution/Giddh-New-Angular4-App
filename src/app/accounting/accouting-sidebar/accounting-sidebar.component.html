@@ -1,12 +1,12 @@
 <ul class="menu_list">
     <!-- "isHidden" class  if user is not able to access the module-->
-    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher')">F1: Journal</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher')" [hidden]="selectedVoucher == 'Purchase'">F9: Purchase</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)">F1: Journal</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')" [hidden]="selectedVoucher == 'Purchase'">F9: Purchase</a></li>
     <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher')" [hidden]="selectedVoucher !== 'Purchase'">F9: As Voucher</a></li>
     <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice')" [hidden]="selectedVoucher !== 'Purchase'">F9: As Invoice</a></li>
 
 
-    <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice')">F9: Purchase as Invoice</a></li>
+    <!-- <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice')">F9: Purchase as Invoice</a></li> -->
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher')">F9: Sales as Voucher</a></li>
     <li><a class="cp" (click)="setSelectedPage('Sales', 'invoice')">F9: Sales as Invoice</a></li>
     <li><a class="cp" (click)="setSelectedPage('Debit note', 'voucher')">F9: Debit Note as Voucher</a></li>

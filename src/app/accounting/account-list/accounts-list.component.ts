@@ -1,3 +1,4 @@
+import { SearchActions } from './../../actions/search.actions';
 import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
 import { ToasterService } from './../../services/toaster.service';
 import { KeyboardService } from './../keyboard.service';
@@ -5,7 +6,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, ChangeDetectionStrategy, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, ChangeDetectionStrategy, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +16,7 @@ import { IFlattenGroupsAccountsDetail, IFlattenGroupsAccountItem, IFlattenGroups
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { SalesActions } from 'app/actions/sales/sales.action';
+import { TallyModuleService } from 'app/accounting/tally-service';
 
 @Component({
   selector: 'accounts-list',
@@ -46,15 +48,22 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public showStockList: boolean = false;
   public stockList: any[] = [];
 
+  private groupUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef, private _accountService: AccountService,  private _salesActions: SalesActions) {
+  constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef, private _accountService: AccountService,  private _salesActions: SalesActions, private _tallyService: TallyModuleService) {
 
     this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
 
     this.companyList$ = this.store.select(state => {
       return state.session.companies;
     }).takeUntil(this.destroyed$);
+
+    this._tallyService.selectedPageInfo.subscribe((info) => {
+      if (info) {
+        this.groupUniqueName = info.uniqueName;
+      }
+    });
 
   }
 
@@ -97,10 +106,6 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  public ngAfterViewInit() {
-
-  }
-
   public searchAccount(s: string) {
     this._accountService.GetFlattenAccounts(s, '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.body.count) {
@@ -125,19 +130,20 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
    * renderAccontList
    */
   public renderAccountList(data) {
-    let accounts: any[] = [];
-    data.map(d => {
-      accounts.push(d);
-    });
-    this.accounts = accounts;
-    console.log(accounts, 'accounts');
+    if (data && data.length) {
+      let accounts: any[] = [];
+      data.map(d => {
+        accounts.push(d);
+      });
+      this.accounts = accounts;
+    }
   }
 
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(grpUniqueName) {
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [grpUniqueName] }).takeUntil(this.destroyed$).subscribe(data => {
+  public getFlattenGrpofAccounts(grpUniqueName, q?: string) {
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [grpUniqueName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         this.renderAccountList(data.body.results);
         this.sortStockItems(data.body.results);

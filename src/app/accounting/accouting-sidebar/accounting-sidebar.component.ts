@@ -49,9 +49,10 @@ export class AccountingSidebarComponent implements OnChanges {
     }
   }
 
-  public setSelectedPage(pageName: string, grid: string) {
-    this._tallyModuleService.onSelectedPage({
+  public setSelectedPage(pageName: string, grid: string, grpUnqName: string) {
+    this._tallyModuleService.setVoucher({
       page: pageName,
+      uniqueName: grpUnqName,
       gridType: grid
     });
     this.selectedVoucher = pageName;
