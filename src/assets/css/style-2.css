@@ -4344,3 +4344,10 @@ table td[class*=col-]:last-child {
 .universal_date .btn-link {
     color: #10aae0 !important;
 }
+
+.divide-ico {
+    width: 15px;
+    position: absolute;
+    top: 55%;
+    left: -7px;
+}
