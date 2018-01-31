@@ -380,7 +380,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public resetInvoiceForm(f: NgForm) {
-    let a = Observable.of({status: true});
     f.form.reset();
     this.invFormData = new InvoiceFormClass();
     this.typeaheadNoResultsOfCustomer = false;
