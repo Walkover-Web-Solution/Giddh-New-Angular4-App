@@ -5,7 +5,7 @@ import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { FakeDiscountItem, GenerateSalesRequest, InvoiceFormClass, IStockUnit, SalesEntryClass, SalesTransactionItemClass, ITaxList } from '../../models/api-models/Sales';
+import { FakeDiscountItem, GenerateSalesRequest, InvoiceFormClass, IStockUnit, SalesEntryClass, SalesTransactionItemClass, ITaxList, IForceClear } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs/Observable';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { AccountService } from '../../services/account.service';
@@ -31,6 +31,7 @@ import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccount
 import { orderBy, remove } from '../../lodash-optimized';
 import * as uuid from 'uuid';
 import { GeneralActions } from 'app/actions/general/general.actions';
+import { setTimeout } from 'timers';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -150,6 +151,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public createAccountIsSuccess$: Observable<boolean>;
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   // modals related
   public modalConfig = {
     animated: true,
@@ -378,6 +380,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public resetInvoiceForm(f: NgForm) {
+    let a = Observable.of({status: true});
     f.form.reset();
     this.invFormData = new InvoiceFormClass();
     this.typeaheadNoResultsOfCustomer = false;
@@ -385,6 +388,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = true;
+    this.forceClear$ = Observable.of({status: true});
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {

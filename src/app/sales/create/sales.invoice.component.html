@@ -21,6 +21,7 @@
                 [placeholder]="'Select Customer'"
                 [notFoundLink]="true"
                 [doNotReset]="true"
+                [forceClearReactive]="forceClear$ | async"
                 [isFilterEnabled]="true"
                 (noResultsClicked)="toggleAccountAsidePane($event)"
                 [multiple]="false"
