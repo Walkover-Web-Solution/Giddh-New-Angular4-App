@@ -244,7 +244,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public initUnitAndRates() {
     // initialize our controls
     return this._fb.group({
-      rate: ['', digitsOnly],
+      rate: [''],
       stockUnitCode: ['']
     });
   }
