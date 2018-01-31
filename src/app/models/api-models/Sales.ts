@@ -7,6 +7,10 @@ export interface IStockUnit {
   id: string;
 }
 
+export interface IForceClear {
+  status: boolean;
+}
+
 /**
  * draw invoice on ui and api model related class and interface
 */
