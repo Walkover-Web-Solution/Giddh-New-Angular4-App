@@ -71,14 +71,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private store: Store<AppState>,
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
-    private _toaster: ToasterService, private _router: Router, private _tallyModuleService: TallyModuleService) {
+    private _toaster: ToasterService, private _router: Router,
+    private _tallyModuleService: TallyModuleService) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
     });
 
     this._tallyModuleService.selectedPageInfo.subscribe((d) => {
-      this.voucherType = d.page;
+      if (d) {
+        console.log('the new page info is :', d);
+        this.voucherType = d.page;
+        console.log('this._tallyModuleService.getAccounts() returns :', this._tallyModuleService.getAccounts());
+      }
     });
   }
 

@@ -1,3 +1,5 @@
+import { ReplaySubject } from 'rxjs';
+import { AccountService } from 'app/services/account.service';
 import { TallyModuleService } from './tally-service';
 import { KeyboardService } from 'app/accounting/keyboard.service';
 import { Router } from '@angular/router';
@@ -16,17 +18,22 @@ export class AccountingComponent implements OnInit {
 
   public gridType: string = 'voucher';
   public selectedPage: string = 'journal';
+  public flattenAccounts: any = [];
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
     private companyActions: CompanyActions,
     private _router: Router,
     private _keyboardService: KeyboardService,
-    private _tallyModuleService: TallyModuleService) {
+    private _tallyModuleService: TallyModuleService,
+    private _accountService: AccountService) {
       this._tallyModuleService.selectedPageInfo.subscribe((d) => {
-        this.gridType = d.gridType;
-        this.selectedPage = d.page;
+        if (d) {
+          this.gridType = d.gridType;
+          this.selectedPage = d.page;
+        }
       });
-
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -42,6 +49,17 @@ export class AccountingComponent implements OnInit {
     stateDetailsRequest.lastState = 'accounting';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+      if (a && a !== '') {
+        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this.flattenAccounts = data.body.results;
+          this._tallyModuleService.setFlattenAccounts(data.body.results);
+        }
+      });
+      }
+    });
   }
 
   /**
