@@ -51,7 +51,13 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   private groupUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef, private _accountService: AccountService,  private _salesActions: SalesActions, private _tallyService: TallyModuleService) {
+  constructor(
+    private store: Store<AppState>,
+    private _flyAccountActions: FlyAccountsActions,
+    private cd: ChangeDetectorRef,
+    private _accountService: AccountService,
+    private _salesActions: SalesActions,
+    private _tallyService: TallyModuleService) {
 
     this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
 
@@ -59,11 +65,11 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       return state.session.companies;
     }).takeUntil(this.destroyed$);
 
-    this._tallyService.selectedPageInfo.subscribe((info) => {
-      if (info) {
-        this.groupUniqueName = info.uniqueName;
-      }
-    });
+    // this._tallyService.selectedPageInfo.subscribe((info) => {
+    //   if (info) {
+    //     this.groupUniqueName = info.uniqueName;
+    //   }
+    // });
 
   }
 
@@ -79,7 +85,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       this.activeAccIdx = s.activeIdx.currentValue;
     }
 
-    if (s.grpUniqueName && s.grpUniqueName.currentValue && s.filterByGrp) {
+    if (s.grpUniqueName && s.grpUniqueName.currentValue) {
       let groupUniqueNames = s.grpUniqueName.currentValue;
       this.getFlattenGrpofAccounts(groupUniqueNames);
     }
@@ -94,16 +100,23 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-   this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
-      if (a && a !== '') {
-        this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
-        if (data.status === 'success') {
-          this.renderAccountList(data.body.results);
-          this.flattenAccounts = data.body.results;
-        }
-      });
-      }
-    });
+  //  this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+  //     if (a && a !== '') {
+  //       this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
+  //       if (data.status === 'success') {
+  //         this.renderAccountList(data.body.results);
+  //         this.flattenAccounts = data.body.results;
+  //       }
+  //     });
+  //     }
+  //   });
+  this._tallyService.filteredAccounts.subscribe((accounts) => {
+    if (accounts) {
+      this.renderAccountList(accounts);
+      this.flattenAccounts = accounts;
+    }
+  });
+
   }
 
   public searchAccount(s: string) {

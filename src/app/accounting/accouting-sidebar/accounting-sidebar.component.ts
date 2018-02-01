@@ -27,7 +27,7 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
   styleUrls: ['./accounting-sidebar.component.css']
 })
 
-export class AccountingSidebarComponent implements OnChanges {
+export class AccountingSidebarComponent implements OnInit, OnChanges {
 
   @Input() public AccountListOpen: boolean;
 
@@ -40,6 +40,11 @@ export class AccountingSidebarComponent implements OnChanges {
 
   constructor(private _tallyModuleService: TallyModuleService) {
     //
+    // 
+  }
+
+  public ngOnInit() {
+    this.setSelectedPage('Journal', 'voucher', null);
   }
 
   public ngOnChanges(s) {
