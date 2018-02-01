@@ -13,6 +13,7 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { IForceClear } from 'app/models/api-models/Sales';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -20,7 +21,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public addGroup: boolean;
-  
+
   public sub: Subscription;
   public groupsData$: Observable<IOption[]>;
   public parentStockSearchString: string;
@@ -34,6 +35,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
   public isAddNewGroupInProcess$: Observable<boolean>;
   public isUpdateGroupInProcess$: Observable<boolean>;
   public isDeleteGroupInProcess$: Observable<boolean>;
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -71,7 +73,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
       parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
       isSubGroup: [false]
     });
-    
+
     // enable disable parentGroup select
     this.addGroupForm.controls['isSubGroup'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
@@ -80,6 +82,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
         this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
         this.addGroupForm.setErrors({ groupNameInvalid: true });
+        this.forceClear$ = Observable.of({status: true});
       }
     });
 
@@ -108,16 +111,17 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
           updGroupObj.parentStockGroupUniqueName = '';
           this.parentStockSearchString = '';
           updGroupObj.isSubGroup = false;
+          this.forceClear$ = Observable.of({status: true});
         }
         this.addGroupForm.patchValue(updGroupObj);
-        
+
         // if (!this.addGroup) {
         //   this.addGroupForm.patchValue(updGroupObj);
         // } else if (this.addGroup) {
-        
+
         //   this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
         // }
-        
+
       } else {
         this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
         this.parentStockSearchString = '';
@@ -261,6 +265,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
     this.addGroupForm.reset();
     this.router.navigateByUrl('/pages/inventory');
+  }
+
+  /**
+   * validateUniqueName
+   */
+  public validateUniqueName(unqName) {
+    if (unqName) {
+      let val = uniqueNameInvalidStringReplace(unqName);
+      this.addGroupForm.patchValue({ uniqueName: val });
+    }
   }
 
 }

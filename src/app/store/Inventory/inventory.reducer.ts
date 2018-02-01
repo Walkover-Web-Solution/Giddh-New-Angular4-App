@@ -38,6 +38,7 @@ export interface InventoryState {
   createCustomStockInProcess: boolean;
   updateCustomStockInProcess: boolean;
   deleteCustomStockInProcessCode: any[];
+  createCustomStockSuccess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -82,7 +83,8 @@ const initialState: InventoryState = {
   activeGroupUniqueName: '',
   activeStock: null,
   activeStockUniqueName: '',
-  stockReport: null
+  stockReport: null,
+  createCustomStockSuccess: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -462,12 +464,14 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       if (action.payload.status === 'success') {
         return Object.assign({}, state, {
           stockUnits: [...state.stockUnits, action.payload.body],
-          createCustomStockInProcess: false
+          createCustomStockInProcess: false,
+          createCustomStockSuccess: true
         });
       }
       return {
         ...state,
-        createCustomStockInProcess: false
+        createCustomStockInProcess: false,
+        createCustomStockSuccess: false
       };
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
       return Object.assign({}, state, { updateCustomStockInProcess: true });
