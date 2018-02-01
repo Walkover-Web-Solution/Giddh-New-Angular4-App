@@ -1,3 +1,4 @@
+import { TallyModuleService } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { CreatedBy } from './../../models/api-models/Invoice';
 import { IParticular, LedgerRequest } from './../../models/api-models/Ledger';
@@ -81,7 +82,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private store: Store<AppState>,
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
-    private _toaster: ToasterService, private _router: Router, private _salesActions: SalesActions) {
+    private _toaster: ToasterService,
+    private _router: Router,
+    private _salesActions: SalesActions,
+    private _tallyModuleService: TallyModuleService,
+  ) {
     this.purchaseReq.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -90,6 +95,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public ngOnInit() {
+
+    this._tallyModuleService.requestData.subscribe((data) => {
+      console.log('the request data in grid comp is :', data);
+    });
 
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
