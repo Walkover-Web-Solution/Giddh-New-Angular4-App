@@ -44,9 +44,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('particular') public accountField: any;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public showLedgerAccountList: boolean = true;
+  public showLedgerAccountList: boolean;
   public selectedInput: 'by' | 'to' = 'by';
-  public requestObj: BlankLedgerVM = new BlankLedgerVM();
+  public requestObj: any = {};
   public totalCreditAmount: number = 0;
   public totalDebitAmount: number = 0;
   public showConfirmationBox: boolean = false;
@@ -58,7 +58,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public showFromDatePicker: boolean = false;
   public journalDate: any;
   public navigateURL: any = CustomShortcode;
-  public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  public showStockList: boolean = false;
+  public groupUniqueName: string;
+  public selectedStockIdx: any;
   // public groupFlattenAccount: string = '';
 
   public voucherType: string = null;
@@ -80,9 +82,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     this._tallyModuleService.selectedPageInfo.subscribe((d) => {
       if (d) {
-        console.log('the new page info is :', d);
         this.voucherType = d.page;
-        console.log('this._tallyModuleService.getAccounts() returns :', this._tallyModuleService.getAccounts());
       }
     });
   }
@@ -97,6 +97,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       }
     });
     this.refreshEntry();
+
+    this._tallyModuleService.selectedPageInfo.subscribe(() => {
+      this._tallyModuleService.requestData.next(this.requestObj);
+    });
 
   }
 
@@ -113,6 +117,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       taxes: [],
       total: 0,
       discounts: [],
+      inventory: [],
       selectedAccount: {
         name: '',
         UniqueName: '',
@@ -120,6 +125,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         account: ''
       }
     });
+  }
+
+  /**
+   * initInventory
+   */
+  public initInventory() {
+    return {
+      unit: {
+        stockUnitCode: '',
+        code: '',
+        rate: null,
+      },
+      quantity: null,
+      stock: {
+        uniqueName: '',
+        name: '',
+      },
+      amount: null
+    };
   }
 
   /**
@@ -147,6 +171,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public onAccountFocus() {
     this.showLedgerAccountList = true;
+    this.showStockList = false;
     // this.showStockList.next(false);
   }
 
@@ -156,6 +181,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public onAccountBlur(ev, elem) {
     this.showLedgerAccountList = false;
     this.selectedParticular = elem;
+    this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
@@ -179,9 +205,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     setTimeout(() => {
       this.selectedParticular.focus();
-      console.log(this.selectedParticular.nextElementSibling);
+      // console.log(this.selectedParticular.nextElementSibling);
       this.showLedgerAccountList = false;
     }, 50);
+
+    if (acc && acc.stocks) {
+      this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      console.log('acc.stocks are :', acc.stocks);
+      alert('Open model');
+      this.groupUniqueName = acc.uniqueName;
+    }
   }
 
   /**
@@ -342,5 +375,52 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return false;
     }
 
+  }
+
+  /**
+   * openStockList
+   */
+  public openStockList() {
+    this.showLedgerAccountList = false;
+    this.showStockList = true;
+    // this.showStockList.next(true);
+  }
+
+  /**
+   * onSelectStock
+   */
+  public onSelectStock(item) {
+    console.log(item);
+    let idx = this.selectedStockIdx;
+    let entryItem = _.cloneDeep(item);
+    this.prepareEntry(entryItem, this.selectedIdx);
+    setTimeout(() => {
+      // this.selectedInput.focus();
+      this.showStockList = false;
+    }, 50);
+  }
+
+
+  /**
+   * prepareEntry
+   */
+  public prepareEntry(item, idx) {
+    let i = this.selectedStockIdx;
+    let defaultUnit = {
+      stockUnitCode: item.stockUnit.name,
+      code: item.stockUnit.code,
+      rate: 0
+    };
+    if (item.accountStockDetails.unitRates.length) {
+      this.requestObj.transactions[idx].inventory[i].unit = item.accountStockDetails.unitRates[0];
+      this.requestObj.transactions[idx].inventory[i].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+
+    } else if (!item.accountStockDetails.unitRates.length) {
+      this.requestObj.transactions[idx].inventory[i].unit = defaultUnit;
+    }
+    this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+    this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
+    this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
   }
 }

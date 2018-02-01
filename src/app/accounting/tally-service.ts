@@ -26,10 +26,15 @@ export class TallyModuleService {
   public expenseAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
   public salesAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
 
+  public filteredAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
+
+  public requestData: BehaviorSubject<any> = new BehaviorSubject(null);
+
   public transactionObj: object = {};
 
   public setVoucher(info: IPageInfo) {
     this.selectedPageInfo.next(info);
+    this.getAccounts();
   }
 
   public setFlattenAccounts(accounts: IFlattenAccountsResultItem[]) {
@@ -103,7 +108,10 @@ export class TallyModuleService {
         default:
           accounts = this.flattenAccounts.value;
       }
-      return accounts;
+      if (accounts && accounts.length) {
+        // console.log('accounts are :', accounts);
+        this.filteredAccounts.next(accounts);
+      }
     }
   }
 }
