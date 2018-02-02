@@ -102,7 +102,7 @@
                             <!-- accounts entry -->
                             <!--  -->
                             <ng-container *ngFor="let transaction of data.transactions">
-                                <ng-container *ngIf="!transaction.inventory.length">
+                                <ng-container *ngIf="transaction.inventory.length && !transaction?.inventory?.stock?.name">
                                     <tr *ngFor="let transaction of data.transactions;let i=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
                                         <td colspan="2"><input type="text" class="form-control" #particular [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event);" (focus)="this.showAccountList = true;selectAccountRow(true,i)" (blur)="selectAccountRow(true,i);"
                                                 [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}" (keyup)="showAccountList=true;" (blur)="showAccountList=false;selectedInput=particular;" /></td>
