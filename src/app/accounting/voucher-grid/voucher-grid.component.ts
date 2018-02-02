@@ -89,6 +89,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnInit() {
 
+    this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((data) => {
+      if (data) {
+        this.requestObj = _.cloneDeep(data);
+      }
+    });
+
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
