@@ -504,7 +504,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           this._toasty.successToast(response.body);
         } else {
           try {
-            this._toasty.successToast(`Entry created successfully with invoice number: ${response.body.invoiceDetails.invoiceNumber}`);
+            this._toasty.successToast(`Entry created successfully with invoice number: ${response.body.voucherDetails.voucherNumber}`);
           } catch (error) {
             this._toasty.successToast('Invoice Generated Successfully');
           }
