@@ -202,6 +202,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     };
     this.requestObj.transactions[idx].particular = accModel.UniqueName;
     this.requestObj.transactions[idx].selectedAccount = accModel;
+    this.requestObj.transactions[idx].stocks = acc.stocks;
 
     setTimeout(() => {
       this.selectedParticular.focus();
