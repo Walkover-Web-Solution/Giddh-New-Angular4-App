@@ -97,9 +97,18 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnInit() {
 
-    this._tallyModuleService.requestData.subscribe((data) => {
-      console.log('the request data in grid comp is :', data);
-      this.data = _.cloneDeep(data);
+    this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((data) => {
+      if (data) {
+        this.data = _.cloneDeep(data);
+      }
     });
 
     this._tallyModuleService.selectedPageInfo.subscribe((d) => {
