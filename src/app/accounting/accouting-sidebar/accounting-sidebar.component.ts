@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, Input, OnChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -40,11 +40,14 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
 
   constructor(private _tallyModuleService: TallyModuleService) {
     //
-    // 
   }
 
   public ngOnInit() {
-    this.setSelectedPage('Journal', 'voucher', null);
+    this._tallyModuleService.flattenAccounts.subscribe((accounts) => {
+      if (accounts) {
+        this.setSelectedPage('Journal', 'voucher', 'purchases');
+      }
+    });
   }
 
   public ngOnChanges(s) {

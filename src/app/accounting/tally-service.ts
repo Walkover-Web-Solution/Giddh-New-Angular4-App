@@ -38,6 +38,7 @@ export class TallyModuleService {
   }
 
   public setFlattenAccounts(accounts: IFlattenAccountsResultItem[]) {
+    let t0 = performance.now();
     let cashAccounts = [];
     let purchaseAccounts = [];
     let bankAccounts = [];
@@ -77,6 +78,14 @@ export class TallyModuleService {
     this.expenseAccounts.next(expenseAccounts);
     this.salesAccounts.next(salesAccounts);
     this.flattenAccounts.next(accounts);
+    let t1 = performance.now();
+    // setTimeout(() => {
+    //   this.setVoucher({
+    //     page: 'Journal',
+    //     uniqueName: 'voucher',
+    //     gridType: 'purchases'
+    //   });
+    // }, t1 - t0);
   }
 
   public getAccounts() {
