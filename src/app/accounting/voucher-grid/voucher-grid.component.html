@@ -38,7 +38,7 @@
                                                         decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!inventory.stock.name" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" placeholder="Rate" class="form-control text-right" [(ngModel)]="inventory.unit.rate" (focus)="selectRow(true,i)" (blur)="selectRow(false,null)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === i}"
+                                                    <input type="text" placeholder="Rate" class="form-control text-right" [(ngModel)]="inventory.unit.rate" (ngModelChange)="changePrice(i,$event)" (focus)="selectRow(true,i)" (blur)="selectRow(false,null)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === i}"
                                                         decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!inventory.stock.name" />
                                                 </td>
                                                 <td>
