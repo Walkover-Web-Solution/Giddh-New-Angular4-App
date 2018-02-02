@@ -131,7 +131,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       taxes: [],
       total: 0,
       discounts: [],
-      inventory: [],
+      inventory: [this.initInventory()],
       selectedAccount: {
         name: '',
         UniqueName: '',
@@ -224,14 +224,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.showLedgerAccountList = false;
     }, 50);
 
-    // if (acc && acc.stocks) {
-    //   this.requestObj.transactions[idx].inventory.push(this.initInventory());
-    //   console.log('acc.stocks are :', acc.stocks);
-    //   alert('Open model');
-    //   this.groupUniqueName = acc.uniqueName;
-    // }
-    this.requestObj.transactions[idx].inventory.push(this.initInventory());
-    this.groupUniqueName = acc.uniqueName;
+    if (acc && acc.stocks) {
+      this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      this.groupUniqueName = acc.uniqueName;
+    }
+    // this.requestObj.transactions[idx].inventory.push(this.initInventory());
+    // this.groupUniqueName = acc.uniqueName;
   }
 
   /**
