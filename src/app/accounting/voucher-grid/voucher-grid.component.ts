@@ -209,12 +209,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.showLedgerAccountList = false;
     }, 50);
 
-    if (acc && acc.stocks) {
-      this.requestObj.transactions[idx].inventory.push(this.initInventory());
-      console.log('acc.stocks are :', acc.stocks);
-      alert('Open model');
-      this.groupUniqueName = acc.uniqueName;
-    }
+    // if (acc && acc.stocks) {
+    //   this.requestObj.transactions[idx].inventory.push(this.initInventory());
+    //   console.log('acc.stocks are :', acc.stocks);
+    //   alert('Open model');
+    //   this.groupUniqueName = acc.uniqueName;
+    // }
+    this.requestObj.transactions[idx].inventory.push(this.initInventory());
+    this.groupUniqueName = acc.uniqueName;
   }
 
   /**
@@ -400,7 +402,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }, 50);
   }
 
-
   /**
    * prepareEntry
    */
@@ -422,5 +423,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
     this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
     this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+  }
+
+    /**
+   * changePrice
+   */
+  public changePrice(idx, val) {
+    this.requestObj.transactions[this.selectedIdx].inventory[idx].unit.rate = Number(_.cloneDeep(val));
+    this.requestObj.transactions[this.selectedIdx].amount = Number((this.requestObj.transactions[this.selectedIdx].inventory[idx].unit.rate * this.requestObj.transactions[this.selectedIdx].inventory[idx].quantity).toFixed(2));
+    this.amountChanged(idx);
+  }
+
+  public amountChanged(invIdx) {
+    if (this.requestObj.transactions && this.requestObj.transactions[this.selectedIdx].inventory[invIdx].stock && this.requestObj.transactions[this.selectedIdx].inventory[invIdx].quantity) {
+      if (this.requestObj.transactions[this.selectedIdx].inventory[invIdx].quantity) {
+        this.requestObj.transactions[this.selectedIdx].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[this.selectedIdx].amount / this.requestObj.transactions[this.selectedIdx].inventory[invIdx].quantity).toFixed(2));
+      }
+    }
+    let stockTotal = _.sumBy(this.requestObj.transactions[this.selectedIdx].inventory[invIdx],  (o: any) => Number(o.amount));
+    console.log('stockTotal is :', stockTotal);
+    // this.stockTotal = stockTotal;
   }
 }
