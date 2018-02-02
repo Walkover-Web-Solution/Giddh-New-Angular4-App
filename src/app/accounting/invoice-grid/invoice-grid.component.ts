@@ -47,7 +47,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public showAccountList: boolean = true;
   public TransactionType: 'by' | 'to' = 'by';
-  public purchaseReq: BlankLedgerVM = new BlankLedgerVM();
+  public data: any = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
   public totalDebitAmount: number = 0;
   public showConfirmationBox: boolean = false;
@@ -87,7 +87,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _salesActions: SalesActions,
     private _tallyModuleService: TallyModuleService,
   ) {
-    this.purchaseReq.transactions = [];
+    this.data.transactions = [];
+    this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
     });
@@ -98,6 +99,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     this._tallyModuleService.requestData.subscribe((data) => {
       console.log('the request data in grid comp is :', data);
+      this.data = _.cloneDeep(data);
+    });
+
+    this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+      if (d) {
+        this.data.voucherType = d.page;
+      }
     });
 
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
@@ -107,6 +115,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       }
     });
     this.refreshEntry();
+    // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
   }
 
   /**
@@ -122,18 +131,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       taxes: [],
       total: null,
       discounts: [],
-      inventory: {
-        unit: {
-          stockUnitCode: '',
-          code: '',
-          rate: null,
-        },
-        quantity: null,
-        stock: {
-          uniqueName: '',
-          name: '',
-        }
-      },
+      inventory: this.initInventory(),
       selectedAccount: {
         name: '',
         uniqueName: ''
@@ -141,7 +139,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     };
 
     if (type === 'stock') {
-      this.purchaseReq.transactions.push(entryObj);
+      this.data.transactions.push(entryObj);
     } else if (type === 'account') {
       this.accountsTransaction.push(entryObj);
     }
@@ -243,7 +241,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public addNewStock(amount, transactionObj, idx) {
     let indx = idx;
-    let lastIndx = this.purchaseReq.transactions.length - 1;
+    let lastIndx = this.data.transactions.length - 1;
 
     if (amount) {
       transactionObj.amount = Number(amount);
@@ -251,12 +249,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     if (transactionObj.inventory.quantity) {
-      this.purchaseReq.transactions[indx].inventory.quantity = _.cloneDeep(Number(transactionObj.inventory.quantity));
+      this.data.transactions[indx].inventory.quantity = _.cloneDeep(Number(transactionObj.inventory.quantity));
     }
 
-    if (indx === lastIndx && this.purchaseReq.transactions[indx].inventory.stock.name) {
+    if (indx === lastIndx && this.data.transactions[indx].inventory.stock.name) {
       this.newRowType('stock');
-    } else if (indx === lastIndx && !this.purchaseReq.transactions[indx].inventory.stock.name) {
+    } else if (indx === lastIndx && !this.data.transactions[indx].inventory.stock.name) {
       this.newRowType('account');
     }
   }
@@ -266,8 +264,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
     this.showConfirmationBox = true;
-    if (this.purchaseReq.description) {
-      this.purchaseReq.description = this.purchaseReq.description.replace(/(?:\r\n|\r|\n)/g, '');
+    if (this.data.description) {
+      this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
     }
     setTimeout(() => {
       submitBtnEle.focus();
@@ -278,7 +276,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * refreshEntry
    */
   public refreshEntry() {
-    this.purchaseReq.transactions = [];
+    this.data.transactions = [];
     this.accountsTransaction = [];
     this.showConfirmationBox = false;
     this.showAccountList = false;
@@ -286,10 +284,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.totalDebitAmount = 0;
     this.newRowType('stock');
     this.newRowType('account');
-    this.purchaseReq.entryDate = moment().format(GIDDH_DATE_FORMAT);
+    this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.entryDate = moment();
-    this.purchaseReq.transactions[0].type = 'CREDIT';
-    this.purchaseReq.voucherType = 'purchase';
     this.creditorAcc = {};
     this.debtorAcc = {};
     this.stockTotal = null;
@@ -316,7 +312,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setDate(date) {
     this.showFromDatePicker = !this.showFromDatePicker;
-    this.purchaseReq.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
+    this.data.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**
@@ -389,25 +385,25 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       rate: 0
     };
     if (item.accountStockDetails.unitRates.length) {
-      this.purchaseReq.transactions[idx].inventory.unit = item.accountStockDetails.unitRates[0];
-      this.purchaseReq.transactions[idx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
-      this.purchaseReq.transactions[idx].inventory.unit.stockUnitCode = item.stockUnit.name;
+      this.data.transactions[idx].inventory.unit = item.accountStockDetails.unitRates[0];
+      this.data.transactions[idx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.data.transactions[idx].inventory.unit.stockUnitCode = item.stockUnit.name;
 
     } else if (!item.accountStockDetails.unitRates.length) {
-      this.purchaseReq.transactions[idx].inventory.unit = defaultUnit;
+      this.data.transactions[idx].inventory.unit = defaultUnit;
     }
-    this.purchaseReq.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-    this.purchaseReq.transactions[idx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
-    this.purchaseReq.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.data.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+    this.data.transactions[idx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
+    this.data.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
   }
 
   /**
    * calculateAmount
    */
   public changeQuantity(idx, val) {
-    let entry = this.purchaseReq.transactions[idx];
-    this.purchaseReq.transactions[idx].inventory.quantity = Number(val);
-    this.purchaseReq.transactions[idx].amount = Number((this.purchaseReq.transactions[idx].inventory.unit.rate * this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
+    let entry = this.data.transactions[idx];
+    this.data.transactions[idx].inventory.quantity = Number(val);
+    this.data.transactions[idx].amount = Number((this.data.transactions[idx].inventory.unit.rate * this.data.transactions[idx].inventory.quantity).toFixed(2));
     this.amountChanged(idx);
   }
 
@@ -415,8 +411,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * changePrice
    */
   public changePrice(idx, val) {
-    this.purchaseReq.transactions[idx].inventory.unit.rate = Number(_.cloneDeep(val));
-    this.purchaseReq.transactions[idx].amount = Number((this.purchaseReq.transactions[idx].inventory.unit.rate * this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
+    this.data.transactions[idx].inventory.unit.rate = Number(_.cloneDeep(val));
+    this.data.transactions[idx].amount = Number((this.data.transactions[idx].inventory.unit.rate * this.data.transactions[idx].inventory.quantity).toFixed(2));
     this.amountChanged(idx);
   }
 
@@ -424,12 +420,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * amountChanged
    */
   public amountChanged(idx) {
-    if (this.purchaseReq.transactions[idx] && this.purchaseReq.transactions[idx].inventory.stock && this.purchaseReq.transactions[idx].inventory.quantity) {
-      if (this.purchaseReq.transactions[idx].inventory.quantity) {
-        this.purchaseReq.transactions[idx].inventory.unit.rate = Number((this.purchaseReq.transactions[idx].amount / this.purchaseReq.transactions[idx].inventory.quantity).toFixed(2));
+    if (this.data.transactions[idx] && this.data.transactions[idx].inventory.stock && this.data.transactions[idx].inventory.quantity) {
+      if (this.data.transactions[idx].inventory.quantity) {
+        this.data.transactions[idx].inventory.unit.rate = Number((this.data.transactions[idx].amount / this.data.transactions[idx].inventory.quantity).toFixed(2));
       }
     }
-    let stockTotal = _.sumBy(this.purchaseReq.transactions,  (o) => Number(o.amount));
+    let stockTotal = _.sumBy(this.data.transactions,  (o: any) => Number(o.amount));
     this.stockTotal = stockTotal;
   }
 
@@ -460,9 +456,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public changeStock(idx, val) {
     if (!val) {
-      this.purchaseReq.transactions.splice(idx, 1);
+      this.data.transactions.splice(idx, 1);
       this.showStockList.next(false);
-      if (!this.purchaseReq.transactions.length) {
+      if (!this.data.transactions.length) {
         this.newRowType('stock');
       }
       this.amountChanged(idx);
@@ -478,7 +474,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     let idx = 0;
-    let data = _.cloneDeep(this.purchaseReq);
+    let data = _.cloneDeep(this.data);
 
     data.transactions = this.validateTransaction(data.transactions, 'stock');
     let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
@@ -497,5 +493,24 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
     }
+  }
+
+    /**
+   * initInventory
+   */
+  public initInventory() {
+    return {
+      unit: {
+        stockUnitCode: '',
+        code: '',
+        rate: null,
+      },
+      quantity: null,
+      stock: {
+        uniqueName: '',
+        name: '',
+      },
+      amount: null
+    };
   }
 }
