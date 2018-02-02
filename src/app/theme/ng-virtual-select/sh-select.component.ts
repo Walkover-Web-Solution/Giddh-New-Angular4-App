@@ -1,11 +1,13 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { startsWith, concat, includes } from 'app/lodash-optimized';
+import { Observable } from 'rxjs/Observable';
+import { IForceClear } from 'app/models/api-models/Sales';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -23,12 +25,13 @@ const FLATTEN_SEARCH_TERM = 'flatten';
     }
   ]
 })
-export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
   @Input() public idEl: string = '';
   @Input() public placeholder: string = 'Type to filter';
   @Input() public multiple: boolean = false;
   @Input() public mode: 'default' | 'inline' = 'default';
   @Input() public showClear: boolean = true;
+  @Input() public forceClearReactive: IForceClear;
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLinkText: string = 'Create New';
@@ -377,6 +380,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public ngAfterViewInit() {
     this.viewInitEvent.emit(true);
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
+      if (this.forceClearReactive.status) {
+        this.filter = '';
+        this.clear();
+      }
+    }
   }
 
   //////// ControlValueAccessor imp //////////

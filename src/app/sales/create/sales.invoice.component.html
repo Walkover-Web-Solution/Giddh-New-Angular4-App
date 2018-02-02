@@ -1,14 +1,14 @@
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate class="clearfix mrB2">
-
-  <div class="pdB1 bdrB">
-    <div class="form-group mrB form-inline">
-      <select class="form-control voucher-selector" name="selectedPage" (change)="pageChanged()" [(ngModel)]="selectedPage">
-        <option *ngFor="let page of pageList" [value]="page.value">{{page.label}}</option>
+<div class="pdB1 bdrB">
+  <div class="form-group mrB form-inline">
+    <span class="pure-css-select-wrapper">
+      <select class="voucher-selector" name="selectedPage" (change)="pageChanged()" [(ngModel)]="selectedPage">
+        <option *ngFor="let page of pageList" [value]="page.value">{{page.value}}</option>
       </select>
-    </div>
+    </span>
   </div>
-
-  <div class="clearfix">
+</div>
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate>
+  <div class="clearfix mrB2">
     <div class="clearfix pdT2 pdB2">
       <div class="col-xs-9">
         <div class="flex-row">
@@ -25,6 +25,7 @@
                 [placeholder]="'Select Customer'"
                 [notFoundLink]="true"
                 [doNotReset]="true"
+                [forceClearReactive]="forceClear$ | async"
                 [isFilterEnabled]="true"
                 (noResultsClicked)="toggleAccountAsidePane($event)"
                 [multiple]="false"
@@ -52,6 +53,7 @@
               (selected)="onSelectBankCash($event)"
               [placeholder]="'Select Bank A/c'"
               [notFoundLink]="false"
+              [forceClearReactive]="forceClear$ | async"
               [multiple]="false"
               [ItemHeight]="67"
               [useInBuiltFilterForIOptionTypeItems]="true"
@@ -80,7 +82,7 @@
         </div>
       </div>
       <div class="col-xs-3 text-right">
-        <p class="fs20 b">Balance Due: Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</p>
+        <p *ngIf="toggleFieldForSales" class="fs20 b">Balance Due: Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</p>
       </div>
     </div>
     <div class="col-xs-12">
@@ -262,6 +264,7 @@
                 (selected)="onSelectSalesAccount($event,transaction,entryIdx)"
                 [placeholder]="'Select A/c'"
                 [notFoundLink]="true"
+                [forceClearReactive]="forceClear$ | async"
                 (noResultsClicked)="onNoResultsClicked(entryIdx)"
                 [multiple]="false"
                 [ItemHeight]="67"
@@ -412,14 +415,14 @@
                   <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                 </div>
               </div>
-              <div class="tableRow">
+              <div class="tableRow" *ngIf="toggleFieldForSales">
                 <div class="tableCell">Deposit</div>
                 <div class="tableCell figureCell">
                   <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount"
                   />
                 </div>
               </div>
-              <div class="tableRow">
+              <div class="tableRow" *ngIf="toggleFieldForSales">
                 <div class="tableCell">
                   <strong>Balance Due</strong>
                 </div>
@@ -440,8 +443,8 @@
       <div class="col-xs-12">
         <div class="pull-right pr">
           <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
-          <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate Invoice &amp; Update A/c</button>
-          <button type="submit" class="btn btn-success">Generate Invoice</button>
+          <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button>
+          <button type="submit" class="btn btn-success">Generate {{toggleActionText}}</button>
         </div>
       </div>
     </section>

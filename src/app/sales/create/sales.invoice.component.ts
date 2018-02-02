@@ -12,7 +12,8 @@ import {
   VoucherClass,
   GenericRequestForGenerateSCD,
   VOUCHER_TYPE_LIST,
-  AccountDetailsClass
+  AccountDetailsClass,
+  IForceClear
 } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs/Observable';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
@@ -36,10 +37,9 @@ import { SelectComponent } from '../../theme/ng-select/select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { orderBy, remove, forEach } from '../../lodash-optimized';
 import * as uuid from 'uuid';
 import { GeneralActions } from 'app/actions/general/general.actions';
-
+import { setTimeout } from 'timers';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -152,11 +152,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
+  public toggleFieldForSales: boolean = true;
   public dueAmount: number;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public createAccountIsSuccess$: Observable<boolean>;
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   // modals related
   public modalConfig = {
     animated: true,
@@ -166,6 +168,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   public pageList: IOption[] = VOUCHER_TYPE_LIST;
   public selectedPage: string = VOUCHER_TYPE_LIST[0].value;
+  public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -176,6 +179,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   private activeCompany: CompanyResponse;
   private sundryDebtorsAcList: IOption[] = [];
   private sundryCreditorsAcList: IOption[] = [];
+  private prdSerAcListForDeb: IOption[] = [];
+  private prdSerAcListForCred: IOption[] = [];
 
   constructor(
     private store: Store<AppState>,
@@ -281,10 +286,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // all flatten A/c's
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
 
-      let accountsArray: IOption[] = [];
       let bankaccounts: IOption[] = [];
       this.sundryDebtorsAcList = [];
       this.sundryCreditorsAcList = [];
+      this.prdSerAcListForDeb = [];
+      this.prdSerAcListForCred = [];
 
       _.forEach(data, (item) => {
 
@@ -302,51 +308,72 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
           if (item.stocks) {
             // normal entry
-            accountsArray.push({ value: uuid.v4(), label: item.name, additional: item });
+            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
 
             // stock entry
             item.stocks.map(as => {
-              accountsArray.push({
+              this.prdSerAcListForDeb.push({
                 value: uuid.v4(),
                 label: `${item.name} (${as.name})`,
                 additional: Object.assign({}, item, { stock: as })
               });
             });
           } else {
-            accountsArray.push({ value: uuid.v4(), label: item.name, additional: item });
+            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
+          }
+        }
+
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
+          if (item.stocks) {
+            // normal entry
+            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
+
+            // stock entry
+            item.stocks.map(as => {
+              this.prdSerAcListForCred.push({
+                value: uuid.v4(),
+                label: `${item.name} (${as.name})`,
+                additional: Object.assign({}, item, { stock: as })
+              });
+            });
+          } else {
+            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
           }
         }
       });
       this.makeCustomerList();
-      this.bankAccounts$ = Observable.of(orderBy(bankaccounts, 'label'));
-      this.salesAccounts$ = Observable.of(orderBy(accountsArray, 'label'));
+      this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
       // listen for newly added stock and assign value
-      this.newlyCreatedStockAc$.take(1).subscribe((o: any) => {
-        if (o) {
-          let result: IOption = _.find(accountsArray, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
+      Observable.combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+        let o = resp[0];
+        let acData = resp[1];
+        if (o && acData) {
+          let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
           if (result && !_.isUndefined(this.entryIdx)) {
             this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
             this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
           }
         }
       });
-
     });
   }
 
   public makeCustomerList() {
     // sales case || Credit Note
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
-      this.customerAcList$ = Observable.of(orderBy(this.sundryDebtorsAcList, 'label'));
+      this.customerAcList$ = Observable.of(_.orderBy(this.sundryDebtorsAcList, 'label'));
+      this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForDeb, 'label'));
     }else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value) {
-      this.customerAcList$ = Observable.of(orderBy(this.sundryCreditorsAcList, 'label'));
+      this.customerAcList$ = Observable.of(_.orderBy(this.sundryCreditorsAcList, 'label'));
+      this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
   }
 
   public pageChanged() {
-    console.log ('pageChanged:', this.selectedPage);
     this.makeCustomerList();
+    this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
+    this.toggleActionText = this.selectedPage;
   }
 
   public getAllFlattenAc() {
@@ -389,10 +416,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     f.form.reset();
     this.invFormData = new VoucherClass();
     this.typeaheadNoResultsOfCustomer = false;
+    // this.selectedPage = VOUCHER_TYPE_LIST[0].value;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = true;
+    this.forceClear$ = Observable.of({status: true});
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -453,8 +482,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // check for valid entries and transactions
     if ( data.entries) {
-      forEach(data.entries, (entry) => {
-        forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+      _.forEach(data.entries, (entry) => {
+        _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
           // convert date object
           txn.date = this.convertDateForAPI(txn.date);
           // will get errors of string and if not error then true boolean
@@ -807,7 +836,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public removeTransaction(entryIdx: number) {
     if (this.invFormData.entries.length > 1 ) {
-      this.invFormData.entries = remove(this.invFormData.entries, (entry, index) => {
+      this.invFormData.entries = _.remove(this.invFormData.entries, (entry, index) => {
         return index !== entryIdx;
       });
     }else {
