@@ -125,6 +125,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     });
     this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
+
+    this._tallyModuleService.selectedPageInfo.subscribe(() => {
+      this._tallyModuleService.requestData.next(this.data);
+    });
   }
 
   /**
@@ -136,11 +140,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'CREDIT',
+      type: 'By',
       taxes: [],
       total: null,
       discounts: [],
-      inventory: this.initInventory(),
+      inventory: [this.initInventory()],
       selectedAccount: {
         name: '',
         uniqueName: ''
