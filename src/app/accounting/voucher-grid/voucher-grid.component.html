@@ -2,7 +2,7 @@
     <div class="col-xs-12 bg_wrap">
         <div class="row">
             <div class="clearfix pdT2">
-                <span class="btn label isActive">{{voucherType}}</span>
+                <span class="btn label isActive">{{requestObj.voucherType}}</span>
                 <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
                     <input type="text" [ngModel]="moment(journalDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control text-right appearance_none" />
                     <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
@@ -27,7 +27,7 @@
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
-                                <td><input type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event)" (focus)="onAccountFocus(); selectRow(true,i)"
+                                <td><input type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value)" (focus)="onAccountFocus(); selectRow(true,i)"
                                         (blur)="selectRow(true,i);onAccountBlur($event, particular);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keyup)="showLedgerAccountList=true;" />
                                     <!-- *ngIf="transaction.inventory" -->
                                     <table [hidden]="!transaction.stocks">
@@ -109,7 +109,7 @@
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!showStockList">
         <h3 class="pd1 bdrB primary_clr">List of Stock Item</h3>
-        <accounts-list [search]="accountSearch" [showStockItem]="showStockList" [grpUniqueName]="groupUniqueName" (onSelectItem)="onSelectStock($event)"></accounts-list>
+        <accounts-list [search]="accountSearch" [showStockItem]="showStockList" [parentGrpUnqName]="groupUniqueName" [accountUnqName]="selectAccUnqName" (onSelectItem)="onSelectStock($event)"></accounts-list>
     </div>
 
     <accounting-sidebar></accounting-sidebar>
