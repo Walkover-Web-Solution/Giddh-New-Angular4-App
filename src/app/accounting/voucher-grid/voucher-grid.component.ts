@@ -299,6 +299,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
       let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
       data.transactions.splice(indexOfMaxAmountEntry, 1);
+      console.log('the data before is :', data);
+      data = this._tallyModuleService.prepareRequestForAPI(data);
+      console.log('the data after is :', data);
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');

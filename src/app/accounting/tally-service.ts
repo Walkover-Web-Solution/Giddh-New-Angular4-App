@@ -108,7 +108,7 @@ export class TallyModuleService {
         case 'Debit note':
           accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value);
           break;
-        case 'payments':
+        case 'Payment':
           accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
           break;
         case 'receipt':
@@ -121,6 +121,23 @@ export class TallyModuleService {
         // console.log('accounts are :', accounts);
         this.filteredAccounts.next(accounts);
       }
+    }
+  }
+
+  /**
+   * prepareRequestForAPI
+   */
+  public prepareRequestForAPI(data: any) {
+    if (data.transactions && data.transactions.length) {
+      data.transactions.forEach((transaction) => {
+        transaction.inventory.forEach((inventory) => {
+          transaction.inventory = inventory;
+        });
+        delete transaction.inventory;
+      });
+      return data;
+    } else {
+      return data;
     }
   }
 }
