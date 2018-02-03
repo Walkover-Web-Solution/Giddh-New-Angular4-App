@@ -62,6 +62,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public groupUniqueName: string;
   public selectedStockIdx: any;
   public selectedStk: any;
+  public selectAccUnqName: string;
   // public groupFlattenAccount: string = '';
 
   public voucherType: string = null;
@@ -91,7 +92,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return true;
      }).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
-        this.voucherType = d.page;
+        this.requestObj.voucherType = d.page;
       } else if (d) {
         this._tallyModuleService.requestData.next(this.requestObj);
       }
@@ -230,7 +231,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let accModel = {
       name: acc.name,
       UniqueName: acc.uniqueName,
-      groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+      groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
       account: acc.name
     };
     this.requestObj.transactions[idx].particular = accModel.UniqueName;
@@ -244,7 +245,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }, 50);
 
     if (acc && acc.stocks) {
-      this.groupUniqueName = acc.uniqueName;
+      this.groupUniqueName = accModel.groupUniqueName;
+      this.selectAccUnqName = acc.uniqueName;
       if (!this.requestObj.transactions[idx].inventory.length) {
         this.requestObj.transactions[idx].inventory.push(this.initInventory());
       }
@@ -307,10 +309,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public saveEntry() {
     let idx = 0;
     let data = _.cloneDeep(this.requestObj);
-    console.log('data before validateTransaction :', data);
     // data.transactions = this.removeBlankTransaction(data.transactions);
     data.transactions = this.validateTransaction(data.transactions);
-    console.log('data after validateTransaction :', data);
 
     if (!data.transactions) {
       return;
@@ -319,13 +319,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       _.forEach(data.transactions, element => {
         element.type = (element.type === 'by') ? 'credit' : 'debit';
       });
-
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
       let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
       data.transactions.splice(indexOfMaxAmountEntry, 1);
-      console.log('the data before is :', data);
       data = this._tallyModuleService.prepareRequestForAPI(data);
-      console.log('the data after is :', data);
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
@@ -345,7 +342,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.journalDate = moment();
     this.requestObj.transactions[0].type = 'by';
-    this.requestObj.voucherType = 'journal';
   }
 
   /**

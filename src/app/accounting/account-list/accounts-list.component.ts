@@ -31,12 +31,13 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public activeIdx: string = null;
   @Output() public openAddAndManage: EventEmitter<boolean> = new EventEmitter();
   @Output() public onSelectItem: EventEmitter<boolean> = new EventEmitter();
-  @Input() public grpUniqueName: string;
+  @Input() public parentGrpUnqName: string;
   @Input() public filterByGrp: boolean = false;
   @Input() public showStockItem: boolean;
   @Input() public showAccountList: boolean;
   @Input() public voucher: string;
   @Input() public type: 'account' | 'stock';
+  @Input() public accountUnqName: string;
 
   public accounts: any[];
   public isFlyAccountInProcess$: Observable<boolean>;
@@ -77,7 +78,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
 
     if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3 ) {
       this.searchAccount(s.search.currentValue);
-    } else if ((s.search && !s.search.currentValue) || (s.filterByGrp && !s.filterByGrp.currentValue) && this.flattenAccounts.length){
+    } else if (s.search && !s.search.currentValue && !s.search.previousValue) {
       this.renderAccountList(this.flattenAccounts);
     }
 
@@ -85,9 +86,10 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       this.activeAccIdx = s.activeIdx.currentValue;
     }
 
-    if (s.grpUniqueName && s.grpUniqueName.currentValue) {
-      let groupUniqueNames = s.grpUniqueName.currentValue;
-      this.getFlattenGrpofAccounts(groupUniqueNames);
+    if (s.parentGrpUnqName && s.parentGrpUnqName.currentValue) {
+      let groupUniqueNames = s.parentGrpUnqName.currentValue;
+      let accUnqName = s.accountUnqName.currentValue || null;
+      this.getFlattenGrpofAccounts(groupUniqueNames, accUnqName);
     }
 
     if (s.showStockItem && s.showStockItem.currentValue) {
@@ -148,6 +150,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       data.map(d => {
         accounts.push(d);
       });
+      console.log(accounts);
       this.accounts = accounts;
     }
   }
@@ -155,8 +158,8 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(grpUniqueName, q?: string) {
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [grpUniqueName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [parentGrpUnqName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         this.renderAccountList(data.body.results);
         this.sortStockItems(data.body.results);

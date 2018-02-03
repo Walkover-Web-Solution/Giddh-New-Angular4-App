@@ -29,7 +29,8 @@ export class TallyModuleService {
 
   public filteredAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
 
-  public requestData: BehaviorSubject<any> = new BehaviorSubject(new BlankLedgerVM());
+  // public requestData: BehaviorSubject<any> = new BehaviorSubject(new BlankLedgerVM());
+  public requestData: BehaviorSubject<any> = new BehaviorSubject(null);
 
   public transactionObj: object = {};
 
@@ -39,7 +40,6 @@ export class TallyModuleService {
   }
 
   public setFlattenAccounts(accounts: IFlattenAccountsResultItem[]) {
-    let t0 = performance.now();
     let cashAccounts = [];
     let purchaseAccounts = [];
     let bankAccounts = [];
@@ -79,14 +79,6 @@ export class TallyModuleService {
     this.expenseAccounts.next(expenseAccounts);
     this.salesAccounts.next(salesAccounts);
     this.flattenAccounts.next(accounts);
-    let t1 = performance.now();
-    // setTimeout(() => {
-    //   this.setVoucher({
-    //     page: 'Journal',
-    //     uniqueName: 'voucher',
-    //     gridType: 'purchases'
-    //   });
-    // }, t1 - t0);
   }
 
   public getAccounts() {
@@ -103,7 +95,7 @@ export class TallyModuleService {
         case 'Sales':
           accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
           break;
-        case 'creditnote':
+        case 'Credit note':
           accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
           break;
         case 'Debit note':
@@ -112,14 +104,15 @@ export class TallyModuleService {
         case 'Payment':
           accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
           break;
-        case 'receipt':
+        case 'Receipt':
+          accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
+        case 'Contra':
           accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
         break;
         default:
           accounts = this.flattenAccounts.value;
       }
       if (accounts && accounts.length) {
-        // console.log('accounts are :', accounts);
         this.filteredAccounts.next(accounts);
       }
     }
@@ -152,15 +145,21 @@ export class TallyModuleService {
     _.each(requestObj.transactions, (txn: any) => {
       if (txn.inventory && txn.inventory.length) {
         _.each(txn.inventory, (inv) => {
+          let obj = txn;
           if (inv.stock.name && inv.amount) {
-            let obj = txn;
             obj.inventory = inv;
-            transactions.push(obj);
+          } else {
+            delete obj.inventory;
           }
+          transactions.push(obj);
         });
       }
     });
-    requestObj.transactions = transactions;
+
+    if (transactions.length) {
+      requestObj.transactions = transactions;
+    }
+
     return requestObj;
   }
 }
