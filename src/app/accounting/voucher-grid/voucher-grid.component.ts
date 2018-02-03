@@ -61,6 +61,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public showStockList: boolean = false;
   public groupUniqueName: string;
   public selectedStockIdx: any;
+  public selectedStk: any;
   // public groupFlattenAccount: string = '';
 
   public voucherType: string = null;
@@ -80,9 +81,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.watchKeyboardEvent(key);
     });
 
-    this._tallyModuleService.selectedPageInfo.subscribe((d) => {
-      if (d) {
+    this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((d) => {
+      if (d && d.gridType === 'voucher') {
         this.voucherType = d.page;
+      } else if (d) {
+        this._tallyModuleService.requestData.next(this.requestObj);
       }
     });
   }
@@ -112,9 +123,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     });
     this.refreshEntry();
 
-    this._tallyModuleService.selectedPageInfo.subscribe(() => {
-      this._tallyModuleService.requestData.next(this.requestObj);
-    });
+    // this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+    //   if (p && q) {
+    //     return (_.isEqual(p, q));
+    //   }
+    //   if ((p && !q) || (!p && q)) {
+    //     return false;
+    //   }
+    //   return true;
+    //  }).subscribe(() => {
+
+    // });
 
   }
 
@@ -288,8 +307,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public saveEntry() {
     let idx = 0;
     let data = _.cloneDeep(this.requestObj);
+    console.log('data before validateTransaction :', data);
     // data.transactions = this.removeBlankTransaction(data.transactions);
     data.transactions = this.validateTransaction(data.transactions);
+    console.log('data after validateTransaction :', data);
+
     if (!data.transactions) {
       return;
     }
@@ -415,7 +437,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let entryItem = _.cloneDeep(item);
     this.prepareEntry(entryItem, this.selectedIdx);
     setTimeout(() => {
-      // this.selectedInput.focus();
+      this.selectedStk.focus();
       this.showStockList = false;
     }, 50);
   }
@@ -441,25 +463,53 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
     this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
     this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
   }
 
     /**
    * changePrice
    */
   public changePrice(idx, val) {
-    this.requestObj.transactions[this.selectedIdx].inventory[idx].unit.rate = Number(_.cloneDeep(val));
-    this.requestObj.transactions[this.selectedIdx].amount = Number((this.requestObj.transactions[this.selectedIdx].inventory[idx].unit.rate * this.requestObj.transactions[this.selectedIdx].inventory[idx].quantity).toFixed(2));
+    let i = this.selectedIdx;
+    this.requestObj.transactions[i].inventory[idx].unit.rate = Number(_.cloneDeep(val));
+    this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
     this.amountChanged(idx);
   }
 
   public amountChanged(invIdx) {
-    if (this.requestObj.transactions && this.requestObj.transactions[this.selectedIdx].inventory[invIdx].stock && this.requestObj.transactions[this.selectedIdx].inventory[invIdx].quantity) {
-      if (this.requestObj.transactions[this.selectedIdx].inventory[invIdx].quantity) {
-        this.requestObj.transactions[this.selectedIdx].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[this.selectedIdx].amount / this.requestObj.transactions[this.selectedIdx].inventory[invIdx].quantity).toFixed(2));
-      }
+    let i = this.selectedIdx;
+    if (this.requestObj.transactions && this.requestObj.transactions[i].inventory[invIdx].stock && this.requestObj.transactions[i].inventory[invIdx].quantity) {
+      this.requestObj.transactions[i].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[i].inventory[invIdx].amount / this.requestObj.transactions[i].inventory[invIdx].quantity).toFixed(2));
     }
-    let stockTotal = _.sumBy(this.requestObj.transactions[this.selectedIdx].inventory[invIdx],  (o: any) => Number(o.amount));
-    console.log('stockTotal is :', stockTotal);
-    // this.stockTotal = stockTotal;
+    let total = this.calculateTransactionTotal(this.requestObj.transactions[i].inventory);
+    this.requestObj.transactions[i].total = total;
+    this.requestObj.transactions[i].amount = total;
+  }
+
+  /**
+   * calculateTransactionTotal
+   */
+  public calculateTransactionTotal(inventory) {
+    console.log('The env we got is :', inventory);
+    let total = 0;
+    inventory.forEach((inv) => {
+      total = total + Number(inv.amount);
+    });
+    return total;
+  }
+
+  public changeQuantity(idx, val) {
+    let i = this.selectedIdx;
+    let entry = this.requestObj.transactions[i];
+    this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
+    this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
+    this.amountChanged(idx);
+  }
+
+  public validateAndAddNewStock(idx) {
+    let i = this.selectedIdx;
+    if (this.requestObj.transactions[i].inventory.length - 1 === idx && this.requestObj.transactions[i].inventory[idx].amount) {
+      this.requestObj.transactions[i].inventory.push(this.initInventory());
+    }
   }
 }
