@@ -111,9 +111,19 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       }
     });
 
-    this._tallyModuleService.selectedPageInfo.subscribe((d) => {
-      if (d) {
+    this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((d) => {
+      if (d && d.gridType === 'invoice') {
         this.data.voucherType = d.page;
+      } else if (d) {
+        this._tallyModuleService.requestData.next(this.data);
       }
     });
 
@@ -126,9 +136,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
-    this._tallyModuleService.selectedPageInfo.subscribe(() => {
-      this._tallyModuleService.requestData.next(this.data);
-    });
   }
 
   /**
