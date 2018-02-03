@@ -147,7 +147,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'by',
+      type: 'By',
       taxes: [],
       total: null,
       discounts: [],
@@ -171,7 +171,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public selectRow(type: boolean, idx) {
     this.isSelectedRow = type;
     this.selectedStockIdx = idx;
-    this.selectedAccIdx = null;
+    // this.selectedAccIdx = null;
   }
 
   /**
@@ -387,8 +387,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public onSelectStock(item) {
     let idx = this.selectedStockIdx;
+    let accIdx = this.selectedAccIdx;
     let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, idx);
+    this.prepareEntry(entryItem, idx, accIdx);
     setTimeout(() => {
       this.selectedInput.focus();
       this.showStockList.next(false);
@@ -398,23 +399,23 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * prepareEntry
    */
-  public prepareEntry(item, idx) {
+  public prepareEntry(item, stkIdx, accIdx) {
     let defaultUnit = {
       stockUnitCode: item.stockUnit.name,
       code: item.stockUnit.code,
       rate: 0
     };
     if (item.accountStockDetails.unitRates.length) {
-      this.data.transactions[idx].inventory.unit = item.accountStockDetails.unitRates[0];
-      this.data.transactions[idx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
-      this.data.transactions[idx].inventory.unit.stockUnitCode = item.stockUnit.name;
+      this.data.transactions[accIdx].inventory[stkIdx].unit = item.accountStockDetails.unitRates[0];
+      this.data.transactions[accIdx].inventory[stkIdx].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.data.transactions[accIdx].inventory[stkIdx].unit.stockUnitCode = item.stockUnit.name;
 
     } else if (!item.accountStockDetails.unitRates.length) {
-      this.data.transactions[idx].inventory.unit = defaultUnit;
+      this.data.transactions[accIdx].inventory[stkIdx].unit = defaultUnit;
     }
-    this.data.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-    this.data.transactions[idx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
-    this.data.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.data.transactions[accIdx].particular = item.accountStockDetails.accountUniqueName;
+    this.data.transactions[accIdx].inventory[stkIdx].stock = { name: item.name, uniqueName: item.uniqueName};
+    this.data.transactions[accIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
   }
 
   /**
