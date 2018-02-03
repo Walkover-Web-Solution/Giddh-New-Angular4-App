@@ -163,13 +163,13 @@
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!showAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <accounts-list [search]="accountSearch" [grpUniqueName]="groupUniqueName" [filterByGrp]="filterByGrp" (onSelectItem)="setAccount($event)"></accounts-list>
+        <accounts-list [search]="accountSearch" [parentGrpUnqName]="groupUniqueName" [filterByGrp]="filterByGrp" (onSelectItem)="setAccount($event)"></accounts-list>
     </div>
 
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!(showStockList | async)">
         <h3 class="pd1 bdrB primary_clr">List of Stock Items</h3>
-        <accounts-list [search]="stockSearch" [grpUniqueName]="groupUniqueName" [voucher]="'purchases'" [filterByGrp]="filterByGrp" [showStockItem]="(showStockList | async)" (onSelectItem)="onSelectStock($event)"></accounts-list>
+        <accounts-list [search]="stockSearch" [parentGrpUnqName]="groupUniqueName" [voucher]="'purchases'" [filterByGrp]="filterByGrp" [showStockItem]="(showStockList | async)" (onSelectItem)="onSelectStock($event)"></accounts-list>
     </div>
 
     <accounting-sidebar></accounting-sidebar>
