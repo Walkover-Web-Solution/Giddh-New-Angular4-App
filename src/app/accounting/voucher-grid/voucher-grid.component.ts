@@ -225,8 +225,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }, 50);
 
     if (acc && acc.stocks) {
-      this.requestObj.transactions[idx].inventory.push(this.initInventory());
       this.groupUniqueName = acc.uniqueName;
+      if (!this.requestObj.transactions[idx].inventory.length) {
+        this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      }
     }
     // this.requestObj.transactions[idx].inventory.push(this.initInventory());
     // this.groupUniqueName = acc.uniqueName;

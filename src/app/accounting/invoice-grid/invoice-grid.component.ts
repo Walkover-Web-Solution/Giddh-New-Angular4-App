@@ -140,7 +140,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'By',
+      type: 'by',
       taxes: [],
       total: null,
       discounts: [],
