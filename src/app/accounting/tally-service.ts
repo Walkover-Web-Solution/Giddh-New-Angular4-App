@@ -1,3 +1,4 @@
+import { BlankLedgerVM, TransactionVM } from './../ledger/ledger.vm';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { Subject } from 'rxjs/Subject';
@@ -28,7 +29,7 @@ export class TallyModuleService {
 
   public filteredAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
 
-  public requestData: BehaviorSubject<any> = new BehaviorSubject(null);
+  public requestData: BehaviorSubject<any> = new BehaviorSubject(new BlankLedgerVM());
 
   public transactionObj: object = {};
 
@@ -127,17 +128,39 @@ export class TallyModuleService {
   /**
    * prepareRequestForAPI
    */
-  public prepareRequestForAPI(data: any) {
-    if (data.transactions && data.transactions.length) {
-      data.transactions.forEach((transaction) => {
-        transaction.inventory.forEach((inventory) => {
-          transaction.inventory = inventory;
+  // public prepareRequestForAPI(data: any) {
+  //   if (data.transactions && data.transactions.length) {
+  //     data.transactions.forEach((transaction) => {
+  //       transaction.inventory.forEach((inv) => {
+  //         let trxnObj = {
+
+  //         }
+  //         transaction.inventory = inv;
+  //       });
+  //       delete transaction.inventory;
+  //     });
+  //     return data;
+  //   } else {
+  //     return data;
+  //   }
+  // }
+
+  public prepareRequestForAPI(data: any): BlankLedgerVM {
+    let requestObj = _.cloneDeep(data);
+    let transactions = [];
+    // filter transactions which have selected account
+    _.each(requestObj.transactions, (txn: any) => {
+      if (txn.inventory && txn.inventory.length) {
+        _.each(txn.inventory, (inv) => {
+          if (inv.stock.name && inv.amount) {
+            let obj = txn;
+            obj.inventory = inv;
+            transactions.push(obj);
+          }
         });
-        delete transaction.inventory;
-      });
-      return data;
-    } else {
-      return data;
-    }
+      }
+    });
+    requestObj.transactions = transactions;
+    return requestObj;
   }
 }
