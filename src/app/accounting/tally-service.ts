@@ -1,3 +1,4 @@
+import { ToasterService } from './../services/toaster.service';
 import { BlankLedgerVM, TransactionVM } from './../ledger/ledger.vm';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
@@ -5,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { SessionState } from './../store/authentication/authentication.reducer';
-import { Injectable, HostListener } from '@angular/core';
+import { Injectable, HostListener, transition } from '@angular/core';
 import { createSelector } from 'reselect';
 
 export interface IPageInfo {
@@ -34,6 +35,10 @@ export class TallyModuleService {
 
   public transactionObj: object = {};
 
+  constructor(private _toaster: ToasterService) {
+    //
+  }
+
   public setVoucher(info: IPageInfo) {
     this.selectedPageInfo.next(info);
     this.getAccounts();
@@ -51,7 +56,7 @@ export class TallyModuleService {
       if (cashAccount) {
         cashAccounts.push(acc);
       }
-      let purchaseAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'purchases');
+      let purchaseAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses');
       if (purchaseAccount) {
         purchaseAccounts.push(acc);
       }
@@ -67,7 +72,7 @@ export class TallyModuleService {
       if (expenseAccount) {
         expenseAccounts.push(acc);
       }
-      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations');
+      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'income' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
       if (salesAccount) {
         salesAccounts.push(acc);
       }
@@ -90,7 +95,7 @@ export class TallyModuleService {
           accounts = this.flattenAccounts.value;
           break;
         case 'Purchase':
-          accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.purchaseAccounts.value);
+          accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.bankAccounts.value).concat(this.taxAccounts.value);
           break;
         case 'Sales':
           accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
@@ -99,15 +104,15 @@ export class TallyModuleService {
           accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
           break;
         case 'Debit note':
-          accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value);
+          accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
           break;
         case 'Payment':
-          accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
+          accounts = this.flattenAccounts.value;
           break;
         case 'Receipt':
-          accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
+          accounts = this.flattenAccounts.value;
         case 'Contra':
-          accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
+          accounts = this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value);
         break;
         default:
           accounts = this.flattenAccounts.value;
@@ -139,27 +144,70 @@ export class TallyModuleService {
   // }
 
   public prepareRequestForAPI(data: any): BlankLedgerVM {
-    let requestObj = _.cloneDeep(data);
-    let transactions = [];
-    // filter transactions which have selected account
-    _.each(requestObj.transactions, (txn: any) => {
-      if (txn.inventory && txn.inventory.length) {
-        _.each(txn.inventory, (inv) => {
-          let obj = txn;
-          if (inv.stock.name && inv.amount) {
-            obj.inventory = inv;
-          } else {
-            delete obj.inventory;
+    if (!data.voucherType) {
+      this._toaster.errorToast('voucherType not found.');
+      return;
+    } else {
+      if (this.validateForData(data)) {
+        let requestObj = _.cloneDeep(data);
+        let transactions = [];
+        // filter transactions which have selected account
+        _.each(requestObj.transactions, (txn: any) => {
+          if (txn.inventory && txn.inventory.length) {
+            _.each(txn.inventory, (inv) => {
+              let obj = txn;
+              if (inv.stock.name && inv.amount) {
+                obj.inventory = inv;
+              } else {
+                delete obj.inventory;
+              }
+              transactions.push(obj);
+            });
           }
-          transactions.push(obj);
         });
+        if (transactions.length) {
+          requestObj.transactions = transactions;
+        }
+        return requestObj;
+      } else {
+        this._toaster.errorToast('Validation failed.');
       }
-    });
-
-    if (transactions.length) {
-      requestObj.transactions = transactions;
     }
+  }
 
-    return requestObj;
+  private validateForData(data) {
+    console.log('the data in validation fn is :', data);
+    let isValid = true;
+    switch (data.voucherType) {
+      case 'Purchase':
+        let debitAcc = data.transactions.findIndex((trxn) => {
+          let indx = trxn.parentGroup.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
+          if (indx !== -1) {
+            return trxn.type === 'debit' ? true : false;
+          } else {
+            return false;
+          }
+        });
+        if (debitAcc === -1) {
+          isValid = false;
+          alert('At least one debit acc is required in Purchase');
+        }
+        break;
+      case 'Sales':
+        let creditAcc = data.transactions.find((trxn) => trxn.parentGroup === 'sales' && trxn.type === 'credit');
+        if (!creditAcc) {
+          isValid = false;
+          alert('At least one credit acc is required in Sales');
+        }
+        break;
+      case 'Debit note':
+        let debitNoteAcc = data.transactions.find((trxn) => trxn.parentGroup === 'debitnote' && trxn.type === 'credit');
+        if (!debitNoteAcc) {
+          isValid = false;
+          alert('At least one credit acc is required in Sales');
+        }
+        break;
+    }
+    return isValid;
   }
 }
