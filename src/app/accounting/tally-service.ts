@@ -181,7 +181,7 @@ export class TallyModuleService {
     switch (data.voucherType) {
       case 'Purchase':
         let debitAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.parentGroup.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
+          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
           if (indx !== -1) {
             return trxn.type === 'debit' ? true : false;
           } else {
@@ -190,21 +190,77 @@ export class TallyModuleService {
         });
         if (debitAcc === -1) {
           isValid = false;
-          alert('At least one debit acc is required in Purchase');
+          this._toaster.errorToast('At least one debit account is required in Purchase (debit side).');
         }
         break;
       case 'Sales':
-        let creditAcc = data.transactions.find((trxn) => trxn.parentGroup === 'sales' && trxn.type === 'credit');
-        if (!creditAcc) {
+        let creditAcc = data.transactions.findIndex((trxn) => {
+          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'income');
+          if (indx !== -1) {
+            return trxn.type === 'credit' ? true : false;
+          } else {
+            return false;
+          }
+        });
+        if (creditAcc === -1) {
           isValid = false;
-          alert('At least one credit acc is required in Sales');
+          this._toaster.errorToast('At least one income account is required in Sales (credit side).');
         }
         break;
-      case 'Debit note':
-        let debitNoteAcc = data.transactions.find((trxn) => trxn.parentGroup === 'debitnote' && trxn.type === 'credit');
-        if (!debitNoteAcc) {
+        case 'Debit note':
+        let debitNoteAcc = data.transactions.findIndex((trxn) => {
+          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
+          if (indx !== -1) {
+            return trxn.type === 'credit' ? true : false;
+          } else {
+            return false;
+          }
+        });
+        if (debitNoteAcc === -1) {
           isValid = false;
-          alert('At least one credit acc is required in Sales');
+          this._toaster.errorToast('At least one credit account is required in Debit note (credit side).');
+        }
+        break;
+        case 'Credit note':
+        let creditNoteAcc = data.transactions.findIndex((trxn) => {
+          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'income');
+          if (indx !== -1) {
+            return trxn.type === 'debit' ? true : false;
+          } else {
+            return false;
+          }
+        });
+        if (creditNoteAcc === -1) {
+          isValid = false;
+          this._toaster.errorToast('At least one debit account is required in Credit note (debit side).');
+        }
+        break;
+        case 'Payment':
+        let paymentAcc = data.transactions.findIndex((trxn) => {
+          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank');
+          if (indx !== -1) {
+            return trxn.type === 'credit' ? true : false;
+          } else {
+            return false;
+          }
+        });
+        if (paymentAcc === -1) {
+          isValid = false;
+          this._toaster.errorToast('At least one credit account is required in Payment (credit side).');
+        }
+        break;
+        case 'Receipt':
+        let receiptAcc = data.transactions.findIndex((trxn) => {
+          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank');
+          if (indx !== -1) {
+            return trxn.type === 'debit' ? true : false;
+          } else {
+            return false;
+          }
+        });
+        if (receiptAcc === -1) {
+          isValid = false;
+          this._toaster.errorToast('At least one debit account is required in Receipt (debit side).');
         }
         break;
     }
