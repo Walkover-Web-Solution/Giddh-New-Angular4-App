@@ -203,7 +203,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     this.activeGroup$.take(1).subscribe(ag => activeGrp = ag);
     // if updating group don't generate uniqueName
     if (!this.addGroup) {
-      return true;
+      return;
     }
     let val: string = this.addGroupForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
@@ -232,7 +232,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     let uniqueNameField = this.addGroupForm.get('uniqueName');
     uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
     stockRequest = this.addGroupForm.value as StockGroupRequest;
-    if (!this.addGroupForm.value.isSubGroup && this.selectedGroup) {
+    if (this.addGroupForm.value.isSubGroup && this.selectedGroup) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));

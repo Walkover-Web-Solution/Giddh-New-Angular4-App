@@ -74,13 +74,22 @@ export class AsideInventoryComponent implements OnInit {
   public isAddStockOpen: boolean = false;
   public isAddGroupOpen: boolean = false;
   public hideFirstStep: boolean = false;
-  
+  public openGroupAsidePane$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private inventoryAction: InventoryAction
   ) {
+    this.openGroupAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+    this.openGroupAsidePane$.subscribe(s => {
+      if (s) {
+        this.toggleGroupPane();
+      }
+    });
 
   }
 
@@ -97,6 +106,7 @@ export class AsideInventoryComponent implements OnInit {
     if (e) {
       //
     } else {
+      this.store.dispatch(this.inventoryAction.OpenNewGroupAsidePane(false));
       this.closeAsideEvent.emit();
     }
   }
