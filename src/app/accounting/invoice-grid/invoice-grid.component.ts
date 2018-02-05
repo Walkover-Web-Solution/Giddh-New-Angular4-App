@@ -61,13 +61,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public entryDate: any;
   public navigateURL: any = CustomShortcode;
   public showInvoiceDate: boolean = false;
-  public purchaseType: string = 'invoice';
+  // public purchaseType: string = 'invoice';
   public groupUniqueName: string;
   public filterByGrp: boolean = false;
   public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public selectedAcc: object;
   public accountType: string;
   public accountsTransaction = [];
+  public stocksTransaction = [];
   public selectedAccIdx: any;
   public creditorAcc: any = {};
   public debtorAcc: any = {};
@@ -108,6 +109,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.data = _.cloneDeep(data);
+        this.prepareDataForUi(this.data);
       }
     });
 
@@ -147,7 +149,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'By',
+      type: 'by',
       taxes: [],
       total: null,
       discounts: [],
@@ -168,19 +170,19 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * selectRow() on entryObj focus/blur
    */
-  public selectRow(type: boolean, idx) {
+  public selectRow(type: boolean, stkIdx, accIdx) {
     this.isSelectedRow = type;
-    this.selectedStockIdx = idx;
-    // this.selectedAccIdx = null;
+    this.selectedStockIdx = stkIdx;
+    this.selectedAccIdx = accIdx;
   }
 
   /**
    * selectAccountRow() on entryObj focus/blur
    */
   public selectAccountRow(type: boolean, idx) {
-    this.isSelectedRow = type;
-    this.selectedAccIdx = idx;
-    this.selectedStockIdx = null;
+    // this.isSelectedRow = type;
+    // this.selectedAccIdx = idx;
+    // this.selectedStockIdx = null;
   }
 
   /**
@@ -260,23 +262,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * addNewStock
    */
   public addNewStock(amount, transactionObj, idx) {
-    let indx = idx;
-    let lastIndx = this.data.transactions.length - 1;
-
-    if (amount) {
-      transactionObj.amount = Number(amount);
-      transactionObj.total = transactionObj.amount;
-    }
-
-    if (transactionObj.inventory.quantity) {
-      this.data.transactions[indx].inventory.quantity = _.cloneDeep(Number(transactionObj.inventory.quantity));
-    }
-
-    if (indx === lastIndx && this.data.transactions[indx].inventory.stock.name) {
-      this.newRowType('stock');
-    } else if (indx === lastIndx && !this.data.transactions[indx].inventory.stock.name) {
-      this.newRowType('account');
-    }
+    //
   }
 
   /**
@@ -422,9 +408,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * calculateAmount
    */
   public changeQuantity(idx, val) {
-    let entry = this.data.transactions[idx];
-    this.data.transactions[idx].inventory.quantity = Number(val);
-    this.data.transactions[idx].amount = Number((this.data.transactions[idx].inventory.unit.rate * this.data.transactions[idx].inventory.quantity).toFixed(2));
+    let i = this.selectedAccIdx;
+    // let entry = this.data.transactions[idx];
+    this.data.transactions[i].inventory[idx].quantity = Number(val);
+    this.data.transactions[i].inventory[idx].amount = Number((this.data.transactions[i].inventory[idx].unit.rate * this.data.transactions[i].inventory[idx].quantity).toFixed(2));
     this.amountChanged(idx);
   }
 
@@ -432,8 +419,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * changePrice
    */
   public changePrice(idx, val) {
-    this.data.transactions[idx].inventory.unit.rate = Number(_.cloneDeep(val));
-    this.data.transactions[idx].amount = Number((this.data.transactions[idx].inventory.unit.rate * this.data.transactions[idx].inventory.quantity).toFixed(2));
+    let i = this.selectedAccIdx;
+    this.data.transactions[i].inventory[idx].unit.rate = Number(_.cloneDeep(val));
+    this.data.transactions[i].inventory[idx].amount = Number((this.data.transactions[i].inventory[idx].unit.rate * this.data.transactions[i].inventory[idx].quantity).toFixed(2));
     this.amountChanged(idx);
   }
 
@@ -441,20 +429,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * amountChanged
    */
   public amountChanged(idx) {
-    if (this.data.transactions[idx] && this.data.transactions[idx].inventory.stock && this.data.transactions[idx].inventory.quantity) {
-      if (this.data.transactions[idx].inventory.quantity) {
-        this.data.transactions[idx].inventory.unit.rate = Number((this.data.transactions[idx].amount / this.data.transactions[idx].inventory.quantity).toFixed(2));
+    let i = this.selectedAccIdx;
+    if (this.data.transactions[i] && this.data.transactions[idx].inventory[idx].stock && this.data.transactions[i].inventory[idx].quantity) {
+      if (this.data.transactions[i].inventory[idx].quantity) {
+        this.data.transactions[i].inventory[idx].unit.rate = Number((this.data.transactions[i].inventory[idx].amount / this.data.transactions[i].inventory[idx].quantity).toFixed(2));
       }
     }
-    let stockTotal = _.sumBy(this.data.transactions,  (o: any) => Number(o.amount));
+    let stockTotal = _.sumBy(this.data.transactions.inventory,  (o: any) => Number(o.amount));
     this.stockTotal = stockTotal;
   }
 
   public calculateRate(idx, val) {
-    if (val) {
-      this.accountsTransaction[idx].amount = Number( this.stockTotal * val / 100);
-    }
-    this.calculateAmount();
+    // if (val) {
+    //   this.accountsTransaction[idx].amount = Number( this.stockTotal * val / 100);
+    // }
+    // this.calculateAmount();
   }
 
   public changeTotal(idx, val) {
@@ -534,4 +523,25 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       amount: null
     };
   }
+
+  public prepareDataForUi(data) {
+    let stocksTransaction = [];
+    let accountsTransaction = [];
+    let filterData = this._tallyModuleService.prepareRequestForAPI(data);
+    console.log('_tallyModuleService', data);
+    if (data.transactions.length) {
+      _.forEach(data.transactions, function(o, i) {
+        if (o.inventory.length) {
+           _.forEach(o.inventory, function(obj, idx) {
+             stocksTransaction.push(o);
+           });
+        } else {
+          accountsTransaction.push(o);
+        }
+      });
+      console.log('stocksTransaction', stocksTransaction);
+      console.log('accountsTransaction', accountsTransaction);
+    }
+  }
+
 }
