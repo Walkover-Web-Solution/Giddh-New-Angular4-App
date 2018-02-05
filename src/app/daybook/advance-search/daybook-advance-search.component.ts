@@ -169,11 +169,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) &&
-      ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue)) {
+    if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
       this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
-      this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
       this.fromDate = changes.startDate.currentValue;
+    }
+    if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
+      this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
       this.toDate = changes.endDate.currentValue;
     }
   }
@@ -181,22 +182,22 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
   public setVoucherTypes() {
     this.voucherTypeList = Observable.of([{
       label: 'Sales',
-      value: 'sal'
+      value: 'sales'
     }, {
       label: 'Purchases',
-      value: 'pur'
+      value: 'purchase'
     }, {
       label: 'Receipt',
-      value: 'rcpt'
+      value: 'receipt'
     }, {
       label: 'Payment',
-      value: 'pay'
+      value: 'payment'
     }, {
       label: 'Journal',
-      value: 'jr'
+      value: 'journal'
     }, {
       label: 'Contra',
-      value: 'cntr'
+      value: 'contra'
     }, {
       label: 'Debit Note',
       value: 'debit note'

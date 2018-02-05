@@ -1,6 +1,6 @@
 
-let URL = 'v2/company/:companyUniqueName/accounts/:accountUniqueName/';
-
+let URL = 'company/:companyUniqueName/accounts/:accountUniqueName/';
 export const SALES_API_V2 = {
-  GENERATE_SALES: URL + 'invoices/generate-sales',
+  GENERATE_SALES: `v2/${URL}invoices/generate-sales`,
+  GENERATE_GENERIC_ITEMS: `company/:companyUniqueName/account/:accountUniqueName/voucher/generate`,
 };
