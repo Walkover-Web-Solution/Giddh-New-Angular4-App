@@ -370,4 +370,19 @@ export class InventoryAction {
       type: InventoryActionsConst.ResetInventoryState
     };
   }
+
+  public OpenNewGroupAsidePane(value: boolean) {
+    return {
+      type : InventoryActionsConst.NewGroupAsidePane,
+      payload: value
+    };
+  }
+
+  public OpenCustomUnitPane(value: boolean) {
+    return {
+      type : InventoryActionsConst.NewCustomUnitAsidePane,
+      payload: value
+    };
+  }
+
 }
