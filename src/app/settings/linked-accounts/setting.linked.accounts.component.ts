@@ -134,7 +134,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteAddedBank(bankName, account) {
-    if (bankName && account && account.accountId) {
+    if (bankName && account && account.loginId) {
       this.selectedAccount = _.cloneDeep(account);
       this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
       this.actionToPerform = 'DeleteAddedBank';
