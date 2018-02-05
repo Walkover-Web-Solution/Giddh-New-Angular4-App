@@ -97,6 +97,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this._tallyModuleService.requestData.next(this.requestObj);
       }
     });
+
   }
 
   public ngOnInit() {
@@ -112,6 +113,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.requestObj = _.cloneDeep(data);
+        this.requestObj.voucherType = 'Journal';
+        this.voucherType = 'Journal';
       }
     });
 
@@ -232,7 +235,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       name: acc.name,
       UniqueName: acc.uniqueName,
       groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
-      account: acc.name
+      account: acc.name,
+      parentGroups: acc.parentGroups
     };
     this.requestObj.transactions[idx].particular = accModel.UniqueName;
     this.requestObj.transactions[idx].selectedAccount = accModel;
