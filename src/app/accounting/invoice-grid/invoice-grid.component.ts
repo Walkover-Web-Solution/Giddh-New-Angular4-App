@@ -89,30 +89,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _salesActions: SalesActions,
     private _tallyModuleService: TallyModuleService,
   ) {
-    this.data.transactions = [];
     // this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
     });
       // this.store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
-  }
-
-  public ngOnInit() {
-
-    this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
-      if (p && q) {
-        return (_.isEqual(p, q));
-      }
-      if ((p && !q) || (!p && q)) {
-        return false;
-      }
-      return true;
-     }).subscribe((data) => {
-      if (data) {
-        this.data = _.cloneDeep(data);
-        // this.prepareDataForInvoice(this.data);
-      }
-    });
 
     this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
       if (p && q) {
@@ -125,16 +106,38 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((d) => {
       if (d && d.gridType === 'invoice') {
         this.data.voucherType = d.page;
-      } else if (d) {
-        // this.data.transactions = this.prepareDataForVoucher();
+        this.gridType = d.gridType;
+      } else if (d && this.data.transactions) {
+        this.data.transactions = this.prepareDataForVoucher();
         this._tallyModuleService.requestData.next(this.data);
       }
     });
 
+    this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((data) => {
+      if (data) {
+        this.data = _.cloneDeep(data);
+        if (this.gridType === 'invoice') {
+          this.prepareDataForInvoice(this.data);
+        }
+      }
+    });
+
+  }
+
+  public ngOnInit() {
+
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        this.refreshEntry();
+        // this.refreshEntry();
       }
     });
     this.refreshEntry();
@@ -242,7 +245,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
-    let idx = this.selectedRowIdx;
+    let idx = this.selectedAccIdx;
 
     if (this.accountType === 'creditor') {
       this.creditorAcc = acc;
@@ -251,7 +254,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.debtorAcc = acc;
     }
 
-    if (this.selectedRowIdx > -1) {
+    if (this.selectedAccIdx > -1) {
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
@@ -295,6 +298,17 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * addNewStock
    */
   public addNewStock(amount, transactionObj, idx) {
+    let lastIdx = this.stocksTransaction.length - 1;
+    if (amount) {
+      transactionObj.amount = Number(amount);
+    }
+    if (amount && !transactionObj.inventory.stock && !transactionObj.inventory.stock.name) {
+      this._toaster.errorToast("Stock can't be blank");
+      return;
+    }
+    if (idx === lastIdx) {
+      this.addNewRow('stock');
+    }
     //
   }
 
@@ -315,14 +329,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * refreshEntry
    */
   public refreshEntry() {
-    this.data.transactions = [];
-    this.accountsTransaction = [];
     this.showConfirmationBox = false;
     this.showAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.addNewRow('stock');
-    // this.addNewRow('account');
+    this.addNewRow('account');
     this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.entryDate = moment();
     this.creditorAcc = {};
@@ -376,29 +388,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * removeBlankTransaction
    */
-  public removeBlankTransaction(transactions, type) {
-    if (type === 'stock') {
-      _.forEach(transactions, function(obj: any, idx) {
-        if (obj && !obj.inventory.stock.name && !obj.amount) {
+  public removeBlankTransaction(transactions) {
+    _.forEach(transactions, function(obj: any, idx) {
+        if (obj && !obj.particular) {
           transactions = _.without(transactions, obj);
         }
       });
-    } else if (type === 'account') {
-      _.forEach(transactions, function(obj: any, idx) {
-        if (obj && !obj.particular && !obj.amount) {
-          transactions = _.without(transactions, obj);
-        }
-      });
-    }
     return transactions;
   }
 
   /**
    * validateTransaction
    */
-  public validateTransaction(transactions, type) {
-    let validEntry = this.removeBlankTransaction(transactions, type);
-    return validEntry;
+  public validateTransaction(transactions) {
+    let transactionArr = this.removeBlankTransaction(transactions);
+    return transactionArr;
   }
 
   /**
@@ -423,18 +427,17 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       code: item.stockUnit.code,
       rate: 0
     };
-    let accIdx = 0;
     if (item.accountStockDetails.unitRates.length) {
-      this.stocksTransaction[accIdx].inventory[0].unit = item.accountStockDetails.unitRates[0];
-      this.stocksTransaction[accIdx].inventory[0].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
-      this.stocksTransaction[accIdx].inventory[0].unit.stockUnitCode = item.stockUnit.name;
+      this.stocksTransaction[stkIdx].inventory.unit = item.accountStockDetails.unitRates[0];
+      this.stocksTransaction[stkIdx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.stocksTransaction[stkIdx].inventory.unit.stockUnitCode = item.stockUnit.name;
 
     } else if (!item.accountStockDetails.unitRates.length) {
-      this.stocksTransaction[accIdx].inventory[0].unit = defaultUnit;
+      this.stocksTransaction[stkIdx].inventory.unit = defaultUnit;
     }
-    this.stocksTransaction[accIdx].particular = item.accountStockDetails.accountUniqueName;
-    this.stocksTransaction[accIdx].inventory[0].stock = { name: item.name, uniqueName: item.uniqueName};
-    this.stocksTransaction[accIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.stocksTransaction[stkIdx].particular = item.accountStockDetails.accountUniqueName;
+    this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
+    this.stocksTransaction[stkIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
   }
 
   /**
@@ -442,9 +445,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public changeQuantity(idx, val) {
     let i = this.selectedRowIdx;
-    // let entry = this.data.transactions[idx];
     this.stocksTransaction[i].inventory.quantity = Number(val);
     this.stocksTransaction[i].inventory.amount = Number((this.stocksTransaction[i].inventory.unit.rate * this.stocksTransaction[i].inventory.quantity).toFixed(2));
+    this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
     this.amountChanged(idx);
   }
 
@@ -455,6 +458,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let i = this.selectedRowIdx;
     this.stocksTransaction[i].inventory.unit.rate = Number(_.cloneDeep(val));
     this.stocksTransaction[i].inventory.amount = Number((this.stocksTransaction[i].inventory.unit.rate * this.stocksTransaction[i].inventory.quantity).toFixed(2));
+    this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
     this.amountChanged(idx);
   }
 
@@ -468,20 +472,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.stocksTransaction[i].inventory.unit.rate = Number((this.stocksTransaction[i].inventory.amount / this.stocksTransaction[i].inventory.quantity).toFixed(2));
       }
     }
-    // let stockTotal = _.sumBy(this.stocksTransaction[0].inventory,  (o: any) => Number(o.amount));
-    // this.stockTotal = stockTotal;
+    this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
+    let stockTotal = _.sumBy(this.stocksTransaction, (o: any) => Number(o.inventory.amount));
+    this.stockTotal = stockTotal;
   }
 
   public calculateRate(idx, val) {
-    // if (val) {
-    //   this.accountsTransaction[idx].amount = Number( this.stockTotal * val / 100);
-    // }
-    // this.calculateAmount();
+    if (val) {
+      this.accountsTransaction[idx].amount = Number( this.stockTotal * val / 100);
+    }
+    this.calculateAmount();
   }
 
   public changeTotal(idx, val) {
     if (val) {
-      this.accountsTransaction[idx].inventory.unit.rate = null;
+      this.accountsTransaction[idx].rate =  null;
     }
     this.calculateAmount();
   }
@@ -516,27 +521,36 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     if (!this.creditorAcc.uniqueName) {
       return this._toaster.errorToast("Party A/c Name can't be blank.");
     }
-
-    let idx = 0;
     let data = _.cloneDeep(this.data);
 
-    data.transactions = this.validateTransaction(data.transactions, 'stock');
-    let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
+    // let idx = 0;
+    data.transactions = this.prepareDataForVoucher();
+    data = this._tallyModuleService.prepareRequestForAPI(data);
+    data.transactions = this.validateTransaction(data.transactions);
 
-    if (!data.transactions.length) {
-      return this._toaster.errorToast('Atleast 1 stock entry required.');
-    }
+    let accUniqueName: string = this.creditorAcc.uniqueName;
 
-    let transactions = _.concat(data.transactions, accountsTransaction);
-    console.log(transactions);
+    _.forEach(data.transactions, element => {
+        element.type = (element.type === 'by') ? 'debit' : 'credit';
+      });
+    this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+    // data.transactions = this.validateTransaction(data.transactions, 'stock');
+    // let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
 
-    if (this.totalCreditAmount === this.totalDebitAmount) {
-      let accUniqueName: string = this.creditorAcc.uniqueName;
-      this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
-      this.showStockList.next(false);
-    } else {
-      this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-    }
+    // if (!data.transactions.length) {
+    //   return this._toaster.errorToast('Atleast 1 stock entry required.');
+    // }
+
+    // let transactions = _.concat(data.transactions, accountsTransaction);
+    // console.log(transactions);
+
+    // if (this.totalCreditAmount === this.totalDebitAmount) {
+    //   let accUniqueName: string = this.creditorAcc.uniqueName;
+    //   this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+    //   this.showStockList.next(false);
+    // } else {
+    //   this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+    // }
   }
 
   public prepareDataForInvoice(data) {
@@ -546,14 +560,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (filterData.transactions.length) {
       _.forEach(filterData.transactions, function(o, i) {
-        if (o.inventory && o.inventory) {
-           _.forEach(o.inventory, function(obj, idx) {
+        if (o.inventory) {
              stocksTransaction.push(o);
-           });
         } else {
+          o.inventory = {};
           accountsTransaction.push(o);
         }
       });
+      this.accountsTransaction = accountsTransaction;
+      this.stocksTransaction = stocksTransaction;
 
       if (!stocksTransaction.length) {
         this.addNewRow('stock');
@@ -561,22 +576,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (!accountsTransaction.length) {
         this.addNewRow('account');
       }
-
-      this.accountsTransaction = accountsTransaction;
-      this.stocksTransaction = stocksTransaction;
     }
   }
 
   public prepareDataForVoucher() {
-   let transactions = _.concat(this.accountsTransaction, this.stocksTransaction);
+   let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
    transactions = _.orderBy(transactions, 'type');
    _.forEach(transactions, function(obj, idx) {
-     if (obj.inventory) {
-        let inventoryObj = obj.inventory;
-        obj.inventory = [inventoryObj];
+     let inventoryArr = [];
+     if (obj.inventory && obj.inventory.amount) {
+        inventoryArr.push(obj.inventory);
+        obj.inventory = inventoryArr;
       }
     });
-   console.log(transactions);
+  //  console.log(transactions);
    return transactions;
   }
 
