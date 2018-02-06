@@ -30,13 +30,41 @@ export class TallyModuleService {
 
   public filteredAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
 
+  public selectedFieldType: BehaviorSubject<string> = new BehaviorSubject(null);
+
+  public mappingObj = [{
+    purchase: {
+      by: ['cash', 'bank', 'currentliabilities'],
+      to: ['expenses']
+    },
+    sales: {
+      by: ['currentassets', 'currentliabilities'],
+      to: ['income']
+    }
+  }];
+
   // public requestData: BehaviorSubject<any> = new BehaviorSubject(new BlankLedgerVM());
   public requestData: BehaviorSubject<any> = new BehaviorSubject(null);
 
   public transactionObj: object = {};
 
   constructor(private _toaster: ToasterService) {
-    //
+    this.selectedFieldType.distinctUntilChanged((p, q) => p === q).subscribe((type: string) => {
+      if (type && this.selectedPageInfo.value) {
+        let filteredAccounts;
+        if (this.selectedPageInfo.value.page === 'Purchase') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+      } else {
+        this.filteredAccounts.next(this.flattenAccounts.value);
+      }
+    });
   }
 
   public setVoucher(info: IPageInfo) {
@@ -179,90 +207,90 @@ export class TallyModuleService {
     console.log('the data in validation fn is :', data);
     let isValid = true;
     switch (data.voucherType) {
-      case 'Purchase':
-        let debitAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
-          if (indx !== -1) {
-            return trxn.type === 'debit' ? true : false;
-          } else {
-            return false;
-          }
-        });
-        if (debitAcc === -1) {
-          isValid = false;
-          this._toaster.errorToast('At least one debit account is required in Purchase (debit side).');
-        }
-        break;
-      case 'Sales':
-        let creditAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'income');
-          if (indx !== -1) {
-            return trxn.type === 'credit' ? true : false;
-          } else {
-            return false;
-          }
-        });
-        if (creditAcc === -1) {
-          isValid = false;
-          this._toaster.errorToast('At least one income account is required in Sales (credit side).');
-        }
-        break;
-        case 'Debit note':
-        let debitNoteAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
-          if (indx !== -1) {
-            return trxn.type === 'credit' ? true : false;
-          } else {
-            return false;
-          }
-        });
-        if (debitNoteAcc === -1) {
-          isValid = false;
-          this._toaster.errorToast('At least one credit account is required in Debit note (credit side).');
-        }
-        break;
-        case 'Credit note':
-        let creditNoteAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'income');
-          if (indx !== -1) {
-            return trxn.type === 'debit' ? true : false;
-          } else {
-            return false;
-          }
-        });
-        if (creditNoteAcc === -1) {
-          isValid = false;
-          this._toaster.errorToast('At least one debit account is required in Credit note (debit side).');
-        }
-        break;
-        case 'Payment':
-        let paymentAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank');
-          if (indx !== -1) {
-            return trxn.type === 'credit' ? true : false;
-          } else {
-            return false;
-          }
-        });
-        if (paymentAcc === -1) {
-          isValid = false;
-          this._toaster.errorToast('At least one credit account is required in Payment (credit side).');
-        }
-        break;
-        case 'Receipt':
-        let receiptAcc = data.transactions.findIndex((trxn) => {
-          let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank');
-          if (indx !== -1) {
-            return trxn.type === 'debit' ? true : false;
-          } else {
-            return false;
-          }
-        });
-        if (receiptAcc === -1) {
-          isValid = false;
-          this._toaster.errorToast('At least one debit account is required in Receipt (debit side).');
-        }
-        break;
+      // case 'Purchase':
+      //   let debitAcc = data.transactions.findIndex((trxn) => {
+      //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
+      //     if (indx !== -1) {
+      //       return trxn.type === 'debit' ? true : false;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      //   if (debitAcc === -1) {
+      //     isValid = false;
+      //     this._toaster.errorToast('At least one debit account is required in Purchase (debit side).');
+      //   }
+      //   break;
+      // case 'Sales':
+      //   let creditAcc = data.transactions.findIndex((trxn) => {
+      //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'income');
+      //     if (indx !== -1) {
+      //       return trxn.type === 'credit' ? true : false;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      //   if (creditAcc === -1) {
+      //     isValid = false;
+      //     this._toaster.errorToast('At least one income account is required in Sales (credit side).');
+      //   }
+      //   break;
+      //   case 'Debit note':
+      //   let debitNoteAcc = data.transactions.findIndex((trxn) => {
+      //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank' || pg.uniqueName === 'currentliabilities');
+      //     if (indx !== -1) {
+      //       return trxn.type === 'credit' ? true : false;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      //   if (debitNoteAcc === -1) {
+      //     isValid = false;
+      //     this._toaster.errorToast('At least one credit account is required in Debit note (credit side).');
+      //   }
+      //   break;
+      //   case 'Credit note':
+      //   let creditNoteAcc = data.transactions.findIndex((trxn) => {
+      //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'income');
+      //     if (indx !== -1) {
+      //       return trxn.type === 'debit' ? true : false;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      //   if (creditNoteAcc === -1) {
+      //     isValid = false;
+      //     this._toaster.errorToast('At least one debit account is required in Credit note (debit side).');
+      //   }
+      //   break;
+      //   case 'Payment':
+      //   let paymentAcc = data.transactions.findIndex((trxn) => {
+      //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank');
+      //     if (indx !== -1) {
+      //       return trxn.type === 'credit' ? true : false;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      //   if (paymentAcc === -1) {
+      //     isValid = false;
+      //     this._toaster.errorToast('At least one credit account is required in Payment (credit side).');
+      //   }
+      //   break;
+      //   case 'Receipt':
+      //   let receiptAcc = data.transactions.findIndex((trxn) => {
+      //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bank');
+      //     if (indx !== -1) {
+      //       return trxn.type === 'debit' ? true : false;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      //   if (receiptAcc === -1) {
+      //     isValid = false;
+      //     this._toaster.errorToast('At least one debit account is required in Receipt (debit side).');
+      //   }
+      //   break;
     }
     return isValid;
   }

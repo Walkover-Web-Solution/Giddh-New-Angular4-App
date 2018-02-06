@@ -15,14 +15,14 @@
     <li><a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'sales')" [ngClass]="{ activechild: selectedVoucher === 'Debit note'}" [hidden]="selectedVoucher !== 'Debit note'">V: As Voucher</a></li>
     <li><a class="cp" (click)="setSelectedPage('Debit note', 'invoice', 'sales')" [ngClass]="{ activechild: selectedVoucher === 'Debit note'}" [hidden]="selectedVoucher !== 'Debit note'">V: As Invoice</a></li>
 
-    <li><a class="cp" (click)="setSelectedPage('Credit note', 'invoice', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Credit note'}">F9: Credit Note</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Credit note'}">F9: Credit Note</a></li>
     <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'sales')" [ngClass]="{ activechild: selectedVoucher === 'Credit note'}" [hidden]="selectedVoucher !== 'Credit note'">V: As Voucher</a></li>
     <li><a class="cp" (click)="setSelectedPage('Credit note', 'invoice', 'sales')" [ngClass]="{ activechild: selectedVoucher === 'Credit note'}" [hidden]="selectedVoucher !== 'Credit note'">V: As Invoice</a></li>
 
-    <li><a class="cp" (click)="setSelectedPage('Receipt', 'invoice', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Receipt'}">F6: Receipt</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Contra', 'invoice', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Contra'}">F9: Contra</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Receipt', 'voucher', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Receipt'}">F6: Receipt</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Contra', 'voucher', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Contra'}">F9: Contra</a></li>
 
-    <li><a class="cp" (click)="setSelectedPage('Payment', 'invoice', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Payment'}">F5: Payment</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Payment'}">F5: Payment</a></li>
 </ul>
 
 <style>
