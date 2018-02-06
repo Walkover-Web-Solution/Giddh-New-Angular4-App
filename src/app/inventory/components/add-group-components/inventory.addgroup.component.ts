@@ -235,6 +235,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     if (this.addGroupForm.value.isSubGroup && this.selectedGroup) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
+    if (!stockRequest.isSubGroup) {
+      stockRequest.isSubGroup = false;
+    }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
   }
 
