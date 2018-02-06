@@ -113,8 +113,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.requestObj = _.cloneDeep(data);
-        this.requestObj.voucherType = 'Journal';
-        this.voucherType = 'Journal';
       }
     });
 

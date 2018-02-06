@@ -57,11 +57,11 @@
                                 <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
                                 <td>
                                     <input *ngIf="transaction.type === 'by'" type="text" min="0" [required]="transaction.particular" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
-                                        (blur)="addNewEntry(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.inventory[0]?.amount" />
+                                        (blur)="addNewEntry(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount" />
                                 </td>
                                 <td>
                                     <input *ngIf="transaction.type === 'to'" type="text" min="0" class="form-control text-right" [required]="transaction.particular" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
-                                        (blur)="addNewEntry(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.inventory[0]?.amount" />
+                                        (blur)="addNewEntry(transaction.amount,transaction, i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount" />
                                 </td>
                             </tr>
 
