@@ -110,7 +110,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.data = _.cloneDeep(data);
-        this.prepareDataForInvoice(this.data);
+        // this.prepareDataForInvoice(this.data);
       }
     });
 
@@ -126,7 +126,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (d && d.gridType === 'invoice') {
         this.data.voucherType = d.page;
       } else if (d) {
-        this.data.transactions = this.prepareDataForVoucher();
+        // this.data.transactions = this.prepareDataForVoucher();
         this._tallyModuleService.requestData.next(this.data);
       }
     });
@@ -425,16 +425,16 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     };
     let accIdx = 0;
     if (item.accountStockDetails.unitRates.length) {
-      this.data.transactions[accIdx].inventory[stkIdx].unit = item.accountStockDetails.unitRates[0];
-      this.data.transactions[accIdx].inventory[stkIdx].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
-      this.data.transactions[accIdx].inventory[stkIdx].unit.stockUnitCode = item.stockUnit.name;
+      this.stocksTransaction[accIdx].inventory[0].unit = item.accountStockDetails.unitRates[0];
+      this.stocksTransaction[accIdx].inventory[0].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.stocksTransaction[accIdx].inventory[0].unit.stockUnitCode = item.stockUnit.name;
 
     } else if (!item.accountStockDetails.unitRates.length) {
-      this.data.transactions[accIdx].inventory[stkIdx].unit = defaultUnit;
+      this.stocksTransaction[accIdx].inventory[0].unit = defaultUnit;
     }
-    this.data.transactions[accIdx].particular = item.accountStockDetails.accountUniqueName;
-    this.data.transactions[accIdx].inventory[stkIdx].stock = { name: item.name, uniqueName: item.uniqueName};
-    this.data.transactions[accIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.stocksTransaction[accIdx].particular = item.accountStockDetails.accountUniqueName;
+    this.stocksTransaction[accIdx].inventory[0].stock = { name: item.name, uniqueName: item.uniqueName};
+    this.stocksTransaction[accIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
   }
 
   /**
