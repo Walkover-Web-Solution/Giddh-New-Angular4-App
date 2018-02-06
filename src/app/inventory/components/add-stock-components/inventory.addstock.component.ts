@@ -773,6 +773,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.flattenDATA(data.body.results, flattenData);
         this.groupsData$ = Observable.of(flattenData);
         // this.autoGroupSelect(this.activeGroup);
+
+        if (!data.body.totalItems) {
+          let stockRequest = {
+            name: 'Main Group',
+            uniqueName: 'maingroup',
+            isSubGroup: false
+          };
+          this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
+        }
       }
     });
   }
