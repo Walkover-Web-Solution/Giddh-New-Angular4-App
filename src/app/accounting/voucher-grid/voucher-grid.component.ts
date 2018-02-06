@@ -304,7 +304,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
       return;
     }
-
   }
 
   /**
@@ -510,6 +509,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let i = this.selectedIdx;
     if (this.requestObj.transactions[i].inventory.length - 1 === idx && this.requestObj.transactions[i].inventory[idx].amount) {
       this.requestObj.transactions[i].inventory.push(this.initInventory());
+    }
+  }
+
+  public filterAccount(byOrTo: string) {
+    if (byOrTo) {
+      this._tallyModuleService.selectedFieldType.next(byOrTo);
     }
   }
 }
