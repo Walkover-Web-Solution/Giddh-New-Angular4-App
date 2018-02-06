@@ -154,7 +154,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       taxes: [],
       total: 0,
       discounts: [],
-      inventory: [this.initInventory()],
+      inventory: [],
       selectedAccount: {
         name: '',
         UniqueName: '',
