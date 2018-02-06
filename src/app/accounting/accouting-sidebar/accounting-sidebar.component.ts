@@ -1,4 +1,4 @@
-import { TallyModuleService } from './../tally-service';
+import { TallyModuleService, IPageInfo } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { CreatedBy } from './../../models/api-models/Invoice';
 import { IParticular, LedgerRequest } from './../../models/api-models/Ledger';
@@ -48,10 +48,23 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
         this.setSelectedPage('Journal', 'voucher', 'purchases');
       }
     });
+
+    this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((pageInfo: IPageInfo) => {
+      if (pageInfo && pageInfo.page !== this.selectedVoucher) {
+        this.selectedVoucher = pageInfo.page;
+      }
+    });
   }
 
   public ngOnChanges(s) {
-    console.log(s);
     if (s.AccountListOpen) {
       this.showAccountList = !this.showAccountList;
     }
