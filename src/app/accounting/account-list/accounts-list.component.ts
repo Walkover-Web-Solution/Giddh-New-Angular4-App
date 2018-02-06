@@ -114,6 +114,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   //   });
   this._tallyService.filteredAccounts.subscribe((accounts) => {
     if (accounts) {
+      console.log('accounts are :', accounts);
       this.renderAccountList(accounts);
       this.flattenAccounts = accounts;
     }
