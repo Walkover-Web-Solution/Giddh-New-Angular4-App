@@ -114,7 +114,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   //   });
   this._tallyService.filteredAccounts.subscribe((accounts) => {
     if (accounts) {
-      console.log('accounts are :', accounts);
+      // console.log('accounts are :', accounts);
       this.renderAccountList(accounts);
       this.flattenAccounts = accounts;
     }
@@ -151,7 +151,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       data.map(d => {
         accounts.push(d);
       });
-      console.log(accounts);
+      // console.log(accounts);
       this.accounts = accounts;
     }
   }
@@ -182,7 +182,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
         });
       }
     });
-    console.log(stockAccountArr, 'stocks');
+    // console.log(stockAccountArr, 'stocks');
     this.stockList = stockAccountArr;
   }
 
