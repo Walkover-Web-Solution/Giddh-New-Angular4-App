@@ -262,6 +262,9 @@ export class TallyModuleService {
             }
             transactions.push(obj);
           });
+        } else {
+          delete txn.inventory;
+          transactions.push(txn);
         }
       });
       if (transactions.length) {

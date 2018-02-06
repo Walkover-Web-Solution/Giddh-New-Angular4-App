@@ -427,7 +427,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    console.log(item);
+    // console.log(item);
     let idx = this.selectedStockIdx;
     let entryItem = _.cloneDeep(item);
     this.prepareEntry(entryItem, this.selectedIdx);
@@ -485,7 +485,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * calculateTransactionTotal
    */
   public calculateTransactionTotal(inventory) {
-    console.log('The env we got is :', inventory);
+    // console.log('The env we got is :', inventory);
     let total = 0;
     inventory.forEach((inv) => {
       total = total + Number(inv.amount);
