@@ -82,7 +82,7 @@
                                                 <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                             </div>
                                         </div>
-                                        <div class="pull-right mrT pdR2">
+                                        <div class="pull-right mrT unit_add">
                                             <button class="btn-xs btn-default" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
                                             <button class="btn-xs btn-default" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i class="fa fa-times dlet"></i></button>
                                         </div>
@@ -125,7 +125,7 @@
                                                 <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                             </div>
                                         </div>
-                                        <div class="pull-right mrT pdR2">
+                                        <div class="pull-right mrT unit_add">
                                             <button class="btn-xs btn-default" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
                                             <button class="btn-xs btn-default" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="fa fa-times dlet"></i></button>
                                         </div>
@@ -163,7 +163,7 @@
                         <div class="col-xs-12 text-right">
                             <div class="row">
 
-                                <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" class="btn btn-default" [disabled]="addStockForm.invalid">Cancel</button>
+                                <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" class="btn btn-default">Cancel</button>
                                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save</button>
                                 <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()" [disabled]="addStockForm.invalid || disableStockButton">Update</button>
                                 <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-danger" (click)="deleteStock()">
