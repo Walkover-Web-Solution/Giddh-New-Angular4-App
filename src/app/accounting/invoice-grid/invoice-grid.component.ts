@@ -54,7 +54,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public moment = moment;
   public accountSearch: string = '';
   public stockSearch: string;
-  public selectedStockIdx: any;
+  public selectedRowIdx: any;
   public isSelectedRow: boolean;
   public selectedInput: any;
   public showFromDatePicker: boolean = false;
@@ -125,6 +125,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (d && d.gridType === 'invoice') {
         this.data.voucherType = d.page;
       } else if (d) {
+        this.data.transactions = this.prepareDataForVoucher();
         this._tallyModuleService.requestData.next(this.data);
       }
     });
@@ -141,9 +142,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   /**
-   * newRowType() to push new object
+   * addNewRow() to push new object
    */
-  public newRowType(type) {
+  public addNewRow(type) {
     let entryObj = {
       amount: null,
       particular: '',
@@ -153,7 +154,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       taxes: [],
       total: null,
       discounts: [],
-      inventory: [this.initInventory()],
+      inventory: [],
       selectedAccount: {
         name: '',
         uniqueName: ''
@@ -161,7 +162,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     };
 
     if (type === 'stock') {
-      this.data.transactions.push(entryObj);
+      let stockEntry = entryObj;
+      stockEntry.inventory.push(this.initInventory());
+      this.stocksTransaction.push(stockEntry);
     } else if (type === 'account') {
       this.accountsTransaction.push(entryObj);
     }
@@ -170,10 +173,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * selectRow() on entryObj focus/blur
    */
-  public selectRow(type: boolean, stkIdx, accIdx) {
+  public selectRow(type: boolean, stkIdx) {
     this.isSelectedRow = type;
-    this.selectedStockIdx = stkIdx;
-    this.selectedAccIdx = accIdx;
+    this.selectedRowIdx = stkIdx;
+    // this.selectedAccIdx = accIdx;
   }
 
   /**
@@ -182,7 +185,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public selectAccountRow(type: boolean, idx) {
     // this.isSelectedRow = type;
     // this.selectedAccIdx = idx;
-    // this.selectedStockIdx = null;
+    // this.selectedRowIdx = null;
   }
 
   /**
@@ -219,7 +222,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
-    let idx = this.selectedAccIdx;
+    let idx = this.selectedRowIdx;
 
     if (this.accountType === 'creditor') {
       this.creditorAcc = acc;
@@ -228,7 +231,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.debtorAcc = acc;
     }
 
-    if (this.selectedAccIdx > -1) {
+    if (this.selectedRowIdx > -1) {
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
@@ -288,8 +291,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.showAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
-    this.newRowType('stock');
-    this.newRowType('account');
+    this.addNewRow('stock');
+    this.addNewRow('account');
     this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.entryDate = moment();
     this.creditorAcc = {};
@@ -372,10 +375,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    let idx = this.selectedStockIdx;
-    let accIdx = this.selectedAccIdx;
+    let idx = this.selectedRowIdx;
     let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, idx, accIdx);
+    this.prepareEntry(entryItem, idx);
     setTimeout(() => {
       this.selectedInput.focus();
       this.showStockList.next(false);
@@ -385,12 +387,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * prepareEntry
    */
-  public prepareEntry(item, stkIdx, accIdx) {
+  public prepareEntry(item, stkIdx) {
     let defaultUnit = {
       stockUnitCode: item.stockUnit.name,
       code: item.stockUnit.code,
       rate: 0
     };
+    let accIdx = 0;
     if (item.accountStockDetails.unitRates.length) {
       this.data.transactions[accIdx].inventory[stkIdx].unit = item.accountStockDetails.unitRates[0];
       this.data.transactions[accIdx].inventory[stkIdx].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
@@ -408,9 +411,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * calculateAmount
    */
   public changeQuantity(idx, val) {
-    let i = this.selectedAccIdx;
+    let i = this.selectedRowIdx;
     // let entry = this.data.transactions[idx];
-    this.data.transactions[i].inventory[idx].quantity = Number(val);
+    this.stocksTransaction[i].inventory[idx].quantity = Number(val);
     this.data.transactions[i].inventory[idx].amount = Number((this.data.transactions[i].inventory[idx].unit.rate * this.data.transactions[i].inventory[idx].quantity).toFixed(2));
     this.amountChanged(idx);
   }
@@ -419,7 +422,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * changePrice
    */
   public changePrice(idx, val) {
-    let i = this.selectedAccIdx;
+    let i = this.selectedRowIdx;
     this.data.transactions[i].inventory[idx].unit.rate = Number(_.cloneDeep(val));
     this.data.transactions[i].inventory[idx].amount = Number((this.data.transactions[i].inventory[idx].unit.rate * this.data.transactions[i].inventory[idx].quantity).toFixed(2));
     this.amountChanged(idx);
@@ -429,7 +432,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * amountChanged
    */
   public amountChanged(idx) {
-    let i = this.selectedAccIdx;
+    let i = this.selectedRowIdx;
     if (this.data.transactions[i] && this.data.transactions[idx].inventory[idx].stock && this.data.transactions[i].inventory[idx].quantity) {
       if (this.data.transactions[i].inventory[idx].quantity) {
         this.data.transactions[i].inventory[idx].unit.rate = Number((this.data.transactions[i].inventory[idx].amount / this.data.transactions[i].inventory[idx].quantity).toFixed(2));
@@ -469,7 +472,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.data.transactions.splice(idx, 1);
       this.showStockList.next(false);
       if (!this.data.transactions.length) {
-        this.newRowType('stock');
+        this.addNewRow('stock');
       }
       this.amountChanged(idx);
     }
@@ -541,7 +544,16 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       });
       console.log('stocksTransaction', stocksTransaction);
       console.log('accountsTransaction', accountsTransaction);
+      this.addNewRow('stock');
+      this.accountsTransaction = accountsTransaction;
+      this.stocksTransaction = stocksTransaction;
     }
+  }
+
+  public prepareDataForVoucher() {
+   let transactions = _.concat(this.accountsTransaction, this.stocksTransaction);
+   console.log(transactions);
+   return transactions;
   }
 
 }
