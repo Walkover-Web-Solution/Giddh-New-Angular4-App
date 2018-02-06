@@ -214,57 +214,61 @@ export class TallyModuleService {
     }
   }
 
-  /**
-   * prepareRequestForAPI
-   */
-  // public prepareRequestForAPI(data: any) {
-  //   if (data.transactions && data.transactions.length) {
-  //     data.transactions.forEach((transaction) => {
-  //       transaction.inventory.forEach((inv) => {
-  //         let trxnObj = {
-
-  //         }
-  //         transaction.inventory = inv;
-  //       });
-  //       delete transaction.inventory;
-  //     });
-  //     return data;
+  // public prepareRequestForAPI(data: any): BlankLedgerVM {
+  //   if (!data.voucherType) {
+  //     this._toaster.errorToast('voucherType not found.');
+  //     return;
   //   } else {
-  //     return data;
+  //     if (this.validateForData(data)) {
+  //       let requestObj = _.cloneDeep(data);
+  //       let transactions = [];
+  //       // filter transactions which have selected account
+  //       _.each(requestObj.transactions, (txn: any) => {
+  //         if (txn.inventory && txn.inventory.length) {
+  //           _.each(txn.inventory, (inv) => {
+  //             let obj = txn;
+  //             if (inv.stock.name && inv.amount) {
+  //               obj.inventory = inv;
+  //             } else {
+  //               delete obj.inventory;
+  //             }
+  //             transactions.push(obj);
+  //           });
+  //         }
+  //       });
+  //       if (transactions.length) {
+  //         requestObj.transactions = transactions;
+  //       }
+  //       return requestObj;
+  //     } else {
+  //       this._toaster.errorToast('Validation failed.');
+  //     }
   //   }
   // }
 
-  public prepareRequestForAPI(data: any): BlankLedgerVM {
-    if (!data.voucherType) {
-      this._toaster.errorToast('voucherType not found.');
-      return;
-    } else {
-      if (this.validateForData(data)) {
-        let requestObj = _.cloneDeep(data);
-        let transactions = [];
-        // filter transactions which have selected account
-        _.each(requestObj.transactions, (txn: any) => {
-          if (txn.inventory && txn.inventory.length) {
-            _.each(txn.inventory, (inv) => {
-              let obj = txn;
-              if (inv.stock.name && inv.amount) {
-                obj.inventory = inv;
-              } else {
-                delete obj.inventory;
-              }
-              transactions.push(obj);
-            });
-          }
-        });
-        if (transactions.length) {
-          requestObj.transactions = transactions;
+    public prepareRequestForAPI(data: any): BlankLedgerVM {
+
+      let requestObj = _.cloneDeep(data);
+      let transactions = [];
+      // filter transactions which have selected account
+      _.each(requestObj.transactions, (txn: any) => {
+        if (txn.inventory && txn.inventory.length) {
+          _.each(txn.inventory, (inv) => {
+            let obj = txn;
+            if (inv.stock.name && inv.amount) {
+              obj.inventory = inv;
+            } else {
+              delete obj.inventory;
+            }
+            transactions.push(obj);
+          });
         }
-        return requestObj;
-      } else {
-        this._toaster.errorToast('Validation failed.');
+      });
+      if (transactions.length) {
+        requestObj.transactions = transactions;
       }
+      return requestObj;
     }
-  }
 
   private validateForData(data) {
     console.log('the data in validation fn is :', data);
