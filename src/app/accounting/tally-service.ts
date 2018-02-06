@@ -52,12 +52,75 @@ export class TallyModuleService {
     this.selectedFieldType.distinctUntilChanged((p, q) => p === q).subscribe((type: string) => {
       if (type && this.selectedPageInfo.value) {
         let filteredAccounts;
+        if (this.selectedPageInfo.value.page === 'Journal') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
         if (this.selectedPageInfo.value.page === 'Purchase') {
           if (type === 'by') {
             filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
             this.filteredAccounts.next(filteredAccounts);
           } else if (type === 'to') {
             filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+        if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+        if (this.selectedPageInfo.value.page === 'Payment') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+        if (this.selectedPageInfo.value.page === 'Contra') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+        if (this.selectedPageInfo.value.page === 'Receipt') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+        if (this.selectedPageInfo.value.page === 'Debit note') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          }
+        }
+        if (this.selectedPageInfo.value.page === 'Credit note') {
+          if (type === 'by') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+            this.filteredAccounts.next(filteredAccounts);
+          } else if (type === 'to') {
+            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
             this.filteredAccounts.next(filteredAccounts);
           }
         }
