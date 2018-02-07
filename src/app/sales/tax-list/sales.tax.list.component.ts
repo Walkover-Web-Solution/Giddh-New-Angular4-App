@@ -105,21 +105,15 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private applicableTaxesFn() {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
-      forEach(this.applicableTaxes, (tax) => {
-        this.taxList.map((item: ITaxList) => {
-          if (this.getIsTaxApplicable(tax)) {
-            item.isChecked = (item.uniqueName === tax) ? true : false;
-            item.isDisabled = false;
-          }else {
-            item.isChecked = false;
-            item.isDisabled = true;
-          }
-          return item;
-        });
+      this.taxList.map((item: ITaxList) => {
+        item.isChecked = (indexOf(this.applicableTaxes, item.uniqueName) !== -1) ? this.getIsTaxApplicable(item.uniqueName) : false;
+        item.isDisabled = false;
+        return item;
       });
     }else {
       this.taxList.map((item: ITaxList) => {
         item.isChecked = false;
+        item.isDisabled = false;
         return item;
       });
     }
