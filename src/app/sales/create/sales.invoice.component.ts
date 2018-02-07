@@ -40,6 +40,9 @@ import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccount
 import * as uuid from 'uuid';
 import { GeneralActions } from 'app/actions/general/general.actions';
 import { setTimeout } from 'timers';
+import { createSelector } from 'reselect';
+import { forEach, map, cloneDeep } from '../../lodash-optimized';
+import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -169,6 +172,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public pageList: IOption[] = VOUCHER_TYPE_LIST;
   public selectedPage: string = VOUCHER_TYPE_LIST[0].value;
   public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
+  public universalDate: any;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -211,7 +215,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     // bind state sources
-   this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
+    this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
       let arr: IOption[] = [];
         if (states) {
           states.map(d => {
@@ -357,6 +361,32 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     });
+
+    // listen for universal date
+    this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        try {
+          this.universalDate = moment(dateObj[0]).toDate();
+          this.assignDates();
+        } catch (e) {
+          //
+        }
+      }
+    })).subscribe();
+  }
+
+  public assignDates() {
+    let o = cloneDeep(this.invFormData);
+    let date = this.universalDate || new Date();
+    o.voucherDetails.voucherDate = date;
+    o.voucherDetails.dueDate = date;
+    o.templateDetails.other.shippingDate = date;
+    forEach(o.entries, (entry: SalesEntryClass) => {
+      forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+        txn.date = date;
+      });
+    });
+    return Object.assign(this.invFormData, o);
   }
 
   public makeCustomerList() {
@@ -416,7 +446,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     f.form.reset();
     this.invFormData = new VoucherClass();
     this.typeaheadNoResultsOfCustomer = false;
-    // this.selectedPage = VOUCHER_TYPE_LIST[0].value;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
@@ -453,13 +482,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniquename
-    if (data.accountDetails && !data.accountDetails.uniqueName) {
-      if (this.typeaheadNoResultsOfCustomer) {
-        this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
-      }else {
-        this._toasty.warningToast('Customer Name can\'t be empty');
+    if (data.accountDetails) {
+      if (!data.accountDetails.uniqueName) {
+        if (this.typeaheadNoResultsOfCustomer) {
+          this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+        }else {
+          this._toasty.warningToast('Customer Name can\'t be empty');
+        }
+        return;
       }
-      return;
+      if (data.accountDetails.email) {
+        if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
+          this._toasty.warningToast('Invalid Email Address.');
+          return;
+        }
+      }
     }
 
     // replace /n to br in case of message
@@ -674,7 +711,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }, 700);
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number): void {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: any): void {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
       this.salesAccounts$.take(1).subscribe(idata => {
         idata.map(fa => {
@@ -832,6 +869,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     let entry: SalesEntryClass = new SalesEntryClass();
     this.invFormData.entries.push(entry);
+    // set default date
+    forEach(this.invFormData.entries, (e) => {
+      forEach(e.transactions, (t: SalesTransactionItemClass) => {
+        t.date = this.universalDate || new Date();
+      });
+    });
   }
 
   public removeTransaction(entryIdx: number) {
