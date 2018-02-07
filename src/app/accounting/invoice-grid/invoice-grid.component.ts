@@ -530,7 +530,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     let accUniqueName: string = this.creditorAcc.uniqueName;
 
-    _.forEach(data.transactions, element => {
+    _.forEach(data.transactions, (element: any)  => {
         element.type = (element.type === 'by') ? 'debit' : 'credit';
       });
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
