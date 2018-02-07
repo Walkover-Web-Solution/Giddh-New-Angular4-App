@@ -180,7 +180,7 @@ export class TallyModuleService {
   public getAccounts() {
     let accounts = [];
     if (this.selectedPageInfo.value) {
-      console.log('this.selectedPageInfo.value inside service is :', this.selectedPageInfo.value);
+      // console.log('this.selectedPageInfo.value inside service is :', this.selectedPageInfo.value);
       switch (this.selectedPageInfo.value.page) {
         case 'Journal':
           accounts = this.flattenAccounts.value;
@@ -214,38 +214,6 @@ export class TallyModuleService {
     }
   }
 
-  // public prepareRequestForAPI(data: any): BlankLedgerVM {
-  //   if (!data.voucherType) {
-  //     this._toaster.errorToast('voucherType not found.');
-  //     return;
-  //   } else {
-  //     if (this.validateForData(data)) {
-  //       let requestObj = _.cloneDeep(data);
-  //       let transactions = [];
-  //       // filter transactions which have selected account
-  //       _.each(requestObj.transactions, (txn: any) => {
-  //         if (txn.inventory && txn.inventory.length) {
-  //           _.each(txn.inventory, (inv) => {
-  //             let obj = txn;
-  //             if (inv.stock.name && inv.amount) {
-  //               obj.inventory = inv;
-  //             } else {
-  //               delete obj.inventory;
-  //             }
-  //             transactions.push(obj);
-  //           });
-  //         }
-  //       });
-  //       if (transactions.length) {
-  //         requestObj.transactions = transactions;
-  //       }
-  //       return requestObj;
-  //     } else {
-  //       this._toaster.errorToast('Validation failed.');
-  //     }
-  //   }
-  // }
-
     public prepareRequestForAPI(data: any): BlankLedgerVM {
 
       let requestObj = _.cloneDeep(data);
@@ -253,8 +221,9 @@ export class TallyModuleService {
       // filter transactions which have selected account
       _.each(requestObj.transactions, (txn: any) => {
         if (txn.inventory && txn.inventory.length) {
-          _.each(txn.inventory, (inv) => {
-            let obj = txn;
+          _.each(txn.inventory, (inv, i) => {
+            let obj = null;
+            obj = _.cloneDeep(txn);
             if (inv.stock.name && inv.amount) {
               obj.inventory = inv;
             } else {
@@ -274,7 +243,7 @@ export class TallyModuleService {
     }
 
   private validateForData(data) {
-    console.log('the data in validation fn is :', data);
+    // console.log('the data in validation fn is :', data);
     let isValid = true;
     switch (data.voucherType) {
       // case 'Purchase':

@@ -108,6 +108,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.data.voucherType = d.page;
         this.gridType = d.gridType;
       } else if (d && this.data.transactions) {
+        this.gridType = d.gridType;
         this.data.transactions = this.prepareDataForVoucher();
         this._tallyModuleService.requestData.next(this.data);
       }
@@ -124,9 +125,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.data = _.cloneDeep(data);
-        if (this.gridType === 'invoice') {
-          this.prepareDataForInvoice(this.data);
-        }
+        this.prepareDataForInvoice(this.data);
       }
     });
 
@@ -438,6 +437,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.stocksTransaction[stkIdx].particular = item.accountStockDetails.accountUniqueName;
     this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
     this.stocksTransaction[stkIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    this.stocksTransaction[stkIdx].selectedAccount.name = item.accountStockDetails.name;
   }
 
   /**
@@ -560,7 +560,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (filterData.transactions.length) {
       _.forEach(filterData.transactions, function(o, i) {
-        if (o.inventory) {
+        if (o.inventory && o.inventory.amount) {
              stocksTransaction.push(o);
         } else {
           o.inventory = {};
@@ -581,11 +581,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public prepareDataForVoucher() {
    let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
+  //  let result = _.chain(transactions).groupBy('particular').value();
    transactions = _.orderBy(transactions, 'type');
    _.forEach(transactions, function(obj, idx) {
      let inventoryArr = [];
      if (obj.inventory && obj.inventory.amount) {
         inventoryArr.push(obj.inventory);
+        obj.inventory = inventoryArr;
+      } else {
         obj.inventory = inventoryArr;
       }
     });

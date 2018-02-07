@@ -178,6 +178,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     _.forEach(ItemArr, function(obj) {
       if (obj.stocks) {
         _.forEach(obj.stocks, function(stock) {
+          stock.accountStockDetails.name = obj.name;
           stockAccountArr.push(stock);
         });
       }
