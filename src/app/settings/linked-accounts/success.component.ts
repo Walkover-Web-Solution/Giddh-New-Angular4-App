@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+// import { Component } from '@angular/core';
+// import { ActivatedRoute } from '@angular/router';
 
-@Component({
-  selector: 'success',
-  templateUrl: './success.html'
-})
-export class SuccessComponent {
+// @Component({
+//   selector: 'success',
+//   templateUrl: './success.html'
+// })
+// export class SuccessComponent {
 
-  public localState: any;
+//   public localState: any;
 
-  constructor(public route: ActivatedRoute) {
-  }
-}
+//   constructor(public route: ActivatedRoute) {
+//   }
+// }
