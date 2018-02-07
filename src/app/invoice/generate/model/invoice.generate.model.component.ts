@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
     @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
     public goAhead: boolean = false;
+    public hasErr: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
         private store: Store<AppState>,
@@ -21,14 +22,19 @@ export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
         .takeUntil(this.destroyed$)
         .distinctUntilChanged()
         .subscribe((o: any) => {
+          this.hasErr = false;
           if (o && o.invoiceData && o.invoiceTemplateConditions) {
             this.goAhead = true;
+          }else {
+            this.hasErr = true;
           }
         }
       );
     }
 
     public ngOnDestroy() {
+      this.hasErr = false;
+      this.goAhead = false;
       this.destroyed$.next(true);
       this.destroyed$.complete();
     }
