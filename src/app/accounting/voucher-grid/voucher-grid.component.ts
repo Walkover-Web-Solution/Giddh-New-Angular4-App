@@ -278,10 +278,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.newEntryObj();
     }
 
-    let debitTransactions = _.filter(this.requestObj.transactions, (o) => o.type === 'by');
-    this.totalDebitAmount = _.sumBy(debitTransactions, (o) => Number(o.amount));
-    let creditTransactions = _.filter(this.requestObj.transactions, (o) => o.type === 'to');
-    this.totalCreditAmount = _.sumBy(creditTransactions, (o) => Number(o.amount));
+    let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+    this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
+    let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+    this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
   }
 
   /**
@@ -315,7 +315,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return;
     }
     if (this.totalCreditAmount === this.totalDebitAmount) {
-      _.forEach(data.transactions, element => {
+      _.forEach(data.transactions, (element: any) => {
         element.type = (element.type === 'by') ? 'credit' : 'debit';
       });
       let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
@@ -396,7 +396,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public validateTransaction(transactions) {
     let validEntry = this.removeBlankTransaction(transactions);
     let entryIsValid = true;
-    _.forEach(validEntry, function(obj, idx) {
+    _.forEach(validEntry, function(obj: any, idx) {
       if (obj.particular && !obj.amount) {
         obj.amount = 0;
       } else if (obj && !obj.particular) {
