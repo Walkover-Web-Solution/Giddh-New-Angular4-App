@@ -261,9 +261,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         //   this.taxGroupForm.get('taxes').setValue(taxes);
         //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         // }
-        if (this.columnsRef) {
-          if (this.columnsRef.columns[1]) {
-            let col = this.columnsRef.columns[1].uniqueName;
+        if (this.breadcrumbUniquePath) {
+          if (this.breadcrumbUniquePath[0]) {
+            let col = this.breadcrumbUniquePath[0];
             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
           }
@@ -294,12 +294,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.isTaxableAccount$ = this.store.select(createSelector([
       (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-      (state: AppState) => state.groupwithaccounts.activeGroup,
       (state: AppState) => state.groupwithaccounts.activeAccount],
-      (groupswithaccounts, activeGroup, activeAccount) => {
+      (groupswithaccounts, activeAccount) => {
         let result: boolean = false;
-        if (groupswithaccounts && activeGroup && activeAccount) {
-          result = this.getAccountFromGroup(groupswithaccounts, activeGroup.uniqueName, false);
+        let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        if (groupswithaccounts && activeGroupUniqueName && activeAccount) {
+          result = this.getAccountFromGroup(groupswithaccounts, activeGroupUniqueName, false);
         } else {
           result = false;
         }
@@ -347,7 +347,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     let grpObject = new AccountMoveRequest();
     grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
-    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+
+    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
     this.moveAccountForm.reset();
   }
 
@@ -638,7 +641,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public deleteAccount() {
     let activeAccUniqueName = null;
     this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
     this.hideDeleteAccountModal();
   }
 

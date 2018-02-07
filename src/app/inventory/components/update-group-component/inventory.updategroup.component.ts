@@ -5,20 +5,21 @@ import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/cor
   templateUrl: './inventory.updategroup.component.html'
 })
 export class InventoryUpdateGroupComponent implements OnInit, OnDestroy {
-  
 
   /**
    * TypeScript public modifiers
    */
   constructor()
-  {}
+  {
+    //
+  }
 
   public ngOnInit() {
-
+    //
   }
 
   public ngOnDestroy() {
+    //
   }
-
 
 }

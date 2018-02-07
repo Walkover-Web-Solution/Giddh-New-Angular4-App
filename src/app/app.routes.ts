@@ -1,6 +1,6 @@
-import { MagicLinkComponent } from './magic-link/magic-link.component';
+// import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { NeedsAuthorization } from './decorators/needAuthorization';
-import { SuccessComponent } from './settings/linked-accounts/success.component';
+// import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
@@ -14,9 +14,9 @@ export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
-  { path: 'success', component: SuccessComponent },
+  // { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
-  { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
+  // { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
   { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
   { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
   { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
@@ -33,7 +33,7 @@ export const ROUTES: Routes = [
   { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
-  { path: 'accounting', redirectTo: 'pages/accounting', pathMatch: 'full' },
+  { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -55,7 +55,7 @@ export const ROUTES: Routes = [
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization] },
       { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization] },
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
-      { path: 'accounting', loadChildren: './accounting/accounting.module#AccountingModule' },
+      { path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
