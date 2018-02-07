@@ -10,17 +10,36 @@
 
                 <div class="">
                     <section class="form_body witBg clearfix mrBChldLbl">
+
                         <div class="row">
 
-                            <div class="form-group col-xs-4">
+
+                            <div class="form-group col-xs-6">
+
                                 <label>Name <sup>*</sup></label>
                                 <!-- (change)="generateUniqueName()" -->
                                 <input type="text" name="name" class="form-control" formControlName="name" />
                             </div>
+
+                            <div class="form-group col-xs-6">
+                                <label>Select Parent Group <sup>*</sup></label>
+                                <sh-select [options]="groupsData$ | async" formControlName="parentGroup" required [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
+                                    [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewGroupPane()" [notFoundLink]="true" [dropdownMinHeight]="70"></sh-select>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
                             <div class="form-group col-xs-4">
                                 <label>Unique Name</label>
                                 <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addStockForm.get('uniqueName')" class="form-control" formControlName="uniqueName">
                             </div>
+                            <div class="form-group col-xs-4">
+                                <label>HSN Code</label>
+                                <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="hsnNumber" />
+                            </div>
+
 
                             <div class="form-group col-xs-4">
                                 <label>Stock Unit <span class="required">*</span></label>
@@ -136,19 +155,6 @@
 
 
 
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-xs-6">
-                                <label>Select Parent Group <sup>*</sup></label>
-                                <sh-select [options]="groupsData$ | async" formControlName="parentGroup" required [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
-                                    [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewGroupPane()" [notFoundLink]="true" [dropdownMinHeight]="70"></sh-select>
-                            </div>
-
-                            <div class="form-group col-xs-6">
-                                <label>HSN Code</label>
-                                <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="hsnNumber" />
-                            </div>
                         </div>
 
                         <div class="row mrT1">

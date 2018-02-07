@@ -144,7 +144,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // add stock form
     this.addStockForm = this._fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      uniqueName: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2)]],
+      uniqueName: ['', [Validators.required, Validators.minLength(2)]],
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
       stockRate: [{ value: '', disabled: true }],
@@ -604,8 +604,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
     }
     if (linkedStocksControls.length > 1) {
-      linkedStocksControls.controls = linkedStocksControls.controls.splice(1);
-      // linkedStocksControls.push(this.initialIManufacturingDetails());
+      linkedStocksControls.controls = [];
+      linkedStocksControls.push(this.initialIManufacturingDetails());
     }
 
     this.addStockForm.reset();
@@ -672,6 +672,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.stockUnitCode = formObj.stockUnitCode;
     stockObj.openingAmount = formObj.openingAmount;
     stockObj.openingQuantity = formObj.openingQuantity;
+    stockObj.hsnNumber = formObj.hsnNumber;
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
         return pr.stockUnitCode && pr.rate;
@@ -854,12 +855,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public removeBlankLinkedStock(linkedStocks) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    _.forEach(linkedStocks, function(o, i) {
+    let rawArr = control.getRawValue();
+    _.forEach(rawArr, function(o, i) {
       if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
-        linkedStocks = _.without(linkedStocks, o);
+        rawArr = _.without(rawArr, o);
         control.removeAt(i);
       }
     });
+    linkedStocks = _.cloneDeep(rawArr);
     return linkedStocks;
   }
 
