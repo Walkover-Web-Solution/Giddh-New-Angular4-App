@@ -166,11 +166,24 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
   public filterData() {
+    this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
     this.onPropertyChanged.emit(this.filterForm.value);
   }
   public refreshData() {
+    this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
     let data = _.cloneDeep(this.filterForm.value);
     data.refresh = true;
     this.onPropertyChanged.emit(data);
+  }
+
+  public setFYFirstTime(selectedFY: string) {
+    if (selectedFY) {
+      let inx = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === selectedFY);
+      if (inx !== -1) {
+        this.filterForm.patchValue({
+          fy: inx === 0 ? 0 : inx * -1
+        });
+      }
+    }
   }
 }
