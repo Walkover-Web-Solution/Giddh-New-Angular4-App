@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass, CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -24,7 +24,9 @@ import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { orderBy } from '../../lodash-optimized';
+import { orderBy, find } from '../../lodash-optimized';
+import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
+import { BaseResponse } from 'app/models/api-models/BaseResponse';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   { label: '12', value: '12' },
@@ -91,6 +93,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
+    private _invoiceTemplatesService: InvoiceTemplatesService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.invoiceSearchRequest.page = 1;
@@ -139,7 +142,26 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         return true;
       }).subscribe((o: PreviewInvoiceResponseClass) => {
         if (o) {
-          this.getInvoiceTemplateDetails(o.templateUniqueName);
+          /**
+           * find if templateUniqueName is exist in company all templates
+           * check for isDefault flag
+           * last hope call api from first template
+           * */
+          this._invoiceTemplatesService.getAllCreatedTemplates().subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
+            if (res.status === 'success' && res.body.length) {
+              let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
+              if (template) {
+                this.getInvoiceTemplateDetails(template.uniqueName);
+              }else {
+                template = find(res.body, (item) => item.isDefault);
+                if (template) {
+                  this.getInvoiceTemplateDetails(template.uniqueName);
+                }else {
+                  this.getInvoiceTemplateDetails(res.body[0].uniqueName);
+                }
+              }
+            }
+          });
         }
       });
 

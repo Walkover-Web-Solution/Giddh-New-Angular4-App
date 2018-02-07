@@ -294,7 +294,7 @@ export class TransactionVM {
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];
   public isStock?: boolean = false;
-  public inventory?: IInventory;
+  public inventory?: IInventory | any;
 }
 
 export interface IInventory {
