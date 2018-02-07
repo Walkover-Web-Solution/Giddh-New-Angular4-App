@@ -12,12 +12,14 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { IForceClear } from 'app/models/api-models/Sales';
+import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html'
 })
-export class InventoryCustomStockComponent implements OnInit, OnDestroy {
+export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isAsideClose: boolean;
 
   public stockUnitsDropDown$: Observable<IOption[]>;
@@ -29,11 +31,13 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public createCustomStockInProcess$: Observable<boolean>;
   public updateCustomStockInProcess$: Observable<boolean>;
   public deleteCustomStockInProcessCode$: Observable<any[]>;
+  public createCustomStockSuccess$: Observable<boolean>;
   public stockUnitsList = StockUnits;
   public companyProfile: any;
   public country: string;
   public selectedUnitName: string;
   public isIndia: boolean;
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -69,7 +73,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
     this.createCustomStockInProcess$ = this.store.select(s => s.inventory.createCustomStockInProcess).takeUntil(this.destroyed$);
     this.updateCustomStockInProcess$ = this.store.select(s => s.inventory.updateCustomStockInProcess).takeUntil(this.destroyed$);
     this.deleteCustomStockInProcessCode$ = this.store.select(s => s.inventory.deleteCustomStockInProcessCode).takeUntil(this.destroyed$);
-
+    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -82,7 +86,19 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.inventoryAction.resetActiveGroup());
     this.store.dispatch(this.inventoryAction.resetActiveStock());
     this.store.dispatch(this.customStockActions.GetStockUnit());
-    this.stockUnit$.subscribe(p => this.clearFields());
+    // this.stockUnit$.subscribe(p => this.clearFields());
+
+    this.createCustomStockSuccess$.subscribe((a) => {
+      if (a) {
+        this.clearFields();
+      }
+    });
+
+    this.updateCustomStockInProcess$.subscribe((a) => {
+      if (!a) {
+        this.clearFields();
+      }
+    });
   }
 
   public saveUnit(): any {
@@ -113,6 +129,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public clearFields() {
     this.customUnitObj = new StockUnitRequest();
+    this.forceClear$ = Observable.of({status: true});
     this.customUnitObj.parentStockUnitCode = null;
     this.editMode = false;
     this.editCode = '';
@@ -142,9 +159,19 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
       this.selectedUnitName = unit[0].label;
     }
   }
+
   public ngOnChanges(changes) {
     if (this.isAsideClose) {
       this.clearFields();
     }
+  }
+
+  /**
+   * clearUnit
+   */
+  public clearUnit() {
+    setTimeout(() => {
+      this.customUnitObj.code = '';
+    }, 100);
   }
 }
