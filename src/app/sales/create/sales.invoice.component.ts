@@ -711,7 +711,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }, 700);
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: any): void {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: any): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
       this.salesAccounts$.take(1).subscribe(idata => {
         idata.map(fa => {
@@ -720,6 +720,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
+                txn.quantity = null;
                 // assign taxes and create fluctuation
                 _.forEach(o.applicableTaxes, (item) => {
                   txn.applicableTaxes.push(item.uniqueName);
@@ -786,9 +787,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       txn.accountUniqueName = null;
       txn.hsnOrSac = 'sac';
       txn.total = null;
+      txn.rate = null;
       txn.sacNumber = null;
       txn.taxableValue = 0;
       txn.applicableTaxes = [];
+      return txn;
     }
   }
 
