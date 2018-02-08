@@ -41,7 +41,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public stockUnitsDropDown$: Observable<IOption[]>;
   public purchaseAccountsDropDown$: Observable<IOption[]>;
   public salesAccountsDropDown$: Observable<IOption[]>;
-  
+
   @ViewChild('formDiv') public formDiv: ElementRef;
   public formDivBoundingRect: Subject<any> = new Subject<any>();
 
@@ -68,6 +68,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public forceClearStock$: Observable<IForceClear> = Observable.of({status: false});
   public forceClearStockUnit$: Observable<IForceClear> = Observable.of({status: false});
   public disableStockButton: boolean = false;
+  public createGroupSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -83,6 +84,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.isStockUpdateInProcess$ = this.store.select(s => s.inventory.isStockUpdateInProcess).takeUntil(this.destroyed$);
     this.isStockDeleteInProcess$ = this.store.select(s => s.inventory.isStockDeleteInProcess).takeUntil(this.destroyed$);
     this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).takeUntil(this.destroyed$);
+    this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -142,7 +144,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // add stock form
     this.addStockForm = this._fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      uniqueName: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2)]],
+      uniqueName: ['', [Validators.required, Validators.minLength(2)]],
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
       stockRate: [{ value: '', disabled: true }],
@@ -284,7 +286,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
           });
           a.manufacturingDetails.linkedStocks.map((item, i) => {
-            this.addItemInLinkedStocks(item, i);
+            this.addItemInLinkedStocks(item, i, a.manufacturingDetails.linkedStocks.length - 1);
           });
         } else {
           this.addStockForm.patchValue({ isFsStock: false });
@@ -323,6 +325,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       } else {
         groupName = this.selectedGroup;
         // console.log(groupName);
+      }
+    });
+
+    this.createGroupSuccess$.subscribe(s => {
+      if (s) {
+        this.getParentGroupData();
       }
     });
 
@@ -476,38 +484,39 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  public addItemInLinkedStocks(item, i?: number) {
+  public addItemInLinkedStocks(item, i?: number, lastIdx?) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
     let frmgrp = this.initialIManufacturingDetails();
-
     if (item) {
-      if (control.controls[i]) {
-        control.controls[i].patchValue(item);
-        control.push(frmgrp);
-      } else {
-        control.push(frmgrp);
-        frmgrp.patchValue(item);
-      }
-    } else {
-      if (manufacturingDetailsContorl.value.linkedStockUniqueName && manufacturingDetailsContorl.value.linkedStockUnitCode && manufacturingDetailsContorl.value.linkedQuantity) {
-        this.showManufacturingItemsError = false;
-        let obj = new IStockItemDetail();
-        obj.stockUniqueName = manufacturingDetailsContorl.value.linkedStockUniqueName;
-        obj.stockUnitCode = manufacturingDetailsContorl.value.linkedStockUnitCode;
-        obj.quantity = manufacturingDetailsContorl.value.linkedQuantity;
+      if (item.controls) {
+        let isValid = this.validateLinkedStock(item.value);
+        if (isValid) {
+          control.controls[i] = item;
+        } else {
+          return this._toasty.errorToast('All fields are required.');
+        }
 
-        control.push(frmgrp);
-        frmgrp.patchValue(obj);
-
-        // manufacturingDetailsContorl.controls['linkedStockUniqueName'].reset();
-        // manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
-        // manufacturingDetailsContorl.controls['linkedQuantity'].reset();
-        this.forceClearStock$ = Observable.of({status: true});
-        this.forceClearStockUnit$ = Observable.of({status: true});
       } else {
-        this.showManufacturingItemsError = true;
+        let isValid = this.validateLinkedStock(item);
+        if (isValid) {
+          frmgrp.patchValue(item);
+          control.controls[i] = frmgrp;
+        } else {
+          return this._toasty.errorToast('All fields are required.');
+        }
       }
+      if (i === lastIdx) {
+        control.controls.push(this.initialIManufacturingDetails());
+      }
+      // if (control.controls[i]) {
+      //   control.controls[i].patchValue(item);
+      //   control.push(frmgrp);
+      // }
+      // else {
+      //   control.push(frmgrp);
+      //   frmgrp.patchValue(item);
+      // }
     }
   }
 
@@ -595,10 +604,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
     }
     if (linkedStocksControls.length > 1) {
-      linkedStocksControls.controls = linkedStocksControls.controls.splice(1);
-      // linkedStocksControls.push(this.initialIManufacturingDetails());
+      linkedStocksControls.controls = [];
+      linkedStocksControls.push(this.initialIManufacturingDetails());
     }
-  
+
     this.addStockForm.reset();
     // this.addStockForm.controls['manufacturingDetailsContorl']['linkedStocks'].push(this.initialIManufacturingDetails());
     // this.initialIManufacturingDetails();
@@ -640,8 +649,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             manufacturingUnitCode: activeStock.manufacturingDetails.manufacturingUnitCode
           }
         });
+        // this.addStockForm.patchValue({})
         activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
-          this.addItemInLinkedStocks(item, i);
+          this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks.length - 1);
         });
       } else {
         this.addStockForm.patchValue({ isFsStock: false });
@@ -662,6 +672,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.stockUnitCode = formObj.stockUnitCode;
     stockObj.openingAmount = formObj.openingAmount;
     stockObj.openingQuantity = formObj.openingQuantity;
+    stockObj.hsnNumber = formObj.hsnNumber;
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
         return pr.stockUnitCode && pr.rate;
@@ -684,7 +695,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.isFsStock = formObj.isFsStock;
 
     if (stockObj.isFsStock) {
-      formObj.manufacturingDetails.linkedStocks.splice(formObj.manufacturingDetails.linkedStocks.length - 1, 1);
+      formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
       stockObj.manufacturingDetails = {
         manufacturingQuantity: formObj.manufacturingDetails.manufacturingQuantity,
         manufacturingUnitCode: formObj.manufacturingDetails.manufacturingUnitCode,
@@ -738,7 +749,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.isFsStock = formObj.isFsStock;
 
     if (stockObj.isFsStock) {
-      formObj.manufacturingDetails.linkedStocks.splice(formObj.manufacturingDetails.linkedStocks.length - 1, 1);
+      formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
       stockObj.manufacturingDetails = {
         manufacturingQuantity: formObj.manufacturingDetails.manufacturingQuantity,
         manufacturingUnitCode: formObj.manufacturingDetails.manufacturingUnitCode,
@@ -763,6 +774,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.flattenDATA(data.body.results, flattenData);
         this.groupsData$ = Observable.of(flattenData);
         // this.autoGroupSelect(this.activeGroup);
+
+        if (!data.body.totalItems) {
+          let stockRequest = {
+            name: 'Main Group',
+            uniqueName: 'maingroup',
+            isSubGroup: false
+          };
+          this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
+        }
       }
     });
   }
@@ -814,19 +834,55 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
     let count = 0;
-    _.forEach(control.controls, function(o) { 
+    _.forEach(control.controls, function(o) {
       if (o.value.stockUniqueName === uniqueName) {
         count++;
-      }; 
+      }
     });
 
-    if (count>1) {
+    if (count > 1) {
       this._toasty.errorToast('Stock already added.');
       this.disableStockButton = true;
       return;
     } else {
       this.disableStockButton = false;
     }
+  }
+
+  /**
+   * removeBlankLinkedStock
+   */
+  public removeBlankLinkedStock(linkedStocks) {
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    let rawArr = control.getRawValue();
+    _.forEach(rawArr, function(o, i) {
+      if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
+        rawArr = _.without(rawArr, o);
+        control.removeAt(i);
+      }
+    });
+    linkedStocks = _.cloneDeep(rawArr);
+    return linkedStocks;
+  }
+
+  /**
+   * validateLinkedStock
+   */
+  public validateLinkedStock(item) {
+    if (!item.quantity || !item.stockUniqueName || !item.stockUnitCode) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public addNewGroupPane() {
+    this.store.dispatch(this.inventoryAction.OpenNewGroupAsidePane(true));
+  }
+
+  public addNewStockUnit() {
+    this.store.dispatch(this.inventoryAction.OpenCustomUnitPane(true));
   }
 
 }
