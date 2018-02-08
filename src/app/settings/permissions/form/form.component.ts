@@ -310,6 +310,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
       this.onSubmitForm.emit(obj);
     }else if (obj.action === 'update') {
+      if ((obj.data.from && obj.data.from) === 'Invalid date' || (obj.data.to && obj.data.to) === 'Invalid date') {
+        delete obj.data.from;
+        delete obj.data.to;
+        obj.data.periodOptions = null;
+      }
       this._settingsPermissionService.UpdatePermission(form).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Permission Updated Successfully!');

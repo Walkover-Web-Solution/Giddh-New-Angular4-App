@@ -206,7 +206,7 @@
                                                             <ng-template [ngIf]="vm.stockTrxEntry">
                                                                 <td [ngClass]="{width55: vm.stockTrxEntry}" class="text-right">
                                                                     <label>Quantity</label>
-                                                                    <input type="number" name="" class="form-control text-right" [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.inventoryQuantityChanged($event.target.value)" />
+                                                                    <input type="number" name="" class="form-control text-right" [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective [DecimalPlaces]="4" (change)="vm.inventoryQuantityChanged($event.target.value)" />
                                                                 </td>
                                                                 <td class="text-right pItem" style="width: 300px;">
                                                                     <label>Unit</label>
@@ -228,7 +228,7 @@
                                             <ng-template [ngIf]="vm.stockTrxEntry">
                                                 <td class="text-right" class="pItem">
                                                     <label>Price</label>
-                                                    <input type="text" name="" (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
+                                                    <input type="text" name="" (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                                                 </td>
                                             </ng-template>
                                             <td *ngIf="vm.stockTrxEntry">

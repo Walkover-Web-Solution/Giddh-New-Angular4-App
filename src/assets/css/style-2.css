@@ -4351,3 +4351,8 @@ table td[class*=col-]:last-child {
     top: 55%;
     left: -7px;
 }
+
+.unit_add {
+    position: absolute;
+    right: 15px;
+}
