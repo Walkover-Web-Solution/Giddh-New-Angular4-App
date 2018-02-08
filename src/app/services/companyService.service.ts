@@ -1,3 +1,4 @@
+import { ICurrencyResponse } from './../models/api-models/Company';
 import { AccountSharedWithResponse } from '../models/api-models/Account';
 import { CompanyRequest, CompanyResponse, GetCouponResp, StateDetailsRequest, StateDetailsResponse, States, TaxResponse } from '../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -47,6 +48,18 @@ export class CompanyService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, ''));
+  }
+
+  /**
+   * CurrencyList
+   */
+  public CurrencyList(): Observable<BaseResponse<ICurrencyResponse[], string>> {
+    return this._http.get(this.config.apiUrl + 'currency')
+      .map((res) => {
+        let data: BaseResponse<ICurrencyResponse[], string> = res;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<ICurrencyResponse[], string>(e, ''));
   }
 
   /**
