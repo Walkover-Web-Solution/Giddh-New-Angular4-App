@@ -366,10 +366,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         try {
-          this.universalDate = moment(dateObj[0]).toDate();
+          this.universalDate = moment(dateObj[1]).toDate();
           this.assignDates();
         } catch (e) {
-          //
+          this.universalDate = new Date();
         }
       }
     })).subscribe();
