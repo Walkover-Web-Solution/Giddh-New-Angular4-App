@@ -52,7 +52,9 @@ export class SettingsComponent implements OnInit {
     this.staticTabs.tabs[2].disabled = ! this.staticTabs.tabs[2].disabled;
   }
   public profileSelected(e) {
-    this.profileComponent.getInitialProfileData();
+    if (e.heading === 'Profile') {
+      this.profileComponent.getInitialProfileData();
+    }
   }
 
   public integrationSelected(e) {

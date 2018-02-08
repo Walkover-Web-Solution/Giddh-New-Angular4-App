@@ -35,7 +35,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 </div>
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
 <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-custom-stock>
-<aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleInventoryAsidePane($event)"></aside-inventory-stock-group>  
+<aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleInventoryAsidePane($event)"></aside-inventory-stock-group>
 `
 })
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
@@ -45,12 +45,29 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
   public activeGroupName$: Observable<string>;
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
+  public openGroupAsidePane$: Observable<boolean>;
+  public openCustomUnitAsidePane$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private router: Router, private store: Store<AppState>, private inventoryAction: InventoryAction) {
+
+    this.openGroupAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).takeUntil(this.destroyed$);
+    this.openCustomUnitAsidePane$ = this.store.select(s => s.inventory.showNewCustomUnitAsidePane).takeUntil(this.destroyed$);
   }
   public ngOnInit() {
     // get activeGroup
     this.activeGroupName$ = this.store.select(s => s.inventory.activeGroupUniqueName).takeUntil(this.destroyed$);
+
+    this.openGroupAsidePane$.subscribe(s => {
+      if (s) {
+        this.toggleInventoryAsidePane();
+      }
+    });
+
+    this.openCustomUnitAsidePane$.subscribe(s => {
+      if (s) {
+        this.toggleAccountAsidePane();
+      }
+    });
   }
 
   public goToAddGroup() {
