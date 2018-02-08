@@ -122,6 +122,7 @@
           <tr *ngFor="let transaction of item.transactions">
             <td style="width:93%">
               {{transaction.particular.name}}
+              <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})</span>
             </td>
             <td style="width:23%;">
               {{transaction.amount}}
