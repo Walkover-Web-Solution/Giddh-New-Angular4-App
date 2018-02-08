@@ -194,7 +194,10 @@
             <label for="">Currency
               <small *ngIf="isMultipleCurrency">(Account)</small>
             </label>
-            <input type="text" class="form-control" formControlName="currency" name="currency" />
+            <!-- <input type="text" class="form-control" formControlName="currency" name="currency" /> -->
+            <div class="custom-select pos-rel">
+              <sh-select [options]="currencySource$ | async" [isFilterEnabled]="true" formControlName="currency"></sh-select>
+            </div>
           </div>
         </div>
 
