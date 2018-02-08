@@ -31,7 +31,10 @@
             <div class="col-xs-3 pd0">
                 <div class="form-group col-xs-6">
                     <label>Currency</label><br>
-                    <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
+                    <div class="custom-select pos-rel">
+                        <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency"></sh-select>
+                    </div>
+                    <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                 </div>
                 <div class="form-group col-xs-6">
                     <div class="checkbox pdT2">
