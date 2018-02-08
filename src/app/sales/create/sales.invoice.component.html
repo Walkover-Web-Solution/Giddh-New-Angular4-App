@@ -70,13 +70,13 @@
           <div class="flex-row-child mrL2">
             <div class="form-group noMarg">
               <label>Email Id</label>
-              <input type="text" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
+              <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
             </div>
           </div>
           <div class="flex-row-child mrL2">
             <div class="form-group noMarg">
               <label>Mobile No.</label>
-              <input type="text" name="accountDetails.mobileNo" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNo" />
+              <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
             </div>
           </div>
         </div>
@@ -115,12 +115,12 @@
             <label>Date</label>
             <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker
             [(ngModel)]="invFormData.voucherDetails.voucherDate"
-            value="{{ invFormData.voucherDetails.voucherDate | date: giddhDateFormatUI }}">
+            [bsConfig]="{ dateInputFormat: giddhDateFormat }">
           </div>
-          <div class="form-group col-xs-2">
+          <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
             <label>Due Date</label>
             <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate"
-              value="{{ invFormData.voucherDetails.dueDate | date: giddhDateFormatUI }}" />
+            [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
           </div>
         </div>
       </div>
@@ -201,7 +201,7 @@
           <div class="form-group col-xs-2">
             <label>Ship Date</label>
             <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate"
-              class="form-control" value="{{ invFormData.templateDetails.other.shippingDate | date: giddhDateFormatUI }}" />
+              class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
           </div>
           <div class="form-group col-xs-2">
             <label>Ship Via</label>
@@ -251,8 +251,11 @@
         <tr *ngFor="let transaction of entry.transactions;">
           <td>{{ entryIdx+1 }}</td>
           <td>
-            <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-right"
-              [(ngModel)]="transaction.date" value="{{ transaction.date | date: giddhDateFormatUI }}" />
+            <input type="text"
+              [placeholder]="giddhDateFormat" bsDatepicker
+              name="transaction.date_{{entryIdx}}" class="form-control text-right"
+              [(ngModel)]="transaction.date"
+              [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
           </td>
           <td>
             <div class="ng-select-wrap">
@@ -261,7 +264,7 @@
                 [options]="salesAccounts$ | async"
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                (selected)="onSelectSalesAccount($event,transaction,entryIdx)"
+                (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)"
                 [placeholder]="'Select A/c'"
                 [notFoundLink]="true"
                 [forceClearReactive]="forceClear$ | async"

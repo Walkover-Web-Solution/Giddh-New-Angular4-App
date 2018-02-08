@@ -76,6 +76,7 @@ export class AccountDetailsClass {
   public address?: string[];
   public attentionTo: string;
   public email: string;
+  public mobileNumber?: any;
   public mobileNo?: any;
   public billingDetails: GstDetailsClass;
   public shippingDetails: GstDetailsClass;
@@ -85,7 +86,8 @@ export class AccountDetailsClass {
     this.billingDetails = new GstDetailsClass();
     this.shippingDetails = new GstDetailsClass();
     if (attrs) {
-      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'attentionTo', 'email', 'mobileNo', 'country']));
+      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'attentionTo', 'email', 'country']));
+      this.mobileNumber = attrs.mobileNo;
       if (attrs.addresses.length > 0) {
         let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
         // set billing
@@ -255,7 +257,7 @@ export class SalesEntryClass {
   public taxableValue: number;
   public discountTotal: number;
   public nonTaxableValue: number;
-  public entryDate: string;
+  public entryDate: any;
   public taxList?: string[];
   public voucherType: string;
   public entryTotal: number;
@@ -333,7 +335,7 @@ export interface GenericRequestForGenerateSCD {
 
 class VoucherDetailsClass {
   public voucherNumber?: string;
-  public voucherDate?: string;
+  public voucherDate?: any;
   public dueDate?: any;
   public balance?: any;
   public balanceDue?: number;
