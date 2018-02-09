@@ -465,7 +465,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             }
           }
         }
-        console.log(groupArray);
+        // console.log(groupArray);
         groupArray = _.orderBy(groupArray, ['name']);
         return Object.assign({}, state, { groupsWithStocks: groupArray });
       }
