@@ -157,13 +157,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     let dataToSave = _.cloneDeep(data);
     if (this.countryIsIndia) {
-      if (dataToSave.gstDetails.length > 0) {
-        for (let entry of dataToSave.gstDetails) {
-          if (entry.gstNumber === '') {
-            dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
-          }
-        }
-      }
+      // if (dataToSave.gstDetails.length > 0) {
+      //   for (let entry of dataToSave.gstDetails) {
+      //     if (entry.gstNumber === '') {
+      //       dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
+      //     }
+      //   }
+      // }
     }
     delete dataToSave.financialYears;
     delete dataToSave.activeFinancialYear;
