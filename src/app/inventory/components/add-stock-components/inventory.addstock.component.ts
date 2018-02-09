@@ -88,12 +88,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnInit() {
-    // this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
-    //   if(data.status === 'success') {
-    //     this.groupsData$ = Observable.of(data.body.results);
-    //     this.autoGroupSelect(this.activeGroup);
-    //   }
-    // });
     // get all groups
     this.getParentGroupData();
     this.formDivBoundingRect.next({
@@ -292,20 +286,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           this.addStockForm.patchValue({ isFsStock: false });
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
-        // this.addStockForm.controls['parentGroup'].patchValue(a.stockGroup.uniqueName);
         this.addStockForm.controls['parentGroup'].disable();
       } else {
         this.isUpdatingStockForm = false;
-        // this.resetStockForm();
-      }
-    });
-
-    // fetching uniquename boolean
-    this.fetchingStockUniqueName$.takeUntil(this.destroyed$).subscribe(f => {
-      if (f) {
-        // this.addStockForm.controls['uniqueName'].disable();
-      } else {
-        // this.addStockForm.controls['uniqueName'].disable();
       }
     });
 
@@ -333,9 +316,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.getParentGroupData();
       }
     });
-
-    // this.addStockForm.controls['enablePurchase'].patchValue(false);
-    // this.addStockForm.controls['enableSales'].patchValue(false);
     setTimeout(() => {
     this.addStockForm.controls['enableSales'].patchValue(false);
     this.addStockForm.controls['enablePurchase'].patchValue(false);
@@ -431,15 +411,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       return true;
     }
     let groupName = null;
-    // this.activeGroup$.take(1).subscribe(s => {
-    //   if (s) {
-    //     groupName = s.uniqueName;
-    //     console.log(groupName);
-    //   } else {
-    //     groupName = this.selectedGroup;
-    //     console.log(groupName);
-    //   }
-    // });
     let val: string = this.addStockForm.controls['name'].value;
     if (val) {
       val = uniqueNameInvalidStringReplace(val);
@@ -509,14 +480,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (i === lastIdx) {
         control.controls.push(this.initialIManufacturingDetails());
       }
-      // if (control.controls[i]) {
-      //   control.controls[i].patchValue(item);
-      //   control.push(frmgrp);
-      // }
-      // else {
-      //   control.push(frmgrp);
-      //   frmgrp.patchValue(item);
-      // }
     }
   }
 
@@ -529,15 +492,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     control.controls[i].enable();
     control.controls[last].enable();
     this.editModeForLinkedStokes = true;
-    // control.controls[last].enable();
-    // setTimeout(() => {
-    // control.controls[i].enable();
-    // this.editModeForLinkedStokes = true;
-    // }, 100);
-    // const linkedStokesControl = control;
-    // const linkedStokesValues = control.value;
-    // linkedStokesControl.controls[i].enable();
-    // this.editModeForLinkedStokes = true;
   }
 
   public updateItemInLinkedStocks(item: FormGroup, i: any) {
@@ -573,14 +527,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         manufacturingDetailsContorl.controls['linkedStockUniqueName'].setValue(el.stockUniqueName);
         manufacturingDetailsContorl.controls['linkedStockUnitCode'].setValue(el.stockUnitCode);
         manufacturingDetailsContorl.controls['linkedQuantity'].setValue(el.quantity);
-        // this.editModeForLinkedStokes = true;
         return true;
       }
     }
-    // this.forceClearStockUnit$ = Observable.of({status: true});
-    // manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
-    // manufacturingDetailsContorl.controls['linkedQuantity'].reset();
-    // this.editModeForLinkedStokes = false;
     return true;
   }
 
@@ -609,8 +558,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.addStockForm.reset();
-    // this.addStockForm.controls['manufacturingDetailsContorl']['linkedStocks'].push(this.initialIManufacturingDetails());
-    // this.initialIManufacturingDetails();
 
     if (activeStock) {
       this.isUpdatingStockForm = true;
@@ -649,7 +596,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             manufacturingUnitCode: activeStock.manufacturingDetails.manufacturingUnitCode
           }
         });
-        // this.addStockForm.patchValue({})
         activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
           this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks.length - 1);
         });
@@ -773,8 +719,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let flattenData: IOption[] = [];
         this.flattenDATA(data.body.results, flattenData);
         this.groupsData$ = Observable.of(flattenData);
-        // this.autoGroupSelect(this.activeGroup);
-
         if (!data.body.totalItems) {
           let stockRequest = {
             name: 'Main Group',
@@ -809,8 +753,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       selected = p.find(q => q.value === event.value);
     });
     this.activeGroup = selected;
-    // this.addStockForm.controls['uniqueName'].disable();
-    // this.addGroupForm.updateValueAndValidity();
   }
 
   public autoGroupSelect(grpname) {

@@ -115,13 +115,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         }
         this.addGroupForm.patchValue(updGroupObj);
 
-        // if (!this.addGroup) {
-        //   this.addGroupForm.patchValue(updGroupObj);
-        // } else if (this.addGroup) {
-
-        //   this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
-        // }
-
       } else {
         this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
         this.parentStockSearchString = '';

@@ -39,11 +39,9 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   @HostListener('window:resize')
   public resizeEvent() {
     this.sidebarRect = window.screen.height;
-    // console.log(this.sidebarRect);
   }
 
   // @HostListener('window:load', ['$event'])
-
 
   public ngOnInit() {
     this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
@@ -54,8 +52,13 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
       .debounceTime(500)
       .distinctUntilChanged()
       .map((e: any) => e.target.value)
-      .subscribe((val: string) => this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val)));
-      
+      .subscribe((val: string) => {
+          if (val) {
+            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
+          } else {
+            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
+          }
+      }
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
