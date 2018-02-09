@@ -25,13 +25,6 @@ import { AsideCustomStockComponent } from 'app/inventory/components/aside-custom
 import { AsideInventoryComponent } from 'app/inventory/components/aside-inventory.components/aside-inventory.components';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from 'app/shared/helpers/directives/textCaseChange/textCaseChange.module';
-// import { PaginationModule  } from 'ngx-bootstrap/pagination';
-// import { CollapseModule } from 'ngx-bootstrap/collapse';
-// import { ModalModule } from 'ngx-bootstrap/modal';
-// import { TabsModule } from 'ngx-bootstrap/tabs';
-// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-// import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
   declarations: [
