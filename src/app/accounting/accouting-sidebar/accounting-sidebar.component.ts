@@ -1,3 +1,4 @@
+import { TallyModuleService, IPageInfo } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { CreatedBy } from './../../models/api-models/Invoice';
 import { IParticular, LedgerRequest } from './../../models/api-models/Ledger';
@@ -11,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, Input, OnChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -20,32 +21,62 @@ import * as moment from 'moment';
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 
-
 @Component({
   selector: 'accounting-sidebar',
   templateUrl: './accounting-sidebar.component.html',
   styleUrls: ['./accounting-sidebar.component.css']
 })
 
-export class AccountingSidebarComponent {
+export class AccountingSidebarComponent implements OnInit, OnChanges {
 
   @Input() public AccountListOpen: boolean;
 
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public isGroupToggle: boolean;
-  public accountSearch:string = '';
+  public accountSearch: string = '';
   public grpUniqueName: string = '';
   public showAccountList: boolean = true;
+  public selectedVoucher: string = null;
 
-  constructor() {
+  constructor(private _tallyModuleService: TallyModuleService) {
+    //
+  }
 
+  public ngOnInit() {
+    this._tallyModuleService.flattenAccounts.subscribe((accounts) => {
+      if (accounts) {
+        this.setSelectedPage('Journal', 'voucher', 'purchases');
+      }
+    });
+
+    this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+     }).subscribe((pageInfo: IPageInfo) => {
+      if (pageInfo && pageInfo.page !== this.selectedVoucher) {
+        this.selectedVoucher = pageInfo.page;
+      }
+    });
   }
 
   public ngOnChanges(s) {
-    console.log(s);
     if (s.AccountListOpen) {
       this.showAccountList = !this.showAccountList;
     }
+  }
+
+  public setSelectedPage(pageName: string, grid: string, grpUnqName: string) {
+    this._tallyModuleService.setVoucher({
+      page: pageName,
+      uniqueName: grpUnqName,
+      gridType: grid
+    });
+    this.selectedVoucher = pageName;
   }
 
 }

@@ -13,6 +13,8 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
+import { cloneDeep } from 'app/lodash-optimized';
+import { isNull } from 'util';
 
 @Component({
   selector: 'daybook',
@@ -70,6 +72,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private searchFilterData: any = null;
 
   constructor(private store: Store<AppState>, private _daybookActions: DaybookActions,
     private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
@@ -111,34 +114,41 @@ export class DaybookComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    this.daybookQueryRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
-    this.daybookQueryRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
-    this.daybookQueryRequest.page = 0;
-
-    this.go();
+    let from = moment(value.picker.startDate).format('DD-MM-YYYY');
+    let to = moment(value.picker.endDate).format('DD-MM-YYYY');
+    if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
+      this.daybookQueryRequest.from = from;
+      this.daybookQueryRequest.to = to;
+      this.daybookQueryRequest.page = 0;
+      this.go();
+    }
   }
 
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
   }
 
+  /**
+   * if closing triggers from advance search filter
+   * @param obj contains search params
+   */
   public closeAdvanceSearchPopup(obj) {
+    this.searchFilterData = null;
     if (!obj.cancle) {
-
+      this.searchFilterData = cloneDeep(obj.dataToSend);
       this.datePickerOptions.startDate = moment(obj.fromDate, 'DD-MM-YYYY');
       this.datePickerOptions.endDate = moment(obj.toDate, 'DD-MM-YYYY');
       this.dateRangePickerCmp.render();
-
       this.daybookQueryRequest.from = obj.fromDate;
       this.daybookQueryRequest.to = obj.toDate;
       this.daybookQueryRequest.page = 0;
-      this.store.dispatch(this._daybookActions.GetDaybook(obj.dataToSend, this.daybookQueryRequest));
+      this.go(this.searchFilterData);
     }
     this.advanceSearchModel.hide();
   }
 
-  public go() {
-    this.store.dispatch(this._daybookActions.GetDaybook(null, this.daybookQueryRequest));
+  public go(withFilters = null) {
+    this.store.dispatch(this._daybookActions.GetDaybook(withFilters, this.daybookQueryRequest));
   }
 
   public toggleExpand() {
@@ -157,7 +167,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
   public pageChanged(event: any): void {
     this.daybookQueryRequest.page = event.page;
-    this.go();
+    this.go(this.searchFilterData);
   }
 
   public loadPaginationComponent(s) {

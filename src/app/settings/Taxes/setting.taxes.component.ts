@@ -185,6 +185,10 @@ export class SettingTaxesComponent implements OnInit {
     });
   }
 
+  public customDateSorting(a: IOption, b: IOption) {
+    return (parseInt(a.label) - parseInt(b.label));
+  }
+
   public sayHello() {
     alert('ok');
   }

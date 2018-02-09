@@ -118,14 +118,14 @@ export class AccountService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ApplyTaxRequest>(e));
   }
 
-  public AccountMove(model: AccountMoveRequest, accountUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
+  public AccountMove(model: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + ACCOUNTS_API.MOVE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, AccountMoveRequest> = res;
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = { accountUniqueName, activeGroupUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, AccountMoveRequest>(e));
