@@ -1,11 +1,13 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { startsWith, concat, includes } from 'app/lodash-optimized';
+import { Observable } from 'rxjs/Observable';
+import { IForceClear } from 'app/models/api-models/Sales';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -23,12 +25,13 @@ const FLATTEN_SEARCH_TERM = 'flatten';
     }
   ]
 })
-export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
   @Input() public idEl: string = '';
   @Input() public placeholder: string = 'Type to filter';
   @Input() public multiple: boolean = false;
   @Input() public mode: 'default' | 'inline' = 'default';
   @Input() public showClear: boolean = true;
+  @Input() public forceClearReactive: IForceClear;
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLinkText: string = 'Create New';
@@ -38,7 +41,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public ItemHeight: number = 41;
   @Input() public NoFoundMsgHeight: number = 30;
   @Input() public NoFoundLinkHeight: number = 30;
+  @Input() public dropdownMinHeight: number = 35;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
+  @Input() public customSorting: (a: IOption, b: IOption) => number;
   @Input() public useInBuiltFilterForFlattenAc: boolean = false;
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
   @Input() public doNotReset: boolean = false;
@@ -170,12 +175,18 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
       this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
     }else {
-      this.filteredData = this._options ? this._options.filter(item => {
+      let filteredData = this._options ? this._options.filter(item => {
         if (this.customFilter) {
           return this.customFilter(lowercaseFilter, item);
         }
         return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
-      }).sort((a, b) => a.label.length - b.label.length ) : [];
+      }) : [];
+
+      if (this.customSorting) {
+        this.filteredData = filteredData.sort(this.customSorting);
+      } else {
+        this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length );
+      }
     }
     if (this.filteredData.length === 0) {
       this.noOptionsFound.emit(true);
@@ -370,6 +381,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public ngAfterViewInit() {
     this.viewInitEvent.emit(true);
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
+      if (this.forceClearReactive.status) {
+        this.filter = '';
+        this.clear();
+      }
+    }
   }
 
   //////// ControlValueAccessor imp //////////
