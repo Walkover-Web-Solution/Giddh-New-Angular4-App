@@ -450,6 +450,26 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         });
       }
       return state;
+
+    case InventoryActionsConst.SearchGroupsWithStocksResponse:
+      if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).status === 'success') {
+        groupArray = action.payload.body.results;
+        if (groupArray.length) {
+          if (groupArray) {
+            for (let el of groupArray) {
+              if (el) {
+                el.isOpen = true;
+                el.isActive = false;
+              }
+              el.childStockGroups = [];
+            }
+          }
+        }
+        // console.log(groupArray);
+        groupArray = _.orderBy(groupArray, ['name']);
+        return Object.assign({}, state, { groupsWithStocks: groupArray });
+      }
+      return state;
     case InventoryActionsConst.ShowLoadingForStockEditInProcess:
       return Object.assign({}, state, { showLoadingForStockEditInProcess: true });
     case InventoryActionsConst.HideLoadingForStockEditInProcess:

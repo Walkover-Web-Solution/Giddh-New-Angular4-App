@@ -83,7 +83,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
       this.store.dispatch(this.sidebarAction.OpenGroup(activeGroup));
     }
 
-    this.store.dispatch(this.inventoryAction.resetActiveGroup());
+    // this.store.dispatch(this.inventoryAction.resetActiveGroup());
     this.store.dispatch(this.inventoryAction.resetActiveStock());
     this.store.dispatch(this.customStockActions.GetStockUnit());
     // this.stockUnit$.subscribe(p => this.clearFields());

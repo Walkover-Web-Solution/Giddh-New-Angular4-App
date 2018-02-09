@@ -45,7 +45,6 @@ import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
 export class AsideCustomStockComponent implements OnInit {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-  // @ViewChild('customStock') public customStock; 
 
   public asideClose: boolean;
 
@@ -60,7 +59,7 @@ export class AsideCustomStockComponent implements OnInit {
   public closeAsidePane(event) {
     this.closeAsideEvent.emit(event);
     this.asideClose = true;
-    setTimeout(() => {this.asideClose = false}, 500);
+    setTimeout(() => {this.asideClose = false; }, 500);
   }
 
 }
