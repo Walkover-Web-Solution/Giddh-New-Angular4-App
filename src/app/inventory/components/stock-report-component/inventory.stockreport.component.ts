@@ -81,12 +81,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
-    // this.activeStock$ = this.store.select(p => {
-    //   return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
-    // });
-    // constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    //   private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
-    //   this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
 
@@ -199,7 +193,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public selectedDate(value: any) {
-    this.fromDate= moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
     // this.stockReportRequest.page = 0;
 
