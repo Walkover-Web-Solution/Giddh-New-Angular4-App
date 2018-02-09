@@ -189,7 +189,4 @@ export class SettingTaxesComponent implements OnInit {
     return (parseInt(a.label) - parseInt(b.label));
   }
 
-  public sayHello() {
-    alert('ok');
-  }
 }
