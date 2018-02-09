@@ -1,30 +1,62 @@
 import * as _ from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { isNull, pick } from '../../lodash-optimized';
+
+/**
+ * IMP by dude
+ * do not change
+ * changing below const breaks the generate functionality
+ */
+export const VOUCHER_TYPE_LIST: any[] = [
+  {
+    value: 'Invoice',
+    label: 'sales'
+  },
+  {
+    value: 'Credit Note',
+    label: 'credit note'
+  },
+  {
+    value: 'Debit Note',
+    label: 'debit note'
+  }
+];
+/*
+RECEIPT("receipt"),
+JOURNAL("journal"),
+PURCHASE("purchase"),
+PAYMENT("payment"),
+CONTRA("contra"),
+SALES("sales"),
+DEBIT_NOTE("debit note"),
+CREDIT_NOTE("credit note")
+*/
 
 export interface IStockUnit {
   text: string;
   id: string;
 }
 
+export interface IForceClear {
+  status: boolean;
+}
+
 /**
  * draw invoice on ui and api model related class and interface
 */
-class CompanyClass {
+class CompanyDetailsClass {
   public name: string;
-  public data: any[];
+  public gstNumber: string;
+  public address: string[];
+  public stateCode: string;
+  public panNumber: string;
 }
 
 class SignatureClass {
   public name: string;
   public data: string;
   public path: string;
-}
-
-class InvoiceDetailsClass {
-  public invoiceNumber: string;
-  public invoiceDate: any;
-  public dueDate: any;
 }
 
 class GstDetailsClass {
@@ -37,18 +69,43 @@ class GstDetailsClass {
   }
 }
 
-class AccountClass {
+export class AccountDetailsClass {
   public name: string;
   public uniqueName: string;
-  public data: string[];
+  public data?: string[];
+  public address?: string[];
   public attentionTo: string;
   public email: string;
   public mobileNumber?: any;
+  public mobileNo?: any;
   public billingDetails: GstDetailsClass;
   public shippingDetails: GstDetailsClass;
-  constructor() {
+  public country?: CountryClass;
+  constructor(attrs?: any) {
+    this.country = new CountryClass();
     this.billingDetails = new GstDetailsClass();
     this.shippingDetails = new GstDetailsClass();
+    if (attrs) {
+      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'attentionTo', 'email', 'country']));
+      this.mobileNumber = attrs.mobileNo;
+      if (attrs.addresses.length > 0) {
+        let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
+        // set billing
+        this.billingDetails.address = [];
+        this.billingDetails.address.push(str);
+        this.billingDetails.stateCode = attrs.addresses[0].stateCode;
+        this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
+        // set shipping
+        this.shippingDetails.address = [];
+        this.shippingDetails.address.push(str);
+        this.shippingDetails.stateCode = attrs.addresses[0].stateCode;
+        this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
+      }
+    }else {
+      this.attentionTo = null;
+      this.email = null;
+      this.mobileNo = null;
+    }
   }
 }
 
@@ -193,12 +250,16 @@ class IRoundOff {
 
 export class SalesEntryClass {
   public uniqueName: string;
-  public transactions: SalesTransactionItemClass[];
   public discounts: ICommonItemOfTransaction[];
   public taxes: IInvoiceTax[];
-  public taxList?: string[];
+  public transactions: SalesTransactionItemClass[];
   public description: string;
   public taxableValue: number;
+  public discountTotal: number;
+  public nonTaxableValue: number;
+  public entryDate: any;
+  public taxList?: string[];
+  public voucherType: string;
   public entryTotal: number;
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -221,6 +282,11 @@ class ITotaltaxBreakdown {
 class CountryClass {
   public countryName: string;
   public countryCode: string;
+  constructor(attrs?: any) {
+    if (attrs) {
+      return Object.assign({}, this, attrs);
+    }
+  }
 }
 
 export class OtherSalesItemClass {
@@ -230,46 +296,20 @@ export class OtherSalesItemClass {
   public customField1: string;
   public customField2: string;
   public customField3: string;
+  public message1: string;
   public message2: string;
-}
-
-export class InvoiceFormClass {
-  public logo: string;
-  public company: CompanyClass;
-  public customerName: string;
-  public account: AccountClass;
-  public signature: SignatureClass;
-  public templateUniqueName: string;
-  public roundOff: IRoundOff;
-  public balanceStatus: string;
-  public balanceStatusSealPath: string;
-  public commonDiscounts: any[];
-  public entries: SalesEntryClass[];
-  public totalTaxableValue: number;
-  public grandTotal: number;
-  public balanceDue: number;
-  public totalInWords?: any;
-  public subTotal: number;
-  public totalDiscount: number;
-  public totaltaxBreakdown: ITotaltaxBreakdown[];
-  public totalTax?: any;
-  public invoiceDetails: InvoiceDetailsClass;
-  public other?: OtherSalesItemClass;
-  public uniqueName?: string;
-  public country: CountryClass;
+  public slogan?: any;
   constructor() {
-    this.invoiceDetails = new InvoiceDetailsClass();
-    this.totaltaxBreakdown = [new ITotaltaxBreakdown()];
-    this.entries = [new SalesEntryClass()];
-    this.commonDiscounts = [];
-    this.roundOff = new IRoundOff();
-    this.company = new CompanyClass();
-    this.account = new AccountClass();
-    this.signature = new SignatureClass();
-    this.country = new CountryClass();
-    this.other = new OtherSalesItemClass();
+    this.shippingDate = null;
+    this.shippedVia = null;
+    this.trackingNumber = null;
+    this.customField1 = null;
+    this.customField2 = null;
+    this.customField3 = null;
+    this.message2 = null;
   }
 }
+
 /**
  * end draw invoice on ui and api model related class and interface
 */
@@ -280,8 +320,61 @@ interface IPaymentAction {
   action: string;
   amount: number;
 }
-export interface GenerateSalesRequest {
-  invoice: InvoiceFormClass;
-  updateAccountDetails: boolean;
+
+/**
+ * Generic request class to generate sales, credit note, debit note
+*/
+
+export interface GenericRequestForGenerateSCD {
+  entryUniqueNames?: string[];
+  taxes?: string[];
+  voucher: VoucherClass;
+  updateAccountDetails?: boolean;
   paymentAction?: IPaymentAction;
+}
+
+class VoucherDetailsClass {
+  public voucherNumber?: string;
+  public voucherDate?: any;
+  public dueDate?: any;
+  public balance?: any;
+  public balanceDue?: number;
+  public balanceStatus?: string;
+  public totalAsWords: string;
+  public grandTotal: number;
+  public subTotal: number;
+  public totalDiscount?: any;
+  public gstTaxesTotal?: any;
+  public totalTaxableValue?: number;
+  public customerName?: any;
+  constructor() {
+    this.customerName = null;
+    this.grandTotal = null;
+    this.subTotal = null;
+    this.totalAsWords = null;
+    this.voucherDate = null;
+  }
+}
+
+class TemplateDetailsClass {
+  public logoPath: string;
+  public other: OtherSalesItemClass;
+  public templateUniqueName: string;
+  constructor() {
+    this.other = new OtherSalesItemClass();
+  }
+}
+
+export class VoucherClass {
+  public voucherDetails: VoucherDetailsClass;
+  public companyDetails: CompanyDetailsClass;
+  public accountDetails: AccountDetailsClass;
+  public templateDetails: TemplateDetailsClass;
+  public entries: SalesEntryClass[];
+  constructor() {
+    this.accountDetails = new AccountDetailsClass();
+    this.entries = [new SalesEntryClass()];
+    this.voucherDetails = new VoucherDetailsClass();
+    this.templateDetails = new TemplateDetailsClass();
+  }
 }

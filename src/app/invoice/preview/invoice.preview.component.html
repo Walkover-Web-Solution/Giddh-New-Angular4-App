@@ -46,11 +46,10 @@
     <button class="btn btn-success btn-sm">GO</button>
   </div>
 </form>
-<!--list of data  -->
+
 <div class="no-data mrT2" *ngIf="!invoiceData">
   <h1>No Entry found in sales!</h1>
   <h1>Have to do some sales before creating invoice</h1>
-  <!-- <a class="btn btn-primary">Go to Sales</a> -->
 </div>
 
 <div class="no-data" *ngIf="invoiceData && invoiceData.results.length === 0">
@@ -106,7 +105,6 @@
 <!-- Delete invoice confirmation model -->
 <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
-    <!-- modal-liq90 class is removed for now-->
     <div class="modal-content">
       <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()"
         (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
@@ -116,7 +114,6 @@
 <!-- Perform action on invoice model -->
 <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
-    <!-- modal-liq90 class is removed for now-->
     <div class="modal-content">
       <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
     </div>
@@ -125,14 +122,8 @@
 <!-- Download or Send Invoice on mail -->
 <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
   <div class="modal-dialog modal-lg">
-    <!-- modal-liq90 class is removed for now-->
     <div class="modal-content">
-      <!-- <download-or-send-mail-invoice #downloadOrSendMailComponent (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
-        (closeModelEvent)="closeDownloadOrSendMailPopup($event)"></download-or-send-mail-invoice> -->
-      <div id="pagination" element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
-        <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
-                        [boundaryLinks]="true">
-                    </pagination> -->
+      <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
       </div>
     </div>
   </div>
