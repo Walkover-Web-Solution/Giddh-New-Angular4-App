@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { INVENTORY_API } from './apiurls/inventory.api';
-import { GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
+import { GroupsWithStocksHierarchyMin, GroupsWithStocksFlatten } from '../models/api-models/GroupsWithStocks';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -102,20 +102,17 @@ export class InventoryService {
   /**
    * get Groups with Stocks
    */
-  // public GetGroupsWithStocksFlatten(q: string = '', page: number = 1, count: string = '100000000'): Observable<BaseResponse<GroupsWithStocksFlatten, string>> {
-  //   this.store.take(1).subscribe(s => {
-  //     if (s.session.user) {
-  //       this.user = s.session.user.user;
-  //     }
-  //     this.companyUniqueName = s.session.companyUniqueName;
-  //   });
-  //   return this._http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '').replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
-  //     let data: BaseResponse<GroupsWithStocksFlatten, string> = res;
-  //     data.request = '';
-  //     data.queryString = { q, page, count };
-  //     return data;
-  //   }).catch((e) => this.errorHandler.HandleCatch<GroupsWithStocksFlatten, string>(e, '', { q, page, count }));
-  // }
+  public SearchStockGroupsWithStocks(q: string = '', page: number = 1, count: string = '100000000'): Observable<BaseResponse<GroupsWithStocksFlatten, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
+      let data: BaseResponse<GroupsWithStocksFlatten, string> = res;
+      data.request = '';
+      data.queryString = { q, page, count };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<GroupsWithStocksFlatten, string>(e, '', { q, page, count }));
+  }
+
   public GetGroupsWithStocksFlatten(): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;

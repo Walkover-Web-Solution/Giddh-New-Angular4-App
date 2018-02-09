@@ -68,7 +68,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 export class AsideInventoryComponent implements OnInit {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-  @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
+  @Output() public animatePaneAside: EventEmitter<any> = new EventEmitter();
 
   // public
   public isAddStockOpen: boolean = false;
@@ -112,7 +112,7 @@ export class AsideInventoryComponent implements OnInit {
   }
 
   public animateAside(e: any) {
-    this.animatePAside.emit(e);
+    this.animatePaneAside.emit(e);
   }
 
 }
