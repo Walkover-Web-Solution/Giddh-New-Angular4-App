@@ -18,7 +18,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
-  templateUrl: './inventory.stockreport.component.html'
+  templateUrl: './inventory.stockreport.component.html',
+  styles: [`
+  .bdrT {
+    border-color: #ccc;
+  }
+  `]
 })
 export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   public today: Date = new Date();
@@ -33,6 +38,41 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public toDate: string;
   public fromDate: string;
   public moment = moment;
+  public datePickerOptions: any = {
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'Last 1 Day': [
+        moment().subtract(1, 'days'),
+        moment()
+      ],
+      'Last 7 Days': [
+        moment().subtract(6, 'days'),
+        moment()
+      ],
+      'Last 30 Days': [
+        moment().subtract(29, 'days'),
+        moment()
+      ],
+      'Last 6 Months': [
+        moment().subtract(6, 'months'),
+        moment()
+      ],
+      'Last 1 Year': [
+        moment().subtract(12, 'months'),
+        moment()
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -41,12 +81,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
-    // this.activeStock$ = this.store.select(p => {
-    //   return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
-    // });
-    // constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    //   private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
-    //   this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
 
@@ -156,5 +190,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (this.showToDatePicker) {
       this.showToDatePicker = false;
     }
+  }
+
+  public selectedDate(value: any) {
+    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+    // this.stockReportRequest.page = 0;
+
+    this.getStockReport(true);
   }
 }

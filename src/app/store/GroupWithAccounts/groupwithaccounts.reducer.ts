@@ -551,8 +551,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
       let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
       if (mAcc.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        let activeGrp: GroupResponse = _.cloneDeep(state.activeGroup);
-        let deletedItem = removeAccountFunc(groupArray, activeGrp.uniqueName, mAcc.queryString.accountUniqueName, null);
+        let deletedItem = removeAccountFunc(groupArray, mAcc.queryString.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
         addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false);
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
