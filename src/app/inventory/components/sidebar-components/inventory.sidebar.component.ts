@@ -58,7 +58,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
           } else {
             this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
           }
-      }
+      });
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
