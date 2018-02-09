@@ -14,6 +14,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     .active {
       color: #d35f29 !important;
     }
+    .stock-items li div {
+      padding-left: 15px;
+    }
   `],
   template: `
   <ul class="list-unstyled stock-items" [hidden]="!Groups.isOpen" >

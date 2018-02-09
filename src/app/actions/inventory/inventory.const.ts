@@ -52,6 +52,13 @@ export class InventoryActionsConst {
   public static ResetActiveStock = 'ResetActiveStock';
 
   public static ResetInventoryState = 'ResetInventoryState';
+
+  public static NewGroupAsidePane = 'NewGroupAsidePane';
+  public static NewCustomUnitAsidePane = 'NewCustomUnitAsidePane';
+
+  public static SearchGroupsWithStocks = 'SearchGroupsWithStocks';
+  public static SearchGroupsWithStocksResponse = 'SearchGroupsWithStocksResponse';
+
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {

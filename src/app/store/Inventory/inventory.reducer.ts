@@ -38,6 +38,9 @@ export interface InventoryState {
   createCustomStockInProcess: boolean;
   updateCustomStockInProcess: boolean;
   deleteCustomStockInProcessCode: any[];
+  createCustomStockSuccess: boolean;
+  showNewGroupAsidePane: boolean;
+  showNewCustomUnitAsidePane: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -82,7 +85,10 @@ const initialState: InventoryState = {
   activeGroupUniqueName: '',
   activeStock: null,
   activeStockUniqueName: '',
-  stockReport: null
+  stockReport: null,
+  createCustomStockSuccess: false,
+  showNewGroupAsidePane: false,
+  showNewCustomUnitAsidePane: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -192,7 +198,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (groupStockResponse.status === 'success') {
         groupArray = _.cloneDeep(state.groupsWithStocks);
-        if (groupStockResponse.request.isSelfParent) {
+        if (groupStockResponse.request.isSelfParent || !groupStockResponse.request.isSubGroup) {
           groupArray.push({
             name: groupStockResponse.body.name,
             uniqueName: groupStockResponse.body.uniqueName,
@@ -236,7 +242,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           isAddNewGroupInProcess: false,
           createGroupSuccess: true,
           groupsWithStocks: groupArray,
-          activeStockUniqueName: null
+          activeStockUniqueName: null,
+          showNewGroupAsidePane: false
         });
       }
       return Object.assign({}, state, { isAddNewGroupInProcess: false, createGroupSuccess: false });
@@ -261,7 +268,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         groupArray = _.cloneDeep(state.groupsWithStocks);
         let activeGroup = _.cloneDeep(state.activeGroup);
         let stateActiveGrp: StockGroupResponse = null;
-        if (resp.request.isSelfParent) {
+        if (resp.request.isSelfParent || !resp.request.isSubGroup) {
           groupArray.map(gr => {
             if (gr.uniqueName === activeGroup.uniqueName) {
               gr.name = resp.body.name;
@@ -402,7 +409,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       let updateStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
       if (updateStockResp.status === 'success') {
         groupArray = _.cloneDeep(state.groupsWithStocks);
-        let activeGroup = _.cloneDeep(state.activeGroup);
+        let activeGroup = _.cloneDeep(state.activeGroup) || updateStockResp.body.stockGroup;
         let stateActiveGrp: StockGroupResponse = null;
         let myGrp = removeStockItemAndReturnIt(groupArray, activeGroup.uniqueName, updateStockResp.queryString.stockUniqueName, null);
         if (myGrp) {
@@ -443,6 +450,26 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         });
       }
       return state;
+
+    case InventoryActionsConst.SearchGroupsWithStocksResponse:
+      if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).status === 'success') {
+        groupArray = action.payload.body.results;
+        if (groupArray.length) {
+          if (groupArray) {
+            for (let el of groupArray) {
+              if (el) {
+                el.isOpen = true;
+                el.isActive = false;
+              }
+              el.childStockGroups = [];
+            }
+          }
+        }
+        // console.log(groupArray);
+        groupArray = _.orderBy(groupArray, ['name']);
+        return Object.assign({}, state, { groupsWithStocks: groupArray });
+      }
+      return state;
     case InventoryActionsConst.ShowLoadingForStockEditInProcess:
       return Object.assign({}, state, { showLoadingForStockEditInProcess: true });
     case InventoryActionsConst.HideLoadingForStockEditInProcess:
@@ -462,12 +489,15 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       if (action.payload.status === 'success') {
         return Object.assign({}, state, {
           stockUnits: [...state.stockUnits, action.payload.body],
-          createCustomStockInProcess: false
+          createCustomStockInProcess: false,
+          createCustomStockSuccess: true,
+          showNewCustomUnitAsidePane: false
         });
       }
       return {
         ...state,
-        createCustomStockInProcess: false
+        createCustomStockInProcess: false,
+        createCustomStockSuccess: false
       };
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
       return Object.assign({}, state, { updateCustomStockInProcess: true });
@@ -493,7 +523,10 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
      * */
     case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE:
       return Object.assign({}, state, { stockReport: action.payload });
-
+    case InventoryActionsConst.NewGroupAsidePane:
+      return Object.assign({}, state, { showNewGroupAsidePane: action.payload });
+    case InventoryActionsConst.NewCustomUnitAsidePane:
+      return Object.assign({}, state, { showNewCustomUnitAsidePane: action.payload });
     default:
       return state;
   }
