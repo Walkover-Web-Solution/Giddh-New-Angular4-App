@@ -51,6 +51,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
   public endDate: Date;
   private universalDate: Date[];
   private isUniversalDateApplicable: boolean = false;
+  private lastPage: number = 0;
   private destroyed$: ReplaySubject<boolean > = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -68,11 +69,11 @@ export class MfReportComponent implements OnInit, OnDestroy {
     // Refresh the stock list
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
-    this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.manufacturingStockList) {
-        if (o.manufacturingStockList.results) {
+    this.store.select(p => p.inventory.manufacturingStockList).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (o) {
+        if (o.results) {
           this.stockListDropDown = [];
-          _.forEach(o.manufacturingStockList.results, (unit: any) => {
+          _.forEach(o.results, (unit: any) => {
             this.stockListDropDown.push({ label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName });
           });
         }
@@ -80,9 +81,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.inventoryAction.GetManufacturingStock());
       }
     });
-    this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.reportData) {
-        this.reportData = o.reportData;
+    this.store.select(p => p.manufacturing.reportData).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (o) {
+        this.reportData = _.cloneDeep(o);
       }
     });
 
@@ -129,9 +130,12 @@ export class MfReportComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged(event: any): void {
-    let data = _.cloneDeep(this.mfStockSearchRequest);
-    data.page = event.page;
-    this.store.dispatch(this.manufacturingActions.GetMfReport(data));
+    if (event.page !== this.lastPage) {
+      this.lastPage = event.page;
+      let data = _.cloneDeep(this.mfStockSearchRequest);
+      data.page = event.page;
+      this.store.dispatch(this.manufacturingActions.GetMfReport(data));
+    }
   }
 
   public editMFItem(item) {
