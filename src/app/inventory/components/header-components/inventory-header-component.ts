@@ -27,15 +27,15 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   <div class="stock-bar">
   <div class="col-xs-12 top_bar bdrB">
     <div class="pull-right">
-      <button (click)="toggleAccountAsidePane($event)" type="button" class="btn btn-primary">Custom Stock Unit</button>
-      <button (click)="toggleInventoryAsidePane($event)" type="button" class="btn btn-primary">New <span class="caret"></span></button>
+      <button (click)="toggleCustomUnitAsidePane($event)" type="button" class="btn btn-primary">Custom Stock Unit</button>
+      <button (click)="toggleGroupStockAsidePane($event)" type="button" class="btn btn-primary">New <span class="caret"></span></button>
 
     </div>
   </div>
 </div>
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-<aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-custom-stock>
-<aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleInventoryAsidePane($event)"></aside-inventory-stock-group>
+<aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>
+<aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"></aside-inventory-stock-group>
 `
 })
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
@@ -59,13 +59,13 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
 
     this.openGroupAsidePane$.subscribe(s => {
       if (s) {
-        this.toggleInventoryAsidePane();
+        this.toggleGroupStockAsidePane();
       }
     });
 
     this.openCustomUnitAsidePane$.subscribe(s => {
       if (s) {
-        this.toggleAccountAsidePane();
+        this.toggleCustomUnitAsidePane();
       }
     });
   }
@@ -80,8 +80,7 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
     this.activeGroupName$.take(1).subscribe(s => groupName = s);
     this.router.navigate(['/pages', 'inventory', 'add-group', groupName, 'add-stock']);
   }
-  public toggleAccountAsidePane(event?): void {
-    // alert("toggleAccountAsidePane");
+  public toggleCustomUnitAsidePane(event?): void {
     if (event) {
       event.preventDefault();
     }
@@ -89,8 +88,7 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
     this.toggleBodyClass();
   }
 
-  public toggleInventoryAsidePane(event?): void {
-    // alert("toggleAccountAsidePane");
+  public toggleGroupStockAsidePane(event?): void {
     if (event) {
       event.preventDefault();
     }

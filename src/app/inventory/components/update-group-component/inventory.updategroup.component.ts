@@ -9,8 +9,7 @@ export class InventoryUpdateGroupComponent implements OnInit, OnDestroy {
   /**
    * TypeScript public modifiers
    */
-  constructor()
-  {
+  constructor() {
     //
   }
 
