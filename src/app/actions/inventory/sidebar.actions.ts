@@ -1,4 +1,4 @@
-import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
+import { GroupsWithStocksHierarchyMin, GroupsWithStocksFlatten } from '../../models/api-models/GroupsWithStocks';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockDetailResponse, StockGroupResponse } from '../../models/api-models/Inventory';
 import { InventoryActionsConst } from './inventory.const';
@@ -100,6 +100,25 @@ export class SidebarAction {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public SearchGroupsWithStocks$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.SearchGroupsWithStocks)
+    .switchMap((action: CustomActions) =>  this._inventoryService.SearchStockGroupsWithStocks(action.payload))
+    .map(response => {
+      return this.SearchGroupsWithStocksResponse(response);
+    });
+
+  @Effect()
+  public SearchGroupsWithStocksResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.SearchGroupsWithStocksResponse)
+    .map((action: CustomActions) => {
+      let data: BaseResponse<StockGroupResponse, string> = action.payload;
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
@@ -174,6 +193,20 @@ export class SidebarAction {
   public SetActiveStock(value: string) {
     return {
       type: InventoryActionsConst.SetActiveStock,
+      payload: value
+    };
+  }
+
+  public SearchGroupsWithStocks(q?: string): CustomActions {
+    return {
+      type: InventoryActionsConst.SearchGroupsWithStocks,
+      payload: q
+    };
+  }
+
+  public SearchGroupsWithStocksResponse(value: BaseResponse<GroupsWithStocksFlatten, string>): CustomActions {
+    return {
+      type: InventoryActionsConst.SearchGroupsWithStocksResponse,
       payload: value
     };
   }
