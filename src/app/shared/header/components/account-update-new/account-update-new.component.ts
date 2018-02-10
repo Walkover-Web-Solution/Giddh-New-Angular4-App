@@ -150,7 +150,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      // MobileCode: [''],
+      mobileCode: ['91'],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -189,7 +189,15 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
         this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
         this.addAccountForm.patchValue(accountDetails);
-        if (!accountDetails.mobileNo) {
+        if (accountDetails.mobileNo) {
+          if (accountDetails.mobileNo.length > 10 && accountDetails.mobileNo.indexOf('-') > -1) {
+            let mobileArray = accountDetails.mobileNo.split('-');
+            this.addAccountForm.get('mobileCode').patchValue(mobileArray[0]);
+            this.addAccountForm.get('mobileNo').patchValue(mobileArray[1]);
+          } else {
+            this.addAccountForm.get('mobileNo').patchValue(accountDetails.mobileNo);
+          }
+        } else {
           this.addAccountForm.get('mobileNo').patchValue('');
         }
       }
@@ -396,6 +404,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       delete accountRequest['addresses'];
       delete accountRequest['hsnOrSac'];
       delete accountRequest['mobileNo'];
+      delete accountRequest['mobileCode'];
       delete accountRequest['email'];
       delete accountRequest['attentionTo'];
     } else {
@@ -409,6 +418,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
         return f;
       });
+
+      if (accountRequest.mobileCode && accountRequest.mobileNo) {
+        accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
+        delete accountRequest['mobileCode'];
+      }
     }
 
     this.submitClicked.emit({
