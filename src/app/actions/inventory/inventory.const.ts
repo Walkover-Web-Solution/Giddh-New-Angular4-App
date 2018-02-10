@@ -59,6 +59,9 @@ export class InventoryActionsConst {
   public static SearchGroupsWithStocks = 'SearchGroupsWithStocks';
   public static SearchGroupsWithStocksResponse = 'SearchGroupsWithStocksResponse';
 
+  public static GetStockWithUniqueName = 'GetStockWithUniqueName';
+  public static GetStockWithUniqueNameResponse = 'GetStockWithUniqueNameResponse';
+
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
