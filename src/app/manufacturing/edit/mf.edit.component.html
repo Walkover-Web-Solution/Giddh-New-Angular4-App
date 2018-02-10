@@ -196,14 +196,14 @@
 
                             <tr *ngIf="toggleAddExpenses">
                                 <td colspan="1">
-                                    <sh-select [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'" [ItemHeight]="33"></sh-select>
+                                    <sh-select [forceClearReactive]="needForceClear$ | async" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'" [ItemHeight]="33"></sh-select>
                                 </td>
                                 <td class="text-center">
                                     <label class="pd">to</label>
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
-                                        <sh-select [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'" [ItemHeight]="33"></sh-select>
+                                        <sh-select [forceClearReactive]="needForceClear$ | async" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'" [ItemHeight]="33"></sh-select>
                                     </div>
                                 </td>
                                 <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
