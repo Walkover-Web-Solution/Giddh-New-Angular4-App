@@ -1,3 +1,4 @@
+import { ICurrencyResponse } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -54,6 +55,7 @@ export interface SessionState {
   isCompanyCreationSuccess: boolean;
   isCompanyCreated: boolean;
   userLoginState: userLoginStateEnum;
+  currencies: ICurrencyResponse[];
 }
 
 /**
@@ -93,7 +95,8 @@ const sessionInitialState: SessionState = {
   isCompanyCreationInProcess: false,
   isCompanyCreationSuccess: false,
   isRefreshing: false,
-  userLoginState: userLoginStateEnum.notLoggedIn
+  userLoginState: userLoginStateEnum.notLoggedIn,
+  currencies: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -510,6 +513,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     case LoginActions.SetLoginStatus: {
       return Object.assign({}, state, {
         userLoginState: action.payload
+      });
+    }
+    case LoginActions.SetCurrencyInStore: {
+      return Object.assign({}, state, {
+        currencies: action.payload
       });
     }
     case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
