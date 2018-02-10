@@ -340,4 +340,18 @@ export class InventoryService {
       }));
   }
 
+  /**
+   * get Stockdetails
+   */
+  public GetStockUniqueNameWithDetail(stockUniqueName: string): Observable<BaseResponse<StockDetailResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_WITH_UNIQUENAME.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
+      let data: BaseResponse<StockDetailResponse, string> = res;
+      data.request = '';
+      data.queryString = { stockUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', { stockUniqueName }));
+  }
+
 }

@@ -470,6 +470,16 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         return Object.assign({}, state, { groupsWithStocks: groupArray });
       }
       return state;
+    case InventoryActionsConst.GetStockWithUniqueNameResponse:
+      let data: BaseResponse<StockDetailResponse, string> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: false });
+      } else {
+        if (data.code === 'STOCK_NOT_FOUND') {
+          return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: true });
+        }
+        return state;
+      }
     case InventoryActionsConst.ShowLoadingForStockEditInProcess:
       return Object.assign({}, state, { showLoadingForStockEditInProcess: true });
     case InventoryActionsConst.HideLoadingForStockEditInProcess:
