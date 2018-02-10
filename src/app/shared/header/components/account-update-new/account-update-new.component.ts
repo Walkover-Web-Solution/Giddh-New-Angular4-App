@@ -84,6 +84,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public currencySource$: Observable<IOption[]> = Observable.of([]);
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
@@ -108,6 +109,17 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
       this.statesSource$ = Observable.of(states);
     });
+
+    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+      let currencies: IOption[] = [];
+      if (data) {
+        data.map(d => {
+          currencies.push({ label: d.code, value: d.code });
+        });
+      }
+      this.currencySource$ = Observable.of(currencies);
+    });
+
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
