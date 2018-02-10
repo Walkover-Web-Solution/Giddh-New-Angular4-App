@@ -215,7 +215,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
-      // mobileCode: [''],
+      mobileCode: ['91'],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
@@ -362,7 +362,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    debugger;
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
@@ -375,6 +374,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       delete accountRequest['hsnOrSac'];
       delete accountRequest['hsnNumber'];
       delete accountRequest['sacNumber'];
+
+      if (accountRequest.mobileCode && accountRequest.mobileNo) {
+        accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
+        delete accountRequest['mobileCode'];
+      }
     }
 
     this.submitClicked.emit({
