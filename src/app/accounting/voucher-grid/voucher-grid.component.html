@@ -27,8 +27,8 @@
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
-                                <td><input type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value)" (focus)="onAccountFocus(); selectRow(true,i); filterAccount(transaction.type)"
-                                        (blur)="selectRow(true,i);onAccountBlur($event, particular);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keyup)="showLedgerAccountList=true;" />
+                                <td><input type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value); showLedgerAccountList=true;" (focus)="onAccountFocus(); selectRow(true,i); filterAccount(transaction.type)"
+                                        (blur)="selectRow(true,i);onAccountBlur($event, particular);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)"/>
                                     <!-- *ngIf="transaction.inventory" -->
                                     <table [hidden]="!transaction.stocks">
                                         <tbody>
@@ -106,7 +106,7 @@
 <div class="sidebar_menu col-xs-2 pd0">
     <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <accounts-list [search]="accountSearch" [showStockItem]="false" (onSelectItem)="setAccount($event)"></accounts-list>
+        <accounts-list [arrowKeyInfo]="arrowInput" [search]="accountSearch" [showStockItem]="false" (onSelectItem)="setAccount($event)"></accounts-list>
     </div>
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!showStockList">
