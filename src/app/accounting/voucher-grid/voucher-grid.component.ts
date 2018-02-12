@@ -217,7 +217,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public onAccountBlur(ev, elem) {
     this.arrowInput = { key: 0 };
-    // this.showLedgerAccountList = false;
+    this.showLedgerAccountList = false;
     this.selectedParticular = elem;
     this.showStockList = false;
     // this.showStockList.next(true);
