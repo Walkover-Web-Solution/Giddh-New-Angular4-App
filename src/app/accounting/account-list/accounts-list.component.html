@@ -12,16 +12,16 @@
         </div> -->
         <!-- searchbar end -->
         <div class="pd1 l8grey" [hidden]="!noResult">
-            <h4>Oops, there is no accounts in selected company. <br /><br /> 
+            <h4>Oops, there is no accounts in selected company. <br /><br />
                 <!-- <button class="btn-primary btn">+ Add new</button> -->
             </h4>
         </div>
-        <div class="menu acList wrapAcList"> 
+        <div class="menu acList wrapAcList">
             <!-- <span *ngIf="accounts" style="color:#000;">{{ accounts.length }}</span> -->
             <ng-container>
                 <ul #accountEleList class="ul_0 acntAccordion wrapAcList" *vsFor="accounts; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
                     <ng-container *ngFor="let item of _items;let i = index">
-                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIndex }">
+                        <li class="inrPrnt cp accountli fs14" #list tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (focus)="isAccFocus = i" (keydown.arrowdown)="onArrowDown(list)" (keydown.arrowup)="onArrowUp(list)" (keyup.enter)="onSelectItem.emit(item)">
                             <a>
                                 <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
                             </a>

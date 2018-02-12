@@ -41,7 +41,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public accountUnqName: string;
   @Input() public arrowKeyInfo: string;
 
-  @ViewChild('accountEleList') public accountEleList: VsForDirective;
+  @ViewChild('accountEleList') public accountEleList: ElementRef;
   // @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
 
@@ -54,6 +54,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public flattenAccounts: any[] = [];
   public showStockList: boolean = false;
   public stockList: any[] = [];
+  public isAccFocus = null;
 
   private groupUniqueName: string;
   private activeIndex: number = 0;
@@ -108,10 +109,24 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
+      // if (!this.isAccFocus && this.isAccFocus !== 0 ) {
+
+      // }
+      if (this.accountEleList) {
+        setTimeout(() => {
+          // console.log(this.isAccFocus);
+        this.accountEleList.nativeElement.children[1].focus();
+        }, 100);
+      } else if (this.isAccFocus > -1) {
+        // console.log(this.isAccFocus);
+        this.accountEleList.nativeElement.children[this.isAccFocus].focus();
+      }
+    }
+/* if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
+      console.log(this.accountEleList.nativeElement);
       if (s.arrowKeyInfo.currentValue.key === 40) {
 
         this.columnView.first.scrollToElement(this.activeIndex);
-        console.log(this.activeIndex);
         this.nextActiveMatch();
 
       } else if (s.arrowKeyInfo.currentValue.key === 38) {
@@ -122,7 +137,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         this.activeIndex = 0; // on blur
       }
-    }
+    } */
   }
 
   public ngOnInit() {
@@ -170,6 +185,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
    * renderAccontList
    */
   public renderAccountList(data) {
+    this.isAccFocus = null;
     if (data && data.length) {
       let accounts: any[] = [];
       data.map(d => {
@@ -216,5 +232,19 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
   public prevActiveMatch() {
     this.activeIndex = this.activeIndex > 0 ? --this.activeIndex : 0;
+  }
+
+  /**
+   * onArrowDown
+   */
+  public onArrowDown(item) {
+    item.nextElementSibling.focus();
+  }
+
+  /**
+   * onArrowDown
+   */
+  public onArrowUp(item) {
+    item.previousElementSibling.focus();
   }
 }

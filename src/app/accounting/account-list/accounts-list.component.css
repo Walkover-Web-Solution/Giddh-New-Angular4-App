@@ -1,13 +1,19 @@
 .ul_0 {
-  height: 100vh;
-  overflow: scroll;
+    height: 100vh;
+    overflow: scroll;
 }
 
 .accountli {
-  font-size: 13px;
+    font-size: 13px;
+    margin: 0 !important;
+    padding: 4px 7px;
 }
 
-.active {
-  background: blue;
-  color: white;
+.accountli:focus {
+    background-color: rgb(244, 245, 248);
+    outline: 0;
+}
+
+.accountli:focus strong {
+    color: rgb(210, 95, 42) !important;
 }
