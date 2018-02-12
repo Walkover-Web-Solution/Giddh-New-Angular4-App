@@ -19,9 +19,9 @@
         <div class="menu acList wrapAcList"> 
             <!-- <span *ngIf="accounts" style="color:#000;">{{ accounts.length }}</span> -->
             <ng-container>
-                <ul class="ul_0 acntAccordion wrapAcList" *vsFor="accounts; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+                <ul #accountEleList class="ul_0 acntAccordion wrapAcList" *vsFor="accounts; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
                     <ng-container *ngFor="let item of _items;let i = index">
-                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIdx }">
+                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIndex }">
                             <a>
                                 <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
                             </a>

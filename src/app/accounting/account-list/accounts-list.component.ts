@@ -1,3 +1,4 @@
+import { VirtualScrollComponent } from './../../theme/ng-virtual-select/virtual-scroll';
 import { SearchActions } from './../../actions/search.actions';
 import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
 import { ToasterService } from './../../services/toaster.service';
@@ -38,6 +39,11 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public voucher: string;
   @Input() public type: 'account' | 'stock';
   @Input() public accountUnqName: string;
+  @Input() public arrowKeyInfo: string;
+
+  @ViewChild('accountEleList') public accountEleList: VsForDirective;
+  // @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
+  @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
 
   public accounts: any[];
   public isFlyAccountInProcess$: Observable<boolean>;
@@ -50,6 +56,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public stockList: any[] = [];
 
   private groupUniqueName: string;
+  private activeIndex: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -98,6 +105,23 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
 
     if (s.voucher && s.voucher.currentValue) {
       this.getFlattenGrpofAccounts(s.voucher.currentValue);
+    }
+
+    if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
+      if (s.arrowKeyInfo.currentValue.key === 40) {
+
+        this.columnView.first.scrollToElement(this.activeIndex);
+        console.log(this.activeIndex);
+        this.nextActiveMatch();
+
+      } else if (s.arrowKeyInfo.currentValue.key === 38) {
+        this.prevActiveMatch();
+        this.columnView.first.scrollToElement(this.activeIndex);
+      } else if (s.arrowKeyInfo.currentValue.key === 13) {
+        this.onSelectItem.emit(this.accounts[this.activeIndex]);
+      } else {
+        this.activeIndex = 0; // on blur
+      }
     }
   }
 
@@ -187,4 +211,10 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     this.stockList = stockAccountArr;
   }
 
+  public nextActiveMatch() {
+    this.activeIndex = this.activeIndex < this.accounts.length - 1 ? ++this.activeIndex : this.activeIndex;
+  }
+  public prevActiveMatch() {
+    this.activeIndex = this.activeIndex > 0 ? --this.activeIndex : 0;
+  }
 }
