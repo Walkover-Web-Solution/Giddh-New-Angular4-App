@@ -63,6 +63,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedStockIdx: any;
   public selectedStk: any;
   public selectAccUnqName: string;
+  public activeIndex: number = 0;
+  public arrowInput: { key: number };
   // public groupFlattenAccount: string = '';
 
   public voucherType: string = null;
@@ -214,7 +216,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountBlur() to hide accountList
    */
   public onAccountBlur(ev, elem) {
-    this.showLedgerAccountList = false;
+    this.arrowInput = { key: 0 };
+    // this.showLedgerAccountList = false;
     this.selectedParticular = elem;
     this.showStockList = false;
     // this.showStockList.next(true);
@@ -513,4 +516,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this._tallyModuleService.selectedFieldType.next(byOrTo);
     }
   }
+
+ public detectKey(ev) {
+   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+    this.arrowInput = { key: ev.keyCode };
+   }
+ }
 }
