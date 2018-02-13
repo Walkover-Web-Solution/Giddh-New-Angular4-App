@@ -251,7 +251,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
    * onArrowDown
    */
   public onArrowDown(item, ev) {
-    ev.preventDefault();
+    // ev.preventDefault();
     item.nextElementSibling.focus();
   }
 
