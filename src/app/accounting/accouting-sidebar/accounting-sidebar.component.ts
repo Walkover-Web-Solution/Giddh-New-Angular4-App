@@ -37,6 +37,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
   public grpUniqueName: string = '';
   public showAccountList: boolean = true;
   public selectedVoucher: string = null;
+  public selectedGrid: string = null;
 
   constructor(private _tallyModuleService: TallyModuleService) {
     //
@@ -58,8 +59,10 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
       }
       return true;
      }).subscribe((pageInfo: IPageInfo) => {
-      if (pageInfo && pageInfo.page !== this.selectedVoucher) {
+      // && pageInfo.page !== this.selectedVoucher && pageInfo.gridType !== this.selectedGrid
+      if (pageInfo) {
         this.selectedVoucher = pageInfo.page;
+        this.selectedGrid = pageInfo.gridType;
       }
     });
   }
@@ -77,6 +80,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
       gridType: grid
     });
     this.selectedVoucher = pageName;
+    this.selectedGrid = grid;
   }
 
 }
