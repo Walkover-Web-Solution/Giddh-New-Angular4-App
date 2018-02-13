@@ -1,6 +1,6 @@
 <ul class="menu_list">
     <!-- "isHidden" class  if user is not able to access the module-->
-    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)" [ngClass]="{ activeparent: selectedVoucher === 'Journal'}">F7: Journal {{selectedGrid}}</a></li>
+    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)" [ngClass]="{ activeparent: selectedVoucher === 'Journal'}">F7: Journal</a></li>
     <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')" [ngClass]="{ activeparent: selectedVoucher === 'Purchase'}">F9: Purchase</a></li>
     <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')" [ngClass]="{ activechild: selectedVoucher === 'Purchase'}" [hidden]="selectedVoucher !== 'Purchase' || selectedGrid!== 'voucher'"><span class="dblUnderlined">V:</span> As Voucher</a></li>
     <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice', 'purchases')" [ngClass]="{ activechild: selectedVoucher === 'Purchase'}" [hidden]="selectedVoucher !== 'Purchase' || selectedGrid!== 'invoice'"><span class="dblUnderlined">V:</span> As Invoice</a></li>

@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <br />
-                        <tbody>
+                        <tbody (clickOutside)="showLedgerAccountList = false">
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i)" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
@@ -35,7 +35,7 @@
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
                                                     <td colspan="" [style.width.px]="250"><input type="text" placeholder="Type to search stock" class="form-control" #Item [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="openStockList();selectedStockIdx = idx;selectedIdx = i;"
-                                                            (blur)="showStockList = false; selectedStk = qty" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="showStockList=true;" /></td>
+                                                            (blur)="selectedStk = qty" (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="showStockList=true;"/></td>
                                                     <td>
                                                         <input type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" decimalDigitsDirective
                                                             [DecimalPlaces]="2" [disabled]="!inventory.stock.name" (focus)="selectedIdx = i" />
@@ -106,12 +106,12 @@
 <div class="sidebar_menu col-xs-2 pd0">
     <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <accounts-list [arrowKeyInfo]="arrowInput" [search]="accountSearch" [showStockItem]="false" (onSelectItem)="setAccount($event)"></accounts-list>
+        <accounts-list [arrowKeyInfo]="arrowInput" [search]="accountSearch" [showStockItem]="showStockList" (onSelectItem)="setAccount($event)"></accounts-list>
     </div>
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!showStockList">
         <h3 class="pd1 bdrB primary_clr">List of Stock Item</h3>
-        <accounts-list [search]="accountSearch" [showStockItem]="showStockList" [parentGrpUnqName]="groupUniqueName" [accountUnqName]="selectAccUnqName" (onSelectItem)="onSelectStock($event)"></accounts-list>
+        <accounts-list [arrowKeyInfo]="arrowInput" [search]="accountSearch" [showStockItem]="showStockList" [parentGrpUnqName]="groupUniqueName" [accountUnqName]="selectAccUnqName" (onSelectItem)="onSelectStock($event)"></accounts-list>
     </div>
 
     <accounting-sidebar></accounting-sidebar>

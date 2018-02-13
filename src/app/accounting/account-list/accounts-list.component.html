@@ -21,7 +21,7 @@
             <ng-container>
                 <ul #accountEleList class="ul_0 acntAccordion wrapAcList" *vsFor="accounts; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
                     <ng-container *ngFor="let item of _items;let i = index">
-                        <li class="inrPrnt cp accountli fs14" #list tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (focus)="isAccFocus = i" (keydown.arrowdown)="onArrowDown(list)" (keydown.arrowup)="onArrowUp(list)" (keyup.enter)="onSelectItem.emit(item)">
+                        <li class="inrPrnt cp accountli fs14" #accountList tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (focus)="isAccFocus = i" (keydown.arrowdown)="onArrowDown(accountList, $event)" (keydown.arrowup)="onArrowUp(accountList, $event)" (keyup.enter)="onSelectItem.emit(item)">
                             <a>
                                 <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
                             </a>
@@ -39,9 +39,9 @@
     <div class="wrapAcList">
         <div class="menu acList wrapAcList">
             <ng-container>
-                <ul class="ul_0 acntAccordion wrapAcList" *vsFor="stockList; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+                <ul  #stockEleList class="ul_0 acntAccordion wrapAcList" *vsFor="stockList; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
                     <ng-container *ngFor="let item of _items;let i = index">
-                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIdx }">
+                        <li class="inrPrnt cp accountli fs14" #stockList tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (focus)="isStockFocus = i" (keydown.arrowdown)="onArrowDown(stockList, $event)" (keydown.arrowup)="onArrowUp(stockList, $event)" (keyup.enter)="onSelectItem.emit(item)">
                             <a>
                                 <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
                             </a>
