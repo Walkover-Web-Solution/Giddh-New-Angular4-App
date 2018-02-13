@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -39,8 +39,9 @@ const CustomShortcode = [
   styleUrls: ['./invoice-grid.component.css', '../accounting.component.css']
 })
 
-export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
+  @Input() public openDatePicker: boolean;
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
@@ -142,6 +143,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
+  }
+
+  public ngOnChanges(c: SimpleChanges) {
+    if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
+      this.showFromDatePicker = c.openDatePicker.currentValue;
+    }
   }
 
   /**
