@@ -42,6 +42,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public arrowKeyInfo: string;
 
   @ViewChild('accountEleList') public accountEleList: ElementRef;
+  @ViewChild('stockEleList') public stockEleList: ElementRef;
   // @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
 
@@ -55,6 +56,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public showStockList: boolean = false;
   public stockList: any[] = [];
   public isAccFocus = null;
+  public isStockFocus = null;
 
   private groupUniqueName: string;
   private activeIndex: number = 0;
@@ -100,8 +102,8 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       this.getFlattenGrpofAccounts(groupUniqueNames, accUnqName);
     }
 
-    if (s.showStockItem && s.showStockItem.currentValue) {
-      this.showStockList = true;
+    if (s.showStockItem  && s.showStockItem.currentValue !== s.showStockItem.previousValue) {
+      this.showStockList = s.showStockItem.currentValue;
     }
 
     if (s.voucher && s.voucher.currentValue) {
@@ -112,14 +114,29 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       // if (!this.isAccFocus && this.isAccFocus !== 0 ) {
 
       // }
-      if (this.accountEleList) {
-        setTimeout(() => {
+
+      if (this.showStockList) {
+        if (this.stockEleList) {
+          setTimeout(() => {
+            // console.log(this.isAccFocus);
+            console.log('this.stockEleList.nativeElement.children is :', this.stockEleList.nativeElement.children);
+          this.stockEleList.nativeElement.children[1].focus();
+          }, 100);
+        } else if (this.isStockFocus > -1) {
           // console.log(this.isAccFocus);
-        this.accountEleList.nativeElement.children[1].focus();
-        }, 100);
-      } else if (this.isAccFocus > -1) {
-        // console.log(this.isAccFocus);
-        this.accountEleList.nativeElement.children[this.isAccFocus].focus();
+          this.stockEleList.nativeElement.children[this.isStockFocus].focus();
+        }
+      } else {
+        if (this.accountEleList) {
+          setTimeout(() => {
+            // console.log(this.isAccFocus);
+          console.log('this.accountEleList.nativeElement.children is :', this.accountEleList.nativeElement.children);
+          this.accountEleList.nativeElement.children[1].focus();
+          }, 100);
+        } else if (this.isAccFocus > -1) {
+          // console.log(this.isAccFocus);
+          this.accountEleList.nativeElement.children[this.isAccFocus].focus();
+        }
       }
     }
 /* if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
@@ -237,14 +254,16 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * onArrowDown
    */
-  public onArrowDown(item) {
+  public onArrowDown(item, ev) {
+    ev.preventDefault();
     item.nextElementSibling.focus();
   }
 
   /**
    * onArrowDown
    */
-  public onArrowUp(item) {
+  public onArrowUp(item, ev) {
+    ev.preventDefault();
     item.previousElementSibling.focus();
   }
 }
