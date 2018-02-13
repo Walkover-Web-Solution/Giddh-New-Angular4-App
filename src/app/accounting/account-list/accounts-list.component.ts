@@ -1,3 +1,4 @@
+import { VirtualScrollComponent } from './../../theme/ng-virtual-select/virtual-scroll';
 import { SearchActions } from './../../actions/search.actions';
 import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
 import { ToasterService } from './../../services/toaster.service';
@@ -38,6 +39,12 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public voucher: string;
   @Input() public type: 'account' | 'stock';
   @Input() public accountUnqName: string;
+  @Input() public arrowKeyInfo: string;
+
+  @ViewChild('accountEleList') public accountEleList: ElementRef;
+  @ViewChild('stockEleList') public stockEleList: ElementRef;
+  // @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
+  @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
 
   public accounts: any[];
   public isFlyAccountInProcess$: Observable<boolean>;
@@ -48,8 +55,11 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   public flattenAccounts: any[] = [];
   public showStockList: boolean = false;
   public stockList: any[] = [];
+  public isAccFocus = null;
+  public isStockFocus = null;
 
   private groupUniqueName: string;
+  private activeIndex: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -76,7 +86,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnChanges(s: SimpleChanges) {
 
-    if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3 ) {
+    if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3) {
       this.searchAccount(s.search.currentValue);
     } else if (s.search && !s.search.currentValue && !s.search.previousValue) {
       this.renderAccountList(this.flattenAccounts);
@@ -92,33 +102,75 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       this.getFlattenGrpofAccounts(groupUniqueNames, accUnqName);
     }
 
-    if (s.showStockItem && s.showStockItem.currentValue) {
-      this.showStockList = true;
+    if (s.showStockItem && s.showStockItem.currentValue !== s.showStockItem.previousValue) {
+      this.showStockList = s.showStockItem.currentValue;
     }
 
     if (s.voucher && s.voucher.currentValue) {
       this.getFlattenGrpofAccounts(s.voucher.currentValue);
     }
+
+    if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
+      // if (!this.isAccFocus && this.isAccFocus !== 0 ) {
+
+      // }
+
+      if (this.showStockList) {
+        if (this.stockEleList) {
+          setTimeout(() => {
+            this.stockEleList.nativeElement.children[1].focus();
+          }, 100);
+        } else if (this.isStockFocus > -1) {
+          // console.log(this.isAccFocus);
+          this.stockEleList.nativeElement.children[this.isStockFocus].focus();
+        }
+      } else {
+        if (this.accountEleList) {
+          setTimeout(() => {
+            this.accountEleList.nativeElement.children[1].focus();
+          }, 100);
+        } else if (this.isAccFocus > -1) {
+          // console.log(this.isAccFocus);
+          this.accountEleList.nativeElement.children[this.isAccFocus].focus();
+        }
+      }
+    }
+    /* if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
+          console.log(this.accountEleList.nativeElement);
+          if (s.arrowKeyInfo.currentValue.key === 40) {
+
+            this.columnView.first.scrollToElement(this.activeIndex);
+            this.nextActiveMatch();
+
+          } else if (s.arrowKeyInfo.currentValue.key === 38) {
+            this.prevActiveMatch();
+            this.columnView.first.scrollToElement(this.activeIndex);
+          } else if (s.arrowKeyInfo.currentValue.key === 13) {
+            this.onSelectItem.emit(this.accounts[this.activeIndex]);
+          } else {
+            this.activeIndex = 0; // on blur
+          }
+        } */
   }
 
   public ngOnInit() {
-  //  this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
-  //     if (a && a !== '') {
-  //       this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
-  //       if (data.status === 'success') {
-  //         this.renderAccountList(data.body.results);
-  //         this.flattenAccounts = data.body.results;
-  //       }
-  //     });
-  //     }
-  //   });
-  this._tallyService.filteredAccounts.subscribe((accounts) => {
-    if (accounts) {
-      // console.log('accounts are :', accounts);
-      this.renderAccountList(accounts);
-      this.flattenAccounts = accounts;
-    }
-  });
+    //  this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+    //     if (a && a !== '') {
+    //       this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
+    //       if (data.status === 'success') {
+    //         this.renderAccountList(data.body.results);
+    //         this.flattenAccounts = data.body.results;
+    //       }
+    //     });
+    //     }
+    //   });
+    this._tallyService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        // console.log('accounts are :', accounts);
+        this.renderAccountList(accounts);
+        this.flattenAccounts = accounts;
+      }
+    });
 
   }
 
@@ -146,6 +198,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
    * renderAccontList
    */
   public renderAccountList(data) {
+    this.isAccFocus = null;
     if (data && data.length) {
       let accounts: any[] = [];
       data.map(d => {
@@ -175,9 +228,9 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
    */
   public sortStockItems(ItemArr) {
     let stockAccountArr = [];
-    _.forEach(ItemArr, function(obj: any) {
+    _.forEach(ItemArr, (obj: any) => {
       if (obj.stocks) {
-        _.forEach(obj.stocks, function(stock: any) {
+        _.forEach(obj.stocks, (stock: any) => {
           stock.accountStockDetails.name = obj.name;
           stockAccountArr.push(stock);
         });
@@ -187,4 +240,26 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
     this.stockList = stockAccountArr;
   }
 
+  public nextActiveMatch() {
+    this.activeIndex = this.activeIndex < this.accounts.length - 1 ? ++this.activeIndex : this.activeIndex;
+  }
+  public prevActiveMatch() {
+    this.activeIndex = this.activeIndex > 0 ? --this.activeIndex : 0;
+  }
+
+  /**
+   * onArrowDown
+   */
+  public onArrowDown(item, ev) {
+    // ev.preventDefault();
+    item.nextElementSibling.focus();
+  }
+
+  /**
+   * onArrowDown
+   */
+  public onArrowUp(item, ev) {
+    ev.preventDefault();
+    item.previousElementSibling.focus();
+  }
 }
