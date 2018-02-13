@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -39,8 +39,9 @@ const CustomShortcode = [
   styleUrls: ['./invoice-grid.component.css', '../accounting.component.css']
 })
 
-export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
+  @Input() public openDatePicker: boolean;
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
@@ -74,7 +75,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public debtorAcc: any = {};
   public stockTotal = null;
   public accountsTotal = null;
+  public arrowInput: { key: number };
   public gridType: string = 'invoice';
+  public isPartyACFocused: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -125,7 +128,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.data = _.cloneDeep(data);
-        this.prepareDataForInvoice(this.data);
+        if (this.gridType === 'invoice') {
+          this.prepareDataForInvoice(this.data);
+        }
       }
     });
 
@@ -136,12 +141,18 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        // this.refreshEntry();
+        this.refreshEntry();
       }
     });
-    this.refreshEntry();
+    // this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
+  }
+
+  public ngOnChanges(c: SimpleChanges) {
+    if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
+      this.showFromDatePicker = c.openDatePicker.currentValue;
+    }
   }
 
   /**
@@ -328,6 +339,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * refreshEntry
    */
   public refreshEntry() {
+    this.stocksTransaction = [];
+    this.accountsTransaction = [];
     this.showConfirmationBox = false;
     this.showAccountList = false;
     this.totalCreditAmount = 0;
@@ -595,5 +608,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   //  console.log(transactions);
    return transactions;
   }
+
+  public detectKey(ev) {
+    if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+     this.arrowInput = { key: ev.keyCode };
+    }
+  }
+
+   /**
+  * hideListItems
+  */
+ public hideListItems() {
+   if (!this.isPartyACFocused) {
+    this.showStockList.next(false);
+    this.showAccountList = false;
+   }
+ }
 
 }
