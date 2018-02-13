@@ -90,6 +90,7 @@ export class AccountingComponent implements OnInit {
   public gridType: string = 'voucher';
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
+  public openDatePicker: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -141,6 +142,8 @@ export class AccountingComponent implements OnInit {
         // this._router.navigate([]);
         this._tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
         // this._keyboardService.setKey(event);
+      } else if (event.code === 'F2') {
+        this.openDatePicker = !this.openDatePicker;
       }
     }
   }

@@ -86,7 +86,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnChanges(s: SimpleChanges) {
 
-    if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3 ) {
+    if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3) {
       this.searchAccount(s.search.currentValue);
     } else if (s.search && !s.search.currentValue && !s.search.previousValue) {
       this.renderAccountList(this.flattenAccounts);
@@ -102,7 +102,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       this.getFlattenGrpofAccounts(groupUniqueNames, accUnqName);
     }
 
-    if (s.showStockItem  && s.showStockItem.currentValue !== s.showStockItem.previousValue) {
+    if (s.showStockItem && s.showStockItem.currentValue !== s.showStockItem.previousValue) {
       this.showStockList = s.showStockItem.currentValue;
     }
 
@@ -118,9 +118,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       if (this.showStockList) {
         if (this.stockEleList) {
           setTimeout(() => {
-            // console.log(this.isAccFocus);
-            console.log('this.stockEleList.nativeElement.children is :', this.stockEleList.nativeElement.children);
-          this.stockEleList.nativeElement.children[1].focus();
+            this.stockEleList.nativeElement.children[1].focus();
           }, 100);
         } else if (this.isStockFocus > -1) {
           // console.log(this.isAccFocus);
@@ -129,9 +127,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         if (this.accountEleList) {
           setTimeout(() => {
-            // console.log(this.isAccFocus);
-          console.log('this.accountEleList.nativeElement.children is :', this.accountEleList.nativeElement.children);
-          this.accountEleList.nativeElement.children[1].focus();
+            this.accountEleList.nativeElement.children[1].focus();
           }, 100);
         } else if (this.isAccFocus > -1) {
           // console.log(this.isAccFocus);
@@ -139,42 +135,42 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     }
-/* if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
-      console.log(this.accountEleList.nativeElement);
-      if (s.arrowKeyInfo.currentValue.key === 40) {
+    /* if (s.arrowKeyInfo && s.arrowKeyInfo.currentValue) {
+          console.log(this.accountEleList.nativeElement);
+          if (s.arrowKeyInfo.currentValue.key === 40) {
 
-        this.columnView.first.scrollToElement(this.activeIndex);
-        this.nextActiveMatch();
+            this.columnView.first.scrollToElement(this.activeIndex);
+            this.nextActiveMatch();
 
-      } else if (s.arrowKeyInfo.currentValue.key === 38) {
-        this.prevActiveMatch();
-        this.columnView.first.scrollToElement(this.activeIndex);
-      } else if (s.arrowKeyInfo.currentValue.key === 13) {
-        this.onSelectItem.emit(this.accounts[this.activeIndex]);
-      } else {
-        this.activeIndex = 0; // on blur
-      }
-    } */
+          } else if (s.arrowKeyInfo.currentValue.key === 38) {
+            this.prevActiveMatch();
+            this.columnView.first.scrollToElement(this.activeIndex);
+          } else if (s.arrowKeyInfo.currentValue.key === 13) {
+            this.onSelectItem.emit(this.accounts[this.activeIndex]);
+          } else {
+            this.activeIndex = 0; // on blur
+          }
+        } */
   }
 
   public ngOnInit() {
-  //  this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
-  //     if (a && a !== '') {
-  //       this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
-  //       if (data.status === 'success') {
-  //         this.renderAccountList(data.body.results);
-  //         this.flattenAccounts = data.body.results;
-  //       }
-  //     });
-  //     }
-  //   });
-  this._tallyService.filteredAccounts.subscribe((accounts) => {
-    if (accounts) {
-      // console.log('accounts are :', accounts);
-      this.renderAccountList(accounts);
-      this.flattenAccounts = accounts;
-    }
-  });
+    //  this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+    //     if (a && a !== '') {
+    //       this._accountService.GetFlattenAccounts('', '', '60').takeUntil(this.destroyed$).subscribe(data => {
+    //       if (data.status === 'success') {
+    //         this.renderAccountList(data.body.results);
+    //         this.flattenAccounts = data.body.results;
+    //       }
+    //     });
+    //     }
+    //   });
+    this._tallyService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        // console.log('accounts are :', accounts);
+        this.renderAccountList(accounts);
+        this.flattenAccounts = accounts;
+      }
+    });
 
   }
 
@@ -232,9 +228,9 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
    */
   public sortStockItems(ItemArr) {
     let stockAccountArr = [];
-    _.forEach(ItemArr, function(obj: any) {
+    _.forEach(ItemArr, (obj: any) => {
       if (obj.stocks) {
-        _.forEach(obj.stocks, function(stock: any) {
+        _.forEach(obj.stocks, (stock: any) => {
           stock.accountStockDetails.name = obj.name;
           stockAccountArr.push(stock);
         });
