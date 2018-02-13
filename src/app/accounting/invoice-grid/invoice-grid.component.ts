@@ -75,7 +75,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public debtorAcc: any = {};
   public stockTotal = null;
   public accountsTotal = null;
+  public arrowInput: { key: number };
   public gridType: string = 'invoice';
+  public isPartyACFocused: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -606,5 +608,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   //  console.log(transactions);
    return transactions;
   }
+
+  public detectKey(ev) {
+    if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+     this.arrowInput = { key: ev.keyCode };
+    }
+  }
+
+   /**
+  * hideListItems
+  */
+ public hideListItems() {
+   if (!this.isPartyACFocused) {
+    this.showStockList.next(false);
+    this.showAccountList = false;
+   }
+ }
 
 }
