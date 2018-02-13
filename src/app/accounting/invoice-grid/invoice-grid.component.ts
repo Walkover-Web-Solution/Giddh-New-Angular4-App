@@ -126,7 +126,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((data) => {
       if (data) {
         this.data = _.cloneDeep(data);
-        this.prepareDataForInvoice(this.data);
+        if (this.gridType === 'invoice') {
+          this.prepareDataForInvoice(this.data);
+        }
       }
     });
 
@@ -137,10 +139,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        // this.refreshEntry();
+        this.refreshEntry();
       }
     });
-    this.refreshEntry();
+    // this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
   }
@@ -335,6 +337,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * refreshEntry
    */
   public refreshEntry() {
+    this.stocksTransaction = [];
+    this.accountsTransaction = [];
     this.showConfirmationBox = false;
     this.showAccountList = false;
     this.totalCreditAmount = 0;
