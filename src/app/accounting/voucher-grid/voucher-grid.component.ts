@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -38,7 +38,9 @@ const CustomShortcode = [
   styleUrls: ['../accounting.component.css']
 })
 
-export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+
+  @Input() public openDatePicker: boolean;
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
@@ -63,6 +65,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedStockIdx: any;
   public selectedStk: any;
   public selectAccUnqName: string;
+  public activeIndex: number = 0;
+  public arrowInput: { key: number };
+  public winHeight: number;
   // public groupFlattenAccount: string = '';
 
   public voucherType: string = null;
@@ -137,6 +142,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     // });
 
+  }
+
+  public ngOnChanges(c: SimpleChanges) {
+    if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
+      this.showFromDatePicker = c.openDatePicker.currentValue;
+    }
   }
 
   /**
@@ -214,7 +225,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountBlur() to hide accountList
    */
   public onAccountBlur(ev, elem) {
-    this.showLedgerAccountList = false;
+    this.arrowInput = { key: 0 };
+    // this.showLedgerAccountList = false;
     this.selectedParticular = elem;
     this.showStockList = false;
     // this.showStockList.next(true);
@@ -229,30 +241,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setAccount(acc) {
     let idx = this.selectedIdx;
-    let accModel = {
-      name: acc.name,
-      UniqueName: acc.uniqueName,
-      groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
-      account: acc.name,
-      parentGroups: acc.parentGroups
-    };
-    this.requestObj.transactions[idx].particular = accModel.UniqueName;
-    this.requestObj.transactions[idx].selectedAccount = accModel;
-    this.requestObj.transactions[idx].stocks = acc.stocks;
+    if (acc) {
+      let accModel = {
+        name: acc.name,
+        UniqueName: acc.uniqueName,
+        groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
+        account: acc.name,
+        parentGroups: acc.parentGroups
+      };
+      this.requestObj.transactions[idx].particular = accModel.UniqueName;
+      this.requestObj.transactions[idx].selectedAccount = accModel;
+      this.requestObj.transactions[idx].stocks = acc.stocks;
+
+      if (acc && acc.stocks) {
+        this.groupUniqueName = accModel.groupUniqueName;
+        this.selectAccUnqName = acc.uniqueName;
+        this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      }
+    } else {
+        this.requestObj.transactions.splice(idx, 1);
+        if (!idx) {
+          this.newEntryObj();
+          this.requestObj.transactions[0].type = 'by';
+        }
+    }
 
     setTimeout(() => {
       this.selectedParticular.focus();
-      // console.log(this.selectedParticular.nextElementSibling);
       this.showLedgerAccountList = false;
     }, 50);
-
-    if (acc && acc.stocks) {
-      this.groupUniqueName = accModel.groupUniqueName;
-      this.selectAccUnqName = acc.uniqueName;
-      this.requestObj.transactions[idx].inventory.push(this.initInventory());
-      // if (!this.requestObj.transactions[idx].inventory.length) {
-      // }
-    }
   }
 
   /**
@@ -513,4 +530,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this._tallyModuleService.selectedFieldType.next(byOrTo);
     }
   }
+
+ public detectKey(ev) {
+   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+    this.arrowInput = { key: ev.keyCode };
+   }
+ }
+
+ /**
+  * hideListItems
+  */
+ public hideListItems() {
+  this.showLedgerAccountList = false;
+  this.showStockList = false;
+ }
+
+  // @HostListener('window:resize')
+  // public resizeEvent() {
+  //   this.winHeight = window.innerHeight - 64;
+  // }
 }
