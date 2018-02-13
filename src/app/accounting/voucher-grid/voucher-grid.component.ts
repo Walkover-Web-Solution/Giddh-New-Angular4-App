@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -38,7 +38,9 @@ const CustomShortcode = [
   styleUrls: ['../accounting.component.css']
 })
 
-export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+
+  @Input() public openDatePicker: boolean;
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
@@ -139,6 +141,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     // });
 
+  }
+
+  public ngOnChanges(c: SimpleChanges) {
+    if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
+      this.showFromDatePicker = c.openDatePicker.currentValue;
+    }
   }
 
   /**
@@ -522,4 +530,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.arrowInput = { key: ev.keyCode };
    }
  }
+
+ public sayHello() {
+   alert('Hello');
+ }
+
 }
