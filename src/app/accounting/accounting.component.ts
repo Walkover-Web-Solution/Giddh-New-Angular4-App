@@ -9,6 +9,77 @@ import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
+export const PAGE_SHORTCUT_MAPPING = [
+  {
+    keyCode: 'F7',
+    inputForFn: {
+      page: 'Journal',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F9',
+    inputForFn: {
+      page: 'Purchase',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F8',
+    inputForFn: {
+      page: 'Sales',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F9',
+    altKey: true,
+    inputForFn: {
+      page: 'Debit note',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F8',
+    altKey: true,
+    inputForFn: {
+      page: 'Credit note',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F5',
+    inputForFn: {
+      page: 'Payment',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F6',
+    inputForFn: {
+      page: 'Receipt',
+      uniqueName: 'null',
+      gridType: 'voucher'
+    }
+  },
+  {
+    keyCode: 'F4',
+    inputForFn: {
+      page: 'Contra',
+      uniqueName: 'purchases',
+      gridType: 'voucher'
+    }
+  }
+];
+
+export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note'];
+
 @Component({
   templateUrl: './accounting.component.html',
   styleUrls: ['./accounting.component.css']
@@ -19,6 +90,7 @@ export class AccountingComponent implements OnInit {
   public gridType: string = 'voucher';
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
+  public openDatePicker: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -38,8 +110,42 @@ export class AccountingComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    this._keyboardService.setKey(event);
-    // console.log(event);
+    // Handling Alt + v
+    if (event.altKey && event.code === 'KeyV') {
+      const selectedPage = this._tallyModuleService.selectedPageInfo.value;
+      if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+        if (selectedPage.gridType === 'voucher') {
+          this._tallyModuleService.setVoucher({
+            page: selectedPage.page,
+            uniqueName: selectedPage.uniqueName,
+            gridType: 'invoice'
+          });
+        } else {
+          this._tallyModuleService.setVoucher({
+            page: selectedPage.page,
+            uniqueName: selectedPage.uniqueName,
+            gridType: 'voucher'
+          });
+        }
+      } else {
+        return;
+      }
+    } else {
+      let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
+        if (event.altKey) {
+          return page.keyCode === event.code && page.altKey;
+        } else {
+          return page.keyCode === event.code;
+        }
+      });
+      if (selectedPageIndx > -1) {
+        // this._router.navigate([]);
+        this._tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
+        // this._keyboardService.setKey(event);
+      } else if (event.code === 'F2') {
+        this.openDatePicker = !this.openDatePicker;
+      }
+    }
   }
   public ngOnInit(): void {
     let companyUniqueName = null;
