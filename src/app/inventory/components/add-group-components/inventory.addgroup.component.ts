@@ -36,6 +36,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
   public isUpdateGroupInProcess$: Observable<boolean>;
   public isDeleteGroupInProcess$: Observable<boolean>;
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public defaultGrpActive: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -101,6 +102,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let updGroupObj = new StockGroupRequest();
         updGroupObj.name = a.name;
         updGroupObj.uniqueName = a.uniqueName;
+        if (updGroupObj.uniqueName === 'maingroup') {
+          this.addGroupForm.controls['uniqueName'].disable();
+          this.defaultGrpActive = true;
+        } else {
+          this.addGroupForm.controls['uniqueName'].enable();
+          this.defaultGrpActive = false;
+        }
 
         if (a.parentStockGroup) {
           this.selectedGroup = { label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName };

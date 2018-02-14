@@ -6,14 +6,14 @@
         <div class="row">
             <div class="col-xs-12">
                 <h1 class="section_head">Financial Year(s) - {{ currentCompanyName }}</h1>
-                <div class="">
+                <div class="col-xs-7 row">
                     <table class="table-bordered basic table financial-year">
                         <thead>
                             <tr>
                                 <th>Sr. No.</th>
                                 <th>From</th>
                                 <th>To</th>
-                                <th>Lock Status</th>
+                                <!-- <th>Lock Status</th> -->
                             </tr>
                         </thead>
                         <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
@@ -21,14 +21,13 @@
                                 <td>{{i+1}}</td>
                                 <td>{{financialYear.financialYearStarts}}</td>
                                 <td>{{financialYear.financialYearEnds}}</td>
-                                <td *ngIf="currentCompanyFinancialYearUN != financialYear.uniqueName" class="status">
+                                <!-- <td *ngIf="currentCompanyFinancialYearUN != financialYear.uniqueName" class="status">
                                     <span *ngIf="financialYear.isLocked"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true" (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Locked</label></span>
                                     <span *ngIf="!financialYear.isLocked"><i  class="fa fa-toggle-on fa-2x cp" aria-hidden="true" (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Unlocked</label></span>
-                                    <!--<input [(ngModel)]="financialYear.isLocked" name="fy_{{i}}" type="checkbox" (change)="lockUnlockFinancialYear(financialYear);">-->
                                 </td>
                                 <td *ngIf="currentCompanyFinancialYearUN == financialYear.uniqueName">
                                     Current Financial Year (can not be locked)
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                         <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length">
@@ -40,8 +39,8 @@
                         </tbody>
                     </table>
                 </div>
-                <hr>
-                <div class="form-group mrT1">
+                <hr class="clearfix">
+                <div class="form-group mrT1 clearfix">
                     <label>Switch Financial Year</label>
                     <div>
                         <span class="pull-left">
@@ -53,7 +52,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="form-group mrT1 mrB">
+                <div class="form-group mrT1 mrB clearfix">
                     <label>Add Financial Year</label>
                     <div>
                         <span class="pull-left">
