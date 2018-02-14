@@ -18,6 +18,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { createSelector } from 'reselect';
+import { IForceClear } from 'app/models/api-models/Sales';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -43,6 +44,7 @@ export class MfEditComponent implements OnInit {
   public showFromDatePicker: boolean = false;
   public moment = moment;
   public initialQuantityObj: any = [];
+  public needForceClear$: Observable<IForceClear> = Observable.of({status: false});
 
   public options: Select2Options = {
     multiple: false,
@@ -291,6 +293,7 @@ export class MfEditComponent implements OnInit {
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};
+    this.needForceClear$ = Observable.of({status: true});
     this.initializeOtherExpenseObj();
   }
 
