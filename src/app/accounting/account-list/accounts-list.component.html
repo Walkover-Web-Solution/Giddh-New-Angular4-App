@@ -12,16 +12,22 @@
         </div> -->
         <!-- searchbar end -->
         <div class="pd1 l8grey" [hidden]="!noResult">
-            <h4>Oops, there is no accounts in selected company. <br /><br /> 
+            <h4>Oops, there is no accounts in selected company. <br /><br />
                 <!-- <button class="btn-primary btn">+ Add new</button> -->
             </h4>
         </div>
-        <div class="menu acList wrapAcList"> 
+        <div class="menu acList wrapAcList">
             <!-- <span *ngIf="accounts" style="color:#000;">{{ accounts.length }}</span> -->
             <ng-container>
-                <ul class="ul_0 acntAccordion wrapAcList" *vsFor="accounts; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+                <ul #accountEleList class="ul_0 acntAccordion wrapAcList" *vsFor="accounts; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+                    <li class="inrPrnt cp accountli fs14" #accountList tooltip="" style="background: #e5e5e5;" container="body" tabindex="-1" (keydown.arrowdown)="onArrowDown(accountList, $event)" (keydown.arrowup)="onArrowUp(accountList, $event)" (keyup.enter)="onSelectItem.emit(false)">
+                        <a>
+                            <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(false)">End of Item</span></strong></div>
+                        </a>
+                    </li>
+                    <!-- <li><a href="javascript:void(0)" (mousedown)="onSelectItem.emit(false)">End of Item</a></li> -->
                     <ng-container *ngFor="let item of _items;let i = index">
-                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIdx }">
+                        <li class="inrPrnt cp accountli fs14" #accountList tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (focus)="isAccFocus = i" (keydown.arrowdown)="onArrowDown(accountList, $event)" (keydown.arrowup)="onArrowUp(accountList, $event)" (keyup.enter)="onSelectItem.emit(item)">
                             <a>
                                 <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
                             </a>
@@ -39,9 +45,9 @@
     <div class="wrapAcList">
         <div class="menu acList wrapAcList">
             <ng-container>
-                <ul class="ul_0 acntAccordion wrapAcList" *vsFor="stockList; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
+                <ul #stockEleList class="ul_0 acntAccordion wrapAcList" *vsFor="stockList; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
                     <ng-container *ngFor="let item of _items;let i = index">
-                        <li class="inrPrnt cp accountli fs14" tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (keyup.enter)="onSelectItem.emit(item)" [ngClass]="{active: i === activeIdx }">
+                        <li class="inrPrnt cp accountli fs14" #stockList tooltip="{{item.uniqueName}}" container="body" tabindex="{{i}}" (focus)="isStockFocus = i" (keydown.arrowdown)="onArrowDown(stockList, $event)" (keydown.arrowup)="onArrowUp(stockList, $event)" (keyup.enter)="onSelectItem.emit(item)">
                             <a>
                                 <div><strong><span class="ellp max250" (mousedown)="onSelectItem.emit(item)" [innerHTML]="item.name+' ' + '(' + item.uniqueName + ')'"></span></strong></div>
                             </a>
