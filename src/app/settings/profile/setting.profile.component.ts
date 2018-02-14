@@ -38,6 +38,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public companyProfileObj: any = null;
   public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public currencySource$: Observable<IOption[]> = Observable.of([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
   public states: IOption[] = [];
@@ -67,6 +68,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       this.statesSource$ = Observable.of(this.states);
     }, (err) => {
       // console.log(err);
+    });
+
+    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+      let currencies: IOption[] = [];
+      if (data) {
+        data.map(d => {
+          currencies.push({ label: d.code, value: d.code });
+        });
+      }
+      this.currencySource$ = Observable.of(currencies);
     });
   }
 

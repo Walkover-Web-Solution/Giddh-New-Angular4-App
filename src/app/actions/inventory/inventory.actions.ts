@@ -197,6 +197,21 @@ export class InventoryAction {
       return {type: 'EmptyAction'};
     });
 
+  @Effect()
+  public GetStockWithUniqueName$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetStockWithUniqueName)
+    .switchMap((action: CustomActions) => this._inventoryService.GetStockUniqueNameWithDetail(action.payload.stockUniqueName))
+    .map(response => {
+      return this.GetStockWithUniqueNameResponse(response);
+    });
+
+  @Effect()
+  public GetStockWithUniqueNameResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetStockWithUniqueNameResponse)
+    .map((action: CustomActions) => {
+      return {type: 'EmptyAction'};
+    });
+
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {
 
@@ -385,4 +400,17 @@ export class InventoryAction {
     };
   }
 
+  public GetStockWithUniqueName(stockUniqueName: string): CustomActions {
+    return {
+      type: InventoryActionsConst.GetStockWithUniqueName,
+      payload: {stockUniqueName}
+    };
+  }
+
+  public GetStockWithUniqueNameResponse(value: BaseResponse<StockDetailResponse, string>): CustomActions {
+    return {
+      type: InventoryActionsConst.GetStockWithUniqueNameResponse,
+      payload: value
+    };
+  }
 }
