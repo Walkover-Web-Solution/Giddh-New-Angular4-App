@@ -1,3 +1,4 @@
+import { ICurrencyResponse } from './../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
@@ -64,6 +65,7 @@ export class LoginActions {
   public static AddBalance = 'AddBalance';
   public static AddBalanceResponse = 'AddBalanceResponse';
   public static ResetTwoWayAuthModal = 'ResetTwoWayAuthModal';
+  public static SetCurrencyInStore = 'SetCurrencyInStore';
 
   public static NEEDS_TO_REDIRECT_TO_LEDGER = 'NEEDS_TO_REDIRECT_TO_LEDGER';
   public static RESET_NEEDS_TO_REDIRECT_TO_LEDGER = 'RESET_NEEDS_TO_REDIRECT_TO_LEDGER';
@@ -184,11 +186,15 @@ export class LoginActions {
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
     .switchMap((action) => {
-      return Observable.zip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
+      return Observable.zip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
     }).map((results: any[]) => {
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
       let companies = results[1] as BaseResponse<CompanyResponse[], string>;
+      let currencies = results[2] as BaseResponse<ICurrencyResponse[], string>;
+      if (currencies.body && currencies.status === 'success') {
+        this.store.dispatch(this.SetCurrencyInStore(currencies.body));
+      }
       if (companies.body && companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         this._router.navigate(['/pages/new-user']);
@@ -710,6 +716,13 @@ export class LoginActions {
   public AddBalanceResponse(resp: BaseResponse<string, string>): CustomActions {
     return {
       type: LoginActions.AddBalanceResponse,
+      payload: resp
+    };
+  }
+
+  public SetCurrencyInStore(resp: ICurrencyResponse[]): CustomActions {
+    return {
+      type: LoginActions.SetCurrencyInStore,
       payload: resp
     };
   }
