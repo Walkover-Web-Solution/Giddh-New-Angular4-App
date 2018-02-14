@@ -264,7 +264,6 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
     case InventoryActionsConst.UpdateGroupResponse:
       let resp = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (resp.status === 'success') {
-        let data: StockGroupResponse = action.payload.body;
         groupArray = _.cloneDeep(state.groupsWithStocks);
         let activeGroup = _.cloneDeep(state.activeGroup);
         let stateActiveGrp: StockGroupResponse = null;

@@ -1,5 +1,7 @@
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Component, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
+import * as moment from 'moment/moment';
 import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
@@ -102,6 +104,11 @@ export class InvoiceSettingComponent implements OnInit {
           this.store.dispatch(this.invoiceActions.getRazorPayDetail());
           this.getRazorPayDetailResponse = true;
         }
+
+        if (this.invoiceSetting.lockDate) {
+          this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
+        }
+
       } else if (!setting || !setting.webhooks) {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
       }
@@ -161,6 +168,11 @@ export class InvoiceSettingComponent implements OnInit {
         this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
         this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
         delete this.formToSave.razorPayform; // delete razorPay before sending form
+
+        if (this.formToSave.invoiceSettings.lockDate) {
+          this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+        }
+
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
       // }
 

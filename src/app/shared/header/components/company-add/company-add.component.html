@@ -61,7 +61,8 @@
                             <form #createCompanyForm="ngForm" name="createCompForm" novalidate id="createCompForm" class="mrT mrB1" (submit)="createCompany()">
 
                                 <div class="form-group">
-                                    <input #name="ngModel" type="text" [ngClass]="{'hasError': name.invalid, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ ]{5,100}">
+                                    <input #name="ngModel" type="text" [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ ]{5,100}">
+                                    <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Company name should contain atleast 5 characters and should not contain any special character.</small>
                                 </div>
                                 <div class="form-group">
                                     <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$">
