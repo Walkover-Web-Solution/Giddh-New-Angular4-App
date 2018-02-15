@@ -45,10 +45,10 @@
                 <h3 class="fs16 mrB">Invoice Copy</h3>
                 <hr />
                 <div class="checkbox">
-                    <label><input type="checkbox" value="Transport" (change)="onSelectCopy($event)">Transport</label>
+                    <label><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)">Transport</label>
                 </div>
                 <div class="checkbox">
-                    <label><input type="checkbox" value="Customer" (change)="onSelectCopy($event)">Customer</label>
+                    <label><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)">Customer</label>
                 </div>
                 <div class="clearfix">
                     <button [hidden]="!emailTabActive" type="button" class="btn btn-sm btn-success" (click)="onSendInvoiceOnMail(emailList.value)">Send</button>
