@@ -221,11 +221,6 @@ export class InvoicePurchaseActions {
   public downloadFile(data: Response, month: string, gstNumber: string, type: string) {
     let blob = this.base64ToBlob(data, 'application/xls', 512);
     return saveAs(blob, `${type}-${month}-${gstNumber}.xlsx`);
-    // if (type === 'gstr1_sheet') {
-    //   return saveAs(blob, `${type}-${month}-${gstNumber}.xlsx`);
-    // } else if (type === 'error_sheet') {
-    //   return saveAs(blob, `${type}-${month}-${gstNumber}.xlsx`);
-    // }
   }
 
   public GetPurchaseInvoices(model: CommonPaginatedRequest): CustomActions {

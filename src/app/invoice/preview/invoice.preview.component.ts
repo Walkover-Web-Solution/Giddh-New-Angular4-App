@@ -187,6 +187,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
     componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
     componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
+    componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
     // componentInstance.totalItems = s.count * s.totalPages;
     // componentInstance.itemsPerPage = s.count;
     // componentInstance.maxSize = 5;
@@ -308,11 +309,11 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   /**
   * onDownloadOrSendMailEvent
   */
-  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[] }) {
+  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], typeOfInvoice: string[] }) {
     if (userResponse.action === 'download') {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice }));
     }
   }
 
@@ -381,6 +382,14 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
       this.getInvoices();
     }
+  }
+
+  public ondownloadInvoiceEvent(invoiceCopy) {
+    let dataToSend = {
+      invoiceNumber: [this.selectedInvoice.invoiceNumber],
+      typeOfInvoice: invoiceCopy
+    };
+    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
   }
 
   public ngOnDestroy() {
