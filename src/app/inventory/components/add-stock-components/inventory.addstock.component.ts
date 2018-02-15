@@ -297,20 +297,23 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (s) {
         this.resetStockForm();
         this.store.dispatch(this.inventoryAction.GetStock());
+        setTimeout(() => {
+        this.autoGroupSelect(this.activeGroup);
+        }, 700);
       }
     });
 
-    this.activeGroup$.take(1).subscribe(s => {
-      let groupName = null;
-
+    this.activeGroup$.subscribe(s => {
       if (s) {
         this.activeGroup = s.uniqueName;
         setTimeout(() => {
         this.autoGroupSelect(this.activeGroup);
         }, 700);
       } else {
-        groupName = this.selectedGroup;
-        // console.log(groupName);
+        this.activeGroup = null;
+        setTimeout(() => {
+        this.autoGroupSelect(null);
+        }, 700);
       }
     });
 
@@ -773,14 +776,17 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.groupsData$.subscribe(p => {
       selected = p.find(q => q.value === event.value);
     });
-    this.activeGroup = selected;
+    // this.activeGroup = selected;
   }
 
   public autoGroupSelect(grpname) {
     this.groupsData$.subscribe(p => {
      let selected = p.find(q => q.value === grpname);
-    //  console.log(selected);
-     this.addStockForm.patchValue({ parentGroup: selected.value });
+      if (selected) {
+      this.addStockForm.patchValue({ parentGroup: selected.value });
+      } else {
+        this.addStockForm.patchValue({ parentGroup: null });
+      }
     });
   }
 
