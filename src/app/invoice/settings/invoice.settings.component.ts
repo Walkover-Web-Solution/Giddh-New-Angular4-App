@@ -42,6 +42,8 @@ export class InvoiceSettingComponent implements OnInit {
     triggerAt: '',
     entity: 'invoice'
   };
+  public showDatePicker: boolean = false;
+  public moment = moment;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -340,5 +342,13 @@ export class InvoiceSettingComponent implements OnInit {
         });
       }
     }
+  }
+
+  /**
+   * setInvoiceLockDate
+   */
+  public setInvoiceLockDate(date) {
+    this.showDatePicker = !this.showDatePicker;
+    this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 }

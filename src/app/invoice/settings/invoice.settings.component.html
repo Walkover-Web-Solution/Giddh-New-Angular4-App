@@ -70,10 +70,14 @@
                 <div class="clearfix bdrB pdT1">
                     <div class="row">
                         <div class="col-xs-5">
-                            <label>Invoice lock date {{invoiceSetting.lockDate}}</label>
+                            <label>Invoice lock date</label>
                         </div>
                         <div class="col-xs-7 form-group">
-                            <input type="text" class="form-control w100" [ngModel]="invoiceSetting.lockDate" name="invoiceLockDate" bsDatepicker autocomplete="off"/>
+                            <input type="text" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" />
+                            <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                                <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
+                            </div>
+                            <!-- <input type="text" class="form-control w100" [ngModel]="invoiceSetting.lockDate" name="invoiceLockDate" bsDatepicker autocomplete="off"/> -->
                         </div>
                     </div>
                 </div>
