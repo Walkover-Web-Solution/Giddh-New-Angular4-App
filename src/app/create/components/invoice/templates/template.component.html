@@ -1,0 +1,20 @@
+<section class="container">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <h1>
+        Hello am from template 1
+      </h1>
+
+      <p>
+        <a [routerLink]="['/create/invoice']">Go Back to Selection</a>
+      </p>
+
+
+      <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
+
+      <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
+      <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
+    </div>
+  </div>
+</section>
