@@ -57,15 +57,13 @@ h4 {
     }
 }
 
-.invoice_list {
-    h4 {
-        text-align: left;
-        margin-bottom: 10px;
-    }
-    .template_img {
-        float: left;
-        margin-bottom: 15px;
-    }
+.invoice_area {
+    max-width: 8.3in;
+    float: left;
+}
+
+.bdrD {
+    border-bottom: 2px dotted #000;
 }
 
 .lh42 {

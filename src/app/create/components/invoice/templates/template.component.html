@@ -1,20 +1,117 @@
-<section class="container">
-  <div class="row">
-    <div class="col-xs-12">
-
-      <h1>
-        Hello am from template 1
-      </h1>
-
-      <p>
-        <a [routerLink]="['/create/invoice']">Go Back to Selection</a>
-      </p>
-
-
-      <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
-
-      <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
-      <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
+<header>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img src="assets/images/giddh-logo-white.png" alt="Giddh | online accounting software" class="logo" /></a>
+        <ul class="nav navbar-nav pull-right">
+            <li><a href="">Sign up</a></li>
+            <li><a href="">Login</a></li>
+        </ul>
     </div>
-  </div>
+
+</header>
+
+
+
+<section class="container">
+    <div class="row">
+        <div class="col-xs-12 alC">
+            <div class="pr mrB4 clearfix mrT2">
+                <div class="alL col-xs-7">
+
+                    <h1 class="fs18 bdrD inline lh42"><i class="glyphicon glyphicon-arrow-left cp" [routerLink]="['/create/invoice']"></i> Template TIGER</h1>
+                </div>
+                <ul class="nav nav-pills pull-right generate_steps" role="tablist">
+                    <li role="presentation">
+                        <a class="active" href="javascript:void(0)">1</a>
+                    </li>
+                    <li role="presentation">
+                        <span class="v_line"></span>
+                        <a href="javascript:void(0)">2</a>
+                        <span class="v_line"></span>
+                    </li>
+                    <li role="presentation">
+                        <a href="javascript:void(0)">3</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </section>
+
+
+<section class="container">
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="invoice_area">
+                <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
+
+                <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
+                <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
+            </div>
+
+            <!-- right side bar -->
+            <div class="col-xs-3 pull-right">
+                <!-- generate invoice -->
+                <div class="">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Invoice Name" />
+                        </div>
+                        <button class="btn btn-primary">Generate Invoice</button>
+                    </form>
+                </div>
+
+                <!-- download, emial, save -->
+                <div class="">
+                    <div class="clearfix">
+                        <button class="btn btn-primary mrB1">Download</button>
+                    </div>
+                    <div class="clearfix">
+                        <button class="btn btn-success mrB1">Send Email</button>
+                    </div>
+                    <button class="btn btn-success">Save</button> for future reference
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<!-- send email modal -->
+<div bsModal class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div id="shareModal">
+                <div id="share-modal" class="">
+                    <div class="modal-header">
+                        <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close">×</span>
+                        <h3>Share Invoice</h3>
+                    </div>
+                    <div class="modal-body mrB4" id="SharePop">
+                        <div class="modal_wrap">
+                            <div class="form-group add-mailer">
+                                <!--share invoice from-->
+                                <form name="shareInvoiceForm" novalidate="" class="" autocomplete="off">
+                                    <div class="form-group">
+                                        <label class="d-block">From</label>
+                                        <input name="fromEmail" type="email" required placeholder="Email ID" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                    </div>
+                                    <div>
+                                        <label class="d-block">To</label>
+                                        <input name="toEmail" type="email" required placeholder="Email ID" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                    </div>
+                                    <div class="clearfix mrT1">
+                                        <button class="btn btn-success btn-md pull-right" type="submit">Send</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

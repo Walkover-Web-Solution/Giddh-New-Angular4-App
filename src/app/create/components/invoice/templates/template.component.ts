@@ -9,7 +9,8 @@ const TEMPLATES = ['LETTER', 'CLASSIC', 'ROYAL'];
 const TEMPLATES_ID = ['t001', 't002', 't003'];
 
 @Component({
-  templateUrl: './template.component.html'
+  templateUrl: './template.component.html',
+  styleUrls: ['./template.component.scss']
 })
 export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
 
