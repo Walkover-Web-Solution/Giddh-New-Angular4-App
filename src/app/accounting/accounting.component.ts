@@ -110,23 +110,27 @@ export class AccountingComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    // Handling Alt + v
+    event.preventDefault();
+    // Handling Alt + V and Alt I
     if (event.altKey && event.code === 'KeyV') {
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
-        if (selectedPage.gridType === 'voucher') {
+        this._tallyModuleService.setVoucher({
+          page: selectedPage.page,
+          uniqueName: selectedPage.uniqueName,
+          gridType: 'voucher'
+        });
+      } else {
+        return;
+      }
+    } else if (event.altKey && event.code === 'KeyI') {
+      const selectedPage = this._tallyModuleService.selectedPageInfo.value;
+      if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
           this._tallyModuleService.setVoucher({
             page: selectedPage.page,
             uniqueName: selectedPage.uniqueName,
             gridType: 'invoice'
           });
-        } else {
-          this._tallyModuleService.setVoucher({
-            page: selectedPage.page,
-            uniqueName: selectedPage.uniqueName,
-            gridType: 'voucher'
-          });
-        }
       } else {
         return;
       }
