@@ -44,6 +44,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() public openDatePicker: boolean;
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
+  @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showAccountList: boolean = true;
@@ -58,7 +59,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedRowIdx: any;
   public isSelectedRow: boolean;
   public selectedInput: any;
-  public showFromDatePicker: boolean = false;
   public entryDate: any;
   public navigateURL: any = CustomShortcode;
   public showInvoiceDate: boolean = false;
@@ -78,6 +78,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public arrowInput: { key: number };
   public gridType: string = 'invoice';
   public isPartyACFocused: boolean = false;
+  public displayDay: string = '';
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -144,6 +146,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.refreshEntry();
       }
     });
+    this.entryDate = moment().format(GIDDH_DATE_FORMAT);
     // this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
@@ -151,7 +154,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnChanges(c: SimpleChanges) {
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
-      this.showFromDatePicker = c.openDatePicker.currentValue;
+      this.dateField.nativeElement.focus();
     }
   }
 
@@ -348,7 +351,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.addNewRow('stock');
     this.addNewRow('account');
     this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.entryDate = moment();
+    this.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.creditorAcc = {};
     this.debtorAcc = {};
     this.stockTotal = null;
@@ -368,14 +371,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
-
-  /**
-   * setDate
-   */
-  public setDate(date) {
-    this.showFromDatePicker = !this.showFromDatePicker;
-    this.data.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**
@@ -624,5 +619,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.showAccountList = false;
    }
  }
+
+  public dateEntered() {
+    const date = moment(this.entryDate, 'DD-MM-YYYY');
+    if (moment(date).format('dddd') !== 'Invalid date') {
+      this.displayDay =  moment(date).format('dddd');
+    } else {
+      this.displayDay = '';
+    }
+  }
 
 }

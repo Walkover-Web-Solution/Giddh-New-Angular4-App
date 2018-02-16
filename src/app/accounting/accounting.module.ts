@@ -19,6 +19,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { AccountListComponent } from 'app/accounting/account-list/accounts-list.component';
 import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
     SharedModule,
     ClickOutsideModule,
     TooltipModule,
-    TypeaheadModule
+    TypeaheadModule,
+    TextMaskModule
   ],
 })
 export class AccountingModule {
