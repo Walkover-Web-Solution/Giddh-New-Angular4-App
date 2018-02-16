@@ -44,6 +44,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
+  @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showLedgerAccountList: boolean;
@@ -68,7 +69,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public activeIndex: number = 0;
   public arrowInput: { key: number };
   public winHeight: number;
-  // public groupFlattenAccount: string = '';
+  public displayDay: string = '';
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   public voucherType: string = null;
 
@@ -147,6 +149,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public ngOnChanges(c: SimpleChanges) {
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
       this.showFromDatePicker = c.openDatePicker.currentValue;
+      this.dateField.nativeElement.focus();
     }
   }
 
@@ -267,7 +270,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     setTimeout(() => {
-      this.selectedParticular.focus();
+      if (this.selectedParticular) {
+        this.selectedParticular.focus();
+      }
       this.showLedgerAccountList = false;
     }, 50);
   }
@@ -356,7 +361,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.totalDebitAmount = 0;
     this.newEntryObj();
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.journalDate = moment();
+    this.journalDate = moment().format(GIDDH_DATE_FORMAT);
     this.requestObj.transactions[0].type = 'by';
   }
 
@@ -545,8 +550,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   this.showStockList = false;
  }
 
-  // @HostListener('window:resize')
-  // public resizeEvent() {
-  //   this.winHeight = window.innerHeight - 64;
-  // }
+  public dateEntered() {
+    const date = moment(this.journalDate, 'DD-MM-YYYY');
+    if (moment(date).format('dddd') !== 'Invalid date') {
+      this.displayDay = moment(date).format('dddd');
+    } else {
+      this.displayDay = '';
+    }
+}
 }
