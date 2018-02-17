@@ -157,3 +157,7 @@ export class GetCouponResp {
   public value: number;
   public type: string;
 }
+
+export interface ICurrencyResponse {
+  code: string;
+}

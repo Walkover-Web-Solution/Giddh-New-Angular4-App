@@ -8,6 +8,7 @@ import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../../../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
@@ -32,6 +33,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
+  @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
 
   public showEmailTextarea: boolean = false;
   public base64StringForModel: any;
@@ -39,11 +41,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public showEsign: boolean = false;
   public showEditButton: boolean = false;
   public isErrOccured$: Observable<boolean>;
+  public invoiceType: string[] = [];
+  public showMore: boolean = false;
+  public emailTabActive: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
-    private store: Store<AppState>,
+    private store: Store<AppState>, private _invoiceActions: InvoiceActions
   ) {
     this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).takeUntil(this.destroyed$).distinctUntilChanged();
   }
@@ -90,11 +95,31 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     }
     let emailList = email.split(',');
     if (Array.isArray(emailList)) {
-      this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList });
+      this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
       this.showEmailTextarea = false;
     } else {
       this._toasty.errorToast('Invalid email(s).');
     }
+  }
+
+  /**
+   * onSelectInvoiceCopy
+   */
+  public onSelectInvoiceCopy(event) {
+    let val = event.target.value;
+    if (event.target.checked) {
+      this.invoiceType.push(val);
+    } else {
+      let idx = _.findIndex(this.invoiceType, (o) => o === val);
+      return this.invoiceType.splice(idx, 1);
+    }
+  }
+
+  /**
+   * downloadInvoice
+   */
+  public downloadInvoice() {
+    this.downloadInvoiceEvent.emit(this.invoiceType);
   }
 
 }
