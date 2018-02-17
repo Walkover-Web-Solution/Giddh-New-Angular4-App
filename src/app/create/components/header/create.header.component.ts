@@ -2,17 +2,21 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
-  selector: 'create-invoice',
-  templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss'],
+  selector: 'create-invoice-header',
+  templateUrl: './create.header.component.html',
+  styleUrls: ['./create.header.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class CreateInvoiceComponent implements OnInit, OnDestroy {
+export class CreateInvoiceHeaderComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  constructor() {
+    //
+  }
+
   public ngOnInit() {
-    console.log ('CreateInvoiceComponent loaded');
+    //
   }
 
   public ngOnDestroy() {
