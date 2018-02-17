@@ -112,6 +112,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (d && d.gridType === 'invoice') {
         this.data.voucherType = d.page;
         this.gridType = d.gridType;
+        setTimeout(() => {
+          document.getElementById('first_element_0_0').focus();
+        }, 50);
       } else if (d && this.data.transactions) {
         this.gridType = d.gridType;
         this.data.transactions = this.prepareDataForVoucher();
@@ -254,43 +257,49 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     // }
   }
 
+  public onAccountBlur(ev) {
+    console.log('the ev is :', ev);
+    // if (ev.target.value === 0) {
+    //   ev.target.focus();
+    //   ev.preventDefault();
+    // }
+  }
+
   /**
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
     let idx = this.selectedAccIdx;
+    if (acc) {
+      if (this.accountType === 'creditor') {
+        this.creditorAcc = acc;
+        return this.accountType = null;
+      } else if (this.accountType === 'debitor') {
+        this.debtorAcc = acc;
+      }
 
-    if (this.accountType === 'creditor') {
-      this.creditorAcc = acc;
-      return this.accountType = null;
-    } else if (this.accountType === 'debitor') {
-      this.debtorAcc = acc;
+      if (this.selectedAccIdx > -1) {
+        let accModel = {
+          name: acc.name,
+          UniqueName: acc.uniqueName,
+          groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+          account: acc.name
+        };
+        this.accountsTransaction[idx].particular = accModel.UniqueName;
+        this.accountsTransaction[idx].selectedAccount = accModel;
+        this.accountsTransaction[idx].stocks = acc.stocks;
+      }
+
+      setTimeout(() => {
+        this.selectedInput.focus();
+        this.showAccountList = false;
+      }, 50);
+    } else {
+      this.accountsTransaction.splice(idx, 1);
+      if (!idx) {
+        this.addNewRow('account');
+      }
     }
-
-    if (this.selectedAccIdx > -1) {
-      let accModel = {
-        name: acc.name,
-        UniqueName: acc.uniqueName,
-        groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
-        account: acc.name
-      };
-      this.accountsTransaction[idx].particular = accModel.UniqueName;
-      this.accountsTransaction[idx].selectedAccount = accModel;
-      this.accountsTransaction[idx].stocks = acc.stocks;
-    }
-
-    setTimeout(() => {
-      this.selectedInput.focus();
-      this.showAccountList = false;
-    }, 50);
-
-    // if (acc && acc.stocks) {
-    //   this.groupUniqueName = accModel.groupUniqueName;
-    //   this.selectAccUnqName = acc.uniqueName;
-    //   if (!this.requestObj.transactions[idx].inventory.length) {
-    //     this.requestObj.transactions[idx].inventory.push(this.initInventory());
-    //   }
-    // }
   }
 
   /**
@@ -416,13 +425,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    let idx = this.selectedRowIdx;
-    let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, idx);
-    setTimeout(() => {
-      this.selectedInput.focus();
-      this.showStockList.next(false);
-    }, 50);
+    if (item) {
+      let idx = this.selectedRowIdx;
+      let entryItem = _.cloneDeep(item);
+      this.prepareEntry(entryItem, idx);
+      setTimeout(() => {
+        this.selectedInput.focus();
+        this.showStockList.next(false);
+      }, 50);
+    } else {
+      this.stocksTransaction.splice(this.selectedRowIdx);
+      if (!this.selectedRowIdx) {
+        this.addNewRow('stock');
+      }
+    }
   }
 
   /**
@@ -604,7 +620,16 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    return transactions;
   }
 
+  // public detectKey(ev) {
+  //   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+  //    this.arrowInput = { key: ev.keyCode };
+  //   }
+  // }
+
   public detectKey(ev) {
+    if (ev.keyCode === 27) {
+     this.deleteRow(this.selectedRowIdx);
+    }
     if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
      this.arrowInput = { key: ev.keyCode };
     }
@@ -626,6 +651,19 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.displayDay =  moment(date).format('dddd');
     } else {
       this.displayDay = '';
+    }
+  }
+
+  private deleteRow(idx: number) {
+    this.stocksTransaction.splice(idx, 1);
+    if (!idx) {
+      this.addNewRow('stock');
+    }
+  }
+
+  private addNewAccount(val, lastIdx) {
+    if (val && lastIdx) {
+      this.addNewRow('account');
     }
   }
 

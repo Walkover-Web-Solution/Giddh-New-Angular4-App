@@ -85,6 +85,7 @@ export class AccountListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(s: SimpleChanges) {
+    console.log('changes :', s);
 
     if (s.search && s.search.currentValue !== s.search.previousValue && s.search.currentValue.length >= 3) {
       this.searchAccount(s.search.currentValue);

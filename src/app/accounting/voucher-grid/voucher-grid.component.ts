@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener, ComponentRef, EventEmitter, Output } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -22,6 +22,8 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TallyModuleService } from 'app/accounting/tally-service';
+import { AccountListComponent } from '../account-list/accounts-list.component';
+import { AccountResponse } from '../../models/api-models/Account';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -41,6 +43,8 @@ const CustomShortcode = [
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public newSelectedAccount: AccountResponse;
+  @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
@@ -100,6 +104,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
+        setTimeout(() => {
+          document.getElementById('first_element_0').focus();
+        }, 50);
       } else if (d) {
         this._tallyModuleService.requestData.next(this.requestObj);
       }
@@ -150,6 +157,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
       this.showFromDatePicker = c.openDatePicker.currentValue;
       this.dateField.nativeElement.focus();
+    }
+    if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
+      this.setAccount(c.newSelectedAccount.currentValue);
     }
   }
 
@@ -218,24 +228,37 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * onAccountFocus() to show accountList
    */
-  public onAccountFocus() {
+  public onAccountFocus(elem) {
     this.showLedgerAccountList = true;
     this.showStockList = false;
+    this.selectedParticular = elem;
+
+    this.showAccountList.emit(true);
     // this.showStockList.next(false);
   }
 
   /**
-   * onAccountBlur() to hide accountList
+   * onAccountBlur to hide accountList
    */
-  public onAccountBlur(ev, elem) {
+  public onAccountBlur(ev) {
     this.arrowInput = { key: 0 };
     // this.showLedgerAccountList = false;
-    this.selectedParticular = elem;
     this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
+    }
+
+    this.showAccountList.emit(false);
+  }
+
+  public onAmountFieldBlur(ev) {
+    if (ev.target.value === '0') {
+      if (this.totalCreditAmount !== this.totalDebitAmount) {
+        ev.target.focus();
+        ev.preventDefault();
+      }
     }
   }
 
@@ -262,19 +285,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.requestObj.transactions[idx].inventory.push(this.initInventory());
       }
     } else {
-        this.requestObj.transactions.splice(idx, 1);
-        if (!idx) {
-          this.newEntryObj();
-          this.requestObj.transactions[0].type = 'by';
-        }
+      this.deleteRow(idx);
     }
 
     setTimeout(() => {
       if (this.selectedParticular) {
         this.selectedParticular.focus();
       }
-      this.showLedgerAccountList = false;
-    }, 50);
+      // this.showLedgerAccountList = false;
+      this.showAccountList.emit(false);
+    }, 500);
   }
 
   /**
@@ -449,14 +469,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    // console.log(item);
-    let idx = this.selectedStockIdx;
-    let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, this.selectedIdx);
-    setTimeout(() => {
-      this.selectedStk.focus();
-      this.showStockList = false;
-    }, 50);
+    if (item) {
+      // console.log(item);
+      let idx = this.selectedStockIdx;
+      let entryItem = _.cloneDeep(item);
+      this.prepareEntry(entryItem, this.selectedIdx);
+      setTimeout(() => {
+        this.selectedStk.focus();
+        this.showStockList = false;
+      }, 50);
+    } else {
+      this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
+    }
   }
 
   /**
@@ -507,7 +531,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * calculateTransactionTotal
    */
   public calculateTransactionTotal(inventory) {
-    // console.log('The env we got is :', inventory);
     let total = 0;
     inventory.forEach((inv) => {
       total = total + Number(inv.amount);
@@ -537,6 +560,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
  public detectKey(ev) {
+   if (ev.keyCode === 27) {
+    this.deleteRow(this.selectedIdx);
+   }
    if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
     this.arrowInput = { key: ev.keyCode };
    }
@@ -558,4 +584,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.displayDay = '';
     }
 }
+
+  private deleteRow(idx: number) {
+    this.requestObj.transactions.splice(idx, 1);
+    if (!idx) {
+      this.newEntryObj();
+      this.requestObj.transactions[0].type = 'by';
+    }
+  }
 }
