@@ -1,183 +1,211 @@
-<section id="template3">
-
+<form #testForm="ngForm">
+  <div class="invoice_area" id="template-3">
     <div id="template-header" class="mrT3">
-        <header class="pdRL3">
-            <table class="mrB1">
-                <tbody>
-                    <tr>
-                        <td class="text-left vmiddle">
-                            <div *ngIf="!logoPath">
-                                <label class="cp" for="upload_logo" id="upload_label">Your Logo <i class="paper_clip"></i></label>
-                                <input id="upload_logo" type='file' (change)="readUrl($event)" accept="image/*" />
-                            </div>
-                            <div *ngIf="logoPath" class="pos-rel">
-                                <img [src]="logoPath" alt="" class="logo">
-                                <p class="pos-abs"><a (click)="clearUploadedImg()" href="javsascript:void(0)" class="btn btn-link">clear</a></p>
-                            </div>
-                        </td>
-                        <td class="text-right vmiddle">
-                            <figure>
-                                <p contenteditable="true">August 09, 2017</p>
-                                <p contenteditable="true">GSTIN: 11AAAAAA000A1Z0</p>
-                                <p contenteditable="true">PAN: AAACW9768L</p>
-                            </figure>
-                        </td>
-                    </tr>
+      <header class="pdRL3">
+        <table class="mrB1">
+          <tbody>
+            <tr>
+              <td class="text-left vmiddle">
+                <div *ngIf="!logoPath">
+                  <label class="cp" for="upload_logo" id="upload_label">Your Logo
+                    <i class="paper_clip"></i>
+                  </label>
+                  <input id="upload_logo" type='file' (change)="readUrl($event)" accept="image/*" />
+                </div>
+                <div *ngIf="logoPath" class="pos-rel">
+                  <img [src]="logoPath" alt="" class="logo">
+                  <p class="pos-abs">
+                    <a (click)="clearUploadedImg()" href="javascript:void(0)" class="btn btn-link">clear</a>
+                  </p>
+                </div>
+              </td>
+              <td class="text-right vmiddle">
+                <figure>
+                  <p contenteditable="true" name="date" [(ngModel)]="name"></p>
+                  <p contenteditable="true" name="gstin" [(ngModel)]="name1"></p>
+                  <p contenteditable="true" name="pan" [(ngModel)]="name2"></p>
+                </figure>
+              </td>
+            </tr>
 
-                </tbody>
-            </table>
-        </header>
-
-        <table class="meta pdRL3">
-            <tbody>
-                <tr>
-                    <td>
-                        <h4 class="mrB1" contenteditable="true">Hello Shubhendra Agrawal,</h4>
-                        <p contenteditable="true">This is a system generated <strong class="primary-clr" contenteditable="true">INVOICE #201770323-64</strong> due on September 15, 2017 for <strong class="primary-clr" contenteditable="true">Insta car Technologies Private Limited</strong>                            at 24 Building Name, 3rd Floor, 15 A.B. Road, Indore (M.P.) 452000 [GSTIN:22BBBBBB000A1Z0] and the total amount is <strong class="primary-clr" contenteditable="true">INR 945</strong>.</p>
-                    </td>
-                </tr>
-            </tbody>
+          </tbody>
         </table>
+      </header>
+
+      <table class="meta pdRL3">
+        <tbody>
+          <tr>
+            <td>
+              <h4 class="mrB1" contenteditable="true">Hello Shubhendra Agrawal,</h4>
+              <p contenteditable="true">This is a system generated
+                <strong class="primary-clr" contenteditable="true">INVOICE #201770323-64</strong> due on September 15, 2017 for
+                <strong class="primary-clr" contenteditable="true">Insta car Technologies Private Limited</strong> at 24 Building Name, 3rd Floor, 15 A.B. Road, Indore (M.P.)
+                452000 [GSTIN:22BBBBBB000A1Z0] and the total amount is
+                <strong class="primary-clr" contenteditable="true">INR 945</strong>.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div id="Template-table" class="pos-rel">
-        <table class="item product-table pdRL3" cellspacing="0" cellpadding="0">
-            <thead>
-                <tr>
-                    <th class="text-left" width="45px">S. No.</th>
-                    <th class="text-left">Description</th>
-                    <th>HSN/SAC</th>
-                    <th>Tax Rate</th>
-                    <th>Qty.</th>
-                    <th>Rate</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-left">1</td>
-                    <td class="text-left" contenteditable="true">Transactional Route</td>
-                    <td contenteditable="true">12345678</td>
-                    <td contenteditable="true">18%</td>
-                    <td contenteditable="true">2</td>
-                    <td contenteditable="true">5000.00</td>
-                    <td>10000.00</td>
-                </tr>
-                <tr>
-                    <td class="text-left">2</td>
-                    <td class="text-left" contenteditable="true">Operational Route</td>
-                    <td contenteditable="true">45484848</td>
-                    <td contenteditable="true">10%</td>
-                    <td contenteditable="true">5</td>
-                    <td contenteditable="true">2500.00</td>
-                    <td>12500.00</td>
-                </tr>
-                <tr>
-                    <td colspan="7"></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="5"></th>
-                    <th class="text-left grey_txt">Sub Total</th>
-                    <th class="text-right grey_txt">22500.00</th>
-                </tr>
-                <tr>
-                    <th colspan="5"></th>
-                    <th class="text-left grey_txt">Discount</th>
-                    <th class="text-right grey_txt">00.00</th>
-                </tr>
-                <tr>
-                    <th colspan="5"></th>
-                    <th class="text-left grey_txt">CGST</th>
-                    <th class="text-right grey_txt">1525.00</th>
-                </tr>
-                <tr>
-                    <th colspan="5"></th>
-                    <th class="text-left grey_txt">SGST</th>
-                    <th class="text-right grey_txt">1525.00</th>
-                </tr>
+      <table class="item product-table pdRL3" cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th class="text-left" width="45px">S. No.</th>
+            <th class="text-left">Description</th>
+            <th>HSN/SAC</th>
+            <th>Tax Rate</th>
+            <th>Qty.</th>
+            <th>Rate</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left">1</td>
+            <td class="text-left" contenteditable="true">Transactional Route</td>
+            <td contenteditable="true">12345678</td>
+            <td contenteditable="true">18%</td>
+            <td contenteditable="true">2</td>
+            <td contenteditable="true">5000.00</td>
+            <td>10000.00</td>
+          </tr>
+          <tr>
+            <td class="text-left">2</td>
+            <td class="text-left" contenteditable="true">Operational Route</td>
+            <td contenteditable="true">45484848</td>
+            <td contenteditable="true">10%</td>
+            <td contenteditable="true">5</td>
+            <td contenteditable="true">2500.00</td>
+            <td>12500.00</td>
+          </tr>
+          <tr>
+            <td colspan="7"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5"></th>
+            <th class="text-left grey_txt">Sub Total</th>
+            <th class="text-right grey_txt">22500.00</th>
+          </tr>
+          <tr>
+            <th colspan="5"></th>
+            <th class="text-left grey_txt">Discount</th>
+            <th class="text-right grey_txt">00.00</th>
+          </tr>
+          <tr>
+            <th colspan="5"></th>
+            <th class="text-left grey_txt">CGST</th>
+            <th class="text-right grey_txt">1525.00</th>
+          </tr>
+          <tr>
+            <th colspan="5"></th>
+            <th class="text-left grey_txt">SGST</th>
+            <th class="text-right grey_txt">1525.00</th>
+          </tr>
 
-                <tr>
-                    <th colspan="5" class="text-left inwords">Twenty Five Thousand Five Hundred Fifty Only</th>
-                    <th class="text-left"><strong>Total</strong></th>
-                    <th class="text-right"><strong>25550.00</strong></th>
-                </tr>
-            </tfoot>
-        </table>
-        <table class="tax-table item pdRL3" cellspacing="0" cellpadding="0">
-            <thead>
-                <tr>
-                    <th class="text-left">HSN/SAC</th>
-                    <th>Taxable Amt.</th>
-                    <th>CGST Rate</th>
-                    <th>Amt.</th>
-                    <th>SGST Rate</th>
-                    <th>Amt.</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-left" contenteditable="true">12345678</td>
-                    <td contenteditable="true">10000.00</td>
-                    <td contenteditable="true">9%</td>
-                    <td contenteditable="true">900.00</td>
-                    <td contenteditable="true">9%</td>
-                    <td contenteditable="true">900.00</td>
-                </tr>
+          <tr>
+            <th colspan="5" class="text-left inwords">Twenty Five Thousand Five Hundred Fifty Only</th>
+            <th class="text-left">
+              <strong>Total</strong>
+            </th>
+            <th class="text-right">
+              <strong>25550.00</strong>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+      <table class="tax-table item pdRL3" cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th class="text-left">HSN/SAC</th>
+            <th>Taxable Amt.</th>
+            <th>CGST Rate</th>
+            <th>Amt.</th>
+            <th>SGST Rate</th>
+            <th>Amt.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" contenteditable="true">12345678</td>
+            <td contenteditable="true">10000.00</td>
+            <td contenteditable="true">9%</td>
+            <td contenteditable="true">900.00</td>
+            <td contenteditable="true">9%</td>
+            <td contenteditable="true">900.00</td>
+          </tr>
 
-                <tr>
-                    <td class="text-left" contenteditable="true">12345678</td>
-                    <td contenteditable="true">12500.00</td>
-                    <td contenteditable="true">5%</td>
-                    <td contenteditable="true">625.00</td>
-                    <td contenteditable="true">5%</td>
-                    <td contenteditable="true">625.00</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="1"></th>
-                    <th class="text-right">Total <span class="mrL2">25550.00</span></th>
-                    <th colspan="1"></th>
-                    <th class="text-right">1525.00</th>
-                    <th colspan="1"></th>
-                    <th class="text-right">1525.00</th>
-                </tr>
-            </tfoot>
-        </table>
+          <tr>
+            <td class="text-left" contenteditable="true">12345678</td>
+            <td contenteditable="true">12500.00</td>
+            <td contenteditable="true">5%</td>
+            <td contenteditable="true">625.00</td>
+            <td contenteditable="true">5%</td>
+            <td contenteditable="true">625.00</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="1"></th>
+            <th class="text-right">Total
+              <span class="mrL2">25550.00</span>
+            </th>
+            <th colspan="1"></th>
+            <th class="text-right">1525.00</th>
+            <th colspan="1"></th>
+            <th class="text-right">1525.00</th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
 
     <div id="Template-footer" class="pdRL3">
-        <table class="subfooter">
-            <tbody>
-                <tr>
-                    <td colspan="2" class="vbottom">
-                        <h1 class="primary-clr">THANK YOU
-                            <span class="normal primary-clr">FOR YOUR BUSINESS.</span>
-                        </h1>
+      <table class="subfooter">
+        <tbody>
+          <tr>
+            <td colspan="2" class="vbottom">
+              <h1 class="primary-clr">THANK YOU
+                <span class="normal primary-clr">FOR YOUR BUSINESS.</span>
+              </h1>
 
-                    </td>
-                    <td class="text-center vbottom">
-                        <p class="bdrB"></p>
-                        <p contenteditable="true"> <strong>Walkover Web Solutions Private Limited</strong></p>
-                        <p>(Signature)</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <ul class="note">
-                            <li contenteditable="true">Tax to be paid on reverse charge</li>
-                            <li contenteditable="true">All payments to be made in cash. Contact us for queries on these quotations. </li>
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            </td>
+            <td class="text-center vbottom">
+              <p class="bdrB"></p>
+              <p contenteditable="true">
+                <strong>Walkover Web Solutions Private Limited</strong>
+              </p>
+              <p>(Signature)</p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <ul class="note">
+                <li contenteditable="true">Tax to be paid on reverse charge</li>
+                <li contenteditable="true">All payments to be made in cash. Contact us for queries on these quotations. </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <footer class="text-center">
-            <p contenteditable="true"><strong>Walkover Web Solutions Private Limited</strong></p>
-            <p contenteditable="true">405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
-        </footer>
+      <footer class="text-center">
+        <p contenteditable="true">
+          <strong>Walkover Web Solutions Private Limited</strong>
+        </p>
+        <p contenteditable="true">405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+      </footer>
     </div>
+  </div>
 
-</section>
+  <div class="invoice_sidebar">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Invoice Name" />
+    </div>
+    <button class="btn btn-primary" (click)="emitTemplateData(testForm)">Generate Invoice</button>
+  </div>
+
+</form>
+
+

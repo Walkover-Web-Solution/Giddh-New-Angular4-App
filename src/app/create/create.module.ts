@@ -11,6 +11,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { LetterTemplateComponent } from './components/invoice/templates/letter/letter.template.component';
 import { CreateInvoiceHeaderComponent } from './components/header/create.header.component';
 import { CreateInvoiceStepsComponent } from './components/nav/create.steps.component';
+import { ContenteditableDirective } from 'ng-contenteditable';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { CreateInvoiceStepsComponent } from './components/nav/create.steps.compo
     CreateInvoiceTemplateComponent,
     CreateInvoiceStepsComponent,
     CreateInvoiceHeaderComponent,
-    LetterTemplateComponent
+    LetterTemplateComponent,
+    ContenteditableDirective
   ],
   entryComponents: [
     LetterTemplateComponent
