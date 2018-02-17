@@ -1,9 +1,11 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'letter-template',
-  templateUrl: './letter.template.component.html'
+  templateUrl: './letter.template.component.html',
+  styleUrls: ['./letter.template.component.scss'],
+  encapsulation: ViewEncapsulation.Native
 })
 
 export class LetterTemplateComponent implements OnInit, OnDestroy  {
