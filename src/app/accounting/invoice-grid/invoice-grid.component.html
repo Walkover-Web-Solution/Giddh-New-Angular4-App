@@ -71,7 +71,7 @@
                                 <ng-container>
                                     <tr [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
                                             <!-- (blur)="onStockItemBlur($event, qty); showStockList.next(false)" -->
-                                        <td><input type="text" class="form-control" [(ngModel)]="transaction.inventory.stock.name" (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                        <td><input id="first_element_{{i}}_{{i}}" type="text" class="form-control" [(ngModel)]="transaction.inventory.stock.name" (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
                                                 (focus)="showStockList.next(true); selectRow(true,i,null)" (blur)="onStockItemBlur($event, qty);" (keyup)="showStockList.next(true)" (keydown)="detectKey($event)" /></td>
                                         <td>
                                             <input type="text" class="form-control text-right" #qty [(ngModel)]="transaction.inventory.quantity" (ngModelChange)="changeQuantity(i, $event)" (focus)="selectRow(true,i, null); hideListItems();" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}" decimalDigitsDirective
@@ -112,7 +112,7 @@
                                     <td><input type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled readonly /></td>
                                     <td>
                                         <input type="text" class="form-control text-right" (change)="changeTotal(i, transaction.amount)" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                                            [disabled]="!transaction.selectedAccount.account" />
+                                            [disabled]="!transaction.selectedAccount.account" (blur)="addNewAccount(transaction.amount, l)" />
                                     </td>
                                 </tr>
                             </ng-container>
@@ -157,7 +157,7 @@
 </div>
 
 
-<div class="sidebar_menu col-xs-2 pd0">
+<!-- <div class="sidebar_menu col-xs-2 pd0">
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!showAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
@@ -171,4 +171,4 @@
     </div>
 
     <accounting-sidebar></accounting-sidebar>
-</div>
+</div> -->

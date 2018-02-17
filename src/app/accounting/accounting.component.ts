@@ -8,6 +8,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { AccountResponse } from '../models/api-models/Account';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
@@ -91,6 +92,9 @@ export class AccountingComponent implements OnInit {
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
   public openDatePicker: boolean = false;
+
+  public showAccountList: boolean = false;
+  public selectedAccount: AccountResponse = null;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -184,6 +188,15 @@ export class AccountingComponent implements OnInit {
    */
   public setStock(stockObj) {
     //
+  }
+
+  ////////////////////////////////// Account list related logic //////////////////////////////////
+  public onShowAccountListSelected(ev) {
+    this.showAccountList = ev;
+  }
+
+  public onSelectAccount(ev: AccountResponse) {
+    this.selectedAccount = ev;
   }
 
 }
