@@ -21,28 +21,11 @@
 <section class="container">
   <div class="row">
     <div class="col-xs-12">
-
-      <div class="invoice_area">
-        <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
-
-        <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
-        <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
-      </div>
-
-      <!-- right side bar -->
-      <div class="col-xs-3 pull-right">
-        <!-- generate invoice -->
-        <div class="">
-          <form>
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Invoice Name" />
-            </div>
-            <button class="btn btn-primary">Generate Invoice</button>
-          </form>
-        </div>
-
+      <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
+      <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
+      <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
         <!-- download, emial, save -->
-        <div class="">
+        <!-- <div class="">
           <div class="clearfix">
             <button class="btn btn-primary mrB1">Download</button>
           </div>
@@ -50,8 +33,7 @@
             <button class="btn btn-success mrB1">Send Email</button>
           </div>
           <button class="btn btn-success">Save</button> for future reference
-        </div>
-      </div>
+        </div> -->
     </div>
   </div>
 </section>
