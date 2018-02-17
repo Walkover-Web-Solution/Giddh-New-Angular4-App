@@ -68,6 +68,7 @@ export class InventoryAction {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast(data.body, '');
+        return this.resetActiveGroup();
       }
       return {type: 'EmptyAction'};
     });
