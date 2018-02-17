@@ -183,3 +183,11 @@ $color_punch_approx: #df4927;
 	padding-right: 30px !important;
 	padding-left: 30px !important;
 }
+
+.logo-wrap{
+  width: 120px;
+  figure {
+    height: 50px;
+    overflow: hidden;
+  }
+}
