@@ -10,11 +10,26 @@ import { ReplaySubject } from 'rxjs';
 
 export class LetterTemplateComponent implements OnInit, OnDestroy  {
   @Output() public closeAndDestroyComponent: EventEmitter<any> = new EventEmitter();
+  public selectedFiles: any;
+  public logoPath: any;
 
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor() {
     console.log (`hello from LetterTemplateComponent`);
+  }
+
+  public readUrl(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (item: any) => {
+        this.logoPath = item.target.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+  public clearUploadedImg() {
+    this.logoPath = null;
   }
 
   public ngOnInit() {
