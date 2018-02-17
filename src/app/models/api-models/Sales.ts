@@ -59,7 +59,7 @@ class SignatureClass {
   public path: string;
 }
 
-class GstDetailsClass {
+export class GstDetailsClass {
   public gstNumber?: any;
   public address: string[];
   public stateCode?: any;
