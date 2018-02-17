@@ -6,7 +6,14 @@
                 <tbody>
                     <tr>
                         <td class="text-left vmiddle">
-                            <img src="logo.png" alt="" class="logo">
+                            <input *ngIf="!logoPath" type='file' (change)="readUrl($event)" accept="image/*">
+                            <div class="logo-wrap" *ngIf="logoPath">
+                              <figure>
+                                <img [src]="logoPath" alt="" class="logo">
+                              </figure>
+                              <a (click)="clearUploadedImg()" href="javsascript:void(0)">clear</a>
+                            </div>
+                            <!-- <img src="logo.png" alt="" class="logo"> -->
                         </td>
                         <td class="text-right">
                             <figure>
