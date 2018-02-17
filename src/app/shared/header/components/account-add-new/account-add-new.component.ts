@@ -74,6 +74,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public currencySource$: Observable<IOption[]> = Observable.of([]);
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   public moreGstDetailsVisible: boolean = false;
@@ -98,6 +99,16 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       this.statesSource$ = Observable.of(states);
     }, (err) => {
       // console.log(err);
+    });
+
+    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+      let currencies: IOption[] = [];
+      if (data) {
+        data.map(d => {
+          currencies.push({ label: d.code, value: d.code });
+        });
+      }
+      this.currencySource$ = Observable.of(currencies);
     });
 
     contriesWithCodes.map(c => {
@@ -204,7 +215,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
-      // mobileCode: [''],
+      mobileCode: ['91'],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
@@ -234,22 +245,26 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public generateUniqueName() {
     let val: string = this.addAccountForm.controls['name'].value;
-    val = uniqueNameInvalidStringReplace(val);
-    if (val) {
-      this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-
-      this.isAccountNameAvailable$.subscribe(a => {
-        if (a !== null && a !== undefined) {
-          if (a) {
-            this.addAccountForm.patchValue({ uniqueName: val });
-          } else {
-            let num = 1;
-            this.addAccountForm.patchValue({ uniqueName: val + num });
-          }
-        }
-      });
+    if (val.match(/[\\/(){};:"<>#?%, ]/g)) {
+      this._toaster.clearAllToaster();
+      this._toaster.errorToast('Account name must not contain special symbol like [\/(){};:"<>#?%');
     } else {
-      this.addAccountForm.patchValue({ uniqueName: '' });
+      val = uniqueNameInvalidStringReplace(val);
+      if (val) {
+        this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+        this.isAccountNameAvailable$.subscribe(a => {
+          if (a !== null && a !== undefined) {
+            if (a) {
+              this.addAccountForm.patchValue({ uniqueName: val });
+            } else {
+              let num = 1;
+              this.addAccountForm.patchValue({ uniqueName: val + num });
+            }
+          }
+        });
+      } else {
+        this.addAccountForm.patchValue({ uniqueName: '' });
+      }
     }
   }
 
@@ -351,7 +366,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    debugger;
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
@@ -364,6 +378,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       delete accountRequest['hsnOrSac'];
       delete accountRequest['hsnNumber'];
       delete accountRequest['sacNumber'];
+
+      if (accountRequest.mobileCode && accountRequest.mobileNo) {
+        accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
+        delete accountRequest['mobileCode'];
+      }
     }
 
     this.submitClicked.emit({
