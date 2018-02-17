@@ -1,0 +1,95 @@
+<section class="h100">
+    <div class="clearfix mrB2">
+        <button class="btn btn-primary btn-md gico-wrap" (click)="goToManageGroup()">
+      <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeGroupName }} Group
+      </button>
+    </div>
+    <form #filter="ngForm" class="form-inline mrB1">
+        <div class="clearfix pr">
+            <div class="form-group">
+                <label class="d-block">From - To</label>
+                <input type="text" name="daterangeInput" daterangepicker class="form-control date-range-picker" />
+            </div>
+            <div class="form-group">
+                <label class="d-block">Stocks</label>
+                <sh-select [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
+            </div>
+            <div class="form-group">
+                <label class="d-block">Stocks</label>
+                <sh-select [placeholder]="'Choose a parent unit'" [multiple]="false" [ItemHeight]="33"></sh-select>
+            </div>
+            <div class="form-group">
+                <label class="d-block">Others</label>
+                <sh-select [placeholder]="'-- select --'" [multiple]="false" [ItemHeight]="33"></sh-select>
+            </div>
+            <div class="form-group">
+                <label class="d-block">&nbsp;</label>
+                <sh-select [placeholder]="'-- select --'" [multiple]="false" [ItemHeight]="33"></sh-select>
+            </div>
+            <div class="form-group">
+                <label class="d-block">&nbsp;</label>
+                <sh-select [placeholder]="'-- select --'" [multiple]="false" [ItemHeight]="33"></sh-select>
+            </div>
+            <div class="form-group">
+                <label class="d-block">&nbsp;</label>
+                <input type="text" name="" class="form-control" />
+            </div>
+        </div>
+    </form>
+
+    <section style="margin-bottom: 40px">
+        <table class="table basic">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="bdrR">Stock name</th>
+                    <th class="text-center bdrR bdrB" colspan="2">Opening stock</th>
+                    <th class="text-center bdrR bdrB" colspan="2">Inwards</th>
+                    <th class="text-center bdrR bdrB" colspan="2">Outwards</th>
+                    <th class="text-center bdrB" colspan="2">Closing Stock</th>
+                </tr>
+                <tr class="bdrT">
+                    <th>Quantity</th>
+                    <th class="text-right bdrR">Value</th>
+                    <th>Quantity</th>
+                    <th class="text-right bdrR">Value</th>
+                    <th>Quantity</th>
+                    <th class="text-right bdrR">Value</th>
+                    <th>Quantity</th>
+                    <th class="text-right">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Stock 1</td>
+                    <td>25 kg</td>
+                    <td class="text-right bdrR">30000.00</td>
+                    <td>25 kg</td>
+                    <td class="text-right bdrR">30000.00</td>
+                    <td>25 kg</td>
+                    <td class="text-right bdrR">30000.00</td>
+                    <td>25 kg</td>
+                    <td class="text-right bdrR">30000.00</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="14">
+                        <div class="pagination pull-right">
+                            <ul class="list-inline">
+                                <li>
+                                    <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === 1">Prev
+                          </button>
+                                </li>
+                                <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
+                                <li>
+                                    <button class="btn btn-default" (click)="nextPage()" [disabled]="(stockReport$ | async)?.page === (stockReport$ | async)?.totalPages">Next
+                          </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+</section>
