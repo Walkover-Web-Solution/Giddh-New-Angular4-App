@@ -4356,3 +4356,8 @@ table td[class*=col-]:last-child {
     position: absolute;
     right: 15px;
 }
+
+.custom-tabs {
+    background: #eee;
+    border-bottom: 1px solid #ddd;
+}
