@@ -1,61 +1,10 @@
-header {
-    background: #27273b;
-    padding: 10px 0;
-    .navbar-brand {
-        height: auto;
-        padding: 0;
-        img {
-            max-width: 140px;
-        }
-    }
-    .navbar-nav {
-        margin-top: 2px;
-        li {
-            a {
-                color: #fff;
-                padding: 10px 15px;
-                &:hover {
-                    background: #ff5f00;
-                    border-radius: 2px;
-                }
-            }
-        }
-    }
-}
+
 
 h4 {
     font-size: 18px;
 }
 
-.generate_steps {
-    li {
-        margin: 0 15px;
-        a {
-            color: #1a1a1a;
-            padding: 9px 16px;
-            border-radius: 100%;
-            border: 1px solid #1a1a1a;
-            &.active {
-                background: #ff5f00 !important;
-                border-color: #ff5f00;
-                color: #fff;
-            }
-            &:nth-child(2):before,
-            &:nth-child(2):after {
-                content: ' ';
-                position: absolute;
-                width: 24px;
-                left: -28px;
-                border-bottom: 1px solid #000;
-                top: 18px;
-            }
-            &:nth-child(2):after {
-                right: -28px;
-                left: initial;
-            }
-        }
-    }
-}
+
 
 .invoice_list {
     h4 {

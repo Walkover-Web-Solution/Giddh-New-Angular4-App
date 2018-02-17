@@ -9,6 +9,8 @@ import { CreateRoutingModule } from './create.routing.module';
 import { CreateInvoiceTemplateComponent } from './components/invoice/templates/template.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { LetterTemplateComponent } from './components/invoice/templates/letter/letter.template.component';
+import { CreateInvoiceHeaderComponent } from './components/header/create.header.component';
+import { CreateInvoiceStepsComponent } from './components/nav/create.steps.component';
 
 @NgModule({
   imports: [
@@ -24,6 +26,8 @@ import { LetterTemplateComponent } from './components/invoice/templates/letter/l
   declarations: [
     CreateInvoiceComponent,
     CreateInvoiceTemplateComponent,
+    CreateInvoiceStepsComponent,
+    CreateInvoiceHeaderComponent,
     LetterTemplateComponent
   ],
   entryComponents: [
