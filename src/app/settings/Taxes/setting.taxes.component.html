@@ -32,7 +32,7 @@
             <div class="form-group col-xs-3">
                 <label>Apply Tax From</label>
                 <div class="input-group">
-                    <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+                    <input type="text" name="from" (blur)="showFromDatePicker = false;" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
                     <span class="input-group-btn">
                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                <i class="glyphicon glyphicon-calendar"></i>
@@ -148,47 +148,20 @@
                                     </span>
                                 </div>
                             </td>
-                            <!--<td *ngIf="!tax.taxDetail[0] && !taxToEdit[i]">--</td>
-                           <td *ngIf="tax.taxDetail[0] && !taxToEdit[i]">{{tax.taxDetail[0].taxValue}}</td>
-                           <td *ngIf="tax.taxDetail[0] && taxToEdit[i]"><input type="text" [(ngModel)]="availableTaxes[i].taxDetail[0].taxValue" name="acc_0_txx_detail{{i}}"></td>-->
+            
                             <td *ngIf="!taxToEdit[i]">{{tax.taxFileDate}}</td>
                             <td *ngIf="taxToEdit[i]">
                                 <div class="custom-select pos-rel">
-                                    <select class="form-control" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}">
-                                        <option (value)="num.value" *ngFor="let num of days">{{num.label}}</option>
-                                    </select>
-                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <sh-select [options]="days" [isFilterEnabled]="false" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}" [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
                                 </div>
-                                <!--<input type="text" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}">-->
                             </td>
-                            <td *ngIf="!taxToEdit[i]">{{tax.duration}}</td>
-                            <td *ngIf="taxToEdit[i]">
-
+                            <td>
                                 <div class="custom-select pos-rel">
-                                    <select [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}" class="form-control">
-                                          <option value="">Select Duration</option>
-                                          <option value="MONTHLY">Monthly</option>
-                                          <option value="QUARTERLY">Quarterly</option>
-                                          <option value="HALFYEARLY">Half-Yearly</option>
-                                          <option value="YEARLY">Yearly</option>
-                                        </select>
-                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                                </div>
-
-                            </td>
-                            <td *ngIf="!taxToEdit[i]">{{tax.taxType ? tax.taxType : 'Others'}}</td>
-                            <td *ngIf="taxToEdit[i]">
-
-                                <div class="custom-select pos-rel">
-                                    <select [(ngModel)]="availableTaxes[i].taxType" name="taxType{{i}}" class="form-control">
-                                        <option value="">Select tax</option>
-                                        <option value="GST">GST</option>
-                                        <option value="InputGST">Input GST</option>
-                                        <option value="others">Others</option>
-                                      </select>
-                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <sh-select [options]="duration" [disabled]="!taxToEdit[i]" [isFilterEnabled]="false" [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}" [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
                                 </div>
                             </td>
+                            <td>{{tax.taxType ? tax.taxType : 'Others'}}</td>
+
                             <td class="text-center icon-btn">
                                 <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="reloadTaxList();taxToEdit = [];taxToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true" tooltip="Edit"></i></button>
                                 <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax);"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
