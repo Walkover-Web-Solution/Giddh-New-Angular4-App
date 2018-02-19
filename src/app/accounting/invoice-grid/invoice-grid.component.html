@@ -72,7 +72,7 @@
                                     <tr [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
                                             <!-- (blur)="onStockItemBlur($event, qty); showStockList.next(false)" -->
                                         <td><input id="first_element_{{i}}_{{i}}" type="text" class="form-control" [(ngModel)]="transaction.inventory.stock.name" (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                                                (focus)="showStockList.next(true); selectRow(true,i,null)" (blur)="onStockItemBlur($event, qty);" (keyup)="showStockList.next(true)" (keydown)="detectKey($event)" /></td>
+                                                (focus)="onStockFocus(i)" (blur)="onStockItemBlur($event, qty);" (keyup)="showStockList.next(true)" (keydown)="detectKey($event)" /></td>
                                         <td>
                                             <input type="text" class="form-control text-right" #qty [(ngModel)]="transaction.inventory.quantity" (ngModelChange)="changeQuantity(i, $event)" (focus)="selectRow(true,i, null); hideListItems();" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}" decimalDigitsDirective
                                                 [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />

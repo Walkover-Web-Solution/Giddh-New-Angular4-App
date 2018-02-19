@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -23,6 +23,7 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SalesActions } from 'app/actions/sales/sales.action';
+import { AccountResponse } from '../../models/api-models/Account';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -42,12 +43,16 @@ const CustomShortcode = [
 export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public newSelectedAccount: AccountResponse;
+  @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
+  @Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
+
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public showAccountList: boolean = true;
+  // public showAccountList: boolean = true;
   public TransactionType: 'by' | 'to' = 'by';
   public data: any = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
@@ -65,7 +70,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   // public purchaseType: string = 'invoice';
   public groupUniqueName: string;
   public filterByGrp: boolean = false;
-  public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  // public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public selectedAcc: object;
   public accountType: string;
   public accountsTransaction = [];
@@ -159,6 +164,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
       this.dateField.nativeElement.focus();
     }
+    if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
+      this.setAccount(c.newSelectedAccount.currentValue);
+    }
   }
 
   /**
@@ -231,10 +239,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * getFlattenGrpAccounts
    */
   public getFlattenGrpAccounts(groupUniqueName, filter) {
-    this.showAccountList = true;
+    this.showAccountList.emit(true);
     this.groupUniqueName = groupUniqueName;
     this.filterByGrp = filter;
-    this.showStockList.next(false);
+    this.showStockList.emit(false);
   }
 
   /**
@@ -291,8 +299,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       }
 
       setTimeout(() => {
-        this.selectedInput.focus();
-        this.showAccountList = false;
+        // this.selectedInput.focus();
+        this.showAccountList.emit(false);
       }, 50);
     } else {
       this.accountsTransaction.splice(idx, 1);
@@ -354,7 +362,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.stocksTransaction = [];
     this.accountsTransaction = [];
     this.showConfirmationBox = false;
-    this.showAccountList = false;
+    this.showAccountList.emit(false);
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.addNewRow('stock');
@@ -430,8 +438,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       let entryItem = _.cloneDeep(item);
       this.prepareEntry(entryItem, idx);
       setTimeout(() => {
-        this.selectedInput.focus();
-        this.showStockList.next(false);
+        // this.selectedInput.focus();
+        this.showStockList.emit(false);
       }, 50);
     } else {
       this.stocksTransaction.splice(this.selectedRowIdx);
@@ -530,7 +538,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let i = this.selectedRowIdx;
     if (!val) {
       this.stocksTransaction[i].inventory.splice(idx, 1);
-      this.showStockList.next(false);
+      this.showStockList.emit(false);
       // if (!this.data.transactions.length) {
       //   this.addNewRow('stock');
       // }
@@ -640,8 +648,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   */
  public hideListItems() {
    if (!this.isPartyACFocused) {
-    this.showStockList.next(false);
-    this.showAccountList = false;
+    this.showStockList.emit(false);
+    this.showAccountList.emit(false);
    }
  }
 
@@ -652,6 +660,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     } else {
       this.displayDay = '';
     }
+  }
+
+  public onStockFocus(indx: number) {
+    this.showStockList.emit(true);
+    this.selectRow(true, indx);
+    this.showAccountList.emit(false);
   }
 
   private deleteRow(idx: number) {
@@ -666,5 +680,4 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.addNewRow('account');
     }
   }
-
 }

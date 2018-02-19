@@ -94,7 +94,9 @@ export class AccountingComponent implements OnInit {
   public openDatePicker: boolean = false;
 
   public showAccountList: boolean = false;
-  public selectedAccount: AccountResponse = null;
+  public showStockList: boolean = false;
+  public selectedAccount: AccountResponse;
+  public selectedStock: AccountResponse;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -191,12 +193,19 @@ export class AccountingComponent implements OnInit {
   }
 
   ////////////////////////////////// Account list related logic //////////////////////////////////
-  public onShowAccountListSelected(ev) {
+  public onShowAccountListSelected(ev: boolean) {
     this.showAccountList = ev;
+  }
+
+  public onShowStockListSelected(ev: boolean) {
+    this.showStockList = ev;
   }
 
   public onSelectAccount(ev: AccountResponse) {
     this.selectedAccount = ev;
   }
 
+  public onSelectStock(ev: AccountResponse) {
+    this.selectedStock = ev;
+  }
 }
