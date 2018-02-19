@@ -229,12 +229,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * onAccountFocus() to show accountList
    */
-  public onAccountFocus(elem) {
-    this.showLedgerAccountList = true;
-    this.showStockList = false;
-    this.selectedParticular = elem;
+  public onAccountFocus(elem, trxnType, indx) {
 
-    this.showAccountList.emit(true);
+    this.selectRow(true, indx);
+    this.filterAccount(trxnType);
+
+    // this.showLedgerAccountList = true;
+    // this.showStockList = false;
+    this.selectedParticular = elem;
+    setTimeout(() => {
+      this.showAccountList.emit(true);
+    }, 200);
     // this.showStockList.next(false);
   }
 
@@ -250,7 +255,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.searchAccount('');
       this.accountSearch = '';
     }
-
     this.showAccountList.emit(false);
   }
 
