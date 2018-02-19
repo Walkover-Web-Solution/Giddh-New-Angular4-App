@@ -27,15 +27,20 @@
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i);hideListItems()" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
+<<<<<<< HEAD
                                 <td><input id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value); showLedgerAccountList=true;"
                                     (focus)="onAccountFocus(particular, transaction.type, i);" (blur)="selectRow(true,i);onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)">
+=======
+                                <td><input id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value);" (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
+                                        (blur)="onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)">
+>>>>>>> Arpit | Accounting voucher sh-select list added
                                     <!-- *ngIf="transaction.inventory" -->
                                     <table [hidden]="!transaction.stocks">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
-                                                    <td colspan="" [style.width.px]="250"><input type="text" placeholder="Type to search stock" class="form-control" #Item [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="openStockList();selectedStockIdx = idx;selectedIdx = i;"
+                                                    <td colspan="" [style.width.px]="250"><input type="text" placeholder="Type to search stock" class="form-control" #Item [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus(idx, i);"
                                                             (blur)="selectedStk = qty" (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="showStockList=true;" /></td>
                                                     <td>
                                                         <input type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" decimalDigitsDirective
@@ -59,6 +64,7 @@
                                 </td>
                                 <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
                                 <td>
+<<<<<<< HEAD
                                     <input [hidden]="transaction.type !== 'by'" type="text" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
                                         (blur)="addNewEntry(transaction.amount,transaction, i);" [disabled]="!transaction.selectedAccount.name" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
                                     />
@@ -66,6 +72,15 @@
                                 <td>
                                     <input [hidden]="transaction.type !== 'to'" type="text" class="form-control text-right" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
                                         (blur)="addNewEntry(transaction.amount,transaction, i);" [disabled]="!transaction.selectedAccount.name" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount"
+=======
+                                    <input [hidden]="transaction.type !== 'by'" type="text" min="0" [required]="transaction.particular" class="form-control text-right" #amountField1 decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
+                                        (keydown.Tab)="onAmountFieldBlur($event);addNewEntry(transaction.amount,transaction, i)" (blur)="addNewEntry(transaction.amount,transaction, i);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
+                                    />
+                                </td>
+                                <td>
+                                    <input [hidden]="transaction.type !== 'to'" type="text" min="0" class="form-control text-right" [required]="transaction.particular" #amountField2 decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
+                                        (keydown.Tab)="onAmountFieldBlur($event);addNewEntry(transaction.amount,transaction, i)" (blur)="addNewEntry(transaction.amount,transaction, i);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount"
+>>>>>>> Arpit | Accounting voucher sh-select list added
                                     />
                                 </td>
                             </tr>
@@ -102,8 +117,8 @@
         </div>
     </div>
 </div>
-
-
+<!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
+<accounting-voucher-sh-select class="temporary" [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"></accounting-voucher-sh-select>
 
 <!-- <div class="sidebar_menu col-xs-2 pd0">
     <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">
@@ -126,3 +141,12 @@
         </div>
     </div>
 </div> -->
+
+<style>
+    .temporary {
+        width: 270px;
+        position: absolute;
+        right: 317px;
+        top: 54px;
+    }
+</style>
