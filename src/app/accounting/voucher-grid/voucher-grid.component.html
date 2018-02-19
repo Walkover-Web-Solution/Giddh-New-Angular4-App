@@ -27,8 +27,9 @@
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i);hideListItems()" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
-                                <td><input id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value); showLedgerAccountList=true;" (focus)="onAccountFocus(particular); selectRow(true,i); filterAccount(transaction.type)"
-                                        (blur)="selectRow(true,i);onAccountBlur($event);" autofocus [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)">
+                                <td><input id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value); showLedgerAccountList=true;"
+                                        (focus)="onAccountFocus(particular); selectRow(true,i); filterAccount(transaction.type)" (blur)="selectRow(true,i);onAccountBlur($event);" autofocus [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)"
+                                        (keydown.Tab)="validateAccount(transaction, $event, i)">
                                     <!-- *ngIf="transaction.inventory" -->
                                     <table [hidden]="!transaction.stocks">
                                         <tbody>
@@ -58,13 +59,13 @@
                                 </td>
                                 <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
                                 <td>
-                                    <input [hidden]="transaction.type !== 'by'" type="text" min="0" [required]="transaction.particular" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
-                                        (keydown.Tab)="onAmountFieldBlur($event);addNewEntry(transaction.amount,transaction, i)" (blur)="addNewEntry(transaction.amount,transaction, i);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
+                                    <input [hidden]="transaction.type !== 'by'" type="text" class="form-control text-right" #byAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
+                                        (blur)="addNewEntry(transaction.amount,transaction, i);" [disabled]="!transaction.selectedAccount.name" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
                                     />
                                 </td>
                                 <td>
-                                    <input [hidden]="transaction.type !== 'to'" type="text" min="0" class="form-control text-right" [required]="transaction.particular" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
-                                        (keydown.Tab)="onAmountFieldBlur($event);addNewEntry(transaction.amount,transaction, i)" (blur)="addNewEntry(transaction.amount,transaction, i);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount"
+                                    <input [hidden]="transaction.type !== 'to'" type="text" class="form-control text-right" #toAmountField decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
+                                        (blur)="addNewEntry(transaction.amount,transaction, i);" [disabled]="!transaction.selectedAccount.name" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount"
                                     />
                                 </td>
                             </tr>
