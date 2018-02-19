@@ -5,7 +5,6 @@ import { SharedModule } from './../shared/shared.module';
 import { AccountAsInvoiceComponent } from './invoice-grid/invoice-grid.component';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule, InjectionToken } from '@angular/core';
@@ -20,6 +19,8 @@ import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/acc
 import { AccountListComponent } from 'app/accounting/account-list/accounts-list.component';
 import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
+import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
+import { AVShSelectModule } from './ng-virtual-list/sh-select.module';
 
 @NgModule({
   declarations: [
@@ -42,12 +43,13 @@ import { TextMaskModule } from 'angular2-text-mask';
     ModalModule,
     LaddaModule,
     DecimalDigitsModule,
-    ShSelectModule,
+    AVShSelectModule,
     SharedModule,
     ClickOutsideModule,
     TooltipModule,
     TypeaheadModule,
-    TextMaskModule
+    TextMaskModule,
+    VirtualScrollModule
   ],
 })
 export class AccountingModule {

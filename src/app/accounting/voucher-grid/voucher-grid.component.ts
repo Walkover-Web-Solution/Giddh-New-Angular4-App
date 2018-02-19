@@ -24,6 +24,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { TallyModuleService } from 'app/accounting/tally-service';
 import { AccountListComponent } from '../account-list/accounts-list.component';
 import { AccountResponse } from '../../models/api-models/Account';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -51,7 +52,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public showLedgerAccountList: boolean;
+  public showLedgerAccountList: boolean = false;
   public selectedInput: 'by' | 'to' = 'by';
   public requestObj: any = {};
   public totalCreditAmount: number = 0;
@@ -78,6 +79,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public totalDiffAmount: number = 0;
 
   public voucherType: string = null;
+  public flattenAccounts: IOption[];
+  public stockList: IOption[];
+  public currentSelectedValue: string = '';
+  public filterByText: string = '';
+  public keyUpDownEvent: KeyboardEvent;
+  public inputForList: IOption[];
+  public selectedField: 'account' | 'stock';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -152,6 +160,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     // });
 
+    this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        let accList: IOption[] = [];
+        accounts.forEach((acc: IFlattenAccountsResultItem) => {
+          accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+        });
+        this.flattenAccounts = accList;
+        this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
+
   }
 
   public ngOnChanges(c: SimpleChanges) {
@@ -159,9 +178,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.showFromDatePicker = c.openDatePicker.currentValue;
       this.dateField.nativeElement.focus();
     }
-    if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
-      this.setAccount(c.newSelectedAccount.currentValue);
-    }
+    // if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
+    //   this.setAccount(c.newSelectedAccount.currentValue);
+    // }
   }
 
   /**
@@ -230,17 +249,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountFocus() to show accountList
    */
   public onAccountFocus(elem, trxnType, indx) {
-
+    this.inputForList = _.cloneDeep(this.flattenAccounts);
+    this.selectedField = 'account';
+    this.selectedParticular = elem;
     this.selectRow(true, indx);
     this.filterAccount(trxnType);
-
-    // this.showLedgerAccountList = true;
-    // this.showStockList = false;
-    this.selectedParticular = elem;
     setTimeout(() => {
-      this.showAccountList.emit(true);
+      this.showLedgerAccountList = true;
     }, 200);
-    // this.showStockList.next(false);
+  }
+
+  public onStockFocus(stockIndx: number, indx: number) {
+    this.selectedField = 'stock';
+    this.selectedStockIdx = stockIndx;
+    this.selectedIdx = indx;
+    this.getFlattenGrpofAccounts(this.groupUniqueName);
+    this.showLedgerAccountList = true;
   }
 
   /**
@@ -248,14 +272,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public onAccountBlur(ev) {
     this.arrowInput = { key: 0 };
-    // this.showLedgerAccountList = false;
-    this.showStockList = false;
+    // this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
     }
-    this.showAccountList.emit(false);
+    this.showLedgerAccountList = false;
+    // this.showAccountList.emit(false);
   }
 
   public onAmountFieldBlur(ev) {
@@ -286,26 +310,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (acc && acc.stocks) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
-        transaction.inventory.push(this.initInventory());
+        this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      } else if (!acc.stocks) {
+        setTimeout(() => {
+          this.selectedParticular.focus();
+        }, 200);
       }
     } else {
       this.deleteRow(idx);
     }
-
-    setTimeout(() => {
-      if (this.selectedParticular) {
-        this.selectedParticular.focus();
-      }
-      // this.showLedgerAccountList = false;
-      this.showAccountList.emit(false);
-    }, 500);
   }
 
   /**
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    this.accountSearch = str;
+    console.log('str is :', str);
+    this.filterByText = str;
+    // this.accountSearch = str;
   }
 
   /**
@@ -380,7 +402,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public refreshEntry() {
     this.requestObj.transactions = [];
     this.showConfirmationBox = false;
-    this.showLedgerAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.newEntryObj();
@@ -478,10 +499,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       let idx = this.selectedStockIdx;
       let entryItem = _.cloneDeep(item);
       this.prepareEntry(entryItem, this.selectedIdx);
-      setTimeout(() => {
-        this.selectedStk.focus();
-        this.showStockList = false;
-      }, 50);
+      // setTimeout(() => {
+      //   this.selectedStk.focus();
+      //   this.showStockList = false;
+      // }, 50);
     } else {
       this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
     }
@@ -563,21 +584,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
- public detectKey(ev) {
-   if (ev.keyCode === 27) {
-    this.deleteRow(this.selectedIdx);
-   }
-   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-    this.arrowInput = { key: ev.keyCode };
-   }
+ public detectKey(ev: KeyboardEvent) {
+   this.keyUpDownEvent = ev;
+  //  if (ev.keyCode === 27) {
+  //   this.deleteRow(this.selectedIdx);
+  //  }
+  //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+  //   this.arrowInput = { key: ev.keyCode };
+  //  }
  }
 
  /**
   * hideListItems
   */
  public hideListItems() {
-  this.showLedgerAccountList = false;
-  this.showStockList = false;
+  // this.showLedgerAccountList = false;
+  // this.showStockList = false;
  }
 
   public dateEntered() {
@@ -613,6 +635,53 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return;
     }
     // console.log(transactionObj, ev);
+  }
+
+  public onItemSelected(ev: IOption) {
+    if (this.selectedField === 'account') {
+      this.setAccount(ev.additional);
+    } else if (this.selectedField === 'stock') {
+      this.onSelectStock(ev.additional);
+    }
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+  }
+
+  /**
+   * getFlattenGrpofAccounts
+   */
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [parentGrpUnqName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.sortStockItems(data.body.results);
+      } else {
+        // this.noResult = true;
+      }
+    });
+  }
+
+  /**
+   * sortStockItems
+   */
+  public sortStockItems(ItemArr) {
+    let stockAccountArr: IOption[] = [];
+    _.forEach(ItemArr, (obj: any) => {
+      if (obj.stocks) {
+        _.forEach(obj.stocks, (stock: any) => {
+          stock.accountStockDetails.name = obj.name;
+          stockAccountArr.push({
+            label: `${stock.name} (${stock.uniqueName})`,
+            value: stock.uniqueName,
+            additional: stock
+          });
+        });
+      }
+    });
+    // console.log(stockAccountArr, 'stocks');
+    this.stockList = stockAccountArr;
+    this.inputForList = _.cloneDeep(this.stockList);
   }
 
   private deleteRow(idx: number) {
