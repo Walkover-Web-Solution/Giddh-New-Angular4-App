@@ -34,7 +34,7 @@
             <div class="mx-300 clearfix form-inline mrB">
                 <div class="form-group">
                     <label>Party A/c Name:<sup>*</sup></label>
-                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (ngModelChange)="searchAccount($event)" [(ngModel)]="creditorAcc.name" (focus)="getFlattenGrpAccounts(null, false);accountType = 'creditor';isPartyACFocused = true;" (blur)="showAccountList=false;selectedInput=creditor;isPartyACFocused = false;"
+                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (ngModelChange)="searchAccount($event)" [(ngModel)]="creditorAcc.name" (focus)="getFlattenGrpAccounts(null, false);accountType = 'creditor';isPartyACFocused = true;" (blur)="showAccountList.emit(false);selectedInput=creditor;isPartyACFocused = false;"
                         style="max-width:200px" />
                 </div>
             </div>
