@@ -75,6 +75,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public winHeight: number;
   public displayDay: string = '';
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public totalDiffAmount: number = 0;
 
   public voucherType: string = null;
 
@@ -254,12 +255,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onAmountFieldBlur(ev) {
-    if (ev.target.value === '0') {
-      if (this.totalCreditAmount !== this.totalDebitAmount) {
-        ev.target.focus();
-        ev.preventDefault();
-      }
-    }
+    //
   }
 
   /**
@@ -267,6 +263,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setAccount(acc) {
     let idx = this.selectedIdx;
+    let transaction = this.requestObj.transactions[idx];
     if (acc) {
       let accModel = {
         name: acc.name,
@@ -275,14 +272,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         account: acc.name,
         parentGroups: acc.parentGroups
       };
-      this.requestObj.transactions[idx].particular = accModel.UniqueName;
-      this.requestObj.transactions[idx].selectedAccount = accModel;
-      this.requestObj.transactions[idx].stocks = acc.stocks;
+      transaction.particular = accModel.UniqueName;
+      transaction.selectedAccount = accModel;
+      transaction.stocks = acc.stocks;
+
+      // tally differnce amount
+      transaction.amount = this.calculateDiffAmount(transaction.type);
 
       if (acc && acc.stocks) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
-        this.requestObj.transactions[idx].inventory.push(this.initInventory());
+        transaction.inventory.push(this.initInventory());
       }
     } else {
       this.deleteRow(idx);
@@ -584,12 +584,54 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.displayDay = '';
     }
 }
+  /**
+   * validateAccount
+   */
+  public validateAccount(transactionObj, ev, idx) {
+    let lastIndx = this.requestObj.transactions.length - 1;
+    if (idx === lastIndx) {
+      return;
+    }
+    if (!transactionObj.selectedAccount.account) {
+      transactionObj.selectedAccount = {};
+      transactionObj.amount = 0;
+      transactionObj.inventory = [];
+      if (idx) {
+        this.requestObj.transactions.splice(idx, 1);
+      } else {
+        ev.preventDefault();
+      }
+      return;
+    }
+    if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
+      this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
+      ev.preventDefault();
+      return;
+    }
+    // console.log(transactionObj, ev);
+  }
 
   private deleteRow(idx: number) {
     this.requestObj.transactions.splice(idx, 1);
     if (!idx) {
       this.newEntryObj();
       this.requestObj.transactions[0].type = 'by';
+    }
+  }
+
+  private calculateDiffAmount(type) {
+    if (type === 'by') {
+      if (this.totalDebitAmount < this.totalCreditAmount) {
+        return this.totalDiffAmount = this.totalCreditAmount - this.totalDebitAmount;
+      } else {
+        return this.totalDiffAmount = 0;
+      }
+    } else if (type === 'to') {
+      if (this.totalCreditAmount < this.totalDebitAmount) {
+        return this.totalDiffAmount = this.totalDebitAmount - this.totalCreditAmount;
+      } else {
+        return this.totalDiffAmount = 0;
+      }
     }
   }
 }
