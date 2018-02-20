@@ -212,13 +212,11 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   public updateProfile(data) {
 
     let dataToSave = _.cloneDeep(data);
-    if (this.countryIsIndia) {
-      if (dataToSave.gstDetails.length > 0) {
-        console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
-        for (let entry of dataToSave.gstDetails) {
-          if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
-            dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
-          }
+    if (dataToSave.gstDetails.length > 0) {
+      // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
+      for (let entry of dataToSave.gstDetails) {
+        if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
+          dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
         }
       }
     }
