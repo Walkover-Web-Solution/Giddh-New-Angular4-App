@@ -339,6 +339,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     // this.accountSearch = str;
   }
 
+  public onStockBlur(qty) {
+    this.selectedStk = qty;
+    this.filterByText = '';
+    this.showLedgerAccountList = false;
+  }
+
   /**
    * onAmountField() on amount, event => Blur, Enter, Tab
    */
