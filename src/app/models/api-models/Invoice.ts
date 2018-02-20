@@ -210,6 +210,7 @@ export interface Signature {
 export class SendMailRequest {
   public emailId: string[];
   public invoiceNumber: string[];
+  public typeOfInvoice: string[];
 }
 
 /**
