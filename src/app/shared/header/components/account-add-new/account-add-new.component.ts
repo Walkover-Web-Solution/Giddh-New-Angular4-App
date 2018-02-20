@@ -82,6 +82,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
+  public isIndia: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -144,18 +145,23 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+
       if (a) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
+        let lengthofFormArray = addressFormArray.controls.length;
         if (a !== 'IN') {
-          let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
-          let lengthofFormArray = addressFormArray.controls.length;
+          this.isIndia = false;
           for (let index = 0; index < lengthofFormArray; index++) {
             addressFormArray.removeAt(index);
           }
+          addresses.push(this.initialGstDetailsForm());
+          this.isIndia = false;
         } else {
-          const addresses = this.addAccountForm.get('addresses') as FormArray;
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
           }
+          this.isIndia = true;
         }
       }
     });
