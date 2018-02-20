@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ComponentFactoryResolver } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -25,6 +25,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { SalesActions } from 'app/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -47,6 +49,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() public newSelectedAccount: AccountResponse;
   @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
   @Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
@@ -108,6 +113,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _router: Router,
     private _salesActions: SalesActions,
     private _tallyModuleService: TallyModuleService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     // this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
@@ -318,7 +324,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let idx = this.selectedAccIdx;
     if (acc) {
       if (this.accountType === 'creditor') {
-        this.creditorAcc = acc;
+        setTimeout(() => {
+          this.creditorAcc = acc;
+        }, 200);
         return this.accountType = null;
       } else if (this.accountType === 'debitor') {
         this.debtorAcc = acc;
@@ -360,7 +368,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * searchStock
    */
   public searchStock(str) {
-    this.stockSearch = str;
+    // this.stockSearch = str;
+    this.filterByText = str;
   }
 
   /**
@@ -577,7 +586,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let i = this.selectedRowIdx;
     if (!val) {
       this.stocksTransaction[i].inventory.splice(idx, 1);
-      this.showStockList.emit(false);
+      // this.showStockList.emit(false);
       // if (!this.data.transactions.length) {
       //   this.addNewRow('stock');
       // }
@@ -760,6 +769,34 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }, 200);
   }
 
+  public loadQuickAccountComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.hideQuickAccountModal();
+      componentInstance.newAccountForm.reset();
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
+    });
+    componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+      if (status) {
+        this.refreshAccountListData();
+      }
+    });
+  }
+
+  public showQuickAccountModal() {
+    this.loadQuickAccountComponent();
+    this.quickAccountModal.show();
+  }
+
+  public hideQuickAccountModal() {
+    this.quickAccountModal.hide();
+  }
+
   public onPartyAccFocus() {
     this.getFlattenGrpAccounts(null, false);
     this.accountType = 'creditor';
@@ -792,5 +829,17 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     if (val && lastIdx) {
       this.addNewRow('account');
     }
+  }
+
+  private refreshAccountListData() {
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+      if (a && a !== '') {
+        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this._tallyModuleService.setFlattenAccounts(data.body.results);
+        }
+      });
+      }
+    });
   }
 }
