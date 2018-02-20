@@ -1,29 +1,7 @@
-<account-as-voucher 
-    [newSelectedAccount]="selectedAccount"
-    [openDatePicker]="openDatePicker"
-    [hidden]="gridType !== 'voucher'"
-    (showAccountList)="onShowAccountListSelected($event)">
-</account-as-voucher>
+<account-as-voucher [openDatePicker]="openDatePicker" [hidden]="gridType !== 'voucher'"></account-as-voucher>
 
-<account-as-invoice 
-    [newSelectedAccount]="selectedAccount"
-    [openDatePicker]="openDatePicker"
-    [hidden]="gridType !== 'invoice'"
-    (showAccountList)="onShowAccountListSelected($event)"
-    (showStockList)="onShowStockListSelected($event)">
-</account-as-invoice>
+<account-as-invoice [openDatePicker]="openDatePicker" [hidden]="gridType !== 'invoice'"></account-as-invoice>
 
 <div class="sidebar_menu col-xs-2 pd0">
-    <div class="bdrL account_listbar pos_rel" [hidden]="!showAccountList">
-        <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <!-- [arrowKeyInfo]="arrowInput" [search]="accountSearch" [parentGrpUnqName]="groupUniqueName" [filterByGrp]="filterByGrp" -->
-        <accounts-list (onSelectItem)="onSelectAccount($event)"></accounts-list>
-    </div>
-
-    <div class="bdrL account_listbar pos_rel" [hidden]="!showStockList">
-        <h3 class="pd1 bdrB primary_clr">List of Stock Items</h3> -->
-        <!-- [arrowKeyInfo]="arrowInput" [search]="stockSearch" [parentGrpUnqName]="groupUniqueName" [voucher]="'purchases'" [filterByGrp]="filterByGrp" [showStockItem]="(showStockList | async)" (onSelectItem)="onSelectStock($event)" -->
-        <accounts-list (onSelectItem)="onSelectStock($event)"></accounts-list>
-    </div>
     <accounting-sidebar></accounting-sidebar>
 </div>

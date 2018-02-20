@@ -18,7 +18,7 @@
         </div>
 
         <div class="item no-result-link" *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled" [style.height.px]="NoFoundLinkHeight">
-            <a class="btn-link" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">{{notFoundLinkText}}</a>
+            <a class="btn-link" href="javascript:void(0)" (mousedown)="$event.stopPropagation();noResultClicked.emit()">{{notFoundLinkText}}</a>
         </div>
 
     </virtual-scroll>
