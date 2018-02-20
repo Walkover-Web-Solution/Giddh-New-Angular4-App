@@ -3,10 +3,10 @@ import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { VirtualScrollComponent } from '../../theme/ng-virtual-select/virtual-scroll';
 
 @Component({
-  selector: 'sh-select-menu',
+  selector: 'virtual-list-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './sh-select-menu.component.html',
-  styleUrls: ['./sh-select-menu.component.css']
+  templateUrl: './virtual-list-menu.component.html',
+  styleUrls: ['./virtual-list-menu.component.css']
 })
 export class AVAccountListComponent implements OnChanges {
   @Input() public selectedValues: any[];

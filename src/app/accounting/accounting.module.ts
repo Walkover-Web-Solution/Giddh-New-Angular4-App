@@ -19,9 +19,9 @@ import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/acc
 import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
 import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
-import { AVShSelectModule } from './ng-virtual-list/sh-select.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
+import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 
 @NgModule({
   declarations: [

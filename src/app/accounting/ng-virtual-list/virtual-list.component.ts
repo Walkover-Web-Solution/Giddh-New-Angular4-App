@@ -7,15 +7,15 @@ import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { startsWith, concat, includes } from 'app/lodash-optimized';
 import { Observable } from 'rxjs/Observable';
 import { IForceClear } from 'app/models/api-models/Sales';
-import { AVAccountListComponent } from './sh-select-menu.component';
+import { AVAccountListComponent } from './virtual-list-menu.component';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
 // noinspection TsLint
 @Component({
-  selector: 'accounting-voucher-sh-select',
-  templateUrl: './sh-select.component.html',
-  styleUrls: ['./sh-select.component.css'],
+  selector: 'accounting-virtual-list',
+  templateUrl: './virtual-list.component.html',
+  styleUrls: ['./virtual-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -118,20 +118,20 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
    * on click outside the view close the menu
    * @param event
    */
-  @HostListener('window:mouseup', ['$event'])
-  public onDocumentClick(event) {
-    if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
-      this.isOpen = false;
-      if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
-        this.filter = this.selectedValues[0].label;
-      } else if (this.doNotReset && this.filter !== '') {
-        this.propagateChange(this.filter);
-      } else {
-        this.clearFilter();
-      }
-      this.onHide.emit();
-    }
-  }
+  // @HostListener('window:mouseup', ['$event'])
+  // public onDocumentClick(event) {
+  //   if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
+  //     this.isOpen = true;
+  //     if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
+  //       this.filter = this.selectedValues[0].label;
+  //     } else if (this.doNotReset && this.filter !== '') {
+  //       this.propagateChange(this.filter);
+  //     } else {
+  //       this.clearFilter();
+  //     }
+  //     this.onHide.emit();
+  //   }
+  // }
 
   public updateRows(val: IOption[] = []) {
     this.rows = val;
