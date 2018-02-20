@@ -80,9 +80,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
     this.store.select(s => s.daybook.data).takeUntil(this.destroyed$).subscribe((data) => {
       if (data && data.entries) {
         this.daybookQueryRequest.page = data.page;
-        data.entries.sort((a, b) => {
-          return new Date(a.entryDate).getTime() - new Date(b.entryDate).getTime();
-        }).map(a => {
+        // data.entries.sort((a, b) => {
+        //   return new Date(a.entryDate).getTime() - new Date(b.entryDate).getTime();
+        // }).map(a => {
+        //   a.isExpanded = false;
+        // });
+        data.entries.map(a => {
           a.isExpanded = false;
         });
         this.loadPaginationComponent(data);

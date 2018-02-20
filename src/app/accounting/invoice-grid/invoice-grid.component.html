@@ -3,12 +3,12 @@
         <div class="row">
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{data.voucherType}}</span>
-                <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
-                    <input type="text" placeholder="Entry date" decimalDigitsDirective [ngModel]="moment(entryDate).format('DD-MM-YYYY')" readonly (focus)="showFromDatePicker = true;" class="form-control text-right appearance_none" />
-                    <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                <div class="pull-right text-right">
+                    <input type="text" #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right appearance_none" />
+                    <!-- <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                         <datepicker [(ngModel)]="entryDate" (selectionDone)="setDate($event)" [showWeeks]="false"></datepicker>
-                    </div>
-                    {{moment(entryDate).format('dddd')}}
+                    </div> -->
+                    {{ displayDay }}
                 </div>
             </div>
 
@@ -34,7 +34,7 @@
             <div class="mx-300 clearfix form-inline mrB">
                 <div class="form-group">
                     <label>Party A/c Name:<sup>*</sup></label>
-                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (ngModelChange)="searchAccount($event)" [(ngModel)]="creditorAcc.name" (focus)="getFlattenGrpAccounts(null, false);accountType = 'creditor';isPartyACFocused = true;" (blur)="showAccountList=false;selectedInput=creditor;isPartyACFocused = false;"
+                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name" (focus)="onPartyAccFocus();" (blur)="onPartyAccBlur()"
                         style="max-width:200px" />
                 </div>
             </div>
@@ -70,12 +70,12 @@
                             <ng-container *ngFor="let transaction of stocksTransaction;let i=index;let l=last">
                                 <ng-container>
                                     <tr [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
-                                            <!-- (blur)="onStockItemBlur($event, qty); showStockList.next(false)" -->
-                                        <td><input type="text" class="form-control" [(ngModel)]="transaction.inventory.stock.name" (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                                                (focus)="showStockList.next(true); selectRow(true,i,null)" (blur)="onStockItemBlur($event, qty);" (keyup)="showStockList.next(true)" (keydown)="detectKey($event)" /></td>
+                                        <!-- (blur)="onStockItemBlur($event, qty); showStockList.next(false)" -->
+                                        <td><input id="first_element_{{i}}_{{i}}" type="text" class="form-control" [(ngModel)]="transaction.inventory.stock.name" (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                                (focus)="onStockFocus(i)" (blur)="onStockItemBlur($event, qty);" (keydown)="detectKey($event)" /></td>
                                         <td>
-                                            <input type="text" class="form-control text-right" #qty [(ngModel)]="transaction.inventory.quantity" (ngModelChange)="changeQuantity(i, $event)" (focus)="selectRow(true,i, null); hideListItems();" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}" decimalDigitsDirective
-                                                [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />
+                                            <input type="text" class="form-control text-right" #qty [(ngModel)]="transaction.inventory.quantity" (ngModelChange)="changeQuantity(i, $event)" (focus)="selectRow(true,i, null); hideListItems();" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
+                                                decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />
                                         </td>
                                         <td>
                                             <input type="text" class="form-control text-right" [(ngModel)]="transaction.inventory.unit.rate" (ngModelChange)="changePrice(i,$event)" (focus)="selectRow(true,i,null)" [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}" decimalDigitsDirective
@@ -103,8 +103,8 @@
                             <!--  -->
                             <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
                                 <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
-                                    <td colspan="2"><input type="text" class="form-control" #particular [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event);" (focus)="this.showAccountList = true;selectedAccIdx=i; showStockList.next(false);"
-                                            [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}" (keyup)="showAccountList=true;" (keydown)="detectKey($event)" (blur)="selectedInput=particular;" /></td>
+                                    <td colspan="2"><input type="text" class="form-control" #particular [(ngModel)]="transaction.selectedAccount.account" (ngModelChange)="searchAccount($event);" (focus)="onAccountFocus(i)" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                            (keydown)="detectKey($event)" (blur)="onAccountBlur(particular)" /></td>
                                     <td>
                                         <input type="text" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.rate" (ngModelChange)="calculateRate(i, transaction?.rate)" (focus)="selectedAccIdx=i; hideListItems()" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
                                             [disabled]="!transaction.selectedAccount.account" />
@@ -112,7 +112,7 @@
                                     <td><input type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled readonly /></td>
                                     <td>
                                         <input type="text" class="form-control text-right" (change)="changeTotal(i, transaction.amount)" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                                            [disabled]="!transaction.selectedAccount.account" />
+                                            [disabled]="!transaction.selectedAccount.account" (blur)="addNewAccount(transaction.amount, l)" />
                                     </td>
                                 </tr>
                             </ng-container>
@@ -154,10 +154,28 @@
             </div>
         </div>
     </div>
+
+    <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
+        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
+        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
+            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
+    </div>
+
+</div>
+
+<!--quick account popup -->
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 298px">
+        <div class="modal-content">
+            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+        </div>
+    </div>
 </div>
 
 
-<div class="sidebar_menu col-xs-2 pd0">
+<!-- <div class="sidebar_menu col-xs-2 pd0">
 
     <div class="bdrL account_listbar pos_rel" [hidden]="!showAccountList">
         <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
@@ -171,4 +189,4 @@
     </div>
 
     <accounting-sidebar></accounting-sidebar>
-</div>
+</div> -->
