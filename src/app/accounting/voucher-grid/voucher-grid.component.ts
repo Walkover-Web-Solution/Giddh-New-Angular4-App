@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener, ComponentRef, EventEmitter, Output, ComponentFactoryResolver } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -22,6 +22,10 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TallyModuleService } from 'app/accounting/tally-service';
+import { AccountResponse } from '../../models/api-models/Account';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -41,12 +45,18 @@ const CustomShortcode = [
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public newSelectedAccount: AccountResponse;
+  @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
+  @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public showLedgerAccountList: boolean;
+  public showLedgerAccountList: boolean = false;
   public selectedInput: 'by' | 'to' = 'by';
   public requestObj: any = {};
   public totalCreditAmount: number = 0;
@@ -68,9 +78,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public activeIndex: number = 0;
   public arrowInput: { key: number };
   public winHeight: number;
-  // public groupFlattenAccount: string = '';
+  public displayDay: string = '';
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public totalDiffAmount: number = 0;
 
   public voucherType: string = null;
+  public flattenAccounts: IOption[];
+  public stockList: IOption[];
+  public currentSelectedValue: string = '';
+  public filterByText: string = '';
+  public keyUpDownEvent: KeyboardEvent;
+  public inputForList: IOption[];
+  public selectedField: 'account' | 'stock';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -81,7 +100,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
     private _toaster: ToasterService, private _router: Router,
-    private _tallyModuleService: TallyModuleService) {
+    private _tallyModuleService: TallyModuleService,
+    private componentFactoryResolver: ComponentFactoryResolver) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -98,6 +118,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
+        setTimeout(() => {
+          document.getElementById('first_element_0').focus();
+        }, 50);
       } else if (d) {
         this._tallyModuleService.requestData.next(this.requestObj);
       }
@@ -142,12 +165,27 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     // });
 
+    this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        let accList: IOption[] = [];
+        accounts.forEach((acc: IFlattenAccountsResultItem) => {
+          accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+        });
+        this.flattenAccounts = accList;
+        this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
+
   }
 
   public ngOnChanges(c: SimpleChanges) {
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
       this.showFromDatePicker = c.openDatePicker.currentValue;
+      this.dateField.nativeElement.focus();
     }
+    // if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
+    //   this.setAccount(c.newSelectedAccount.currentValue);
+    // }
   }
 
   /**
@@ -215,25 +253,42 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * onAccountFocus() to show accountList
    */
-  public onAccountFocus() {
+  public onAccountFocus(elem, trxnType, indx) {
+    this.inputForList = _.cloneDeep(this.flattenAccounts);
+    this.selectedField = 'account';
+    this.selectedParticular = elem;
+    this.selectRow(true, indx);
+    this.filterAccount(trxnType);
+    setTimeout(() => {
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onStockFocus(stockIndx: number, indx: number) {
+    this.selectedField = 'stock';
+    this.selectedStockIdx = stockIndx;
+    this.selectedIdx = indx;
+    this.getFlattenGrpofAccounts(this.groupUniqueName);
     this.showLedgerAccountList = true;
-    this.showStockList = false;
-    // this.showStockList.next(false);
   }
 
   /**
-   * onAccountBlur() to hide accountList
+   * onAccountBlur to hide accountList
    */
-  public onAccountBlur(ev, elem) {
+  public onAccountBlur(ev) {
     this.arrowInput = { key: 0 };
-    // this.showLedgerAccountList = false;
-    this.selectedParticular = elem;
-    this.showStockList = false;
+    // this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
     }
+    this.showLedgerAccountList = false;
+    // this.showAccountList.emit(false);
+  }
+
+  public onAmountFieldBlur(ev) {
+    //
   }
 
   /**
@@ -241,6 +296,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setAccount(acc) {
     let idx = this.selectedIdx;
+    let transaction = this.requestObj.transactions[idx];
     if (acc) {
       let accModel = {
         name: acc.name,
@@ -249,34 +305,44 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         account: acc.name,
         parentGroups: acc.parentGroups
       };
-      this.requestObj.transactions[idx].particular = accModel.UniqueName;
-      this.requestObj.transactions[idx].selectedAccount = accModel;
-      this.requestObj.transactions[idx].stocks = acc.stocks;
+      transaction.particular = accModel.UniqueName;
+      transaction.selectedAccount = accModel;
+      transaction.stocks = acc.stocks;
+
+      // tally differnce amount
+      transaction.amount = this.calculateDiffAmount(transaction.type);
 
       if (acc && acc.stocks) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
         this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      } else if (!acc.stocks) {
+        setTimeout(() => {
+          this.selectedParticular.focus();
+        }, 200);
       }
     } else {
-        this.requestObj.transactions.splice(idx, 1);
-        if (!idx) {
-          this.newEntryObj();
-          this.requestObj.transactions[0].type = 'by';
-        }
+      this.deleteRow(idx);
     }
-
-    setTimeout(() => {
-      this.selectedParticular.focus();
-      this.showLedgerAccountList = false;
-    }, 50);
   }
 
   /**
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    this.accountSearch = str;
+    this.filterByText = str;
+    // this.accountSearch = str;
+  }
+
+  public searchStock(str) {
+    this.filterByText = str;
+    // this.accountSearch = str;
+  }
+
+  public onStockBlur(qty) {
+    this.selectedStk = qty;
+    this.filterByText = '';
+    this.showLedgerAccountList = false;
   }
 
   /**
@@ -351,12 +417,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public refreshEntry() {
     this.requestObj.transactions = [];
     this.showConfirmationBox = false;
-    this.showLedgerAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.newEntryObj();
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.journalDate = moment();
+    this.journalDate = moment().format(GIDDH_DATE_FORMAT);
     this.requestObj.transactions[0].type = 'by';
   }
 
@@ -444,14 +509,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    // console.log(item);
-    let idx = this.selectedStockIdx;
-    let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, this.selectedIdx);
-    setTimeout(() => {
-      this.selectedStk.focus();
-      this.showStockList = false;
-    }, 50);
+    if (item) {
+      // console.log(item);
+      let idx = this.selectedStockIdx;
+      let entryItem = _.cloneDeep(item);
+      this.prepareEntry(entryItem, this.selectedIdx);
+      // setTimeout(() => {
+      //   this.selectedStk.focus();
+      //   this.showStockList = false;
+      // }, 50);
+    } else {
+      this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
+    }
   }
 
   /**
@@ -502,7 +571,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * calculateTransactionTotal
    */
   public calculateTransactionTotal(inventory) {
-    // console.log('The env we got is :', inventory);
     let total = 0;
     inventory.forEach((inv) => {
       total = total + Number(inv.amount);
@@ -531,22 +599,167 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
- public detectKey(ev) {
-   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-    this.arrowInput = { key: ev.keyCode };
-   }
+ public detectKey(ev: KeyboardEvent) {
+   this.keyUpDownEvent = ev;
+  //  if (ev.keyCode === 27) {
+  //   this.deleteRow(this.selectedIdx);
+  //  }
+  //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+  //   this.arrowInput = { key: ev.keyCode };
+  //  }
  }
 
  /**
   * hideListItems
   */
  public hideListItems() {
-  this.showLedgerAccountList = false;
-  this.showStockList = false;
+  // this.showLedgerAccountList = false;
+  // this.showStockList = false;
  }
 
-  // @HostListener('window:resize')
-  // public resizeEvent() {
-  //   this.winHeight = window.innerHeight - 64;
-  // }
+  public dateEntered() {
+    const date = moment(this.journalDate, 'DD-MM-YYYY');
+    if (moment(date).format('dddd') !== 'Invalid date') {
+      this.displayDay = moment(date).format('dddd');
+    } else {
+      this.displayDay = '';
+    }
+}
+  /**
+   * validateAccount
+   */
+  public validateAccount(transactionObj, ev, idx) {
+    let lastIndx = this.requestObj.transactions.length - 1;
+    if (idx === lastIndx) {
+      return;
+    }
+    if (!transactionObj.selectedAccount.account) {
+      transactionObj.selectedAccount = {};
+      transactionObj.amount = 0;
+      transactionObj.inventory = [];
+      if (idx) {
+        this.requestObj.transactions.splice(idx, 1);
+      } else {
+        ev.preventDefault();
+      }
+      return;
+    }
+    if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
+      this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
+      ev.preventDefault();
+      return;
+    }
+    // console.log(transactionObj, ev);
+  }
+
+  public onItemSelected(ev: IOption) {
+    if (this.selectedField === 'account') {
+      this.setAccount(ev.additional);
+    } else if (this.selectedField === 'stock') {
+      this.onSelectStock(ev.additional);
+    }
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+  }
+
+  /**
+   * getFlattenGrpofAccounts
+   */
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [parentGrpUnqName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.sortStockItems(data.body.results);
+      } else {
+        // this.noResult = true;
+      }
+    });
+  }
+
+  /**
+   * sortStockItems
+   */
+  public sortStockItems(ItemArr) {
+    let stockAccountArr: IOption[] = [];
+    _.forEach(ItemArr, (obj: any) => {
+      if (obj.stocks) {
+        _.forEach(obj.stocks, (stock: any) => {
+          stock.accountStockDetails.name = obj.name;
+          stockAccountArr.push({
+            label: `${stock.name} (${stock.uniqueName})`,
+            value: stock.uniqueName,
+            additional: stock
+          });
+        });
+      }
+    });
+    // console.log(stockAccountArr, 'stocks');
+    this.stockList = stockAccountArr;
+    this.inputForList = _.cloneDeep(this.stockList);
+  }
+
+  public loadQuickAccountComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.hideQuickAccountModal();
+      componentInstance.newAccountForm.reset();
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
+    });
+    componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+      if (status) {
+        this.refreshAccountListData();
+      }
+    });
+  }
+
+  public showQuickAccountModal() {
+    this.loadQuickAccountComponent();
+    this.quickAccountModal.show();
+  }
+
+  public hideQuickAccountModal() {
+    this.quickAccountModal.hide();
+  }
+
+  private deleteRow(idx: number) {
+    this.requestObj.transactions.splice(idx, 1);
+    if (!idx) {
+      this.newEntryObj();
+      this.requestObj.transactions[0].type = 'by';
+    }
+  }
+
+  private calculateDiffAmount(type) {
+    if (type === 'by') {
+      if (this.totalDebitAmount < this.totalCreditAmount) {
+        return this.totalDiffAmount = this.totalCreditAmount - this.totalDebitAmount;
+      } else {
+        return this.totalDiffAmount = 0;
+      }
+    } else if (type === 'to') {
+      if (this.totalCreditAmount < this.totalDebitAmount) {
+        return this.totalDiffAmount = this.totalDebitAmount - this.totalCreditAmount;
+      } else {
+        return this.totalDiffAmount = 0;
+      }
+    }
+  }
+
+  private refreshAccountListData() {
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+      if (a && a !== '') {
+        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this._tallyModuleService.setFlattenAccounts(data.body.results);
+        }
+      });
+      }
+    });
+  }
 }

@@ -5,7 +5,6 @@ import { SharedModule } from './../shared/shared.module';
 import { AccountAsInvoiceComponent } from './invoice-grid/invoice-grid.component';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule, InjectionToken } from '@angular/core';
@@ -17,15 +16,18 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { KeyboardService } from 'app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/accounting-sidebar.component';
-import { AccountListComponent } from 'app/accounting/account-list/accounts-list.component';
 import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
+import { TextMaskModule } from 'angular2-text-mask';
+import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
+import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 
 @NgModule({
   declarations: [
     AccountingComponent,
     AccountAsInvoiceComponent,
     AccountingSidebarComponent,
-    AccountListComponent,
     AccountAsVoucherComponent
   ],
   exports: [RouterModule, AccountingSidebarComponent],
@@ -41,11 +43,15 @@ import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
     ModalModule,
     LaddaModule,
     DecimalDigitsModule,
-    ShSelectModule,
+    AVShSelectModule,
     SharedModule,
     ClickOutsideModule,
     TooltipModule,
-    TypeaheadModule
+    TypeaheadModule,
+    TextMaskModule,
+    VirtualScrollModule,
+    ElementViewChildModule,
+    QuickAccountModule.forRoot()
   ],
 })
 export class AccountingModule {
