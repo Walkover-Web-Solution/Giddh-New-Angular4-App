@@ -182,6 +182,7 @@ export interface InvoiceDetails {
   invoiceNumber: string;
   invoiceDate: any;
   dueDate: any;
+  shippingDate?: any;
 }
 
 export interface Logo {
@@ -314,6 +315,7 @@ export interface GstEntry {
   description: string;
   taxableValue: number;
   entryTotal: number;
+  entryDate?: any;
 }
 
 export interface IGstDetails {
@@ -322,6 +324,7 @@ export interface IGstDetails {
   addressStr?: string;
   stateCode?: any;
   panNumber?: any;
+  stateName?: any;
 }
 
 export interface GstTaxesTotal {

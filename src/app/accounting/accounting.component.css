@@ -119,3 +119,18 @@
 .menu_list li a.isHidden {
     color: #4d4d4d
 }
+
+.sidebar_list {
+    width: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 90vh;
+    padding: 0 !important;
+    border: 0;
+    z-index: 0;
+}
+
+.sidebar_list h3 {
+    background: #fff;
+}
