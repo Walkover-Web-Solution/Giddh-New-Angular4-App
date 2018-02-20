@@ -34,7 +34,7 @@
             <div class="mx-300 clearfix form-inline mrB">
                 <div class="form-group">
                     <label>Party A/c Name:<sup>*</sup></label>
-                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (ngModelChange)="searchAccount($event)" [(ngModel)]="creditorAcc.name" (focus)="onPartyAccFocus();" (blur)="onPartyAccBlur()"
+                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name" (focus)="onPartyAccFocus();" (blur)="onPartyAccBlur()"
                         style="max-width:200px" />
                 </div>
             </div>
@@ -156,7 +156,17 @@
     </div>
 </div>
 
-<accounting-voucher-sh-select class="temporary" [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"></accounting-voucher-sh-select>
+<!--quick account popup -->
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 298px">
+        <div class="modal-content">
+        <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+        </div>
+    </div>
+</div>
+
+<accounting-voucher-sh-select class="temporary" [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'" [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()"
+[multiple]="false" [ItemHeight]="67"></accounting-voucher-sh-select>
 
 <!-- <div class="sidebar_menu col-xs-2 pd0">
 
