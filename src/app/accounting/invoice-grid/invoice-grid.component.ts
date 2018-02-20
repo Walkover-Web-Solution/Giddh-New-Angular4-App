@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SalesActions } from 'app/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -68,7 +69,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public navigateURL: any = CustomShortcode;
   public showInvoiceDate: boolean = false;
   // public purchaseType: string = 'invoice';
-  public groupUniqueName: string;
+  public groupUniqueName: string = 'purchases';
   public filterByGrp: boolean = false;
   // public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public selectedAcc: object;
@@ -85,6 +86,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public isPartyACFocused: boolean = false;
   public displayDay: string = '';
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+
+  public keyUpDownEvent: KeyboardEvent;
+  public filterByText: string = '';
+  public inputForList: IOption[];
+  public flattenAccounts: IOption[];
+  public stockList: IOption[];
+  public showLedgerAccountList: boolean = false;
+  public selectedField: 'account' | 'stock' | 'partyAcc';
+  public currentSelectedValue: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -157,6 +167,17 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.entryDate = moment().format(GIDDH_DATE_FORMAT);
     // this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
+
+    this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        let accList: IOption[] = [];
+        accounts.forEach((acc: IFlattenAccountsResultItem) => {
+          accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+        });
+        this.flattenAccounts = accList;
+        this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
 
   }
 
@@ -239,7 +260,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * getFlattenGrpAccounts
    */
   public getFlattenGrpAccounts(groupUniqueName, filter) {
-    this.showAccountList.emit(true);
+    // this.showAccountList.emit(true);
     this.groupUniqueName = groupUniqueName;
     this.filterByGrp = filter;
     this.showStockList.emit(false);
@@ -259,14 +280,31 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public onStockItemBlur(ev, elem) {
     this.selectedInput = elem;
+    this.showLedgerAccountList = false;
     // if (!this.stockSearch) {
     //   this.searchStock('');
     //   this.stockSearch = '';
     // }
   }
 
-  public onAccountBlur(ev) {
-    console.log('the ev is :', ev);
+  public onAccountFocus(indx: number) {
+    // this.selectedField = 'account';
+    this.selectedAccIdx = indx;
+    // this.showLedgerAccountList = true;
+
+    this.inputForList = _.cloneDeep(this.flattenAccounts);
+    this.selectedField = 'account';
+    // this.selectedParticular = elem;
+    // this.selectRow(true, indx);
+    // this.filterAccount(trxnType);
+    setTimeout(() => {
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onAccountBlur(ele) {
+    this.selectedInput = ele;
+    this.showLedgerAccountList = false;
     // if (ev.target.value === 0) {
     //   ev.target.focus();
     //   ev.preventDefault();
@@ -314,7 +352,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    this.accountSearch = str;
+    this.filterByText = str;
+    // this.accountSearch = str;
   }
 
   /**
@@ -635,12 +674,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   // }
 
   public detectKey(ev) {
-    if (ev.keyCode === 27) {
-     this.deleteRow(this.selectedRowIdx);
-    }
-    if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-     this.arrowInput = { key: ev.keyCode };
-    }
+    this.keyUpDownEvent = ev;
+    // if (ev.keyCode === 27) {
+    //  this.deleteRow(this.selectedRowIdx);
+    // }
+    // if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+    //  this.arrowInput = { key: ev.keyCode };
+    // }
   }
 
    /**
@@ -663,9 +703,82 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockFocus(indx: number) {
-    this.showStockList.emit(true);
     this.selectRow(true, indx);
-    this.showAccountList.emit(false);
+    this.selectedField = 'stock';
+    this.getFlattenGrpofAccounts(this.groupUniqueName);
+  }
+
+  /**
+   * getFlattenGrpofAccounts
+   */
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [parentGrpUnqName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.sortStockItems(data.body.results);
+      } else {
+        // this.noResult = true;
+      }
+    });
+  }
+
+  /**
+   * sortStockItems
+   */
+  public sortStockItems(ItemArr) {
+    let stockAccountArr: IOption[] = [];
+    _.forEach(ItemArr, (obj: any) => {
+      if (obj.stocks) {
+        _.forEach(obj.stocks, (stock: any) => {
+          stock.accountStockDetails.name = obj.name;
+          stockAccountArr.push({
+            label: `${stock.name} (${stock.uniqueName})`,
+            value: stock.uniqueName,
+            additional: stock
+          });
+        });
+      }
+    });
+    // console.log(stockAccountArr, 'stocks');
+    this.stockList = stockAccountArr;
+    this.inputForList = _.cloneDeep(this.stockList);
+    setTimeout(() => {
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onItemSelected(ev: IOption) {
+    if (this.selectedField === 'account') {
+      this.setAccount(ev.additional);
+    } else if (this.selectedField === 'stock') {
+      this.onSelectStock(ev.additional);
+    } else if (this.selectedField === 'partyAcc') {
+      this.setAccount(ev.additional);
+    }
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+  }
+
+  public onPartyAccFocus() {
+    this.getFlattenGrpAccounts(null, false);
+    this.accountType = 'creditor';
+    this.isPartyACFocused = true;
+    this.selectedField = 'partyAcc';
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onPartyAccBlur() {
+    // this.showAccountList.emit(false);
+    // selectedInput=creditor;
+    // isPartyACFocused = false;
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
   }
 
   private deleteRow(idx: number) {

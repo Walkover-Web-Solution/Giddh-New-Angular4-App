@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener, ComponentRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener, ComponentRef, EventEmitter, Output, ComponentFactoryResolver } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -22,9 +22,10 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TallyModuleService } from 'app/accounting/tally-service';
-import { AccountListComponent } from '../account-list/accounts-list.component';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -46,6 +47,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() public openDatePicker: boolean;
   @Input() public newSelectedAccount: AccountResponse;
   @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
@@ -96,7 +100,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
     private _toaster: ToasterService, private _router: Router,
-    private _tallyModuleService: TallyModuleService) {
+    private _tallyModuleService: TallyModuleService,
+    private componentFactoryResolver: ComponentFactoryResolver) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -325,7 +330,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    console.log('str is :', str);
+    this.filterByText = str;
+    // this.accountSearch = str;
+  }
+
+  public searchStock(str) {
     this.filterByText = str;
     // this.accountSearch = str;
   }
@@ -684,6 +693,34 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.inputForList = _.cloneDeep(this.stockList);
   }
 
+  public loadQuickAccountComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.hideQuickAccountModal();
+      componentInstance.newAccountForm.reset();
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
+    });
+    componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+      if (status) {
+        this.refreshAccountListData();
+      }
+    });
+  }
+
+  public showQuickAccountModal() {
+    this.loadQuickAccountComponent();
+    this.quickAccountModal.show();
+  }
+
+  public hideQuickAccountModal() {
+    this.quickAccountModal.hide();
+  }
+
   private deleteRow(idx: number) {
     this.requestObj.transactions.splice(idx, 1);
     if (!idx) {
@@ -706,5 +743,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         return this.totalDiffAmount = 0;
       }
     }
+  }
+
+  private refreshAccountListData() {
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+      if (a && a !== '') {
+        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this._tallyModuleService.setFlattenAccounts(data.body.results);
+        }
+      });
+      }
+    });
   }
 }

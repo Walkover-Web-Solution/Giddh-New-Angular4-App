@@ -35,7 +35,7 @@
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
                                                     <td colspan="" [style.width.px]="250"><input type="text" placeholder="Type to search stock" class="form-control" #Item [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus(idx, i);"
-                                                            (blur)="selectedStk = qty" (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="showStockList=true;" /></td>
+                                                            (blur)="selectedStk = qty" (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="searchStock($event?.target?.value);"/></td>
                                                     <td>
                                                         <input type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" decimalDigitsDirective
                                                             [DecimalPlaces]="2" [disabled]="!inventory.stock.name" (focus)="selectedIdx = i" />
@@ -101,8 +101,19 @@
         </div>
     </div>
 </div>
+
+<!--quick account popup -->
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 298px">
+        <div class="modal-content">
+        <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+        </div>
+    </div>
+</div>
+
 <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
-<accounting-voucher-sh-select class="temporary" [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"></accounting-voucher-sh-select>
+<accounting-voucher-sh-select class="temporary" [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'" [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()"
+[multiple]="false" [ItemHeight]="67"></accounting-voucher-sh-select>
 
 <!-- <div class="sidebar_menu col-xs-2 pd0">
     <div class="bdrL account_listbar pos_rel" [hidden]="!showLedgerAccountList">

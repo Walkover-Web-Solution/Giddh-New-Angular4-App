@@ -16,18 +16,18 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { KeyboardService } from 'app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AccountingSidebarComponent } from 'app/accounting/accouting-sidebar/accounting-sidebar.component';
-import { AccountListComponent } from 'app/accounting/account-list/accounts-list.component';
 import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
 import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
 import { AVShSelectModule } from './ng-virtual-list/sh-select.module';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 
 @NgModule({
   declarations: [
     AccountingComponent,
     AccountAsInvoiceComponent,
     AccountingSidebarComponent,
-    AccountListComponent,
     AccountAsVoucherComponent
   ],
   exports: [RouterModule, AccountingSidebarComponent],
@@ -49,7 +49,9 @@ import { AVShSelectModule } from './ng-virtual-list/sh-select.module';
     TooltipModule,
     TypeaheadModule,
     TextMaskModule,
-    VirtualScrollModule
+    VirtualScrollModule,
+    ElementViewChildModule,
+    QuickAccountModule.forRoot()
   ],
 })
 export class AccountingModule {
