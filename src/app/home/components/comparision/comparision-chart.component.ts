@@ -115,8 +115,10 @@ export class ComparisionChartComponent implements OnInit {
         this.expenseDataLY = (p.ExpensesLastYearMonthly);
         this.revenueData = (p.revenueActiveYearMonthly);
         this.revenueDataLY = (p.revenueLastYearMonthly);
-        this.profitLossData = p.ProfitLossActiveYearMonthly;
-        this.profitLossDataLY = p.ProfitLossLastYearMonthly;
+        // this.profitLossData = p.ProfitLossActiveYearMonthly;
+        // this.profitLossDataLY = p.ProfitLossLastYearMonthly;
+        this.profitLossData = p.ProfitLossActiveYearYearly;
+        this.profitLossDataLY = p.ProfitLossLastYearYearly;
         this.generateCharts();
         this.requestInFlight = false;
       });
