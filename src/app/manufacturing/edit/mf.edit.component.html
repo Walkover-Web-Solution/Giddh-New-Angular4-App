@@ -35,10 +35,10 @@
                             <div class="input-group">
                                 <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
                                 <span class="input-group-btn">
-                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-                </button>
-            </span>
+                                    <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    </button>
+                                </span>
                             </div>
                             <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                                 <ul class="my-dropdown-menu calendar-dropdown">
@@ -196,14 +196,14 @@
 
                             <tr *ngIf="toggleAddExpenses">
                                 <td colspan="1">
-                                    <sh-select [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'" [ItemHeight]="33"></sh-select>
+                                    <sh-select [forceClearReactive]="needForceClear$ | async" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'" [ItemHeight]="33"></sh-select>
                                 </td>
                                 <td class="text-center">
                                     <label class="pd">to</label>
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
-                                        <sh-select [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'" [ItemHeight]="33"></sh-select>
+                                        <sh-select [forceClearReactive]="needForceClear$ | async" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'" [ItemHeight]="33"></sh-select>
                                     </div>
                                 </td>
                                 <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->

@@ -203,7 +203,7 @@ export class TallyModuleService {
         case 'Receipt':
           accounts = this.flattenAccounts.value;
         case 'Contra':
-          accounts = this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value);
+          accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
         break;
         default:
           accounts = this.flattenAccounts.value;
