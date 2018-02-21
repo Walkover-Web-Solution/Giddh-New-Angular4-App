@@ -1,4 +1,7 @@
-<form #testForm="ngForm">
+<div *ngIf="base64Data">
+    <iframe width="100%" height="600px" name="plugin" [src]="base64Data" type="application/pdf"></iframe>
+</div>
+<form #testForm>
   <div class="invoice_area" id="template-3">
     <div id="template-header" class="mrT3">
       <header class="pdRL3">
@@ -207,5 +210,4 @@
   </div>
 
 </form>
-
 
