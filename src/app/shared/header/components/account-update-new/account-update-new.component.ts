@@ -84,11 +84,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public currencySource$: Observable<IOption[]> = Observable.of([]);
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
+  public isIndia: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -108,6 +110,17 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
       this.statesSource$ = Observable.of(states);
     });
+
+    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+      let currencies: IOption[] = [];
+      if (data) {
+        data.map(d => {
+          currencies.push({ label: d.code, value: d.code });
+        });
+      }
+      this.currencySource$ = Observable.of(currencies);
+    });
+
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
@@ -138,7 +151,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      // MobileCode: [''],
+      mobileCode: ['91'],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -158,7 +171,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
-        if (accountDetails.addresses.length > 0 && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India') {
+        // && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India'
+        if (accountDetails.addresses.length > 0) {
           accountDetails.addresses.map(a => {
             this.renderGstDetails(a);
           });
@@ -177,7 +191,15 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
         this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
         this.addAccountForm.patchValue(accountDetails);
-        if (!accountDetails.mobileNo) {
+        if (accountDetails.mobileNo) {
+          if (accountDetails.mobileNo.length > 10 && accountDetails.mobileNo.indexOf('-') > -1) {
+            let mobileArray = accountDetails.mobileNo.split('-');
+            this.addAccountForm.get('mobileCode').patchValue(mobileArray[0]);
+            this.addAccountForm.get('mobileNo').patchValue(mobileArray[1]);
+          } else {
+            this.addAccountForm.get('mobileNo').patchValue(accountDetails.mobileNo);
+          }
+        } else {
           this.addAccountForm.get('mobileNo').patchValue('');
         }
       }
@@ -202,14 +224,21 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
       if (a) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
+        let lengthofFormArray = addressFormArray.controls.length;
         if (a !== 'IN') {
-          this.addAccountForm.controls['addresses'] = this._fb.array([]);
-          // this.addBlankGstForm();
+          this.isIndia = false;
+          for (let index = 0; index < lengthofFormArray; index++) {
+            addressFormArray.removeAt(index);
+          }
+          addresses.push(this.initialGstDetailsForm(null));
+          this.isIndia = false;
         } else {
-          const addresses = this.addAccountForm.get('addresses') as FormArray;
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
           }
+          this.isIndia = true;
         }
       }
     });
@@ -254,12 +283,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
     if (accountCountry) {
       if (accountCountry !== 'IN') {
-        this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        // this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        this.isIndia = false;
       } else {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.controls.length === 0) {
           this.addBlankGstForm();
         }
+        this.isIndia = true;
       }
     }
   }
@@ -384,6 +415,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       delete accountRequest['addresses'];
       delete accountRequest['hsnOrSac'];
       delete accountRequest['mobileNo'];
+      delete accountRequest['mobileCode'];
       delete accountRequest['email'];
       delete accountRequest['attentionTo'];
     } else {
@@ -397,6 +429,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
         return f;
       });
+
+      if (accountRequest.mobileCode && accountRequest.mobileNo) {
+        accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
+        delete accountRequest['mobileCode'];
+      }
     }
 
     this.submitClicked.emit({

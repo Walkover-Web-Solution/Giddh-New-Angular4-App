@@ -375,6 +375,14 @@ export class InvoiceActions {
       let data: BaseResponse<any, string> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
+      } else {
+        let type = 'pdf';
+        let req = data.queryString.dataToSend;
+        if (req.typeOfInvoice.length > 1) {
+          type = 'zip';
+        }
+        let fileName = req.invoiceNumber[0];
+        this.downloadFile(data.body, type, fileName);
       }
       return { type: 'EmptyAction' };
     });
@@ -507,6 +515,32 @@ export class InvoiceActions {
     private _toasty: ToasterService,
     private _router: Router
   ) { }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, { type: contentType });
+  }
+
+  public downloadFile(data: Response, type: string, fileName) {
+    let blob = this.base64ToBlob(data, 'application/' + type, 512);
+    return saveAs(blob, `${fileName}.` + type);
+  }
 
   public GetAllInvoices(model: CommonPaginatedRequest, body): CustomActions {
     return {
@@ -1138,7 +1172,7 @@ export class InvoiceActions {
     };
   }
 
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[] }): CustomActions {
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], typeOfInvoice?: string[] }): CustomActions {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
       payload: { accountUniqueName, dataToSend }
@@ -1152,7 +1186,7 @@ export class InvoiceActions {
     };
   }
 
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[] }): CustomActions {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: { accountUniqueName, dataToSend }

@@ -105,6 +105,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isTransactionRequestInProcess$: Observable<boolean>;
   public searchTermStream: Subject<string> = new Subject();
   public showLoader: boolean = false;
+  public eLedgType: string;
+  public eDrBalAmnt: number;
+  public eCrBalAmnt: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
