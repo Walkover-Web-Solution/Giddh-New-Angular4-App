@@ -251,27 +251,27 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public generateUniqueName() {
     let val: string = this.addAccountForm.controls['name'].value;
-    if (val.match(/[\\/(){};:"<>#?%, ]/g)) {
-      this._toaster.clearAllToaster();
-      this._toaster.errorToast('Account name must not contain special symbol like [\/(){};:"<>#?%');
-    } else {
-      val = uniqueNameInvalidStringReplace(val);
-      if (val) {
-        this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-        this.isAccountNameAvailable$.subscribe(a => {
-          if (a !== null && a !== undefined) {
-            if (a) {
-              this.addAccountForm.patchValue({ uniqueName: val });
-            } else {
-              let num = 1;
-              this.addAccountForm.patchValue({ uniqueName: val + num });
-            }
+    val = uniqueNameInvalidStringReplace(val);
+    if (val) {
+      this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+      this.isAccountNameAvailable$.subscribe(a => {
+        if (a !== null && a !== undefined) {
+          if (a) {
+            this.addAccountForm.patchValue({ uniqueName: val });
+          } else {
+            let num = 1;
+            this.addAccountForm.patchValue({ uniqueName: val + num });
           }
-        });
-      } else {
-        this.addAccountForm.patchValue({ uniqueName: '' });
-      }
+        }
+      });
+    } else {
+      this.addAccountForm.patchValue({ uniqueName: '' });
     }
+    // if (val.match(/[\\/(){};:"<>#?%, ]/g)) {
+    //   this._toaster.clearAllToaster();
+    //   this._toaster.errorToast('Account name must not contain special symbol like [\/(){};:"<>#?%');
+    // } else {
+    // }
   }
 
   public addGstDetailsForm(value: string) {
