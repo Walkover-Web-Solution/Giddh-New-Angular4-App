@@ -45,6 +45,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
   public states: IOption[] = [];
+  public statesInBackground: IOption[] = [];
   public isGstValid: boolean = false;
   public isPANValid: boolean = false;
   public isMobileNumberValid: boolean = false;
@@ -71,6 +72,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         this.stateResponse = _.cloneDeep(data);
         data.map(d => {
           this.states.push({ label: `${d.code} - ${d.name}`, value: `${d.code}` });
+          this.statesInBackground.push({ label: `${d.name}`, value: `${d.code}` });
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -151,7 +153,18 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
           profileObj.gstDetails.push(newGstObj);
         }
 
-        this.companyProfileObj = profileObj;
+        if (this.statesInBackground && this.statesInBackground.length) {
+          let selectedState = this.statesInBackground.find((state) => state.label === profileObj.state);
+          if (selectedState) {
+            profileObj.state = selectedState.value;
+          }
+          this.companyProfileObj = profileObj;
+        } else {
+          this.companyProfileObj = profileObj;
+        }
+
+        console.log('profileObj is :', profileObj);
+
         if (profileObj && profileObj.country) {
           let countryName = profileObj.country.toLocaleLowerCase();
           if (countryName === 'india') {
