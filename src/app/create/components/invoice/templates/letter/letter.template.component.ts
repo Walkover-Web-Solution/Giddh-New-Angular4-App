@@ -25,6 +25,15 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
   public name2: string = 'PAN: AAACW9768L';
   public base64Data: SafeResourceUrl = '';
   public planHtml: any;
+  public css = `  <style>
+  .logo-wrap {
+    width: 120px;
+  }
+  figure {
+      height: 50px;
+      overflow: hidden;
+    }
+</style>`;
 
   constructor(private _sanitizer: DomSanitizer) {
     console.log (`hello from LetterTemplateComponent`);
@@ -57,7 +66,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
     if (typeof(XMLSerializer) !== 'undefined') {
        let serializer = new XMLSerializer();
        return serializer.serializeToString(node);
-    } else if (node.xml) {
+    } else if (node.xml || 1 === 1) {
        return node.xml;
     }
  }
@@ -85,10 +94,14 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
   }
 
   public emitTemplateData(data: any) {
-    const a = this.xml2string(data);
-    const stringToUtf16ByteArray = this.stringToUtf16ByteArray(a);
+    data.append(this.css);
+    const styles = document.getElementById('sometemplate');
+    const dataHTML = data;
+    const a = this.xml2string(dataHTML);
+    let htmlStr = _.cloneDeep(a.replace('&lt;', '<').replace('&gt;', '>').replace('&lt;', '<').replace('&gt;', '>'));
+    const stringToUtf16ByteArray = this.stringToUtf16ByteArray(htmlStr);
     const _arrayBufferToBase64 = this._arrayBufferToBase64(stringToUtf16ByteArray);
-    this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + _arrayBufferToBase64);
+    this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + _arrayBufferToBase64);;
   }
 
   public doDestroy() {
