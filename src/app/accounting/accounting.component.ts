@@ -92,6 +92,7 @@ export class AccountingComponent implements OnInit {
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
   public openDatePicker: boolean = false;
+  public openCreateAccountPopup: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -135,6 +136,8 @@ export class AccountingComponent implements OnInit {
       } else {
         return;
       }
+    } else if (event.altKey && event.code === 'KeyC') {
+      this.openCreateAccountPopup = !this.openCreateAccountPopup;
     } else {
       let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
         if (event.altKey) {
