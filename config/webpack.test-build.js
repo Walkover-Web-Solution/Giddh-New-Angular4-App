@@ -163,7 +163,7 @@ module.exports = function (env) {
           test: /\.js$/,
           loader: '@angular-devkit/build-optimizer/webpack-loader',
           options: {
-            sourceMap: true
+            sourceMap: false
           }
         }
 
@@ -236,9 +236,9 @@ module.exports = function (env) {
        *
        * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
        */
-      // new UglifyJsPlugin({
-      //   uglifyOptions: getUglifyOptions(supportES2015)
-      // })
+      new UglifyJsPlugin({
+        uglifyOptions: getUglifyOptions(supportES2015)
+      })
 
     ],
 
