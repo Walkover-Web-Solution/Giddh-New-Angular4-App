@@ -45,6 +45,7 @@ const CustomShortcode = [
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public openCreateAccountPopup: boolean;
   @Input() public newSelectedAccount: AccountResponse;
   @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
@@ -183,9 +184,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.showFromDatePicker = c.openDatePicker.currentValue;
       this.dateField.nativeElement.focus();
     }
-    // if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
-    //   this.setAccount(c.newSelectedAccount.currentValue);
-    // }
+    if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
+      if (c.openCreateAccountPopup.currentValue) {
+        this.showQuickAccountModal();
+      } else {
+        this.hideQuickAccountModal();
+      }
+    }
   }
 
   /**

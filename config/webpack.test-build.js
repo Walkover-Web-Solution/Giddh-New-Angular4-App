@@ -163,7 +163,7 @@ module.exports = function (env) {
           test: /\.js$/,
           loader: '@angular-devkit/build-optimizer/webpack-loader',
           options: {
-            sourceMap: false
+            sourceMap: true
           }
         }
 
