@@ -229,7 +229,7 @@ module.exports = function (options) {
            */
         }
       ),
-
+      
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
