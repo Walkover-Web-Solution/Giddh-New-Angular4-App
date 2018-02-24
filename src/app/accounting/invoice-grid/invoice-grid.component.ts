@@ -46,6 +46,7 @@ const CustomShortcode = [
 export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public openCreateAccountPopup: boolean;
   @Input() public newSelectedAccount: AccountResponse;
   @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
   @Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
@@ -193,6 +194,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
       this.setAccount(c.newSelectedAccount.currentValue);
+    }
+    if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
+      if (c.openCreateAccountPopup.currentValue) {
+        this.showQuickAccountModal();
+      } else {
+        this.hideQuickAccountModal();
+      }
     }
   }
 
@@ -585,7 +593,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public changeStock(idx, val) {
     let i = this.selectedRowIdx;
     if (!val) {
-      this.stocksTransaction[i].inventory.splice(idx, 1);
+      if (this.stocksTransaction[i].inventory && this.stocksTransaction[i].inventory.length) {
+        this.stocksTransaction[i].inventory.splice(idx, 1);
+      }
       // this.showStockList.emit(false);
       // if (!this.data.transactions.length) {
       //   this.addNewRow('stock');

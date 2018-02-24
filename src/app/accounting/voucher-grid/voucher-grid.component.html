@@ -105,8 +105,7 @@
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
-        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
-            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
+        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'" [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
     </div>
 
 </div>
