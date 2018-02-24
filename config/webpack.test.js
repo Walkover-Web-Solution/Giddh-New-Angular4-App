@@ -98,7 +98,7 @@ module.exports = function (options) {
                 /**
                  * Use inline sourcemaps for "karma-remap-coverage" reporter
                  */
-                sourceMap: true,
+                sourceMap: false,
                 inlineSourceMap: true,
                 compilerOptions: {
 
@@ -229,7 +229,7 @@ module.exports = function (options) {
            */
         }
       ),
-
+      
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
