@@ -113,6 +113,7 @@ export class AccountingComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
     event.preventDefault();
+    debugger;
     // Handling Alt + V and Alt I
     if (event.altKey && event.code === 'KeyV') {
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
