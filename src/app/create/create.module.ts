@@ -12,6 +12,7 @@ import { LetterTemplateComponent } from './components/invoice/templates/letter/l
 import { CreateInvoiceHeaderComponent } from './components/header/create.header.component';
 import { CreateInvoiceStepsComponent } from './components/nav/create.steps.component';
 import { ContenteditableDirective } from 'ng-contenteditable';
+import { CreateHttpService } from './create-http-service';
 
 @NgModule({
   imports: [
@@ -34,6 +35,9 @@ import { ContenteditableDirective } from 'ng-contenteditable';
   ],
   entryComponents: [
     LetterTemplateComponent
+  ],
+  providers: [
+    CreateHttpService
   ]
 })
 export class CreateModule { }
