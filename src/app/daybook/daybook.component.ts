@@ -145,7 +145,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
       this.daybookQueryRequest.from = obj.fromDate;
       this.daybookQueryRequest.to = obj.toDate;
       this.daybookQueryRequest.page = 0;
-      this.go(this.searchFilterData);
+      if (obj.action === 'search') {
+        this.go(this.searchFilterData);
+      } else if (obj.action === 'export') {
+        this.daybookQueryRequest.format = obj.exportAs;
+        this.daybookQueryRequest.type = 'admin-condensed';
+        this.daybookQueryRequest.sort = 'asc';
+        this.store.dispatch(this._daybookActions.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest));
+      }
     }
     this.advanceSearchModel.hide();
   }
@@ -193,6 +200,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.pageChanged(e);
       });
     }
+  }
+
+  public exportDaybook(exportAs: 'pdf' | 'xlsx', withFilters = null) {
+    this.daybookQueryRequest.format = exportAs;
+    this.daybookQueryRequest.type = 'admin-condensed';
+    this.daybookQueryRequest.sort = 'asc';
+    this.store.dispatch(this._daybookActions.ExportDaybook(withFilters, this.daybookQueryRequest));
   }
 
   public ngOnDestroy() {
