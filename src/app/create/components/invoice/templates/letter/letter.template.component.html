@@ -1,6 +1,3 @@
-<div *ngIf="base64Data">
-    <iframe width="100%" height="600px" name="plugin" [src]="base64Data" type="application/pdf"></iframe>
-</div>
 <form #testForm id="sometemplate">
   <div class="invoice_area" id="template-3">
     <div id="template-header" class="mrT3">
@@ -211,3 +208,11 @@
 
 </form>
 
+
+<div bsModal #invoicePreviewModal="bs-modal" [config]="{ keyboard: true }" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="height: 100%;">
+      <div *ngIf="base64Data" class="modal-content">
+        <iframe width="100%" height="600px" name="plugin" [attr.src]="base64Data" type="application/pdf"></iframe>
+      </div>
+  </div>
+</div>

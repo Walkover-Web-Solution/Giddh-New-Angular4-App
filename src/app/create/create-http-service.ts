@@ -11,10 +11,9 @@ export class CreateHttpService {
   }
 
   public Generate(data: any): Observable<BaseResponse<any, any>> {
-    return this._http.post(this.config.apiUrl + '/v2/company/newsncindore15000172022770ygv88/accounts/cash/invoices/preview', data).map((res) => {
+    return this._http.post(this.config.apiUrl + '/invoices', data).map((res) => {
         let response: BaseResponse<any, any> = res;
-        data.request = data;
-        return data;
+        return res;
       });
   }
 }
