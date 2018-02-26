@@ -227,9 +227,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
   }
 
   /**
-   * onSearch
+   * go
    */
-  public onSearch() {
+  public go(exportFileAs = null) {
     let dataToSend = _.cloneDeep(this.advanceSearchForm.value) as DayBookRequestModel;
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
@@ -238,11 +238,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
     let toDate = this.toDate;
     // this.store.dispatch(this._daybookActions.GetDaybook(dataToSend, this.fromDate, this.toDate));
     this.closeModelEvent.emit({
+      action: exportFileAs ? 'export' : 'search',
+      exportAs: exportFileAs,
       dataToSend,
       fromDate,
       toDate,
       cancle: false
     });
+
+    exportFileAs = null;
     // this.advanceSearchForm.reset();
   }
 
