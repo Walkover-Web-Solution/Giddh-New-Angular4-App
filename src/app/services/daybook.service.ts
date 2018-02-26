@@ -56,9 +56,31 @@ export class DaybookService {
       .replace(':type', queryRequest.type.toString())
       .replace(':sort', queryRequest.sort.toString()))
       .map((res) => {
-        let data = res;
-        data.requestType = queryRequest.sort.toString() === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-        data.fileName = this.companyUniqueName + '-daybook-' + queryRequest.from + '-to-' + queryRequest.to;
+        let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+        data.queryString = queryRequest;
+        data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request));
+  }
+
+  public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':page', queryRequest.page.toString())
+      .replace(':count', queryRequest.count.toString())
+      .replace(':from', encodeURIComponent(queryRequest.from))
+      .replace(':to', encodeURIComponent(queryRequest.to))
+      .replace(':format', queryRequest.format.toString())
+      .replace(':type', queryRequest.type.toString())
+      .replace(':sort', queryRequest.sort.toString()), request)
+      .map((res) => {
+        let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+        data.request = request;
+        data.queryString = queryRequest;
+        data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request));

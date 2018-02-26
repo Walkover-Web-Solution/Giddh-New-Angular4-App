@@ -19,6 +19,9 @@ export class DaybookActions {
   public static readonly EXPORT_DAYBOOK_REQUEST = 'EXPORT_DAYBOOK_REQUEST';
   public static readonly EXPORT_DAYBOOK_RESPONSE = 'EXPORT_DAYBOOK_RESPONSE';
 
+  public static readonly EXPORT_DAYBOOK_POST_REQUEST = 'EXPORT_DAYBOOK_POST_REQUEST';
+  public static readonly EXPORT_DAYBOOK_POST_RESPONSE = 'EXPORT_DAYBOOK_POST_RESPONSE';
+
   @Effect() private GetDaybook$: Observable<Action> = this.action$
     .ofType(DaybookActions.GET_DAYBOOK_REQUEST)
     .switchMap((action: CustomActions) => {
@@ -36,14 +39,31 @@ export class DaybookActions {
     .ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST)
     .switchMap((action: CustomActions) => {
       return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest)
-        .map((res: any) => {
+        .map((res) => {
           if (res.status === 'success') {
-            let blob = this.base64ToBlob(res.body, res.requestType, 512);
-            let type = res.requestType === 'application/pdf' ? 'pdf' : 'xls';
-            saveAs(blob, res.fileName + type);
+            let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
+            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xlsx';
+            saveAs(blob, 'response' + type);
           } else {
             this._toasty.clearAllToaster();
-            this._toasty.errorToast('Something went wrong while downloading file.');
+            this._toasty.errorToast(res.message);
+          }
+          return { type: 'EmptyAction' };
+        });
+    });
+
+    @Effect() private ExportDaybookPost$: Observable<Action> = this.action$
+    .ofType(DaybookActions.EXPORT_DAYBOOK_POST_REQUEST)
+    .switchMap((action: CustomActions) => {
+      return this._daybookService.ExportDaybookPost(action.payload.request, action.payload.queryRequest)
+        .map((res) => {
+          if (res.status === 'success') {
+            let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
+            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xlsx';
+            saveAs(blob, 'response' + type);
+          } else {
+            this._toasty.clearAllToaster();
+            this._toasty.errorToast(res.message);
           }
           return { type: 'EmptyAction' };
         });
@@ -85,6 +105,13 @@ export class DaybookActions {
   public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: DaybookActions.EXPORT_DAYBOOK_REQUEST,
+      payload: { request, queryRequest }
+    };
+  }
+
+  public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
+    return {
+      type: DaybookActions.EXPORT_DAYBOOK_POST_REQUEST,
       payload: { request, queryRequest }
     };
   }
