@@ -195,6 +195,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
   }
 
+  public exportDaybook(exportAs: 'pdf' | 'xlsx', withFilters = null) {
+    this.daybookQueryRequest.format = exportAs;
+    this.daybookQueryRequest.type = 'admin-condensed';
+    this.daybookQueryRequest.sort = 'asc';
+    this.store.dispatch(this._daybookActions.ExportDaybook(withFilters, this.daybookQueryRequest));
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

@@ -39,4 +39,28 @@ export class DaybookService {
       })
       .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request));
   }
+
+  public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
+
+    console.log('queryRequest is :', queryRequest);
+
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':page', queryRequest.page.toString())
+      .replace(':count', queryRequest.count.toString())
+      .replace(':from', encodeURIComponent(queryRequest.from))
+      .replace(':to', encodeURIComponent(queryRequest.to))
+      .replace(':format', queryRequest.format.toString())
+      .replace(':type', queryRequest.type.toString())
+      .replace(':sort', queryRequest.sort.toString()))
+      .map((res) => {
+        let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+        data.request = request;
+        data.queryString = queryRequest;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request));
+  }
 }
