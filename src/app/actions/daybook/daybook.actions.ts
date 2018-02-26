@@ -15,6 +15,9 @@ export class DaybookActions {
   public static readonly GET_DAYBOOK_REQUEST = 'GET_DAYBOOK_REQUEST';
   public static readonly GET_DAYBOOK_RESPONSE = 'GET_DAYBOOK_RESPONSE';
 
+  public static readonly EXPORT_DAYBOOK_REQUEST = 'EXPORT_DAYBOOK_REQUEST';
+  public static readonly EXPORT_DAYBOOK_RESPONSE = 'EXPORT_DAYBOOK_RESPONSE';
+
   @Effect() private GetDaybook$: Observable<Action> = this.action$
     .ofType(DaybookActions.GET_DAYBOOK_REQUEST)
     .switchMap((action: CustomActions) => {
@@ -28,6 +31,19 @@ export class DaybookActions {
           }));
     });
 
+  @Effect() private ExportDaybook$: Observable<Action> = this.action$
+    .ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST)
+    .switchMap((action: CustomActions) => {
+      return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest)
+        .map((r) => this.validateResponse<DayBookResponseModel, DayBookRequestModel>(r, {
+          type: DaybookActions.EXPORT_DAYBOOK_RESPONSE,
+          payload: r.body
+        }, true, {
+            type: DaybookActions.EXPORT_DAYBOOK_RESPONSE,
+            payload: null
+          }));
+    });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private _daybookService: DaybookService) {
@@ -36,6 +52,13 @@ export class DaybookActions {
   public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: DaybookActions.GET_DAYBOOK_REQUEST,
+      payload: { request, queryRequest }
+    };
+  }
+
+  public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
+    return {
+      type: DaybookActions.EXPORT_DAYBOOK_REQUEST,
       payload: { request, queryRequest }
     };
   }
