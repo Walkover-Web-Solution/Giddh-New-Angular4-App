@@ -16,7 +16,7 @@ import { ModalDirective } from 'ngx-bootstrap';
   encapsulation: ViewEncapsulation.Native
 })
 
-export class LetterTemplateComponent implements OnInit, OnDestroy  {
+export class LetterTemplateComponent implements OnInit, OnDestroy {
   @Output() public closeAndDestroyComponent: EventEmitter<any> = new EventEmitter();
   @ViewChild('invoicePreviewModal') public invoicePreviewModal: ModalDirective;
   public selectedFiles: any;
@@ -39,7 +39,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
 </style>`;
 
   constructor(private _sanitizer: DomSanitizer, private _createHttpService: CreateHttpService) {
-    console.log (`hello from LetterTemplateComponent`);
+    console.log(`hello from LetterTemplateComponent`);
   }
 
   public readUrl(event: any) {
@@ -58,7 +58,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
   public ngOnInit() {
     this.data = new VoucherClass();
     this.initWithDummyData();
-    console.log (this.data);
+    console.log(this.data);
   }
 
   public ngOnDestroy() {
@@ -66,34 +66,34 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
   }
 
   public xml2string(node) {
-    if (typeof(XMLSerializer) !== 'undefined') {
-       let serializer = new XMLSerializer();
-       return serializer.serializeToString(node);
+    if (typeof (XMLSerializer) !== 'undefined') {
+      let serializer = new XMLSerializer();
+      return serializer.serializeToString(node);
     } else if (node.xml || 1 === 1) {
-       return node.xml;
+      return node.xml;
     }
- }
-
-  public stringToUtf16ByteArray(str) {
-      let bytes = [];
-    for (let i = 0; i < str.length; ++i) {
-        let charCode = str.charCodeAt(i);
-        // tslint:disable-next-line:no-bitwise
-        bytes.push((charCode & 0xFF00) >>> 8);
-        // tslint:disable-next-line:no-bitwise
-        bytes.push(charCode & 0xFF);
-    }
-      return bytes;
   }
 
-  public _arrayBufferToBase64( buffer ) {
+  public stringToUtf16ByteArray(str) {
+    let bytes = [];
+    for (let i = 0; i < str.length; ++i) {
+      let charCode = str.charCodeAt(i);
+      // tslint:disable-next-line:no-bitwise
+      bytes.push((charCode & 0xFF00) >>> 8);
+      // tslint:disable-next-line:no-bitwise
+      bytes.push(charCode & 0xFF);
+    }
+    return bytes;
+  }
+
+  public _arrayBufferToBase64(buffer) {
     let binary = '';
-    let bytes = new Uint8Array( buffer );
+    let bytes = new Uint8Array(buffer);
     let len = bytes.byteLength;
     for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode( bytes[ i ] );
+      binary += String.fromCharCode(bytes[i]);
     }
-    return window.btoa( binary );
+    return window.btoa(binary);
   }
 
   public emitTemplateData(data: any) {
@@ -108,74 +108,73 @@ export class LetterTemplateComponent implements OnInit, OnDestroy  {
 
     const dataToSend = {
       entries: [
-          {
-              entryDate: '26-02-2018',
-              description: 'bla bla',
-              quantity: 12,
-              rate: 10,
-              discount: 4,
-              amount: 120
-
-          }
+        {
+          entryDate: '26-02-2018',
+          description: 'bla bla',
+          quantity: 12,
+          rate: 10,
+          discount: 4,
+          amount: 120
+        }
       ],
       userDetails: {
         countryCode: 'in',
-          userName: 'Mr name',
-          userEmail: null,
-          userMobileNumber: null,
-          userCompanyName: 'User company name',
-          billingDetails: {
-              gstNumber: 236754567898765,
-              address: [],
-              stateCode: null,
-              stateName: null,
-              panNumber: null
-          },
-          shippingDetails: {
-              gstNumber: null,
-              address: [],
-              stateCode: null,
-              stateName: null,
-              panNumber: null
-          }
+        userName: 'Mr name',
+        userEmail: null,
+        userMobileNumber: null,
+        userCompanyName: 'User company name',
+        billingDetails: {
+          gstNumber: 236754567898765,
+          address: [],
+          stateCode: null,
+          stateName: null,
+          panNumber: null
+        },
+        shippingDetails: {
+          gstNumber: null,
+          address: [],
+          stateCode: null,
+          stateName: null,
+          panNumber: null
+        }
       },
       companyDetails: {
-          name: 'Some name',
-          address: null,
-          companyGstDetails: {
-              gstNumber: null,
-              address: [],
-              stateCode: null,
-              stateName: null,
-              panNumber: null
-          }
+        name: 'Some name',
+        address: null,
+        companyGstDetails: {
+          gstNumber: null,
+          address: [],
+          stateCode: null,
+          stateName: null,
+          panNumber: null
+        }
       },
       signature: {
-          slogan: null,
-          ownerName: 'owner',
-          signatureImage: null
+        slogan: null,
+        ownerName: 'owner',
+        signatureImage: null
       },
       invoiceDetails: {
-          invoiceNumber: '12345',
-          invoiceDate: '04-12-2017',
-          dueDate: null
+        invoiceNumber: '12345',
+        invoiceDate: '04-12-2017',
+        dueDate: null
       },
       other: {
-          note1: null,
-          note2: null,
-          shippingDate: null,
-          shippedVia: null,
-          customFields: {
-              customField1: null,
-              customFieldLabel1: null,
-              customField2: null,
-              customFieldLabel2: null,
-              customField3: null,
-              customFieldLabel3: null
-          },
-          trackingNumber: null
+        note1: null,
+        note2: null,
+        shippingDate: null,
+        shippedVia: null,
+        customFields: {
+          customField1: null,
+          customFieldLabel1: null,
+          customField2: null,
+          customFieldLabel2: null,
+          customField3: null,
+          customFieldLabel3: null
+        },
+        trackingNumber: null
       }
-  };
+    };
 
     this._createHttpService.Generate(dataToSend).subscribe(response => {
       if (response.status === 'success') {
