@@ -13,6 +13,7 @@ import { CreateInvoiceHeaderComponent } from './components/header/create.header.
 import { CreateInvoiceStepsComponent } from './components/nav/create.steps.component';
 import { ContenteditableDirective } from 'ng-contenteditable';
 import { CreateHttpService } from './create-http-service';
+import { CollapseModule, BsDatepickerModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -23,7 +24,9 @@ import { CreateHttpService } from './create-http-service';
     ModalModule,
     LaddaModule,
     ShSelectModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    CollapseModule,
+    BsDatepickerModule.forRoot(),
   ],
   declarations: [
     CreateInvoiceComponent,
