@@ -2,6 +2,7 @@
 	path = website
 	url = https://github.com/Walkover-Web-Solution/Giddh-Website.git
 	
-[submodule "mobile"]
-	path = mobile
+[submodule "Nativemobile"]
+	path = Nativemobile
 	url = https://github.com/Walkover-Web-Solution/Nativemobile.git
+	branch = master
