@@ -4,6 +4,9 @@ export class DaybookQueryRequest {
   public count: number = 20;
   public from: string = '';
   public to: string = '';
+  public format: 'pdf' | 'xlsx' = 'pdf';
+  public type: 'admin-condensed' | 'admin-detailed' = 'admin-condensed';
+  public sort: 'asc' | 'desc' = 'asc';
 }
 export interface DayBookRequestModel {
   amountLessThan: boolean;
