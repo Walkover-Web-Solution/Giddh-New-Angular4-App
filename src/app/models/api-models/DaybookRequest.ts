@@ -5,7 +5,7 @@ export class DaybookQueryRequest {
   public from: string = '';
   public to: string = '';
   public format: 'pdf' | 'xlsx' = 'pdf';
-  public type: 'admin-condensed' | 'admin-detailed' = 'admin-condensed';
+  public type: string = 'admin-condensed';
   public sort: 'asc' | 'desc' = 'asc';
 }
 export interface DayBookRequestModel {
