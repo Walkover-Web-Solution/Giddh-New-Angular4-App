@@ -42,7 +42,7 @@ export class DaybookActions {
         .map((res) => {
           if (res.status === 'success') {
             let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
-            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xlsx';
+            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
             saveAs(blob, 'response' + type);
           } else {
             this._toasty.clearAllToaster();
@@ -59,7 +59,7 @@ export class DaybookActions {
         .map((res) => {
           if (res.status === 'success') {
             let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
-            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xlsx';
+            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
             saveAs(blob, 'response' + type);
           } else {
             this._toasty.clearAllToaster();
