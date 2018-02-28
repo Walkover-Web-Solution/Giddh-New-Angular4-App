@@ -11,7 +11,7 @@ export class CreateHttpService {
   }
 
   public Generate(data: any): Observable<BaseResponse<any, any>> {
-    return this._http.post(this.config.apiUrl + '/invoices', data).map((res) => {
+    return this._http.post(this.config.apiUrl + 'invoices', data).map((res) => {
         let response: BaseResponse<any, any> = res;
         return res;
       });
