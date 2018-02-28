@@ -13,7 +13,7 @@ import { validateEmail } from '../../shared/helpers/helperFunctions';
 })
 export class ExportDaybookComponent implements OnInit {
 
-  @Output() public closeExportDaybookModal: EventEmitter<object> = new EventEmitter();
+  @Output() public closeExportDaybookModal: EventEmitter<any> = new EventEmitter();
 
   public emailTypeSelected: string = '';
   public emailTypeMini: string = '';
