@@ -380,19 +380,19 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public addBlankRow(txn: SalesTransactionItemClass) {
     // if transaction is valid then add new row else show toasty
-    let txnResponse = txn.isValid();
-    if (txnResponse !== true) {
-      this._toasty.warningToast(txnResponse);
-      return;
-    }
-    let entry: SalesEntryClass = new SalesEntryClass();
-    this.invFormData.entries.push(entry);
-    // set default date
-    this.invFormData.entries.forEach((e) => {
-      e.transactions.forEach((t: SalesTransactionItemClass) => {
-        t.date = this.universalDate || new Date();
-      });
-    });
+    // let txnResponse = txn.isValid();
+    // if (txnResponse !== true) {
+    //   this._toasty.warningToast(txnResponse);
+    //   return;
+    // }
+    // let entry: SalesEntryClass = new SalesEntryClass();
+    // this.invFormData.entries.push(entry);
+    // // set default date
+    // this.invFormData.entries.forEach((e) => {
+    //   e.transactions.forEach((t: SalesTransactionItemClass) => {
+    //     t.date = this.universalDate || new Date();
+    //   });
+    // });
   }
 
   public autoFillShippingDetails() {
