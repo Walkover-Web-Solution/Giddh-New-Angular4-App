@@ -216,7 +216,7 @@
           <div class="flex-row-child">
             <div class="form-group noMarg">
               <label>Customer Name</label>
-              <input type="text" class="form-control" formControlName="userName">
+              <input type="text" class="form-control" formControlName="userName" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userName').invalid }">
             </div>
           </div>
           <div class="flex-row-child mrL2">
@@ -229,6 +229,12 @@
             <div class="form-group noMarg">
               <label>Mobile No.</label>
               <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" formControlName="userMobileNumber" class="form-control"  />
+            </div>
+          </div>
+          <div class="flex-row-child mrL2">
+            <div class="form-group noMarg">
+              <label>Company name</label>
+              <input placeholder="Company name" type="text" formControlName="userCompanyName" class="form-control" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }" />
             </div>
           </div>
         </div>
@@ -256,14 +262,27 @@
             <label>Attention to</label>
             <input type="text" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
           </div> -->
+
+          <ng-container formGroupName="companyDetails">
+            <div class="form-group col-xs-4">
+              <label>Company name</label>
+              <input type="text" class="form-control" formControlName="name" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['companyDetails'].get('name').invalid }"/>
+            </div>
+            <div class="form-group col-xs-4">
+              <label>Address</label>
+              <textarea class="form-control" formControlName="address" rows="5"></textarea>
+            </div>
+            <div class="col-xs-4"></div>
+          </ng-container>
+
           <div class="form-group col-xs-2" formGroupName="userDetails">
             <label>Country</label>
-            <sh-select class="sh-form_control" formControlName="countryCode" [options]="countrySource"></sh-select>
+            <sh-select class="sh-form_control" formControlName="countryCode" [options]="countrySource" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"></sh-select>
           </div>
           <ng-container formGroupName="invoiceDetails">
             <div class="form-group col-xs-4">
               <label>Invoice Number</label>
-              <input type="text" class="form-control" formControlName="invoiceNumber"/>
+              <input type="text" class="form-control" formControlName="invoiceNumber" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['invoiceDetails'].get('invoiceNumber').invalid }"/>
             </div>
             <div class="form-group col-xs-2">
               <label>Date</label>
@@ -388,21 +407,17 @@
   </section>
   <section class="clearfix pd1 pdB2 mrB2 whiteBg">
       <table class="table" formArrayName="entries">
-        <!-- <thead>
+        <thead>
           <tr>
-            <th *ngFor="let item of theadArr;" [hidden]="!item.display" attr.data-field="{{item.label}}">{{item.label}}</th>
-            <th class="nested-table-wrap">
-              <table width="100%" class="nested-table" cellspacing="0" cellspadding="0">
-                <thead>
-                  <tr>
-                    <th width="25%" *ngFor="let item of theadArrOpt;" attr.data-field="{{item.label}}">{{item.label}}</th>
-                  </tr>
-                </thead>
-              </table>
-            </th>
-            <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">{{item.label}}</th>
+            <td>#</td>
+            <td>Date</td>
+            <td>Description</td>
+            <td>Quantity</td>
+            <td>Rate</td>
+            <td>Discount</td>
+            <td>Amount</td>
           </tr>
-        </thead> -->
+        </thead>
         <tbody *ngFor="let entry of CreateInvoiceForm.get('entries')['controls']; let entryIdx = index; let first = first; let last = last">
           <tr [formGroupName]="entryIdx">
             <td>{{ entryIdx+1 }}</td>
@@ -592,7 +607,7 @@
           <div class="pull-right pr">
             <!-- <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
             <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button> -->
-            <button type="submit" (click)="emitTemplateData()" class="btn btn-success">Generate Invoice</button>
+            <button type="submit" class="btn btn-success">Generate Invoice</button>
           </div>
         </div>
       </section>
@@ -606,3 +621,9 @@
       </div>
   </div>
 </div>
+
+<style>
+  .has-error {
+    border: 1px solid red;
+  }
+</style>
