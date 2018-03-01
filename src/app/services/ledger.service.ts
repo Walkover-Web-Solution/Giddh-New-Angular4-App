@@ -66,6 +66,7 @@ export class LedgerService {
     request.reversePage = reversePage;
     request.sort = sort;
     request.to = to;
+    // tslint:disable-next-line:max-line-length
     return this._http.get(this.config.apiUrl + LEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
       data.request = request;

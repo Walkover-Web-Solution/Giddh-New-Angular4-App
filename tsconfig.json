@@ -36,7 +36,8 @@
     "dist",
     "dev",
     "node_modules_electron",
-    "packages"
+    "packages", 
+    "Nativemobile"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,
