@@ -33,7 +33,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
   public isAllExpanded: boolean = false;
   public daybookQueryRequest: DaybookQueryRequest;
   public daybookData$: Observable<DayBookResponseModel>;
+  public daybookExportRequestType: 'get' | 'post';
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
+  @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
   @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   public datePickerOptions: any = {
@@ -146,15 +148,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
       this.daybookQueryRequest.to = obj.toDate;
       this.daybookQueryRequest.page = 0;
       if (obj.action === 'search') {
+        this.advanceSearchModel.hide();
         this.go(this.searchFilterData);
       } else if (obj.action === 'export') {
-        this.daybookQueryRequest.format = obj.exportAs;
-        this.daybookQueryRequest.type = 'admin-condensed';
-        this.daybookQueryRequest.sort = 'asc';
-        this.store.dispatch(this._daybookActions.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest));
+        this.daybookExportRequestType = 'post';
+        this.exportDaybookModal.show();
       }
     }
-    this.advanceSearchModel.hide();
   }
 
   public go(withFilters = null) {
@@ -202,11 +202,23 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
   }
 
-  public exportDaybook(exportAs: 'pdf' | 'xlsx', withFilters = null) {
-    this.daybookQueryRequest.format = exportAs;
-    this.daybookQueryRequest.type = 'admin-condensed';
-    this.daybookQueryRequest.sort = 'asc';
-    this.store.dispatch(this._daybookActions.ExportDaybook(withFilters, this.daybookQueryRequest));
+  public exportDaybook() {
+    this.daybookExportRequestType = 'get';
+    this.exportDaybookModal.show();
+  }
+
+  public hideExportDaybookModal(response: any) {
+    this.exportDaybookModal.hide();
+    if (response !== 'close') {
+      this.daybookQueryRequest.type = response.type;
+      this.daybookQueryRequest.format = response.fileType;
+      this.daybookQueryRequest.sort = response.order;
+      if (this.daybookExportRequestType === 'post') {
+        this.store.dispatch(this._daybookActions.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest));
+      } else if (this.daybookExportRequestType === 'get') {
+        this.store.dispatch(this._daybookActions.ExportDaybook(null, this.daybookQueryRequest));
+      }
+    }
   }
 
   public ngOnDestroy() {
