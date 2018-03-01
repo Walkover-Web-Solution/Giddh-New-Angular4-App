@@ -5,12 +5,16 @@
                 <span class="btn label isActive">{{requestObj.voucherType}}</span>
                 <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
                     <input type="text" #dateField [textMask]="{mask: dateMask, guide: true}" name="journalDate" [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right appearance_none" />
-                    <!-- <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <datepicker [(ngModel)]="journalDate" (selectionDone)="setDate($event)" [showWeeks]="false"></datepicker>
-                    </div> -->
                     {{ displayDay }}
                 </div>
             </div>
+            <!-- invoice num -->
+            <!-- <div class="clearfix form-inline mrB2">
+                <div class="mx-300 form-group">
+                    <label>Invoice No:</label> <input type="text" placeholder="Invoice no." [(ngModel)]="requestObj.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" decimalDigitsDirective style="max-width:200px" />
+                </div>
+            </div> -->
+            <!-- /invoice num -->
             <div class="clearfix" [style.min-height.vh]="61">
                 <div class="table-responsive bdrT">
                     <table class="table entry_table">
@@ -111,7 +115,7 @@
 </div>
 
 <!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
     <div class="modal-dialog modal-sm" style="width: 298px">
         <div class="modal-content">
             <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
