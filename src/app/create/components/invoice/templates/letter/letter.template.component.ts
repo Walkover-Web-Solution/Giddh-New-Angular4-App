@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { VoucherClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, GenericRequestForGenerateSCD, SalesEntryClass } from '../../../../../models/api-models/Sales';
-import { FormControl, Form, NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, Form, NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CreateHttpService } from '../../../../create-http-service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -68,6 +68,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   // reactive form
   public CreateInvoiceForm: FormGroup;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public isFormSubmitted: boolean = false;
 
   constructor(
     private _sanitizer: DomSanitizer,
@@ -76,7 +77,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store<AppState>
   ) {
-    console.log(`hello from LetterTemplateComponent`);
     this.invFormData = new VoucherClass();
     this.setCreateInvoiceForm();
   }
@@ -117,124 +117,24 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     //
   }
 
-  public xml2string(node) {
-    if (typeof (XMLSerializer) !== 'undefined') {
-      let serializer = new XMLSerializer();
-      return serializer.serializeToString(node);
-    } else if (node.xml || 1 === 1) {
-      return node.xml;
-    }
-  }
-
-  public stringToUtf16ByteArray(str) {
-    let bytes = [];
-    for (let i = 0; i < str.length; ++i) {
-      let charCode = str.charCodeAt(i);
-      // tslint:disable-next-line:no-bitwise
-      bytes.push((charCode & 0xFF00) >>> 8);
-      // tslint:disable-next-line:no-bitwise
-      bytes.push(charCode & 0xFF);
-    }
-    return bytes;
-  }
-
-  public _arrayBufferToBase64(buffer) {
-    let binary = '';
-    let bytes = new Uint8Array(buffer);
-    let len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  }
-
   public emitTemplateData(data: any) {
-    // data.append(this.css);
-    // const styles = document.getElementById('sometemplate');
-    // const dataHTML = data;
-    // const a = this.xml2string(dataHTML);
-    // let htmlStr = _.cloneDeep(a.replace('&lt;', '<').replace('&gt;', '>').replace('&lt;', '<').replace('&gt;', '>'));
-    // const stringToUtf16ByteArray = this.stringToUtf16ByteArray(htmlStr);
-    // const _arrayBufferToBase64 = this._arrayBufferToBase64(stringToUtf16ByteArray);
-    // this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + _arrayBufferToBase64);
+    this.isFormSubmitted = true;
+    this.isGenDtlCollapsed = false;
+    this.isMlngAddrCollapsed = false;
+    this.isOthrDtlCollapsed = false;
 
-    // const dataToSend = {
-    //   entries: [
-    //     {
-    //       entryDate: '26-02-2018',
-    //       description: 'bla bla',
-    //       quantity: 12,
-    //       rate: 10,
-    //       discount: 4,
-    //       amount: 120
-    //     }
-    //   ],
-    //   userDetails: {
-    //     countryCode: 'in',
-    //     userName: 'Mr name',
-    //     userEmail: null,
-    //     userMobileNumber: null,
-    //     userCompanyName: 'User company name',
-    //     billingDetails: {
-    //       gstNumber: 236754567898765,
-    //       address: [],
-    //       stateCode: null,
-    //       stateName: null,
-    //       panNumber: null
-    //     },
-    //     shippingDetails: {
-    //       gstNumber: null,
-    //       address: [],
-    //       stateCode: null,
-    //       stateName: null,
-    //       panNumber: null
-    //     }
-    //   },
-    //   companyDetails: {
-    //     name: 'Some name',
-    //     address: null,
-    //     companyGstDetails: {
-    //       gstNumber: null,
-    //       address: [],
-    //       stateCode: null,
-    //       stateName: null,
-    //       panNumber: null
-    //     }
-    //   },
-    //   signature: {
-    //     slogan: null,
-    //     ownerName: 'owner',
-    //     signatureImage: null
-    //   },
-    //   invoiceDetails: {
-    //     invoiceNumber: '12345',
-    //     invoiceDate: '04-12-2017',
-    //     dueDate: null
-    //   },
-    //   other: {
-    //     note1: null,
-    //     note2: null,
-    //     shippingDate: null,
-    //     shippedVia: null,
-    //     customFields: {
-    //       customField1: null,
-    //       customFieldLabel1: null,
-    //       customField2: null,
-    //       customFieldLabel2: null,
-    //       customField3: null,
-    //       customFieldLabel3: null
-    //     },
-    //     trackingNumber: null
-    //   }
-    // };
-
-    this._createHttpService.Generate(data).subscribe(response => {
-      if (response.status === 'success') {
-        this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + response.body);
-        this.invoicePreviewModal.show();
-      }
-    });
-
+    if (this.CreateInvoiceForm.valid) {
+      this._createHttpService.Generate(data).subscribe(response => {
+        if (response.status === 'success') {
+          this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + response.body);
+          this.invoicePreviewModal.show();
+        } else if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        }
+      });
+    } else {
+      this._toasty.errorToast('Please fill are red marked fields.', 'Validation check');
+    }
   }
 
   public doDestroy() {
@@ -251,109 +151,14 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     data.entries.forEach((entry) => {
       entry.entryDate = entry.entryDate ? moment(entry.entryDate).format(GIDDH_DATE_FORMAT) : '';
     });
+    data.userDetails.billingDetails.address = data.userDetails.billingDetails.address ? [data.userDetails.billingDetails.address] : null;
+    data.userDetails.shippingDetails.address = data.userDetails.shippingDetails.address ? [data.userDetails.shippingDetails.address] : null;
+
+    data.companyDetails.address = data.companyDetails.address ? [data.companyDetails.address] : null;
+    data.companyDetails.companyGstDetails.address = data.companyDetails.companyGstDetails.address ? [data.companyDetails.companyGstDetails.address] : null;
+
     console.log('data after conversion is :', data);
     this.emitTemplateData(data);
-    // let txnErr: boolean;
-    // // before submit request making some validation rules
-    // // check for account uniquename
-    // if (data.accountDetails) {
-    //   if (!data.accountDetails.uniqueName) {
-    //     if (this.typeaheadNoResultsOfCustomer) {
-    //       this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
-    //     }else {
-    //       this._toasty.warningToast('Customer Name can\'t be empty');
-    //     }
-    //     return;
-    //   }
-    //   if (data.accountDetails.email) {
-    //     if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
-    //       this._toasty.warningToast('Invalid Email Address.');
-    //       return;
-    //     }
-    //   }
-    // }
-
-    // // replace /n to br in case of message
-    // if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
-    //   data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
-    // }
-
-    // // replace /n to br for (shipping and billing)
-    // if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
-    //   data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
-    // }
-    // if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
-    //   data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
-    // }
-
-    // // convert date object
-    // data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
-    // data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
-    // data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
-
-    // // check for valid entries and transactions
-    // if ( data.entries) {
-    //   _.forEach(data.entries, (entry) => {
-    //     _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-    //       // convert date object
-    //       txn.date = this.convertDateForAPI(txn.date);
-    //       // will get errors of string and if not error then true boolean
-    //       let txnResponse = txn.isValid();
-    //       if (txnResponse !== true) {
-    //         this._toasty.warningToast(txnResponse);
-    //         txnErr = true;
-    //         return false;
-    //       }else {
-    //         txnErr = false;
-    //       }
-    //     });
-    //   });
-    // } else {
-    //   this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
-    //   return;
-    // }
-
-    // // if txn has errors
-    // if (txnErr) {
-    //   return false;
-    // }
-
-    // // set voucher type
-    // data.entries = data.entries.map((entry) => {
-    //   entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-    //   return entry;
-    // });
-
-    // let obj: GenericRequestForGenerateSCD = {
-    //   voucher : data,
-    //   updateAccountDetails: this.updateAccount
-    // };
-
-    // if (this.dueAmount && this.dueAmount > 0) {
-    //   obj.paymentAction = {
-    //     action: 'paid',
-    //     amount: this.dueAmount
-    //   };
-    // }
-
-    // // this.salesService.generateGenericItem(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-    // //   if (response.status === 'success') {
-    // //     // reset form and other
-    // //     this.resetInvoiceForm(f);
-    // //     if (typeof response.body === 'string') {
-    // //       this._toasty.successToast(response.body);
-    // //     } else {
-    // //       try {
-    // //         this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
-    // //       } catch (error) {
-    // //         this._toasty.successToast('Voucher Generated Successfully');
-    // //       }
-    // //     }
-    // //   } else {
-    // //     this._toasty.errorToast(response.message, response.code);
-    // //   }
-    // //   this.updateAccount = false;
-    // // });
   }
 
   public convertDateForAPI(val: any): string {
@@ -363,7 +168,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
       } catch (error) {
         return '';
       }
-    }else {
+    } else {
       return '';
     }
   }
@@ -371,28 +176,15 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
     this.invFormData = new VoucherClass();
-    this.typeaheadNoResultsOfCustomer = false;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = true;
   }
 
-  public addBlankRow(txn: SalesTransactionItemClass) {
-    // if transaction is valid then add new row else show toasty
-    // let txnResponse = txn.isValid();
-    // if (txnResponse !== true) {
-    //   this._toasty.warningToast(txnResponse);
-    //   return;
-    // }
-    // let entry: SalesEntryClass = new SalesEntryClass();
-    // this.invFormData.entries.push(entry);
-    // // set default date
-    // this.invFormData.entries.forEach((e) => {
-    //   e.transactions.forEach((t: SalesTransactionItemClass) => {
-    //     t.date = this.universalDate || new Date();
-    //   });
-    // });
+  public addBlankRow() {
+    const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
+    transactionEntries.push(this.retunArrayData());
   }
 
   public autoFillShippingDetails() {
@@ -403,11 +195,10 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   }
 
   public removeTransaction(entryIdx: number) {
-    if (this.invFormData.entries.length > 1 ) {
-      this.invFormData.entries = _.remove(this.invFormData.entries, (entry, index) => {
-        return index !== entryIdx;
-      });
-    }else {
+    const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
+    if (transactionEntries.length > 1 ) {
+      transactionEntries.removeAt(entryIdx);
+    } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
   }
@@ -418,10 +209,10 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     return this.fb.group({
       entryDate: '',
       description: '',
-      quantity: 1,
-      rate: 2,
-      discount: 3,
-      amount: 4
+      quantity: 0,
+      rate: 0,
+      discount: 0,
+      amount: 0
     });
   }
 
@@ -429,11 +220,11 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     this.CreateInvoiceForm = this.fb.group({
       entries: this.fb.array([ this.retunArrayData() ]),
       userDetails: this.fb.group({
-        countryCode: '',
-        userName: '',
+        countryCode: ['', Validators.required],
+        userName: ['', Validators.required],
         userEmail: '',
         userMobileNumber: '',
-        userCompanyName: '',
+        userCompanyName: ['', Validators.required],
         billingDetails: this.fb.group({
           gstNumber: null,
           address: null,
@@ -444,18 +235,18 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
         shippingDetails: this.fb.group({
           autoFillShipping: null,
           gstNumber: null,
-          address: [],
+          address: null,
           stateCode: null,
           stateName: null,
           panNumber: null
         })
       }),
       companyDetails: this.fb.group({
-        name: '',
-        address: '',
+        name: ['', Validators.required],
+        address: null,
         companyGstDetails: this.fb.group({
           gstNumber: null,
-          address: [],
+          address: null,
           stateCode: null,
           stateName: null,
           panNumber: null
@@ -467,7 +258,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
         signatureImage: null
       }),
       invoiceDetails: this.fb.group({
-        invoiceNumber: null,
+        invoiceNumber: ['', Validators.required],
         invoiceDate: null,
         dueDate: null
       }),
