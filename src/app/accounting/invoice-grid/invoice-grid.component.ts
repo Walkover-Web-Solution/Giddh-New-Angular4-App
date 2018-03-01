@@ -135,7 +135,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.data.voucherType = d.page;
         this.gridType = d.gridType;
         setTimeout(() => {
-          document.getElementById('first_element_0_0').focus();
+          // document.getElementById('first_element_0_0').focus();
+          this.dateField.nativeElement.focus();
         }, 50);
       } else if (d && this.data.transactions) {
         this.gridType = d.gridType;
@@ -169,6 +170,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.refreshEntry();
+        this.data.description = '';
+        this.dateField.nativeElement.focus();
       }
     });
     this.entryDate = moment().format(GIDDH_DATE_FORMAT);
@@ -275,7 +278,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public getFlattenGrpAccounts(groupUniqueName, filter) {
     // this.showAccountList.emit(true);
-    this.groupUniqueName = groupUniqueName;
+    this.groupUniqueName = groupUniqueName ? groupUniqueName : this.groupUniqueName;
     this.filterByGrp = filter;
     this.showStockList.emit(false);
   }
@@ -302,6 +305,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onAccountFocus(indx: number) {
+    this.showConfirmationBox = false;
     // this.selectedField = 'account';
     this.selectedAccIdx = indx;
     // this.showLedgerAccountList = true;
@@ -429,6 +433,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.debtorAcc = {};
     this.stockTotal = null;
     this.accountsTotal = null;
+    this.data.description = '';
   }
 
   /**
@@ -722,6 +727,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockFocus(indx: number) {
+    this.showConfirmationBox = false;
     this.selectRow(true, indx);
     this.selectedField = 'stock';
     this.getFlattenGrpofAccounts(this.groupUniqueName);
@@ -731,7 +737,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * getFlattenGrpofAccounts
    */
   public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [parentGrpUnqName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+    const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         this.sortStockItems(data.body.results);
       } else {
@@ -808,6 +815,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onPartyAccFocus() {
+    this.showConfirmationBox = false;
     this.getFlattenGrpAccounts(null, false);
     this.accountType = 'creditor';
     this.isPartyACFocused = true;
@@ -842,7 +850,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   private refreshAccountListData() {
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
         if (data.status === 'success') {
