@@ -175,6 +175,7 @@ export class TallyModuleService {
     this.expenseAccounts.next(expenseAccounts);
     this.salesAccounts.next(salesAccounts);
     this.flattenAccounts.next(accounts);
+    this.filteredAccounts.next(this.flattenAccounts.value);
   }
 
   public getAccounts() {
