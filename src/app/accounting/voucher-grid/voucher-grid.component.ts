@@ -120,13 +120,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
         setTimeout(() => {
-          document.getElementById('first_element_0').focus();
+          // document.getElementById('first_element_0').focus();
+          this.dateField.nativeElement.focus();
         }, 50);
       } else if (d) {
         this._tallyModuleService.requestData.next(this.requestObj);
       }
     });
-
   }
 
   public ngOnInit() {
@@ -150,6 +150,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this._toaster.successToast('Entry created successfully', 'Success');
         this.refreshEntry();
         this.store.dispatch(this._ledgerActions.ResetLedger());
+        this.requestObj.description = '';
+        this.dateField.nativeElement.focus();
       }
     });
     this.refreshEntry();
@@ -176,7 +178,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.inputForList = _.cloneDeep(this.flattenAccounts);
       }
     });
-
   }
 
   public ngOnChanges(c: SimpleChanges) {
@@ -259,6 +260,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountFocus() to show accountList
    */
   public onAccountFocus(elem, trxnType, indx) {
+    this.showConfirmationBox = false;
     this.inputForList = _.cloneDeep(this.flattenAccounts);
     this.selectedField = 'account';
     this.selectedParticular = elem;
@@ -270,6 +272,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockFocus(stockIndx: number, indx: number) {
+    this.showConfirmationBox = false;
     this.selectedField = 'stock';
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
@@ -403,16 +406,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return;
     }
     if (this.totalCreditAmount === this.totalDebitAmount) {
-      _.forEach(data.transactions, (element: any) => {
-        element.type = (element.type === 'by') ? 'credit' : 'debit';
-      });
-      let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
-      let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
-      data.transactions.splice(indexOfMaxAmountEntry, 1);
-      data = this._tallyModuleService.prepareRequestForAPI(data);
-      this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+      if (this.validatePaymentAndReceipt(data)) {
+        _.forEach(data.transactions, (element: any) => {
+          element.type = (element.type === 'by') ? 'credit' : 'debit';
+        });
+        let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
+        let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
+        data.transactions.splice(indexOfMaxAmountEntry, 1);
+        data = this._tallyModuleService.prepareRequestForAPI(data);
+        this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+      } else {
+        const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+        this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
+      }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+    }
+  }
+
+  public validatePaymentAndReceipt(data) {
+    if (data.voucherType === 'Payment' || data.voucherType === 'Receipt') {
+      const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+      const toAccounts = data.transactions.filter((acc) => acc.type === byOrTo);
+      const AccountOfCashOrBank = toAccounts.filter((acc) => {
+        const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bankaccounts');
+        return indexOfCashOrBank !== -1 ? true : false;
+      });
+      return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
+    } else {
+      return true; // By pass all other
     }
   }
 
@@ -428,6 +450,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.journalDate = moment().format(GIDDH_DATE_FORMAT);
     this.requestObj.transactions[0].type = 'by';
+    this.requestObj.description = '';
   }
 
   /**
@@ -673,7 +696,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * getFlattenGrpofAccounts
    */
   public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: [parentGrpUnqName] }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+    const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         this.sortStockItems(data.body.results);
       } else {
@@ -705,6 +729,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public loadQuickAccountComponent() {
+    this.quickAccountModal.config.backdrop = false;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
     let viewContainerRef = this.quickAccountComponent.viewContainerRef;
     viewContainerRef.remove();
@@ -757,7 +782,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   private refreshAccountListData() {
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
         if (data.status === 'success') {
