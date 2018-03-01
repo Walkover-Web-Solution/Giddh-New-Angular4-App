@@ -22,6 +22,9 @@
         <button type="button" class="btn btn-success" (click)="go()">GO</button>
         <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' : 'Expand All'}}</button>
       </div>
+      <!-- <div class="pull-right form-group">
+        <button type="button" class="btn btn-default" (click)="exportDaybook()">Export</button>
+      </div> -->
     </div>
   </div>
 </div>
@@ -106,4 +109,14 @@
     </div>
   </div>
 </div>
-<!-- Advance  search popup -->
+<!-- ./Advance  search popup -->
+
+<!-- export ladger popup -->
+<div bsModal #exportDaybookModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <export-daybook (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
+      </div>
+    </div>
+</div>
+<!-- ./ export ladger popup -->
