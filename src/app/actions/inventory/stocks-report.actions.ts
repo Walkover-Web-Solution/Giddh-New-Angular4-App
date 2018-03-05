@@ -1,7 +1,7 @@
 /**
  * Created by ad on 04-07-2017.
  */
-import { StockGroupResponse, StockReportRequest, StockReportResponse } from '../../models/api-models/Inventory';
+import { StockGroupResponse, StockReportRequest, StockReportResponse, GroupStockReportRequest, GroupStockReportResponse } from '../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
@@ -37,6 +37,19 @@ export class StockReportActions {
 
     });
 
+  @Effect() private GetGroupStocksReport$: Observable<Action> = this.action$
+    .ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT)
+    .switchMap((action: CustomActions) => {
+      return this._inventoryService.GetGroupStocksReport(action.payload)
+        .map((r) => {
+          return this.validateResponse<GroupStockReportResponse, GroupStockReportRequest>(r, {
+            type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,
+            payload: r.body
+          }, true);
+        });
+
+    });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
@@ -46,6 +59,13 @@ export class StockReportActions {
   public GetStocksReport(stockReportRequest: StockReportRequest): CustomActions {
     return {
       type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT,
+      payload: stockReportRequest
+    };
+  }
+
+  public GetGroupStocksReport(stockReportRequest: StockReportRequest): CustomActions {
+    return {
+      type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT,
       payload: stockReportRequest
     };
   }
