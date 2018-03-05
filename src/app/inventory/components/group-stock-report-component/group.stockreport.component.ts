@@ -1,5 +1,5 @@
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { StockReportRequest, StockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
+import { GroupStockReportRequest, StockGroupResponse, GroupStockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 
@@ -15,6 +15,27 @@ import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+
+const COMPARISON_FILTER = [
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
+];
+
+const ENTITY_FILTER = [
+  { label: 'Inwards', value: 'inwards' },
+  { label: 'Outwards', value: 'outwards' },
+  { label: 'Opening Stock', value: 'Opening Stock' },
+  { label: 'Closing Stock', value: 'Closing Stock' }
+];
+
+const VALUE_FILTER = [
+  { label: 'Quantity', value: 'quantity' },
+  { label: 'Amount', value: 'amount' }
+];
 
 @Component({
   selector: 'invetory-group-stock-report',  // <home></home>
@@ -28,17 +49,21 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   public today: Date = new Date();
   public activeGroup$: Observable<StockGroupResponse>;
-  public stockReport$: Observable<StockReportResponse>;
+  public groupStockReport$: Observable<GroupStockReportResponse>;
   public sub: Subscription;
   public groupUniqueName: string;
   public stockUniqueName: string;
-  public stockReportRequest: StockReportRequest;
+  public GroupStockReportRequest: GroupStockReportRequest;
   public showFromDatePicker: boolean;
   public showToDatePicker: boolean;
   public toDate: string;
   public fromDate: string;
   public moment = moment;
   public activeGroupName: string;
+  public stockList$: Observable<IOption[]>;
+  public comparisonFilterDropDown$: Observable<IOption[]>;
+  public entityFilterDropDown$: Observable<IOption[]>;
+  public valueFilterDropDown$: Observable<IOption[]>;
   public datePickerOptions: any = {
     locale: {
       applyClass: 'btn-green',
@@ -76,19 +101,26 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  /**
-   * TypeScript public modifiers
-   */
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-              private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
-    this.stockReportRequest = new StockReportRequest();
+  constructor(
+    private store: Store<AppState>,
+    private route: ActivatedRoute,
+    private sideBarAction: SidebarAction,
+    private stockReportActions: StockReportActions,
+    private router: Router,
+    private fb: FormBuilder,
+    private inventoryAction: InventoryAction) {
+    this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).takeUntil(this.destroyed$);
+    this.GroupStockReportRequest = new GroupStockReportRequest();
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).takeUntil(this.destroyed$);
-
     this.activeGroup$.takeUntil(this.destroyed$).subscribe(a => {
-      console.log(a);
       if (a) {
-        this.activeGroupName = a.name;
+        const stockGroup = _.cloneDeep(a);
+        const stockList = [];
+        this.activeGroupName = stockGroup.name;
+        stockGroup.stocks.forEach((stock) => {
+          stockList.push({ label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName });
+        });
+        this.stockList$ = Observable.of(stockList);
       }
     });
   }
@@ -100,26 +132,31 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         let activeGroup = null;
         let activeStock = null;
         if (this.groupUniqueName) {
-          this.stockReportRequest.count = 10;
+          this.GroupStockReportRequest.count = 10;
           this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
           this.toDate = moment().format('DD-MM-YYYY');
-          this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-          this.stockReportRequest.to = moment().format('DD-MM-YYYY');
-          this.stockReportRequest.page = 1;
-          this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
-          // this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
+          this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+          this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+          this.GroupStockReportRequest.page = 1;
+          this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName;
+          this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
+          this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
         }
       }
     });
+
+    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
+    this.entityFilterDropDown$ = Observable.of(ENTITY_FILTER);
+    this.valueFilterDropDown$ = Observable.of(VALUE_FILTER);
   }
 
   public getGroupReport(resetPage: boolean) {
-    this.stockReportRequest.from = this.fromDate || null;
-    this.stockReportRequest.to = this.toDate || null;
+    this.GroupStockReportRequest.from = this.fromDate || null;
+    this.GroupStockReportRequest.to = this.toDate || null;
     if (resetPage) {
-      this.stockReportRequest.page = 1;
+      this.GroupStockReportRequest.page = 1;
     }
-    // this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
+    this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }
 
   public ngOnDestroy() {
@@ -142,12 +179,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public nextPage() {
-    this.stockReportRequest.page++;
+    this.GroupStockReportRequest.page++;
     this.getGroupReport(false);
   }
 
   public prevPage() {
-    this.stockReportRequest.page--;
+    this.GroupStockReportRequest.page--;
     this.getGroupReport(false);
   }
 
@@ -166,8 +203,11 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-    // this.stockReportRequest.page = 0;
+    // this.GroupStockReportRequest.page = 0;
+    this.getGroupReport(true);
+  }
 
+  public filterFormData() {
     this.getGroupReport(true);
   }
 }
