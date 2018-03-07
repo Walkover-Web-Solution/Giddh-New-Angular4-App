@@ -258,7 +258,9 @@ export class UpdateLedgerVm {
     }) || 0;
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
     let total = this.totalAmount - discountTrxTotal;
-    this.grandTotal = Number((total + ((total * taxTotal) / 100)).toFixed(2));
+    setTimeout(() => {
+      this.grandTotal = Number((total + ((total * taxTotal) / 100)).toFixed(2));
+    }, 100);
   }
 
   public generateCompoundTotal() {
