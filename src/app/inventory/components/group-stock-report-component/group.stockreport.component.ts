@@ -18,11 +18,11 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  { label: 'Greater Than', value: 'Greater Than' },
+  { label: 'Less Than', value: 'Less than' },
+  { label: 'Greater Than or Equals', value: 'Greater than or Equals' },
+  { label: 'Less Than or Equals', value: 'Less than or Equals' },
+  { label: 'Equals', value: 'Equals' }
 ];
 
 const ENTITY_FILTER = [
@@ -34,7 +34,7 @@ const ENTITY_FILTER = [
 
 const VALUE_FILTER = [
   { label: 'Quantity', value: 'quantity' },
-  { label: 'Amount', value: 'amount' }
+  { label: 'Value', value: 'Value' }
 ];
 
 @Component({
