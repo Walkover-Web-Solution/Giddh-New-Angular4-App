@@ -12,7 +12,7 @@ import { AccountResponse } from '../models/api-models/Account';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
-    keyCode: 'F7',
+    keyCode: 118, // 'F7',
     inputForFn: {
       page: 'Journal',
       uniqueName: 'purchases',
@@ -20,7 +20,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F9',
+    keyCode: 120, // 'F9',
     inputForFn: {
       page: 'Purchase',
       uniqueName: 'purchases',
@@ -28,7 +28,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F8',
+    keyCode: 119, // 'F8',
     inputForFn: {
       page: 'Sales',
       uniqueName: 'purchases',
@@ -36,7 +36,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F9',
+    keyCode: 120, // 'F9',
     altKey: true,
     inputForFn: {
       page: 'Debit note',
@@ -45,7 +45,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F8',
+    keyCode: 119, // 'F8',
     altKey: true,
     inputForFn: {
       page: 'Credit note',
@@ -54,7 +54,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F5',
+    keyCode: 116, // 'F5',
     inputForFn: {
       page: 'Payment',
       uniqueName: 'purchases',
@@ -62,7 +62,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F6',
+    keyCode: 117, // 'F6',
     inputForFn: {
       page: 'Receipt',
       uniqueName: 'null',
@@ -70,7 +70,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F4',
+    keyCode: 115, // 'F4',
     inputForFn: {
       page: 'Contra',
       uniqueName: 'purchases',
@@ -117,9 +117,10 @@ export class AccountingComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
+    console.log('event is :', event);
     event.preventDefault();
-    // Handling Alt + V and Alt I
-    if (event.altKey && event.code === 'KeyV') {
+    // Handling Alt + V and Alt + I
+    if (event.altKey && event.which === 86) { // Alt + V
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
         this._tallyModuleService.setVoucher({
@@ -130,7 +131,7 @@ export class AccountingComponent implements OnInit {
       } else {
         return;
       }
-    } else if (event.altKey && event.code === 'KeyI') {
+    } else if (event.altKey && event.which === 73) { // Alt + I
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
           this._tallyModuleService.setVoucher({
@@ -141,21 +142,19 @@ export class AccountingComponent implements OnInit {
       } else {
         return;
       }
-    } else if (event.altKey && event.code === 'KeyC') {
+    } else if (event.altKey && event.which === 67) { // Alt + C
       this.openCreateAccountPopup = !this.openCreateAccountPopup;
     } else {
       let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
         if (event.altKey) {
-          return page.keyCode === event.code && page.altKey;
+          return page.keyCode === event.which && page.altKey;
         } else {
-          return page.keyCode === event.code;
+          return page.keyCode === event.which;
         }
       });
       if (selectedPageIndx > -1) {
-        // this._router.navigate([]);
         this._tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
-        // this._keyboardService.setKey(event);
-      } else if (event.code === 'F2') {
+      } else if (event.which === 113) { // F2
         this.openDatePicker = !this.openDatePicker;
       }
     }
