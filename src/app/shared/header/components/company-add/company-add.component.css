@@ -56,3 +56,7 @@
   cursor: not-allowed;
   background-color: transparent;
 }
+
+.hasError {
+  border: 1px solid red;
+}

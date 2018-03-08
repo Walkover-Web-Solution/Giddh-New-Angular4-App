@@ -23,6 +23,7 @@ import { SettingPermissionFormComponent } from './permissions/form/form.componen
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.modul
     ClickOutsideModule,
     BsDatepickerModule.forRoot(),
     ShSelectModule,
-    OmitByKeyPipeModule
+    OmitByKeyPipeModule,
+    NgbTypeaheadModule
   ]
 })
 
