@@ -101,6 +101,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public showLedgerAccountList: boolean = false;
   public selectedField: 'account' | 'stock' | 'partyAcc';
   public currentSelectedValue: string = '';
+  public invoiceNoHeading: string = 'Supplier Invoice No';
+  public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -135,9 +137,18 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.data.voucherType = d.page;
         this.gridType = d.gridType;
         setTimeout(() => {
-          // document.getElementById('first_element_0_0').focus();
           this.dateField.nativeElement.focus();
         }, 50);
+        if (d.page === 'Debit note' || d.page === 'Credit note') {
+          this.invoiceNoHeading = 'Original invoice number';
+        } else {
+          this.invoiceNoHeading = 'Supplier Invoice No';
+        }
+        if (d.page === 'Sales') {
+          this.isSalesInvoiceSelected = true;
+        } else {
+          this.isSalesInvoiceSelected = false;
+        }
       } else if (d && this.data.transactions) {
         this.gridType = d.gridType;
         this.data.transactions = this.prepareDataForVoucher();
