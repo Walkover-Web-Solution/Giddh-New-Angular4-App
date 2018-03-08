@@ -10,9 +10,10 @@ import { ShSelectModule } from 'app/theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ModalModule, PaginationComponent, PaginationModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
 
 @NgModule({
-  declarations: [DaybookComponent, DaybookAdvanceSearchModelComponent],
+  declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
   providers: [],
   imports: [CommonModule,
     ReactiveFormsModule, DecimalDigitsModule,
@@ -23,7 +24,8 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
     Daterangepicker,
     DaybookRoutingModule,
     ShSelectModule,
-    ElementViewChildModule],
+    ElementViewChildModule,
+  ],
   entryComponents: [
     PaginationComponent
   ]

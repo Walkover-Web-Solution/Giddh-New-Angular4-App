@@ -90,6 +90,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
+  public isIndia: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -170,7 +171,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
-        if (accountDetails.addresses.length > 0 && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India') {
+        // && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India'
+        if (accountDetails.addresses.length > 0) {
           accountDetails.addresses.map(a => {
             this.renderGstDetails(a);
           });
@@ -222,14 +224,21 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
       if (a) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
+        let lengthofFormArray = addressFormArray.controls.length;
         if (a !== 'IN') {
-          this.addAccountForm.controls['addresses'] = this._fb.array([]);
-          // this.addBlankGstForm();
+          this.isIndia = false;
+          for (let index = 0; index < lengthofFormArray; index++) {
+            addressFormArray.removeAt(index);
+          }
+          addresses.push(this.initialGstDetailsForm(null));
+          this.isIndia = false;
         } else {
-          const addresses = this.addAccountForm.get('addresses') as FormArray;
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
           }
+          this.isIndia = true;
         }
       }
     });
@@ -274,12 +283,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
     if (accountCountry) {
       if (accountCountry !== 'IN') {
-        this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        // this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        this.isIndia = false;
       } else {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.controls.length === 0) {
           this.addBlankGstForm();
         }
+        this.isIndia = true;
       }
     }
   }
