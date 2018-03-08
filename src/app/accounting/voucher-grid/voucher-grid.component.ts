@@ -11,7 +11,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges, HostListener, ComponentRef, EventEmitter, Output, ComponentFactoryResolver } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -22,6 +22,10 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TallyModuleService } from 'app/accounting/tally-service';
+import { AccountResponse } from '../../models/api-models/Account';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -41,12 +45,19 @@ const CustomShortcode = [
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public openCreateAccountPopup: boolean;
+  @Input() public newSelectedAccount: AccountResponse;
+  @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
+  @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public showLedgerAccountList: boolean;
+  public showLedgerAccountList: boolean = false;
   public selectedInput: 'by' | 'to' = 'by';
   public requestObj: any = {};
   public totalCreditAmount: number = 0;
@@ -68,9 +79,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public activeIndex: number = 0;
   public arrowInput: { key: number };
   public winHeight: number;
-  // public groupFlattenAccount: string = '';
+  public displayDay: string = '';
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public totalDiffAmount: number = 0;
 
   public voucherType: string = null;
+  public flattenAccounts: IOption[];
+  public stockList: IOption[];
+  public currentSelectedValue: string = '';
+  public filterByText: string = '';
+  public keyUpDownEvent: KeyboardEvent;
+  public inputForList: IOption[];
+  public selectedField: 'account' | 'stock';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -81,7 +101,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private _keyboardService: KeyboardService,
     private flyAccountActions: FlyAccountsActions,
     private _toaster: ToasterService, private _router: Router,
-    private _tallyModuleService: TallyModuleService) {
+    private _tallyModuleService: TallyModuleService,
+    private componentFactoryResolver: ComponentFactoryResolver) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -98,11 +119,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      }).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
+        setTimeout(() => {
+          // document.getElementById('first_element_0').focus();
+          this.dateField.nativeElement.focus();
+        }, 50);
       } else if (d) {
         this._tallyModuleService.requestData.next(this.requestObj);
       }
     });
-
   }
 
   public ngOnInit() {
@@ -126,6 +150,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this._toaster.successToast('Entry created successfully', 'Success');
         this.refreshEntry();
         this.store.dispatch(this._ledgerActions.ResetLedger());
+        this.requestObj.description = '';
+        this.dateField.nativeElement.focus();
       }
     });
     this.refreshEntry();
@@ -142,11 +168,29 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     // });
 
+    this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        let accList: IOption[] = [];
+        accounts.forEach((acc: IFlattenAccountsResultItem) => {
+          accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+        });
+        this.flattenAccounts = accList;
+        this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
   }
 
   public ngOnChanges(c: SimpleChanges) {
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
       this.showFromDatePicker = c.openDatePicker.currentValue;
+      this.dateField.nativeElement.focus();
+    }
+    if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
+      if (c.openCreateAccountPopup.currentValue) {
+        this.showQuickAccountModal();
+      } else {
+        this.hideQuickAccountModal();
+      }
     }
   }
 
@@ -215,25 +259,44 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * onAccountFocus() to show accountList
    */
-  public onAccountFocus() {
+  public onAccountFocus(elem, trxnType, indx) {
+    this.showConfirmationBox = false;
+    this.inputForList = _.cloneDeep(this.flattenAccounts);
+    this.selectedField = 'account';
+    this.selectedParticular = elem;
+    this.selectRow(true, indx);
+    this.filterAccount(trxnType);
+    setTimeout(() => {
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onStockFocus(stockIndx: number, indx: number) {
+    this.showConfirmationBox = false;
+    this.selectedField = 'stock';
+    this.selectedStockIdx = stockIndx;
+    this.selectedIdx = indx;
+    this.getFlattenGrpofAccounts(this.groupUniqueName);
     this.showLedgerAccountList = true;
-    this.showStockList = false;
-    // this.showStockList.next(false);
   }
 
   /**
-   * onAccountBlur() to hide accountList
+   * onAccountBlur to hide accountList
    */
-  public onAccountBlur(ev, elem) {
+  public onAccountBlur(ev) {
     this.arrowInput = { key: 0 };
-    // this.showLedgerAccountList = false;
-    this.selectedParticular = elem;
-    this.showStockList = false;
+    // this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
     }
+    this.showLedgerAccountList = false;
+    // this.showAccountList.emit(false);
+  }
+
+  public onAmountFieldBlur(ev) {
+    //
   }
 
   /**
@@ -241,6 +304,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setAccount(acc) {
     let idx = this.selectedIdx;
+    let transaction = this.requestObj.transactions[idx];
     if (acc) {
       let accModel = {
         name: acc.name,
@@ -249,34 +313,44 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         account: acc.name,
         parentGroups: acc.parentGroups
       };
-      this.requestObj.transactions[idx].particular = accModel.UniqueName;
-      this.requestObj.transactions[idx].selectedAccount = accModel;
-      this.requestObj.transactions[idx].stocks = acc.stocks;
+      transaction.particular = accModel.UniqueName;
+      transaction.selectedAccount = accModel;
+      transaction.stocks = acc.stocks;
+
+      // tally differnce amount
+      transaction.amount = this.calculateDiffAmount(transaction.type);
 
       if (acc && acc.stocks) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
         this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      } else if (!acc.stocks) {
+        setTimeout(() => {
+          this.selectedParticular.focus();
+        }, 200);
       }
     } else {
-        this.requestObj.transactions.splice(idx, 1);
-        if (!idx) {
-          this.newEntryObj();
-          this.requestObj.transactions[0].type = 'by';
-        }
+      this.deleteRow(idx);
     }
-
-    setTimeout(() => {
-      this.selectedParticular.focus();
-      this.showLedgerAccountList = false;
-    }, 50);
   }
 
   /**
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    this.accountSearch = str;
+    this.filterByText = str;
+    // this.accountSearch = str;
+  }
+
+  public searchStock(str) {
+    this.filterByText = str;
+    // this.accountSearch = str;
+  }
+
+  public onStockBlur(qty) {
+    this.selectedStk = qty;
+    this.filterByText = '';
+    this.showLedgerAccountList = false;
   }
 
   /**
@@ -332,16 +406,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return;
     }
     if (this.totalCreditAmount === this.totalDebitAmount) {
-      _.forEach(data.transactions, (element: any) => {
-        element.type = (element.type === 'by') ? 'credit' : 'debit';
-      });
-      let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
-      let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
-      data.transactions.splice(indexOfMaxAmountEntry, 1);
-      data = this._tallyModuleService.prepareRequestForAPI(data);
-      this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+      if (this.validatePaymentAndReceipt(data)) {
+        _.forEach(data.transactions, (element: any) => {
+          element.type = (element.type === 'by') ? 'credit' : 'debit';
+        });
+        let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
+        let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
+        data.transactions.splice(indexOfMaxAmountEntry, 1);
+        data = this._tallyModuleService.prepareRequestForAPI(data);
+        this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
+      } else {
+        const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+        this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
+      }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+    }
+  }
+
+  public validatePaymentAndReceipt(data) {
+    if (data.voucherType === 'Payment' || data.voucherType === 'Receipt') {
+      const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+      const toAccounts = data.transactions.filter((acc) => acc.type === byOrTo);
+      const AccountOfCashOrBank = toAccounts.filter((acc) => {
+        const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bankaccounts');
+        return indexOfCashOrBank !== -1 ? true : false;
+      });
+      return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
+    } else {
+      return true; // By pass all other
     }
   }
 
@@ -351,13 +444,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public refreshEntry() {
     this.requestObj.transactions = [];
     this.showConfirmationBox = false;
-    this.showLedgerAccountList = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.newEntryObj();
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.journalDate = moment();
+    this.journalDate = moment().format(GIDDH_DATE_FORMAT);
     this.requestObj.transactions[0].type = 'by';
+    this.requestObj.description = '';
   }
 
   /**
@@ -444,14 +537,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    // console.log(item);
-    let idx = this.selectedStockIdx;
-    let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, this.selectedIdx);
-    setTimeout(() => {
-      this.selectedStk.focus();
-      this.showStockList = false;
-    }, 50);
+    if (item) {
+      // console.log(item);
+      let idx = this.selectedStockIdx;
+      let entryItem = _.cloneDeep(item);
+      this.prepareEntry(entryItem, this.selectedIdx);
+      // setTimeout(() => {
+      //   this.selectedStk.focus();
+      //   this.showStockList = false;
+      // }, 50);
+    } else {
+      this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
+    }
   }
 
   /**
@@ -502,7 +599,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * calculateTransactionTotal
    */
   public calculateTransactionTotal(inventory) {
-    // console.log('The env we got is :', inventory);
     let total = 0;
     inventory.forEach((inv) => {
       total = total + Number(inv.amount);
@@ -531,22 +627,169 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
- public detectKey(ev) {
-   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-    this.arrowInput = { key: ev.keyCode };
-   }
+ public detectKey(ev: KeyboardEvent) {
+   this.keyUpDownEvent = ev;
+  //  if (ev.keyCode === 27) {
+  //   this.deleteRow(this.selectedIdx);
+  //  }
+  //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+  //   this.arrowInput = { key: ev.keyCode };
+  //  }
  }
 
  /**
   * hideListItems
   */
  public hideListItems() {
-  this.showLedgerAccountList = false;
-  this.showStockList = false;
+  // this.showLedgerAccountList = false;
+  // this.showStockList = false;
  }
 
-  // @HostListener('window:resize')
-  // public resizeEvent() {
-  //   this.winHeight = window.innerHeight - 64;
-  // }
+  public dateEntered() {
+    const date = moment(this.journalDate, 'DD-MM-YYYY');
+    if (moment(date).format('dddd') !== 'Invalid date') {
+      this.displayDay = moment(date).format('dddd');
+    } else {
+      this.displayDay = '';
+    }
+}
+  /**
+   * validateAccount
+   */
+  public validateAccount(transactionObj, ev, idx) {
+    let lastIndx = this.requestObj.transactions.length - 1;
+    if (idx === lastIndx) {
+      return;
+    }
+    if (!transactionObj.selectedAccount.account) {
+      transactionObj.selectedAccount = {};
+      transactionObj.amount = 0;
+      transactionObj.inventory = [];
+      if (idx) {
+        this.requestObj.transactions.splice(idx, 1);
+      } else {
+        ev.preventDefault();
+      }
+      return;
+    }
+    if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
+      this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
+      ev.preventDefault();
+      return;
+    }
+    // console.log(transactionObj, ev);
+  }
+
+  public onItemSelected(ev: IOption) {
+    if (this.selectedField === 'account') {
+      this.setAccount(ev.additional);
+    } else if (this.selectedField === 'stock') {
+      this.onSelectStock(ev.additional);
+    }
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+  }
+
+  /**
+   * getFlattenGrpofAccounts
+   */
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
+    const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.sortStockItems(data.body.results);
+      } else {
+        // this.noResult = true;
+      }
+    });
+  }
+
+  /**
+   * sortStockItems
+   */
+  public sortStockItems(ItemArr) {
+    let stockAccountArr: IOption[] = [];
+    _.forEach(ItemArr, (obj: any) => {
+      if (obj.stocks) {
+        _.forEach(obj.stocks, (stock: any) => {
+          stock.accountStockDetails.name = obj.name;
+          stockAccountArr.push({
+            label: `${stock.name} (${stock.uniqueName})`,
+            value: stock.uniqueName,
+            additional: stock
+          });
+        });
+      }
+    });
+    // console.log(stockAccountArr, 'stocks');
+    this.stockList = stockAccountArr;
+    this.inputForList = _.cloneDeep(this.stockList);
+  }
+
+  public loadQuickAccountComponent() {
+    this.quickAccountModal.config.backdrop = false;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.hideQuickAccountModal();
+      componentInstance.newAccountForm.reset();
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
+    });
+    componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+      if (status) {
+        this.refreshAccountListData();
+      }
+    });
+  }
+
+  public showQuickAccountModal() {
+    this.loadQuickAccountComponent();
+    this.quickAccountModal.show();
+  }
+
+  public hideQuickAccountModal() {
+    this.quickAccountModal.hide();
+  }
+
+  private deleteRow(idx: number) {
+    this.requestObj.transactions.splice(idx, 1);
+    if (!idx) {
+      this.newEntryObj();
+      this.requestObj.transactions[0].type = 'by';
+    }
+  }
+
+  private calculateDiffAmount(type) {
+    if (type === 'by') {
+      if (this.totalDebitAmount < this.totalCreditAmount) {
+        return this.totalDiffAmount = this.totalCreditAmount - this.totalDebitAmount;
+      } else {
+        return this.totalDiffAmount = 0;
+      }
+    } else if (type === 'to') {
+      if (this.totalCreditAmount < this.totalDebitAmount) {
+        return this.totalDiffAmount = this.totalDebitAmount - this.totalCreditAmount;
+      } else {
+        return this.totalDiffAmount = 0;
+      }
+    }
+  }
+
+  private refreshAccountListData() {
+    this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+      if (a && a !== '') {
+        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this._tallyModuleService.setFlattenAccounts(data.body.results);
+        }
+      });
+      }
+    });
+  }
 }

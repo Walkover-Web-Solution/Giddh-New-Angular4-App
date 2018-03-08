@@ -22,6 +22,29 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+    font-family: 'icomoon';
+    src: url('../fonts/header/icomoon.eot?pgg8xh');
+    src: url('../fonts/header/icomoon.eot?pgg8xh#iefix') format('embedded-opentype'), url('../fonts/header/icomoon.ttf?pgg8xh') format('truetype'), url('../fonts/header/icomoon.woff?pgg8xh') format('woff'), url('../fonts/header/icomoon.svg?pgg8xh#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .icon-add:before {
     content: "\e900";
 }
@@ -104,6 +127,70 @@
 
 .icon-folder:before {
     content: "\f2334";
+}
+
+.icon-journal:before {
+    content: "\e90f";
+}
+
+.icon-tax:before {
+    content: "\e90b";
+}
+
+.icon-manufacturing:before {
+    content: "\e90c";
+}
+
+.icon-permission:before {
+    content: "\e90d";
+}
+
+.icon-daybook:before {
+    content: "\e90e";
+}
+
+.icon-log:before {
+    content: "\e900";
+}
+
+.icon-recurring:before {
+    content: "\e901";
+}
+
+.icon-inventory:before {
+    content: "\e902";
+}
+
+.icon-dashboard:before {
+    content: "\e903";
+}
+
+.icon-purchase:before {
+    content: "\e904";
+}
+
+.icon-invoice:before {
+    content: "\e905";
+}
+
+.icon-report:before {
+    content: "\e906";
+}
+
+.icon-sales:before {
+    content: "\e907";
+}
+
+.icon-search:before {
+    content: "\e908";
+}
+
+.icon-setting:before {
+    content: "\e909";
+}
+
+.icon-tbpl:before {
+    content: "\e90a";
 }
 
 a,
@@ -4359,3 +4446,11 @@ table td[class*=col-]:last-child {
 .sh-form_control .form-control {
     width: 100% !important;
 }
+
+.custom-tabs {
+    background: #eee;
+    border-bottom: 1px solid #ddd;
+}
+
+
+/* left bar menu */
