@@ -5,6 +5,9 @@ import { Observable } from 'rxjs/Observable';
   selector: 'layout-main',
   templateUrl: './layout.component.html',
   styles: [`
+  #content_wrapper {
+    margin-left: 46px;
+  }
     `]
 })
 export class LayoutComponent implements OnInit, AfterViewInit {

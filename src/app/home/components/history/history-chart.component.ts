@@ -243,8 +243,10 @@ export class HistoryChartComponent implements OnInit {
         this.expenseDataLY = (p.ExpensesLastYearYearly);
         this.revenueData = (p.revenueActiveYearYearly);
         this.revenueDataLY = (p.revenueLastYearYearly);
-        this.profitLossData = p.ProfitLossActiveYearYearly;
-        this.profitLossDataLY = p.ProfitLossLastYearYearly;
+        // this.profitLossData = p.ProfitLossActiveYearYearly;
+        // this.profitLossDataLY = p.ProfitLossLastYearYearly;
+        this.profitLossData = p.ProfitLossActiveYearMonthly;
+        this.profitLossDataLY = p.ProfitLossLastYearMonthly;
         this.generateCharts();
         this.requestInFlight = false;
       });

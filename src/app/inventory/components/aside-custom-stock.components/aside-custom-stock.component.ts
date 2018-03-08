@@ -47,17 +47,27 @@ export class AsideCustomStockComponent implements OnInit {
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   public asideClose: boolean;
+  public createCustomStockSuccess$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>
   ) {
+    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     this.asideClose = false;
+
+    this.createCustomStockSuccess$.subscribe((a) => {
+      if (a) {
+        this.closeAsidePane();
+      }
+    });
   }
-  public closeAsidePane(event) {
-    this.closeAsideEvent.emit(event);
+
+  public closeAsidePane(event?) {
+    this.closeAsideEvent.emit();
     this.asideClose = true;
     setTimeout(() => {this.asideClose = false; }, 500);
   }
