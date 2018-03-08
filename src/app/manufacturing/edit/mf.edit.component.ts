@@ -45,6 +45,7 @@ export class MfEditComponent implements OnInit {
   public moment = moment;
   public initialQuantityObj: any = [];
   public needForceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public needForceClearProductList$: Observable<IForceClear> = Observable.of({status: false});
 
   public options: Select2Options = {
     multiple: false,
@@ -229,8 +230,8 @@ export class MfEditComponent implements OnInit {
     this._location.back();
   }
 
-  public addConsumption(data) {
-    if (data.amount > 0) {
+  public addConsumption(data, ev?) {
+    if (data.amount > 0 && data.rate && data.stockUniqueName && data.quantity) {
       let val: any = {
         amount: data.amount,
         rate: data.rate,
@@ -257,7 +258,8 @@ export class MfEditComponent implements OnInit {
       // manufacturingObj.stockUniqueName = this.selectedProduct;
       this.manufacturingDetails = manufacturingObj;
       this.linkedStocks = new IStockItemDetail();
-    } else {
+      this.needForceClearProductList$ = Observable.of({status: true});
+    } else if (ev) {
       this._toasty.errorToast('Can not add raw material, amount is 0');
     }
   }
@@ -269,32 +271,34 @@ export class MfEditComponent implements OnInit {
   }
 
   public addExpense(data) {
-    let objToPush = {
-      baseAccount: {
-        uniqueName: data.transactionAccountUniqueName
-      },
-      transactions: [
-        {
-          account: {
-            uniqueName: data.baseAccountUniqueName
-          },
-          amount: data.transactionAmount
-        }
-      ]
-    };
-    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+    if (data && data.transactionAccountUniqueName && data.baseAccountUniqueName && data.transactionAmount) {
+      let objToPush = {
+        baseAccount: {
+          uniqueName: data.transactionAccountUniqueName
+        },
+        transactions: [
+          {
+            account: {
+              uniqueName: data.baseAccountUniqueName
+            },
+            amount: data.transactionAmount
+          }
+        ]
+      };
+      let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
-    if (manufacturingObj.otherExpenses) {
-      manufacturingObj.otherExpenses.push(objToPush);
-    } else {
-      manufacturingObj.otherExpenses = [objToPush];
+      if (manufacturingObj.otherExpenses) {
+        manufacturingObj.otherExpenses.push(objToPush);
+      } else {
+        manufacturingObj.otherExpenses = [objToPush];
+      }
+      // manufacturingObj.manufacturingMultipleOf = manufacturingObj.manufacturingMultipleOf;
+      this.manufacturingDetails = manufacturingObj;
+
+      this.otherExpenses = {};
+      this.needForceClear$ = Observable.of({status: true});
+      this.initializeOtherExpenseObj();
     }
-    // manufacturingObj.manufacturingMultipleOf = manufacturingObj.manufacturingMultipleOf;
-    this.manufacturingDetails = manufacturingObj;
-
-    this.otherExpenses = {};
-    this.needForceClear$ = Observable.of({status: true});
-    this.initializeOtherExpenseObj();
   }
 
   public removeExpenseItem(indx) {
@@ -428,14 +432,17 @@ export class MfEditComponent implements OnInit {
             amount: null
           };
 
+          this.linkedStocks.manufacturingUnit = unitCode;
+          this.linkedStocks.stockUnitCode = unitCode;
+
           this._inventoryService.GetRateForStoke(selectedItem, data).subscribe((response) => {
             if (response.status === 'success') {
               this.linkedStocks.rate = _.cloneDeep(response.body.rate);
+              setTimeout(() => {
+                this.addConsumption(this.linkedStocks);
+              }, 10);
             }
           });
-
-          this.linkedStocks.manufacturingUnit = unitCode;
-          this.linkedStocks.stockUnitCode = unitCode;
         }
       });
     } else {
