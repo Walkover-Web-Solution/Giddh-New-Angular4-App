@@ -48,7 +48,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    // chang
+    if (changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue) {
+        this.taxRenderData = [];
+        this.sum = 0;
+        this.prepareTaxObject();
+        this.change();
+    }
+
     if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
       if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
         this.sum = 0;
