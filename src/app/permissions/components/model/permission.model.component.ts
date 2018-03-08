@@ -30,6 +30,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((p: PermissionState) => {
       if (p.roles && p.roles.length) {
+        this.allRoles = [];
         _.forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
           this.allRoles.push({ name: role.name, uniqueName: role.uniqueName });
         });
