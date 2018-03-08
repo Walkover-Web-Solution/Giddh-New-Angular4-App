@@ -13,12 +13,13 @@
   <section class="pd2" *ngIf="!(searchLoader$ | async) && (search$ | async)">
     <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()"
       (openSmsDialog)="openSmsDialog()"></search-filter>
-    <table class="mrT2 table table-bordered table-striped">
+    <table class="table table-bordered table-striped">
       <thead>
         <tr>
+          <th>#</th>
           <th class="col-xs-2">
             <div>
-              Select
+                <input type="checkbox" (change)="toggleSelectAll(isAllChecked)" [(ngModel)]="isAllChecked"> Select
             </div>
           </th>
           <th class="col-xs-2">
@@ -73,7 +74,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of searchResponseFiltered$ | async">
+        <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
+          <td>{{i+1}}</td>
           <td><input type="checkbox" (change)="toggleSelection(item)" [(ngModel)]="item.isSelected"></td>
           <td>{{item.name}}</td>
           <td>{{item.uniqueName}}</td>
