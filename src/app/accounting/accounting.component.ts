@@ -8,6 +8,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { AccountResponse } from '../models/api-models/Account';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
@@ -91,6 +92,7 @@ export class AccountingComponent implements OnInit {
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
   public openDatePicker: boolean = false;
+  public openCreateAccountPopup: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -108,28 +110,39 @@ export class AccountingComponent implements OnInit {
       });
   }
 
+  @HostListener('document:keydown', ['$event'])
+  public beforeunloadHandler(event: KeyboardEvent) {
+    return (event.which || event.keyCode) !== 116;
+  }
+
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    // Handling Alt + v
+    event.preventDefault();
+    // Handling Alt + V and Alt I
     if (event.altKey && event.code === 'KeyV') {
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
-        if (selectedPage.gridType === 'voucher') {
+        this._tallyModuleService.setVoucher({
+          page: selectedPage.page,
+          uniqueName: selectedPage.uniqueName,
+          gridType: 'voucher'
+        });
+      } else {
+        return;
+      }
+    } else if (event.altKey && event.code === 'KeyI') {
+      const selectedPage = this._tallyModuleService.selectedPageInfo.value;
+      if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
           this._tallyModuleService.setVoucher({
             page: selectedPage.page,
             uniqueName: selectedPage.uniqueName,
             gridType: 'invoice'
           });
-        } else {
-          this._tallyModuleService.setVoucher({
-            page: selectedPage.page,
-            uniqueName: selectedPage.uniqueName,
-            gridType: 'voucher'
-          });
-        }
       } else {
         return;
       }
+    } else if (event.altKey && event.code === 'KeyC') {
+      this.openCreateAccountPopup = !this.openCreateAccountPopup;
     } else {
       let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
         if (event.altKey) {
@@ -181,5 +194,4 @@ export class AccountingComponent implements OnInit {
   public setStock(stockObj) {
     //
   }
-
 }
