@@ -75,6 +75,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
   public searchRequest$: Observable<SearchRequest>;
+  public isAllChecked: boolean = false;
 
   public get sortType(): string {
     return this._sortType;
@@ -124,6 +125,15 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.sortType = 'name';
   }
 
+  public toggleSelectAll(selectAll: boolean) {
+    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => {
+      return _.cloneDeep(p).map(j => {
+        j.isSelected = selectAll;
+        return j;
+      });
+    });
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -131,54 +141,68 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Filter data of table By Filters
   public filterData(searchQuery: SearchDataSet[]) {
-    searchQuery.forEach((query) => {
-      this.searchResponseFiltered$ = this.searchResponse$.map((accounts) => {
-        return accounts.filter((account) => {
-          let amount;
-          amount = +query.amount;
-          switch (query.queryDiffer) {
-            case 'Greater':
-              if (amount === 0) {
+    this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+      return _.cloneDeep(p).map(j => {
+        j.isSelected = false;
+        return j;
+      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    });
+    searchQuery.forEach((query, indx) => {
+      if (indx === 0) {
+        this.searchAndFilter(query, this.searchResponse$);
+      } else {
+        this.searchAndFilter(query, this.searchResponseFiltered$);
+      }
+    });
+  }
+
+  public searchAndFilter(query, searchIn) {
+    this.searchResponseFiltered$ = searchIn.map((accounts) => {
+      return accounts.filter((account) => {
+        let amount;
+        amount = +query.amount;
+        switch (query.queryDiffer) {
+          case 'Greater':
+            if (amount === 0) {
+              return account[query.queryType] > amount;
+            } else {
+              if (query.queryType === 'openingBalance') {
+                return account.openingBalance > amount && account.openBalanceType === query.balType;
+              }
+              if (query.queryType === 'closingBalance') {
+                return account.closingBalance > amount && account.closeBalanceType === query.balType;
+              } else {
                 return account[query.queryType] > amount;
-              } else {
-                if (query.queryType === 'openingBalance') {
-                  return account.openingBalance > amount && account.openBalanceType === query.balType;
-                }
-                if (query.queryType === 'closingBalance') {
-                  return account.closingBalance > amount && account.closeBalanceType === query.balType;
-                } else {
-                  return account[query.queryType] > amount;
-                }
               }
-            case 'Less':
-              if (amount === 0) {
+            }
+          case 'Less':
+            if (amount === 0) {
+              return account[query.queryType] < amount;
+            } else {
+              if (query.queryType === 'openingBalance') {
+                return account.openingBalance < amount && account.openBalanceType === query.balType;
+              }
+              if (query.queryType === 'closingBalance') {
+                return account.closingBalance < amount && account.closeBalanceType === query.balType;
+              } else {
                 return account[query.queryType] < amount;
-              } else {
-                if (query.queryType === 'openingBalance') {
-                  return account.openingBalance < amount && account.openBalanceType === query.balType;
-                }
-                if (query.queryType === 'closingBalance') {
-                  return account.closingBalance < amount && account.closeBalanceType === query.balType;
-                } else {
-                  return account[query.queryType] < amount;
-                }
               }
-            case 'Equals':
-              if (amount === 0) {
+            }
+          case 'Equals':
+            if (amount === 0) {
+              return account[query.queryType] === amount;
+            } else {
+              if (query.queryType === 'openingBalance') {
+                return account.openingBalance === amount && account.openBalanceType === query.balType;
+              }
+              if (query.queryType === 'closingBalance') {
+                return account.closingBalance === amount && account.closeBalanceType === query.balType;
+              } else {
                 return account[query.queryType] === amount;
-              } else {
-                if (query.queryType === 'openingBalance') {
-                  return account.openingBalance === amount && account.openBalanceType === query.balType;
-                }
-                if (query.queryType === 'closingBalance') {
-                  return account.closingBalance === amount && account.closeBalanceType === query.balType;
-                } else {
-                  return account[query.queryType] === amount;
-                }
               }
-            default:
-          }
-        });
+            }
+          default:
+        }
       });
     });
   }

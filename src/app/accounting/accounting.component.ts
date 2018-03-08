@@ -8,10 +8,11 @@ import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { AccountResponse } from '../models/api-models/Account';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
-    keyCode: 'F7',
+    keyCode: 118, // 'F7',
     inputForFn: {
       page: 'Journal',
       uniqueName: 'purchases',
@@ -19,7 +20,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F9',
+    keyCode: 120, // 'F9',
     inputForFn: {
       page: 'Purchase',
       uniqueName: 'purchases',
@@ -27,7 +28,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F8',
+    keyCode: 119, // 'F8',
     inputForFn: {
       page: 'Sales',
       uniqueName: 'purchases',
@@ -35,7 +36,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F9',
+    keyCode: 120, // 'F9',
     altKey: true,
     inputForFn: {
       page: 'Debit note',
@@ -44,7 +45,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F8',
+    keyCode: 119, // 'F8',
     altKey: true,
     inputForFn: {
       page: 'Credit note',
@@ -53,7 +54,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F5',
+    keyCode: 116, // 'F5',
     inputForFn: {
       page: 'Payment',
       uniqueName: 'purchases',
@@ -61,7 +62,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F6',
+    keyCode: 117, // 'F6',
     inputForFn: {
       page: 'Receipt',
       uniqueName: 'null',
@@ -69,7 +70,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     }
   },
   {
-    keyCode: 'F4',
+    keyCode: 115, // 'F4',
     inputForFn: {
       page: 'Contra',
       uniqueName: 'purchases',
@@ -91,6 +92,7 @@ export class AccountingComponent implements OnInit {
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
   public openDatePicker: boolean = false;
+  public openCreateAccountPopup: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -108,41 +110,51 @@ export class AccountingComponent implements OnInit {
       });
   }
 
+  @HostListener('document:keydown', ['$event'])
+  public beforeunloadHandler(event: KeyboardEvent) {
+    return (event.which || event.keyCode) !== 116;
+  }
+
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    // Handling Alt + v
-    if (event.altKey && event.code === 'KeyV') {
+    console.log('event is :', event);
+    event.preventDefault();
+    // Handling Alt + V and Alt + I
+    if (event.altKey && event.which === 86) { // Alt + V
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
-        if (selectedPage.gridType === 'voucher') {
+        this._tallyModuleService.setVoucher({
+          page: selectedPage.page,
+          uniqueName: selectedPage.uniqueName,
+          gridType: 'voucher'
+        });
+      } else {
+        return;
+      }
+    } else if (event.altKey && event.which === 73) { // Alt + I
+      const selectedPage = this._tallyModuleService.selectedPageInfo.value;
+      if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
           this._tallyModuleService.setVoucher({
             page: selectedPage.page,
             uniqueName: selectedPage.uniqueName,
             gridType: 'invoice'
           });
-        } else {
-          this._tallyModuleService.setVoucher({
-            page: selectedPage.page,
-            uniqueName: selectedPage.uniqueName,
-            gridType: 'voucher'
-          });
-        }
       } else {
         return;
       }
+    } else if (event.altKey && event.which === 67) { // Alt + C
+      this.openCreateAccountPopup = !this.openCreateAccountPopup;
     } else {
       let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
         if (event.altKey) {
-          return page.keyCode === event.code && page.altKey;
+          return page.keyCode === event.which && page.altKey;
         } else {
-          return page.keyCode === event.code;
+          return page.keyCode === event.which;
         }
       });
       if (selectedPageIndx > -1) {
-        // this._router.navigate([]);
         this._tallyModuleService.setVoucher(PAGE_SHORTCUT_MAPPING[selectedPageIndx].inputForFn);
-        // this._keyboardService.setKey(event);
-      } else if (event.code === 'F2') {
+      } else if (event.which === 113) { // F2
         this.openDatePicker = !this.openDatePicker;
       }
     }
@@ -181,5 +193,4 @@ export class AccountingComponent implements OnInit {
   public setStock(stockObj) {
     //
   }
-
 }
