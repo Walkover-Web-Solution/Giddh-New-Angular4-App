@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { CreateInvoiceComponent } from './components/invoice/invoice.component';
 import { CreateRoutingModule } from './create.routing.module';
@@ -14,6 +13,8 @@ import { CreateInvoiceStepsComponent } from './components/nav/create.steps.compo
 import { ContenteditableDirective } from 'ng-contenteditable';
 import { CreateHttpService } from './create-http-service';
 import { CollapseModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { LaddaModule } from 'angular2-ladda';
+import { SampleTemplateComponent } from './components/invoice/templates/sample/sample.template.component';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { CollapseModule, BsDatepickerModule } from 'ngx-bootstrap';
     CreateInvoiceStepsComponent,
     CreateInvoiceHeaderComponent,
     LetterTemplateComponent,
-    ContenteditableDirective
+    ContenteditableDirective,
+    SampleTemplateComponent
   ],
   entryComponents: [
     LetterTemplateComponent
