@@ -2,6 +2,10 @@
     max-width: 300px;
 }
 
+.mx-350 {
+    max-width: 350px;
+}
+
 .appearance_none:focus {
     background: #ccc !important;
 }
@@ -28,4 +32,8 @@
 
 .mx-300 label {
     width: 130px;
+}
+
+.mx-350 label {
+    width: 160px;
 }

@@ -154,6 +154,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.daybookExportRequestType = 'post';
         this.exportDaybookModal.show();
       }
+    } else {
+      this.advanceSearchModel.hide();
     }
   }
 
