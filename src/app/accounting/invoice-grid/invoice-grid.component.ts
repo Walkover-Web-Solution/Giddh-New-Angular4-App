@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ComponentFactoryResolver } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -23,6 +23,10 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SalesActions } from 'app/actions/sales/sales.action';
+import { AccountResponse } from '../../models/api-models/Account';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -42,11 +46,20 @@ const CustomShortcode = [
 export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input() public openDatePicker: boolean;
+  @Input() public openCreateAccountPopup: boolean;
+  @Input() public newSelectedAccount: AccountResponse;
+  @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
+  @Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
+
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
+  @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
-  public showAccountList: boolean = true;
+  // public showAccountList: boolean = true;
   public TransactionType: 'by' | 'to' = 'by';
   public data: any = new BlankLedgerVM();
   public totalCreditAmount: number = 0;
@@ -58,14 +71,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedRowIdx: any;
   public isSelectedRow: boolean;
   public selectedInput: any;
-  public showFromDatePicker: boolean = false;
   public entryDate: any;
   public navigateURL: any = CustomShortcode;
   public showInvoiceDate: boolean = false;
   // public purchaseType: string = 'invoice';
-  public groupUniqueName: string;
+  public groupUniqueName: string = 'purchases';
   public filterByGrp: boolean = false;
-  public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  // public showStockList: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public selectedAcc: object;
   public accountType: string;
   public accountsTransaction = [];
@@ -78,6 +90,19 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public arrowInput: { key: number };
   public gridType: string = 'invoice';
   public isPartyACFocused: boolean = false;
+  public displayDay: string = '';
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+
+  public keyUpDownEvent: KeyboardEvent;
+  public filterByText: string = '';
+  public inputForList: IOption[];
+  public flattenAccounts: IOption[];
+  public stockList: IOption[];
+  public showLedgerAccountList: boolean = false;
+  public selectedField: 'account' | 'stock' | 'partyAcc';
+  public currentSelectedValue: string = '';
+  public invoiceNoHeading: string = 'Supplier Invoice No';
+  public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -91,6 +116,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _router: Router,
     private _salesActions: SalesActions,
     private _tallyModuleService: TallyModuleService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     // this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
@@ -110,6 +136,19 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (d && d.gridType === 'invoice') {
         this.data.voucherType = d.page;
         this.gridType = d.gridType;
+        setTimeout(() => {
+          this.dateField.nativeElement.focus();
+        }, 50);
+        if (d.page === 'Debit note' || d.page === 'Credit note') {
+          this.invoiceNoHeading = 'Original invoice number';
+        } else {
+          this.invoiceNoHeading = 'Supplier Invoice No';
+        }
+        if (d.page === 'Sales') {
+          this.isSalesInvoiceSelected = true;
+        } else {
+          this.isSalesInvoiceSelected = false;
+        }
       } else if (d && this.data.transactions) {
         this.gridType = d.gridType;
         this.data.transactions = this.prepareDataForVoucher();
@@ -142,16 +181,40 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.refreshEntry();
+        this.data.description = '';
+        this.dateField.nativeElement.focus();
       }
     });
+    this.entryDate = moment().format(GIDDH_DATE_FORMAT);
     // this.refreshEntry();
     // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
+
+    this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+      if (accounts) {
+        let accList: IOption[] = [];
+        accounts.forEach((acc: IFlattenAccountsResultItem) => {
+          accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+        });
+        this.flattenAccounts = accList;
+        this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
 
   }
 
   public ngOnChanges(c: SimpleChanges) {
     if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
-      this.showFromDatePicker = c.openDatePicker.currentValue;
+      this.dateField.nativeElement.focus();
+    }
+    if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
+      this.setAccount(c.newSelectedAccount.currentValue);
+    }
+    if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
+      if (c.openCreateAccountPopup.currentValue) {
+        this.showQuickAccountModal();
+      } else {
+        this.hideQuickAccountModal();
+      }
     }
   }
 
@@ -225,10 +288,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * getFlattenGrpAccounts
    */
   public getFlattenGrpAccounts(groupUniqueName, filter) {
-    this.showAccountList = true;
-    this.groupUniqueName = groupUniqueName;
+    // this.showAccountList.emit(true);
+    this.groupUniqueName = groupUniqueName ? groupUniqueName : this.groupUniqueName;
     this.filterByGrp = filter;
-    this.showStockList.next(false);
+    this.showStockList.emit(false);
   }
 
   /**
@@ -245,9 +308,35 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public onStockItemBlur(ev, elem) {
     this.selectedInput = elem;
+    this.showLedgerAccountList = false;
     // if (!this.stockSearch) {
     //   this.searchStock('');
     //   this.stockSearch = '';
+    // }
+  }
+
+  public onAccountFocus(indx: number) {
+    this.showConfirmationBox = false;
+    // this.selectedField = 'account';
+    this.selectedAccIdx = indx;
+    // this.showLedgerAccountList = true;
+
+    this.inputForList = _.cloneDeep(this.flattenAccounts);
+    this.selectedField = 'account';
+    // this.selectedParticular = elem;
+    // this.selectRow(true, indx);
+    // this.filterAccount(trxnType);
+    setTimeout(() => {
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onAccountBlur(ele) {
+    this.selectedInput = ele;
+    this.showLedgerAccountList = false;
+    // if (ev.target.value === 0) {
+    //   ev.target.focus();
+    //   ev.preventDefault();
     // }
   }
 
@@ -256,52 +345,54 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public setAccount(acc) {
     let idx = this.selectedAccIdx;
+    if (acc) {
+      if (this.accountType === 'creditor') {
+        setTimeout(() => {
+          this.creditorAcc = acc;
+        }, 200);
+        return this.accountType = null;
+      } else if (this.accountType === 'debitor') {
+        this.debtorAcc = acc;
+      }
 
-    if (this.accountType === 'creditor') {
-      this.creditorAcc = acc;
-      return this.accountType = null;
-    } else if (this.accountType === 'debitor') {
-      this.debtorAcc = acc;
+      if (this.selectedAccIdx > -1) {
+        let accModel = {
+          name: acc.name,
+          UniqueName: acc.uniqueName,
+          groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+          account: acc.name
+        };
+        this.accountsTransaction[idx].particular = accModel.UniqueName;
+        this.accountsTransaction[idx].selectedAccount = accModel;
+        this.accountsTransaction[idx].stocks = acc.stocks;
+      }
+
+      setTimeout(() => {
+        // this.selectedInput.focus();
+        this.showAccountList.emit(false);
+      }, 50);
+    } else {
+      this.accountsTransaction.splice(idx, 1);
+      if (!idx) {
+        this.addNewRow('account');
+      }
     }
-
-    if (this.selectedAccIdx > -1) {
-      let accModel = {
-        name: acc.name,
-        UniqueName: acc.uniqueName,
-        groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
-        account: acc.name
-      };
-      this.accountsTransaction[idx].particular = accModel.UniqueName;
-      this.accountsTransaction[idx].selectedAccount = accModel;
-      this.accountsTransaction[idx].stocks = acc.stocks;
-    }
-
-    setTimeout(() => {
-      this.selectedInput.focus();
-      this.showAccountList = false;
-    }, 50);
-
-    // if (acc && acc.stocks) {
-    //   this.groupUniqueName = accModel.groupUniqueName;
-    //   this.selectAccUnqName = acc.uniqueName;
-    //   if (!this.requestObj.transactions[idx].inventory.length) {
-    //     this.requestObj.transactions[idx].inventory.push(this.initInventory());
-    //   }
-    // }
   }
 
   /**
    * searchAccount in accountList
    */
   public searchAccount(str) {
-    this.accountSearch = str;
+    this.filterByText = str;
+    // this.accountSearch = str;
   }
 
   /**
    * searchStock
    */
   public searchStock(str) {
-    this.stockSearch = str;
+    // this.stockSearch = str;
+    this.filterByText = str;
   }
 
   /**
@@ -342,17 +433,18 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.stocksTransaction = [];
     this.accountsTransaction = [];
     this.showConfirmationBox = false;
-    this.showAccountList = false;
+    this.showAccountList.emit(false);
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
     this.addNewRow('stock');
     this.addNewRow('account');
     this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
-    this.entryDate = moment();
+    this.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.creditorAcc = {};
     this.debtorAcc = {};
     this.stockTotal = null;
     this.accountsTotal = null;
+    this.data.description = '';
   }
 
   /**
@@ -368,14 +460,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
-
-  /**
-   * setDate
-   */
-  public setDate(date) {
-    this.showFromDatePicker = !this.showFromDatePicker;
-    this.data.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
   }
 
   /**
@@ -421,13 +505,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    let idx = this.selectedRowIdx;
-    let entryItem = _.cloneDeep(item);
-    this.prepareEntry(entryItem, idx);
-    setTimeout(() => {
-      this.selectedInput.focus();
-      this.showStockList.next(false);
-    }, 50);
+    if (item) {
+      let idx = this.selectedRowIdx;
+      let entryItem = _.cloneDeep(item);
+      this.prepareEntry(entryItem, idx);
+      setTimeout(() => {
+        // this.selectedInput.focus();
+        this.showStockList.emit(false);
+      }, 50);
+    } else {
+      this.stocksTransaction.splice(this.selectedRowIdx);
+      if (!this.selectedRowIdx) {
+        this.addNewRow('stock');
+      }
+    }
   }
 
   /**
@@ -518,8 +609,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public changeStock(idx, val) {
     let i = this.selectedRowIdx;
     if (!val) {
-      this.stocksTransaction[i].inventory.splice(idx, 1);
-      this.showStockList.next(false);
+      if (this.stocksTransaction[i].inventory && this.stocksTransaction[i].inventory.length) {
+        this.stocksTransaction[i].inventory.splice(idx, 1);
+      }
+      // this.showStockList.emit(false);
       // if (!this.data.transactions.length) {
       //   this.addNewRow('stock');
       // }
@@ -609,10 +702,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    return transactions;
   }
 
+  // public detectKey(ev) {
+  //   if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+  //    this.arrowInput = { key: ev.keyCode };
+  //   }
+  // }
+
   public detectKey(ev) {
-    if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-     this.arrowInput = { key: ev.keyCode };
-    }
+    this.keyUpDownEvent = ev;
+    // if (ev.keyCode === 27) {
+    //  this.deleteRow(this.selectedRowIdx);
+    // }
+    // if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+    //  this.arrowInput = { key: ev.keyCode };
+    // }
   }
 
    /**
@@ -620,9 +723,152 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   */
  public hideListItems() {
    if (!this.isPartyACFocused) {
-    this.showStockList.next(false);
-    this.showAccountList = false;
+    this.showStockList.emit(false);
+    this.showAccountList.emit(false);
    }
  }
 
+  public dateEntered() {
+    const date = moment(this.entryDate, 'DD-MM-YYYY');
+    if (moment(date).format('dddd') !== 'Invalid date') {
+      this.displayDay =  moment(date).format('dddd');
+    } else {
+      this.displayDay = '';
+    }
+  }
+
+  public onStockFocus(indx: number) {
+    this.showConfirmationBox = false;
+    this.selectRow(true, indx);
+    this.selectedField = 'stock';
+    this.getFlattenGrpofAccounts(this.groupUniqueName);
+  }
+
+  /**
+   * getFlattenGrpofAccounts
+   */
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
+    const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
+    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.sortStockItems(data.body.results);
+      } else {
+        // this.noResult = true;
+      }
+    });
+  }
+
+  /**
+   * sortStockItems
+   */
+  public sortStockItems(ItemArr) {
+    let stockAccountArr: IOption[] = [];
+    _.forEach(ItemArr, (obj: any) => {
+      if (obj.stocks) {
+        _.forEach(obj.stocks, (stock: any) => {
+          stock.accountStockDetails.name = obj.name;
+          stockAccountArr.push({
+            label: `${stock.name} (${stock.uniqueName})`,
+            value: stock.uniqueName,
+            additional: stock
+          });
+        });
+      }
+    });
+    // console.log(stockAccountArr, 'stocks');
+    this.stockList = stockAccountArr;
+    this.inputForList = _.cloneDeep(this.stockList);
+    setTimeout(() => {
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onItemSelected(ev: IOption) {
+    if (this.selectedField === 'account') {
+      this.setAccount(ev.additional);
+    } else if (this.selectedField === 'stock') {
+      this.onSelectStock(ev.additional);
+    } else if (this.selectedField === 'partyAcc') {
+      this.setAccount(ev.additional);
+    }
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+  }
+
+  public loadQuickAccountComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.hideQuickAccountModal();
+      componentInstance.newAccountForm.reset();
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
+    });
+    componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+      if (status) {
+        this.refreshAccountListData();
+      }
+    });
+  }
+
+  public showQuickAccountModal() {
+    this.loadQuickAccountComponent();
+    this.quickAccountModal.show();
+  }
+
+  public hideQuickAccountModal() {
+    this.quickAccountModal.hide();
+  }
+
+  public onPartyAccFocus() {
+    this.showConfirmationBox = false;
+    this.getFlattenGrpAccounts(null, false);
+    this.accountType = 'creditor';
+    this.isPartyACFocused = true;
+    this.selectedField = 'partyAcc';
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = true;
+    }, 200);
+  }
+
+  public onPartyAccBlur() {
+    // this.showAccountList.emit(false);
+    // selectedInput=creditor;
+    // isPartyACFocused = false;
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+  }
+
+  private deleteRow(idx: number) {
+    this.stocksTransaction.splice(idx, 1);
+    if (!idx) {
+      this.addNewRow('stock');
+    }
+  }
+
+  private addNewAccount(val, lastIdx) {
+    if (val && lastIdx) {
+      this.addNewRow('account');
+    }
+  }
+
+  private refreshAccountListData() {
+    this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+      if (a && a !== '') {
+        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this._tallyModuleService.setFlattenAccounts(data.body.results);
+        }
+      });
+      }
+    });
+  }
 }
