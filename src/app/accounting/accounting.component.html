@@ -1,2 +1,7 @@
-<account-as-voucher [openDatePicker]="openDatePicker" [hidden]="gridType !== 'voucher'"></account-as-voucher>
-<account-as-invoice [openDatePicker]="openDatePicker" [hidden]="gridType !== 'invoice'"></account-as-invoice>
+<account-as-voucher [openDatePicker]="openDatePicker" [openCreateAccountPopup]="openCreateAccountPopup" [hidden]="gridType !== 'voucher'"></account-as-voucher>
+
+<account-as-invoice [openDatePicker]="openDatePicker" [openCreateAccountPopup]="openCreateAccountPopup" [hidden]="gridType !== 'invoice'"></account-as-invoice>
+
+<div class="sidebar_menu col-xs-2 pd0">
+    <accounting-sidebar></accounting-sidebar>
+</div>
