@@ -51,16 +51,18 @@
                                     </td>
                                 </tr>
                                 <tr *ngFor="let item of page.permissions | mySortBy : ['code']; let i = index">
-                                    <td>
-                                        <input id="{{item.code}}+{{idx}}+{{i}}" [disabled]="newRole.isFixed" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}_{{i}}" [(ngModel)]="item.isSelected" />
-                                        <label for="{{item.code}}+{{idx}}+{{i}}"> {{getNameByCode(item.code)}}</label>
-                                    </td>
-                                    <td class="text-center">
-                                        <i class="fa" [ngClass]="isHavePermission(page.name, item, 'admin') ? 'fa-check' : 'fa-times'" aria-hidden="true"></i>
-                                    </td>
-                                    <td class="text-center">
-                                        <i class="fa" [ngClass]="isHavePermission(page.name, item, 'view') ? 'fa-check' : 'fa-times'" aria-hidden="true"></i>
-                                    </td>
+                                    <ng-container *ngIf="item.code !== 'SHR'">
+                                        <td>
+                                            <input id="{{item.code}}+{{idx}}+{{i}}" [disabled]="newRole.isFixed" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}_{{i}}" [(ngModel)]="item.isSelected" />
+                                            <label for="{{item.code}}+{{idx}}+{{i}}"> {{getNameByCode(item.code)}}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <i class="fa" [ngClass]="isHavePermission(page.name, item, 'admin') ? 'fa-check' : 'fa-times'" aria-hidden="true"></i>
+                                        </td>
+                                        <td class="text-center">
+                                            <i class="fa" [ngClass]="isHavePermission(page.name, item, 'view') ? 'fa-check' : 'fa-times'" aria-hidden="true"></i>
+                                        </td>
+                                    </ng-container>
                                 </tr>
                             </tbody>
                         </table>
