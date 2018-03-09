@@ -364,9 +364,39 @@ h1 {
     margin-bottom: 40px;
 }
 
-.app_ico ul li {
-    display: inline;
+.app_ico,
+.download_app {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.app_ico ul h1 {
+    margin-top: 10px;
+}
+
+.app_ico ul li,
+.download_app ul li {
+    display: inline-block;
     list-style: none;
+    /* margin-right: 20px; */
+    border-radius: 2px;
+}
+
+.download_app ul li {
+    margin-right: 0;
+}
+
+.app_ico ul li a,
+.download_app ul li a {
+    display: inline-block;
+    height: 40px;
+    border: 1px solid;
+    min-width: 40px;
+    line-height: 40px;
+    color: #fff;
+    text-align: center;
+    position: relative;
 }
 
 @media only screen and (max-width: 768px) {
@@ -376,10 +406,10 @@ h1 {
     }
     .slide_content {
         display: none !important;
-        padding: 80px 20px;
+        padding: 110px 20px;
     }
     .login_box {
-        padding: 120px 20px;
+        padding: 80px 20px;
     }
     .on_mobile {
         display: block !important;
@@ -392,5 +422,28 @@ h1 {
     }
     .social_login {
         display: block;
+    }
+    .logo {
+        left: 20px;
+        top: 20px;
+    }
+    .logo img {
+        max-width: 130px;
+    }
+    .download_app ul li a {
+        height: 50px;
+        line-height: 50px;
+        padding: 0 16px;
+        border-radius: 2px;
+        display: flex;
+    }
+    .download_app ul li a i {
+        border-right: 1px solid #fff;
+        padding-right: 16px;
+        font-size: 28px;
+        position: relative;
+        margin-right: 16px;
+        height: 49px;
+        line-height: 49px;
     }
 }

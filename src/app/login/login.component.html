@@ -1,5 +1,5 @@
 <div class="flex-container">
-    <a href="/" class="logo"></a>
+    <a href="/" class="logo"><img src="./assets/images/new/giddh-logo-white.png" /> </a>
     <!-- slide1 -->
     <div class="slide_content col-xs-7 slide1" [hidden]="selectedBanner !== 'slide1'">
         <div>
@@ -13,23 +13,27 @@
 
     <!-- slide2 -->
     <div class="slide_content col-xs-7 slide2" [hidden]="selectedBanner !== 'slide2'">
-        <div>
-            <img src="./assets/images/login/img2.png" class="img-responsive" />
+        <div class="mrB4">
+            <h1>Giddh handles your accounting seamlessly, wherever you are!</h1>
         </div>
         <div>
-            <h1>Giddh handles your accounting seamlessly, wherever you are!</h1>
+            <img src="./assets/images/login/img2.png" class="img-responsive" />
         </div>
 
         <div class="app_ico">
             <ul>
-                <li><a href=""><i class="fa fa-android"></i></a></li>
-                <li><a href=""><i class="fa fa-apple"></i></a></li>
+                <li class="mrR2"><a href="" target="_blank"><i class="fa fa-android"></i></a></li>
+                <li><a href="" target="_blank"><i class="fa fa-apple"></i></a></li>
+                <h1>Mobile App</h1>
             </ul>
             <ul>
-                <li><a href=""><i class="fa fa-windows"></i></a></li>
-                <li><a href=""><i class="">
+                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe" target="_blank"><i class="fa fa-windows"></i></a></li>
+                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank"><i class="">
                     <img src="./assets/images/new/ios.svg" />
-                </i></a></li>
+                    </i></a>
+                </li>
+                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz" target="_blank"><i class="fa fa-linux"></i></a></li>
+                <h1>Desktop App</h1>
             </ul>
         </div>
     </div>
@@ -71,6 +75,13 @@
     <div class="slide_content col-xs-12 on_mobile" [hidden]="true">
         <div>
             <h1>Giddh handles your accounting seamlessly, wherever you are! <span class="hash_tag">Download</span></h1>
+        </div>
+
+        <div class="download_app mrT4">
+            <ul>
+                <li><a href="" target="_blank"><i class="fa fa-android"></i> Download</a></li>
+                <li><a href="" target="_blank"><i class="fa fa-apple"></i>Download</a></li>
+            </ul>
         </div>
     </div>
 
