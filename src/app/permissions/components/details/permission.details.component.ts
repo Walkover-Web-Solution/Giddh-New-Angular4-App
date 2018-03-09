@@ -66,18 +66,39 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     // listener for add update role case
     this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
       if (result) {
-        // uncomment below to redirect
+        // un comment below code to redirect
         this.router.navigate(['/pages/permissions/list']);
       }
     });
 
     if (_.isEmpty(this.newRole)) {
       this.router.navigate(['/pages/permissions/list']);
-    }else if (this.newRole.isUpdateCase) {
-      this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), false, this.newRole.uniqueName, this.newRole.isUpdateCase);
+    } else if (this.newRole.isUpdateCase) {
+      const roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), false, this.newRole.uniqueName, this.newRole.isUpdateCase);
+      this.roleObj = this.handleShareSituation(roleObj);
     } else {
       this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), this.newRole.isFresh, this.checkForRoleUniqueName());
     }
+  }
+
+  public handleShareSituation(roleObj: NewRoleClass) {
+    let shareScopes = ['SHRALL', 'SHRLWR', 'SHRSM'];
+    roleObj.scopes.forEach((role) => {
+      if (role.name === 'SHARE') {
+        role.permissions = role.permissions.filter((p) => {
+          return shareScopes.indexOf(p.code) > -1;
+        });
+        if (role.permissions.length < 3) {
+          shareScopes.forEach((s: string) => {
+            let indexOfAbsentScope = role.permissions.findIndex((p) => p.code === s);
+            if (indexOfAbsentScope === -1) {
+              role.permissions.push(new NewPermissionObj(s, false));
+            }
+          });
+        }
+      }
+    });
+    return roleObj;
   }
 
   public addNewPage(page: string) {
@@ -100,7 +121,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     });
     if (idx !== -1) {
       return true;
-    }else {
+    } else {
       return false;
     }
   }
@@ -121,7 +142,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
     if (data.scopes.length < 1) {
-      return this._toaster.errorToast('Atleast 1 scope should selected.');
+      return this._toaster.errorToast('At least 1 scope should selected.');
     }
     this.store.dispatch(this.permissionActions.CreateRole(data));
   }
@@ -142,8 +163,8 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     if (this.newRole.isFresh) {
       // fresh role logic here
       return this.generateFreshUI();
-    }else {
-      // copy role scenerio
+    } else {
+      // copy role scenario
       return this.generateUIFromExistedRole();
     }
   }
@@ -206,7 +227,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
   public checkForRoleUniqueName(): string {
     if (this.newRole.isFresh) {
       return null;
-    }else {
+    } else {
       return this.newRole.uniqueName;
     }
   }
@@ -232,6 +253,15 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
       case 'VWDLT':
         result = 'view delete';
         break;
+      case 'SHRLWR':
+        result = 'Share Lower';
+        break;
+      case 'SHRALL':
+        result = 'Share All';
+        break;
+      case 'SHRSM':
+        result = 'Share Same';
+        break;
       default:
         result = '';
     }
@@ -242,7 +272,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     let page;
     if (type === 'admin') {
       page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
-    }else {
+    } else {
       page = _.find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
     }
     if (page) {
@@ -251,7 +281,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         return true;
       }
       return false;
-    }else {
+    } else {
       return false;
     }
   }
@@ -269,10 +299,10 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
       let idx = _.findIndex(res.permissions, (o: Permission) => o.isSelected === false);
       if (idx !== -1) {
         return res.selectAll = false;
-      }else {
+      } else {
         return res.selectAll = true;
       }
-    }else {
+    } else {
       return res.selectAll = false;
     }
   }
