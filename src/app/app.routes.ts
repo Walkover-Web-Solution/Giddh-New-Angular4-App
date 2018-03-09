@@ -13,6 +13,7 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
+  { path: 'create', loadChildren: './create/create.module#CreateModule'},
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   // { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
