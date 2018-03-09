@@ -9,12 +9,13 @@
     min-height: 100vh;
     background: #1a1a1a;
     width: 46px;
-    transition: width .3s ease;
+    transition: width .1s ease;
     padding: 7px 0;
     padding-bottom: 120px;
 }
 
-.left_fixed_header.open {
+.left_fixed_header.open,
+.left_fixed_header:hover {
     width: 210px;
 }
 
@@ -25,6 +26,12 @@
 .left_fixed_header li {
     overflow: hidden;
     position: relative;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .left_fixed_header li {
+        display: grid;
+    }
 }
 
 .left_fixed_header li a {
@@ -55,7 +62,7 @@
     cursor: pointer;
 }
 
-.left_fixed_header [class^="icon-"] {
+.left_fixed_header [class^="navico-"] {
     font-size: 20px;
     display: table-cell;
 }
@@ -65,4 +72,10 @@
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
+}
+
+:host ::ng-deep .tooltip {
+    white-space: nowrap;
+    width: auto !important;
+    max-width: inherit !important;
 }
