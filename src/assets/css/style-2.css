@@ -4443,6 +4443,9 @@ table td[class*=col-]:last-child {
     position: absolute;
     right: 15px;
 }
+.sh-form_control .form-control {
+    width: 100% !important;
+}
 
 .custom-tabs {
     background: #eee;
