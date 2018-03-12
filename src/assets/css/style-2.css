@@ -720,9 +720,10 @@ header {
     font-size: 14px;
 }
 
-.basic>tbody>tr>td {
+.basic>tbody>tr>td,
+.basic>thead>tr>th {
     font-weight: 400;
-    padding: 8px 11px;
+    padding: 8px 14px;
     text-transform: capitalize;
 }
 
@@ -4443,6 +4444,7 @@ table td[class*=col-]:last-child {
     position: absolute;
     right: 15px;
 }
+
 .sh-form_control .form-control {
     width: 100% !important;
 }
