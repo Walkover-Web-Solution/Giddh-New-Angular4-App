@@ -4,7 +4,7 @@
       <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeGroupName }} Group
       </button>
     </div>
-    <form class="form-inline mrB1" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
+    <form class="form-inline mrB2" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
         <div class="clearfix pr">
             <div class="form-group">
                 <label class="d-block">From - To</label>
@@ -41,7 +41,7 @@
         <table class="table basic">
             <thead>
                 <tr>
-                    <th rowspan="2" class="bdrR">Stock name</th>
+                    <th rowspan="2" colspan="2" class="bdrR">Stock name</th>
                     <th class="text-center bdrR bdrB" colspan="2">Opening stock</th>
                     <th class="text-center bdrR bdrB" colspan="2">Inwards</th>
                     <th class="text-center bdrR bdrB" colspan="2">Outwards</th>
@@ -72,17 +72,17 @@
                 </tr> -->
                 <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
                     <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
-                        <td>{{txn.stockName}}</td>
-                        <td>{{txn.openingBalance?.quantity}}</td>
-                        <td>{{txn.openingBalance?.amount}}</td>
-                        <td>{{txn.inwards?.quantity}}</td>
-                        <td>{{txn.inwards?.amount}}</td>
-                        <td>{{txn.outwards?.quantity}}</td>
-                        <td>{{txn.outwards?.amount}}</td>
-                        <td>{{txn.closingBalance?.quantity}}</td>
-                        <td>{{txn.closingBalance?.amount}}</td>
+                        <td class="bdrR" colspan="2">{{txn.stockName}}</td>
+                        <td>{{txn.openingBalance?.quantity}} {{txn.openingBalance?.stockUnit}}</td>
+                        <td class="text-right bdrR">{{txn.openingBalance?.amount}}</td>
+                        <td>{{txn.inwards?.quantity}} {{txn.inwards?.stockUnit}}</td>
+                        <td class="text-right bdrR">{{txn.inwards?.amount}}</td>
+                        <td>{{txn.outwards?.quantity}} {{txn.outwards?.stockUnit}}</td>
+                        <td class="text-right bdrR">{{txn.outwards?.amount}}</td>
+                        <td>{{txn.closingBalance?.quantity}} {{txn.closingBalance?.stockUnit}}</td>
+                        <td class="text-right">{{txn.closingBalance?.amount}}</td>
                     </ng-container>
-                    
+
                     <!--td>{{txn.account?.name}}</td>
                     <td class="text-right">
                         <span *ngIf="txn.type == 'dr'">
