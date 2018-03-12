@@ -89,6 +89,60 @@
     <div class="login_box flex col-md-5 col-xs-12">
         <div class="">
             <h1 class="mrB3">Login to your secure accounting space</h1>
+            <div class="form_wrapper" *ngIf="loginUsing">
+
+                <!-- login with email form -->
+                <form class="" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm" *ngIf="loginUsing === 'email'">
+                    <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
+
+                        <input class="form-control mrB1" formControlName="email" type="email" placeholder="Email address" required>
+                        <button [disabled]="!emailVerifyForm.controls['email'].valid" [ladda]="isLoginWithEmailInProcess$ | async" class="btn btn-success btn-block btn-lg" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
+              </button>
+
+                    </div>
+                    <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
+                        <input class="form-control mrB1" formControlName="token" type="text" placeholder="Enter verification code here" required>
+                        <div class="clearfix mrB2">
+                            <button [disabled]="!emailVerifyForm.controls['token'].valid" class="btn btn-success btn-block btn-lg" [ladda]="isVerifyEmailInProcess$ | async" (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">Verify Email</button>
+                            <a class="btn btn-link cp pull-right" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend code</a>
+                        </div>
+
+                        <!-- <div class="clearfix">
+                            <small class="">We have sent a verification code to your registered email.</small>
+                        </div> -->
+                    </div>
+                </form>
+                <!-- form end/ -->
+
+                <!-- login with mobile form -->
+                <form class="" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm" *ngIf="loginUsing === 'mobile'">
+                    <div class="clearfix form-group" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                        <sh-select [options]="countryCodeList" class="pull-left mrR1" (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country" style="width: 80px;"></sh-select>
+                        <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Mobile No" required style="width: calc(100% - 90px);" />
+                        <button class="btn btn-success btn-lg btn-block mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)" [ladda]="isLoginWithMobileInProcess$ | async" [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ | async) ? 'Get OTP' : 'Resend' }}</button>
+                    </div>
+                    <div class="clearfix form-group" *ngIf="(isLoginWithMobileSubmited$ | async)">
+                        <input class="form-control" placeholder="Enter OTP" formControlName="otp">
+                        <button type="login" class="btn btn-block btn-success btn-lg mrT1" [ladda]="isVerifyMobileInProcess$ | async" (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)" [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
+              </button>
+                    </div>
+                </form>
+                <!-- form end/ -->
+
+                <!-- login with userName form -->
+                <form class="" id="verifyUsernameForm" name="verifyUsernameForm" novalidate *ngIf="loginUsing === 'userName'">
+                    <div class="clearfix form-group">
+                        <input class="form-control mrB1" type="text" placeholder="Username" required />
+                        <input class="form-control" type="text" placeholder="Password" required />
+                        <button class="btn btn-success btn-lg btn-block mrT1">Login</button>
+                    </div>
+                </form>
+                <!-- form end/ -->
+
+            </div>
+
+
+
             <ul class="social_login">
                 <li class="google_ico"><a href="javascript:void(0);" (click)="signInWithProviders('google')"><i class="ico-google">
                     <img src="./assets/images/new/google_ico.svg" />
@@ -97,7 +151,7 @@
 
             </ul>
             <div class="login_option">
-                Login with Username, <a href="javascript:void(0);" (click)="showEmailModal()">Email</a> or <a href="javascript:void(0);" (click)="showMobileModal()">Mobile</a>
+                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> or <a href="javascript:void(0);" (click)="loginUsing = 'mobile'">Mobile</a>
             </div>
         </div>
     </div>
