@@ -6,15 +6,10 @@ import { CreateInvoiceTemplateComponent } from './components/invoice/templates/t
 @NgModule({
   imports: [
     RouterModule.forChild([
-      {
-        path: '',
-        children: [
-          { path: '', redirectTo: 'invoice', pathMatch: 'full' },
-          { path: 'invoice', component: CreateInvoiceComponent },
-          { path: 'invoice/:templateId', component: CreateInvoiceTemplateComponent },
-          { path: '**', redirectTo: 'invoice', pathMatch: 'full' }
-        ]
-      }
+      { path: '', redirectTo: 'invoice', pathMatch: 'full' },
+      { path: 'invoice', component: CreateInvoiceComponent },
+      { path: 'invoice/:templateId', component: CreateInvoiceTemplateComponent },
+      { path: '**', redirectTo: 'invoice', pathMatch: 'full' }
     ])
   ],
   exports: [RouterModule]
