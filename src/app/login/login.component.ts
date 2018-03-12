@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
   public selectedBanner: string = null;
+  public loginUsing: string = null;
   private imageURL: string;
   private email: string;
   private name: string;
