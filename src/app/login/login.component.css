@@ -207,6 +207,28 @@ button.close {
 
 /***********************SIGN IN REDESIGN ***********************/
 
+.form-control,
+ :host ::ng-deep .form-control {
+    height: 41px;
+    font-size: 16px;
+}
+
+:host ::ng-deep .clear {
+    top: 50% !important;
+    font-size: 22px !important;
+    right: 6px !important;
+}
+
+:host ::ng-deep .btn-success {
+    background: #ff5f00;
+    color: #fff;
+}
+
+:host ::ng-deep .btn-success:hover {
+    background: #2c2c43;
+    /* color: #ff5f00; */
+}
+
 strong {
     font-family: 'Roboto', sans-serif;
 }
@@ -249,12 +271,26 @@ h1 {
 
 .login_box {
     background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
-    padding: 20px;
+    padding: 20px 70px;
 }
 
 .login_box h1 {
     color: #0f0f27;
     font-weight: 500;
+}
+
+.form_wrapper {
+    display: flex;
+    margin-bottom: 40px;
+    flex-direction: column;
+}
+
+small {
+    color: #333;
+}
+
+.form_wrapper form {
+    width: 300px;
 }
 
 
@@ -445,5 +481,8 @@ h1 {
         margin-right: 16px;
         height: 49px;
         line-height: 49px;
+    }
+    .form_wrapper form {
+        margin: 0 auto;
     }
 }
