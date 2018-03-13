@@ -103,10 +103,12 @@ export interface ITransactionItem {
   entryDate: string;
   entryUniqueName: string;
   inventory?: IInventory;
-  invoiceNumber: string;
+  // invoiceNumber: string;
+  voucherNumber: string;
   isBaseAccount: boolean;
   isCompoundEntry: boolean;
-  isInvoiceGenerated: boolean;
+  // isInvoiceGenerated: boolean;
+  voucherGenerated: boolean;
   isTax: boolean;
   particular: INameUniqueName;
   type: string;

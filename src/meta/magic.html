@@ -158,15 +158,15 @@
                                 <tr class="text-left bdrB" v-if="txn.type === 'DEBIT'">
                                   <td class="col-xs-3">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
-                                  <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.invoiceGenerated}" align="right">
+                                  <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.voucherGenerated}" align="right">
                                     {{txn.amount}}
-                                    <template v-if="ledger.invoiceGenerated && ledger.invoiceNumber">
-                                      <span class="download-invoice-ledger" v-on:click="downloadInvoice(ledger.invoiceNumber)" v-tooltip="'Download Invoice : '+ledger.invoiceNumber">
+                                    <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                      <span class="download-invoice-ledger" v-on:click="downloadInvoice(ledger.voucherNumber)" v-tooltip="'Download Invoice : '+ledger.voucherNumber">
                                         <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
                                       </span>
                                     </template>
-                                                            <template v-if="ledger.invoiceGenerated && ledger.purchaseInvoiceNumber">
-                                      <span class="download-invoice-ledger" v-on:click="downloadPurchaseInvoice(ledger.purchaseInvoiceNumber)" v-tooltip="'Download Invoice : '+ledger.purchaseInvoiceNumber">
+                                                            <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                      <span class="download-invoice-ledger" v-on:click="downloadPurchaseInvoice(ledger.voucherNumber)" v-tooltip="'Download Invoice : '+ledger.voucherNumber">
                                         <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
                                       </span>
                                     </template>
@@ -238,20 +238,20 @@
                                 <tr class="text-left bdrB" v-if="txn.type === 'CREDIT'">
                                   <td class="col-xs-3">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
-                                  <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.invoiceGenerated}" align="right">
+                                  <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.voucherGenerated}" align="right">
                                     {{txn.amount}}
-                                    <template v-if="ledger.invoiceGenerated && ledger.invoiceNumber">
-                                      <!-- tooltip="Download Invoice : {{ledger.invoiceNumber}}" -->
+                                    <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                      <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
                                       <!-- [placement]="'top'" -->
-                                      <span class="download-invoice-ledger" v-tooltip="'Download Invoice : '+ledger.invoiceNumber" v-on:click="downloadInvoice(ledger.invoiceNumber)"
+                                      <span class="download-invoice-ledger" v-tooltip="'Download Invoice : '+ledger.voucherNumber" v-on:click="downloadInvoice(ledger.voucherNumber)"
                                         container="body">
                                         <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
                                       </span>
                                     </template>
-                                                            <template v-if="ledger.invoiceGenerated && ledger.purchaseInvoiceNumber">
-                                      <!-- tooltip="Download Invoice : {{ledger.purchaseInvoiceNumber}}" -->
+                                                            <template v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                      <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
                                       <!-- [placement]="'top'" -->
-                                      <span class="download-invoice-ledger" v-tooltip="'Download Invoice : '+ledger.purchaseInvoiceNumber" v-on:click="downloadPurchaseInvoice(ledger.purchaseInvoiceNumber)"
+                                      <span class="download-invoice-ledger" v-tooltip="'Download Invoice : '+ledger.voucherNumber" v-on:click="downloadPurchaseInvoice(ledger.voucherNumber)"
                                         container="body">
                                         <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
                                       </span>

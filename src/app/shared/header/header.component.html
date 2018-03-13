@@ -93,12 +93,12 @@
                                 <span class="label">Search</span>
                             </a>
                         </li>
-                        <!-- <li class="dmLi" [hidden]="!userIsSuperUser" [tooltip]="'Permissions'" [placement]="'right'">
+                        <li class="dmLi" [hidden]="!userIsSuperUser" [tooltip]="'Permissions'" [placement]="'right'">
                             <a [routerLink]="['permissions']">
                                 <span class="navico-permission"></span>
                                 <span class="label">Permissions</span>
                             </a>
-                        </li> -->
+                        </li>
                         <li [checkPermission]="['MENU', 'SETTINGS']" [tooltip]="'Settings'" [placement]="'right'">
                             <a [routerLink]="['/pages/settings']">
                                 <span class="navico-setting"></span>
