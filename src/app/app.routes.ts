@@ -9,9 +9,11 @@ import { DummyComponent } from './dummy.component';
 import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
+import { CheckIfPublicPath } from './decorators/checkIfPublicPath';
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'create', loadChildren: './create/create.module#CreateModule'},
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
@@ -61,5 +63,5 @@ export const ROUTES: Routes = [
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' }
+  { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] }
 ];
