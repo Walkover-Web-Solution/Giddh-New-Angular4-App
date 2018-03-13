@@ -565,9 +565,10 @@ header .navbar {
     width: 100% !important;
 }
 
-header {
+
+/* header {
     border-bottom: 1px solid rgb(214, 214, 214);
-}
+} */
 
 .company-name {
     min-width: 380px;
