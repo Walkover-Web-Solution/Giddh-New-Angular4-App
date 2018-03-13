@@ -31,10 +31,11 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
       border: 0;
     }
   `],
+  // [routerLink]="[ 'add-group', grp.uniqueName ]"
   template: `
     <ul class="list-unstyled stock-grp-list">
       <li (click)="OpenGroup(grp,$event)" class="pdL" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups">
-        <div [routerLink]="[ 'add-group', grp.uniqueName ]" [ngClass]="{'active': (activeGroupUniqueName$ | async) === grp.uniqueName}">{{grp.name}}</div>
+        <div [routerLink]="[ 'group', grp.uniqueName, 'stock-report' ]" [ngClass]="{'active': (activeGroupUniqueName$ | async) === grp.uniqueName}">{{grp.name}}</div>
         <i *ngIf="grp.childStockGroups.length > 0" [routerLink]="[ 'add-group', grp.uniqueName ]" class="icon-arrow-down" [ngClass]="{'open': grp.isOpen}"></i>
         <stock-list [Groups]='grp'>
         </stock-list>
