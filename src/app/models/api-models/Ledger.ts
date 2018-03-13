@@ -58,7 +58,8 @@ export class LedgerResponse {
   public entryDate: string;
   public generateInvoice: boolean;
   public invoiceGenerated: boolean;
-  public invoiceNumber: string;
+  // public invoiceNumber: string;
+  public voucherNumber: string;
   public invoiceNumberAgainstVoucher: string;
   public tag?: string;
   public taxes: string[];
