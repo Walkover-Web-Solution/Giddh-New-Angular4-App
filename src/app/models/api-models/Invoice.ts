@@ -8,7 +8,7 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass } from './Sales';
+import { OtherSalesItemClass, SalesEntryClass, GstDetailsClass } from './Sales';
 
 export interface IInvoiceResult {
   companyName: string;
@@ -477,4 +477,13 @@ export class Esignature {
   public SUrl: string = 'https://esign.giddh.com/Fu59xHxuPsQFWEy4zhwB/';
   public FUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
   public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
+}
+
+/**
+ * @request -> model request to generate invoice from outer route
+ * @response -> will get base 64 data
+ */
+
+export class CreateInvoiceClass {
+  public entries: SalesEntryClass[];
 }
