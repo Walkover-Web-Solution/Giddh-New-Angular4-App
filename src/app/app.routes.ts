@@ -13,7 +13,7 @@ import { CheckIfPublicPath } from './decorators/checkIfPublicPath';
 
 export const ROUTES: Routes = [
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
+  { path: '', pathMatch: 'full', redirectTo: 'login', canActivate: [CheckIfPublicPath]},
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'create', loadChildren: './create/create.module#CreateModule'},
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
