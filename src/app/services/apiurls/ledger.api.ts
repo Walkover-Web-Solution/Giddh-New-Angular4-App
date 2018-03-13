@@ -14,7 +14,8 @@ export const LEDGER_API = {
   DOWNLOAD_ATTACHMENT: 'company/:companyUniqueName/ledger/upload/:fileName', // post call
   UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
   MAGIC_LINK: 'company/:companyUniqueName/accounts/:accountUniqueName/magic-link?from=:from&to=:to',
-  EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
+  // EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
+  EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
   GET_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers?from=:from',
   // put call to map transaction
   MAP_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId',

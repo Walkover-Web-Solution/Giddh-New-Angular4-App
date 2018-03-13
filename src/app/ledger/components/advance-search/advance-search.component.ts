@@ -38,7 +38,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
   @Input() public accountUniqueName: string;
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
   public advanceSearchForm: FormGroup;
@@ -177,7 +177,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(true);
+    this.closeModelEvent.emit(null);
   }
 
   /**
@@ -194,13 +194,18 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
    * onSearch
    */
   public onSearch() {
+    const dataToSend = this.prepareRequest();
+    this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
+    this.closeModelEvent.emit(dataToSend);
+    // this.advanceSearchForm.reset();
+  }
+
+  public prepareRequest() {
     let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
     }
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
-    this.closeModelEvent.emit(true);
-    // this.advanceSearchForm.reset();
+    return dataToSend;
   }
 
   /**
