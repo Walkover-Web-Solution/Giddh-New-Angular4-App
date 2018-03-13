@@ -109,7 +109,7 @@
                                         </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span> -->
                                     <!-- </div> -->
-                                    <sh-select placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
+                                    <sh-select [forceClearReactive]="needForceClearProductList$ | async" placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
                                         [ItemHeight]="33"></sh-select>
                                 </td>
                                 <td>
@@ -124,7 +124,7 @@
                                 <!--<td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>-->
 
                                 <td class="action">
-                                    <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks)" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                    <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
 
@@ -170,7 +170,6 @@
                                 <td colspan="1">
                                     <div class="custom-select pos-rel">
                                         <select class="form-control cp">
-                                            <!--<option (value)="expense.baseAccount.uniqueName">{{ expense.baseAccount.uniqueName }}</option>-->
                                             <option (value)="expense.baseAccount.uniqueName">{{ getAccountName(expense.baseAccount.uniqueName, 'liabilityGroupAccounts') | async }}</option>
                                         </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
@@ -182,7 +181,6 @@
                                 <td>
                                     <div class="custom-select pos-rel">
                                         <select class="form-control cp">
-                                            <!--<option (value)="expense.transactions[0].account.uniqueName">{{ expense.transactions[0].account.uniqueName }}</option>-->
                                             <option (value)="expense.baseAccount.uniqueName">{{ getAccountName(expense.transactions[0].account.uniqueName, 'expenseGroupAccounts') | async }}</option>
                                         </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
@@ -196,19 +194,19 @@
 
                             <tr *ngIf="toggleAddExpenses">
                                 <td colspan="1">
-                                    <sh-select [forceClearReactive]="needForceClear$ | async" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'" [ItemHeight]="33"></sh-select>
+                                    <sh-select [forceClearReactive]="needForceClear$ | async" (selected)="addExpense(otherExpenses)" [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'" [ItemHeight]="33"></sh-select>
                                 </td>
                                 <td class="text-center">
                                     <label class="pd">to</label>
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
-                                        <sh-select [forceClearReactive]="needForceClear$ | async" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'" [ItemHeight]="33"></sh-select>
+                                        <sh-select [forceClearReactive]="needForceClear$ | async" (selected)="addExpense(otherExpenses)" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'" [ItemHeight]="33"></sh-select>
                                     </div>
                                 </td>
                                 <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
                                 <td class="text-right w100">
-                                    <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control text-right" #transactionAmount="ngModel"></div>
+                                    <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control text-right" #transactionAmount="ngModel"></div>
                                 </td>
                                 <td><button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button></td>
                             </tr>

@@ -15,8 +15,11 @@ export class ExportLedgerComponent implements OnInit {
   @Input() public accountUniqueName: string = '';
   @Input() public from: string = '';
   @Input() public to: string = '';
+  @Input() public advanceSearchRequest: any;
   @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
   public emailTypeSelected: string = '';
+  public exportAs: string = 'excel';
+  public order: string = 'asc';
   public emailTypeMini: string = '';
   public emailTypeDetail: string;
   public emailData: string = '';
@@ -39,10 +42,22 @@ export class ExportLedgerComponent implements OnInit {
     let exportRequest = new ExportLedgerRequest();
     exportRequest.from = this.from;
     exportRequest.to = this.to;
+    exportRequest.format =  this.exportAs;
+    exportRequest.sort = this.order;
     exportRequest.type = this.emailTypeSelected;
-    this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName).subscribe(a => {
-      let blob = base64ToBlob(a.body, 'application/vnd.ms-excel', 512);
-      return saveAs(blob, `${this.accountUniqueName}.xls`);
+    const body = _.cloneDeep(this.advanceSearchRequest);
+    this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body).subscribe(a => {
+      if (a.status === 'success') {
+        if (a.queryString.fileType === 'excel') {
+          let blob = base64ToBlob(a.body, 'application/vnd.ms-excel', 512);
+          return saveAs(blob, `${this.accountUniqueName}.xls`);
+        } else if (a.queryString.fileType === 'pdf') {
+          let blob = base64ToBlob(a.body, 'application/pdf', 512);
+          return saveAs(blob, `${this.accountUniqueName}.pdf`);
+        }
+      } else {
+        this._toaster.errorToast(a.message, a.code);
+      }
     });
   }
 

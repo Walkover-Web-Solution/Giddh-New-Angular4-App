@@ -69,6 +69,7 @@ export class LedgerResponse {
   public voucher: IVoucherItem = {name: '', shortCode: ''};
   public voucherNo: string;
   public voucherType?: string;
+  public voucherNumber?: string;
 }
 
 /*
@@ -204,6 +205,8 @@ export class ExportLedgerRequest {
   public from: string = '';
   public to: string = '';
   public type: string = '';
+  public format?: string = 'excel';
+  public sort?: string = 'asc';
 }
 
 /**
