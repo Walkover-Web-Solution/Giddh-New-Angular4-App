@@ -1,5 +1,5 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest, GroupStockReportResponse } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
@@ -28,6 +28,7 @@ export interface InventoryState {
   createGroupSuccess: boolean;
   createStockSuccess: boolean;
   stockReport?: StockReportResponse;
+  groupStockReport?: GroupStockReportResponse;
   isStockAddInProcess: boolean;
   isStockUpdateInProcess: boolean;
   isStockDeleteInProcess: boolean;
@@ -86,6 +87,7 @@ const initialState: InventoryState = {
   activeStock: null,
   activeStockUniqueName: '',
   stockReport: null,
+  groupStockReport: null,
   createCustomStockSuccess: false,
   showNewGroupAsidePane: false,
   showNewCustomUnitAsidePane: false
@@ -532,6 +534,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
      * */
     case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE:
       return Object.assign({}, state, { stockReport: action.payload });
+    case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE:
+      return Object.assign({}, state, { groupStockReport: action.payload });
     case InventoryActionsConst.NewGroupAsidePane:
       return Object.assign({}, state, { showNewGroupAsidePane: action.payload });
     case InventoryActionsConst.NewCustomUnitAsidePane:

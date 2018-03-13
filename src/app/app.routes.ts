@@ -9,9 +9,13 @@ import { DummyComponent } from './dummy.component';
 import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
+import { CheckIfPublicPath } from './decorators/checkIfPublicPath';
+import { ArpitComponent } from './Arpit.component';
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'create', loadChildren: './create/create.module#CreateModule'},
+  { path: '', pathMatch: 'full', redirectTo: 'login', canActivate: [CheckIfPublicPath]},
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   // { path: 'success', component: SuccessComponent },
@@ -60,5 +64,5 @@ export const ROUTES: Routes = [
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' }
+  { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] }
 ];

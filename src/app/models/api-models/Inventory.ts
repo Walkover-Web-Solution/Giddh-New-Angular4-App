@@ -116,6 +116,19 @@ export class StockReportRequest {
   public page: number = 1;
 }
 
+export class GroupStockReportRequest {
+  public stockGroupUniqueName: string;
+  public stockUniqueName: string;
+  public from: string = '';
+  public to: string = '';
+  public count: number = 10;
+  public page: number = 1;
+  public entity: string;
+  public value: string;
+  public condition: string;
+  public number: number;
+}
+
 /**
  * Model for stock-detail api response
  * GET call
@@ -184,3 +197,20 @@ export class StockUnitRequest implements IStockUnit {
  * uname stands for unique name of custom unit
  * its response will be string in body
  */
+
+export class GroupStockReportResponse {
+  public count: number;
+  public page: number;
+  public totalItems: number;
+  public totalPages: number;
+  public stockReport: IGroupStockReport[];
+}
+
+interface IGroupStockReport {
+  openingBalance?: any;
+  closingBalance?: any;
+  inwards?: any;
+  outwards?: any;
+  stockUniqueName: string;
+  stockName: string;
+}

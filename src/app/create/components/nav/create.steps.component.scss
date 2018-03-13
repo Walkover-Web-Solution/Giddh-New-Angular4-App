@@ -1,0 +1,19 @@
+.form-group {
+    .btn {
+        color: #1a1a1a;
+        padding: 8px 14px;
+        border-radius: 100%;
+        border: 1px solid #1a1a1a;
+        &.active {
+            background: #ff5f00 !important;
+            border-color: #ff5f00;
+            color: #fff;
+        }
+    }
+    .v_line {
+        background-color: #1a1a1a;
+        height: 1px;
+        width: 25px;
+        display: inline-block;
+    }
+}
