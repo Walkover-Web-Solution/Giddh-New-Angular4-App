@@ -1,4 +1,4 @@
-import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
+import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse, GroupStockReportRequest, GroupStockReportResponse } from '../models/api-models/Inventory';
 import { Injectable, Optional, Inject } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -340,6 +340,62 @@ export class InventoryService {
       }));
   }
 
+/**
+   * get GetGroupStocksReport
+   */
+  public GetGroupStocksReport(stockReportRequest: GroupStockReportRequest): Observable<BaseResponse<GroupStockReportResponse, GroupStockReportRequest>> {
+    console.log('stockReportRequest is :', stockReportRequest);
+    let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT;
+    if (stockReportRequest.entity) {
+      url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));
+    } else {
+      url = url.replace(':entity', '');
+    }
+    if (stockReportRequest.value) {
+      url = url.replace(':value', encodeURIComponent(stockReportRequest.value));
+    } else {
+      url = url.replace(':value', '');
+    }
+    if (stockReportRequest.condition) {
+      url = url.replace(':condition', encodeURIComponent(stockReportRequest.condition));
+    } else {
+      url = url.replace(':condition', '');
+    }
+    if (stockReportRequest.number) {
+      url = url.replace(':number', encodeURIComponent(stockReportRequest.number.toString()));
+    } else {
+      url = url.replace(':number', '');
+    }
+
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
+      .replace(':from', encodeURIComponent(stockReportRequest.from))
+      .replace(':to', encodeURIComponent(stockReportRequest.to))
+      .replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count.toString() : ''))
+      .replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page.toString() : ''))
+      .replace(':stock', encodeURIComponent(stockReportRequest.stockUniqueName)))
+      .map((res) => {
+        let data: BaseResponse<GroupStockReportResponse, GroupStockReportRequest> = res;
+        data.request = stockReportRequest;
+        data.queryString = {
+          stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+          from: stockReportRequest.from,
+          to: stockReportRequest.to,
+          count: stockReportRequest.count,
+          page: stockReportRequest.page
+        }
+          ;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<GroupStockReportResponse, GroupStockReportRequest>(e, stockReportRequest, {
+        stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+        from: stockReportRequest.from,
+        to: stockReportRequest.to,
+        count: stockReportRequest.count,
+        page: stockReportRequest.page
+      }));
+  }
   /**
    * get Stockdetails
    */

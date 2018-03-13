@@ -81,7 +81,7 @@ export class PermissionActions {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('New Role Created Successfully.');
-        // this._router.navigate(['/pages', 'permissions', 'list']);
+        return { type: PERMISSION_ACTIONS.GET_ROLES };
       }
       return { type: 'EmptyAction' };
     });
@@ -103,7 +103,7 @@ export class PermissionActions {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Role Updated Successfully.');
-        // this._router.navigate(['/pages', 'permissions', 'list']);
+        return { type: PERMISSION_ACTIONS.GET_ROLES };
       }
       return { type: 'EmptyAction' };
     });
