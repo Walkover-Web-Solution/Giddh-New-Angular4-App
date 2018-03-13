@@ -52,7 +52,6 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/
 import { Configuration } from 'app/app.constant';
 import { ServiceConfig } from 'app/services/service.config';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
-import { ArpitComponent } from './arpit.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -93,7 +92,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
-    ArpitComponent,
     AppComponent,
     PageComponent,
     NoContentComponent,
