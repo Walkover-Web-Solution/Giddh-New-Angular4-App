@@ -82,17 +82,12 @@ export class AuthenticationService {
     }).catch((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, LoginWithPassword>(e, modele));
   }
 
-  public VerifyNumber(model: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
-    // return this._http.post(this.config.apiUrl + LOGIN_API.VerifyNumber, modele).map((res) => {
-    //   let data: BaseResponse<string, SignupWithMobile> = res;
-    //   data.request = modele;
-    //   return data;
-    // }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, modele));
-    return this._http.get(this.config.apiUrl + LOGIN_API.LoginWithNumber.replace(':countryCode', String(model.countryCode)).replace(':mobileNumber', model.mobileNumber)).map((res) => {
+  public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
+    return this._http.post(this.config.apiUrl + LOGIN_API.VerifyNumber, modele).map((res) => {
       let data: BaseResponse<string, SignupWithMobile> = res;
-      data.request = model;
+      data.request = modele;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, modele));
   }
 
   public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string, VerifyMobileModel>> {
