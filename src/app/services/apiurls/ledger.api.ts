@@ -10,7 +10,8 @@ export const LEDGER_API = {
   MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format', // post call
   // get call
   RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
-  DOWNLOAD_INVOICE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
+  // DOWNLOAD_INVOICE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
+  DOWNLOAD_INVOICE: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=base64', // post call
   DOWNLOAD_ATTACHMENT: 'company/:companyUniqueName/ledger/upload/:fileName', // post call
   UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
   MAGIC_LINK: 'company/:companyUniqueName/accounts/:accountUniqueName/magic-link?from=:from&to=:to',
