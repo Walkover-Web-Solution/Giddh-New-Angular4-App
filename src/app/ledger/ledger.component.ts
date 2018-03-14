@@ -108,6 +108,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public eLedgType: string;
   public eDrBalAmnt: number;
   public eCrBalAmnt: number;
+  public advanceSearchRequest: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -809,7 +810,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   /**
    * closeAdvanceSearchPopup
    */
-  public closeAdvanceSearchPopup() {
+  public closeAdvanceSearchPopup(advanceSearchRequest: any) {
+    this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
     this.advanceSearchModel.hide();
     this.advanceSearchComp.ngOnDestroy();
   }
