@@ -23,6 +23,7 @@
     white-space: nowrap;
     display: table;
     width: 100%;
+    text-transform: capitalize;
 }
 
 .item:hover {
@@ -41,7 +42,7 @@
 }
 
 .item>a {
-    padding: 6px;
+    padding: 6px 10px;
 }
 
 .no-result-link>a {
@@ -53,5 +54,5 @@
 }
 
 :host ::ng-deep .total-padding {
-    height: 90vh !important;
+    height: calc(100vh - 52px) !important;
 }
