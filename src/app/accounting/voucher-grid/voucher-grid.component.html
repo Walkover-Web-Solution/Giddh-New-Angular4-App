@@ -3,9 +3,8 @@
         <div class="row">
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{requestObj.voucherType}}</span>
-                <div class="pull-right text-right" (clickOutside)="showFromDatePicker = false;">
-                    <input type="text" #dateField [textMask]="{mask: dateMask, guide: true}" name="journalDate" [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right appearance_none" />
-                    {{ displayDay }}
+                <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
+                    <input type="text" #dateField [textMask]="{mask: dateMask, guide: true}" name="entryDate" [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right" /> {{ displayDay }}
                 </div>
             </div>
             <!-- invoice num -->
@@ -21,9 +20,9 @@
                         <thead>
                             <tr>
                                 <th> &nbsp; </th>
-                                <th style="width:80%;">Particulars</th>
-                                <th class="text-right">Debit</th>
-                                <th class="text-right">Credit</th>
+                                <th>Particulars</th>
+                                <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">Debit</th>
+                                <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">Credit</th>
                             </tr>
                         </thead>
                         <br />
@@ -89,7 +88,7 @@
                     <div class="">
                         <h1>Accept?</h1>
                         <div class="pdT2">
-                            <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button> |
+                            <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button>
                             <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
                             <br />
                             <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
@@ -97,9 +96,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-3 total_box text-right pull-right">
-                    <span><strong>{{totalDebitAmount}}</strong></span>
-                    <span><strong>{{totalCreditAmount}}</strong></span>
+                <div class="total_box text-right pull-right">
+                    <span><strong>{{totalDebitAmount | number: '1.2-2' }}</strong></span>
+                    <span><strong>{{totalCreditAmount | number: '1.2-2' }}</strong></span>
                 </div>
             </div>
         </div>
@@ -109,7 +108,8 @@
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
-        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'" [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
+        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
+            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
     </div>
 
 </div>
