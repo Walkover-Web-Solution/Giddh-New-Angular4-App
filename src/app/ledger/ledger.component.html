@@ -311,14 +311,14 @@
               <td class="col-xs-7">
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
-              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
+              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.voucherGenerated }">
                 {{ txn.amount | number: '1.0-2' }}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                <span class="download-invoice-ledger" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber, $event)"
-                  container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
+                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, $event)"
+                  container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
               </td>
@@ -431,14 +431,14 @@
               <td class="col-xs-7">
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
-              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
+              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.voucherGenerated }">
                 {{txn.amount | number: '1.0-2'}}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                <span class="download-invoice-ledger" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber , $event)"
-                  container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
+                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber , $event)"
+                  container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
               </td>
@@ -638,7 +638,7 @@
 <div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <export-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+      <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
     </div>
   </div>
 </div>
@@ -666,7 +666,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <advance-search-model #advanceSearchComp [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
+      <advance-search-model #advanceSearchComp [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
     </div>
   </div>
 </div>
