@@ -69,6 +69,7 @@ export class LedgerResponse {
   public voucher: IVoucherItem = {name: '', shortCode: ''};
   public voucherNo: string;
   public voucherType?: string;
+  public voucherNumber?: string;
 }
 
 /*
