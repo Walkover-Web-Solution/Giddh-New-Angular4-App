@@ -1,7 +1,7 @@
 import { LoginActions } from '../actions/login.action';
 import { AppState } from '../store';
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
@@ -15,6 +15,7 @@ import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLogin
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'login',
@@ -42,6 +43,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isTwoWayAuthInSuccess$: Observable<boolean>;
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
+  public selectedBanner: string = null;
+  public loginUsing: string = null;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -53,7 +56,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
     private loginAction: LoginActions,
-    private authService: AuthService) {
+    private authService: AuthService,
+    @Inject(DOCUMENT) private document: Document,
+    ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).takeUntil(this.destroyed$);
@@ -100,6 +105,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    this.document.body.classList.remove('unresponsive');
+    this.generateRandomBanner();
     this.mobileVerifyForm = this._fb.group({
       country: ['India', [Validators.required]],
       mobileNumber: ['', [Validators.required]],
@@ -290,6 +297,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.document.body.classList.add('unresponsive');
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -302,5 +310,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       let country = this.countryCodeList.filter((obj) => obj.value === event.value);
       this.selectedCountry = country[0].label;
     }
+  }
+
+  /**
+   * randomBanner
+   */
+  public generateRandomBanner() {
+    let bannerArr = ['1', '2', '3', '4', '5'];
+    let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
+    this.selectedBanner = 'slide' + selectedSlide;
   }
 }
