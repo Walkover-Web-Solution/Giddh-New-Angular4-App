@@ -220,7 +220,7 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
-    background: #ff5f00;
+    background: #e34b26;
     color: #fff;
 }
 
@@ -374,7 +374,7 @@ small {
 }
 
 .hash_tag {
-    color: #e33536;
+    color: #e34b26;
 }
 
 .slide_content .btn {
@@ -419,6 +419,10 @@ small {
     border-radius: 2px;
 }
 
+.app_ico ul li {
+    height: 40px;
+}
+
 .download_app ul li {
     margin-right: 0;
 }
@@ -433,6 +437,25 @@ small {
     color: #fff;
     text-align: center;
     position: relative;
+    overflow: hidden;
+}
+
+.app_ico ul li a:hover,
+.download_app ul li a:hover {
+    background: #fff;
+    color: #2c2d43;
+}
+
+.download_app ul li a:hover i {
+    border-color: #2c2d43;
+}
+
+.img_hover:hover img:last-child {
+    display: block !important;
+}
+
+.img_hover:hover img:first-child {
+    display: none;
 }
 
 @media only screen and (max-width: 768px) {
