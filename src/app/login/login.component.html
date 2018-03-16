@@ -28,8 +28,9 @@
             </ul>
             <ul>
                 <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe" target="_blank"><i class="fa fa-windows"></i></a></li>
-                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank"><i class="">
+                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank" class="img_hover"><i class="">
                     <img src="./assets/images/new/ios.svg" />
+                    <img src="./assets/images/new/ios_hover.svg" [style.display]="'none'"/>                    
                     </i></a>
                 </li>
                 <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz" target="_blank"><i class="fa fa-linux"></i></a></li>
@@ -63,7 +64,7 @@
     <!-- slide5 -->
     <div class="slide_content col-xs-7 slide5" [hidden]="selectedBanner !== 'slide5'">
         <div>
-            <img src="./assets/images/login/img5.png" class="img-responsive" />
+            <img src="./assets/images/login/img5.png" class="img-responsive" [style.max-width.px]="500" />
         </div>
         <div>
             <h1><span class="hash_tag">Import/Sync</span> all your data from <br />an old accounting software</h1>
