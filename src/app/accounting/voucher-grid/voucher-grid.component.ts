@@ -199,13 +199,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public newEntryObj() {
     this.requestObj.transactions.push({
-      amount: 0,
+      amount: null,
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
       type: 'to',
       taxes: [],
-      total: 0,
+      total: null,
       discounts: [],
       inventory: [],
       selectedAccount: {
@@ -319,7 +319,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
       // tally differnce amount
       transaction.amount = this.calculateDiffAmount(transaction.type);
-
+      transaction.amount = transaction.amount ? transaction.amount : null;
       if (acc && acc.stocks) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
