@@ -17,6 +17,7 @@ export const ROUTES: Routes = [
   { path: 'create', loadChildren: './create/create.module#CreateModule'},
   { path: '', pathMatch: 'full', redirectTo: 'login', canActivate: [CheckIfPublicPath]},
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
+  { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   // { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
