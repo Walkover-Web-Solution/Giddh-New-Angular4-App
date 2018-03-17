@@ -66,5 +66,5 @@ export const ROUTES: Routes = [
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
-  { path: '/app/signup', pathMatch: 'full', redirectTo: 'signup', canActivate: [CheckIfPublicPath]},
+  { path: 'signup', pathMatch: 'full', redirectTo: 'signup', canActivate: [CheckIfPublicPath]},
 ];
