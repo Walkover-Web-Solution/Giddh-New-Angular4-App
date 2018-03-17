@@ -84,7 +84,8 @@ module.exports = function (env) {
     errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl,
-    APP_FOLDER: 'app/'
+    // APP_FOLDER: '/app/'
+    APP_FOLDER: 'giddhnew-fs8eefokm8yjj.stackpathdns.com'
 
   });
 
