@@ -158,9 +158,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   // basic check for valid transaction
   public isValid() {
     let r: any = true;
-    if (this.taxableValue === 0) {
-      r = 'Without Taxable sales-invoice can\'t be generated';
-    }
+    // Arpit: Sagar told me to remove this check
+    // if (this.taxableValue === 0) {
+    //   r = 'Without Taxable sales-invoice can\'t be generated';
+    // }
     if (this.accountUniqueName) {
       if (_.isEmpty(this.accountUniqueName)) {
         r = 'Product/Service can\'t be empty';
