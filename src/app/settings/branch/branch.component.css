@@ -1,0 +1,11 @@
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.dropdown-menu {
+    padding: 10px;
+}
+
+.dropdown-menu li {
+    margin-bottom: 5px;
+}
