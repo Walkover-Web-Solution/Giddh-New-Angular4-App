@@ -24,6 +24,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { BranchComponent } from './branch/branch.component';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
     SettingLinkedAccountsConfirmationModalComponent,
     FinancialYearComponent,
     SettingPermissionComponent,
-    SettingPermissionFormComponent
+    SettingPermissionFormComponent,
+    BranchComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +58,8 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
     BsDatepickerModule.forRoot(),
     ShSelectModule,
     OmitByKeyPipeModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    BsDropdownModule
   ]
 })
 
