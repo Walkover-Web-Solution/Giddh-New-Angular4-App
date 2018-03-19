@@ -108,6 +108,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isElectron: boolean = isElectron;
   public isTodaysDateSelected: boolean = false;
   public isDateRangeSelected: boolean = false;
+  public userFullName: string;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -188,10 +189,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (u.name.match(/\s/g)) {
           let name = u.name;
+          this.userFullName = name;
           let tmpName = name.split(' ');
           this.userName = tmpName[0][0] + tmpName[1][0];
         } else {
           this.userName = u.name[0] + u.name[1];
+          this.userFullName = name;
         }
       }
     });
