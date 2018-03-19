@@ -13,7 +13,6 @@ export class ArpitComponent {
   public localState: any;
 
   constructor(public route: ActivatedRoute) {
-    console.log(' ++++++ Constructor of ArpitComponent ++++++ ');
     console.log('The route in ArpitComponent is :', this.route);
   }
 
