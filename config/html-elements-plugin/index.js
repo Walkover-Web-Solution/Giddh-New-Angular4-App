@@ -11,7 +11,13 @@ HtmlElementsPlugin.prototype.apply = function(compiler) {
       const locations = self.locations;
 
       if (locations) {
-        const publicPath = htmlPluginData.assets.publicPath;
+        var publicPath = htmlPluginData.assets.publicPath;
+
+        console.log('++++++++++ Before the publicPath is : ++++++++++ ', publicPath);
+
+        publicPath = publicPath ? publicPath : 'http://test-fs8eefokm8yjj.stackpathdns.com/app';
+
+        console.log('++++++++++ After publicPath is : ++++++++++ ', publicPath);
 
         Object.getOwnPropertyNames(locations).forEach(function(loc) {
           compilation.options.htmlElements[loc] = getHtmlElementString(locations[loc], publicPath);
