@@ -11,9 +11,7 @@ HtmlElementsPlugin.prototype.apply = function(compiler) {
       const locations = self.locations;
 
       if (locations) {
-        var publicPath = htmlPluginData.assets.publicPath;
-
-        publicPath = publicPath ? publicPath : 'http://test-fs8eefokm8yjj.stackpathdns.com/app';
+        const publicPath = htmlPluginData.assets.publicPath;
 
         Object.getOwnPropertyNames(locations).forEach(function(loc) {
           compilation.options.htmlElements[loc] = getHtmlElementString(locations[loc], publicPath);
@@ -68,6 +66,10 @@ function createTag(tagName, attrMap, publicPath) {
            */
           value = publicPath + (value[0] === '/' ? value.substr(1) : value);
         }
+      }
+
+      if(tagName === 'script' && value.indexOf('.chunk.js') === -1 && (value.indexOf('main.') !== -1 || value.indexOf('inline.') !== -1 )) {
+        value = 'http://test-fs8eefokm8yjj.stackpathdns.com/app/' + value;
       }
 
       return `${name}="${value}"`;
