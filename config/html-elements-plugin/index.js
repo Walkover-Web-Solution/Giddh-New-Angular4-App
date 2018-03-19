@@ -68,10 +68,6 @@ function createTag(tagName, attrMap, publicPath) {
         }
       }
 
-      if(tagName === 'script' && value.indexOf('.chunk.js') === -1 && (value.indexOf('main.') !== -1 || value.indexOf('inline.') !== -1 )) {
-        value = 'http://test-fs8eefokm8yjj.stackpathdns.com/app/' + value;
-      }
-
       return `${name}="${value}"`;
     });
 
