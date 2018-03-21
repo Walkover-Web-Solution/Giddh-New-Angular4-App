@@ -56,7 +56,7 @@
                 Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a>
             </div>
             <div class="mrT4">
-                Already have an account? <a href="/login" class="btn btn-sm btn-primary mrL">Login</a>
+                Already have an account? <a href="{{urlPath}}login" class="btn btn-sm btn-primary mrL">Login</a>
             </div>
         </div>
     </div>
@@ -214,7 +214,7 @@
                             <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()" [disabled]="twoWayOthForm.get('otp').invalid">Submit
-              </button>
+                            </button>
                         </div>
                     </form>
                 </div>
