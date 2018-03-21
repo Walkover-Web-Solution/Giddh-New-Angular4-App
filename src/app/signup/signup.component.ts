@@ -28,6 +28,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
+  public urlPath: string = '';
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -59,6 +60,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     @Inject(DOCUMENT) private document: Document,
     ) {
+    this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).takeUntil(this.destroyed$);
