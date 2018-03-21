@@ -327,7 +327,7 @@
                   </li> -->
                 <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
                     <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
-                        <span class="icon-dropdown"></span>
+                        <span class="icon-dropdown grey"></span>
                         <div class="cText text-right">
                             <span class="cName">{{ (selectedCompany | async)?.name }}</span>
                             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
