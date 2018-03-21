@@ -13,16 +13,14 @@ export class ArpitComponent {
   constructor(
     public route: ActivatedRoute,
     private router: Router) {
-    console.log('The route in ArpitComponent is :', this.route.snapshot);
-    console.log('this.route.snapshot.url.toString() is :', this.route.snapshot.url.toString());
-    if (this.route.snapshot.url.toString() === 'create') {
-      console.log('Redirected by first custom code');
-      this.router.navigate(['/create']);
-    } else if (this.route.snapshot.url.toString() === 'app,create') {
-      console.log('Redirected by second custom code');
-      this.router.navigate(['/create']);
-    } else {
-      this.router.navigate(['/login']);
+      console.log('The route in ArpitComponent is :', this.route.snapshot);
+      console.log('this.route.snapshot.url.toString() is :', this.route.snapshot.url.toString());
+      if (this.route.snapshot.url.toString() === 'create' || this.route.snapshot.url.toString() === 'app,create') {
+        this.router.navigate(['/create']);
+      } else if (this.route.snapshot.url.toString() === 'signup' || this.route.snapshot.url.toString() === 'app,signup') {
+        this.router.navigate(['/signup']);
+      } else {
+        this.router.navigate(['/login']);
+      }
     }
-  }
 }
