@@ -65,6 +65,7 @@ export const ROUTES: Routes = [
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
-  { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
+  // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
+  { path: '**', pathMatch: 'full', component: ArpitComponent },
   { path: 'signup', pathMatch: 'full', redirectTo: 'signup', canActivate: [CheckIfPublicPath]},
 ];
