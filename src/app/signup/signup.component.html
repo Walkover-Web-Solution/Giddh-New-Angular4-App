@@ -30,27 +30,13 @@
                 </form>
                 <!-- form end/ -->
 
-                <!-- login with mobile form -->
-                <form class="" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm" *ngIf="loginUsing === 'mobile'">
-                    <div class="clearfix form-group" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                        <sh-select [options]="countryCodeList" class="pull-left mrR1" (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country" style="width: 80px;"></sh-select>
-                        <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Mobile No" required style="width: calc(100% - 90px);" />
-                        <button class="btn btn-success btn-lg btn-block mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)" [ladda]="isLoginWithMobileInProcess$ | async" [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ | async) ? 'Get OTP' : 'Resend' }}</button>
-                    </div>
-                    <div class="clearfix form-group" *ngIf="(isLoginWithMobileSubmited$ | async)">
-                        <input class="form-control" placeholder="Enter OTP" formControlName="otp">
-                        <button type="login" class="btn btn-block btn-success btn-lg mrT1" [ladda]="isVerifyMobileInProcess$ | async" (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)" [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
-              </button>
-                    </div>
-                </form>
-                <!-- form end/ -->
 
                 <!-- login with userName form -->
                 <form class="" id="verifyUsernameForm" name="verifyUsernameForm" novalidate *ngIf="loginUsing === 'userName'">
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" type="text" placeholder="Username" required />
                         <input class="form-control" type="text" placeholder="Password" required />
-                        <button class="btn btn-success btn-lg btn-block mrT1">Login</button>
+                        <button class="btn btn-success btn-lg btn-block mrT1">Signup</button>
                     </div>
                 </form>
                 <!-- form end/ -->
@@ -67,7 +53,7 @@
 
             </ul>
             <div class="login_option">
-                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a>
+                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a>
             </div>
             <div class="mrT4">
                 Already have an account? <a href="/login" class="btn btn-sm btn-primary mrL">Login</a>
