@@ -4477,6 +4477,7 @@ table td[class*=col-]:last-child {
     width: 100%;
     float: left;
     padding: 0px 10px;
+    font-size: 14px;
     /* margin: 10px 0; */
 }
 
