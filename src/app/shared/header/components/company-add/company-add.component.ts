@@ -91,7 +91,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           });
         })
         .map((res) => {
-          let data = res.map(item => item.address_components[0].long_name);
+          // let data = res.map(item => item.address_components[0].long_name);
+          let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
         });
@@ -116,24 +117,29 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
     this.dataSourceBackup.forEach(item => {
-      if (item.address_components[0].long_name === e.item) {
-        // set country and state values
-        try {
-          item.address_components.forEach(address => {
-            let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
-            let countryIdx = _.indexOf(address.types, 'country');
-            if (stateIdx !== -1) {
-              this.company.state = address.long_name;
-            }
-            if (countryIdx !== -1) {
-              this.company.country = address.long_name;
-            }
-          });
-        } catch (e) {
-          console.log(e);
-        }
+      if (item.city === e.item) {
+        this.company.country = item.country;
       }
     });
+    // this.dataSourceBackup.forEach(item => {
+    //   if (item.address_components[0].long_name === e.item) {
+    //     // set country and state values
+    //     try {
+    //       item.address_components.forEach(address => {
+    //         let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
+    //         let countryIdx = _.indexOf(address.types, 'country');
+    //         if (stateIdx !== -1) {
+    //           this.company.state = address.long_name;
+    //         }
+    //         if (countryIdx !== -1) {
+    //           this.company.country = address.long_name;
+    //         }
+    //       });
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   }
+    // });
   }
 
   public ngOnDestroy() {
