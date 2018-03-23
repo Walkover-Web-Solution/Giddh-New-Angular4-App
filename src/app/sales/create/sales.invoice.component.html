@@ -27,10 +27,10 @@
                             </sh-select>
                         </div>
                     </div>
-                    <div class="flex-row-child mrL2" *ngIf="typeaheadNoResultsOfCustomer">
+                    <div class="flex-row-child mrL3" *ngIf="typeaheadNoResultsOfCustomer">
                         <div class="form-group noMarg">
                             <label>Add Entry Against</label>
-                            <sh-select style="width: 250px;" name="accountDetails.uniqueName" [options]="bankAccounts$ | async" [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)" [placeholder]="'Select Bank A/c'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                            <sh-select style="width: 160px;" name="accountDetails.uniqueName" [options]="bankAccounts$ | async" [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)" [placeholder]="'Select Bank A/c'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                 [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -41,13 +41,13 @@
                             </sh-select>
                         </div>
                     </div>
-                    <div class="flex-row-child mrL2">
+                    <div class="flex-row-child mrL3">
                         <div class="form-group noMarg">
                             <label>Email Id</label>
                             <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
                         </div>
                     </div>
-                    <div class="flex-row-child mrL2">
+                    <div class="flex-row-child mrL3">
                         <div class="form-group noMarg">
                             <label>Mobile No.</label>
                             <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
