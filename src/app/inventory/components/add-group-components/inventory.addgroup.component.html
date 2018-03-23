@@ -1,31 +1,29 @@
-<section class="">
+<section class="" autocomplete="off" [style.margin-top.px]="-15">
     <div class="">
         <section class="clearfix">
             <div class="form_header">
-                <div *ngIf="addGroup">
-                    <label>Add Group</label>
-                </div>
-                <div *ngIf="!addGroup">
-                    <label>Modify Group</label>
-                </div>
+                <h2 *ngIf="addGroup">Create Group</h2>
+                <h2 *ngIf="!addGroup">Update Group</h2>
             </div>
             <form name="updateStockGroup" class="form_body" [formGroup]="addGroupForm" novalidate="">
-                <div class="row">
-                    <div class="form-group col-xs-12">
+                <div class="form_bg clearfix pdT1 pdB1 pdR pdL">
+                    <div class="form-group col-xs-6">
                         <label>Name <sup>*</sup></label>
                         <input type="text" name="name" (change)="generateUniqueName()" class="form-control" formControlName="name" />
                     </div>
-                    <div class="form-group col-xs-12">
+                    <div class="form-group col-xs-6">
                         <label>Unique Name <sup>*</sup></label>
                         <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addGroupForm.get('uniqueName')" (blur)="validateUniqueName($event?.target?.value)" formControlName="uniqueName" class="form-control">
-                        <div class="checkbox" [hidden]="defaultGrpActive">
-                            <label for="isSelfParentUpdt">
-                          <input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt" name="parentStockGroup">Is it a sub group?</label>
-                        </div>
                     </div>
-                    <div class="form-group col-xs-12" [hidden]="defaultGrpActive">
-                        <label>Parent Group</label>
-                        <sh-select [options]="groupsData$ | async" formControlName="parentStockGroupUniqueName" [disabled]="!addGroupForm.get('isSubGroup').value" [placeholder]="'Select Parent Group'" [multiple]="false" (selected)="groupSelected($event)" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
+                    <div class="col-xs-6">
+                        <div class="pdB1" [hidden]="defaultGrpActive">
+                            <label for="isSelfParentUpdt">
+                            <input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt" name="parentStockGroup">Is it a sub group?</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Parent Group</label>
+                            <sh-select [options]="groupsData$ | async" formControlName="parentStockGroupUniqueName" [disabled]="!addGroupForm.get('isSubGroup').value" [placeholder]="'Select Parent Group'" [multiple]="false" (selected)="groupSelected($event)" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
+                        </div>
                     </div>
                 </div>
                 <div class="clearfix text-right">

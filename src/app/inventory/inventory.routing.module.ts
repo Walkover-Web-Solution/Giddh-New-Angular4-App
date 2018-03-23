@@ -14,7 +14,7 @@ import { InventoryGroupStockReportComponent } from './components/group-stock-rep
       {
         path: '', component: InventoryComponent,
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'add-stock' },
+          // { path: '', pathMatch: 'full', redirectTo: 'add-stock' },
           { path: 'add-group', pathMatch: 'full', component: InventoryUpdateGroupComponent },
           { path: 'add-group/:groupUniqueName', pathMatch: 'full', component: InventoryUpdateGroupComponent },
           { path: 'add-stock', pathMatch: 'full', component: InventoryAddStockComponent },

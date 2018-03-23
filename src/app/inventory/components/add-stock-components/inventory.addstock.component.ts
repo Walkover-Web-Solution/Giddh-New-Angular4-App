@@ -1,6 +1,6 @@
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable } from 'rxjs/Observable';
@@ -22,7 +22,7 @@ import { IGroupsWithStocksHierarchyMinItem } from 'app/models/interfaces/groupsW
 import { IForceClear } from 'app/models/api-models/Sales';
 
 @Component({
-  selector: 'invetory-add-stock',  // <home></home>
+  selector: 'inventory-add-stock',  // <home></home>
   templateUrl: './inventory.addstock.component.html',
   styles: [`
   .output_row>td {
@@ -36,9 +36,11 @@ import { IForceClear } from 'app/models/api-models/Sales';
   }
   `]
 })
-export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy {
+export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+  @Input() public addStock: boolean = false;
+
   public stockListDropDown$: Observable<IOption[]>;
-  public stockUnitsDropDown$: Observable<IOption[]>;
+  public stockUnitsDropDown$: Observable<IOption[]> = Observable.of(null);
   public purchaseAccountsDropDown$: Observable<IOption[]>;
   public salesAccountsDropDown$: Observable<IOption[]>;
 
@@ -69,6 +71,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public forceClearStockUnit$: Observable<IForceClear> = Observable.of({status: false});
   public disableStockButton: boolean = false;
   public createGroupSuccess$: Observable<boolean>;
+  public showOtherDetails: boolean;
+  public addNewStock: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -85,6 +89,17 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.isStockDeleteInProcess$ = this.store.select(s => s.inventory.isStockDeleteInProcess).takeUntil(this.destroyed$);
     this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).takeUntil(this.destroyed$);
     this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).takeUntil(this.destroyed$);
+
+    this.store.select(state => state.inventory.stockUnits).takeUntil(this.destroyed$).subscribe( p  => {
+      if (p && p.length) {
+        let units = p;
+        let unitArr = units.map(unit => {
+          return { label: `${unit.name} (${unit.code})`, value: unit.code };
+        });
+        this.stockUnitsDropDown$ = Observable.of(unitArr);
+      }
+    });
+
     this.getParentGroupData();
   }
 
@@ -125,15 +140,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }).takeUntil(this.destroyed$);
 
     // get all stock units
-    this.stockUnitsDropDown$ = this.store.select(p => {
-      if (p.inventory.stockUnits.length) {
-        let units = p.inventory.stockUnits;
+    // this.stockUnitsDropDown$ = this.store.select(p => {
 
-        return units.map(unit => {
-          return { label: `${unit.name} (${unit.code})`, value: unit.code };
-        });
-      }
-    }).takeUntil(this.destroyed$);
+    // }).takeUntil(this.destroyed$);
 
     // add stock form
     this.addStockForm = this._fb.group({
@@ -229,7 +238,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
       return _.isEqual(x, y);
     }).subscribe(a => {
-      if (a) {
+      if (a && !this.addStock) {
+        this.stockUniqueName = a.uniqueName;
         this.isUpdatingStockForm = true;
         this.addStockForm.patchValue({
           name: a.name, uniqueName: a.uniqueName,
@@ -306,6 +316,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$.subscribe(s => {
       if (s) {
         this.activeGroup = s.uniqueName;
+        this.groupUniqueName = s.uniqueName;
         setTimeout(() => {
         this.autoGroupSelect(this.activeGroup);
         }, 700);
@@ -313,7 +324,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.activeGroup = null;
         setTimeout(() => {
         this.autoGroupSelect(null);
-        }, 700);
+        }, 1000);
       }
     });
 
@@ -565,7 +576,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
     this.addStockForm.reset();
 
-    if (activeStock) {
+    if (activeStock && !this.addStock) {
       this.isUpdatingStockForm = true;
       this.addStockForm.patchValue({
         name: activeStock.name,
@@ -783,7 +794,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnDestroy() {
-    this.store.dispatch(this.inventoryAction.resetActiveStock());
+    // this.store.dispatch(this.inventoryAction.resetActiveStock());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -839,11 +850,22 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public addNewGroupPane() {
-    this.store.dispatch(this.inventoryAction.OpenNewGroupAsidePane(true));
+    this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
   }
 
   public addNewStockUnit() {
     this.store.dispatch(this.inventoryAction.OpenCustomUnitPane(true));
   }
 
+  /**
+   * ngOnChanges
+   */
+  public ngOnChanges(s: SimpleChanges) {
+    if (s.addStock && s.addStock.currentValue) {
+      if (this.addStockForm) {
+        this.addStockForm.reset();
+        this.isUpdatingStockForm = false;
+      }
+    }
+  }
 }
