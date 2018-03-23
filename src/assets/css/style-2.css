@@ -2503,7 +2503,7 @@ label {
 }
 
 .form_bg {
-    background: #f4f5f5;
+    background: #f5f5f5;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -4411,14 +4411,15 @@ table td[class*=col-]:last-child {
 /* ======================================= INVENTORY CSS ===================================== */
 
 .form_header {
-    padding: 12px 20px;
-    background: #e5e5e5;
+    padding: 12px 15px;
+    background: #f5f5f5;
     color: #333333;
+    border-bottom: 1px solid #ddd;
 }
 
 .form_body {
     background: #fff;
-    padding: 20px;
+    /* padding: 15px; */
 }
 
 .noHover:hover td {
@@ -4456,3 +4457,7 @@ table td[class*=col-]:last-child {
 
 
 /* left bar menu */
+
+.form_body .toggle-btn label {
+    color: #7f7f7f;
+}

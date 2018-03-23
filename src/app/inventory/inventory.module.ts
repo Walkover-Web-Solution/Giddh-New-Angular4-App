@@ -57,7 +57,8 @@ import { InventoryGroupStockReportComponent } from './components/group-stock-rep
     AsideCustomStockComponent,
     AsideInventoryComponent,
     InventoryUpdateGroupComponent,
-    InventoryGroupStockReportComponent
+    InventoryGroupStockReportComponent,
+    InventoryAddStockComponent
   ],
   providers: [],
   imports: [

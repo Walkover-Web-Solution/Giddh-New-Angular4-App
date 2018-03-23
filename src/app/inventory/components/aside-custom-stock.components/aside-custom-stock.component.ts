@@ -17,7 +17,7 @@ import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 530px;
+      width: 580px;
       z-index: 1045;
     }
     #close{
@@ -37,7 +37,7 @@ import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
       padding-right: 0;
     }
     :host .aside-pane {
-      width: 530px;
+      width: 580px;
     }
   `],
   templateUrl: './aside-custom-stock.component.html'

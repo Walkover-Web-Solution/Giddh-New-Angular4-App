@@ -387,7 +387,7 @@ export class InventoryAction {
     };
   }
 
-  public OpenNewGroupAsidePane(value: boolean) {
+  public OpenInventoryAsidePane(value: boolean) {
     return {
       type : InventoryActionsConst.NewGroupAsidePane,
       payload: value
@@ -414,4 +414,12 @@ export class InventoryAction {
       payload: value
     };
   }
+
+  public ManageInventoryAside(value: object) {
+    return {
+      type : InventoryActionsConst.ManageInventoryAside,
+      payload: value
+    };
+  }
+
 }
