@@ -202,6 +202,26 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.addAccountForm.get('name').valueChanges.debounceTime(100).subscribe(name => {
+      let val: string = name;
+      val = uniqueNameInvalidStringReplace(val);
+      if (val) {
+        this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+        this.isAccountNameAvailable$.subscribe(a => {
+          if (a !== null && a !== undefined) {
+            if (a) {
+              this.addAccountForm.patchValue({ uniqueName: val });
+            } else {
+              let num = 1;
+              this.addAccountForm.patchValue({ uniqueName: val + num });
+            }
+          }
+        });
+      } else {
+        this.addAccountForm.patchValue({ uniqueName: '' });
+      }
+    });
   }
 
   public setCountryByCompany(company: CompanyResponse) {
@@ -249,30 +269,31 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     return gstFields;
   }
 
-  public generateUniqueName() {
-    let val: string = this.addAccountForm.controls['name'].value;
-    val = uniqueNameInvalidStringReplace(val);
-    if (val) {
-      this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-      this.isAccountNameAvailable$.subscribe(a => {
-        if (a !== null && a !== undefined) {
-          if (a) {
-            this.addAccountForm.patchValue({ uniqueName: val });
-          } else {
-            let num = 1;
-            this.addAccountForm.patchValue({ uniqueName: val + num });
-          }
-        }
-      });
-    } else {
-      this.addAccountForm.patchValue({ uniqueName: '' });
-    }
-    // if (val.match(/[\\/(){};:"<>#?%, ]/g)) {
-    //   this._toaster.clearAllToaster();
-    //   this._toaster.errorToast('Account name must not contain special symbol like [\/(){};:"<>#?%');
-    // } else {
-    // }
-  }
+  // public generateUniqueName() {
+  //   alert('changed');
+  //   let val: string = this.addAccountForm.controls['name'].value;
+  //   val = uniqueNameInvalidStringReplace(val);
+  //   if (val) {
+  //     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+  //     this.isAccountNameAvailable$.subscribe(a => {
+  //       if (a !== null && a !== undefined) {
+  //         if (a) {
+  //           this.addAccountForm.patchValue({ uniqueName: val });
+  //         } else {
+  //           let num = 1;
+  //           this.addAccountForm.patchValue({ uniqueName: val + num });
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     this.addAccountForm.patchValue({ uniqueName: '' });
+  //   }
+  //   // if (val.match(/[\\/(){};:"<>#?%, ]/g)) {
+  //   //   this._toaster.clearAllToaster();
+  //   //   this._toaster.errorToast('Account name must not contain special symbol like [\/(){};:"<>#?%');
+  //   // } else {
+  //   // }
+  // }
 
   public addGstDetailsForm(value: string) {
     if (value && !value.startsWith(' ', 0)) {
