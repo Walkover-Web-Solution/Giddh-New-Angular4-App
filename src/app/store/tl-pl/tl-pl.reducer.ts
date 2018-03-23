@@ -241,7 +241,8 @@ const filterProfitLossData = data => {
 };
 
 const prepareProfitLossData = (data) => {
-  let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
+  // let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
+  let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails);
   plData.expenseTotal = calculateTotalExpense(plData.expArr);
   plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
   plData.incomeTotal = calculateTotalIncome(plData.incArr);
