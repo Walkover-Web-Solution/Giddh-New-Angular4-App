@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 
 @Component({
   selector: 'setting-integration',
@@ -34,6 +35,7 @@ export class SettingIntegrationComponent implements OnInit {
   public razorPayObj: RazorPayClass = new RazorPayClass();
   public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
+  public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -42,7 +44,9 @@ export class SettingIntegrationComponent implements OnInit {
     private settingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
     private toasty: ToasterService,
-  ) { }
+  ) {
+    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+  }
 
   public ngOnInit() {
     // getting all page data of integration page
@@ -66,16 +70,25 @@ export class SettingIntegrationComponent implements OnInit {
       }
     });
 
-    // get accounts
-    this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: IOption[] = [];
-        _.forEach(data.body.results, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
+    this.flattenAccountsStream$.subscribe(data => {
+      if (data) {
+            let accounts: IOption[] = [];
+            _.forEach(data, (item) => {
+              accounts.push({ label: item.name, value: item.uniqueName });
+            });
+            this.accounts$ = Observable.of(accounts);
+          }
     });
+    // get accounts
+    // this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+    //   if (data.status === 'success') {
+    //     let accounts: IOption[] = [];
+    //     _.forEach(data.body.results, (item) => {
+    //       accounts.push({ label: item.name, value: item.uniqueName });
+    //     });
+    //     this.accounts$ = Observable.of(accounts);
+    //   }
+    // });
   }
 
   public getInitialData() {
