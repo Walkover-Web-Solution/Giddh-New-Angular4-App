@@ -26,6 +26,7 @@ import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.modul
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { BranchComponent } from './branch/branch.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { BsDropdownModule } from 'ngx-bootstrap';
     ShSelectModule,
     OmitByKeyPipeModule,
     NgbTypeaheadModule,
-    BsDropdownModule
+    BsDropdownModule,
+    ElementViewChildModule
   ]
 })
 
