@@ -117,7 +117,6 @@ export class AccountingComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    console.log('event is :', event);
     event.preventDefault();
     // Handling Alt + V and Alt + I
     if (event.altKey && event.which === 86) { // Alt + V

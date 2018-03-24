@@ -36,7 +36,8 @@
                                 <span class="label">Invoice</span>
                             </a>
                         </li>
-                        <li *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']" [tooltip]="'Journal Voucher'" [placement]="'right'">
+                        <!-- *ngIf="userIsCompanyUser" -->
+                        <li [checkPermission]="['MENU', 'LEDGER']" [tooltip]="'Journal Voucher'" [placement]="'right'">
                             <a [routerLink]="['/pages/accounting-voucher']">
                                 <span class="navico-journal"></span>
                                 <span class="label">Journal Voucher</span>
@@ -50,7 +51,6 @@
                                 <span class="label">Daybook</span>
                             </a>
                         </li>
-
 
                         <li [checkPermission]="['MENU', 'REPORT']" [tooltip]="'TB, P&L and B/S'" [placement]="'right'">
                             <a [routerLink]="['trial-balance-and-profit-loss']">
