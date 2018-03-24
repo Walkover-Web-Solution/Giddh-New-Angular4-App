@@ -18,10 +18,17 @@
                         <input type="text" class="form-control" placeholder="GSTIN" disabled />
                     </div>
                 </div>
-                <div class="form-group">
+                <!-- This feature is not available right now -->
+                <!-- <div class="form-group">
                     <label class="control-label col-sm-2">Sync data to Branches</label>
                     <div class="col-sm-10">
                         <sh-select [placeholder]="'Select data to sync'" [options]="dataSyncOption" [multiple]="true"></sh-select>
+                    </div>
+                </div> -->
+                <div class="form-group">
+                    <label class="control-label col-sm-2"></label>
+                    <div class="col-sm-3">
+                        <button class="btn btn-danger">Remove</button>
                     </div>
                 </div>
             </section>
@@ -37,7 +44,7 @@
         <div class="modal-content">
             <div class="modal-header clearfix">
                 <h3>Add Branch</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal">×</span>
+                <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -50,23 +57,33 @@
                             <li>
                                 <input type="checkbox" /> Select all
                             </li>
-                            <li>
-                                <input type="checkbox" /> Branch 1
+                            <li *ngFor="let cmp of companies$ | async">
+                                <input type="checkbox" /> {{cmp.name}}
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <div>
-                    <span>Or</span> <button class="btn-link">Create Branch</button>
+                    <span>Or</span> <button class="btn-link" (click)="openCreateCompanyModal()">Create Branch</button>
                 </div>
             </div>
             <div class="modal-footer clearfix">
                 <button type="submit" class="btn btn-sm btn-success">Save</button>
-                <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                <button type="submit" (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
             </div>
             <!-- modal footer -->
         </div>
 
+    </div>
+</div>
+
+<!--add company modal  -->
+<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+            </ng-template>
+        </div>
     </div>
 </div>
