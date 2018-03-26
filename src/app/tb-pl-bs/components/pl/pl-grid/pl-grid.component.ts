@@ -8,7 +8,31 @@ import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'pl-grid',  // <home></home>
   templateUrl: './pl-grid.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+  :host ::ng-deep .table-container {
+    padding:0;
+  }
+  :host ::ng-deep .table-container .profitLoss section div>div {
+    padding-left: 8px;
+  }
+  :host ::ng-deep .basic {
+    margin-bottom:0;
+  }
+  :host ::ng-deep .table-container thead tr th:first-child {
+    border-left: 0;
+  }
+  :host ::ng-deep .basic>thead>tr>th {
+    padding: 8px 8px
+   }
+  .max-980 {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  :host ::ng-deep .table-container section div .group {
+    text-transform: capitalize;
+  }
+  `]
 })
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
@@ -22,7 +46,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
     //
   }
   public ngOnInit() {
-    //
+  //
   }
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
