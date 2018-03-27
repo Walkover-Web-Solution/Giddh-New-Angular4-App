@@ -1,21 +1,25 @@
-<div class="mrT2 mrB1">
-    <span class="">Add branch under <strong>{{ currentBranch }}</strong> Headquarter</span> <button class="btn btn-default mrL1" (click)="openAddBranchModal()">Add Branch</button>
+<div class="mrT2 mrB1" *ngIf="!parentCompanyName">
+    <span class="">Add branch under <strong>{{ currentBranch }}</strong> headquarter.</span> <button class="btn btn-default mrL1" (click)="openAddBranchModal()">Add Branch</button>
 </div>
+<div class="mrT2 mrB1" *ngIf="parentCompanyName">
+    <span class="">This is a branch under <strong>{{ parentCompanyName }}</strong> headquarter.</span>
+</div>
+
 <div class="container pull-left">
     <div class="row">
-        <div class="box clearfix col-xs-11 mrB2">
-            <h3 class="fs18 mrB1">Branch 1</h3>
+        <div class="box clearfix col-xs-11 mrB2" *ngFor="let branch of branches$ | async">
+            <h3 class="fs18 mrB1">{{branch.name}}</h3>
             <section class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label col-sm-2">Address</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Address" disabled />
+                        <input type="text" class="form-control" placeholder="Address" disabled [value]="branch.address" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2">GSTIN</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" placeholder="GSTIN" disabled />
+                        <input type="text" class="form-control" placeholder="GSTIN" disabled [value]="branch?.gstDetails[0]?.gstNumber" />
                     </div>
                 </div>
                 <!-- This feature is not available right now -->
@@ -28,7 +32,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2"></label>
                     <div class="col-sm-3">
-                        <button class="btn btn-danger">Remove</button>
+                        <button class="btn btn-danger" (click)="removeBranch(branch.uniqueName, branch.name)">Remove</button>
                     </div>
                 </div>
             </section>
@@ -39,7 +43,7 @@
 
 
 <!-- add branch modal -->
-<div bsModal #branchModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}"  class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header clearfix">
@@ -55,10 +59,10 @@
                         </button>
                         <ul *dropdownMenu class="dropdown-menu width100" role="menu">
                             <li>
-                                <input type="checkbox" /> Select all
+                                <input type="checkbox" (click)="selectAllCompanies($event)" [checked]="isAllSelected$ | async" /> Select all
                             </li>
                             <li *ngFor="let cmp of companies$ | async">
-                                <input type="checkbox" /> {{cmp.name}}
+                                <input type="checkbox" [checked]="selectedCompanies.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp.uniqueName, $event)" /> {{cmp.name}}
                             </li>
                         </ul>
                     </div>
@@ -69,12 +73,11 @@
                 </div>
             </div>
             <div class="modal-footer clearfix">
-                <button type="submit" class="btn btn-sm btn-success">Save</button>
-                <button type="submit" (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
+                <button (click)="createBranches()" class="btn btn-sm btn-success">Save</button>
+                <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
             </div>
             <!-- modal footer -->
         </div>
-
     </div>
 </div>
 
@@ -84,6 +87,25 @@
         <div class="modal-content">
             <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
             </ng-template>
+        </div>
+    </div>
+</div>
+
+<!-- add branch modal -->
+<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}"  class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header clearfix">
+                <h3>Confirmation</h3>
+                <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">×</span>
+            </div>
+            <div class="modal-body" [innerHTML]="confirmationMessage">
+            </div>
+            <div class="modal-footer clearfix">
+                <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">Yes</button>
+                <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">No</button>
+            </div>
+            <!-- modal footer -->
         </div>
     </div>
 </div>
