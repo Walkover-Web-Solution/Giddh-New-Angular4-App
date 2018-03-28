@@ -12,17 +12,15 @@ import { AppModule } from './app';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/switchMap';
-// import 'rxjs/add/operator/withLatestFrom';
-// import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/debounce';
 
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 const debuggerOn = true;
 
-Observable.prototype.debug = function (message: string) {
+Observable.prototype.debug = function(message: string) {
   return this.do(
     nextValue => {
       if (debuggerOn) {
@@ -43,6 +41,7 @@ Observable.prototype.debug = function (message: string) {
 };
 
 declare module 'rxjs/Observable' {
+  // tslint:disable-next-line:no-shadowed-variable
   interface Observable<T> {
     // tslint:disable-next-line:variable-name
     debug: (...any) => Observable<T>;

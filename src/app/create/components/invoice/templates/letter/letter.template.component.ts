@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { VoucherClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, GenericRequestForGenerateSCD, SalesEntryClass } from '../../../../../models/api-models/Sales';
 import { FormControl, Form, NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';

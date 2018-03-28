@@ -5,7 +5,7 @@ import { eventsConst } from 'app/shared/header/components/eventsConst';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupResponse, MoveGroupRequest } from 'app/models/api-models/Group';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ChangeDetectorRef } from '@angular/core';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
