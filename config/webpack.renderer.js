@@ -351,14 +351,6 @@ module.exports = function (options) {
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
-    // node: {
-    //   global: true,
-    //   crypto: 'empty',
-    //   process: true,
-    //   module: false,
-    //   clearImmediate: false,
-    //   setImmediate: false
-    // }
     target: 'electron-renderer'
   };
 };

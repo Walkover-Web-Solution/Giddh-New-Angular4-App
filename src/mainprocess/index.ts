@@ -15,7 +15,7 @@ if (app.makeSingleInstance((commandLine: any[], workingDirectory: string) => {
   app.quit();
 } else {
   // tslint:disable-next-line:no-var-requires
-  require('electron-debug')();
+  // require('electron-debug')();
 
   app.on('ready', () => {
     ipcMain.on('log.error', (event: any, arg: any) => {
