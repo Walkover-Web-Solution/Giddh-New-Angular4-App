@@ -237,25 +237,10 @@ module.exports = function (env) {
        *
        * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
        */
-      new UglifyJsPlugin({
-        uglifyOptions: getUglifyOptions(supportES2015)
-      })
+      // new UglifyJsPlugin({
+      //   uglifyOptions: getUglifyOptions(supportES2015)
+      // })
 
-    ],
-
-    /**
-     * Include polyfills or mocks for various node stuff
-     * Description: Node configuration
-     *
-     * See: https://webpack.github.io/docs/configuration.html#node
-     */
-    // node: {
-    //   global: true,
-    //   crypto: 'empty',
-    //   process: false,
-    //   module: false,
-    //   clearImmediate: false,
-    //   setImmediate: false
-    // }
+    ]
   });
 }
