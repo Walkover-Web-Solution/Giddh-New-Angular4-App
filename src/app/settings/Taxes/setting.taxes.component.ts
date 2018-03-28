@@ -172,7 +172,7 @@ export class SettingTaxesComponent implements OnInit {
   public getFlattenAccounts(value) {
     let count = '5';
     let query = value || '';
-    // get flatternaccounts
+    // get flattern accounts
     this._accountService.GetFlattenAccounts(query, '', count).debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
@@ -181,8 +181,7 @@ export class SettingTaxesComponent implements OnInit {
           // `${d.name} (${d.uniqueName})`
         });
         this.accounts$ = accounts;
-      }
-    });
+    }});
   }
 
   public customDateSorting(a: IOption, b: IOption) {

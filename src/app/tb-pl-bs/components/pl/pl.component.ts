@@ -100,7 +100,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public InitData(d: ChildGroup[]) {
     _.each(d, (grp: ChildGroup) => {
-      grp.isVisible = false;
+      grp.isVisible = true;
       grp.isCreated = false;
       grp.isIncludedInSearch = true;
       _.each(grp.accounts, (acc: Account) => {
