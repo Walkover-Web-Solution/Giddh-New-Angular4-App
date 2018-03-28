@@ -24,7 +24,6 @@ export class SettingsComponent implements OnInit {
   @ViewChild('financialYearComp') public financialYearComp: FinancialYearComponent;
   @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
   @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
-  @ViewChild('branchComp') public branchComp: SettingPermissionComponent;
 
   public isUserSuperAdmin: boolean = false;
 
@@ -72,9 +71,5 @@ export class SettingsComponent implements OnInit {
 
   public permissionTabSelected(e) {
     this.permissionComp.getInitialData();
-  }
-
-  public branchTabSelected(e) {
-    console.log('branch tab selected');
   }
 }
