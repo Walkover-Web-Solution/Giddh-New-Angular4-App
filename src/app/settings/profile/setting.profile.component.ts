@@ -409,5 +409,4 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       }
     });
   }
-
 }
