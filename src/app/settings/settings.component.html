@@ -20,8 +20,8 @@
                 <tab *ngIf="isUserSuperAdmin" (select)="permissionTabSelected($event)" heading="Permission">
                     <setting-permission #permissionComp></setting-permission>
                 </tab>
-                <tab (select)="branchTabSelected($event)" heading="Branch">
-                    <setting-branch #branchComp></setting-branch>
+                <tab heading="Branch">
+                    <setting-branch></setting-branch>
                 </tab>
             </tabset>
         </div>
