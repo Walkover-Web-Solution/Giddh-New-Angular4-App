@@ -40,6 +40,7 @@ import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { SettingsBranchService } from './settings.branch.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -86,7 +87,8 @@ export class ServiceModule {
         PurchaseInvoiceService,
         SettingsFinancialYearService,
         SettingsPermissionService,
-        DaybookService
+        DaybookService,
+        SettingsBranchService
       ]
     };
   }
