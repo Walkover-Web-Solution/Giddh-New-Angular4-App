@@ -56,7 +56,7 @@ import { ArpitComponent } from './Arpit.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: isElectron ? '/' : AppUrl + APP_FOLDER }
+  { provide: APP_BASE_HREF, useValue: true ? './' : AppUrl + APP_FOLDER }
 ];
 
 interface InternalStateType {
@@ -136,7 +136,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, { useHash: isElectron }),
+    RouterModule.forRoot(ROUTES, { useHash: true }),
     StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({
     //   maxAge: 25

@@ -21,7 +21,6 @@ function defaultWindows() {
             webPreferences: {
                 plugins: true,
                 webSecurity: false,
-                nodeIntegration: false
             }
         }
     ];
@@ -39,6 +38,7 @@ export class StateManager {
     }
 
     public restoreWindows(): void {
+        console.log(DEFAULT_URL);
         let data = this.getOrLoadData();
         data.windows = defaultWindows();
         this.store.all = data;
