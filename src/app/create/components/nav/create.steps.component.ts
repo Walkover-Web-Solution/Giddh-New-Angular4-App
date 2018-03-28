@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

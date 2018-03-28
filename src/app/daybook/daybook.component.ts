@@ -6,7 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { StateDetailsRequest } from '../models/api-models/Company';
