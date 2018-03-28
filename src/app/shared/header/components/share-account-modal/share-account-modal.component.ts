@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AccountResponse, AccountSharedWithResponse, ShareAccountRequest, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 
 @Component({
   selector: 'share-account-modal',
