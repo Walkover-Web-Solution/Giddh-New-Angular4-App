@@ -1,4 +1,3 @@
-import { ReplaySubject } from 'rxjs';
 import { AccountService } from 'app/services/account.service';
 import { TallyModuleService } from './tally-service';
 import { KeyboardService } from 'app/accounting/keyboard.service';
@@ -9,6 +8,7 @@ import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AccountResponse } from '../models/api-models/Account';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {

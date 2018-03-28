@@ -11,7 +11,7 @@ import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 
 @Component({
   selector: 'share-group-modal',
