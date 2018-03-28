@@ -456,7 +456,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.store.select(createSelector([(state: AppState) => state.general.addAndManageClosed], (yesOrNo: boolean) => {
       this.getTransactionData();
-    })).subscribe();
+    })).debounceTime(300).subscribe();
 
   }
 
