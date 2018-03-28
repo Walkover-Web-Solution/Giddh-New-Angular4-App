@@ -9,7 +9,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers
 import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';

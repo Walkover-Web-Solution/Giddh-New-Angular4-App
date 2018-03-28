@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'sample-template',
