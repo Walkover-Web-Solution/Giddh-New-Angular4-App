@@ -1,9 +1,9 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 import isCidr from 'is-cidr';
 import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild, EventEmitter, Input, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs';
+
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -14,6 +14,7 @@ import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { Observable } from 'rxjs/Observable';
 
 // some local const
 const DATE_RANGE = 'daterange';
