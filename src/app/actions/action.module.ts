@@ -33,6 +33,7 @@ import { InvoicePurchaseActions } from './purchase-invoice/purchase-invoice.acti
 import { SettingsFinancialYearActions } from './settings/financial-year/financial-year.action';
 import { GeneralActions } from './general/general.actions';
 import { SettingsPermissionActions } from './settings/permissions/settings.permissions.action';
+import { SettingsBranchActions } from './settings/branch/settings.branch.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -64,6 +65,7 @@ import { SettingsPermissionActions } from './settings/permissions/settings.permi
       InvoiceActions,
       SettingsIntegrationActions,
       SettingsProfileActions,
+      SettingsBranchActions,
       SettingsTaxesActions,
       SalesActions,
       SettingsLinkedAccountsActions,
