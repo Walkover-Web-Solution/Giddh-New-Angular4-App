@@ -57,8 +57,6 @@ export default class WindowManager {
                 // to avoid visible maximizing
                 show: false,
                 webPreferences: {
-                    // fix jquery issue (https://github.com/atom/electron/issues/254), and in any case node integration is not required
-                    nodeIntegration: false,
                 }
             };
 
@@ -85,7 +83,7 @@ export default class WindowManager {
         }
 
         // tslint:disable-next-line:no-unused-expression
-        new AppUpdater();
+        // new AppUpdater();
     }
 
     public focusFirstWindow(): void {
