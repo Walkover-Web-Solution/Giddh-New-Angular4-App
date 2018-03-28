@@ -4515,3 +4515,18 @@ table td[class*=col-]:last-child {
     color: #fff;
     font-size: 12px;
 }
+
+.longcode-details figure ul li {
+    list-style: none;
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.longcode-details figure ul li:last-child {
+    border-bottom: 0;
+}
+
+.longcode-details figure ul {
+    background: #f4f5f8;
+    margin-bottom: 10px;
+}

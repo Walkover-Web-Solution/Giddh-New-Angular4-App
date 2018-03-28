@@ -64,6 +64,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).takeUntil(this.destroyed$);
     this.authenticateTwoWay$ = this.store.select(s => {
       if (s.session.user) {
+        console.log(s.session.user);
         return s.session.user.user.authenticateTwoWay;
       }
     }).takeUntil(this.destroyed$);
