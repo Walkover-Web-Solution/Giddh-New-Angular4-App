@@ -32,6 +32,9 @@ import { Observable } from 'rxjs/Observable';
   :host ::ng-deep .table-container section div .group {
     text-transform: capitalize;
   }
+  :host ::ng-deep .table-container div.row {
+    border-bottom:0;
+  }
   `]
 })
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
@@ -103,10 +106,20 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   //   });
   // }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
     _.each(data, (grp: ChildGroup) => {
       if (grp.isIncludedInSearch) {
-        grp.isCreated = true;
-        grp.isVisible = isVisible;
+        if (!grp.level1) {
+          if (parentGroups.indexOf(grp.uniqueName) === -1) {
+            grp.isCreated = false;
+            grp.isVisible = isVisible;
+            grp.isOpen = isVisible;
+          } else {
+            grp.isOpen = isVisible;
+          }
+        } else {
+          grp.isOpen = true;
+        }
         _.each(grp.accounts, (acc: Account) => {
           if (acc.isIncludedInSearch) {
             acc.isCreated = true;
