@@ -86,8 +86,8 @@
             <section>
               <form name="walletForm" #walletForm="ngForm" novalidate class="form-inline">
                 <div class="form-group mrR1 " ng-class="(walletForm.amount.$valid  && walletForm.amount.$touched) ? 'has-success' : (walletForm.amount.$touched) ? 'has-error' : '' ">
-                  <input type="text" name="amount" placeholder="Amount" class="form-control max100" [(ngModel)]="amount"
-                    minlength="3" maxlength="7" [disabled]="payStep2" autocomplete="off" required digitsOnlyDirective/>
+                  <input type="text" name="amount" placeholder="Amount" class="form-control max100" [(ngModel)]="amount" minlength="3" maxlength="7"
+                    [disabled]="payStep2" autocomplete="off" required digitsOnlyDirective/>
                 </div>
                 <div class="form-group">
                   <button [disabled]="walletForm.invalid" class="btn btn-success" (click)="addMoneyInWallet()">Add money in wallet</button>
@@ -110,8 +110,7 @@
                 </label>
               </div>
               <form class="form-inline mrB2" name="couponForm" #couponForm="ngForm" novalidate *ngIf="isHaveCoupon">
-                <div class="form-group mrR1"
-                [ngClass]="{'has-success': couponForm.valid && couponForm.touched,'has-error': couponForm.invalid && couponForm.touched}">
+                <div class="form-group mrR1" [ngClass]="{'has-success': couponForm.valid && couponForm.touched,'has-error': couponForm.invalid && couponForm.touched}">
                   <input type="text" name="couponcode" class="form-control max200" [(ngModel)]="couponcode" placeholder="Coupon code" required
                     autocomplete="off">
                 </div>
@@ -186,7 +185,7 @@
             <hr>
             <h1 class="mrT2">Enter verification Code</h1>
             <div class="max350 mrT">
-              <input class="form-control" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword"/>
+              <input class="form-control" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword" />
             </div>
             <button class="btn btn-success mrT" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify</button>
           </div>
@@ -250,7 +249,7 @@
               <!--two way auth-->
               <h1 class="mrB1">Two Way Authentication</h1>
               <span (click)="changeTwoWayAuth()">
-                  <ui-switch [(ngModel)]="twoWayAuth"></ui-switch>
+                <ui-switch [(ngModel)]="twoWayAuth"></ui-switch>
                 <!-- <switch name="twowayauth" on="On" off="Off" ng-model="twoWayAuth" class="wide"></switch> -->
               </span>
               <p class="mrT1">Two way Authentication is

@@ -15,7 +15,7 @@ import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, trans
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 import * as moment from 'moment';
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
