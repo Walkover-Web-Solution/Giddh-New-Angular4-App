@@ -1,10 +1,7 @@
-<div class="pdB1 bdrB">
-    <div class="form-group mrB form-inline">
-        <span class="pure-css-select-wrapper">
-      <select class="voucher-selector" name="selectedPage" (change)="pageChanged()" [(ngModel)]="selectedPage">
-        <option *ngFor="let page of pageList" [value]="page.value">{{page.value}}</option>
-      </select>
-    </span>
+<div class="form-group mrB clearfix">
+    <div class="col-xs-12 clearfix">
+        <label>Select Type</label>        
+        <sh-select style="width: 200px;" [options]="pageList" [placeholder]="'Select Invoice Type'" (selected)="pageChanged()" name="selectedPage" [(ngModel)]="selectedPage"></sh-select>
     </div>
 </div>
 <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate>
