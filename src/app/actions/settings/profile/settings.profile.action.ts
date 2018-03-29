@@ -44,6 +44,7 @@ export class SettingsProfileActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
+        this.store.dispatch(this.companyActions.RefreshCompanies());
         this.toasty.successToast('Profile Updated Successfully.');
       }
       return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
@@ -53,7 +54,8 @@ export class SettingsProfileActions {
     private toasty: ToasterService,
     private router: Router,
     private store: Store<AppState>,
-    private settingsProfileService: SettingsProfileService) {
+    private settingsProfileService: SettingsProfileService,
+    private companyActions: CompanyActions) {
   }
 
   public GetProfileInfo(): CustomActions {
