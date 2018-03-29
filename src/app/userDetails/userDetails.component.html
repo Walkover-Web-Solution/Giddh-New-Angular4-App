@@ -147,7 +147,7 @@
         <tab heading="Mobile Number" select="getUserDetails()">
             <div class="box clearfix mrT2">
                 <form class="" name="mobileForm" novalidate>
-                    <h1>Add/Edit Mobile Number</h1>
+                    <h1 class="section_head">Add/Edit Mobile Number</h1>
                     <div class="mrT">
                         <input ng-minlength="10" ng-pattern="/^[0-9]{1,10}$/" class="form-control max350 pull-left " type="text" ng-required="true" placeholder="9998899988" name="mobileForm.phoneNumber" [(ngModel)]="phoneNumber" />
                         <button class="btn btn-success btn-sm mrL1" [ladda]="isAddNewMobileNoInProcess$ | async" (click)="addNumber(phoneNumber)">Add</button>
@@ -222,20 +222,14 @@
                                 </div>
                             </div>
                         </div>
-                        <hr class="mrT1 mrB2">
-                        <!--two way auth-->
-                        <h1 class="mrB1">Two Way Authentication</h1>
-                        <span (click)="changeTwoWayAuth()">
-                  <ui-switch [(ngModel)]="twoWayAuth"></ui-switch>
-                <!-- <switch name="twowayauth" on="On" off="Off" ng-model="twoWayAuth" class="wide"></switch> -->
-              </span>
-                        <p class="mrT1">Two way Authentication is
-                            <span class="bold" *ngIf="twoWayAuth">ON</span>
-                            <span class="bold" *ngIf="!twoWayAuth">OFF</span>.
-                            <span *ngIf="twoWayAuth">You will need to enter verification code at the time of login.</span>
-                        </p>
                     </div>
                 </section>
+
+                <div class="mrT2">
+                    <!--two way auth-->
+                    <h1 class="section_head"><input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" /> Two Way Authentication</h1>
+                    <p class="grey" *ngIf="twoWayAuth">You will need to enter verification code at the time of login.</p>
+                </div>
             </div>
         </tab>
         <!-- end of Mobile Number tab tab -->
