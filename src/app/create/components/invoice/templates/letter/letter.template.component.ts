@@ -16,6 +16,8 @@ import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { SelectComponent } from '../../../../../theme/ng-select/select.component';
+import { GeneralActions } from '../../../../../actions/general/general.actions';
+import { IInvoiceTax, ICommonItemOfTransaction } from '../../../../../models/api-models/Invoice';
 
 @Component({
   selector: 'letter-template',
@@ -29,6 +31,11 @@ import { SelectComponent } from '../../../../../theme/ng-select/select.component
 
 export class LetterTemplateComponent implements OnInit, OnDestroy {
   public universalDate: Date;
+  public quantity: number;
+  public rate: number;
+  public amount: number;
+  public taxableValue: number;
+  public total: number;
   @Output() public closeAndDestroyComponent: EventEmitter<any> = new EventEmitter();
   @ViewChild('invoicePreviewModal') public invoicePreviewModal: ModalDirective;
 
@@ -69,13 +76,15 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   public CreateInvoiceForm: FormGroup;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public isFormSubmitted: boolean = false;
+  public isIndia: boolean = false;
 
   constructor(
     private _sanitizer: DomSanitizer,
     private _createHttpService: CreateHttpService,
     private _toasty: ToasterService,
     private fb: FormBuilder,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private generalAction: GeneralActions
   ) {
     this.invFormData = new VoucherClass();
     this.setCreateInvoiceForm();
@@ -95,6 +104,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.store.dispatch(this.generalAction.getAllState());
     this.data = new VoucherClass();
     // bind countries
     contriesWithCodes.map(c => {
@@ -144,7 +154,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   /////// Taken from Sales ////////
   public onSubmitInvoiceForm(f?: NgForm) {
     let data: any = _.cloneDeep(this.CreateInvoiceForm.value);
-    console.log('data is :', data.invoiceDetails.dueDate);
+    // console.log('data is :', data.invoiceDetails.dueDate);
     data.invoiceDetails.dueDate = data.invoiceDetails.dueDate ? moment(data.invoiceDetails.dueDate).format(GIDDH_DATE_FORMAT) : '';
     data.invoiceDetails.invoiceDate = data.invoiceDetails.invoiceDate ? moment(data.invoiceDetails.invoiceDate).format(GIDDH_DATE_FORMAT) : '';
     data.other.shippingDate = data.other.shippingDate ? moment(data.other.shippingDate).format(GIDDH_DATE_FORMAT) : '';
@@ -157,7 +167,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     data.companyDetails.address = data.companyDetails.address ? [data.companyDetails.address] : null;
     data.companyDetails.companyGstDetails.address = data.companyDetails.companyGstDetails.address ? [data.companyDetails.companyGstDetails.address] : null;
 
-    console.log('data after conversion is :', data);
+    // console.log('data after conversion is :', data);
     this.emitTemplateData(data);
   }
 
@@ -189,8 +199,12 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public autoFillShippingDetails() {
     // auto fill shipping address
-    if (this.autoFillShipping) {
-      this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
+    // this.autoFillShipping
+    // this.CreateInvoiceForm.get('userDetails').get('shippingDetails').get('autoFillShipping').value
+    if (this.CreateInvoiceForm.get('userDetails').get('shippingDetails').get('autoFillShipping').value) {
+      let billingDetails = this.CreateInvoiceForm.get('userDetails').get('billingDetails').value;
+      this.CreateInvoiceForm.get('userDetails').get('shippingDetails').patchValue(billingDetails);
+      // this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
     }
   }
 
@@ -221,7 +235,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
       entries: this.fb.array([ this.retunArrayData() ]),
       userDetails: this.fb.group({
         countryCode: ['', Validators.required],
-        userName: ['', Validators.required],
+        userName: [''],
         userEmail: '',
         userMobileNumber: '',
         userCompanyName: ['', Validators.required],
@@ -233,7 +247,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
           panNumber: null
         }),
         shippingDetails: this.fb.group({
-          autoFillShipping: null,
+          autoFillShipping: false,
           gstNumber: null,
           address: null,
           stateCode: null,
@@ -276,6 +290,15 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
           customField3: null,
           customFieldLabel3: null
         })
+      }),
+      uiCalculation: this.fb.group({
+        subTotal: 0,
+        totalDiscount: 0,
+        totalTaxableValue: 0,
+        gstTaxesTotal: 0,
+        grandTotal: 0,
+        dueAmount: null,
+        balanceDue: 0
       })
     });
   }
@@ -298,6 +321,79 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
       statesEle.disabled = false;
       this.invFormData.accountDetails[type].stateCode = null;
     }
+  }
+
+  public setAmount(entry: SalesEntryClass) {
+    // delaying due to ngModel change
+    setTimeout(() => {
+      this.taxableValue = this.getTaxableValue(entry);
+      let tax = this.getTotalTaxOfEntry(entry.taxes);
+      this.total = this.getTransactionTotal(tax, entry);
+    }, 500);
+  }
+
+  /**
+   * @param entry: SalesEntryClass object
+   * @return taxable value after calculation
+   * @scenerio one -- without stock entry -- amount - discount = taxableValue
+   * @scenerio two -- stock entry { rate*qty -(discount) = taxableValue}
+   */
+  public getTaxableValue(entry: SalesEntryClass): number {
+    let count: number = 0;
+    if (this.quantity && this.rate) {
+      this.amount = this.rate * this.quantity;
+      count = this.checkForInfinity((this.rate * this.quantity) - this.getTotalDiscount(entry.discounts));
+    } else {
+      count = this.checkForInfinity(this.amount - this.getTotalDiscount(entry.discounts));
+    }
+    return count;
+  }
+
+  /**
+   * @return numeric value
+   * @param discountArr collection of discount items
+   */
+  public getTotalDiscount(discountArr: ICommonItemOfTransaction[]) {
+    let count: number = 0;
+    if (discountArr.length > 0) {
+      _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
+        count += Math.abs(item.amount);
+      });
+    }
+    return count;
+  }
+
+  public checkForInfinity(value): number {
+    return (value === Infinity) ? 0 : value;
+  }
+
+  public getTotalTaxOfEntry(taxArr: IInvoiceTax[]): number {
+    let count: number = 0;
+    if (taxArr.length > 0) {
+      _.forEach(taxArr, (item: IInvoiceTax) => {
+        count += item.amount;
+      });
+      return this.checkForInfinity(count);
+    }else {
+      return count;
+    }
+  }
+
+  public getTransactionTotal(tax: number, entry: SalesEntryClass): number {
+    let count: number = 0;
+    if (tax > 0) {
+      let a = this.getTaxableValue(entry) * (tax / 100);
+      a = this.checkForInfinity(a);
+      let b = _.cloneDeep(this.getTaxableValue(entry));
+      count = a + b;
+    }else {
+      count = _.cloneDeep(this.getTaxableValue(entry));
+    }
+    return Number(count.toFixed(2));
+  }
+
+  public sayHello() {
+    alert('Hello');
   }
 
   public txnChangeOccurred() {

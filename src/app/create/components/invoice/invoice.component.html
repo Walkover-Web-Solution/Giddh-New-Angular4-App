@@ -1,26 +1,27 @@
-
-<create-invoice-header></create-invoice-header>
+<create-invoice-header>
+</create-invoice-header>
 
 
 <section class="container">
-  <div class="row">
-    <div class="col-xs-12 alC">
+    <div class="row">
+        <div class="col-xs-12 alC">
 
-      <div class="pr mrB4 clearfix mrT2">
-        <div class="alR col-xs-7">
-          <h1 class="fs18 lh42">Choose a Template</h1>
-        </div>
-        <create-invoice-steps></create-invoice-steps>
-      </div>
+            <div class="pr mrB4 clearfix mrT2">
+                <div class="alR col-xs-7">
+                    <h1 class="fs18 lh42">Choose a Template</h1>
+                </div>
+                <create-invoice-steps></create-invoice-steps>
+            </div>
 
-      <div class="clearfix mrT4 invoice_list">
-        <div class="col-xs-4">
-          <a [routerLink]="['/create/invoice/t001']">
-            <h4>Template LETTER</h4>
-            <img src="/assets/images/templates/letter.png" class="template_img" />
-          </a>
-        </div>
+            <div class="clearfix mrT4 invoice_list">
+                <div class="col-xs-4">
+                    <a [routerLink]="['/create/invoice/t001']">
+                        <h4>Template LETTER</h4>
+                        <img src="/assets/images/templates/letter.png" class="template_img" />
+                    </a>
+                </div>
 
+                <!-- commented as only 1 invoice available 
         <div class="col-xs-4">
           <a [routerLink]="['/create/invoice/t002']">
             <h4>Template CLASSIC</h4>
@@ -34,8 +35,9 @@
             <img src="/assets/images/templates/royal.png" class="template_img" />
           </a>
         </div>
-      </div>
+        -->
+            </div>
 
+        </div>
     </div>
-  </div>
 </section>
