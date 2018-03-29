@@ -4530,3 +4530,12 @@ table td[class*=col-]:last-child {
     background: #f4f5f8;
     margin-bottom: 10px;
 }
+
+.longcode-details figure ul li h2 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.longcode-details figure ul li .cases {
+    margin-left: 10px;
+}
