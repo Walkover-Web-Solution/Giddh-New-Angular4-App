@@ -3929,6 +3929,7 @@ input[type='checkbox'][disabled]:after {
 
 .table-container .account {
     background: #f4f5f8;
+    /* background: #eee; */
 }
 
 .table-container>div>section>.tb-pl-bs-grid-row>div:nth-child(1) {
