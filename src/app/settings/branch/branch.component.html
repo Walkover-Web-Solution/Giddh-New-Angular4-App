@@ -62,7 +62,7 @@
                                 <input type="checkbox" (click)="selectAllCompanies($event)" [checked]="isAllSelected$ | async" /> Select all
                             </li>
                             <li *ngFor="let cmp of companies$ | async">
-                                <input type="checkbox" [checked]="selectedCompanies.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp.uniqueName, $event)" /> {{cmp.name}}
+                                    <input type="checkbox" [checked]="selectedCompanies.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp.uniqueName, $event)" /> {{cmp.name}}
                             </li>
                         </ul>
                     </div>
