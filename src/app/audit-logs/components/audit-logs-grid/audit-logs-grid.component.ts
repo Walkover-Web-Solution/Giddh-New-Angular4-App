@@ -3,7 +3,7 @@ import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store } from '@ngrx/store';
 import * as _ from '../../../lodash-optimized';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { AppState } from '../../../store/roots';
