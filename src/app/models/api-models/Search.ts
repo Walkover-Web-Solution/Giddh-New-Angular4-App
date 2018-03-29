@@ -68,6 +68,7 @@ export class ChildGroup {
   public isCreated: boolean = false;
   public isVisible: boolean = false;
   public level1?: boolean = false;
+  public isOpen?: boolean = false;
 }
 
 export interface SearchResponse {
