@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';

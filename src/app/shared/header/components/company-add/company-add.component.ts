@@ -2,7 +2,7 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import { LocationService } from '../../../../services/location.service';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,7 @@ import * as _ from '../../../../lodash-optimized';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({

@@ -29,7 +29,7 @@
     "build:aot:dev": "cross-env BUILD_AOT=1 npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.dev.js  --progress --profile --bail",
     "build:aot:local": "cross-env BUILD_AOT=1 npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.local.js  --progress --profile --bail",
     "build:aot:stage": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
-    "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
+    "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=0 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
     "build:aot:test:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.test-build.js  --progress --profile --bail",
     "build:stage": "npm run clean:dist && npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
     "build:stage:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
@@ -63,6 +63,7 @@
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
     "node": "node",
+    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mwl --x64 --publish always",
     "package": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  -mw --x64",
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
@@ -111,17 +112,23 @@
     "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
     "angular2-ui-switch": "git+https://github.com/daominhsangvn/angular2-ui-switch",
     "builder-util": "3.4.4",
+    "configstore": "3.1.1",
+    "electron-debug": "1.5.0",
+    "electron-is-dev": "0.3.0",
+    "electron-log": "2.2.14",
     "electron-oauth": "2.4.3",
+    "electron-publisher-s3": "20.7.0",
+    "electron-updater": "2.21.3",
     "jquery": "3.2.1",
     "jspdf": "1.3.3",
     "jspdf-autotable": "2.3.2",
-    "ng-contenteditable": "^1.0.5",
+    "ng-contenteditable": "1.0.5",
     "ng4-social-login": "1.3.3",
     "razorpay": "1.4.0",
     "reselect": "3.0.1",
     "rxjs": "5.5.2",
     "tsickle": "0.26.0",
-    "typedoc": "^0.9.0"
+    "typedoc": "0.9.0"
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "0.0.32",
@@ -154,11 +161,8 @@
     "@types/webpack": "3.0.10",
     "@types/webpack-env": "1.13.1",
     "add-asset-html-webpack-plugin": "2.0.1",
-    "angular-io-datepicker": "1.3.1",
-    "angular-io-overlay": "1.2.7",
     "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
     "angular2-ladda": "1.2.1",
-    "angular2-template-loader": "0.6.2",
     "angular2-text-mask": "8.0.2",
     "assets-webpack-plugin": "3.5.1",
     "awesome-typescript-loader": "3.3.0",
@@ -169,11 +173,10 @@
     "cross-env": "5.0.1",
     "css-loader": "0.28.4",
     "devtron": "1.4.0",
-    "electron": "1.8.2-beta.3",
+    "electron": "1.8.4",
     "electron-builder": "19.49.2",
     "electron-connect": "0.6.2",
     "electron-connect-webpack-plugin": "0.1.1",
-    "electron-debug": "1.4.0",
     "electron-devtools-installer": "2.2.3",
     "electron-rebuild": "1.6.0",
     "exports-loader": "0.6.4",
@@ -238,7 +241,7 @@
     "uglifyjs-webpack-plugin": "1.1.5",
     "url-loader": "0.5.8",
     "webpack": "3.8.1",
-    "webpack-bundle-analyzer": "^2.9.1",
+    "webpack-bundle-analyzer": "2.9.1",
     "webpack-dev-middleware": "1.10.1",
     "webpack-dev-server": "2.7.1",
     "webpack-dll-bundles-plugin": "1.0.0-beta.5",
@@ -251,7 +254,13 @@
     "zone.js": "0.8.18"
   },
   "build": {
-    "appId": "com.electron.angular-electron-dream-starter",
+    "appId": "org.walkover.giddh",
+    "publish": [
+      {
+        "provider": "s3",
+        "bucket": "tetingmankuuuuu"
+      }
+    ],
     "directories": {
       "buildResources": "src/resources",
       "output": "packages",
@@ -260,18 +269,24 @@
     "mac": {
       "category": "public.app-category.graphics-design",
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ]
     },
     "linux": {
       "target": [
         "AppImage",
-        "snap"
+        "snap",
+        "zip"
       ]
     },
     "win": {
       "target": [
-        "nsis"
+        "nsis",
+        "nsis-web",
+        "squirrel",
+        "zip",
+        "appx"
       ]
     },
     "nsis": {
