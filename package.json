@@ -63,7 +63,7 @@
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
     "node": "node",
-    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=AKIAJO326FB5MCABAHQA  AWS_SECRET_ACCESS_KEY=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  electron-builder build  -mwl --x64 --publish always",
+    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mwl --x64 --publish always",
     "package": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  -mw --x64",
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
