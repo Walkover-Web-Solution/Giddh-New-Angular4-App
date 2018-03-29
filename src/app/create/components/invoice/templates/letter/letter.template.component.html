@@ -104,11 +104,11 @@
                     <div formGroupName="userDetails">
                         <div class="col-xs-6">
                             <div class="row" formGroupName="billingDetails">
-                                <div class="form-group" [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value !== 'IN' }">
+                                <div class="form-group" [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
                                     <label>Billing Address</label>
-                                    <textarea formControlName="address" (keyup)="autoFillShippingDetails()" class="form-control" rows="{{ CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value === 'IN' ? 5 : 3}}"></textarea>
+                                    <textarea formControlName="address" (keyup)="autoFillShippingDetails()" class="form-control" rows="{{ CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN' ? 5 : 3}}"></textarea>
                                 </div>
-                                <div class="form-group col-xs-4" *ngIf="CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value === 'IN'">
+                                <div class="form-group col-xs-4" *ngIf="CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN'">
                                     <div>
                                         <label>State</label>
                                         <sh-select formControlName="stateCode" (selected)="autoFillShippingDetails()" #statesBilling class="splSales" [options]="statesSource$ | async" [width]="139"></sh-select>
@@ -122,19 +122,19 @@
                         </div>
                         <div class="col-xs-6">
                             <div class="row" formGroupName="shippingDetails">
-                                <div class="form-group" [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value !== 'IN' }">
+                                <div class="form-group" [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
                                     <label style="width:340px;">
                                         <input type="checkbox" (change)="autoFillShippingDetails()" formControlName="autoFillShipping"> Shipping Address Same as Billing Address</label>
-                                    <textarea formControlName="address" [readonly]="CreateInvoiceForm.controls['userDetails'].controls['shippingDetails'].controls['autoFillShipping'].value" class="form-control" rows="{{ CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value === 'IN' ? 5 : 3}}"></textarea>
+                                    <textarea formControlName="address" [readonly]="CreateInvoiceForm.get('userDetails')['controls']['shippingDetails'].get('autoFillShipping').value" class="form-control" rows="{{ CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN' ? 5 : 3}}"></textarea>
                                 </div>
-                                <div class="form-group col-xs-4" *ngIf="CreateInvoiceForm.controls['userDetails'].controls['countryCode'].value === 'IN'">
+                                <div class="form-group col-xs-4" *ngIf="CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN'">
                                     <div>
                                         <label>State</label>
-                                        <sh-select formControlName="stateCode" [disabled]="CreateInvoiceForm.controls['userDetails'].controls['shippingDetails'].controls['autoFillShipping'].value" #statesShipping class="splSales" [options]="statesSource$ | async"></sh-select>
+                                        <sh-select formControlName="stateCode" [disabled]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value" #statesShipping class="splSales" [options]="statesSource$ | async"></sh-select>
                                     </div>
                                     <div class="mrT2">
                                         <label>GSTIN</label>
-                                        <input formControlName="gstNumber" [readonly]="CreateInvoiceForm.controls['userDetails'].controls['shippingDetails'].controls['autoFillShipping'].value" maxLength="15" type="text" class="form-control" (keyup)="getStateCode('shippingDetails', statesShipping)"
+                                        <input formControlName="gstNumber" [readonly]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value" maxLength="15" type="text" class="form-control" (keyup)="getStateCode('shippingDetails', statesShipping)"
                                         />
                                     </div>
                                 </div>
@@ -335,28 +335,28 @@
                         <section class="tableSec">
                             <div class="tableRow">
                                 <div class="tableCell">Total Amount</div>
-                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].controls['subTotal'].value | number:'1.2-2'}}</div>
+                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value | number:'1.2-2'}}</div>
                             </div>
                             <div class="tableRow">
                                 <div class="tableCell">Discount</div>
-                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].controls['totalDiscount'].value | number:'1.2-2'}}</div>
+                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}</div>
 
                             </div>
                             <div class="tableRow">
                                 <div class="tableCell">Taxable Value</div>
-                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].controls['totalTaxableValue'].value | number:'1.2-2'}}</div>
+                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}</div>
 
                             </div>
                             <div class="tableRow">
                                 <div class="tableCell">Tax</div>
-                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].controls['gstTaxesTotal'].value | number:'1.2-2'}}</div>
+                                <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}</div>
                             </div>
                             <div class="tableRow">
                                 <div class="tableCell">
                                     <strong>Total</strong>
                                 </div>
                                 <div class="tableCell figureCell">
-                                    <strong>{{CreateInvoiceForm.controls['uiCalculation'].controls['grandTotal'].value | number:'1.2-2'}}</strong>
+                                    <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value | number:'1.2-2'}}</strong>
                                 </div>
                             </div>
                             <div class="tableRow">
@@ -370,7 +370,7 @@
                                     <strong>Balance Due</strong>
                                 </div>
                                 <div class="tableCell figureCell">
-                                    <strong>{{CreateInvoiceForm.controls['uiCalculation'].controls['balanceDue'].value | number:'1.2-2'}}</strong>
+                                    <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value | number:'1.2-2'}}</strong>
                                 </div>
                             </div>
                         </section>
