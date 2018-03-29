@@ -4,7 +4,7 @@ import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
