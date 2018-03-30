@@ -10,12 +10,11 @@ import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { CheckIfPublicPath } from './decorators/checkIfPublicPath';
-import { ArpitComponent } from './Arpit.component';
+import { PublicPageHandlerComponent } from './public-page-handler.component';
 
 export const ROUTES: Routes = [
-  // { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'create', loadChildren: './create/create.module#CreateModule'},
-  { path: '', pathMatch: 'full', redirectTo: 'login', canActivate: [CheckIfPublicPath]},
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
@@ -66,6 +65,5 @@ export const ROUTES: Routes = [
     ]
   },
   // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
-  { path: '**', pathMatch: 'full', component: ArpitComponent },
-  { path: 'signup', pathMatch: 'full', redirectTo: 'signup', canActivate: [CheckIfPublicPath]},
+  { path: '**', pathMatch: 'full', component: PublicPageHandlerComponent },
 ];
