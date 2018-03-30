@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public selectedCountry: string;
   public selectedBanner: string = null;
   public loginUsing: string = null;
+  public urlPath: string = '';
   private imageURL: string;
   private email: string;
   private name: string;
@@ -59,6 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     @Inject(DOCUMENT) private document: Document,
     ) {
+    this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).takeUntil(this.destroyed$);

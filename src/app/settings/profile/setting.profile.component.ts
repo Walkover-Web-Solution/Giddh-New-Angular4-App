@@ -163,8 +163,6 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
           this.companyProfileObj = profileObj;
         }
 
-        console.log('profileObj is :', profileObj);
-
         if (profileObj && profileObj.country) {
           let countryName = profileObj.country.toLocaleLowerCase();
           if (countryName === 'india') {
