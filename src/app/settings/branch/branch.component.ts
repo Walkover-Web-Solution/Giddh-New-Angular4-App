@@ -131,6 +131,7 @@ export class BranchComponent implements OnInit {
     let viewContainerRef = this.companyadd.viewContainerRef;
     viewContainerRef.clear();
     let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddComponent).createBranch = true;
     (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
       this.hideAddCompanyModal();
     });
