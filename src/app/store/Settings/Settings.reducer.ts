@@ -13,6 +13,7 @@ import { IGetAllEbankAccountResponse } from '../../models/api-models/SettingsLin
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financial-year/financial-year.const';
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 import { CustomActions } from '../customActions';
+import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -27,6 +28,8 @@ export interface SettingsState {
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
   usersWithCompanyPermissions: any;
+  branches: any;
+  parentCompany: CompanyResponse;
 }
 
 export const initialState: SettingsState = {
@@ -34,7 +37,9 @@ export const initialState: SettingsState = {
   profile: {},
   linkedAccounts: {},
   financialYears: null,
-  usersWithCompanyPermissions: null
+  usersWithCompanyPermissions: null,
+  branches: null,
+  parentCompany: null
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -207,6 +212,24 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE:
     {
       newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE:
+    {
+      let response: BaseResponse<any, any> = action.payload;
+      if (response.status === 'success') {
+        newState.branches = response.body;
+        return Object.assign({}, state, newState);
+      }
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY_RESPONSE: {
+      let response: BaseResponse<any, any> = action.payload;
+      if (response.status === 'success') {
+        newState.parentCompany = response.body;
+      } else {
+        newState.parentCompany = null;
+      }
       return Object.assign({}, state, newState);
     }
     default: {
