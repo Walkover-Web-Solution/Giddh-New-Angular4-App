@@ -91,6 +91,11 @@
       </div>
     </div>
 
+    <div class=" mrT2 text-center">
+      <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}} Transactions | {{(daybookData$ | async)?.totalPages}} Pages </small> 
+      <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages </small> 
+    </div>
+
     <!-- pagination -->
     <div style="text-align: center;">
       <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
