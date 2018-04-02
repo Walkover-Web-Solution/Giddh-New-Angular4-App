@@ -70,13 +70,17 @@ export class BranchComponent implements OnInit {
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
-      if (branches && branches.results.length) {
-        _.each(branches.results, (branch) => {
-          if (branch.gstDetails && branch.gstDetails.length) {
-            branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList[0].isDefault)];
-          }
-        });
-        this.branches$ =  Observable.of(_.orderBy(branches.results, 'name'));
+      if (branches) {
+        if (branches.results.length) {
+          _.each(branches.results, (branch) => {
+            if (branch.gstDetails && branch.gstDetails.length) {
+              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList[0].isDefault)];
+            }
+          });
+          this.branches$ =  Observable.of(_.orderBy(branches.results, 'name'));
+        } else if (branches.results.length === 0) {
+          this.branches$ =  Observable.of(null);
+        }
       }
       if (companies && companies.length && branches) {
         let companiesWithSuperAdminRole = [];
