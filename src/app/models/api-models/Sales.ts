@@ -11,15 +11,15 @@ import { isNull, pick } from '../../lodash-optimized';
 export const VOUCHER_TYPE_LIST: any[] = [
   {
     value: 'Invoice',
-    label: 'sales'
+    label: 'Sales'
   },
   {
     value: 'Credit Note',
-    label: 'credit note'
+    label: 'Credit Note'
   },
   {
     value: 'Debit Note',
-    label: 'debit note'
+    label: 'Debit Note'
   }
 ];
 /*
