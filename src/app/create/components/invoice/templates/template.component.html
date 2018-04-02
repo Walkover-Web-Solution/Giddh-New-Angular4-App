@@ -6,7 +6,7 @@
       <div class="pr mrB4 clearfix mrT2">
         <div class="alL col-xs-7">
           <h1 class="fs18 bdrD inline lh42">
-            <a [routerLink]="['/create/invoice']">
+            <a [routerLink]="['/create-invoice/invoice']">
               <i class="glyphicon glyphicon-arrow-left cp"></i> Template TIGER
             </a>
           </h1>
@@ -18,14 +18,14 @@
 </section>
 
 
-<section class="container">
-  <div class="row">
-    <div class="col-xs-12">
+<section class="">
+  <div class="">
+    <div class="">
       <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
       <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
       <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
-        <!-- download, emial, save -->
-        <!-- <div class="">
+      <!-- download, emial, save -->
+      <!-- <div class="">
           <div class="clearfix">
             <button class="btn btn-primary mrB1">Download</button>
           </div>
