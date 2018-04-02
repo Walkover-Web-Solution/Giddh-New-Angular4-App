@@ -1,26 +1,29 @@
 <div class="container-fluid settings-bg">
-  <div class="row">
-    <div class="col-xs-12" id="settingTab">
-      <tabset #staticTabs>
-        <tab heading="Taxes">
-          <setting-taxes></setting-taxes>
-        </tab>
-        <tab heading="Integration" (select)="integrationSelected($event)">
-          <setting-integration #integrationComponent></setting-integration>
-        </tab>
-        <tab heading="Linked Accounts" (select)="linkedAccountSelected($event)">
-          <setting-linked-accounts #eBankComp></setting-linked-accounts>
-        </tab>
-        <tab heading="Profile" (select)="profileSelected($event)">
-          <setting-profile #profileComponent></setting-profile>
-        </tab>
-        <tab heading="Financial Year" (select)="financialYearSelected($event)">
-          <financial-year #financialYearComp></financial-year>
-        </tab>
-        <tab *ngIf="isUserSuperAdmin" (select)="permissionTabSelected($event)" heading="Permission">
-          <setting-permission #permissionComp></setting-permission>
-        </tab>
-      </tabset>
+    <div class="row">
+        <div class="col-xs-12" id="settingTab">
+            <tabset #staticTabs>
+                <tab heading="Taxes">
+                    <setting-taxes></setting-taxes>
+                </tab>
+                <tab heading="Integration" (select)="integrationSelected($event)">
+                    <setting-integration #integrationComponent></setting-integration>
+                </tab>
+                <tab heading="Linked Accounts" (select)="linkedAccountSelected($event)">
+                    <setting-linked-accounts #eBankComp></setting-linked-accounts>
+                </tab>
+                <tab heading="Profile" (select)="profileSelected($event)">
+                    <setting-profile #profileComponent></setting-profile>
+                </tab>
+                <tab heading="Financial Year" (select)="financialYearSelected($event)">
+                    <financial-year #financialYearComp></financial-year>
+                </tab>
+                <tab *ngIf="isUserSuperAdmin" (select)="permissionTabSelected($event)" heading="Permission">
+                    <setting-permission #permissionComp></setting-permission>
+                </tab>
+                <tab heading="Branch">
+                    <setting-branch></setting-branch>
+                </tab>
+            </tabset>
+        </div>
     </div>
-  </div>
 </div>

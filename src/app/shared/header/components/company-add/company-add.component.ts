@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
@@ -30,6 +30,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
+  @Input() public createBranch: boolean = false;
+
   public company: CompanyRequest = new CompanyRequest();
   public phoneNumber: string;
   public verificationCode: string;
@@ -92,7 +94,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           });
         })
         .map((res) => {
-          let data = res.map(item => item.address_components[0].long_name);
+          // let data = res.map(item => item.address_components[0].long_name);
+          let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
         });
@@ -105,7 +108,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       }
     });
     this.isCompanyCreated$.subscribe(s => {
-      if (s) {
+      if (s && !this.createBranch) {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'home';
@@ -117,24 +120,29 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
     this.dataSourceBackup.forEach(item => {
-      if (item.address_components[0].long_name === e.item) {
-        // set country and state values
-        try {
-          item.address_components.forEach(address => {
-            let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
-            let countryIdx = _.indexOf(address.types, 'country');
-            if (stateIdx !== -1) {
-              this.company.state = address.long_name;
-            }
-            if (countryIdx !== -1) {
-              this.company.country = address.long_name;
-            }
-          });
-        } catch (e) {
-          console.log(e);
-        }
+      if (item.city === e.item) {
+        this.company.country = item.country;
       }
     });
+    // this.dataSourceBackup.forEach(item => {
+    //   if (item.address_components[0].long_name === e.item) {
+    //     // set country and state values
+    //     try {
+    //       item.address_components.forEach(address => {
+    //         let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
+    //         let countryIdx = _.indexOf(address.types, 'country');
+    //         if (stateIdx !== -1) {
+    //           this.company.state = address.long_name;
+    //         }
+    //         if (countryIdx !== -1) {
+    //           this.company.country = address.long_name;
+    //         }
+    //       });
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   }
+    // });
   }
 
   public ngOnDestroy() {
@@ -168,6 +176,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
    */
   public createCompany() {
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
+    this.company.isBranch = this.createBranch;
     this.store.dispatch(this.companyActions.CreateCompany(this.company));
   }
 

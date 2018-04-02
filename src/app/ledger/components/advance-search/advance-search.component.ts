@@ -1,3 +1,5 @@
+import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
+import { from } from 'rxjs/observable/from';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { GroupService } from './../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
@@ -12,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { IOption } from './../../../theme/ng-select/option.interface';
 import { AccountService } from './../../../services/account.service';
 import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges, OnDestroy, AfterViewInit, OnChanges } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -33,10 +35,12 @@ const COMPARISON_FILTER = [
   templateUrl: './advance-search.component.html'
 })
 
-export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
+export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
+  @Input() public fromDateInLedger: string;
+  @Input() public toDateInLedger: string;
   @Input() public accountUniqueName: string;
   @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -98,6 +102,20 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
         this.groups$ = Observable.of(groups);
       }
     });
+  }
+
+  public ngOnChanges(s: SimpleChanges) {
+    this.dateRangePicker._bsValue = [];
+    if ('fromDateInLedger' in s && s.fromDateInLedger.currentValue && s.fromDateInLedger.currentValue !== s.fromDateInLedger.previousValue) {
+      this.fromDate = s.fromDateInLedger.currentValue;
+      let f: any = moment(s.fromDateInLedger.currentValue, GIDDH_DATE_FORMAT);
+      this.dateRangePicker._bsValue[0] = f._d;
+    }
+    if ('toDateInLedger' in s && s.toDateInLedger.currentValue && s.toDateInLedger.currentValue !== s.toDateInLedger.previousValue) {
+      this.toDate = s.toDateInLedger.currentValue;
+      let t: any = moment(s.toDateInLedger.currentValue, GIDDH_DATE_FORMAT);
+      this.dateRangePicker._bsValue[1] = t._d;
+    }
   }
 
   public resetAdvanceSearchModal() {
@@ -365,7 +383,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
    * toggleOtherDetails
    */
   public toggleOtherDetails() {
-    let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
+    let val: boolean = !this.advanceSearchForm.get('').value;
     this.advanceSearchForm.get('includeDescription').patchValue(val);
     if (!val) {
       this.advanceSearchForm.get('description').patchValue(null);
