@@ -4458,3 +4458,31 @@ table td[class*=col-]:last-child {
 
 
 /* left bar menu */
+
+
+/* ==================================================
+    Branch
+================================================== */
+
+.branch .box h1 {
+    font-size: 18px;
+    padding-right: 85px;
+    display: inline-block;
+}
+
+.branch .box .btn-default {
+    right: 0;
+    top: 0;
+}
+
+.illustration_box {
+    border-radius: 4px;
+    padding: 25px 20px;
+    box-shadow: 0 0 8px #b3b3b329;
+    background: #fdfdfd;
+    margin-top: 70px;
+}
+
+.illustration_box img {
+    max-width: 300px;
+}
