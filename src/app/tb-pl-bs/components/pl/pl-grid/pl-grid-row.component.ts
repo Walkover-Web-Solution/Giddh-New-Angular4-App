@@ -4,7 +4,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
 @Component({
   selector: '[pl-grid-row]',  // <home></home>
   template: `
-    <div class="pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)" [ngClass]="{'isHidden': !groupDetail.isVisible }">
+    <div class="pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated) && groupDetail.closingBalance.amount !== 0" [ngClass]="{'isHidden': !groupDetail.isVisible }">
       <div class="col-xs-4  group" [innerHTML]="groupDetail.groupName | highlight:search" [ngStyle]="{'padding-left': padding+'px'}"></div>
       <div class="col-xs-3  bdrL group pull-right" *ngIf="!groupDetail.level1">
       <!-- {{groupDetail.closingBalance | recType}} -->
