@@ -13,6 +13,8 @@ import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-acc
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 
 @Component({
   selector: 'setting-linked-accounts',
@@ -28,6 +30,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public accounts$: IOption[];
   public confirmationMessage: string;
   public dateToUpdate: string;
+  public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -41,7 +44,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private _accountService: AccountService,
     private _sanitizer: DomSanitizer
   ) {
-    //
+    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -66,16 +69,25 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
     });
 
-    // get flatternaccounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
+    this.flattenAccountsStream$.subscribe(data => {
+      if (data) {
         let accounts: IOption[] = [];
-        data.body.results.map(d => {
+        data.map(d => {
           accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
         });
         this.accounts$ = accounts;
-      }
-    });
+    }});
+
+    // get flatternaccounts
+    // this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+    //   if (data.status === 'success') {
+    //     let accounts: IOption[] = [];
+    //     data.body.results.map(d => {
+    //       accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
+    //     });
+    //     this.accounts$ = accounts;
+    //   }
+    // });
   }
 
   public getInitialEbankInfo() {

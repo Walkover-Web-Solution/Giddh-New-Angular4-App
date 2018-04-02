@@ -8,10 +8,10 @@ import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
-import { from } from 'rxjs/observable/from';
+// import { from } from 'rxjs/observable/from';
 
 @Injectable()
 export class SidebarAction {
