@@ -9,6 +9,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class CreateInvoiceHeaderComponent implements OnInit, OnDestroy {
 
+  public imgPath: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor() {
@@ -16,7 +17,7 @@ export class CreateInvoiceHeaderComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   public ngOnDestroy() {

@@ -9,10 +9,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class CreateInvoiceComponent implements OnInit, OnDestroy {
 
+  public imgPath: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   public ngOnInit() {
     console.log ('CreateInvoiceComponent loaded');
+    this.imgPath = isElectron ? 'assets/images/templates/' : AppUrl + APP_FOLDER + 'assets/images/templates/';
   }
 
   public ngOnDestroy() {
