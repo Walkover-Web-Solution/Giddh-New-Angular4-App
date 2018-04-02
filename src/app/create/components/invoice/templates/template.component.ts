@@ -38,7 +38,7 @@ export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
         this.templateId = params['templateId'];
         this.loadComponents();
       } else {
-        this._router.navigate(['/create/invoice']);
+        this._router.navigate(['/create-invoice/invoice']);
       }
     });
   }

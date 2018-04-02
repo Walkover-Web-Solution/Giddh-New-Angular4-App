@@ -11,7 +11,7 @@ export class CompanyRequest {
   public pincode: string;
   public contactNo: string;
   public email: string;
-
+  public isBranch?: boolean;
 }
 
 export class StateDetailsRequest {
