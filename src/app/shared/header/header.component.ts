@@ -24,6 +24,7 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { DaterangePickerComponent } from 'app/theme/ng2-daterangepicker/daterangepicker.component';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -109,6 +110,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isTodaysDateSelected: boolean = false;
   public isDateRangeSelected: boolean = false;
   public userFullName: string;
+  public userAvatar: string;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -127,7 +129,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private cdRef: ChangeDetectorRef,
     private zone: NgZone,
     private route: ActivatedRoute,
-    private _generalActions: GeneralActions) {
+    private _generalActions: GeneralActions,
+    private authService: AuthenticationService) {
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -181,6 +184,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.user$.subscribe((u) => {
       if (u) {
         let userEmail = u.email;
+        this.getUserAvatar(userEmail);
         let userEmailDomain = userEmail.replace(/.*@/, '');
         if (userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1) {
           this.userIsCompanyUser = true;
@@ -461,5 +465,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public getUserAvatar(userId) {
+    this.authService.getUserAvatar(userId).subscribe(res => {
+      let data = res;
+      this.userAvatar = res.entry.gphoto$thumbnail.$t;
+    });
   }
 }

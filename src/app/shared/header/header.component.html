@@ -356,20 +356,22 @@
               </a>
                     <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
                         <li>
-                            <a href="javascript:void(0)" class="oh"><span class="user_circle pull-left">{{userName | uppercase}}</span> <span class="pull-left">{{ userFullName }} <br/> <small>Profile</small></span></a>
+                            <a [routerLink]="['user-details/profile']" class="oh"><span class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span> <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}" alt="" /></span> <div class="pull-left userName_wrap ellp">{{ userFullName }} <br/> <small class="grey_clr">Profile</small></div></a>
                         </li>
                         <li role="separator" class="divider" style="width:100%"></li>
                         <li>
                             <a [routerLink]="['user-details']">API</a>
                         </li>
+                        <!-- not available now
                         <li>
                             <a [routerLink]="['user-details']">Billing</a>
                         </li>
+                        -->
                         <li>
                             <a href="https://trello.com/b/PArZrnyg/giddh" target="_blank">Upcoming</a>
                         </li>
                         <li>
-                            <a href="#">Feature Request</a>
+                            <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
                         </li>
                         <li>
                             <a href="http://faq.giddh.com" target="_blank">Help</a>

@@ -3,15 +3,18 @@
     <tabset>
 
         <!-- start auth tab tab -->
-        <tab heading="Auth Key" [active]="true">
+        <tab heading="Auth Key" [active]="apiTabActivated">
             <div class="box clearfix mrT2">
                 <h1 class="section_head pdT0">Main Auth-key</h1>
                 <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
-                    <div class="form-group">
-                        <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey" [readonly]="true" />
+                    <div class="form-group col-xs-6">
+                        <div class="row">
+                            <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey" [readonly]="true" />
+                        </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group clearfix">
                         <button class="btn btn-default" (click)="regenerateKey()">Regenerate Auth Key</button>
+                        <a class="btn btn-link" href="https://developers.giddh.com/collection/giddh-api-integration/46/pages/140" target="_blank">Documentation</a>
                     </div>
                 </form>
             </div>
@@ -144,7 +147,7 @@
         <!-- end of Wallet tab tab -->
 
         <!-- start Mobile Number tab tab -->
-        <tab heading="Mobile Number" select="getUserDetails()">
+        <tab heading="Mobile Number" select="getUserDetails()" [active]="!apiTabActivated">
             <div class="box clearfix mrT2">
                 <form class="" name="mobileForm" novalidate>
                     <h1 class="section_head">Add/Edit Mobile Number</h1>
