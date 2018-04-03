@@ -11,6 +11,7 @@ import { CompanyService } from '../services/companyService.service';
 import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../actions/company.actions';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'user-details',
@@ -43,11 +44,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public authenticateTwoWay$: Observable<boolean>;
   public selectedCompany: CompanyResponse = null;
   public user: UserDetails = null;
+  public apiTabActivated: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
     private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
-    private _companyActions: CompanyActions) {
+    private _companyActions: CompanyActions, private router: Router) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -70,6 +72,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+   this.router.events
+    .subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (event.urlAfterRedirects.indexOf('/profile') !== -1) {
+          this.apiTabActivated = false;
+        } else {
+          this.apiTabActivated = true;
+        }
+      }
+    });
+
     // console.log(RazorPay);
     this.contactNo$.subscribe(s => this.phoneNumber = s);
     this.countryCode$.subscribe(s => this.countryCode = s);
