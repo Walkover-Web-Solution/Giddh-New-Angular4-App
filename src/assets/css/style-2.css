@@ -246,11 +246,12 @@ input {
     font-size: 12px;
 }
 
-.company-name span {
+.company-name ul li>span {
     color: #333 !important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    font-size: 14px;
 }
 
 .company-name .cText span {
@@ -450,8 +451,8 @@ header .navbar {
     border: 0;
     background: #333 !important;
     color: #fff;
-    padding: 7px 10px !important;
-    width: 232px;
+    padding: 7px 35px 7px 10px !important;
+    width: 270px;
 }
 
 #accountSearch:focus {
@@ -469,6 +470,10 @@ header .navbar {
     border: 0;
     border-top: 0;
     border-bottom: 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .acntAccordion .accBox {
@@ -676,6 +681,7 @@ header {
     margin: 5px 0 5px 0px;
     width: 100%;
     font-size: 9px;
+    padding-right: 5px;
 }
 
 #companyList {
@@ -1383,7 +1389,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 footer {
     background-color: #26263A;
-    padding: 20px;
+    padding: 10px 20px;
     text-align: center;
     color: #C5C5B8;
     font-size: 17px;
@@ -1399,7 +1405,8 @@ footer>div {
 footer>div>a {
     margin: 0 22px;
     color: #C5C5B8;
-    padding: 10px 0;
+    padding: 0;
+    font-size: 16px;
 }
 
 footer>div>a:hover {
@@ -4460,4 +4467,90 @@ table td[class*=col-]:last-child {
 
 .form_body .toggle-btn label {
     color: #7f7f7f;
+}
+
+.user_dropdown {
+    width: 200px;
+    right: 4px;
+}
+
+.user_dropdown>li>a {
+    font-size: 14px;
+    padding: 3px 10px;
+}
+
+.app_list>ul {
+    width: 100%;
+    float: left;
+    padding: 0px 10px;
+    font-size: 14px;
+    /* margin: 10px 0; */
+}
+
+.app_list>ul h6 {
+    color: #333;
+    margin-bottom: 7px;
+}
+
+.app_list>ul li {
+    list-style: none;
+    float: left;
+    width: 50%;
+    margin: 3px 0;
+}
+
+.app_list>ul li a {
+    padding: 3px 0;
+    color: #555;
+    display: block;
+}
+
+.app_list>ul li a:hover {
+    color: #000;
+}
+
+.user_circle {
+    background: #555555;
+    border-radius: 100%;
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    font-size: 12px;
+}
+
+.user_circle img {
+    width: 100%;
+    border-radius: 100%;
+}
+
+.longcode-details figure ul li {
+    list-style: none;
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.longcode-details figure ul li:last-child {
+    border-bottom: 0;
+}
+
+.longcode-details figure ul {
+    background: #f4f5f8;
+    margin-bottom: 10px;
+}
+
+.longcode-details figure ul li h2 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.longcode-details figure ul li .cases {
+    margin-left: 10px;
+}
+
+.userName_wrap {
+    width: calc(100% - 40px);
 }
