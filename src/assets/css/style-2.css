@@ -681,6 +681,7 @@ header {
     margin: 5px 0 5px 0px;
     width: 100%;
     font-size: 9px;
+    padding-right: 5px;
 }
 
 #companyList {
@@ -4516,6 +4517,11 @@ table td[class*=col-]:last-child {
     font-size: 12px;
 }
 
+.user_circle img {
+    width: 100%;
+    border-radius: 100%;
+}
+
 .longcode-details figure ul li {
     list-style: none;
     padding: 12px 0;
@@ -4538,4 +4544,8 @@ table td[class*=col-]:last-child {
 
 .longcode-details figure ul li .cases {
     margin-left: 10px;
+}
+
+.userName_wrap {
+    width: calc(100% - 40px);
 }
