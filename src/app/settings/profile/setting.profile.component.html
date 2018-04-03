@@ -157,6 +157,7 @@
         <div class="clearfix">
             <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">Update</button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
+            <button type="button" class="btn btn-danger">Delete {{ companyProfileObj.name }}</button>
         </div>
     </form>
 </div>
