@@ -271,7 +271,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           alwaysOnTop: true,
           autoHideMenuBar: true,
           webPreferences: {
-            nodeIntegration: false,
             devTools: true,
             partition: 'oauth2'
           }

@@ -570,9 +570,10 @@ header .navbar {
     width: 100% !important;
 }
 
-header {
+
+/* header {
     border-bottom: 1px solid rgb(214, 214, 214);
-}
+} */
 
 .company-name {
     min-width: 380px;
@@ -3935,6 +3936,7 @@ input[type='checkbox'][disabled]:after {
 
 .table-container .account {
     background: #f4f5f8;
+    /* background: #eee; */
 }
 
 .table-container>div>section>.tb-pl-bs-grid-row>div:nth-child(1) {
@@ -4548,4 +4550,31 @@ table td[class*=col-]:last-child {
 
 .userName_wrap {
     width: calc(100% - 40px);
+}
+
+/* ==================================================
+    Branch
+================================================== */
+
+.branch .box h1 {
+    font-size: 18px;
+    padding-right: 85px;
+    display: inline-block;
+}
+
+.branch .box .btn-default {
+    right: 0;
+    top: 0;
+}
+
+.illustration_box {
+    border-radius: 4px;
+    padding: 25px 20px;
+    box-shadow: 0 0 8px #b3b3b329;
+    background: #fdfdfd;
+    margin-top: 70px;
+}
+
+.illustration_box img {
+    max-width: 300px;
 }
