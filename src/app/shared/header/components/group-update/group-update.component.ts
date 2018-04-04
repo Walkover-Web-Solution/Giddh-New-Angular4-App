@@ -17,6 +17,7 @@ import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { GeneralActions } from '../../../../actions/general/general.actions';
 
 @Component({
   selector: 'group-update',
@@ -57,7 +58,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+    private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions) {
     this.groupList$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
@@ -123,6 +124,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+    this.store.dispatch(this._generalActions.getGroupWithAccounts());
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
