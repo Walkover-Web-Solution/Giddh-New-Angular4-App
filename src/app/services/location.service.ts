@@ -8,7 +8,7 @@ declare var _: any;
 @Injectable()
 export class LocationService {
   // private GoogleApiURL: string = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCaphDTQJXyr1lhnaXP_nm7a5dqgr5KVJU';
-  private GoogleApiURL: string = 'http://apitest.giddh.com/cities?q=:q';
+  private GoogleApiURL: string = 'cities?q=:q';
   private _: any;
   constructor(private _http: HttpClient, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this._ = config._;
@@ -30,7 +30,8 @@ export class LocationService {
     // } else {
     //   query += `components=country:${location.QueryString}`;
     // }
-    return this._http.get(this.GoogleApiURL.replace(':q', location.QueryString))
+    let url = this.config.apiUrl + this.GoogleApiURL;
+    return this._http.get(url.replace(':q', location.QueryString))
       .map((res) => {
         let r = res as any;
         // let data = r.results.filter((i) => _.includes(i.types, 'locality'));
