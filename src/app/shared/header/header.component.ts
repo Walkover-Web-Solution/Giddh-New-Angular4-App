@@ -475,8 +475,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public getUserAvatar(userId) {
     this.authService.getUserAvatar(userId).subscribe(res => {
-      let data = res;
-      this.userAvatar = res.entry.gphoto$thumbnail.$t;
+      if (res && res.entry) {
+        let data = res;
+        this.userAvatar = res.entry.gphoto$thumbnail.$t;
+      }
     });
   }
 }
