@@ -10,8 +10,8 @@
 
                 <div class="">
                     <section class="form_body witBg clearfix mrBChldLbl">
-                        <div class="form_bg clearfix pdT1 pdB1 pdR pdL">
-                            <div class="">
+                        <div class="form_bg clearfix">
+                            <div class="row">
                                 <div class="form-group col-xs-5">
                                     <label>Under Group</label>
                                     <sh-select [options]="groupsData$ | async" formControlName="parentGroup" [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [notFoundLinkText]="'+ Add New'"
@@ -19,7 +19,7 @@
                                 </div>
                             </div>
 
-                            <div class="clearfix">
+                            <div class="clearfix row">
                                 <div class="form-group col-xs-5">
                                     <label>Stock Name <sup>*</sup></label>
                                     <input type="text" name="name" class="form-control" (change)="generateUniqueName()" formControlName="name" />
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             <!-- other details -->
-                            <div class="">
+                            <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
                                         <label class="cp">
@@ -41,7 +41,7 @@
                             </div>
 
                             <ng-container *ngIf="showOtherDetails">
-                                <div class="">
+                                <div class="row">
                                     <div class="form-group col-xs-4">
                                         <label>Unique Name</label>
                                         <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addStockForm.get('uniqueName')" class="form-control" formControlName="uniqueName">
@@ -59,7 +59,7 @@
 
                                 </div>
 
-                                <div class="">
+                                <div class="row">
 
                                     <div class="form-group col-xs-4">
                                         <label>Open. Qty</label>
@@ -172,7 +172,7 @@
 
 
                         <section class="mrT2 mrB3 col-xs-12" *ngIf="addStockForm.value.isFsStock">
-                            <div class="">
+                            <div class="pdL pdR">
                                 <h1 class="section_head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made with)</strong></h1>
                                 <table class="noHover basic width100">
                                     <tbody formGroupName="manufacturingDetails">
@@ -221,9 +221,8 @@
                             </div>
                         </section>
 
-                        <div class="col-xs-12 text-right">
-                            <div class="">
-
+                        <div class="col-xs-12 text-left">
+                            <div class="mrT1 pdL pdR">
                                 <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" class="btn btn-default">Cancel</button>
                                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save</button>
                                 <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()" [disabled]="addStockForm.invalid || disableStockButton">Update</button>
