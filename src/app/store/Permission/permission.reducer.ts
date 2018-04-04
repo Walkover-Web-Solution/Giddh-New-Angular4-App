@@ -3,7 +3,7 @@ import { Action } from '@ngrx/store';
 import { IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
 import { PERMISSION_ACTIONS } from '../../actions/permission/permission.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
 

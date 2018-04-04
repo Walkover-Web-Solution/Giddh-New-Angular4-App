@@ -179,7 +179,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         obj.permissions = obj.permissions.map((o: Permission) => {
           return o = new NewPermissionObj(o.code, true);
         });
-        if (obj.permissions.length < 6) {
+        if (obj.permissions.length < 6 && obj.name !== 'SHARE') {
           obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles)));
         }
         let count = 0;
