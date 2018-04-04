@@ -180,7 +180,7 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      new BundleAnalyzerPlugin(),
+      // new BundleAnalyzerPlugin(), // Arpit: Commented on 3rd Apr 2018
       new SourceMapDevToolPlugin({
         filename: '[file].map[query]',
         moduleFilenameTemplate: '[resource-path]',
