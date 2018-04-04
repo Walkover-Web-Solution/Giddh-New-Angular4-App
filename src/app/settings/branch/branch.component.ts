@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -33,7 +33,7 @@ export const IsyncData = [
   providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 
-export class BranchComponent implements OnInit {
+export class BranchComponent implements OnInit, OnDestroy {
   @ViewChild('branchModal') public branchModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
@@ -194,6 +194,11 @@ export class BranchComponent implements OnInit {
       this.selectedBranch = null;
     }
     this.confirmationModal.hide();
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   private isAllCompaniesSelected() {

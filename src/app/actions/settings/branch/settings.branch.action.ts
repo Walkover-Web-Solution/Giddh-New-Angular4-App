@@ -9,7 +9,6 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_BRANCH_ACTIONS } from './settings.branch.const';
-import { SmsKeyClass } from '../../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../../store/customActions';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 
