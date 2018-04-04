@@ -26,6 +26,7 @@ import { AsideInventoryComponent } from 'app/inventory/components/aside-inventor
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from 'app/shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { InventoryGroupStockReportComponent } from './components/group-stock-report-component/group.stockreport.component';
+import { InventoryWelcomeComponent } from './components/welcome-inventory/welcome-inventory.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { InventoryGroupStockReportComponent } from './components/group-stock-rep
     AsideCustomStockComponent,
     AsideInventoryComponent,
     InventoryUpdateGroupComponent,
-    InventoryGroupStockReportComponent
+    InventoryGroupStockReportComponent,
+    InventoryWelcomeComponent
   ],
   exports: [
     InventoryComponent,
@@ -58,7 +60,8 @@ import { InventoryGroupStockReportComponent } from './components/group-stock-rep
     AsideInventoryComponent,
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
-    InventoryAddStockComponent
+    InventoryAddStockComponent,
+    InventoryWelcomeComponent
   ],
   providers: [],
   imports: [
