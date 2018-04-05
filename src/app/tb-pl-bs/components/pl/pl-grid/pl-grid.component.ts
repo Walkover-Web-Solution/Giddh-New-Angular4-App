@@ -8,7 +8,34 @@ import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'pl-grid',  // <home></home>
   templateUrl: './pl-grid.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+  :host ::ng-deep .table-container {
+    padding:0;
+  }
+  :host ::ng-deep .table-container .profitLoss section div>div {
+    padding-left: 8px;
+  }
+  :host ::ng-deep .basic {
+    margin-bottom:0;
+  }
+  :host ::ng-deep .table-container thead tr th:first-child {
+    border-left: 0;
+  }
+  :host ::ng-deep .basic>thead>tr>th {
+    padding: 8px 8px
+   }
+  .max-980 {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  :host ::ng-deep .table-container section div .group {
+    text-transform: capitalize;
+  }
+  :host ::ng-deep .table-container div.row {
+    border-bottom:0;
+  }
+  `]
 })
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
@@ -22,7 +49,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
     //
   }
   public ngOnInit() {
-    //
+  //
   }
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
@@ -79,10 +106,20 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   //   });
   // }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
     _.each(data, (grp: ChildGroup) => {
       if (grp.isIncludedInSearch) {
-        grp.isCreated = true;
-        grp.isVisible = isVisible;
+        if (!grp.level1) {
+          if (parentGroups.indexOf(grp.uniqueName) === -1) {
+            grp.isCreated = false;
+            grp.isVisible = isVisible;
+            grp.isOpen = isVisible;
+          } else {
+            grp.isOpen = isVisible;
+          }
+        } else {
+          grp.isOpen = true;
+        }
         _.each(grp.accounts, (acc: Account) => {
           if (acc.isIncludedInSearch) {
             acc.isCreated = true;

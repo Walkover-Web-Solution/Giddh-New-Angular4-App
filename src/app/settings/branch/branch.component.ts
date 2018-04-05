@@ -69,35 +69,43 @@ export class BranchComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.settingsBranchActions.GetALLBranches());
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
-    this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
-      if (companies && companies.length) {
+    this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
+      if (branches) {
+        if (branches.results.length) {
+          _.each(branches.results, (branch) => {
+            if (branch.gstDetails && branch.gstDetails.length) {
+              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList[0].isDefault)];
+            }
+          });
+          this.branches$ =  Observable.of(_.orderBy(branches.results, 'name'));
+        } else if (branches.results.length === 0) {
+          this.branches$ =  Observable.of(null);
+        }
+      }
+      if (companies && companies.length && branches) {
         let companiesWithSuperAdminRole = [];
         _.each(companies, (cmp) => {
           _.each(cmp.userEntityRoles, (company) => {
             if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-              companiesWithSuperAdminRole.push(cmp);
+              if (branches && branches.results.length) {
+                let existIndx = branches.results.findIndex((b) => b.uniqueName === cmp.uniqueName);
+                if (existIndx === -1) {
+                  companiesWithSuperAdminRole.push(cmp);
+                }
+              } else {
+                companiesWithSuperAdminRole.push(cmp);
+              }
             }
           });
         });
-        return _.orderBy(companiesWithSuperAdminRole, 'name');
-      }
-    })).takeUntil(this.destroyed$);
-
-    this.branches$ = this.store.select(createSelector([(state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (branches, parentCompany) => {
-      if (branches && branches.results.length) {
-        _.each(branches.results, (branch) => {
-          if (branch.gstDetails && branch.gstDetails.length) {
-            branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList[0].isDefault)];
-          }
-        });
-        return _.orderBy(branches.results, 'name');
+        this.companies$ = Observable.of(_.orderBy(companiesWithSuperAdminRole, 'name'));
       }
       if (parentCompany) {
         setTimeout(() => { this.parentCompanyName = parentCompany.name; }, 10);
       } else {
         setTimeout(() => { this.parentCompanyName = null; }, 10);
       }
-    })).takeUntil(this.destroyed$);
+    })).takeUntil(this.destroyed$).subscribe();
 
   }
 
@@ -123,6 +131,7 @@ export class BranchComponent implements OnInit, OnDestroy {
     let viewContainerRef = this.companyadd.viewContainerRef;
     viewContainerRef.clear();
     let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddComponent).createBranch = true;
     (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
       this.hideAddCompanyModal();
     });

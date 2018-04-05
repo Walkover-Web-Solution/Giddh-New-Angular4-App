@@ -32,7 +32,8 @@
             <div class="form-group col-xs-3">
                 <label>Apply Tax From</label>
                 <div class="input-group">
-                    <input type="text" name="from" (blur)="showFromDatePicker = false;" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+                    <!-- (blur)="showFromDatePicker = false;" -->
+                    <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
                     <span class="input-group-btn">
                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                <i class="glyphicon glyphicon-calendar"></i>
