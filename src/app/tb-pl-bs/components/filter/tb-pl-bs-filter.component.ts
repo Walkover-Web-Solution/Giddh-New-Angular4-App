@@ -78,6 +78,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public expandAll: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showClearSearch: boolean;
   public request: TrialBalanceRequest = {};
+  public expand: boolean = false;
   public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Financial Year', value: '0' }];
 
   @Input() public showLoader: boolean = true;
@@ -217,5 +218,15 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.filterForm.get('tagName').patchValue(ev.value);
     this.filterForm.get('refresh').patchValue(true);
     this.onPropertyChanged.emit(this.filterForm.value);
+  }
+
+  /**
+   * emitExpand
+   */
+  public emitExpand() {
+    this.expand = !this.expand;
+    setTimeout(() => {
+    this.expandAll.emit(this.expand);
+    }, 10);
   }
 }

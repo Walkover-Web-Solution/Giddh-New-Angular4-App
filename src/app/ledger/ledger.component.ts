@@ -453,6 +453,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
+
+    this.store.select(createSelector([(state: AppState) => state.general.addAndManageClosed], (yesOrNo: boolean) => {
+      this.getTransactionData();
+    })).debounceTime(300).subscribe();
+
   }
 
   public initTrxRequest(accountUnq: string) {

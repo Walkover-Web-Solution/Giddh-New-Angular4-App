@@ -309,7 +309,7 @@
               tooltip="{{txn.description}}">
               <td class="col-xs-2">{{ txn.entryDate }}</td>
               <td class="col-xs-7">
-                {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
+                <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.voucherGenerated }">
                 {{ txn.amount | number: '1.0-2' }}
@@ -429,7 +429,7 @@
               tooltip="{{txn.description}}">
               <td class="col-xs-2">{{ txn.entryDate }}</td>
               <td class="col-xs-7">
-                {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
+                <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.voucherGenerated }">
                 {{txn.amount | number: '1.0-2'}}
@@ -666,7 +666,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <advance-search-model #advanceSearchComp [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
+      <advance-search-model #advanceSearchComp [toDateInLedger]="this.trxRequest.to" [fromDateInLedger]="this.trxRequest.from" [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
     </div>
   </div>
 </div>

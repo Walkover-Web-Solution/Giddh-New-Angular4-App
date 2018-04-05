@@ -14,7 +14,7 @@
                     <span>Before creating a company we need to verify your mobile no. first.</span>
                 </div>
             </div>
-            <div class="welcome-msg" *ngIf="isCompanyCreated$ | async">
+            <div class="welcome-msg" *ngIf="(isCompanyCreated$ | async) && !createBranch">
                 <div>
                     <span>Congratulations!</span><br>
                     <span>Company created successfully.</span>
