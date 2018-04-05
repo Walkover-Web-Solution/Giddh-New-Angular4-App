@@ -11,6 +11,7 @@ export interface TrialBalanceRequest {
   to?: string;
   refresh?: boolean;
   selectedDateOption?: string;
+  tagName?: string;
 }
 
 export interface ProfitLossRequest extends TrialBalanceRequest {
@@ -26,6 +27,7 @@ export interface BalanceSheetData {
   liabTotal?: number;
   liabTotalEnd?: number;
   dates?: BalanceSheetRequest;
+  message?: string;
 }
 
 export interface ProfitLossData {
@@ -43,6 +45,7 @@ export interface ProfitLossData {
   frowardBalanceClass?: boolean;
   dates?: ProfitLossRequest;
   incomeStatment?: any;
+  message?: string;
 }
 
 export interface AccountDetails {
@@ -52,6 +55,7 @@ export interface AccountDetails {
   closingBalance: ClosingBalance;
   openingBalance: OpeningBalance;
   groupDetails: ChildGroup[];
+  message?: string;
 }
 
 export interface BalanceSheetRequest extends TrialBalanceRequest {
