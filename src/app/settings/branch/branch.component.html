@@ -5,7 +5,7 @@
 <div class="" *ngIf="(branches$ | async)?.length > 0">
     <div class="row">
         <div class="col-xs-6 branch" *ngFor="let branch of branches$ | async">
-            <div class="box clearfix mrB2" *ngFor="let branch of branches$ | async">
+            <div class="box clearfix mrB2">
                 <div class="mrB1 pdB bdrB clearfix pos-rel">
                     <h1 class="fs18 txtCpc">{{branch.name}}</h1>
                     <button class="pull-right btn btn-default btn-xs pos-abs" (click)="removeBranch(branch.uniqueName, branch.name)">
