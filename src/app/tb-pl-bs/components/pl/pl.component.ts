@@ -10,6 +10,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
 import { createSelector } from 'reselect';
 import { ChildGroup, Account } from '../../../models/api-models/Search';
+import { ToasterService } from '../../../services/toaster.service';
 @Component({
   selector: 'pl',
   template: `
@@ -75,7 +76,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef) {
+  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
     this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
   }
 
@@ -83,6 +84,10 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log('hello Tb Component');
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
       let data = _.cloneDeep(p) as ProfitLossData;
+      if (data && data.message) {
+        this._toaster.clearAllToaster();
+        this._toaster.infoToast(data.message);
+      }
       if (data.expArr) {
         this.InitData(data.expArr);
         data.expArr.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; g.isOpen = true; g.childGroups.forEach(c => { c.isVisible = true; c.isCreated = true; c.isIncludedInSearch = true; }); });
@@ -126,6 +131,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
+    request.tagName = request.tagName;
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }
 
