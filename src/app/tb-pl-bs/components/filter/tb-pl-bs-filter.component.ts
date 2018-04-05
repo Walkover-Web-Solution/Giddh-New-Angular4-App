@@ -5,6 +5,13 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/roots';
+import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
+import { createSelector } from 'reselect';
+import { Observable } from 'rxjs/Observable';
+import { TagRequest } from '../../../models/api-models/settingsTags';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -18,6 +25,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public search: string = '';
   public financialOptions: IOption[] = [];
   public accountSearchControl: FormControl = new FormControl();
+  public tags$: Observable<TagRequest[]>;
+  public selectedTag: string;
   public datePickerOptions: any = {
     locale: {
       applyClass: 'btn-green',
@@ -75,7 +84,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public showLabels: boolean = false;
 
-  // init form and other properties from input commpany
+  // init form and other properties from input company
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     if (!value) {
@@ -100,17 +109,23 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
   private _selectedCompany: CompanyResponse;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
+  constructor(private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+    private store: Store<AppState>,
+    private _settingsTagActions: SettingsTagActions) {
     this.filterForm = this.fb.group({
       from: [''],
       to: [''],
       fy: [''],
       selectedDateOption: ['0'],
       selectedFinancialYearOption: [''],
-      refresh: [false]
+      refresh: [false],
+      tagName: ['']
     });
 
+    this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -131,6 +146,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         this.seachChange.emit(this.search);
         this.cd.detectChanges();
       });
+
+    this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+      if (tags && tags.length) {
+        _.map(tags, (tag) => {
+          tag.value = tag.name;
+          tag.label = tag.name;
+        });
+        return _.orderBy(tags, 'name');
+      }
+    })).takeUntil(this.destroyed$);
 
   }
 
@@ -185,5 +210,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
       }
     }
+  }
+
+  public onTagSelected(ev) {
+    this.selectedTag = ev.value;
+    this.filterForm.get('tagName').patchValue(ev.value);
+    this.filterForm.get('refresh').patchValue(true);
+    this.onPropertyChanged.emit(this.filterForm.value);
   }
 }
