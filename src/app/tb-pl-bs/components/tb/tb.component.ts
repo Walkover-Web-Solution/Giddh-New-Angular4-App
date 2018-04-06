@@ -87,8 +87,10 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       let d = _.cloneDeep(p) as AccountDetails;
       if (d) {
         if (d.message) {
-          this._toaster.clearAllToaster();
-          this._toaster.infoToast(d.message);
+          setTimeout(() => {
+            this._toaster.clearAllToaster();
+            this._toaster.infoToast(d.message);
+          }, 100);
         }
         this.InitData(d.groupDetails);
         d.groupDetails.forEach(g => { g.isVisible = true; g.isCreated = true; });
