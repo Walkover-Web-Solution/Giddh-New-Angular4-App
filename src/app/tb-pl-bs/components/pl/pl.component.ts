@@ -85,8 +85,10 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
       let data = _.cloneDeep(p) as ProfitLossData;
       if (data && data.message) {
-        this._toaster.clearAllToaster();
-        this._toaster.infoToast(data.message);
+        setTimeout(() => {
+          this._toaster.clearAllToaster();
+          this._toaster.infoToast(data.message);
+        }, 100);
       }
       if (data.expArr) {
         this.InitData(data.expArr);
@@ -131,7 +133,9 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
-    request.tagName = request.tagName;
+    if (!request.tagName) {
+      delete request.tagName;
+    }
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }
 
