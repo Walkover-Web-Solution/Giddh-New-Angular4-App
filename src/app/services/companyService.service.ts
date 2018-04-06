@@ -116,10 +116,15 @@ export class CompanyService {
 
   public getApplicationDate(): Observable<BaseResponse<string, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<string, any> = res;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+        let data: BaseResponse<string, any> = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+    } else {
+      // When new user sign up without company
+      return Observable.empty();
+    }
   }
   public setApplicationDate(dateObj: {fromDate?: string, toDate?: string, duration?: number, period?: string}): Observable<BaseResponse<string, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -194,12 +199,11 @@ export class CompanyService {
     }).catch((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e));
   }
 
-
   /**
    * ContactFrom
    */
   public ContactFrom(formObj): Observable<BaseResponse<any, any>> {
-    let domainURL = 'http://giddh.com/'
+    let domainURL = 'http://giddh.com/';
     return this._http.post(domainURL + COMPANY_API.CONTACT_FORM, formObj)
       .map((res) => {
         let data = res;
