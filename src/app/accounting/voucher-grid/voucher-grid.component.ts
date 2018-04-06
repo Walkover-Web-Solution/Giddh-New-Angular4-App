@@ -93,6 +93,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedField: 'account' | 'stock';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private allStocks: any[];
 
   constructor(
     private _accountService: AccountService,
@@ -276,7 +277,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.selectedField = 'stock';
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
-    this.getFlattenGrpofAccounts(this.groupUniqueName);
+    // this.getFlattenGrpofAccounts(this.groupUniqueName);
+    this.getFlattenGrpofAccounts();
     this.showLedgerAccountList = true;
   }
 
@@ -320,15 +322,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       // tally differnce amount
       transaction.amount = this.calculateDiffAmount(transaction.type);
       transaction.amount = transaction.amount ? transaction.amount : null;
-      if (acc && acc.stocks) {
+
+      if (acc) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
         this.requestObj.transactions[idx].inventory.push(this.initInventory());
-      } else if (!acc.stocks) {
-        setTimeout(() => {
-          this.selectedParticular.focus();
-        }, 200);
       }
+
+      // Alok Sir
+      // if (acc && acc.stocks) {
+      //   this.groupUniqueName = accModel.groupUniqueName;
+      //   this.selectAccUnqName = acc.uniqueName;
+      //   this.requestObj.transactions[idx].inventory.push(this.initInventory());
+      // } else if (!acc.stocks) {
+      //   setTimeout(() => {
+      //     this.selectedParticular.focus();
+      //   }, 200);
+      // }
+
     } else {
       this.deleteRow(idx);
     }
@@ -695,15 +706,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        this.sortStockItems(data.body.results);
-      } else {
-        // this.noResult = true;
-      }
-    });
+  public getFlattenGrpofAccounts(parentGrpUnqName?, q?: string) {
+    if (this.allStocks && this.allStocks.length) {
+      this.sortStockItems(_.cloneDeep(this.allStocks));
+    } else {
+      const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
+      this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this.allStocks = _.cloneDeep(data.body.results);
+          this.sortStockItems(data.body.results);
+        } else {
+          // this.noResult = true;
+        }
+      });
+    }
   }
 
   /**
