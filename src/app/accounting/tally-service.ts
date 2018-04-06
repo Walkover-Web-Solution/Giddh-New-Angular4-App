@@ -163,7 +163,8 @@ export class TallyModuleService {
       if (expenseAccount) {
         expenseAccounts.push(acc);
       }
-      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'income' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
+      // pg.uniqueName === 'income'
+      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
       if (salesAccount) {
         salesAccounts.push(acc);
       }

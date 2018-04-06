@@ -33,7 +33,8 @@
                                 <td><input id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value);" (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
                                         (blur)="onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)" (keydown.Tab)="validateAccount(transaction, $event, i)">
                                     <!-- *ngIf="transaction.inventory" -->
-                                    <table [hidden]="!transaction.stocks">
+                                    <!-- [hidden]="!transaction.stocks" Alok Sir -->
+                                    <table>
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
