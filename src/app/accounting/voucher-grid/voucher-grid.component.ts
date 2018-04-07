@@ -1,3 +1,4 @@
+import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { CreatedBy } from './../../models/api-models/Invoice';
 import { IParticular, LedgerRequest } from './../../models/api-models/Ledger';
@@ -103,7 +104,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private flyAccountActions: FlyAccountsActions,
     private _toaster: ToasterService, private _router: Router,
     private _tallyModuleService: TallyModuleService,
-    private componentFactoryResolver: ComponentFactoryResolver) {
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private inventoryService: InventoryService) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -277,8 +279,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.selectedField = 'stock';
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
-    // this.getFlattenGrpofAccounts(this.groupUniqueName);
-    this.getFlattenGrpofAccounts();
+    // this.getStock(this.groupUniqueName);
+    this.getStock();
     this.showLedgerAccountList = true;
   }
 
@@ -704,17 +706,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   /**
-   * getFlattenGrpofAccounts
+   * getStock
    */
-  public getFlattenGrpofAccounts(parentGrpUnqName?, q?: string) {
+  public getStock(parentGrpUnqName?, q?: string) {
     if (this.allStocks && this.allStocks.length) {
+      // this.inputForList = _.cloneDeep(this.allStocks);
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
       const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
-      this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+      this.inventoryService.GetStocks().takeUntil(this.destroyed$).subscribe(data => {
         if (data.status === 'success') {
           this.allStocks = _.cloneDeep(data.body.results);
-          this.sortStockItems(data.body.results);
+          this.sortStockItems(this.allStocks);
+          // this.inputForList = _.cloneDeep(this.allStocks);
         } else {
           // this.noResult = true;
         }
@@ -728,16 +732,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public sortStockItems(ItemArr) {
     let stockAccountArr: IOption[] = [];
     _.forEach(ItemArr, (obj: any) => {
-      if (obj.stocks) {
-        _.forEach(obj.stocks, (stock: any) => {
-          stock.accountStockDetails.name = obj.name;
           stockAccountArr.push({
-            label: `${stock.name} (${stock.uniqueName})`,
-            value: stock.uniqueName,
-            additional: stock
+            label: `${obj.name} (${obj.uniqueName})`,
+            value: obj.uniqueName,
+            additional: obj
           });
-        });
-      }
     });
     // console.log(stockAccountArr, 'stocks');
     this.stockList = stockAccountArr;
