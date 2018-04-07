@@ -155,7 +155,10 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         }
 
         if (this.statesInBackground && this.statesInBackground.length) {
-          let selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
+          let selectedState;
+          if (profileObj.state) {
+            selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
+          }
           if (selectedState) {
             profileObj.state = selectedState.value;
           }
