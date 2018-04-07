@@ -4561,3 +4561,7 @@ table td[class*=col-]:last-child {
     min-height: 100vh;
     overflow: auto;
 }
+
+.dropdown-menu>li>a {
+    padding: 2px 10px;
+}

@@ -142,6 +142,7 @@ export class TaxResponse implements ITax {
   public uniqueName: string;
   public date?: any;
   public taxValue?: any;
+  public isChecked?: any;
 }
 
 export class States {
