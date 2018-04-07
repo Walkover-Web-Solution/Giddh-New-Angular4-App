@@ -213,13 +213,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public onTagSelected(ev) {
-    this.selectedTag = ev.value;
-    this.filterForm.get('tagName').patchValue(ev.value);
-    this.filterForm.get('refresh').patchValue(true);
-    this.onPropertyChanged.emit(this.filterForm.value);
-  }
-
   /**
    * emitExpand
    */
@@ -228,5 +221,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     setTimeout(() => {
     this.expandAll.emit(this.expand);
     }, 10);
+  }
+
+  public onTagSelected(ev) {
+    this.selectedTag = ev.value;
+    this.filterForm.get('tagName').patchValue(ev.value);
+    this.filterForm.get('refresh').patchValue(true);
+    this.onPropertyChanged.emit(this.filterForm.value);
   }
 }

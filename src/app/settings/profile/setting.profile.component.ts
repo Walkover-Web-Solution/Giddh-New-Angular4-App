@@ -155,7 +155,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         }
 
         if (this.statesInBackground && this.statesInBackground.length) {
-          let selectedState = this.statesInBackground.find((state) => state.label === profileObj.state);
+          let selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
           if (selectedState) {
             profileObj.state = selectedState.value;
           }
@@ -238,6 +238,10 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     this.companyProfileObj = _.cloneDeep(dataToSave);
     if (this.gstDetailsBackup) {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+    }
+
+    if (this.countryIsIndia) {
+      dataToSave.state = null;
     }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
