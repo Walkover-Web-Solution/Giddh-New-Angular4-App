@@ -290,6 +290,24 @@ export class LedgerActions {
       });
     });
 
+  @Effect()
+    public GetReconciliation$: Observable<Action> = this.action$
+      .ofType(LEDGER.GET_RECONCILIATION)
+      .switchMap((action: CustomActions) => {
+        let req: TransactionsRequest = action.payload as TransactionsRequest;
+        return this._ledgerService.GetReconciliation(req, req.accountUniqueName);
+      }).map(response => {
+        if (response.status === 'success') {
+          this._toasty.infoToast(response.body.message);
+        } else {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return {
+          type: LEDGER.GET_RECONCILIATION_RESPONSE,
+          payload: response
+        };
+      });
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -500,6 +518,13 @@ export class LedgerActions {
   public resetLedgerTrxDetails(): CustomActions {
     return {
       type: LEDGER.RESET_LEGER_TRX_DETAILS
+    };
+  }
+
+  public GetReconciliation(request: any): CustomActions {
+    return {
+      type: LEDGER.GET_RECONCILIATION,
+      payload: request
     };
   }
 
