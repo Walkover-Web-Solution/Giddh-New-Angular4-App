@@ -20,13 +20,16 @@ export class SettingsTagActions {
   public GetAllTags$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS)
     .switchMap((action: CustomActions) => this.settingsTagService.GetAllTags())
-    .map(res => this.validateResponse<any, string>(res, {
-      type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE,
-      payload: res
-    }, true, {
-        type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE,
-        payload: res
-      }));
+    .map((res) => {
+      return { type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res };
+    });
+
+    @Effect()
+      public GetAllTagsResponse$: Observable<Action> = this.action$
+        .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE)
+        .map((response: CustomActions) => {
+          return { type: 'EmptyAction' };
+        });
 
   @Effect()
   public CreateTag$: Observable<Action> = this.action$
