@@ -304,7 +304,7 @@
                                     <label class="default_clr">Voucher Type</label>
                                     <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
                                 </td>
-                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
+                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
                                     <label class="default_clr">Invoice No.</label>                                    
                                     <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
                                 </td>

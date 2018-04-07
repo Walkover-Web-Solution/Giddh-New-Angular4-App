@@ -103,7 +103,7 @@
                             <!-- <td class="pdL1">
                                 <span>{{""}}</span>
                             </td> -->
-                            <td class="pdR1" *ngIf="(blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                            <td class="pdR1" *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
                                 <label class="default_clr">Invoice No.</label>                                
                                 <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
@@ -135,8 +135,6 @@
                             </tbody>
                         </table>
                 </div>
-
-
             </div>
         </div>
         <!--map bank transactions-->
