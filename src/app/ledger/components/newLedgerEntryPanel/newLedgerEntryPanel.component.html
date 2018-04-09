@@ -95,6 +95,22 @@
             <div class="">
                 <div class="cheq pdT clearfix">
                     <table>
+                        <tr>
+                            <td class="select2-parent pdR1">
+                                <label class="default_clr">Voucher Type</label>
+                                <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
+                            </td>
+                            <!-- <td class="pdL1">
+                                <span>{{""}}</span>
+                            </td> -->
+                            <td class="pdR1" *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                                <label class="default_clr">Invoice No.</label>                                
+                                <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="mrT1">
                         <tbody>
                             <tr>
                                 <td class="pdR1">
@@ -108,33 +124,25 @@
                             </tr>
                         </tbody>
                     </table>
+                    <table class="mrT1">
+                            <tbody>
+                                <tr>
+                                    <td class="">
+                                        <label class="default_clr">Assign Tag</label>                                
+                                        <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                 </div>
-
-                <table class="mrT1">
-                    <tr>
-                        <td class="pdR1">
-                            <label class="default_clr pull-left">Voucher Type</label>
-                        </td>
-                        <td class="select2-parent">
-                            <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'"></sh-select>
-                        </td>
-                        <td class="pdL1">
-                            <span>{{""}}</span>
-                        </td>
-
-                        <td class="pdL1" *ngIf="(blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
-                            <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
-                        </td>
-                    </tr>
-                </table>
             </div>
         </div>
         <!--map bank transactions-->
         <div class="row">
             <div class="col-xs-7 form-group pr" *ngIf="isBankTransaction">
                 <a href="javascript:void(0)" (click)="getReconciledEntries()">Map Transaction
-          <span *ngIf="showMatchingEntries">with</span>
-        </a>
+            <span *ngIf="showMatchingEntries">with</span>
+            </a>
                 <ul class="list-unstyled map-txn-container" *ngIf="showMatchingEntries">
                     <li class="cp" *ngFor="let entry of matchingEntriesData;" (click)="confirmBankTransactionMap(entry)">
                         <table class="table table-bordered mr0">

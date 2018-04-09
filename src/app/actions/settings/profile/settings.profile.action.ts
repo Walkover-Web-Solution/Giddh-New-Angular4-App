@@ -5,7 +5,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
@@ -44,6 +44,7 @@ export class SettingsProfileActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
+        this.store.dispatch(this.companyActions.RefreshCompanies());
         this.toasty.successToast('Profile Updated Successfully.');
       }
       return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
@@ -53,7 +54,8 @@ export class SettingsProfileActions {
     private toasty: ToasterService,
     private router: Router,
     private store: Store<AppState>,
-    private settingsProfileService: SettingsProfileService) {
+    private settingsProfileService: SettingsProfileService,
+    private companyActions: CompanyActions) {
   }
 
   public GetProfileInfo(): CustomActions {

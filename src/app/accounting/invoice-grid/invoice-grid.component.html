@@ -3,12 +3,8 @@
         <div class="row">
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{data.voucherType}}</span>
-                <div class="pull-right text-right">
-                    <input type="text" #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right appearance_none" />
-                    <!-- <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <datepicker [(ngModel)]="entryDate" (selectionDone)="setDate($event)" [showWeeks]="false"></datepicker>
-                    </div> -->
-                    {{ displayDay }}
+                <div class="pull-right text-right mrB1">
+                    <input type="text" #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right" /> {{ displayDay }}
                 </div>
             </div>
 
@@ -34,8 +30,8 @@
             <div class="mx-350 clearfix form-inline mrB">
                 <div class="form-group">
                     <label>Party A/c Name:<sup>*</sup></label>
-                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name" (focus)="onPartyAccFocus();" (blur)="onPartyAccBlur()"
-                        style="max-width:200px" />
+                    <input type="text" #creditor placeholder="Party account" class="form-control max-height28 appearance_none" (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name" (focus)="onPartyAccFocus();selectedField='account'"
+                        (blur)="onPartyAccBlur();selectedField=null" style="max-width:200px" />
                 </div>
             </div>
             <!-- /party acc name -->
@@ -136,21 +132,16 @@
                     <div class="">
                         <h1>Accept?</h1>
                         <div class="pdT2">
-                            <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button> |
+                            <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button>
                             <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
                             <br />
                             <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-3 total_box text-right pull-right">
-                    <span><strong>{{stockTotal + accountsTotal}}</strong></span>
+                <div class="total_box text-right pull-right">
+                    <span><strong>{{stockTotal + accountsTotal | number: '1.2-2' }}</strong></span>
                 </div>
-
-                <!-- <div class="col-xs-3 total_box text-right pull-right" *ngIf="purchaseType == 'voucher'">
-                    <span><strong>{{stockTotal + accountsTotal}}</strong></span>
-                    <span><strong>{{stockTotal + accountsTotal}}</strong></span>
-                </div> -->
             </div>
         </div>
     </div>
@@ -173,20 +164,3 @@
         </div>
     </div>
 </div>
-
-
-<!-- <div class="sidebar_menu col-xs-2 pd0">
-
-    <div class="bdrL account_listbar pos_rel" [hidden]="!showAccountList">
-        <h3 class="pd1 bdrB primary_clr">List of Ledger Accounts</h3>
-        <accounts-list [arrowKeyInfo]="arrowInput" [search]="accountSearch" [parentGrpUnqName]="groupUniqueName" [filterByGrp]="filterByGrp" (onSelectItem)="setAccount($event)"></accounts-list>
-    </div>
-
-
-    <div class="bdrL account_listbar pos_rel" [hidden]="!(showStockList | async)">
-        <h3 class="pd1 bdrB primary_clr">List of Stock Items</h3>
-        <accounts-list [arrowKeyInfo]="arrowInput" [search]="stockSearch" [parentGrpUnqName]="groupUniqueName" [voucher]="'purchases'" [filterByGrp]="filterByGrp" [showStockItem]="(showStockList | async)" (onSelectItem)="onSelectStock($event)"></accounts-list>
-    </div>
-
-    <accounting-sidebar></accounting-sidebar>
-</div> -->

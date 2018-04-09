@@ -85,4 +85,10 @@ export class GeneralActions {
       payload: value
     };
   }
+
+  public addAndManageClosed(): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE
+    };
+  }
 }
