@@ -302,6 +302,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           this.addStockForm.patchValue({ isFsStock: false });
         }
         if (a.taxes.length) {
+          this.addStockForm.get('taxes').patchValue([]);
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
@@ -881,6 +882,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         }
         this.isUpdatingStockForm = false;
+        this.companyTaxesList$.subscribe(a => {
+            _.forEach(a, function(o) {
+              o.isChecked = false;
+            });
+        });
       }
     }
   }
@@ -890,7 +896,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    */
   public selectTax(e, tax) {
     const taxesControls = this.addStockForm.controls['taxes']['value'] as any;
-    e.stopPropagation();
     if (e.target.checked) {
       tax.isChecked = true;
       taxesControls.push(tax.uniqueName);
@@ -905,8 +910,19 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * mapSavedTaxes
    */
   public mapSavedTaxes(taxes) {
-    // console.log('taxes', taxes);
-    // let common  = taxes.filter(e => !this.companyTaxesList$.includes(e.uniqueName));
-    // let match = _.filter(this.companyTaxesList$,  _.matches(taxes.uniqueName));
+    let taxToMap = [];
+    let e: any = { target: { checked: true } };
+    let common = this.companyTaxesList$.subscribe(a => {
+        _.filter(a, function(tax) {
+          _.find(taxes, function(unq) {
+              if (unq === tax.uniqueName) {
+                return taxToMap.push(tax);
+              }
+          });
+        });
+    });
+    taxToMap.map((tax, i) => {
+      this.selectTax(e, tax);
+    });
   }
 }
