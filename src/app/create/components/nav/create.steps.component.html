@@ -1,8 +1,23 @@
 <div class="form-group">
-  <button type="button" (click)="setStep('one')" class="btn" [ngClass]="{'active': stage === 'one'}">1</button>
+  <p class="steps-block">
+   <span class="sp-template">
+      <button type="button" (click)="setStep('one')" class="btn" [ngClass]="{'active': stage === 'one'}">1</button><br>
+      <span [ngClass]="{'active': stage === 'one'}">Select Template</span>
+    </span>
+      <span class="v_line"></span>
+  </p>
+<p class="steps-block">
+  <span class="sp-template">
+  <button type="button" (click)="setStep('two')" class="btn" [ngClass]="{'active': stage === 'two'}" [disabled]="stage === 'one'">2</button><br>
+  Create Invoice
+</span>
   <span class="v_line"></span>
-  <button type="button" (click)="setStep('two')" class="btn" [ngClass]="{'active': stage === 'two'}" [disabled]="stage === 'one'">2</button>
-  <span class="v_line"></span>
-  <button type="button" (click)="setStep('three')" class="btn" [ngClass]="{'active': stage === 'three'}" [disabled]="stage === 'one' || stage === 'two'">3</button>
+</p>
+<p class="steps-block">
+  <span class="sp-template">
+  <button type="button" (click)="setStep('three')" class="btn" [ngClass]="{'active': stage === 'three'}" [disabled]="stage === 'one' || stage === 'two'">3</button><br>
+  Export Invoices
+</span>
+</p>
 </div>
 
