@@ -220,4 +220,16 @@ export class AuthenticationService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
+
+  public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
+    model.email = this._generalService.user.email;
+    model.environment = this.config.apiUrl;
+    model.userUniqueName = this._generalService.user.uniqueName;
+    return this._http.post(this.config.apiUrl + 'exception/invalid-json', model).map((res) => {
+        let data: BaseResponse<AuthKeyResponse, string> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+  }
 }
