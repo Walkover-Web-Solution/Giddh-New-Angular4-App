@@ -574,17 +574,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       code: item.stockUnit.code,
       rate: 0
     };
-    if (item.accountStockDetails.unitRates.length) {
-      this.requestObj.transactions[idx].inventory[i].unit = item.accountStockDetails.unitRates[0];
-      this.requestObj.transactions[idx].inventory[i].unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
-      this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
 
-    } else if (!item.accountStockDetails.unitRates.length) {
-      this.requestObj.transactions[idx].inventory[i].unit = defaultUnit;
-    }
-    this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+    // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
+    this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
+    this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
+    this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+
+    // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
     this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
-    this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
     this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
   }
 
