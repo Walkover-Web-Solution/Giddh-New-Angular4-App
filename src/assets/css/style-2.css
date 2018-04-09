@@ -4587,11 +4587,12 @@ table td[class*=col-]:last-child {
 .illustration_box {
     border-radius: 4px;
     padding: 25px 20px;
-    box-shadow: 0 0 8px #b3b3b329;
-    background: #fdfdfd;
-    margin-top: 70px;
+    /* box-shadow: 0 0 8px #b3b3b329;
+    background: #fdfdfd; */
+    margin-top: 40px;
 }
 
 .illustration_box img {
-    max-width: 300px;
+    /* max-width: 85%; */
+    opacity: 0.7;
 }
