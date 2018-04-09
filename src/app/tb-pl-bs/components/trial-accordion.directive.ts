@@ -16,10 +16,15 @@ export class TrialAccordionDirective {
 
   @HostListener('click')
   public onClick() {
+    let isChildVisible: boolean = false;
+    if (this.data.level1 && this.data.isOpen) {
+      return;
+    }
     if (this.data.accounts) {
       this.data.accounts.forEach((p: Account) => {
         if (p.isIncludedInSearch) {
           p.isVisible = !p.isVisible;
+          isChildVisible = p.isVisible;
         }
       });
     }
@@ -27,10 +32,13 @@ export class TrialAccordionDirective {
       this.data.childGroups.forEach((p: ChildGroup) => {
         if (p.isIncludedInSearch) {
           p.isVisible = !p.isVisible;
+          isChildVisible = p.isVisible;
+          p.isOpen = false;
         }
       });
     }
     this.data.isVisible = true;
+    this.data.isOpen = isChildVisible;
   }
 
   private toggleClass(ele) {

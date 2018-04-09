@@ -221,18 +221,32 @@ const orderGroups = (data) => {
 
 // PL Functions
 
-const filterProfitLossData = data => {
+const filterProfitLossData = (data, statement) => {
   let filterPlData: ProfitLossData = {};
+  let incomeStatement = statement;
   filterPlData.incArr = [];
   filterPlData.expArr = [];
   filterPlData.othArr = [];
-  _.each(data, (grp: any) => {
+  let revenueGroup: any = revenueParentGrp(new ParentGrp(), incomeStatement.revenue);
+  let operatingGrp: any = operatingExpParentGrp(new ParentGrp(), incomeStatement.operatingExpenses);
+  let otherExpGrp: any = otherExpParentGrp(new ParentGrp(), incomeStatement.otherExpenses);
+
+  _.each(data, (grp: any, idx) => {
     grp.isVisible = false;
     switch (grp.category) {
       case 'income':
-        return filterPlData.incArr.push(grp);
+        if (idx === 0) {
+          filterPlData.incArr.push(revenueGroup);
+        }
+        return filterPlData.incArr[0].childGroups.push(grp);
       case 'expenses':
-        return filterPlData.expArr.push(grp);
+        if (grp.uniqueName === 'operatingcost') {
+            filterPlData.expArr.push(operatingGrp);
+            return filterPlData.expArr[0].childGroups.push(grp);
+        } else {
+          filterPlData.expArr.push(otherExpGrp);
+          return filterPlData.expArr[1].childGroups.push(grp);
+        }
       default:
         return filterPlData.othArr.push(grp);
     }
@@ -241,13 +255,15 @@ const filterProfitLossData = data => {
 };
 
 const prepareProfitLossData = (data) => {
-  let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
+  // let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
+  let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
   plData.expenseTotal = calculateTotalExpense(plData.expArr);
   plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
   plData.incomeTotal = calculateTotalIncome(plData.incArr);
   plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
   plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
   plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
+  plData.incomeStatment = data.incomeStatment;
   if (plData.incomeTotal >= plData.expenseTotal) {
     plData.inProfit = true;
     // plData.expenseTotal += plData.closingBalance;
@@ -266,6 +282,7 @@ const prepareProfitLossData = (data) => {
   } else {
     plData.frowardBalanceClass = false;
   }
+  plData.message = data.message;
   return plData;
 };
 
@@ -346,6 +363,7 @@ const prepareBalanceSheetData = (data) => {
   bsData.assetTotalEnd = calCulateTotalAssetsEnd(bsData.assets);
   bsData.liabTotal = calCulateTotalLiab(bsData.liabilities);
   bsData.liabTotalEnd = calCulateTotalLiabEnd(bsData.liabilities);
+  bsData.message = data.message;
   return bsData;
 };
 
@@ -396,4 +414,43 @@ const calCulateTotalLiabEnd = data => {
     }
   });
   return total;
+};
+
+class ParentGrp {
+  public accounts: any[] = [];
+  public category: string;
+  public closingBalance: {amount: 0, type: string} = {amount: 0, type: ''};
+  public creditTotal: number = 0;
+  public debitTotal: number = 0;
+  public forwardedBalance: {amount: number, type: string} = {amount: 0, type: ''};
+  public childGroups: any[] = [];
+  public groupName: string;
+  public uniqueName: string;
+  public isVisible?: boolean;
+  public level1?: boolean = true;
+}
+
+const revenueParentGrp = (data: ParentGrp, statement) => {
+  data.groupName = 'Revenue';
+  data.uniqueName = 'revenue';
+  data.category = 'income';
+  data.closingBalance = statement;
+  data.isVisible = true;
+  return data;
+};
+const operatingExpParentGrp = (data: ParentGrp, statement) => {
+  data.groupName = 'Less: Operating Expenses';
+  data.uniqueName = 'operatingexpenses';
+  data.category = 'expenses';
+  data.closingBalance = statement;
+  data.isVisible = true;
+  return data;
+};
+const otherExpParentGrp = (data: ParentGrp, statement) => {
+  data.groupName = 'Less: Other Expenses';
+  data.uniqueName = 'otherexpenses';
+  data.category = 'expenses';
+  data.closingBalance = statement;
+  data.isVisible = true;
+  return data;
 };

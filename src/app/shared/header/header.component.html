@@ -36,7 +36,8 @@
                                 <span class="label">Invoice</span>
                             </a>
                         </li>
-                        <li *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
+                        <!-- *ngIf="userIsCompanyUser" -->
+                        <li [checkPermission]="['MENU', 'LEDGER']">
                             <a [routerLink]="['/pages/accounting-voucher']">
                                 <span class="navico-journal"></span>
                                 <span class="label">Journal Voucher</span>
@@ -51,7 +52,6 @@
                             </a>
                         </li>
 
-
                         <li [checkPermission]="['MENU', 'REPORT']">
                             <a [routerLink]="['trial-balance-and-profit-loss']">
                                 <span class="navico-tbpl"></span>
@@ -65,7 +65,7 @@
                                 <span class="label">Audit Logs</span>
                             </a>
                         </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'" [tooltip]="'Taxes'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                             <a [routerLink]="['/pages/purchase/invoice']">
                                 <span class="navico-tax"></span>
                                 <span class="label">Taxes</span>
