@@ -35,7 +35,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 </div>
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
 <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>
-<aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event, null)"></aside-inventory-stock-group>
+<aside-inventory-stock-group [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"></aside-inventory-stock-group>
 `
 })
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
