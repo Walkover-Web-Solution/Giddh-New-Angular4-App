@@ -58,7 +58,10 @@
                                             <button dropdownToggle type="button" class="dropdown-toggle form-control text-left"> Selected ({{ addStockForm.get('taxes').value.length }}) <span class="pull-right"><span class="caret"></span></span></button>
                                             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                                                 <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)">
-                                                    <a class="dropdown-item" (click)="selectTax($event, tax)"><input type="checkbox" [checked]="tax.isChecked" /> {{tax.name}}</a>
+                                                    <a class="dropdown-item" (click)="$event.stopPropagation()"><input type="checkbox" [checked]="tax.isChecked" (click)="selectTax($event, tax)" /> {{tax.name}}</a>
+                                                </li>
+                                                <li *ngIf="(companyTaxesList$ | async).length < 1">
+                                                    <a class="dropdown-item" (click)="$event.stopPropagation()">No Tax Found</a>
                                                 </li>
                                             </ul>
                                         </div>
