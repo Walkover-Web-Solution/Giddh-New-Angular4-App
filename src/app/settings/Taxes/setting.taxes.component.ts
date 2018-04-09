@@ -65,6 +65,7 @@ export class SettingTaxesComponent implements OnInit {
     private _companyActions: CompanyActions,
     private _accountService: AccountService,
     private _settingsTaxesActions: SettingsTaxesActions,
+    private _toaster: ToasterService
   ) {
     for (let i = 1; i <= 31; i++) {
       let day = i.toString();
@@ -112,8 +113,11 @@ export class SettingTaxesComponent implements OnInit {
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
     dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
-
-    this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
+    if (dataToSave.duration) {
+      this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
+    } else {
+      this._toaster.errorToast('Please select tax duration.', 'Validation');
+    }
   }
 
   public deleteTax(taxToDelete) {
