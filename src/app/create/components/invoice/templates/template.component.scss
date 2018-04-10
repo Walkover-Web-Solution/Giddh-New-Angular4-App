@@ -130,6 +130,7 @@ h4 {
   .pull-left {
     float: left;
   }
+
   .mrL2 {
     margin-left: 20px;
   }
@@ -139,6 +140,8 @@ h4 {
   .mrB1 {
     margin-bottom: 10px;
   }
+ 
+ 
   .bdrB {
     border-bottom: 1px solid$color_storm_dust_approx;
   }
@@ -187,3 +190,39 @@ h4 {
   padding: 0 15px !important;
   border-left: 1px solid $color_punch_approx !important;
 }
+
+
+.inv_header{
+  background:#FFF8EB;
+  h1{
+      font-size:20px;
+      color:#333333;
+      font-family: 'LatoWeb';
+      padding:0;
+      border-bottom:1px solid #333333;
+      display:inline-block;
+      margin:28px 0;
+  }
+  span{
+      color:#E14D26;
+      border-bottom:1px solid #E14D26;
+      display:inline-block;
+      font-family: 'LatoWeb';
+      font-size:20px;
+      line-height:21px;
+      padding:0;
+      margin:28px 0;
+
+  }
+}
+.head_inv{
+  font-size:16px;
+  color:#333;
+  padding:7px 0;
+  border-bottom:1px solid #BFBFBF;
+  margin-top:20px;
+}
+.mb20{
+  margin-bottom:20px;
+}
+
