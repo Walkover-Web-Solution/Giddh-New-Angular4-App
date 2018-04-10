@@ -17,7 +17,6 @@ import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Select2OptionData } from '../../theme/select2';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { ToasterService } from '../../services/toaster.service';
 
 const taxesType = [
   { label: 'GST', value: 'GST' },
@@ -63,7 +62,6 @@ export class SettingTaxesComponent implements OnInit {
     private _companyActions: CompanyActions,
     private _accountService: AccountService,
     private _settingsTaxesActions: SettingsTaxesActions,
-    private _toaster: ToasterService
   ) {
     for (let i = 1; i <= 31; i++) {
       let day = i.toString();
@@ -110,11 +108,8 @@ export class SettingTaxesComponent implements OnInit {
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
     dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
-    if (dataToSave.duration) {
-      this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
-    } else {
-      this._toaster.errorToast('Please select tax duration.', 'Validation');
-    }
+
+    this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
   }
 
   public deleteTax(taxToDelete) {

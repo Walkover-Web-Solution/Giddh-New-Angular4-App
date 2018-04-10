@@ -258,15 +258,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         isQuickAccountCreatedSuccessfully: false,
         transactionDetails: null
       };
-    case  LEDGER.GET_RECONCILIATION_RESPONSE: {
-      let res = action.payload;
-      if (res.status === 'success') {
-        return Object.assign({}, state, {
-          transactionsResponse: res.body
-        });
-      }
-      return state;
-    }
     default: {
       return state;
     }

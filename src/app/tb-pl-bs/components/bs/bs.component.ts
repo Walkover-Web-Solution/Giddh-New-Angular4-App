@@ -10,7 +10,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BsGridComponent } from './bs-grid/bs-grid.component';
 import { createSelector } from 'reselect';
 import { ChildGroup, Account } from '../../../models/api-models/Search';
-import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'bs',
@@ -76,16 +75,10 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
+  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef) {
     this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).takeUntil(this.destroyed$);
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.bs.data, (p: BalanceSheetData) => {
       let data = _.cloneDeep(p) as BalanceSheetData;
-      if (data && data.message) {
-        setTimeout(() => {
-          this._toaster.clearAllToaster();
-          this._toaster.infoToast(data.message);
-        }, 100);
-      }
       if (data.liabilities) {
         this.InitData(data.liabilities);
         data.liabilities.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });

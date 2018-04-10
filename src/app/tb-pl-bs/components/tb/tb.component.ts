@@ -10,7 +10,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { TbGridComponent } from './tb-grid/tb-grid.component';
 import { createSelector } from 'reselect';
 import { ChildGroup, Account } from '../../../models/api-models/Search';
-import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'tb',
@@ -78,7 +77,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions, private _toaster: ToasterService) {
+  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
     this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).takeUntil(this.destroyed$);
   }
 
@@ -86,12 +85,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
       let d = _.cloneDeep(p) as AccountDetails;
       if (d) {
-        if (d.message) {
-          setTimeout(() => {
-            this._toaster.clearAllToaster();
-            this._toaster.infoToast(d.message);
-          }, 100);
-        }
         this.InitData(d.groupDetails);
         d.groupDetails.forEach(g => { g.isVisible = true; g.isCreated = true; });
       }

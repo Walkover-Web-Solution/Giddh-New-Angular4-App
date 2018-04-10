@@ -70,7 +70,6 @@ export class LedgerResponse {
   public voucherNo: string;
   public voucherType?: string;
   public voucherNumber?: string;
-  public tagNames?: string[];
 }
 
 /*

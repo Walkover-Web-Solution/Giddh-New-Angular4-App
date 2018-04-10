@@ -25,9 +25,6 @@ import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
 import { Configuration } from 'app/app.constant';
 import { IFlattenGroupsAccountsDetail } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
-import { createSelector } from 'reselect';
-import { TagRequest } from '../../../models/api-models/settingsTags';
-import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -42,7 +39,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
-  public tags$: Observable<TagRequest[]>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
   public isFileUploading: boolean = false;
@@ -66,8 +62,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private _toasty: ToasterService, private _accountService: AccountService,
-    private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
-    private _settingsTagActions: SettingsTagActions) {
+    private _ledgerAction: LedgerActions, private _loaderService: LoaderService) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).takeUntil(this.destroyed$);
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
@@ -80,23 +75,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).shareReplay();
     this.closeUpdateLedgerModal.takeUntil(this.destroyed$);
-    this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
   public ngOnInit() {
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
-
-    this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
-      if (tags && tags.length) {
-        _.map(tags, (tag) => {
-          tag.label = tag.name;
-          tag.value = tag.name;
-        });
-        return _.orderBy(tags, 'name');
-      }
-    })).takeUntil(this.destroyed$);
 
     // get enetry name and ledger account uniquename
     Observable.combineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {

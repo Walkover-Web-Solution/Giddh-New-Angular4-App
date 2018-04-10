@@ -579,15 +579,6 @@
 
 </section>
 
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
-      <button class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation</button>                      
-    </div>
-  </div>
-</div>
-
-
 <!--total section-->
 <section class="ledger-stat mrT3" *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
   <div class="container">

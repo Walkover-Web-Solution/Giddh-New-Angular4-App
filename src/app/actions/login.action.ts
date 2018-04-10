@@ -443,14 +443,6 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
-  @Effect()
-  public ReportInvalidJSON$: Observable<Action> = this.actions$
-    .ofType('REPORT_INVALID_JSON')
-    .switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload))
-    .map((res) => {
-      return { type: 'EmptyAction' };
-    });
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(

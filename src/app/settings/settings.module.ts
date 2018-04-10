@@ -27,7 +27,6 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { BranchComponent } from './branch/branch.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { SettingsTagsComponent } from './tags/tags.component';
 
 @NgModule({
   declarations: [
@@ -44,8 +43,7 @@ import { SettingsTagsComponent } from './tags/tags.component';
     FinancialYearComponent,
     SettingPermissionComponent,
     SettingPermissionFormComponent,
-    BranchComponent,
-    SettingsTagsComponent
+    BranchComponent
   ],
   imports: [
     CommonModule,

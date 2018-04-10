@@ -14,7 +14,6 @@ import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financia
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
-import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -30,7 +29,6 @@ export interface SettingsState {
   financialYears: IFinancialYearResponse;
   usersWithCompanyPermissions: any;
   branches: any;
-  tags: any;
   parentCompany: CompanyResponse;
 }
 
@@ -41,7 +39,6 @@ export const initialState: SettingsState = {
   financialYears: null,
   usersWithCompanyPermissions: null,
   branches: null,
-  tags: null,
   parentCompany: null
 };
 
@@ -234,17 +231,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         newState.parentCompany = null;
       }
       return Object.assign({}, state, newState);
-    }
-    case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE:
-    {
-      let response: BaseResponse<any, any> = action.payload;
-      if (response.status === 'success') {
-        newState.tags = response.body;
-        return Object.assign({}, state, newState);
-      } else {
-        newState.tags = null;
-        return Object.assign({}, state, newState);
-      }
     }
     default: {
       return state;
