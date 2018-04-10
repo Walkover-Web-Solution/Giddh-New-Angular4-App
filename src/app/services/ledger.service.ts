@@ -223,12 +223,12 @@ export class LedgerService {
       .catch((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, {accountUniqueName}));
   }
 
-  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: string = '', count: string = ''): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: number = 1, count: number = 15): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      .replace(':fromDate', from).replace(':toDate', to).replace(':page', page).replace(':count', encodeURIComponent(count)), model)
+      .replace(':fromDate', from).replace(':toDate', to).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())), model)
       .map((res) => {
         let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
         data.request = model;
