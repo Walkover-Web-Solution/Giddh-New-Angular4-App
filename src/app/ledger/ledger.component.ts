@@ -109,6 +109,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public eDrBalAmnt: number;
   public eCrBalAmnt: number;
   public advanceSearchRequest: any;
+  public isAdvanceSearchImplemented: boolean = false;
   public isBankOrCashAccount: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -266,6 +267,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = event.page;
     // this.lc.currentPage = event.page;
     this.getTransactionData();
+  }
+
+  public advanceSearchPageChanged(event: any): void {
+    this.store.dispatch(this._ledgerActions.doAdvanceSearch(this.advanceSearchRequest.dataToSend,
+      this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.fromDate,
+      this.advanceSearchRequest.toDate, event.page, 15));
   }
 
   public ngOnInit() {
@@ -527,6 +534,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
+    this.isAdvanceSearchImplemented = false;
+    this.advanceSearchComp.resetAdvanceSearchModal();
+    this.advanceSearchRequest = null;
     this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.trxRequest)));
   }
 
@@ -808,6 +818,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     componentInstance.writeValue(s.page);
     componentInstance.boundaryLinks = true;
     componentInstance.pageChanged.subscribe(e => {
+      if (this.isAdvanceSearchImplemented) {
+        this.advanceSearchPageChanged(e);
+        return;
+      }
       this.pageChanged(e);
     });
   }
@@ -827,6 +841,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * closeAdvanceSearchPopup
    */
   public closeAdvanceSearchPopup(advanceSearchRequest: any) {
+    this.isAdvanceSearchImplemented = true;
     this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
     this.advanceSearchModel.hide();
     this.advanceSearchComp.ngOnDestroy();
