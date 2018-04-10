@@ -14,8 +14,8 @@
             </div>
             <div class="col-xs-7">
               <div class="form-group input-group">
-                <input name="dateRange" autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control" (bsValueChange)="onDateRangeSelected($event)"
-                  bsDaterangepicker required>
+                <input name="dateRange" autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control"
+                  (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required>
                 <span class="input-group-addon cursor-pointer" (click)="dp.toggle()">
                   <i class="fa fa-calendar" aria-hidden="true"></i>
                 </span>
@@ -34,20 +34,20 @@
                   [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
               </div>
             </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-5">
+              <label for="">Merge Group</label>
+              <p>
+                <small>you can merge multiple groups; further filters will depend on this.</small>
+              </p>
             </div>
-            <div class="row">
-              <div class="col-xs-5">
-                <label for="">Merge Group</label>
-                <p>
-                  <small>you can merge multiple groups; further filters will depend on this.</small>
-                </p>
+            <div class="col-xs-7">
+              <div class="form-group">
+                <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear('groupUniqueNames')" (selected)="onDDElementSelect('groupUniqueNames', $event)"
+                  [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Groups'"></sh-select>
               </div>
-              <div class="col-xs-7">
-                <div class="form-group">
-                  <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear('groupUniqueNames')" (selected)="onDDElementSelect('groupUniqueNames', $event)"
-                    [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Groups'"></sh-select>
-                </div>
-              </div>
+            </div>
           </div>
         </div>
 
@@ -230,6 +230,7 @@
           </div>
         </ng-container>
         <div class="col-xs-12 text-right">
+          <button class="btn btn-success" type="button" (click)="resetAndSearch();">Reset & Search</button>
           <button class="btn btn-success" type="button" (click)="onSearch()">Search</button>
           <!-- <button class="btn btn-update" type="button" (click)="onSearch()">Search & Export</button> -->
         </div>
