@@ -217,7 +217,6 @@ export class TallyModuleService {
   }
 
     public prepareRequestForAPI(data: any): BlankLedgerVM {
-
       let requestObj = _.cloneDeep(data);
       let transactions = [];
       // filter transactions which have selected account
@@ -231,6 +230,8 @@ export class TallyModuleService {
             } else {
               delete obj.inventory;
             }
+            // This line is added after all stocks changes
+            obj.amount = obj.inventory ? obj.inventory.amount : obj.amount;
             transactions.push(obj);
           });
         } else {
