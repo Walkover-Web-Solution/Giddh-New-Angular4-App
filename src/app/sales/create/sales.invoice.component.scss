@@ -336,3 +336,68 @@ ng-select.splSales {
 .salesTax .taxInput {
     text-align: right;
 }
+.billing-address{
+    background: #fff;
+    border: 1px solid #d6d6d6;
+    padding: 5px;
+    &.disabled{
+        background: #eee;
+    }
+    textarea{
+        border:none;
+        padding:0 !important;
+    }
+}
+.input-custom{
+    border:none;
+    border-bottom:1px solid #ddd;
+}
+.pl0{
+    padding-left:0;
+}
+.balance-due{
+    display: block;
+    color: #6b6c72;
+    line-height: 1.2rem;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+}
+.sp-rupees{
+    display: block;
+    font-size:2.8rem;
+}
+.table-custom-invoice{
+    > thead{
+        > tr{
+            > th{
+                border:1px dotted #c7c7c7 !important;
+                padding:10px 8px;
+                &:first-child{
+                    border-left:none !important;
+                }
+                &:last-child{
+                    border-right:none !important;
+                }
+            }
+        }
+    }
+    > tbody{
+        > tr{
+            > td{
+                border:1px dotted #c7c7c7 !important;
+                padding:10px 8px;
+                &:first-child{
+                    border-left:none !important;
+                }
+                &:last-child{
+                    border-right:none !important;
+                }
+            }
+        }
+    }
+}
+
+.row-active{
+    box-shadow: 7px 2px 8px 3px rgba(0,0,0,0.2);
+}
