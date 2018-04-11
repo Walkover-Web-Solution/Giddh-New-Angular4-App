@@ -43,6 +43,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
   public isOthrDtlCollapsed: boolean = true;
+  public isCustDtlCollapsed: boolean = false;
   public selectedFiles: any;
   public logoPath: any;
   public data: VoucherClass;
@@ -114,13 +115,21 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     // bind state sources
     this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
       let arr: IOption[] = [];
-        if (states) {
-          states.map(d => {
-            arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
-          });
-        }
-        this.statesSource$ = Observable.of(arr);
+      if (states) {
+        states.map(d => {
+          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
+      this.statesSource$ = Observable.of(arr);
     });
+
+    this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.subscribe((val) => {
+      let data = _.cloneDeep(this.CreateInvoiceForm.value);
+      let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
+      let balanceDue = totalAmountWithTax - val;
+      this.CreateInvoiceForm.get('uiCalculation').get('balanceDue').patchValue(balanceDue);
+    });
+
   }
 
   public ngOnDestroy() {
@@ -193,8 +202,37 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   }
 
   public addBlankRow() {
+    this.calculateAndSetTotal();
     const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
     transactionEntries.push(this.retunArrayData());
+  }
+
+  public calculateAndSetTotal() {
+    let data = _.cloneDeep(this.CreateInvoiceForm.value);
+    let totalAmount = 0;
+    data.entries.forEach((entry) => {
+      console.log('entry.discount is :', entry.discount);
+      totalAmount = totalAmount + (entry.quantity * entry.rate) - (entry.discount); // Amount without tax
+    });
+
+    let totalQuantity = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.quantity)) ? 0 : parseFloat(entry.quantity));
+    let totalRate = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.rate)) ? 0 : parseFloat(entry.rate));
+    let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
+    let totalDiscount = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.discount)) ? 0 : parseFloat(entry.discount));
+    let gstTaxesTotal = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.tax)) ? 0 : parseFloat(entry.tax));
+
+    console.log('totalQuantity is :', totalQuantity);
+    console.log('totalRate is :', totalRate);
+
+    // let totalAmount = totalQuantity * totalRate;
+
+    console.log('totalAmount is :', totalAmount);
+
+    this.CreateInvoiceForm.get('uiCalculation').get('subTotal').patchValue(totalAmount);
+    this.CreateInvoiceForm.get('uiCalculation').get('totalTaxableValue').patchValue(totalAmount);
+    this.CreateInvoiceForm.get('uiCalculation').get('grandTotal').patchValue(totalAmountWithTax);
+    this.CreateInvoiceForm.get('uiCalculation').get('totalDiscount').patchValue(totalDiscount);
+    this.CreateInvoiceForm.get('uiCalculation').get('gstTaxesTotal').patchValue(gstTaxesTotal);
   }
 
   public autoFillShippingDetails() {
@@ -210,11 +248,12 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public removeTransaction(entryIdx: number) {
     const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
-    if (transactionEntries.length > 1 ) {
+    if (transactionEntries.length > 1) {
       transactionEntries.removeAt(entryIdx);
     } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
+    this.calculateAndSetTotal();
   }
 
   ////////// Reactive form //////////////
@@ -226,13 +265,14 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
       quantity: 0,
       rate: 0,
       discount: 0,
+      tax: 0,
       amount: 0
     });
   }
 
   public setCreateInvoiceForm() {
     this.CreateInvoiceForm = this.fb.group({
-      entries: this.fb.array([ this.retunArrayData() ]),
+      entries: this.fb.array([this.retunArrayData()]),
       userDetails: this.fb.group({
         countryCode: ['', Validators.required],
         userName: [''],
@@ -277,6 +317,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
         dueDate: null
       }),
       other: this.fb.group({
+        senderAddress: null, // Not available in API
         note1: null,
         note2: null,
         shippingDate: null,
@@ -298,7 +339,8 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
         gstTaxesTotal: 0,
         grandTotal: 0,
         dueAmount: null,
-        balanceDue: 0
+        balanceDue: 0,
+        depositAmount: 0
       })
     });
   }
@@ -374,7 +416,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
         count += item.amount;
       });
       return this.checkForInfinity(count);
-    }else {
+    } else {
       return count;
     }
   }
@@ -386,7 +428,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
       a = this.checkForInfinity(a);
       let b = _.cloneDeep(this.getTaxableValue(entry));
       count = a + b;
-    }else {
+    } else {
       count = _.cloneDeep(this.getTaxableValue(entry));
     }
     return Number(count.toFixed(2));
@@ -394,6 +436,27 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public sayHello() {
     alert('Hello');
+  }
+
+  public processRateAndQuantity(indx: number) {
+    const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
+    let data = _.cloneDeep(transactionEntries.value);
+    let selectedRow = data[indx];
+    selectedRow.amount = selectedRow.quantity * selectedRow.rate;
+    data[indx] = selectedRow;
+    transactionEntries.patchValue(data);
+    this.calculateAndSetTotal();
+  }
+
+  public processTax(indx: number) {
+    const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
+    let data = _.cloneDeep(transactionEntries.value);
+    let selectedRow = data[indx];
+    selectedRow.amount = selectedRow.quantity * selectedRow.rate;
+    // selectedRow.amount = selectedRow.amount + ((selectedRow.amount * selectedRow.tax) / 100);
+    data[indx] = selectedRow;
+    transactionEntries.patchValue(data);
+    this.calculateAndSetTotal();
   }
 
   public txnChangeOccurred() {
