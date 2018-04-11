@@ -59,6 +59,10 @@ const THEAD_ARR_1 = [
   },
   {
     display: true,
+    label: 'Description'
+  },
+  {
+    display: true,
     label: 'HSN/SAC'
   }
 ];
