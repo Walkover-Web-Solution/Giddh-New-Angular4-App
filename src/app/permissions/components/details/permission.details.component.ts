@@ -277,7 +277,8 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
     if (page) {
       let access = _.find(page.permissions, (p: Permission) => p.code === item.code);
-      if (access && access.isSelected) {
+      // && access.isSelected
+      if (access) {
         return true;
       }
       return false;
