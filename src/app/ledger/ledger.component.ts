@@ -1,13 +1,12 @@
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -39,6 +38,7 @@ import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 import { Subject } from 'rxjs/Subject';
+import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 
 @Component({
   selector: 'ledger',
@@ -91,7 +91,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public trxRequest: TransactionsRequest;
+  // public trxRequest: TransactionsRequest;
+  public advanceSearchRequest: AdvanceSearchRequest;
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
@@ -108,17 +109,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public eLedgType: string;
   public eDrBalAmnt: number;
   public eCrBalAmnt: number;
-  public advanceSearchRequest: any;
   public isAdvanceSearchImplemented: boolean = false;
   public isBankOrCashAccount: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
+              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
+    // debugger;
     this.lc = new LedgerVM();
-    this.trxRequest = new TransactionsRequest();
+    this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
@@ -151,10 +152,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let from = moment(value.picker.startDate).format('DD-MM-YYYY');
     let to = moment(value.picker.endDate).format('DD-MM-YYYY');
 
-    if ((this.trxRequest.from !== from) || (this.trxRequest.to !== to)) {
-      this.trxRequest.from = from;
-      this.trxRequest.to = to;
-      this.trxRequest.page = 0;
+    if ((this.advanceSearchRequest.from !== from) || (this.advanceSearchRequest.to !== to)) {
+      this.advanceSearchRequest.from = from;
+      this.advanceSearchRequest.to = to;
+      this.advanceSearchRequest.page = 0;
+      this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
 
       this.getTransactionData();
       // Después del éxito de la entrada. llamar para transacciones bancarias
@@ -264,19 +266,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged(event: any): void {
-    this.trxRequest.page = event.page;
+    this.advanceSearchRequest.page = event.page;
     // this.lc.currentPage = event.page;
     this.getTransactionData();
   }
 
-  public advanceSearchPageChanged(event: any): void {
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(this.advanceSearchRequest.dataToSend,
-      this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.fromDate,
-      this.advanceSearchRequest.toDate, event.page, 15));
-  }
-
   public ngOnInit() {
-
+    // debugger;
     Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
       let dateObj = resp[0];
       let params = resp[1];
@@ -284,16 +280,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let universalDate = _.cloneDeep(dateObj);
         this.datePickerOptions.startDate = universalDate[0];
         this.datePickerOptions.endDate = universalDate[1];
-
-        this.trxRequest.from = universalDate[0];
-        this.trxRequest.to = universalDate[1];
-
-        this.trxRequest.page = 0;
+        this.advanceSearchRequest.from = universalDate[0];
+        this.advanceSearchRequest.to = universalDate[1];
+        this.advanceSearchRequest.page = 0;
       }
       if (params['accountUniqueName']) {
-        this.advanceSearchComp.resetAdvanceSearchModal();
+        // this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
-        this.showLoader = true;
+        this.showLoader = false; // need to enable loder
         // this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
         this.datePickerOptions = {
@@ -328,8 +322,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
               moment()
             ]
           },
-          startDate: this.trxRequest.from ? this.trxRequest.from : moment().subtract(30, 'days'),
-          endDate: this.trxRequest.to ? this.trxRequest.to : moment()
+          startDate: this.advanceSearchRequest.from ? this.advanceSearchRequest.from : moment().subtract(30, 'days'),
+          endDate: this.advanceSearchRequest.to ? this.advanceSearchRequest.to : moment()
         };
         // set state details
         let companyUniqueName = null;
@@ -341,7 +335,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         // init transaction request and call for transaction data
-        this.trxRequest = new TransactionsRequest();
+        this.advanceSearchRequest = new AdvanceSearchRequest();
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
@@ -354,6 +348,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
+        // debugger;
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
         setTimeout(() => {
@@ -393,13 +388,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             accountDetails.stocks.map(as => {
               // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, { stock: as })
+                additional: Object.assign({}, acc, {stock: as})
               });
             });
           });
@@ -408,18 +403,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, { stock: as })
+                  additional: Object.assign({}, acc, {stock: as})
                 });
               });
             } else {
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             }
           });
         }
@@ -448,8 +443,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       .debounceTime(700)
       .distinctUntilChanged()
       .subscribe(term => {
-        this.trxRequest.q = term;
-        this.trxRequest.page = 0;
+        this.advanceSearchRequest.q = term;
+        this.advanceSearchRequest.page = 0;
         this.getTransactionData();
       });
 
@@ -473,24 +468,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(createSelector([(state: AppState) => state.general.addAndManageClosed], (yesOrNo: boolean) => {
-      this.getTransactionData();
+      if (yesOrNo) {
+        this.getTransactionData();
+      }
     })).debounceTime(300).subscribe();
 
   }
 
   public initTrxRequest(accountUnq: string) {
-    this.trxRequest = this.trxRequest || new TransactionsRequest();
-    this.trxRequest.page = 0;
-    this.trxRequest.count = 15;
-    this.trxRequest.accountUniqueName = accountUnq;
-    this.trxRequest.from = this.trxRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-    this.trxRequest.to = this.trxRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    this.advanceSearchRequest = this.advanceSearchRequest || new AdvanceSearchRequest();
+    this.advanceSearchRequest.page = 0;
+    this.advanceSearchRequest.count = 15;
+    this.advanceSearchRequest.accountUniqueName = accountUnq;
+    this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
     this.getTransactionData();
   }
 
   public getBankTransactions() {
-    if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
-      this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
+    if (this.advanceSearchRequest.accountUniqueName && this.advanceSearchRequest.from) {
+      this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
@@ -534,10 +532,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
-    this.isAdvanceSearchImplemented = false;
-    this.advanceSearchComp.resetAdvanceSearchModal();
-    this.advanceSearchRequest = null;
-    this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.trxRequest)));
+    // this.isAdvanceSearchImplemented = false;
+    // this.advanceSearchComp.resetAdvanceSearchModal();
+    // this.advanceSearchRequest = null;
+    this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from, this.advanceSearchRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+    // this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.advanceSearchRequest)));
   }
 
   public toggleTransactionType(event: string) {
@@ -717,12 +716,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
+    // debugger;
+    // debugger;
     this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
-      if (yesOrNo) {
-        this.advanceSearchComp.onSearch();
-      } else {
-        this.getTransactionData();
-      }
+      // if (yesOrNo) {
+      // this.advanceSearchComp.onSearch();
+      // } else {
+      this.getTransactionData();
+      // }
     })).subscribe();
     // this.trxRequest = new TransactionsRequest();
     // this.trxRequest.accountUniqueName = this.lc.accountUnq;
@@ -818,11 +819,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     componentInstance.writeValue(s.page);
     componentInstance.boundaryLinks = true;
     componentInstance.pageChanged.subscribe(e => {
-      if (this.isAdvanceSearchImplemented) {
-        this.advanceSearchPageChanged(e);
-        return;
-      }
-      this.pageChanged(e);
+      // commenting this as we will use advance search api from now
+      // if (this.isAdvanceSearchImplemented) {
+      // this.advanceSearchPageChanged(e);
+      // return;
+      // }
+      this.pageChanged(e); // commenting this as we will use advance search api from now
     });
   }
 
@@ -841,10 +843,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * closeAdvanceSearchPopup
    */
   public closeAdvanceSearchPopup(advanceSearchRequest: any) {
-    this.isAdvanceSearchImplemented = true;
-    this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
-    this.advanceSearchModel.hide();
-    this.advanceSearchComp.ngOnDestroy();
+    // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
   }
 
   public getReconciliation() {
