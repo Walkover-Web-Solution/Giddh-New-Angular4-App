@@ -14,8 +14,8 @@
             </div>
             <div class="col-xs-7">
               <div class="form-group input-group">
-                <input name="dateRange" autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control"
-                  (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required>
+                <input  autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control"
+                  (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required formControlName="bsRangeValue" [bsConfig]="bsConfig">
                 <span class="input-group-addon cursor-pointer" (click)="dp.toggle()">
                   <i class="fa fa-calendar" aria-hidden="true"></i>
                 </span>
