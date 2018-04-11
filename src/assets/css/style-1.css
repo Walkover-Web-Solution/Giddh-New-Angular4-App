@@ -5124,3 +5124,12 @@ bs-datepicker-container {
 .stock-grp-list li div:focus {
     outline: 0;
 }
+.mt10{
+    margin-top:10px;
+}
+.mt20{
+    margin-top:20px;
+}
+.p0{
+    padding:0;
+}
