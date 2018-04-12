@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <section class="form-inline col-xs-12 mrB1">
+    <section class="form-inline col-xs-12 mrB1" *ngIf="invFormData.accountDetails.uniqueName">
 
         <div class="collapse-pane clearfix">
             <!-- <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
@@ -74,15 +74,15 @@
             </div> -->
             <div class="clearfix pdR3 container mr0"><!--[collapse]="isGenDtlCollapsed" -->
                 <div class="row">
-                    <div class="form-group col-xs-4 pl0">
+                    <div class="form-group pl0 m-r-15"><!--col-xs-3 -->
                         <label>Attention to</label>
-                        <input type="text" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                        <input type="text" name="accountDetails.attention" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                     </div>
-                    <div class="form-group noMarg col-xs-2">
+                    <div class="form-group m-r-15"><!--col-xs-2-->
                             <label>Email Id</label>
                             <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
                     </div>
-                    <div class="form-group noMarg">
+                    <div class="form-group m-r-15">
                                 <label>Mobile No.</label>
                                 <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
                     </div>
@@ -100,17 +100,17 @@
                     </div> -->
                 </div>
                 <div class="row mt20">
-                        <div class="form-group col-xs-4 pl0">
+                        <div class="form-group pl0 m-r-15"><!--col-xs-3 -->
                             <label>Invoice No.</label>
-                            <input type="text" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                            <input type="text" name="accountDetails.attention" class="form-control attentionTo"  />
                         </div>
-                        <div class="form-group noMarg col-xs-2">
+                        <div class="form-group m-r-15"><!--col-xs-2-->
                                 <label>Invoice Date</label>
-                                <input type="text" [placeholder]="giddhDateFormat"  class="form-control" bsDatepicker  />
+                                <input type="text" [placeholder]="giddhDateFormat"  class="form-control dateinvoice" bsDatepicker  />
                         </div>
-                        <div class="form-group noMarg">
+                        <div class="form-group m-r-15">
                                     <label>Due Date</label>
-                                    <input type="text" [placeholder]="giddhDateFormat"  class="form-control" bsDatepicker  />
+                                    <input type="text" [placeholder]="giddhDateFormat"  class="form-control dateinvoice" bsDatepicker  />
                         </div>
                         <!-- <div class="form-group col-xs-2">
                             <label>Country</label>
@@ -229,7 +229,7 @@
 
     </section>
 
-    <section class="clearfix pdB2 mrB2 whiteBg">
+    <section class="clearfix pdB2 mrB2 whiteBg" style="margin:0 -20px;">
         <table class="table table-custom-invoice">
             <thead>
                 <tr>
