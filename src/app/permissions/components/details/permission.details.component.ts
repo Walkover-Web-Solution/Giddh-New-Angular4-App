@@ -270,7 +270,10 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
   public isHavePermission(pageName: string, item: Permission, type: string): boolean {
     let page;
-    if (type === 'admin' && pageName !== 'SHARE') {
+    if (pageName === 'SHARE') {
+      return false;
+    }
+    if (type === 'admin') {
       page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
     } else {
       page = _.find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
