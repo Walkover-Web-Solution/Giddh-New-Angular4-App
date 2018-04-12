@@ -383,7 +383,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
    * toggleOtherDetails
    */
   public toggleOtherDetails() {
-    let val: boolean = !this.advanceSearchForm.get('').value;
+    this.showOtherDetails = !this.showOtherDetails;
+    let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
     this.advanceSearchForm.get('includeDescription').patchValue(val);
     if (!val) {
       this.advanceSearchForm.get('description').patchValue(null);
