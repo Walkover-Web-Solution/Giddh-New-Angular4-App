@@ -163,7 +163,8 @@ export class TallyModuleService {
       if (expenseAccount) {
         expenseAccounts.push(acc);
       }
-      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'income' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
+      // pg.uniqueName === 'income'
+      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
       if (salesAccount) {
         salesAccounts.push(acc);
       }
@@ -216,7 +217,6 @@ export class TallyModuleService {
   }
 
     public prepareRequestForAPI(data: any): BlankLedgerVM {
-
       let requestObj = _.cloneDeep(data);
       let transactions = [];
       // filter transactions which have selected account
@@ -230,6 +230,8 @@ export class TallyModuleService {
             } else {
               delete obj.inventory;
             }
+            // This line is added after all stocks changes
+            obj.amount = obj.inventory ? obj.inventory.amount : obj.amount;
             transactions.push(obj);
           });
         } else {
