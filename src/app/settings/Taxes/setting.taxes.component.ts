@@ -1,12 +1,9 @@
-import { TaxDetail } from './../../services/purchase-invoice.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { CompanyService } from '../../services/companyService.service';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -15,7 +12,6 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Select2OptionData } from '../../theme/select2';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
@@ -178,10 +174,9 @@ export class SettingTaxesComponent implements OnInit {
    *
    */
   public getFlattenAccounts(value) {
-    let count = '5';
     let query = value || '';
     // get flattern accounts
-    this._accountService.GetFlattenAccounts(query, '', count).debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
+    this._accountService.GetFlattenAccounts(query, '').debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
@@ -190,6 +185,10 @@ export class SettingTaxesComponent implements OnInit {
         });
         this.accounts$ = accounts;
     }});
+  }
+
+  public customAccountFilter(term: string, item: IOption) {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public customDateSorting(a: IOption, b: IOption) {
