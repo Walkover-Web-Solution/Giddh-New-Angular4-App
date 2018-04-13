@@ -1,40 +1,41 @@
 <section class="h100">
+    <!-- 
     <div class="clearfix mrB2">
         <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
       <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeStock$  }} Stock
       </button>
     </div>
-    <form #filter="ngForm" class="form-inline">
+     -->
+    <form #filter="ngForm" class="form-inline mrB1">
         <div class="clearfix pr">
             <div class="form-group">
                 <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
             </div>
+            <div class="pull-right" *ngIf="(stockReport$ | async)?.openingBalance">
+                <div class="col-xs-12 text-right mrT1">
+                    <span class="mrR1">
+                <label>O/B Qty:
+                ({{(stockReport$ | async)?.openingBalance.quantity}})
+                {{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
+                </label>
+                <label placement="top"
+                tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
+                </span> |
+                    <span class="mrL1">
+                <label>C/B Qty:
+                ({{(stockReport$ | async)?.closingBalance.quantity}})
+                {{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
+                </label>
+                <label tooltip-placement="top"
+                tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount}}</label>
+                </span>
+                </div>
+            </div>
         </div>
     </form>
 
-    <section style="margin-bottom: 40px">
-        <div class="clearfix" *ngIf="(stockReport$ | async)?.openingBalance">
-            <div class="col-xs-12 text-right mrB1">
-                <span class="mrR1">
-            <label>O/B Qty:
-            ({{(stockReport$ | async)?.openingBalance.quantity}})
-            {{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
-            </label>
-            <label placement="top"
-              tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
-            </span> |
-                <span class="mrL1">
-            <label>C/B Qty:
-            ({{(stockReport$ | async)?.closingBalance.quantity}})
-            {{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
-            </label>
-            <label tooltip-placement="top"
-              tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount}}</label>
-            </span>
-            </div>
-        </div>
-        <h1 class="mrT4 lead text-center clearfix" *ngIf="(stockReport$ | async)?.transactions?.length === 0">No Transactions for this Stock</h1>
-        <table class="table basic" *ngIf="(stockReport$ | async)?.transactions?.length > 0">
+    <section>
+        <table class="table basic">
             <thead>
                 <tr>
                     <th rowspan="2">Date</th>
@@ -77,7 +78,15 @@
                     </td>
                 </tr>
             </tbody>
-            <tfoot>
+
+            <tbody *ngIf="(stockReport$ | async)?.count < 1">
+                <tr>
+                    <td colspan="11" class="text-center empty_table">
+                        <h1>No Report Found !!</h1>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot *ngIf="(stockReport$ | async)?.count > 1">
                 <tr>
                     <td colspan="14">
                         <div class="pagination pull-right">
