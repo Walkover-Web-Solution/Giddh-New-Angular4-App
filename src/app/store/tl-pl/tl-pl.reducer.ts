@@ -282,6 +282,7 @@ const prepareProfitLossData = (data) => {
   } else {
     plData.frowardBalanceClass = false;
   }
+  plData.message = data.message;
   return plData;
 };
 
@@ -362,6 +363,7 @@ const prepareBalanceSheetData = (data) => {
   bsData.assetTotalEnd = calCulateTotalAssetsEnd(bsData.assets);
   bsData.liabTotal = calCulateTotalLiab(bsData.liabilities);
   bsData.liabTotalEnd = calCulateTotalLiabEnd(bsData.liabilities);
+  bsData.message = data.message;
   return bsData;
 };
 
