@@ -109,7 +109,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public eLedgType: string;
   public eDrBalAmnt: number;
   public eCrBalAmnt: number;
-  public isAdvanceSearchImplemented: boolean = false;
   public isBankOrCashAccount: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -117,7 +116,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
-    // debugger;
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -149,14 +147,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    let from = moment(value.picker.startDate).format('DD-MM-YYYY');
-    let to = moment(value.picker.endDate).format('DD-MM-YYYY');
+    let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
+    let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
 
-    if ((this.advanceSearchRequest.from !== from) || (this.advanceSearchRequest.to !== to)) {
-      this.advanceSearchRequest.from = from;
-      this.advanceSearchRequest.to = to;
-      this.advanceSearchRequest.page = 0;
-      this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
+    if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
+
+      this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+        page: 0,
+        dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+          bsRangeValue: [from, to]
+        })
+      });
 
       this.getTransactionData();
       // Después del éxito de la entrada. llamar para transacciones bancarias
@@ -272,16 +273,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    // debugger;
     Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
       let dateObj = resp[0];
       let params = resp[1];
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate = universalDate[0];
-        this.datePickerOptions.endDate = universalDate[1];
-        this.advanceSearchRequest.from = universalDate[0];
-        this.advanceSearchRequest.to = universalDate[1];
+        this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
+        this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+          dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+          })
+        });
+        // this.advanceSearchRequest.to = universalDate[1];
         this.advanceSearchRequest.page = 0;
       }
       if (params['accountUniqueName']) {
@@ -290,41 +294,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.showLoader = false; // need to enable loder
         // this.ledgerSearchTerms.nativeElement.value = '';
         this.resetBlankTransaction();
-        this.datePickerOptions = {
-          locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-          },
-          ranges: {
-            'Last 1 Day': [
-              moment().subtract(1, 'days'),
-              moment()
-            ],
-            'Last 7 Days': [
-              moment().subtract(6, 'days'),
-              moment()
-            ],
-            'Last 30 Days': [
-              moment().subtract(29, 'days'),
-              moment()
-            ],
-            'Last 6 Months': [
-              moment().subtract(6, 'months'),
-              moment()
-            ],
-            'Last 1 Year': [
-              moment().subtract(12, 'months'),
-              moment()
-            ]
-          },
-          startDate: this.advanceSearchRequest.from ? this.advanceSearchRequest.from : moment().subtract(30, 'days'),
-          endDate: this.advanceSearchRequest.to ? this.advanceSearchRequest.to : moment()
-        };
+        // this.datePickerOptions = {
+        //   locale: {
+        //     applyClass: 'btn-green',
+        //     applyLabel: 'Go',
+        //     fromLabel: 'From',
+        //     format: 'D-MMM-YY',
+        //     toLabel: 'To',
+        //     cancelLabel: 'Cancel',
+        //     customRangeLabel: 'Custom range'
+        //   },
+        //   ranges: {
+        //     'Last 1 Day': [
+        //       moment().subtract(1, 'days'),
+        //       moment()
+        //     ],
+        //     'Last 7 Days': [
+        //       moment().subtract(6, 'days'),
+        //       moment()
+        //     ],
+        //     'Last 30 Days': [
+        //       moment().subtract(29, 'days'),
+        //       moment()
+        //     ],
+        //     'Last 6 Months': [
+        //       moment().subtract(6, 'months'),
+        //       moment()
+        //     ],
+        //     'Last 1 Year': [
+        //       moment().subtract(12, 'months'),
+        //       moment()
+        //     ]
+        //   },
+        //   startDate: this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate() : moment().subtract(30, 'days'),
+        //   endDate: this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate() : moment()
+        // };
         // set state details
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -335,7 +339,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         // init transaction request and call for transaction data
-        this.advanceSearchRequest = new AdvanceSearchRequest();
+        // this.advanceSearchRequest = new AdvanceSearchRequest();
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
@@ -348,7 +352,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
-        // debugger;
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
         setTimeout(() => {
@@ -476,12 +479,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public initTrxRequest(accountUnq: string) {
-    this.advanceSearchRequest = this.advanceSearchRequest || new AdvanceSearchRequest();
+    // this.advanceSearchRequest = this.advanceSearchRequest || new AdvanceSearchRequest();
     this.advanceSearchRequest.page = 0;
     this.advanceSearchRequest.count = 15;
     this.advanceSearchRequest.accountUniqueName = accountUnq;
-    this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-    this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    // this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    // this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
     this.getTransactionData();
   }
@@ -535,7 +538,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.isAdvanceSearchImplemented = false;
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from, this.advanceSearchRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+    this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
+      moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+      this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
     // this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.advanceSearchRequest)));
   }
 
@@ -716,8 +721,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    // debugger;
-    // debugger;
     this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
       // if (yesOrNo) {
       // this.advanceSearchComp.onSearch();
@@ -842,7 +845,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   /**
    * closeAdvanceSearchPopup
    */
-  public closeAdvanceSearchPopup(advanceSearchRequest: any) {
+  public closeAdvanceSearchPopup() {
+    this.getTransactionData();
+    this.advanceSearchModel.hide();
     // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
   }
 
