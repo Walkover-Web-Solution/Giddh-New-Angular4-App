@@ -123,6 +123,9 @@ export class InvoiceCreateComponent implements OnInit {
             } else {
               this.invFormData.invoiceDetails.invoiceDate = '';
             }
+            if (this.invFormData.invoiceDetails.invoiceNumber === '##########') {
+              this.invFormData.invoiceDetails.invoiceNumber = null;
+            }
           }
           if (o.invoiceDetails.dueDate) {
             let d = o.invoiceDetails.dueDate.split('-');
