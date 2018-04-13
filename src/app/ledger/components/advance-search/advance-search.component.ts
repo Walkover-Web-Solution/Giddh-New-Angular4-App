@@ -95,35 +95,35 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     });
     this.setAdvanceSearchForm();
     this.setVoucherTypes();
-    debugger;
   }
 
   public ngOnChanges(s: SimpleChanges) {
-    debugger;
     if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue) {
-      let f: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).from, GIDDH_DATE_FORMAT);
-      let t: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).to, GIDDH_DATE_FORMAT);
-      this.bsRangeValue = [];
-      this.bsRangeValue.push(f._d);
-      this.bsRangeValue.push(t._d);
+      let f: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+      let t: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+
+      if (this.advanceSearchForm) {
+        let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+        bsDaterangepicker.patchValue([f, t]);
+      }
     }
   }
 
   public resetAdvanceSearchModal() {
-    this.advanceSearchRequest.from = moment().format('DD-MM-YYYY');
-    this.advanceSearchRequest.to = moment().subtract(30, 'days').format('DD-MM-YYYY');
+    this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
+    // this.advanceSearchRequest.from = moment().format('DD-MM-YYYY');
+    // this.advanceSearchRequest.to = moment().subtract(30, 'days').format('DD-MM-YYYY');
     if (this.dropDowns) {
       this.dropDowns.forEach((el) => {
         el.clear();
       });
     }
-    let f: any = moment(this.advanceSearchRequest.from, GIDDH_DATE_FORMAT);
-    let t: any = moment(this.advanceSearchRequest.to, GIDDH_DATE_FORMAT);
+    let f: any = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT);
+    let t: any = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT);
     this.bsRangeValue = [];
     this.bsRangeValue.push(f._d);
     this.bsRangeValue.push(t._d);
     this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
-    debugger;
     // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
     // this.setAdvanceSearchForm();
   }
@@ -152,7 +152,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     //   inventory: this.fb.group(this.advanceSearchRequest.dataToSend.inventory),
     // });
     // this.advanceSearchForm.
-    debugger;
     this.advanceSearchForm = this.fb.group({
       bsRangeValue: [[]],
       uniqueNames: [[]],
@@ -221,7 +220,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   }
 
   public onCancel() {
-    debugger;
     // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
   }
 
@@ -230,10 +228,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
    */
   public onDateRangeSelected(data) {
     if (data && data.length) {
-      this.advanceSearchRequest.from = moment(data[0]).format('DD-MM-YYYY');
-      this.advanceSearchRequest.to = moment(data[1]).format('DD-MM-YYYY');
+      // this.advanceSearchRequest.from = moment(data[0]).format('DD-MM-YYYY');
+      // this.advanceSearchRequest.to = moment(data[1]).format('DD-MM-YYYY');
     }
-    debugger;
     // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
   }
 
@@ -241,6 +238,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
    * onSearch
    */
   public onSearch() {
+    this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
+    this.closeModelEvent.emit();
     // const dataToSend = this.prepareRequest();
     // this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate, 1, 15));
     // this.closeModelEvent.emit({
