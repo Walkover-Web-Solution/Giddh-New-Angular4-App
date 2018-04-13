@@ -845,9 +845,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
   /**
    * closeAdvanceSearchPopup
    */
-  public closeAdvanceSearchPopup() {
-    this.getTransactionData();
+  public closeAdvanceSearchPopup(isCancel) {
     this.advanceSearchModel.hide();
+    if (!isCancel) {
+      this.getTransactionData();
+    }
     // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
   }
 

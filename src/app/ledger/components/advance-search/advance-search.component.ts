@@ -220,6 +220,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   }
 
   public onCancel() {
+    this.closeModelEvent.emit(true);
     // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
   }
 
@@ -239,7 +240,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
    */
   public onSearch() {
     this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
-    this.closeModelEvent.emit();
+    this.closeModelEvent.emit(false);
     // const dataToSend = this.prepareRequest();
     // this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate, 1, 15));
     // this.closeModelEvent.emit({
