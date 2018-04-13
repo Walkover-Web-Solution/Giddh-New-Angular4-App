@@ -150,7 +150,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
     let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
 
-    if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
+    // if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
 
       this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
         page: 0,
@@ -168,7 +168,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.hideEledgerWrap();
         }
       });
-    }
+    // }
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
