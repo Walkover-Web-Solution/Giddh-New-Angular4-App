@@ -49,28 +49,48 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.groupDetailForm.reset();
       }
     });
-  }
 
-  public generateUniqueName() {
-    let val: string = this.groupDetailForm.controls['name'].value;
-    val = uniqueNameInvalidStringReplace(val);
-    if (val) {
-      this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
-
-      this.isGroupNameAvailable$.subscribe(a => {
-        if (a !== null && a !== undefined) {
-          if (a) {
-            this.groupDetailForm.patchValue({ uniqueName: val });
-          } else {
-            let num = 1;
-            this.groupDetailForm.patchValue({ uniqueName: val + num });
+    this.groupDetailForm.get('name').valueChanges.debounceTime(100).subscribe(name => {
+      let val: string = name;
+      val = uniqueNameInvalidStringReplace(val);
+      if (val) {
+        this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
+        this.isGroupNameAvailable$.subscribe(a => {
+          if (a !== null && a !== undefined) {
+            if (a) {
+              this.groupDetailForm.patchValue({ uniqueName: val });
+            } else {
+              let num = 1;
+              this.groupDetailForm.patchValue({ uniqueName: val + num });
+            }
           }
-        }
-      });
-    } else {
-      this.groupDetailForm.patchValue({ uniqueName: '' });
-    }
+        });
+      } else {
+        this.groupDetailForm.patchValue({ uniqueName: '' });
+      }
+    });
   }
+
+  // public generateUniqueName() {
+  //   let val: string = this.groupDetailForm.controls['name'].value;
+  //   val = uniqueNameInvalidStringReplace(val);
+  //   if (val) {
+  //     this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
+
+  //     this.isGroupNameAvailable$.subscribe(a => {
+  //       if (a !== null && a !== undefined) {
+  //         if (a) {
+  //           this.groupDetailForm.patchValue({ uniqueName: val });
+  //         } else {
+  //           let num = 1;
+  //           this.groupDetailForm.patchValue({ uniqueName: val + num });
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     this.groupDetailForm.patchValue({ uniqueName: '' });
+  //   }
+  // }
 
   public addNewGroup() {
     let activeGrpUniqueName: string;

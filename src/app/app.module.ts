@@ -31,7 +31,6 @@ import { DummyComponent } from './dummy.component';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
-import 'rxjs/add/operator/take';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -56,7 +55,7 @@ import { PublicPageHandlerComponent } from './public-page-handler.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: isElectron ? '/' : AppUrl + APP_FOLDER }
+  { provide: APP_BASE_HREF, useValue: isElectron ? './' : AppUrl + APP_FOLDER }
 ];
 
 interface InternalStateType {

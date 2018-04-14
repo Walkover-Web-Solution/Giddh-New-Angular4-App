@@ -18,12 +18,14 @@ export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   flattenAccounts: IFlattenAccountsResultItem[];
   states: States[];
+  addAndManageClosed: boolean;
 }
 
 const initialState: GeneralState = {
   groupswithaccounts: null,
   flattenAccounts: null,
-  states: null
+  states: null,
+  addAndManageClosed: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -198,6 +200,11 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
           groupswithaccounts: groupArray
         };
       }
+    }
+    case GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE: {
+      let newState = _.cloneDeep(state);
+      newState.addAndManageClosed = !newState.addAndManageClosed;
+      return Object.assign({}, state, newState);
     }
     default:
       return state;

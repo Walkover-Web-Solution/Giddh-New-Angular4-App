@@ -5,7 +5,7 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "dist": false,
+    "dist": true,
     "dev": true,
     "node_modules": true,
     "compiled": true,
@@ -14,5 +14,8 @@
     ".awcache": true,
     "node_modules_electron": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib/"
+  "typescript.tsdk": "node_modules/typescript/lib/",
+  "search.exclude": {
+    "**/dist": true,
+  }
 }

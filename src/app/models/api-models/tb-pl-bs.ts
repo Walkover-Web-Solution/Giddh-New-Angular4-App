@@ -42,6 +42,7 @@ export interface ProfitLossData {
   closingBalanceClass?: boolean;
   frowardBalanceClass?: boolean;
   dates?: ProfitLossRequest;
+  incomeStatment?: any;
 }
 
 export interface AccountDetails {
