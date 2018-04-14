@@ -165,9 +165,10 @@ export class LedgerService {
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
+    let dataToSend = { voucherNumber: model.invoiceNumber };
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+    return this._http.post(this.config.apiUrl + LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend)
       .map((res) => {
         let data: BaseResponse<string, DownloadLedgerRequest> = res;
         data.request = model;
@@ -235,5 +236,18 @@ export class LedgerService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>(e, model, {accountUniqueName}));
+  }
+
+  public GetReconciliation(model: any, accountUniqueName: string): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + LEDGER_API.RECONCILIATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+      .map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = model;
+        data.queryString = {accountUniqueName};
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}));
   }
 }
