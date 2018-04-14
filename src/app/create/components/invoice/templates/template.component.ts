@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ComponentFactoryResolver } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../../../lodash-optimized';
 import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -38,7 +38,7 @@ export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
         this.templateId = params['templateId'];
         this.loadComponents();
       } else {
-        this._router.navigate(['/create/invoice']);
+        this._router.navigate(['/create-invoice/invoice']);
       }
     });
   }

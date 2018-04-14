@@ -11,7 +11,7 @@ const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
 */
-const commonConfig = require('./webpack.common.js');
+const commonConfig = require('./webpack.renderer.js');
 
 /**
  * Webpack Plugins
@@ -84,7 +84,8 @@ module.exports = function (env) {
     errlyticsNeeded: false,
     errlyticsKey: ERRLYTICS_KEY_PROD,
     AppUrl: AppUrl,
-    ApiUrl: ApiUrl
+    ApiUrl: ApiUrl,
+    APP_FOLDER:''
 
   });
 
@@ -213,6 +214,7 @@ module.exports = function (env) {
           'errlyticsKey': ERRLYTICS_KEY_PROD,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'APP_FOLDER':JSON.stringify(METADATA.APP_FOLDER),
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
@@ -235,26 +237,10 @@ module.exports = function (env) {
        *
        * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
        */
-      new UglifyJsPlugin({
-        uglifyOptions: getUglifyOptions(supportES2015)
-      })
+      // new UglifyJsPlugin({
+      //   uglifyOptions: getUglifyOptions(supportES2015)
+      // })
 
-    ],
-
-    /**
-     * Include polyfills or mocks for various node stuff
-     * Description: Node configuration
-     *
-     * See: https://webpack.github.io/docs/configuration.html#node
-     */
-    // node: {
-    //   global: true,
-    //   crypto: 'empty',
-    //   process: false,
-    //   module: false,
-    //   clearImmediate: false,
-    //   setImmediate: false
-    // }
-
+    ]
   });
 }

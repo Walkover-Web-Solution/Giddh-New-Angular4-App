@@ -5,7 +5,7 @@
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Select Tax</label><br>
-                <sh-select [options]="taxList" [isFilterEnabled]="false" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'" [ItemHeight]="33"></sh-select>
+                <sh-select [forceClearReactive]="forceClear$ | async" [options]="taxList" [isFilterEnabled]="false" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'" [ItemHeight]="33"></sh-select>
             </div>
             <div class="form-group col-xs-3">
                 <label>Unique No.</label><br>
@@ -17,7 +17,7 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Linked Account</label><br>
-                <sh-select [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>
+                <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>
             </div>
         </div>
         <div class="row">
@@ -32,7 +32,8 @@
             <div class="form-group col-xs-3">
                 <label>Apply Tax From</label>
                 <div class="input-group">
-                    <input type="text" name="from" (blur)="showFromDatePicker = false;" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+                    <!-- (blur)="showFromDatePicker = false;" -->
+                    <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
                     <span class="input-group-btn">
                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                <i class="glyphicon glyphicon-calendar"></i>
@@ -45,11 +46,11 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Duration</label><br>
-                <sh-select placeholder="Select Duration" name="duration" [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select Duration" [forceClearReactive]="forceClear$ | async" name="duration" [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Filing Date</label>
-                <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select Date" [forceClearReactive]="forceClear$ | async" [customSorting]="customDateSorting" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" [ItemHeight]="33"></sh-select>
             </div>
         </div>
         <div class="row">

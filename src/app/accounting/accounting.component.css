@@ -30,10 +30,12 @@
 
 .entry_table thead th {
     font-weight: normal;
+    padding: 8px 6px;
 }
 
 .entry_table tbody tr td {
     padding: 0;
+    border: 0;
 }
 
 .entry_table tbody tr td .form-control {
@@ -66,14 +68,18 @@
 }
 
 .total_box {
-    padding: 15px;
+    padding: 15px 0;
     border-top: 1px solid;
     border-bottom: 1px solid;
     margin: 20px 0;
+    min-width: 250px;
+    font-size: 14px;
 }
 
 .total_box>span {
-    padding: 0 20px;
+    margin: 0 8px;
+    display: inline-block;
+    min-width: 120px;
 }
 
 .appearance_none {
@@ -125,12 +131,52 @@
     position: absolute;
     right: 0;
     top: 0;
-    height: 90vh;
+    height: 100vh;
     padding: 0 !important;
     border: 0;
     z-index: 0;
+    border-left: 1px solid #d6d6d6;
 }
 
 .sidebar_list h3 {
     background: #fff;
+}
+
+.label.isActive {
+    font-weight: normal;
+    background: #ddd;
+    color: #333 !important;
+    cursor: auto;
+}
+
+input[name="entryDate"] {
+    background: transparent !important;
+    border: 0;
+    padding: 0 !important;
+    color: #333;
+    height: auto;
+    width: 100px;
+    font-size: 16px
+}
+
+textarea[name="narration"] {
+    background: transparent !important;
+    border: 0;
+}
+
+input[name="entryDate"]:focus,
+textarea[name="narration"]:focus {
+    background: #e5e5e5 !important;
+}
+
+:host ::ng-deep .menu {
+    box-shadow: none !important;
+}
+
+:host ::ng-deep .item .list-item {
+    border: 0 !important;
+}
+
+:host ::ng-deep .menu {
+    border-left: 0 !important;
 }

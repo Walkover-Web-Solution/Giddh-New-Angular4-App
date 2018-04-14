@@ -1,0 +1,13 @@
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.dropdown-menu {
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.dropdown-menu li {
+    margin-bottom: 5px;
+}

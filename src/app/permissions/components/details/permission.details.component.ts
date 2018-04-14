@@ -179,7 +179,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         obj.permissions = obj.permissions.map((o: Permission) => {
           return o = new NewPermissionObj(o.code, true);
         });
-        if (obj.permissions.length < 6) {
+        if (obj.permissions.length < 6 && obj.name !== 'SHARE') {
           obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles)));
         }
         let count = 0;
@@ -270,6 +270,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
   public isHavePermission(pageName: string, item: Permission, type: string): boolean {
     let page;
+    if (pageName === 'SHARE') {
+      return false;
+    }
     if (type === 'admin') {
       page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
     } else {
@@ -277,7 +280,8 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
     if (page) {
       let access = _.find(page.permissions, (p: Permission) => p.code === item.code);
-      if (access && access.isSelected) {
+      // && access.isSelected
+      if (access) {
         return true;
       }
       return false;

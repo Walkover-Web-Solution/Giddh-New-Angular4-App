@@ -16,7 +16,7 @@ import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, trans
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
+import * as _ from 'app/lodash-optimized';
 import * as moment from 'moment';
 import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
 import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
@@ -27,6 +27,7 @@ import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { InventoryService } from '../../services/inventory.service';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -105,6 +106,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private allStocks: any[];
 
   constructor(
     private _accountService: AccountService,
@@ -116,7 +118,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _router: Router,
     private _salesActions: SalesActions,
     private _tallyModuleService: TallyModuleService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private inventoryService: InventoryService
   ) {
     // this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
@@ -530,18 +533,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       code: item.stockUnit.code,
       rate: 0
     };
-    if (item.accountStockDetails.unitRates.length) {
-      this.stocksTransaction[stkIdx].inventory.unit = item.accountStockDetails.unitRates[0];
-      this.stocksTransaction[stkIdx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+    // if (item.accountStockDetails.unitRates.length) {
+      // this.stocksTransaction[stkIdx].inventory.unit = item.accountStockDetails.unitRates[0];
+      this.stocksTransaction[stkIdx].inventory.unit.rate = item.amount / item.openingQuantity;
+      // this.stocksTransaction[stkIdx].inventory.unit.code = item.accountStockDetails.unitRates[0].stockUnitCode;
+      this.stocksTransaction[stkIdx].inventory.unit.code = item.stockUnit.code;
       this.stocksTransaction[stkIdx].inventory.unit.stockUnitCode = item.stockUnit.name;
 
-    } else if (!item.accountStockDetails.unitRates.length) {
-      this.stocksTransaction[stkIdx].inventory.unit = defaultUnit;
-    }
-    this.stocksTransaction[stkIdx].particular = item.accountStockDetails.accountUniqueName;
+    // } else if (!item.accountStockDetails.unitRates.length) {
+    //   this.stocksTransaction[stkIdx].inventory.unit = defaultUnit;
+    // }
+    // this.stocksTransaction[stkIdx].particular = item.accountStockDetails.accountUniqueName;
     this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item.uniqueName};
-    this.stocksTransaction[stkIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
-    this.stocksTransaction[stkIdx].selectedAccount.name = item.accountStockDetails.name;
+    // this.stocksTransaction[stkIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+    // this.stocksTransaction[stkIdx].selectedAccount.name = item.accountStockDetails.name;
   }
 
   /**
@@ -748,32 +753,60 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * getFlattenGrpofAccounts
    */
   public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        this.sortStockItems(data.body.results);
-      } else {
-        // this.noResult = true;
-      }
-    });
+    if (this.allStocks && this.allStocks.length) {
+      this.sortStockItems(_.cloneDeep(this.allStocks));
+    } else {
+      this.inventoryService.GetStocks().takeUntil(this.destroyed$).subscribe(data => {
+        if (data.status === 'success') {
+          this.sortStockItems(data.body.results);
+          this.allStocks = _.cloneDeep(data.body.results);
+        }
+      });
+    }
+
+    // const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
+    // this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
+    //   if (data.status === 'success') {
+    //     this.sortStockItems(data.body.results);
+    //   } else {
+    //     // this.noResult = true;
+    //   }
+    // });
   }
 
   /**
    * sortStockItems
    */
+  // public sortStockItems(ItemArr) {
+  //   let stockAccountArr: IOption[] = [];
+  //   _.forEach(ItemArr, (obj: any) => {
+  //     if (obj.stocks) {
+  //       _.forEach(obj.stocks, (stock: any) => {
+  //         stock.accountStockDetails.name = obj.name;
+  //         stockAccountArr.push({
+  //           label: `${stock.name} (${stock.uniqueName})`,
+  //           value: stock.uniqueName,
+  //           additional: stock
+  //         });
+  //       });
+  //     }
+  //   });
+  //   // console.log(stockAccountArr, 'stocks');
+  //   this.stockList = stockAccountArr;
+  //   this.inputForList = _.cloneDeep(this.stockList);
+  //   setTimeout(() => {
+  //     this.showLedgerAccountList = true;
+  //   }, 200);
+  // }
+
   public sortStockItems(ItemArr) {
     let stockAccountArr: IOption[] = [];
     _.forEach(ItemArr, (obj: any) => {
-      if (obj.stocks) {
-        _.forEach(obj.stocks, (stock: any) => {
-          stock.accountStockDetails.name = obj.name;
           stockAccountArr.push({
-            label: `${stock.name} (${stock.uniqueName})`,
-            value: stock.uniqueName,
-            additional: stock
+            label: `${obj.name} (${obj.uniqueName})`,
+            value: obj.uniqueName,
+            additional: obj
           });
-        });
-      }
     });
     // console.log(stockAccountArr, 'stocks');
     this.stockList = stockAccountArr;
