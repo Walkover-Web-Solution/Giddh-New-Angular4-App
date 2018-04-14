@@ -551,16 +551,6 @@ header .navbar {
     margin: 0 auto;
 }
 
-.icon-options {
-    color: #ff5e01;
-    /*    background: #f3f0e6;*/
-    padding: 0 4px;
-    /*    border: 1px solid #ccc;
-  border-radius: 3px;
-*/
-    font-size: 24px;
-}
-
 .daterangepicker.ltr .ranges {
     float: right;
 }
@@ -570,9 +560,10 @@ header .navbar {
     width: 100% !important;
 }
 
-header {
+
+/* header {
     border-bottom: 1px solid rgb(214, 214, 214);
-}
+} */
 
 .company-name {
     min-width: 380px;
@@ -2510,7 +2501,8 @@ label {
 }
 
 .form_bg {
-    background: #f4f5f5;
+    background: #f5f5f5;
+    padding: 10px 20px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3935,6 +3927,7 @@ input[type='checkbox'][disabled]:after {
 
 .table-container .account {
     background: #f4f5f8;
+    /* background: #eee; */
 }
 
 .table-container>div>section>.tb-pl-bs-grid-row>div:nth-child(1) {
@@ -4418,14 +4411,15 @@ table td[class*=col-]:last-child {
 /* ======================================= INVENTORY CSS ===================================== */
 
 .form_header {
-    padding: 12px 20px;
-    background: #e5e5e5;
+    padding: 12px 15px;
+    background: #f5f5f5;
     color: #333333;
+    border-bottom: 1px solid #ddd;
 }
 
 .form_body {
     background: #fff;
-    padding: 20px;
+    /* padding: 15px; */
 }
 
 .noHover:hover td {
@@ -4463,6 +4457,10 @@ table td[class*=col-]:last-child {
 
 
 /* left bar menu */
+
+.form_body .toggle-btn label {
+    color: #7f7f7f;
+}
 
 .user_dropdown {
     width: 200px;
@@ -4552,4 +4550,43 @@ table td[class*=col-]:last-child {
 
 .max900 {
     max-width: 900px;
+}
+
+.sidebar .stock-grp-list:first-child {
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow: auto;
+}
+
+.dropdown-menu>li>a {
+    padding: 2px 10px;
+}
+
+
+/* ==================================================
+    Branch
+================================================== */
+
+.branch .box h1 {
+    font-size: 18px;
+    padding-right: 85px;
+    display: inline-block;
+}
+
+.branch .box .btn-default {
+    right: 0;
+    top: 0;
+}
+
+.illustration_box {
+    border-radius: 4px;
+    padding: 25px 20px;
+    /* box-shadow: 0 0 8px #b3b3b329;
+    background: #fdfdfd; */
+    margin-top: 40px;
+}
+
+.illustration_box img {
+    /* max-width: 85%; */
+    opacity: 0.7;
 }

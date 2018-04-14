@@ -11,7 +11,7 @@ export class CompanyRequest {
   public pincode: string;
   public contactNo: string;
   public email: string;
-
+  public isBranch?: boolean;
 }
 
 export class StateDetailsRequest {
@@ -142,6 +142,7 @@ export class TaxResponse implements ITax {
   public uniqueName: string;
   public date?: any;
   public taxValue?: any;
+  public isChecked?: boolean;
 }
 
 export class States {

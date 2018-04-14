@@ -1,108 +1,106 @@
 <div class="clearfix mrT2">
-  <div class="clearfix">
-    <div class="col-xs-9">
-      <div class="row">
-        <div class="pull-left">
-          <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline" name="fromToDateForm" novalidate>
-            <div class="form-group mrR1" *ngIf="showLabels">
-              <label class="d-block">Filter Type</label>
-              <div class="form-group">
-                <sh-select [options]="dateOptions" formControlName="selectedDateOption" [isFilterEnabled]="true" [placeholder]="'Select Option'"
-                  [ItemHeight]="33"></sh-select>
-                <!--<select2 [data]="dateOptions" [options]="options" [value]="selectedDateOption" (valueChanged)="selectDateOption($event)" class="select2-parent"></select2>-->
-              </div>
-            </div>
-            <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value =='0'">
-              <label class="d-block">Select Year</label>
-              <div class="form-group">
-                <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption" [isFilterEnabled]="true" [placeholder]="'Select Option'"
-                  (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
-                <!--<select2 class="select2-parent" [data]="financialOptions" [options]="options" [value]="selectedFinancialYearOption" (valueChanged)="selectFinancialYearOption($event)"></select2>-->
-              </div>
-            </div>
+    <div class="clearfix">
+        <div class="col-xs-9">
+            <div class="row">
+                <div class="pull-left">
+                    <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline" name="fromToDateForm" novalidate>
+                        <div class="form-group mrR1" *ngIf="showLabels">
+                            <label class="d-block">Filter Type</label>
+                            <div class="form-group">
+                                <sh-select [options]="dateOptions" formControlName="selectedDateOption" [isFilterEnabled]="true" [placeholder]="'Select Option'" [ItemHeight]="33"></sh-select>
+                                <!--<select2 [data]="dateOptions" [options]="options" [value]="selectedDateOption" (valueChanged)="selectDateOption($event)" class="select2-parent"></select2>-->
+                            </div>
+                        </div>
+                        <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value =='0'">
+                            <label class="d-block">Select Year</label>
+                            <div class="form-group">
+                                <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption" [isFilterEnabled]="true" [placeholder]="'Select Option'" (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
+                                <!--<select2 class="select2-parent" [data]="financialOptions" [options]="options" [value]="selectedFinancialYearOption" (valueChanged)="selectFinancialYearOption($event)"></select2>-->
+                            </div>
+                        </div>
 
-            <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value =='1'">
-              <br />
-              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-                (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker mrR1" />
-            </div>
-            <div class="form-group">
-              <br/>
-              <button type="submit" class="btn btn-success">
+                        <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value =='1'">
+                            <br />
+                            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker mrR1" />
+                        </div>
+                        <div class="form-group">
+                            <br/>
+                            <button type="submit" class="btn btn-success">
                 Apply
               </button>
-              <button type="button" class="btn btn-success" (click)="refreshData()">
+                            <button type="button" class="btn btn-success" (click)="refreshData()">
                 Refresh
               </button>
+                        </div>
+                        <!--<div class="form-group" style="vertical-align: bottom">-->
+                        <!--<button class="btn btn-success" (click)="filterData()">Refresh</button>-->
+                        <!--</div>-->
+                    </form>
+                </div>
             </div>
-            <!--<div class="form-group" style="vertical-align: bottom">-->
-            <!--<button class="btn btn-success" (click)="filterData()">Refresh</button>-->
-            <!--</div>-->
-          </form>
         </div>
-      </div>
+        <!-- end of coloumn -->
+        <div class="col-xs-3">
+            <tb-export-csv *ngIf="tbExportCsv" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
+            <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right"></tb-export-xls>
+            <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
+            <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
+            <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
+        </div>
+        <!-- end of second coloumn -->
     </div>
-    <!-- end of coloumn -->
-    <div class="col-xs-3">
-      <tb-export-csv *ngIf="tbExportCsv" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
-        class="pull-right"></tb-export-csv>
-      <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right"></tb-export-xls>
-      <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-        class="pull-right"></tb-export-pdf>
-      <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
-      <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
-    </div>
-    <!-- end of second coloumn -->
-  </div>
 
-  <div class="clearfix mrT2" *ngIf="!(showLoader)">
-    <div class="col-xs-3">
-      <div class="row">
-        <div class="form-group mrB">
-          <div class="input-group input-group-md">
-            <input type="search" #search class="form-control" placeholder="Search" aria-describedby="sizing-addon3" id="w-398px" [formControl]="accountSearchControl">
-            <span class="input-group-addon" id="sizing-addon3" *ngIf="!showClearSearch">
+    <div class="clearfix mrT2" *ngIf="!(showLoader)">
+        <div class="col-xs-3">
+            <div class="row">
+                <div class="form-group mrB">
+                    <div class="input-group input-group-md">
+                        <input type="search" #search class="form-control" placeholder="Search" aria-describedby="sizing-addon3" id="w-398px" [formControl]="accountSearchControl">
+                        <span class="input-group-addon" id="sizing-addon3" *ngIf="!showClearSearch">
               <i class="glyphicon glyphicon-search"></i>
             </span>
-            <span class="input-group-addon" id="sizing-addon4" *ngIf="showClearSearch">
+                        <span class="input-group-addon" id="sizing-addon4" *ngIf="showClearSearch">
               <i class="glyphicon glyphicon-remove"></i>
             </span>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="col-xs-3">
-      <button class="btn btn-default btn-sm" (click)="expandAll.emit(true);">Expand All</button>
-      <button class="btn btn-default btn-sm" (click)="expandAll.emit(false);">Collapse All</button>
-    </div>
-    <!-- end of column -->
-    <!-- end of row -->
+        <!-- Filter by Tag -->
+        <div class="form-group pull-left mrL1 pdL">
+            <sh-select [options]="tags$ | async" name="selectedTag" [(ngModel)]="selectedTag" [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'" [ItemHeight]="33" [width]="'200px'"></sh-select>    
+        </div>
+        <div class="col-xs-3">
+            <button class="btn btn-default btn-sm" (click)="emitExpand()"> {{expand ? 'Collapse All' : 'Expand All'}}</button>
+        </div>
+        <!-- end of column -->
+        <!-- end of row -->
 
-    <div class="mrT1 pull-right" *ngIf="showLabels">
-      <div class="tbplList">
-        <ul class="list-inline color-codes pull-right">
-          <li>
-            <span class="circle square liabilities"></span>
-            <span>Liabilities</span>
-          </li>
-          <li>
-            <span class="circle square  assets"></span>
-            <span>Assets</span>
-          </li>
-          <li>
-            <span class="circle square income"></span>
-            <span>Income</span>
-          </li>
-          <li>
-            <span class="circle square expenses"></span>
-            <span>Expenses</span>
-          </li>
-        </ul>
-      </div>
+        <div class="mrT1 pull-right" *ngIf="showLabels">
+            <div class="tbplList">
+                <ul class="list-inline color-codes pull-right">
+                    <li>
+                        <span class="circle square liabilities"></span>
+                        <span>Liabilities</span>
+                    </li>
+                    <li>
+                        <span class="circle square  assets"></span>
+                        <span>Assets</span>
+                    </li>
+                    <li>
+                        <span class="circle square income"></span>
+                        <span>Income</span>
+                    </li>
+                    <li>
+                        <span class="circle square expenses"></span>
+                        <span>Expenses</span>
+                    </li>
+                </ul>
+            </div>
 
-      <!-- end of column -->
+            <!-- end of column -->
+        </div>
     </div>
-  </div>
 
 </div>
 <!-- end box  -->

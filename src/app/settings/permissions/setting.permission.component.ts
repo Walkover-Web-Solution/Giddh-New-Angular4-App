@@ -9,7 +9,7 @@ import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CompanyService } from '../../services/companyService.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { digitsOnly } from '../../shared/helpers/customValidationHelper';

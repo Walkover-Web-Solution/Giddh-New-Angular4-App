@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { CompanyService } from '../../services/companyService.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { Select2OptionData } from '../../theme/select2';
@@ -112,7 +112,8 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
           });
         })
         .map((res) => {
-          let data = res.map(item => item.address_components[0].long_name);
+          // let data = res.map(item => item.address_components[0].long_name);
+          let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
         });
@@ -154,7 +155,10 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         }
 
         if (this.statesInBackground && this.statesInBackground.length) {
-          let selectedState = this.statesInBackground.find((state) => state.label === profileObj.state);
+          let selectedState;
+          if (profileObj.state) {
+            selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
+          }
           if (selectedState) {
             profileObj.state = selectedState.value;
           }
@@ -237,6 +241,10 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     this.companyProfileObj = _.cloneDeep(dataToSave);
     if (this.gstDetailsBackup) {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+    }
+
+    if (this.countryIsIndia) {
+      dataToSave.state = null;
     }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
@@ -383,29 +391,29 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
     this.dataSourceBackup.forEach(item => {
-      if (item.address_components[0].long_name === e.item) {
+      if (item.city === e.item) {
+        this.companyProfileObj.country = item.country;
         // set country and state values
-        try {
-          item.address_components.forEach(address => {
-            let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
-            let countryIdx = _.indexOf(address.types, 'country');
-            if (stateIdx !== -1) {
-              if (this.stateResponse) {
-                let selectedState = this.stateResponse.find((state: States) => state.name === address.long_name);
-                if (selectedState) {
-                  this.companyProfileObj.state = selectedState.code;
-                }
-              }
-            }
-            if (countryIdx !== -1) {
-              this.companyProfileObj.country = address.long_name;
-            }
-          });
-        } catch (e) {
-          console.log(e);
-        }
+        // try {
+        //   item.address_components.forEach(address => {
+        //     let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
+        //     let countryIdx = _.indexOf(address.types, 'country');
+        //     if (stateIdx !== -1) {
+        //       if (this.stateResponse) {
+        //         let selectedState = this.stateResponse.find((state: States) => state.name === address.long_name);
+        //         if (selectedState) {
+        //           this.companyProfileObj.state = selectedState.code;
+        //         }
+        //       }
+        //     }
+        //     if (countryIdx !== -1) {
+        //       this.companyProfileObj.country = address.long_name;
+        //     }
+        //   });
+        // } catch (e) {
+        //   console.log(e);
+        // }
       }
     });
   }
-
 }
