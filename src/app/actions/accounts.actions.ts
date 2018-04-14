@@ -7,7 +7,6 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
@@ -16,6 +15,7 @@ import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'app/services/general.service';
 import { eventsConst } from 'app/shared/header/components/eventsConst';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AccountsAction {

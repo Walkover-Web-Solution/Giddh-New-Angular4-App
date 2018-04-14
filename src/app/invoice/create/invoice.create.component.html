@@ -26,7 +26,7 @@
         </div>
         <div class="form-group" *ngIf="templateHeader.invoiceNumber.display">
           <label>{{templateHeader.invoiceNumber.label}}</label>
-          <input [disabled]="true" type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
+          <input [disabled]="updateMode" type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
         </div>
         <div class="form-group" *ngIf="templateHeader.dueDate.display">
           <label>{{templateHeader.dueDate.label}}</label>

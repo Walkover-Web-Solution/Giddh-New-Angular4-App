@@ -36,7 +36,8 @@
                                 <span class="label">Invoice</span>
                             </a>
                         </li>
-                        <li *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
+                        <!-- *ngIf="userIsCompanyUser" -->
+                        <li [checkPermission]="['MENU', 'LEDGER']">
                             <a [routerLink]="['/pages/accounting-voucher']">
                                 <span class="navico-journal"></span>
                                 <span class="label">Journal Voucher</span>

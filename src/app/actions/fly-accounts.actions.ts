@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { GroupService } from '../services/group.service';

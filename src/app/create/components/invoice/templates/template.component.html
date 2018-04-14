@@ -1,31 +1,50 @@
-<create-invoice-header></create-invoice-header>
+<div class="col-sm-12 text-center">
+    <create-invoice-header></create-invoice-header>
+</div>
 
-<section class="container">
-  <div class="row">
-    <div class="col-xs-12 alC">
-      <div class="pr mrB4 clearfix mrT2">
-        <div class="alL col-xs-7">
-          <h1 class="fs18 bdrD inline lh42">
-            <a [routerLink]="['/create/invoice']">
-              <i class="glyphicon glyphicon-arrow-left cp"></i> Template TIGER
-            </a>
-          </h1>
+<section>
+    <div class="inv_header">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            <h1 class="text-center">Follow three easy steps below to</h1><span> create Invoice</span>
+          </div>
+          <div class="col-sm-12 text-center">
+              <create-invoice-steps></create-invoice-steps>
+          </div>
         </div>
-        <create-invoice-steps></create-invoice-steps>
       </div>
     </div>
-  </div>
-</section>
 
 
-<section class="container">
+<!-- <section class="container">
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-12 alC">
+      <div class="pr mrB4 clearfix mrT2"> -->
+        <!-- <div class="alL col-xs-7">
+          <h1 class="fs18 bdrD inline lh42">
+            <a [routerLink]="['/create-invoice/invoice']">
+              <i class="glyphicon glyphicon-arrow-left cp"></i> Template LETTER
+            </a>
+          </h1>
+        </div> -->
+        <!-- <div class="col-sm-12 text-center">
+            <create-invoice-steps></create-invoice-steps>
+       </div> -->
+      <!-- </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="">
+  <div class="">
+    <div class="">
       <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
       <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
       <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
-        <!-- download, emial, save -->
-        <!-- <div class="">
+      <!-- download, emial, save -->
+      <!-- <div class="">
           <div class="clearfix">
             <button class="btn btn-primary mrB1">Download</button>
           </div>
