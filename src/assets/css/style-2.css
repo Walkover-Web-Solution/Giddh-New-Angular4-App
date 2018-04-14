@@ -3713,7 +3713,7 @@ input[type='checkbox'][disabled] {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.icon-btn .btn-xs {
+.ico-btn .btn-xs {
     padding: 1px 5px;
     font-size: 12px;
     line-height: 1.5;
@@ -4546,6 +4546,10 @@ table td[class*=col-]:last-child {
 
 .userName_wrap {
     width: calc(100% - 40px);
+}
+
+.max900 {
+    max-width: 900px;
 }
 
 .sidebar .stock-grp-list:first-child {
