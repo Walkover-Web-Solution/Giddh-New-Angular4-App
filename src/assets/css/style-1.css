@@ -1045,6 +1045,10 @@ aside-menu-account .container-fluid {
     font-size: 13px;
 }
 
+.fs14 {
+    font-size: 14px;
+}
+
 .fs16 {
     font-size: 16px;
 }
@@ -4616,10 +4620,9 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .stock-grp-list li>i {
-    position: absolute;
-    right: 15px;
-    top: 10px;
+    top: 3px;
     color: #616161;
+    float: right;
 }
 
 .stock-grp-list li {
@@ -4629,12 +4632,17 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .stock-grp-list>li {
-    padding: 7px 0;
+    /* padding: 7px 0; */
+    padding: 6px 0 6px 15px;
     border-bottom: 1px solid #e0e0e0;
     /* background-color: rgb(220, 220, 220); */
 }
 
-.parent-group>.stock-grp-list>li>div {
+.parent-Group>.stock-grp-list>li {
+    padding: 6px 15px;
+}
+
+.parent-Group>.stock-grp-list>li>div {
     text-transform: uppercase;
 }
 

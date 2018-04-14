@@ -25,6 +25,9 @@
                 <tab heading="Branch">
                     <setting-branch></setting-branch>
                 </tab>
+                <tab heading="Tags" (select)="tagsTabSelected($event)">
+                    <setting-tags #tagComp></setting-tags>
+                </tab>
             </tabset>
         </div>
     </div>

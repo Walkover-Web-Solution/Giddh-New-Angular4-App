@@ -43,16 +43,16 @@ export class AuthenticationService {
   }
 
   public SignupWithMobile(model: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
-    // return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithMobile, model).map((res) => {
-    //   let data: BaseResponse<string, SignupWithMobile> = res;
-    //   data.request = model;
-    //   return data;
-    // }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model));
-    return this._http.get(this.config.apiUrl + LOGIN_API.LoginWithNumber.replace(':countryCode', String(model.countryCode)).replace(':mobileNumber', model.mobileNumber)).map((res) => {
+    return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithMobile, model).map((res) => {
       let data: BaseResponse<string, SignupWithMobile> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model));
+    // return this._http.get(this.config.apiUrl + LOGIN_API.LoginWithNumber.replace(':countryCode', String(model.countryCode)).replace(':mobileNumber', model.mobileNumber)).map((res) => {
+    //   let data: BaseResponse<string, SignupWithMobile> = res;
+    //   data.request = model;
+    //   return data;
+    // }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model));
   }
 
   public VerifyOTP(modele: VerifyMobileModel): Observable<BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>> {
