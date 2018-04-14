@@ -645,8 +645,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     if (transactions) {
       if (txn.isBaseAccount) {
-        // store the trx values in store
-        this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
+        if (!txn.isCompoundEntry) {
+          // store the trx values in store
+          this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
+        } else {
+          // store the trx values in store
+          this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
+        }
       } else {
         // find trx from transactions array and store it in store
         let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
