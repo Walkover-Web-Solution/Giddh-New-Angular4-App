@@ -1,509 +1,540 @@
 <div class="form-group mrB clearfix">
     <div class="col-xs-12 clearfix">
-        <label>Select Type</label>        
-        <sh-select style="width: 200px;" [options]="pageList" [placeholder]="'Select Invoice Type'" (selected)="pageChanged()" name="selectedPage" [(ngModel)]="selectedPage"></sh-select>
+       <label>Select Type</label>
+       <sh-select style="width: 200px;" [options]="pageList" [placeholder]="'Select Invoice Type'" (selected)="pageChanged()" name="selectedPage"
+       [(ngModel)]="selectedPage"></sh-select>
     </div>
-</div>
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate>
-    <div class="clearfix mrB2">
-        <div class="clearfix pdT2 pdB2">
-            <div class="col-xs-9">
-                <div class="flex-row">
-                    <div class="flex-row-child">
-                        <div class="form-group noMarg">
-                            <label>Customer Name</label>
-                            <sh-select style="width: 380px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" (noOptionsFound)="noResultsForCustomer($event)" (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)" [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                [useInBuiltFilterForIOptionTypeItems]="true">
-                                <ng-template #optionTemplate let-option="option">
-                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                        <div class="item">{{ option.label }}</div>
-                                        <div class="item_unq">{{ option.value }}</div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
-                        </div>
-                    </div>
-                    <div class="flex-row-child mrL3"><!--*ngIf="typeaheadNoResultsOfCustomer"-->
-                        <div class="form-group noMarg">
-                            <label>Add Entry Against</label>
-                            <sh-select style="width: 160px;" name="accountDetails.uniqueName" [options]="bankAccounts$ | async" [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)" [placeholder]="'Cash Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
-                                <ng-template #optionTemplate let-option="option">
-                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                        <div class="item">{{ option.label }}</div>
-                                        <div class="item_unq">{{ option.value }}</div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
-                        </div>
-                    </div>
-                    <!-- <div class="flex-row-child mrL3">
-                        <div class="form-group noMarg">
-                            <label>Email Id</label>
-                            <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
-                        </div>
-                    </div> -->
-                    <!-- <div class="flex-row-child mrL3">
-                        <div class="form-group noMarg">
-                            <label>Mobile No.</label>
-                            <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
-                        </div>
-                    </div> -->
+ </div>
+ <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate>
+ <div class="clearfix mrB2">
+    <div class="clearfix pdT2 pdB2">
+       <div class="col-xs-9">
+          <div class="flex-row">
+             <div class="flex-row-child">
+                <div class="form-group noMarg">
+                   <label>Customer Name</label>
+                   <sh-select style="width: 380px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName"
+                   (noOptionsFound)="noResultsForCustomer($event)" (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
+                   (noResultsClicked)="toggleAccountAsidePane($event)" [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                   [useInBuiltFilterForIOptionTypeItems]="true">
+                   <ng-template #optionTemplate let-option="option">
+                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                         <div class="item">{{ option.label }}</div>
+                         <div class="item_unq">{{ option.value }}</div>
+                      </a>
+                   </ng-template>
+                   </sh-select>
                 </div>
-            </div>
-            <div class="col-xs-3 text-right">
-                <p *ngIf="toggleFieldForSales" class="fs20 b"><span class="balance-due">Balance Due: </span><span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span></p>
-            </div>
-        </div>
-        <div class="col-xs-12">
-            <div class="bdrB"></div>
-        </div>
+             </div>
+             <div class="flex-row-child mrL3">
+                <!--*ngIf="typeaheadNoResultsOfCustomer"-->
+                <div class="form-group noMarg">
+                   <label>Add Entry Against</label>
+                   <sh-select style="width: 160px;" name="accountDetails.uniqueName" [options]="bankAccounts$ | async" [(ngModel)]="invFormData.accountDetails.uniqueName"
+                   (selected)="onSelectBankCash($event)" [placeholder]="'Cash Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                   [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
+                   <ng-template #optionTemplate let-option="option">
+                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                         <div class="item">{{ option.label }}</div>
+                         <div class="item_unq">{{ option.value }}</div>
+                      </a>
+                   </ng-template>
+                   </sh-select>
+                </div>
+             </div>
+             <!-- <div class="flex-row-child mrL3">
+                <div class="form-group noMarg">
+                    <label>Email Id</label>
+                    <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
+                </div>
+                </div> -->
+             <!-- <div class="flex-row-child mrL3">
+                <div class="form-group noMarg">
+                    <label>Mobile No.</label>
+                    <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
+                </div>
+                </div> -->
+          </div>
+       </div>
+       <div class="col-xs-3 text-right">
+          <p *ngIf="toggleFieldForSales" class="fs20 b">
+             <span class="balance-due">Balance Due: </span>
+             <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+          </p>
+       </div>
     </div>
-
-    <section class="form-inline col-xs-12 mrB1" *ngIf="invFormData.accountDetails.uniqueName">
-
-        <div class="collapse-pane clearfix">
-            <!-- <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
-                <div class="ico-box-wrap">
-                    <div class="ico-box">
-                        <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                    </div>
+    <div class="col-xs-12">
+       <div class="bdrB"></div>
+    </div>
+ </div>
+ <section class="form-inline col-xs-12 mrB1" *ngIf="invFormData.accountDetails.uniqueName">
+    <div class="collapse-pane clearfix">
+       <!-- <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
+          <div class="ico-box-wrap">
+              <div class="ico-box">
+                  <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+              </div>
+          </div>
+          <div class="ico-head">General Details</div>
+          </div> -->
+       <div class="clearfix pdR3 container mr0">
+          <!--[collapse]="isGenDtlCollapsed" -->
+          <div class="row">
+             <div class="form-group pl0 m-r-15">
+                <!--col-xs-3 -->
+                <label>Attention to</label>
+                <input type="text" name="accountDetails.attention" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo"
+                />
+             </div>
+             <div class="form-group m-r-15">
+                <!--col-xs-2-->
+                <label>Email Id</label>
+                <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email"
+                />
+             </div>
+             <div class="form-group m-r-15">
+                <label>Mobile No.</label>
+                <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control"
+                [(ngModel)]="invFormData.accountDetails.mobileNumber" />
+             </div>
+             <!-- <div class="form-group col-xs-2">
+                <label>Country</label>
+                <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
                 </div>
-                <div class="ico-head">General Details</div>
-            </div> -->
-            <div class="clearfix pdR3 container mr0"><!--[collapse]="isGenDtlCollapsed" -->
-                <div class="row">
-                    <div class="form-group pl0 m-r-15"><!--col-xs-3 -->
-                        <label>Attention to</label>
-                        <input type="text" name="accountDetails.attention" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
-                    </div>
-                    <div class="form-group m-r-15"><!--col-xs-2-->
-                            <label>Email Id</label>
-                            <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control" [(ngModel)]="invFormData.accountDetails.email" />
-                    </div>
-                    <div class="form-group m-r-15">
-                                <label>Mobile No.</label>
-                                <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
-                    </div>
-                    <!-- <div class="form-group col-xs-2">
-                        <label>Country</label>
-                        <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
-                    </div>
-                    <div class="form-group col-xs-2">
-                        <label>Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-                    </div>
-                    <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
-                        <label>Due Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-                    </div> -->
+                <div class="form-group col-xs-2">
+                <label>Date</label>
+                <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                 </div>
-                <div class="row mt20">
-                        <div class="form-group pl0 m-r-15"><!--col-xs-3 -->
-                            <label>Invoice No.</label>
-                            <input type="text" name="accountDetails.attention" class="form-control attentionTo"  />
-                        </div>
-                        <div class="form-group m-r-15"><!--col-xs-2-->
-                                <label>Invoice Date</label>
-                                <input type="text" [placeholder]="giddhDateFormat"  class="form-control dateinvoice" bsDatepicker  />
-                        </div>
-                        <div class="form-group m-r-15">
-                                    <label>Due Date</label>
-                                    <input type="text" [placeholder]="giddhDateFormat"  class="form-control dateinvoice" bsDatepicker  />
-                        </div>
-                        <!-- <div class="form-group col-xs-2">
-                            <label>Country</label>
-                            <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <label>Date</label>
-                            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-                        </div>
-                        <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
-                            <label>Due Date</label>
-                            <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-                        </div> -->
-                    </div>
-            </div>
-        </div>
-        <!-- end general details collapse pane -->
-
-        <div class="collapse-pane clearfix">
-            <!-- <div class="collapse-pane-heading" (click)="isMlngAddrCollapsed = !isMlngAddrCollapsed">
-                <div class="ico-box-wrap">
-                    <div class="ico-box">
-                        <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                    </div>
+                <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
+                <label>Due Date</label>
+                <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                </div> -->
+          </div>
+          <div class="row mt20">
+             <div class="form-group pl0 m-r-15">
+                <!--col-xs-3 -->
+                <label>Invoice No.</label>
+                <input type="text" name="accountDetails.attention" class="form-control attentionTo" />
+             </div>
+             <div class="form-group m-r-15">
+                <!--col-xs-2-->
+                <label>Invoice Date</label>
+                <input type="text" [placeholder]="giddhDateFormat" class="form-control dateinvoice" bsDatepicker />
+             </div>
+             <div class="form-group m-r-15">
+                <label>Due Date</label>
+                <input type="text" [placeholder]="giddhDateFormat" class="form-control dateinvoice" bsDatepicker />
+             </div>
+             <!-- <div class="form-group col-xs-2">
+                <label>Country</label>
+                <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
                 </div>
-                <div class="ico-head">Address</div>
-            </div> -->
-            <div class="clearfix pdL3 pdR3 container mr0"><!--[collapse]="isMlngAddrCollapsed"-->
-                <div class="row">
-                    <div class="">
-                        <div class="col-xs-4 pl0">
-                            <div class="row mt10">
-                                <div class="form-group" [ngClass]="{'col-xs-12':invFormData.accountDetails.country.countryName === 'India', 'col-xs-12': invFormData.accountDetails.country.countryName !== 'India' }">
-                                    <label>Billing Address</label>
-                                    <div class="billing-address">
-                                    <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3"></textarea>
-                                    <div class="row">
-                                            <div class="form-group">
-                                                    <div class="col-sm-4">
-                                                            <div class="form-group">
-                                                                    <label>Country</label>
-                                                                    <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
-                                                                </div>
-                                                    </div>
-                                                    <div class="col-sm-4"> 
-                                                        <label>State</label>
-                                                        <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                            <label>GSTIN</label>
-                                                <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
-                                                    </div>
-                                            </div>  
-                                            </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="form-group col-xs-4" *ngIf="invFormData.accountDetails.country.countryName === 'India'">
-                                    <div>
-                                        <label>State</label>
-                                        <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select>
-                                    </div>
-                                    <div class="mrT2">
-                                        <label>GSTIN</label>
-                                        <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
-                                    </div>
-                                </div> -->
+                <div class="form-group col-xs-2">
+                <label>Date</label>
+                <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+                </div>
+                <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
+                <label>Due Date</label>
+                <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                </div> -->
+          </div>
+       </div>
+    </div>
+    <!-- end general details collapse pane -->
+    <div class="collapse-pane clearfix">
+       <!-- <div class="collapse-pane-heading" (click)="isMlngAddrCollapsed = !isMlngAddrCollapsed">
+          <div class="ico-box-wrap">
+              <div class="ico-box">
+                  <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+              </div>
+          </div>
+          <div class="ico-head">Address</div>
+          </div> -->
+       <div class="clearfix pdL3 pdR3 container mr0">
+          <!--[collapse]="isMlngAddrCollapsed"-->
+          <div class="row">
+             <div class="">
+                <div class="col-xs-4 pl0">
+                   <div class="row mt10">
+                      <div class="form-group" [ngClass]="{'col-xs-12':invFormData.accountDetails.country.countryName === 'India', 'col-xs-12': invFormData.accountDetails.country.countryName !== 'India' }">
+                         <label>Billing Address</label>
+                         <div class="billing-address">
+                            <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]"
+                            rows="3"></textarea>
+                            <div class="row">
+                               <div class="form-group">
+                                  <div class="col-sm-4">
+                                     <div class="form-group">
+                                        <label>Country</label>
+                                        <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
+                                     </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                     <label>State</label>
+                                     <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
+                                     [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select>
+                                  </div>
+                                  <div class="col-sm-4">
+                                     <label>GSTIN</label>
+                                     <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
+                                     (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
+                                  </div>
+                               </div>
                             </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="row mt10">
-                                <div class="form-group p0" [ngClass]="{'col-xs-8':invFormData.accountDetails.country.countryName === 'India', 'col-xs-12': invFormData.accountDetails.country.countryName !== 'India' }">
-                                    <label style="width:340px;">
-                    <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
-                                 <div class="billing-address">
-                                    <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3"></textarea>
-                                    <div class="row">
-                                            <div class="form-group">
-                                                    <div class="col-sm-4">
-                                                            <div class="form-group">
-                                                                    <label>Country</label>
-                                                                    <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
-                                                                </div>
-                                                    </div> 
-                                                    <div class="col-sm-4"> 
-                                                        <label>State</label>
-                                                        <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                            <label>GSTIN</label>
-                                                            <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
-                                                    </div>
-                                            </div>  
-                                            </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="form-group col-xs-4" *ngIf="invFormData.accountDetails.country.countryName === 'India'">
-                                    <div>
-                                        <label>State</label>
-                                        <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select>
-                                    </div>
-                                    <div class="mrT2">
-                                        <label>GSTIN</label>
-                                        <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
-                                    </div>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
+                         </div>
+                      </div>
+                      <!-- <div class="form-group col-xs-4" *ngIf="invFormData.accountDetails.country.countryName === 'India'">
+                         <div>
+                             <label>State</label>
+                             <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select>
+                         </div>
+                         <div class="mrT2">
+                             <label>GSTIN</label>
+                             <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
+                         </div>
+                         </div> -->
+                   </div>
                 </div>
-                <!-- end row -->
-            </div>
-        </div>
-        <!-- end mailing address collapse pane -->
-
-        <!-- end other details collapse pane -->
-
+                <div class="col-xs-6">
+                   <div class="row mt10">
+                      <div class="form-group p0" [ngClass]="{'col-xs-8':invFormData.accountDetails.country.countryName === 'India', 'col-xs-12': invFormData.accountDetails.country.countryName !== 'India' }">
+                         <label style="width:340px;">
+                         <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+                         <div class="billing-address">
+                            <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]"
+                            rows="3"></textarea>
+                            <div class="row">
+                               <div class="form-group">
+                                  <div class="col-sm-4">
+                                     <div class="form-group">
+                                        <label>Country</label>
+                                        <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
+                                     </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                     <label>State</label>
+                                     <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async"
+                                     [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select>
+                                  </div>
+                                  <div class="col-sm-4">
+                                     <label>GSTIN</label>
+                                     <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
+                                     (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                      <!-- <div class="form-group col-xs-4" *ngIf="invFormData.accountDetails.country.countryName === 'India'">
+                         <div>
+                             <label>State</label>
+                             <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select>
+                         </div>
+                         <div class="mrT2">
+                             <label>GSTIN</label>
+                             <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                         </div>
+                         </div> -->
+                   </div>
+                </div>
+             </div>
+          </div>
+          <!-- end row -->
+       </div>
+    </div>
+    <!-- end mailing address collapse pane -->
+    <!-- end other details collapse pane -->
+ </section>
+ <section class="clearfix pdB2 mrB2 whiteBg" style="margin:0 -20px;">
+    <table class="table table-custom-invoice">
+       <thead>
+          <tr>
+             <th *ngFor="let item of theadArr;" [hidden]="!item.display" attr.data-field="{{item.label}}">{{item.label}}</th>
+             <th class="nested-table-wrap">
+                <table width="100%" class="nested-table" cellspacing="0" cellspadding="0">
+                   <thead>
+                      <tr>
+                         <th width="25%" *ngFor="let item of theadArrOpt;" attr.data-field="{{item.label}}">{{item.label}}</th>
+                      </tr>
+                   </thead>
+                </table>
+             </th>
+             <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">{{item.label}}</th>
+          </tr>
+       </thead>
+       <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
+          <tr *ngFor="let transaction of entry.transactions;">
+             <td>{{ entryIdx+1 }}</td>
+             <td>
+                <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-right"
+                [(ngModel)]="transaction.date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+             </td>
+             <td>
+                <div class="ng-select-wrap">
+                   <sh-select style="width: 250px;" [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}"
+                   (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true"
+                   [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
+                   [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                   <ng-template #optionTemplate let-option="option">
+                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                         <div class="item">{{ option.label }}</div>
+                         <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                      </a>
+                   </ng-template>
+                   </sh-select>
+                </div>
+             </td>
+             <td>
+                <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description"
+                />
+             </td>
+             <td>
+                <div class="">
+                   <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}"
+                   class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
+                   <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}"
+                   class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
+                </div>
+             </td>
+             <!-- show/hide fields -->
+             <td class="nested-table-wrap">
+                <table width="100%" cellspacing="0" cellspadding="0">
+                   <tbody>
+                      <tr>
+                         <td *ngIf="transaction.isStockTxn">
+                            <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
+                               <tbody>
+                                  <tr>
+                                     <td width="25%">
+                                        <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity"
+                                        name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity"
+                                        />
+                                     </td>
+                                     <td width="25%">
+                                        <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
+                                        <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}</option>
+                                        </select>
+                                     </td>
+                                     <td width="25%">
+                                        <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}"
+                                        class="form-control text-right" [(ngModel)]="transaction.rate" />
+                                     </td>
+                                     <td width="25%">
+                                        <input type="number" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
+                                        />
+                                     </td>
+                                  </tr>
+                               </tbody>
+                            </table>
+                         </td>
+                         <td *ngIf="!transaction.isStockTxn">
+                            <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
+                               <tbody>
+                                  <tr>
+                                     <td width="25%">
+                                        <input type="text" disabled="true" class="form-control text-right" />
+                                     </td>
+                                     <td width="25%">
+                                        <input type="text" disabled="true" class="form-control text-right" />
+                                     </td>
+                                     <td width="25%">
+                                        <input type="text" disabled="true" class="form-control text-right" />
+                                     </td>
+                                     <td width="25%">
+                                        <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                                        class="form-control text-right" [(ngModel)]="transaction.amount" />
+                                     </td>
+                                  </tr>
+                               </tbody>
+                            </table>
+                         </td>
+                      </tr>
+                   </tbody>
+                </table>
+             </td>
+             <td>
+                <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
+             </td>
+             <td>
+                <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue"
+                />
+             </td>
+             <td class="tax-list-dd-wrap dropdown-container">
+                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="transaction.applicableTaxes"
+                [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                </sales-tax-list>
+             </td>
+             <td>
+                <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total"
+                />
+             </td>
+             <td class="action-panel-td alR">
+                <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
+                <i class="icon-add" aria-hidden="true"></i>
+                </span>
+                <span class="cp" (click)="removeTransaction(entryIdx)">
+                <i class="icon-trash" aria-hidden="true"></i>
+                </span>
+             </td>
+          </tr>
+          <tr class="row-active">
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+             <td>1</td>
+          </tr>
+       </tbody>
+    </table>
+    <!-- sub total and total calc -->
+    <table class="table">
+       <tbody>
+          <tr>
+             <td width="50%">
+                <div class="col-sm-7 pdT1 pl0">
+                   <div class="collapse-pane clearfix">
+                      <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
+                         <div class="ico-box-wrap">
+                            <div class="ico-box">
+                               <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+                            </div>
+                         </div>
+                         <div class="ico-head">Other Details</div>
+                      </div>
+                      <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3 container mr0">
+                         <div class="row">
+                            <div class="form-group col-xs-2">
+                               <!-- <label>Ship Date</label> -->
+                               <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate"
+                               class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date" />
+                               <!--[placeholder]="giddhDateFormat"-->
+                            </div>
+                            <div class="form-group col-xs-2">
+                               <!-- <label>Ship Via</label> -->
+                               <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via"
+                               />
+                            </div>
+                            <div class="form-group col-xs-2">
+                               <!-- <label>Tracking No.</label> -->
+                               <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control"
+                               placeholder="Tracking No." />
+                            </div>
+                         </div>
+                         <div class="row">
+                            <div class="form-group col-xs-2">
+                               <!-- <label>Field 1</label> -->
+                               <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
+                               placeholder="Field 1" />
+                            </div>
+                            <div class="form-group col-xs-2">
+                               <!-- <label>Field 2</label> -->
+                               <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
+                               placeholder="Field 2" />
+                            </div>
+                            <div class="form-group col-xs-2">
+                               <!-- <label>Field 3</label> -->
+                               <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
+                               placeholder="Field 3" />
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-xs-7 pdT1 pl0">
+                   <label class="mrB1">Message</label>
+                   <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                </div>
+             </td>
+             <td width="50%">
+                <section class="tableSec">
+                   <div class="tableRow">
+                      <div class="tableCell">Total Amount</div>
+                      <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
+                   </div>
+                   <div class="tableRow">
+                      <div class="tableCell">Discount</div>
+                      <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
+                   </div>
+                   <div class="tableRow">
+                      <div class="tableCell">Taxable Value</div>
+                      <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}</div>
+                   </div>
+                   <div class="tableRow">
+                      <div class="tableCell">Tax</div>
+                      <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                   </div>
+                   <div class="tableRow">
+                      <div class="tableCell">
+                         <strong>Total</strong>
+                      </div>
+                      <div class="tableCell figureCell">
+                         <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                      </div>
+                   </div>
+                   <div class="tableRow" *ngIf="toggleFieldForSales">
+                      <div class="tableCell">Deposit</div>
+                      <div class="tableCell figureCell">
+                         <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount"
+                         />
+                      </div>
+                   </div>
+                   <div class="tableRow" *ngIf="toggleFieldForSales">
+                      <div class="tableCell">
+                         <strong>Balance Due</strong>
+                      </div>
+                      <div class="tableCell figureCell">
+                         <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                      </div>
+                   </div>
+                </section>
+             </td>
+          </tr>
+       </tbody>
+    </table>
+    <!-- end -->
+ </section>
+ <section class="row">
+    <section id="actionPane" class="text-center">
+       <div class="col-xs-12">
+          <div class="pull-right pr">
+             <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
+             <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button>
+             <button type="submit" class="btn btn-success">Generate {{toggleActionText}}</button>
+          </div>
+       </div>
     </section>
-
-    <section class="clearfix pdB2 mrB2 whiteBg" style="margin:0 -20px;">
-        <table class="table table-custom-invoice">
-            <thead>
-                <tr>
-                    <th *ngFor="let item of theadArr;" [hidden]="!item.display" attr.data-field="{{item.label}}">{{item.label}}</th>
-                    <th class="nested-table-wrap">
-                        <table width="100%" class="nested-table" cellspacing="0" cellspadding="0">
-                            <thead>
-                                <tr>
-                                    <th width="25%" *ngFor="let item of theadArrOpt;" attr.data-field="{{item.label}}">{{item.label}}</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </th>
-                    <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">{{item.label}}</th>
-                </tr>
-            </thead>
-            <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
-                <tr *ngFor="let transaction of entry.transactions;">
-                    <td>{{ entryIdx+1 }}</td>
-                    <td>
-                        <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-                    </td>
-                    <td>
-                        <div class="ng-select-wrap">
-                            <sh-select style="width: 250px;" [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)" [placeholder]="'Select A/c'"
-                                [notFoundLink]="true" [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
-                                <ng-template #optionTemplate let-option="option">
-                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                        <div class="item">{{ option.label }}</div>
-                                        <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
-                        </div>
-                    </td>
-                    <td>
-                            <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" /> 
-                    </td>
-                    <td>
-                        <div class="">
-                            <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
-                            <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
-                        </div>
-                    </td>
-
-                    <!-- show/hide fields -->
-                    <td class="nested-table-wrap">
-                        <table width="100%" cellspacing="0" cellspadding="0">
-                            <tbody>
-                                <tr>
-                                    <td *ngIf="transaction.isStockTxn">
-                                        <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="25%">
-                                                        <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
-                                                    </td>
-                                                    <td width="25%">
-                                                        <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
-                              <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}</option>
-                            </select>
-                                                    </td>
-                                                    <td width="25%">
-                                                        <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" />
-                                                    </td>
-                                                    <td width="25%">
-                                                        <input type="number" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                    <td *ngIf="!transaction.isStockTxn">
-                                        <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="25%">
-                                                        <input type="text" disabled="true" class="form-control text-right" />
-                                                    </td>
-                                                    <td width="25%">
-                                                        <input type="text" disabled="true" class="form-control text-right" />
-                                                    </td>
-                                                    <td width="25%">
-                                                        <input type="text" disabled="true" class="form-control text-right" />
-                                                    </td>
-                                                    <td width="25%">
-                                                        <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td>
-                        <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
-                    </td>
-                    <td>
-                        <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
-                    </td>
-                    <td class="tax-list-dd-wrap dropdown-container">
-                        <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
-                        </sales-tax-list>
-                    </td>
-                    <td>
-                        <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total" />
-                    </td>
-                    <td class="action-panel-td alR">
-                        <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
-              <i class="icon-add" aria-hidden="true"></i>
-            </span>
-                        <span class="cp" (click)="removeTransaction(entryIdx)">
-              <i class="icon-cross" aria-hidden="true"></i>
-            </span>
-                    </td>
-                </tr>
-                <tr class="row-active">
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- sub total and total calc -->
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td width="50%">
-                        <div class="col-sm-7 pdT1 pl0">
-
-        <div class="collapse-pane clearfix">
-                <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
-                    <div class="ico-box-wrap">
-                        <div class="ico-box">
-                            <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                        </div>
-                    </div>
-                    <div class="ico-head">Other Details</div>
-                </div>
-                <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3 container mr0">
-                    <div class="row">
-                        <div class="form-group col-xs-2">
-                            <!-- <label>Ship Date</label> -->
-                            <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"/><!--[placeholder]="giddhDateFormat"-->
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <!-- <label>Ship Via</label> -->
-                            <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <!-- <label>Tracking No.</label> -->
-                            <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No."/>
-                        </div>
-                        </div>
-                        <div class="row">
-                        <div class="form-group col-xs-2">
-                            <!-- <label>Field 1</label> -->
-                            <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <!-- <label>Field 2</label> -->
-                            <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <!-- <label>Field 3</label> -->
-                            <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                        </div>
-                        <div class="col-xs-7 pdT1 pl0">
-                            <label class="mrB1">Message</label>
-                            <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
-                        </div>
-                    </td>
-                    <td width="50%">
-                        <section class="tableSec">
-                            <div class="tableRow">
-                                <div class="tableCell">Total Amount</div>
-                                <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
-                            </div>
-                            <div class="tableRow">
-                                <div class="tableCell">Discount</div>
-                                <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
-                            </div>
-                            <div class="tableRow">
-                                <div class="tableCell">Taxable Value</div>
-                                <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}</div>
-                            </div>
-                            <div class="tableRow">
-                                <div class="tableCell">Tax</div>
-                                <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
-                            </div>
-                            <div class="tableRow">
-                                <div class="tableCell">
-                                    <strong>Total</strong>
-                                </div>
-                                <div class="tableCell figureCell">
-                                    <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
-                                </div>
-                            </div>
-                            <div class="tableRow" *ngIf="toggleFieldForSales">
-                                <div class="tableCell">Deposit</div>
-                                <div class="tableCell figureCell">
-                                    <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount" />
-                                </div>
-                            </div>
-                            <div class="tableRow" *ngIf="toggleFieldForSales">
-                                <div class="tableCell">
-                                    <strong>Balance Due</strong>
-                                </div>
-                                <div class="tableCell figureCell">
-                                    <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
-                                </div>
-                            </div>
-                        </section>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- end -->
-    </section>
-
-    <section class="row">
-        <section id="actionPane" class="text-center">
-            <div class="col-xs-12">
-                <div class="pull-right pr">
-                    <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
-                    <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button>
-                    <button type="submit" class="btn btn-success">Generate {{toggleActionText}}</button>
-                </div>
-            </div>
-        </section>
-    </section>
-</form>
-
-<!-- open account aside -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
-
-<!-- open product service aside -->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
-
-
-<!-- create Group modal -->
-<section *ngIf="showCreateGroupModal">
+ </section>
+ </form>
+ <!-- open account aside -->
+ <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
+ <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+ <!-- open product service aside -->
+ <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"
+ (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+ <!-- create Group modal -->
+ <section *ngIf="showCreateGroupModal">
     <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
-            </div>
-        </div>
+    <div class="modal-dialog modal-md">
+       <div class="modal-content">
+          <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
+       </div>
     </div>
-</section>
-
-<!-- create Ac modal -->
-<section *ngIf="showCreateAcModal">
+    </div>
+ </section>
+ <!-- create Ac modal -->
+ <section *ngIf="showCreateAcModal">
     <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>
-            </div>
-        </div>
+    <div class="modal-dialog modal-md">
+       <div class="modal-content">
+          <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>
+       </div>
     </div>
-</section>
+    </div>
+ </section>
