@@ -220,7 +220,7 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
-    background: #e34b26;
+    background: #ff5f00;
     color: #fff;
 }
 
@@ -239,6 +239,7 @@ strong {
     align-items: center;
     font-family: 'Roboto', sans-serif;
     justify-content: flex-start;
+    flex-direction: row-reverse;
 }
 
 .flex-container>div {
@@ -249,11 +250,7 @@ strong {
 }
 
 .logo {
-    position: absolute;
-    left: 100px;
-    top: 32px;
-    width: 124px;
-    z-index: 9;
+    align-self: start;
 }
 
 h1 {
@@ -261,12 +258,13 @@ h1 {
 }
 
 .slide_content {
-    padding: 80px 100px;
+    padding: 0 100px;
     color: #fff;
     background: #2c2c43;
-    text-align: center;
+    justify-content: space-evenly;
+    text-align: left;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .login_box {
@@ -368,110 +366,107 @@ small {
 
 .slide_content h1 {
     font-size: 24px;
-    font-weight: 400;
-    text-align: center;
+    text-align: left;
+    font-weight: 500;
     line-height: 34px;
 }
 
-.hash_tag {
-    color: #e34b26;
-}
-
-.slide_content .btn {
-    font-size: 18px;
-    font-weight: 500;
-    margin-top: 55px;
-    transition: all 0.5s ease;
-    padding: 4px 18px;
-}
-
-.slide_content .btn-white {
-    color: #fff7eb;
-    border: 1px solid #fff;
-}
-
-.slide_content .btn-white:hover {
-    color: #0f0f27;
-    background: #fff;
-}
-
-.slide_content>div>img {
-    max-width: 400px;
-    margin-bottom: 40px;
-}
-
-.app_ico,
-.download_app {
+.feature_list {
     display: flex;
-    width: 100%;
+    flex-direction: column;
+    /* height: 100%; */
+    align-items: left;
     justify-content: space-evenly;
+    align-self: self-start;
 }
 
-.app_ico ul h1 {
-    margin-top: 10px;
-}
-
-.app_ico ul li,
-.download_app ul li {
-    display: inline-block;
+.feature_list li {
     list-style: none;
-    /* margin-right: 20px; */
-    border-radius: 2px;
-}
-
-.app_ico ul li {
-    height: 40px;
-}
-
-.download_app ul li {
-    margin-right: 0;
-}
-
-.app_ico ul li a,
-.download_app ul li a {
-    display: inline-block;
-    height: 40px;
-    border: 1px solid;
-    min-width: 40px;
-    line-height: 40px;
-    color: #fff;
-    text-align: center;
+    margin-bottom: 70px;
+    padding-left: 55px;
     position: relative;
-    overflow: hidden;
 }
 
-.app_ico ul li a:hover,
-.download_app ul li a:hover {
-    background: #fff;
-    color: #2c2d43;
+.feature_list li .signup-ico {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 30px;
+    right: 0;
+    top: 7px;
+    bottom: 0;
 }
 
-.download_app ul li a:hover i {
-    border-color: #2c2d43;
+.feature_list li>p {
+    font-size: 20px;
+    text-align: left
 }
 
-.img_hover:hover img:last-child {
-    display: block !important;
+.client_testimonial {
+    align-self: flex-start;
+    /* padding-left: 55px; */
+    position: relative;
+    width: 100%;
+    background: rgba(106, 106, 168, 15%);
+    margin: 0 -15px;
 }
 
-.img_hover:hover img:first-child {
-    display: none;
+.client_testimonial .content {
+    display: flex;
+    align-self: left;
+    flex-direction: column;
+    align-items: self-start;
+    position: relative;
+    padding: 30px 70px;
 }
 
-@media only screen and (max-width: 768px) {
+.client_testimonial p {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: left
+}
+
+.client_testimonial h4 {
+    font-size: 20px
+}
+
+.hash_tag {
+    color: #e33536;
+}
+
+.blockquote-ico {
+    position: absolute;
+    left: 15px;
+    height: 100%;
+    width: 30px;
+    right: 0;
+    top: 30px;
+    bottom: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+    .slide_content {
+        padding: 0 55px;
+    }
+}
+
+@media only screen and (min-width: 767px) {
+    .hidden-md {
+        display: none
+    }
+}
+
+@media only screen and (max-width: 767px) {
     .flex-container {
         background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
         display: block;
     }
+    .login_box,
     .slide_content {
-        display: none !important;
-        padding: 110px 20px;
-    }
-    .login_box {
         padding: 80px 20px;
     }
-    .on_mobile {
-        display: block !important;
+    .slide_content .logo {
+        display: none;
     }
     .flex-container>div {
         display: block;
@@ -483,29 +478,16 @@ small {
         display: block;
     }
     .logo {
-        left: 20px;
-        top: 20px;
+        padding: 20px;
+        float: left;
     }
     .logo img {
         max-width: 130px;
     }
-    .download_app ul li a {
-        height: 50px;
-        line-height: 50px;
-        padding: 0 16px;
-        border-radius: 2px;
-        display: flex;
-    }
-    .download_app ul li a i {
-        border-right: 1px solid #fff;
-        padding-right: 16px;
-        font-size: 28px;
-        position: relative;
-        margin-right: 16px;
-        height: 49px;
-        line-height: 49px;
-    }
     .form_wrapper form {
+        margin: 0 auto;
+    }
+    .client_testimonial {
         margin: 0 auto;
     }
 }
