@@ -220,4 +220,13 @@ export class AuthenticationService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
+
+  // fetech user profile picture using emailId
+  public getUserAvatar(userId) {
+    return this._http.get('https://picasaweb.google.com/data/entry/api/user/:user_id?alt=json'
+      .replace(':user_id', userId)).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
 }

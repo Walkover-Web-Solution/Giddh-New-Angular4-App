@@ -1,95 +1,10 @@
 <div class="flex-container">
-    <a href="/" class="logo"><img src="./assets/images/new/giddh-logo-white.png" /> </a>
-    <!-- slide1 -->
-    <div class="slide_content col-xs-7 slide1" [hidden]="selectedBanner !== 'slide1'">
-        <div>
-            <img src="./assets/images/login/img1.png" class="img-responsive" />
-        </div>
-        <div>
-            <h1>Automatic entries when you receive payments <br />online from any payment gateway. <span class="hash_tag">#automation</span></h1>
-        </div>
-        <a href="http://faq.giddh.com/integration/how-to-integrate-razorpay-payment-gateway" target="_blank" class="btn btn-white">Know more</a>
-    </div>
-
-    <!-- slide2 -->
-    <div class="slide_content col-xs-7 slide2" [hidden]="selectedBanner !== 'slide2'">
-        <div class="mrB4">
-            <h1>Giddh handles your accounting seamlessly, wherever you are!</h1>
-        </div>
-        <div>
-            <img src="./assets/images/login/img2.png" class="img-responsive" />
-        </div>
-
-        <div class="app_ico">
-            <ul>
-                <li class="mrR2"><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank"><i class="fa fa-android"></i></a></li>
-                <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank"><i class="fa fa-apple"></i></a></li>
-                <h1>Mobile App</h1>
-            </ul>
-            <ul>
-                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe" target="_blank"><i class="fa fa-windows"></i></a></li>
-                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank" class="img_hover"><i class="">
-                    <img src="./assets/images/new/ios.svg" />
-                    <img src="./assets/images/new/ios_hover.svg" [style.display]="'none'"/>                    
-                    </i></a>
-                </li>
-                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz" target="_blank"><i class="fa fa-linux"></i></a></li>
-                <h1>Desktop App</h1>
-            </ul>
-        </div>
-    </div>
-
-    <!-- slide3 -->
-    <div class="slide_content col-xs-7 slide3" [hidden]="selectedBanner !== 'slide3'">
-        <div>
-            <img src="./assets/images/login/img3.png" class="img-responsive" />
-        </div>
-        <div>
-            <h1>Send automated electronic receipts and past due payment <br /> reminders by email or SMS. <span class="hash_tag">#automation</span></h1>
-        </div>
-        <a href="http://faq.giddh.com/invoice/send-automated-electronic-receipts-and-past-due-payment-reminders-by-email-or-sms" target="_blank" class="btn btn-white">Know more</a>
-    </div>
-
-    <!-- slide4 -->
-    <div class="slide_content col-xs-7 slide4" [hidden]="selectedBanner !== 'slide4'">
-        <div>
-            <img src="./assets/images/login/img4.png" class="img-responsive" />
-        </div>
-        <div>
-            <h1><span class="hash_tag">Share your accounts</span> in real time with your<br /> customers and vendors. And the company with your CA</h1>
-        </div>
-        <a href="http://faq.giddh.com/ledger/what-is-magic-link-and-how-to-get-it" target="_blank" class="btn btn-white">Know more</a>
-    </div>
-
-    <!-- slide5 -->
-    <div class="slide_content col-xs-7 slide5" [hidden]="selectedBanner !== 'slide5'">
-        <div>
-            <img src="./assets/images/login/img5.png" class="img-responsive" [style.max-width.px]="500" />
-        </div>
-        <div>
-            <h1><span class="hash_tag">Import/Sync</span> all your data from <br />an old accounting software</h1>
-        </div>
-        <a href="http://faq.giddh.com/tally/how-to-sync-your-data-from-tally-to-giddh" target="_blank" class="btn btn-white">Know more</a>
-    </div>
-
-    <!-- show on small device -->
-    <div class="slide_content col-xs-12 on_mobile" [hidden]="true">
-        <div>
-            <h1>Giddh handles your accounting seamlessly, wherever you are! <span class="hash_tag">Download</span></h1>
-        </div>
-
-        <div class="download_app mrT4">
-            <ul>
-                <li><a href="" target="_blank"><i class="fa fa-android"></i>Download</a></li>
-                <li><a href="" target="_blank"><i class="fa fa-apple"></i>Download</a></li>
-            </ul>
-        </div>
-    </div>
-
+    <a href="/" class="logo"><img src="./assets/images/new/giddh-logo.png" class="hidden-md" /> </a>
 
     <div class="login_box flex col-md-5 col-xs-12">
+
         <div class="">
-            <h1 class="mrB3">Login to your secure accounting space</h1>
+            <h1 class="mrB3">Signup to the new world of accounting</h1>
             <div class="form_wrapper" *ngIf="loginUsing">
 
                 <!-- login with email form -->
@@ -115,27 +30,13 @@
                 </form>
                 <!-- form end/ -->
 
-                <!-- login with mobile form -->
-                <form class="" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm" *ngIf="loginUsing === 'mobile'">
-                    <div class="clearfix form-group" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                        <sh-select [options]="countryCodeList" class="pull-left mrR1" (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country" style="width: 80px;"></sh-select>
-                        <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Mobile No" required style="width: calc(100% - 90px);" />
-                        <button class="btn btn-success btn-lg btn-block mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)" [ladda]="isLoginWithMobileInProcess$ | async" [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ | async) ? 'Get OTP' : 'Resend' }}</button>
-                    </div>
-                    <div class="clearfix form-group" *ngIf="(isLoginWithMobileSubmited$ | async)">
-                        <input class="form-control" placeholder="Enter OTP" formControlName="otp">
-                        <button type="login" class="btn btn-block btn-success btn-lg mrT1" [ladda]="isVerifyMobileInProcess$ | async" (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)" [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
-              </button>
-                    </div>
-                </form>
-                <!-- form end/ -->
 
                 <!-- login with userName form -->
                 <form class="" id="verifyUsernameForm" name="verifyUsernameForm" novalidate *ngIf="loginUsing === 'userName'">
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" type="text" placeholder="Username" required />
                         <input class="form-control" type="text" placeholder="Password" required />
-                        <button class="btn btn-success btn-lg btn-block mrT1">Login</button>
+                        <button class="btn btn-success btn-lg btn-block mrT1">Signup</button>
                     </div>
                 </form>
                 <!-- form end/ -->
@@ -147,78 +48,86 @@
             <ul class="social_login">
                 <li class="google_ico"><a href="javascript:void(0);" (click)="signInWithProviders('google')"><i class="ico-google">
                     <img src="./assets/images/new/google_ico.svg" />
-                </i><span>Login with Google</span></a></li>
+                </i><span>Signup with Google</span></a></li>
                 <li class="linkedin_ico"><a href="javascript:void(0);" (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a></li>
 
             </ul>
             <div class="login_option">
-                <!-- <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a> -->
-                Login with <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> or <a href="javascript:void(0);" (click)="loginUsing = 'mobile'">Mobile</a>
+                <!-- <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, -->
+                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a>
             </div>
-
             <div class="mrT4">
-                Don't have an account? <a href="{{urlPath}}signup" class="btn btn-sm btn-primary mrL">Signup</a>
+                Already have an account? <a href="{{urlPath}}login" class="btn btn-sm btn-primary mrL">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide_content col-md-7 col-xs-12">
+        <a href="/" class="logo"><img src="./assets/images/new/giddh-logo-white.png" /> </a>
+        <ul class="feature_list" [hidden]="selectedBanner !== 'slide1'">
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-Easy.svg" /></span>
+                <h1>Easy Access</h1>
+                <p>of your financial statements Trial Balance, P&L and B/S.</p>
+            </li>
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-import.svg" /></span>
+                <h1>Import from Tally</h1>
+                <p>either sync or import all your financial data to Giddh.</p>
+            </li>
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-secured.svg" /></span>
+                <h1>Secured</h1>
+                <p>everything is backed up automatically & stored on the AWS cloud.</p>
+            </li>
+        </ul>
+
+        <ul class="feature_list" [hidden]="selectedBanner !== 'slide2'">
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-Easy.svg" /></span>
+                <h1>Simple</h1>
+                <p>a beautiful design to make your accounting easy.</p>
+            </li>
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-import.svg" /></span>
+                <h1>Tax Compliance</h1>
+                <p>File your taxes on time.</p>
+            </li>
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-secured.svg" /></span>
+                <h1>Everywhere</h1>
+                <p>a mobile app, API integration & dedicated support for your custom needs.</p>
+            </li>
+        </ul>
+
+        <ul class="feature_list" [hidden]="selectedBanner !== 'slide3'">
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-Easy.svg" /></span>
+                <h1>Simple</h1>
+                <p>a beautiful design to make your accounting easy.</p>
+            </li>
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-import.svg" /></span>
+                <h1>Tax Compliance</h1>
+                <p>File your taxes on time.</p>
+            </li>
+            <li>
+                <span class="signup-ico"><img src="./assets/images/signup/icon-secured.svg" /></span>
+                <h1>Team Management</h1>
+                <p>add all your team mates, accountants and CAs with the permissions they need.</p>
+            </li>
+        </ul>
+
+        <div class="client_testimonial">
+            <div class="content">
+                <span class="blockquote-ico"><img src="./assets/images/signup/icon-testimonial.svg" /> </span>
+                <p>Giddh has helped me immensely in creating and sending invoices automatically.</p>
+                <h4>-Ishan Vyas</h4>
+                <img src="./assets/images/signup/instacar.png" class="client_logo mrT" />
             </div>
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <section id="videoBg" class="intro login" style="height: 100%;">
-    <div class="intro-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="brand-heading arvo">Enter your accounting space</h1>
-
-                    <div id="box" class="text-uppercase">
-                        <div class="clearfix mrB1">
-                            <p class="lead ">Sign In or register</p>
-                        </div>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
-              <img src="./assets/images/google-plus-icon.png">
-              connect with Google
-            </button>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
-              <img src="./assets/images/linkedin-icon.png">
-              Login with LinkedIn
-            </button>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login email" (click)="showEmailModal()">
-              <i class="glyphicon glyphicon-envelope"></i>
-              connect with Email
-    </button>
-
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
-              <i class="glyphicon glyphicon-phone"></i>
-              Login with Mobile
-            </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
 
 <!--email varify modal  -->
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
@@ -306,7 +215,7 @@
                             <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()" [disabled]="twoWayOthForm.get('otp').invalid">Submit
-              </button>
+                            </button>
                         </div>
                     </form>
                 </div>
