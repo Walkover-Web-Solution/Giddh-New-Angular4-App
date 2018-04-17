@@ -270,6 +270,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
   public isHavePermission(pageName: string, item: Permission, type: string): boolean {
     let page;
+    if (pageName === 'SHARE') {
+      return false;
+    }
     if (type === 'admin') {
       page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
     } else {
@@ -277,7 +280,8 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
     if (page) {
       let access = _.find(page.permissions, (p: Permission) => p.code === item.code);
-      if (access && access.isSelected) {
+      // && access.isSelected
+      if (access) {
         return true;
       }
       return false;
