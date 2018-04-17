@@ -579,6 +579,19 @@
 
 </section>
 
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
+      <div *ngIf="closingBalanceBeforeReconcile" class="box mrT2 clearfix text-center">
+        <div class="col-xs-6 text-right">Balance as per bank <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank.amount}} {{reconcileClosingBalanceForBank.type}}</h3></div>
+        <div class="col-xs-6 text-left">Balance as per books <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile.amount}} {{closingBalanceBeforeReconcile.type}}</h3></div>
+      </div>
+      <button [hidden]="closingBalanceBeforeReconcile" class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation</button>                      
+    </div>
+  </div>
+</div>
+
+
 <!--total section-->
 <section class="ledger-stat mrT3" *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
   <div class="container">
