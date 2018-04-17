@@ -2,42 +2,64 @@
 </create-invoice-header>
 
 
-<section class="container">
-  <div class="row">
-    <div class="col-xs-12 alC">
-
-      <div class="pr mrB4 clearfix mrT2">
-        <div class="alR col-xs-7">
-          <h1 class="fs18 lh42">Choose a Template</h1>
+<section>
+  <div class="inv_header">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <h1 class="text-center">Follow three easy steps below to </h1><span> create Invoice</span>
         </div>
-        <create-invoice-steps></create-invoice-steps>
+        <div class="col-sm-12 text-center">
+            <create-invoice-steps></create-invoice-steps>
+        </div>
       </div>
-
-      <div class="clearfix mrT4 invoice_list">
-        <div class="col-xs-4">
-          <a [routerLink]="['/create-invoice/invoice/t001']">
-            <h4>Template LETTER</h4>
-            <img src="{{imgPath}}letter.png" class="template_img" />
-          </a>
-        </div>
-
-       <!-- commented as only 1 invoice available 
-        <div class="col-xs-4">
-          <a [routerLink]="['/create-invoice/invoice/t002']">
-            <h4>Template CLASSIC</h4>
-            <img src="{{imgPath}}classic.png" class="template_img" />
-          </a>
-        </div>
-
-        <div class="col-xs-4">
-          <a [routerLink]="['/create-invoice/invoice/t003']">
-            <h4>Template ROYAL</h4>
-            <img src="{{imgPath}}royal.png" class="template_img" />
-          </a>
-        </div>
-        -->
-            </div>
-
-        </div>
     </div>
+  </div>
+  <div class="inv_content">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="col-xs-4">
+            <div class="template-options">
+                <a [routerLink]="['/create-invoice/invoice/t001']">
+                  <h4>Template 1</h4>
+                  <figure>
+                      <div class="overlay">
+                        <button class="btn btn-default btn-select">select</button>
+                      </div>
+                      <img src="{{imgPath}}Outside Invoice Sample.jpg" class="template_img" />
+                 </figure>
+                </a>
+            </div>
+          </div>
+          <!-- <div class="col-xs-4">
+              <div class="template-options">
+                  <a [routerLink]="['/create-invoice/invoice/t001']">
+                    <h4>Template 2</h4>
+                    <figure>
+                        <div class="overlay">
+                            <button class="btn btn-default btn-select">select</button>
+                          </div>
+                        <img src="{{imgPath}}Outside Invoice Sample.jpg" class="template_img" />
+                   </figure>
+                  </a>
+              </div>
+          </div>
+        <div class="col-xs-4">
+                <div class="template-options">
+                  <a [routerLink]="['/create-invoice/invoice/t001']">
+                    <h4>Template 3</h4>
+                    <figure>
+                        <div class="overlay">
+                            <button class="btn btn-default btn-select">select</button>
+                          </div>
+                        <img src="{{imgPath}}Outside Invoice Sample.jpg" class="template_img" />
+                   </figure>
+                  </a>
+                </div>
+              </div> -->
+      </div>
+      </div>
+    </div>
+  </div>
 </section>
