@@ -7,7 +7,8 @@ let URI_ONLY_FOR_INVOICE = PART_A + PART_B;
 export const INVOICE_API = {
   GET_ALL_INVOICES: COMMON_URL + 'invoices?',
   GET_ALL_LEDGERS_FOR_INVOICE: COMMON_URL + 'ledgers?',
-  GENERATE_BULK_INVOICE: COMMON_URL + 'invoices/bulk-generate?combined',
+  // GENERATE_BULK_INVOICE: COMMON_URL + 'invoices/bulk-generate?combined', // By Nidhi
+  GENERATE_BULK_INVOICE: COMMON_URL + 'vouchers/bulk-generate?combined',
   GET_INVOICE_TEMPLATES: COMMON_URL + 'templates/all',
   GET_INVOICE_TEMPLATE: COMMON_URL + 'templates-v2/templateUniqueName', // get call for single
   ACTION_ON_INVOICE: COMMON_URL + 'invoices/:invoiceUniqueName/action',
