@@ -18,16 +18,17 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
-  selector: 'login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class SignupComponent implements OnInit, OnDestroy {
   public isLoginWithMobileSubmited$: Observable<boolean>;
   @ViewChild('emailVerifyModal') public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
+  public urlPath: string = '';
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -45,7 +46,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public selectedCountry: string;
   public selectedBanner: string = null;
   public loginUsing: string = null;
-  public urlPath: string = '';
   private imageURL: string;
   private email: string;
   private name: string;
@@ -271,6 +271,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           alwaysOnTop: true,
           autoHideMenuBar: true,
           webPreferences: {
+            nodeIntegration: false,
             devTools: true,
             partition: 'oauth2'
           }
@@ -317,7 +318,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * randomBanner
    */
   public generateRandomBanner() {
-    let bannerArr = ['1', '2', '3', '4', '5'];
+    let bannerArr = ['1', '2', '3'];
     let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
     this.selectedBanner = 'slide' + selectedSlide;
   }
