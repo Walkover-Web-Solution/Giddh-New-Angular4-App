@@ -64,6 +64,22 @@ const THEAD_ARR_1 = [
   {
     display: true,
     label: 'HSN/SAC'
+  },
+  {
+    display: true,
+    label: 'Qty.'
+  },
+  {
+    display: true,
+    label: 'Unit'
+  },
+  {
+    display: true,
+    label: 'Rate'
+  },
+  {
+    display: true,
+    label: 'Amount'
   }
 ];
 const THEAD_ARR_OPTIONAL = [
@@ -177,6 +193,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedPage: string = VOUCHER_TYPE_LIST[0].value;
   public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
   public universalDate: any;
+
+  public activeIndx: number = 0;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -303,7 +321,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       _.forEach(data, (item) => {
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName });
+          let additional = item.email + item.mobileNo;
+          this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : '' });
         }
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
           this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName });
@@ -398,7 +417,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
       this.customerAcList$ = Observable.of(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForDeb, 'label'));
-    }else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value) {
+    } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value) {
       this.customerAcList$ = Observable.of(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
@@ -882,6 +901,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         t.date = this.universalDate || new Date();
       });
     });
+
+    setTimeout(() => {
+      this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
+    }, 10);
   }
 
   public removeTransaction(entryIdx: number) {
@@ -961,8 +984,17 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.createGroupModal.hide();
   }
 
+  public customMoveGroupFilter(term: string, item: IOption): boolean {
+    console.log('item.additional is :', item.additional);
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.toLocaleLowerCase().indexOf(term) > -1);
+  }
+
   public closeCreateAcModal() {
     this.createAcModal.hide();
+  }
+
+  public setActiveIndx(indx: number) {
+    this.activeIndx = indx;
   }
 
 }
