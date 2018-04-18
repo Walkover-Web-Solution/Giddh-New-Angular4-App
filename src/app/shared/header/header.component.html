@@ -9,7 +9,7 @@
                     </a>
 
                     <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}">
-                        <li [checkPermission]="['MENU', 'DASHBOARD']" [tooltip]="'Dashboard'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'DASHBOARD']">
                             <a [routerLink]="['home']">
                                 <span class="navico-dashboard"></span>
                                 <span class="label">Dashboard</span>
@@ -24,20 +24,20 @@
                             </a>
                         </li> -->
 
-                        <li [checkPermission]="['MENU', 'INVOICE']" [tooltip]="'Sales'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'INVOICE']">
                             <a [routerLink]="['/pages/sales']">
                                 <span class="navico-sales"></span>
                                 <span class="label">Sales</span>
                             </a>
                         </li>
-                        <li [checkPermission]="['MENU', 'INVOICE']" [tooltip]="'Invoice'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'INVOICE']">
                             <a [routerLink]="['/pages/invoice']">
                                 <span class="navico-invoice"></span>
                                 <span class="label">Invoice</span>
                             </a>
                         </li>
                         <!-- *ngIf="userIsCompanyUser" -->
-                        <li [checkPermission]="['MENU', 'LEDGER']" [tooltip]="'Journal Voucher'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'LEDGER']">
                             <a [routerLink]="['/pages/accounting-voucher']">
                                 <span class="navico-journal"></span>
                                 <span class="label">Journal Voucher</span>
@@ -45,21 +45,22 @@
                         </li>
                         <li class="divider"></li>
 
-                        <li [checkPermission]="['MENU', 'LEDGER']" [tooltip]="'Daybook'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'LEDGER']">
                             <a [routerLink]="['/pages/daybook']">
                                 <span class="navico-daybook"></span>
                                 <span class="label">Daybook</span>
                             </a>
                         </li>
 
-                        <li [checkPermission]="['MENU', 'REPORT']" [tooltip]="'TB, P&L and B/S'" [placement]="'right'">
+
+                        <li [checkPermission]="['MENU', 'REPORT']">
                             <a [routerLink]="['trial-balance-and-profit-loss']">
                                 <span class="navico-tbpl"></span>
                                 <span class="label">TB, P&L and B/S</span>
                             </a>
                         </li>
 
-                        <li [checkPermission]="['MENU', 'AUDIT_LOGS']" [tooltip]="'Audit Logs'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
                             <a [routerLink]="['audit-logs']">
                                 <span class="navico-log"></span>
                                 <span class="label">Audit Logs</span>
@@ -73,13 +74,13 @@
                         </li>
                         <li class="divider"></li>
 
-                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']" [tooltip]="'Inventory'" [placement]="'right'">
+                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                             <a [routerLink]="['/inventory']">
                                 <span class="navico-inventory"></span>
                                 <span class="label">Inventory</span>
                             </a>
                         </li>
-                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']" [tooltip]="'Manufacturing'" [placement]="'right'">
+                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                             <a [routerLink]="['manufacturing']">
                                 <span class="navico-manufacturing"></span>
                                 <span class="label">Manufacturing</span>
@@ -87,19 +88,19 @@
                         </li>
                         <li class="divider"></li>
 
-                        <li [checkPermission]="['MENU', 'SEARCH']" [tooltip]="'Search'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'SEARCH']">
                             <a [routerLink]="['search']">
                                 <span class="navico-search"></span>
                                 <span class="label">Search</span>
                             </a>
                         </li>
-                        <li class="dmLi" [hidden]="!userIsSuperUser" [tooltip]="'Permissions'" [placement]="'right'">
+                        <li class="dmLi" [hidden]="!userIsSuperUser">
                             <a [routerLink]="['permissions']">
                                 <span class="navico-permission"></span>
                                 <span class="label">Permissions</span>
                             </a>
                         </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']" [tooltip]="'Settings'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'SETTINGS']">
                             <a [routerLink]="['/pages/settings']">
                                 <span class="navico-setting"></span>
                                 <span class="label">Settings</span>
@@ -327,23 +328,24 @@
                   </li> -->
                 <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
                     <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
-                        <span class="icon-dropdown"></span>
+                        <span class="icon-dropdown grey"></span>
                         <div class="cText text-right">
                             <span class="cName">{{ (selectedCompany | async)?.name }}</span>
                             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
                         </div>
                     </a>
                     <ul id="companyList" class="company-list dropdown-menu" role="menu" *dropdownMenu>
-                        <li class="create-company" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
+                        <li class="create-company clearfix" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
                             <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
-                            <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)">
-                    <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh</button>
+                            <button id="refreshCompanyBtn" class="btn btn-default btn-sm pull-right" (click)="refreshCompanies($event)">
+                                <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                            </button>
                         </li>
                         <li style="padding:0px;">
                             <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
                                 <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                    <!-- <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i> -->
                                 </li>
                             </ul>
                         </li>
@@ -353,29 +355,61 @@
                     <a href (click)="$event.preventDefault()" id="user-dropdown" dropdownToggle>
                 {{userName | uppercase}}
               </a>
-                    <ul class="dropdown-menu" role="menu" *dropdownMenu>
+                    <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
                         <li>
-                            <a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a>
+                            <a [routerLink]="['user-details/profile']" class="oh"><span class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span> <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}" alt="" /></span> <div class="pull-left userName_wrap ellp">{{ userFullName }} <br/> <small class="grey_clr">Profile</small></div></a>
+                        </li>
+                        <li role="separator" class="divider" style="width:100%"></li>
+                        <li>
+                            <a [routerLink]="['user-details']">API</a>
+                        </li>
+                        <!-- not available now
+                        <li>
+                            <a [routerLink]="['user-details']">Billing</a>
+                        </li>
+                        -->
+                        <li>
+                            <a href="https://trello.com/b/PArZrnyg/giddh" target="_blank">Upcoming</a>
                         </li>
                         <li>
-                            <a [routerLink]="['user-details']">User Detail</a>
+                            <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)">Run Tour</a>
+                            <a href="http://faq.giddh.com" target="_blank">Help</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a target="_Blank" href="https://docs.giddh.com/">Documentation</a>
-                        </li>
-                        <li>
+                        </li> -->
+                        <!-- <li>
                             <a class="pull-left" href="javascript:void(0)">
                                 <span class="pull-left">Switch User</span>
                                 <span class="on-btn pull-left"></span>
                             </a>
-                        </li>
+                        </li> -->
                         <li role="separator" class="divider" style="width:100%"></li>
                         <li>
                             <a href="javascript:void(0)" (click)="logout()">Logout</a>
                         </li>
+                        <li role="separator" class="divider" style="width:100%"></li>
+                        <li class="app_list">
+                            <ul>
+                                <h6>Downloads</h6>
+                                <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i class="fa fa-android"></i> Android</a></li>
+                                <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i class="fa fa-apple"></i> ios</a></li>
+                                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz" target="_blank" title="linux app"><i class="fa fa-linux"></i> Linux</a></li>
+
+                            </ul>
+                        </li>
+                        <li role="separator" class="divider" style="width:100%"></li>
+                        <li>
+                            <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
+                        </li>
+                        <!-- <li role="separator" class="divider" style="width:100%"></li>
+                        <li>
+                            <a href="javascript:void(0)">v1.2.23 : view release notes</a>
+                        </li> -->
                     </ul>
                 </li>
             </ul>

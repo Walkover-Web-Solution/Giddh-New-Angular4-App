@@ -337,7 +337,7 @@ $themeClr: #fe5f00;
 
 // collapse
 .collapse-pane {
-    padding: 7px 0;
+    padding: 13px 0;
     .collapse-pane-heading {
         @extend .cp;
         @include marg(B, 0px);
@@ -458,4 +458,10 @@ ng-select.splSales {
 
 .form-container {
     margin-bottom: 80px;
+}
+.mt13{
+    margin-top:13px;
+  }
+.mt30{
+    margin-top:30px;
 }

@@ -239,7 +239,8 @@ export class LedgerActions {
   @Effect()
   public AdvanceSearch$: Observable<Action> = this.action$
     .ofType(LEDGER.ADVANCE_SEARCH)
-    .switchMap((action: CustomActions) => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from, action.payload.to, '', '', ''))
+    .switchMap((action: CustomActions) => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from,
+      action.payload.to, '', action.payload.page, action.payload.count, action.payload.q))
     .map(response => {
       return this.advanceSearchResponse(response);
     });
@@ -291,22 +292,22 @@ export class LedgerActions {
     });
 
   @Effect()
-    public GetReconciliation$: Observable<Action> = this.action$
-      .ofType(LEDGER.GET_RECONCILIATION)
-      .switchMap((action: CustomActions) => {
-        let req: TransactionsRequest = action.payload as TransactionsRequest;
-        return this._ledgerService.GetReconciliation(req, req.accountUniqueName);
-      }).map(response => {
-        if (response.status === 'success') {
-          this._toasty.infoToast(response.body.message);
-        } else {
-          this._toasty.errorToast(response.message, response.code);
-        }
-        return {
-          type: LEDGER.GET_RECONCILIATION_RESPONSE,
-          payload: response
-        };
-      });
+  public GetReconciliation$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_RECONCILIATION)
+    .switchMap((action: CustomActions) => {
+      let req: TransactionsRequest = action.payload as TransactionsRequest;
+      return this._ledgerService.GetReconciliation(req, req.accountUniqueName);
+    }).map(response => {
+      if (response.status === 'success') {
+        this._toasty.infoToast(response.body.message);
+      } else {
+        this._toasty.errorToast(response.message, response.code);
+      }
+      return {
+        type: LEDGER.GET_RECONCILIATION_RESPONSE,
+        payload: response
+      };
+    });
 
   constructor(private action$: Actions,
               private _toasty: ToasterService,
@@ -485,10 +486,10 @@ export class LedgerActions {
     };
   }
 
-  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string): CustomActions {
+  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string, page: number, count: number, q: string): CustomActions {
     return {
       type: LEDGER.ADVANCE_SEARCH,
-      payload: {model, accountUniqueName, from, to}
+      payload: {model, accountUniqueName, from, to, page, count, q}
     };
   }
 
