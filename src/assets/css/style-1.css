@@ -3870,7 +3870,7 @@ tr.db-bnk-account>td.reconnectDiv {
 }
 
 .longcode-details figure ul {
-    margin-left: 20px;
+    padding: 0 20px;
 }
 
 .longcode-details figure h1 {
