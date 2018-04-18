@@ -229,4 +229,45 @@ export class AuthenticationService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
   }
+
+  // Get User Sessions
+  public GetUserSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.get(this.config.apiUrl + LOGIN_API.GET_SESSION
+      .replace(':userEmail', userEmail)).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Delete Single Sessions
+  public DeleteSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_SESSION
+      .replace(':userEmail', userEmail)).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Delete All Sessions
+  public DeleteAllSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION
+      .replace(':userEmail', userEmail)).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Delete All Sessions
+  public UpdateSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.put(this.config.apiUrl + LOGIN_API.UPDATE_SESSION
+      .replace(':userEmail', userEmail), '').map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
 }

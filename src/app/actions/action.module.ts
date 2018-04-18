@@ -34,6 +34,7 @@ import { SettingsFinancialYearActions } from './settings/financial-year/financia
 import { GeneralActions } from './general/general.actions';
 import { SettingsPermissionActions } from './settings/permissions/settings.permissions.action';
 import { SettingsBranchActions } from './settings/branch/settings.branch.action';
+import { SessionActions } from './session.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -71,7 +72,8 @@ import { SettingsBranchActions } from './settings/branch/settings.branch.action'
       SettingsLinkedAccountsActions,
       InvoicePurchaseActions,
       SettingsFinancialYearActions,
-      SettingsPermissionActions
+      SettingsPermissionActions,
+      SessionActions
     ])
   ],
   exports: [EffectsModule]
