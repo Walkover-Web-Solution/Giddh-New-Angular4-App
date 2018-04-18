@@ -17,4 +17,8 @@ export const LOGIN_API = {
   ADD_BALANCE: 'users/:uniqueName/balance',
   GET_AUTH_KEY: 'users/:uniqueName/get-auth-key',
   REGENERATE_AUTH_KEY: 'users/:userEmail/generate-auth-key',
+  GET_SESSION: 'users/:userEmail/sessions',
+  DELETE_SESSION: 'users/:userEmail/destroy-session',
+  UPDATE_SESSION: 'users/:userEmail/increment-session',
+  DELETE_ALL_SESSION: 'users/:userEmail/sessions'
 };
