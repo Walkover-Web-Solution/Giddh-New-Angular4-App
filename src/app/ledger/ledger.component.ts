@@ -110,12 +110,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public eDrBalAmnt: number;
   public eCrBalAmnt: number;
   public isBankOrCashAccount: boolean;
+  public closingBalanceBeforeReconcile: { amount: number, type: string };
+  public reconcileClosingBalanceForBank: { amount: number, type: string };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
+    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -152,22 +154,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     // if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
 
-      this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-        page: 0,
-        dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-          bsRangeValue: [from, to]
-        })
-      });
+    this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+      page: 0,
+      dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+        bsRangeValue: [from, to]
+      })
+    });
 
-      this.getTransactionData();
-      // Después del éxito de la entrada. llamar para transacciones bancarias
-      this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-        if (data && data.yodleeAdded) {
-          this.getBankTransactions();
-        } else {
-          this.hideEledgerWrap();
-        }
-      });
+    this.getTransactionData();
+    // Después del éxito de la entrada. llamar para transacciones bancarias
+    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+      if (data && data.yodleeAdded) {
+        this.getBankTransactions();
+      } else {
+        this.hideEledgerWrap();
+      }
+    });
     // }
   }
 
@@ -350,8 +352,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.lc.transactionData$.subscribe(lt => {
+    this.lc.transactionData$.subscribe((lt: any) => {
       if (lt) {
+        if (lt.closingBalanceForBank) {
+          this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
+          this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
+        }
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
         setTimeout(() => {
@@ -391,13 +397,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             accountDetails.stocks.map(as => {
               // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, {stock: as})
+                additional: Object.assign({}, acc, { stock: as })
               });
             });
           });
@@ -406,18 +412,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, {stock: as})
+                  additional: Object.assign({}, acc, { stock: as })
                 });
               });
             } else {
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             }
           });
         }
@@ -538,6 +544,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.isAdvanceSearchImplemented = false;
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
+    this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
       moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
       this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
@@ -854,6 +861,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getReconciliation() {
+    this.lc.transactionData$.take(2).subscribe((val) => {
+      if (val) {
+        this.closingBalanceBeforeReconcile = val.closingBalance;
+        this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+      }
+    });
     let dataToSend = {
       reconcileDate: null,
       closingBalance: 0,
