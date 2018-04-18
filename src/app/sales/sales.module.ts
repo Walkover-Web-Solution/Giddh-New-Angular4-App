@@ -31,6 +31,7 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 import { SalesTaxListComponent } from 'app/sales/tax-list/sales.tax.list.component';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -67,7 +68,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     DecimalDigitsModule,
     ShSelectModule,
     SalesShSelectModule,
-    QuickAccountModule.forRoot()
+    QuickAccountModule.forRoot(),
+    BsDropdownModule
   ],
   exports: [
     TooltipModule,
