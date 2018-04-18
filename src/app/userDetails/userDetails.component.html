@@ -255,24 +255,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>111.118.250.236</td>
-                                <td>02/04/2018</td>
+                            <tr *ngFor="let session of userSessionList">
+                                <td>{{ session.ipAddress }}</td>
+                                <td>{{ moment(session.createdAt).format('MMMM Do YYYY, h:mm:ss a') }}</td>
                                 <td>11:22:00</td>
                                 <td>0d:01:55:02</td>
-                                <td>Chrome</td>
-                                <td class="ico-btn text-center">Current</td>
-                            </tr>
-                            <tr>
-                                <td>111.118.250.236</td>
-                                <td>02/04/2018</td>
-                                <td>11:22:00</td>
-                                <td>0d:01:55:02</td>
-                                <td>Chrome</td>
+                                <td> {{ session.userAgent }}</td>
                                 <td class="ico-btn text-center">
+                                    <span>Current</span>
                                     <button type="button" class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                                 </td>
                             </tr>
+
                         </tbody>
                         <tbody>
                             <tr>
