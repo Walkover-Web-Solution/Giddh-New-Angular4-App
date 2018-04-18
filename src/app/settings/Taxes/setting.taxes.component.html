@@ -17,7 +17,8 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Linked Account</label><br>
-                <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>
+                <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="true"
+                         [customFilter]="customAccountFilter"  placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" ></sh-select>
             </div>
         </div>
         <div class="row">
