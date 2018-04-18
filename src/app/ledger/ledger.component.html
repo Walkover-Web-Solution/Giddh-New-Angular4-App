@@ -1,4 +1,3 @@
-
 <div class="loader mrT4" *ngIf="showLoader">
   <span></span>
   <span></span>
@@ -158,8 +157,8 @@
                         </table>
                         <!--new ledge popup-->
                         <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
-                          <new-ledger-entry-panel #newLedPanel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
-                            [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
+                          <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item"
+                            [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
                             [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()"
                             (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                           </new-ledger-entry-panel>
@@ -216,8 +215,8 @@
                         </table>
                         <!--new ledge popup-->
                         <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
-                          <new-ledger-entry-panel #newLedPanel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
-                            [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
+                          <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item"
+                            [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
                             [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()"
                             (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                           </new-ledger-entry-panel>
@@ -317,8 +316,8 @@
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, $event)"
-                  container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, $event)" container="body"
+                  tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
               </td>
@@ -582,7 +581,15 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
-      <button class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation</button>                      
+      <div *ngIf="closingBalanceBeforeReconcile" class="box mrT2 clearfix text-center">
+        <div class="col-xs-6 text-right">Balance as per bank
+          <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank.amount}} {{reconcileClosingBalanceForBank.type}}</h3>
+        </div>
+        <div class="col-xs-6 text-left">Balance as per books
+          <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile.amount}} {{closingBalanceBeforeReconcile.type}}</h3>
+        </div>
+      </div>
+      <button [hidden]="closingBalanceBeforeReconcile" class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation</button>
     </div>
   </div>
 </div>
@@ -647,7 +654,8 @@
 <div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+      <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq" [from]="advanceSearchRequest?.from"
+        [to]="advanceSearchRequest?.to" (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
     </div>
   </div>
 </div>
@@ -656,7 +664,8 @@
 <div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to" (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
+      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"
+        (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
     </div>
   </div>
 </div>
@@ -675,7 +684,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <advance-search-model #advanceSearchComp [toDateInLedger]="this.trxRequest.to" [fromDateInLedger]="this.trxRequest.from" [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
+      <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
     </div>
   </div>
 </div>
