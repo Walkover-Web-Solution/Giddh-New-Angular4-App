@@ -47,7 +47,7 @@ const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
     display: true,
-    label: 'S.No'
+    label: '#'
   },
   {
     display: true,
@@ -65,22 +65,22 @@ const THEAD_ARR_1 = [
     display: true,
     label: 'HSN/SAC'
   },
-  {
-    display: true,
-    label: 'Qty.'
-  },
-  {
-    display: true,
-    label: 'Unit'
-  },
-  {
-    display: true,
-    label: 'Rate'
-  },
-  {
-    display: true,
-    label: 'Amount'
-  }
+  // {
+  //   display: true,
+  //   label: 'Qty.'
+  // },
+  // {
+  //   display: true,
+  //   label: 'Unit'
+  // },
+  // {
+  //   display: true,
+  //   label: 'Rate'
+  // },
+  // {
+  //   display: true,
+  //   label: 'Amount'
+  // }
 ];
 const THEAD_ARR_OPTIONAL = [
   {
@@ -94,21 +94,21 @@ const THEAD_ARR_OPTIONAL = [
   {
     display: false,
     label: 'Rate'
-  },
-  {
-    display: true,
-    label: 'Amount'
   }
 ];
 const THEAD_ARR_READONLY = [
-  {
+    {
     display: true,
-    label: 'Discount'
+    label: 'Amount'
   },
   {
     display: true,
-    label: 'Taxable'
+    label: 'Disc.'
   },
+  // {
+  //   display: true,
+  //   label: 'Taxable'
+  // },
   {
     display: false,
     label: 'Tax'
@@ -985,7 +985,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
-    console.log('item.additional is :', item.additional);
+    // console.log('item.additional is :', item.additional);
     return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.toLocaleLowerCase().indexOf(term) > -1);
   }
 
