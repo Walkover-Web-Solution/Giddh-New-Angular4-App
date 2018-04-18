@@ -193,7 +193,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedPage: string = VOUCHER_TYPE_LIST[0].value;
   public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
   public universalDate: any;
-
+  public moment = moment;
+  public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
   public activeIndx: number = 0;
 
   // private below
@@ -371,6 +372,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.makeCustomerList();
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
+      setTimeout(() => {
+        this.invFormData.accountDetails.uniqueName = 'cashaccount';
+      }, 1000);
+
       // listen for newly added stock and assign value
       Observable.combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
         let o = resp[0];
@@ -383,6 +388,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       });
+
     });
 
     // listen for universal date
@@ -396,6 +402,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     })).subscribe();
+
+    this.addBlankRow(null, 'code');
   }
 
   public assignDates() {
@@ -423,7 +431,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public pageChanged() {
+  public pageChanged(val: string) {
+    this.selectedPage = val;
     this.makeCustomerList();
     this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
     this.toggleActionText = this.selectedPage;
@@ -502,9 +511,17 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onSubmitInvoiceForm(f?: NgForm) {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
+
+    data.entries = data.entries.filter((entry, indx) => {
+      if (!entry.transactions[0].accountUniqueName) {
+        this.invFormData.entries.splice(indx, 1);
+      }
+      return entry.transactions[0].accountUniqueName;
+    });
+
     let txnErr: boolean;
     // before submit request making some validation rules
-    // check for account uniquename
+    // check for account uniqueName
     if (data.accountDetails) {
       if (!data.accountDetails.uniqueName) {
         if (this.typeaheadNoResultsOfCustomer) {
@@ -886,25 +903,36 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toggleBodyClass();
   }
 
-  public addBlankRow(txn: SalesTransactionItemClass) {
-    // if transaction is valid then add new row else show toasty
-    let txnResponse = txn.isValid();
-    if (txnResponse !== true) {
-      this._toasty.warningToast(txnResponse);
-      return;
-    }
-    let entry: SalesEntryClass = new SalesEntryClass();
-    this.invFormData.entries.push(entry);
-    // set default date
-    forEach(this.invFormData.entries, (e) => {
-      forEach(e.transactions, (t: SalesTransactionItemClass) => {
-        t.date = this.universalDate || new Date();
+  public addBlankRow(txn: SalesTransactionItemClass , pushedBy?: string) {
+    if (pushedBy) {
+      let entry: SalesEntryClass = new SalesEntryClass();
+      this.invFormData.entries.push(entry);
+      // set default date
+      forEach(this.invFormData.entries, (e) => {
+        forEach(e.transactions, (t: SalesTransactionItemClass) => {
+          t.date = this.universalDate || new Date();
+        });
       });
-    });
+    } else {
+      // if transaction is valid then add new row else show toasty
+      let txnResponse = txn.isValid();
+      if (txnResponse !== true) {
+        this._toasty.warningToast(txnResponse);
+        return;
+      }
+      let entry: SalesEntryClass = new SalesEntryClass();
+      this.invFormData.entries.push(entry);
+      // set default date
+      forEach(this.invFormData.entries, (e) => {
+        forEach(e.transactions, (t: SalesTransactionItemClass) => {
+          t.date = this.universalDate || new Date();
+        });
+      });
 
-    setTimeout(() => {
-      this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
-    }, 10);
+      setTimeout(() => {
+        this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
+      }, 10);
+    }
   }
 
   public removeTransaction(entryIdx: number) {
@@ -994,7 +1022,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public setActiveIndx(indx: number) {
+    let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
+    if (indx === lastIndx) {
+      this.addBlankRow(null, 'code');
+    }
   }
 
 }
