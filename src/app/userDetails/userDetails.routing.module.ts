@@ -7,7 +7,10 @@ import { UserDetailsComponent } from './userDetails.component';
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: UserDetailsComponent, canActivate: [NeedsAuthentication]
+        path: '', component: UserDetailsComponent, canActivate: [NeedsAuthentication],
+        children: [
+          { path: 'profile', component: UserDetailsComponent, canActivate: [NeedsAuthentication] }
+        ]
       }
     ])
   ],
