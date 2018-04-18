@@ -35,7 +35,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-    private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
+              private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
     this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
     this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
     this.bsConfig.showWeekNumbers = false;
@@ -60,7 +60,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ label: d.name, value: d.uniqueName });
+          accounts.push({label: d.name, value: d.uniqueName});
         });
         this.vm.accounts$ = Observable.of(accounts);
       }
@@ -73,7 +73,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let users: IOption[] = [];
         data.body.map((d) => {
-          users.push({ label: d.userName, value: d.userUniqueName });
+          users.push({label: d.userName, value: d.userUniqueName, additional: d});
         });
         this.vm.canManageCompany = true;
         this.vm.users$ = Observable.of(users);
@@ -89,7 +89,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         let accountList = this.flattenGroup(data, []);
         let groups: IOption[] = [];
         accountList.map((d: any) => {
-          groups.push({ label: d.name, value: d.uniqueName });
+          groups.push({label: d.name, value: d.uniqueName});
         });
         this.vm.groups$ = Observable.of(groups);
       }
@@ -107,7 +107,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -188,6 +188,15 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     }
     this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
+  }
+
+  public customUserFilter(term: string, item: IOption) {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
+      (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase().indexOf(term) > -1));
+  }
+
+  public genralCustomFilter(term: string, item: IOption) {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public resetFilters() {
