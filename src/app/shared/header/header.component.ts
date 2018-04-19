@@ -297,7 +297,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public hideManageGroupsModal() {
     this.store.select(c => c.session.lastState).take(1).subscribe((s: string) => {
-      if (s && s.indexOf('ledger/') > -1) {
+      if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1 )) {
         this.store.dispatch(this._generalActions.addAndManageClosed());
       }
     });
