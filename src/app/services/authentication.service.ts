@@ -241,10 +241,10 @@ export class AuthenticationService {
   }
 
   // Delete Single Sessions
-  public DeleteSession() {
+  public DeleteSession(sessionId) {
     let userEmail = this._generalService.user.email;
-    return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_SESSION
-      .replace(':userEmail', userEmail)).map(res => {
+    let id = { sessionId };
+    return this._http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION, id).map(res => {
         let data = res;
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
@@ -253,8 +253,7 @@ export class AuthenticationService {
   // Delete All Sessions
   public DeleteAllSession() {
     let userEmail = this._generalService.user.email;
-    return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION
-      .replace(':userEmail', userEmail)).map(res => {
+    return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION.replace(':userEmail', userEmail)).map(res => {
         let data = res;
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));

@@ -14,6 +14,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'user-details',
@@ -50,6 +51,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public userSessionResponse$: Observable<any>;
   public userSessionList: any[] = [];
   public moment = moment;
+  public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
+  public userSessionId: any = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
@@ -121,6 +124,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       }
       if (session.user) {
         this.user = cloneDeep(session.user.user);
+        this.userSessionId = _.cloneDeep(session.user.session.id);
       }
     });
 
@@ -305,5 +309,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  /**
+   * deleteSession
+   */
+  public deleteSession(sessionId: string) {
+    this.store.dispatch(this._sessionAction.deleteSession(sessionId));
+  }
+
+  public clearAllSession() {
+    this.store.dispatch(this._sessionAction.deleteAllSession());
   }
 }

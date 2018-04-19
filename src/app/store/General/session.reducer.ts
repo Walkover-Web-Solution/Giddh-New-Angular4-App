@@ -30,7 +30,7 @@ export function SessionReducer(state: any = initialState, action: CustomActions)
       newState.Usersession = action.payload.body;
       return Object.assign({}, state, newState);
     case SessionActions.DELETE_ALL_SESSION_RESPONSE:
-      newState.Usersession = action.payload.body;
+      newState.Usersession = [];
       return Object.assign({}, state, newState);
     default:
       return state;
