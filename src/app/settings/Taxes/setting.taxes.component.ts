@@ -85,6 +85,12 @@ export class SettingTaxesComponent implements OnInit {
       }
     });
     this.getFlattenAccounts('');
+
+    this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
+      if (bool) {
+        this.getFlattenAccounts('');
+      }
+    });
   }
 
   public onSubmit(data) {
