@@ -26,6 +26,9 @@ import { LoaderService } from '../../../loader/loader.service';
 import { UploaderOptions } from 'ngx-uploader/index';
 import { AccountResponse } from 'app/models/api-models/Account';
 import { Configuration } from 'app/app.constant';
+import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
+import { createSelector } from 'reselect';
+import { TagRequest } from '../../../models/api-models/settingsTags';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -70,6 +73,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public showMatchingEntries: boolean = false;
   public mapBodyContent: string;
   public selectedItemToMap: ReconcileResponse;
+  public tags$: Observable<TagRequest[]>;
 
   public activeAccount$: Observable<AccountResponse>;
 
@@ -84,7 +88,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private _companyActions: CompanyActions,
     private cdRef: ChangeDetectorRef,
     private _toasty: ToasterService,
-    private _loaderService: LoaderService) {
+    private _loaderService: LoaderService,
+    private _settingsTagActions: SettingsTagActions) {
+    this.store.dispatch(this._settingsTagActions.GetALLTags());
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -136,6 +142,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
       }
     });
+
+    this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+      if (tags && tags.length) {
+        _.map(tags, (tag) => {
+          tag.label = tag.name;
+          tag.value = tag.name;
+        });
+        return _.orderBy(tags, 'name');
+      }
+    })).takeUntil(this.destroyed$);
   }
 
   @HostListener('click', ['$event'])
