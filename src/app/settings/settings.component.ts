@@ -11,6 +11,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { SettingsTagsComponent } from './tags/tags.component';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -24,6 +25,7 @@ export class SettingsComponent implements OnInit {
   @ViewChild('financialYearComp') public financialYearComp: FinancialYearComponent;
   @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
   @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
+  @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
 
   public isUserSuperAdmin: boolean = false;
 
@@ -71,5 +73,11 @@ export class SettingsComponent implements OnInit {
 
   public permissionTabSelected(e) {
     this.permissionComp.getInitialData();
+  }
+
+  public tagsTabSelected(e) {
+    if (e.heading === 'Tags') {
+      this.tagComp.getTags();
+    }
   }
 }
