@@ -9,6 +9,7 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { LaddaModule } from 'angular2-ladda';
 import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { DurationModule } from '../shared/helpers/pipes/durationPipe/duration.module';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -28,7 +29,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AlertModule,
     UiSwitchModule,
     LaddaModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    DurationModule
   ],
   providers: [
     {
