@@ -63,18 +63,18 @@
                 </div> -->
                 </div>
             </div>
-            <div class="col-xs-3 text-right" *ngIf="invFormData.voucherDetails.customerName">
+            <div class="col-xs-3 text-right" *ngIf="invFormData.voucherDetails.customerName || invFormData.accountDetails.uniqueName">
                 <p *ngIf="toggleFieldForSales" class="fs20 b">
                     <span class="balance-due">Balance Due: </span>
                     <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
                 </p>
             </div>
         </div>
-        <div class="col-xs-12" [ngClass]="{'mrT1' : !invFormData.voucherDetails.customerName || !toggleFieldForSales}">
+        <div class="col-xs-12" [ngClass]="{'mrT1' : (!invFormData.voucherDetails.customerName && !invFormData.accountDetails.uniqueName) || !toggleFieldForSales}">
             <div class="bdrB"></div>
         </div>
     </div>
-    <ng-container *ngIf="invFormData.voucherDetails.customerName">
+    <ng-container *ngIf="invFormData.voucherDetails.customerName || invFormData.accountDetails.uniqueName">
         <section class="form-inline col-xs-12 mrB1">
             <div class="collapse-pane clearfix">
                 <!-- <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">

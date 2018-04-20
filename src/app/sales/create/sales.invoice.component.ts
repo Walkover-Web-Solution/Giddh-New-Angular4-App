@@ -195,7 +195,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public universalDate: any;
   public moment = moment;
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
-  public activeIndx: number = 0;
+  public activeIndx: number;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
