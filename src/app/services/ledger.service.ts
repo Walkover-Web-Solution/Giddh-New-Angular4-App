@@ -11,6 +11,7 @@ import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { DayBookRequestModel, DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 
 @Injectable()
 export class LedgerService {
@@ -249,5 +250,27 @@ export class LedgerService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}));
+  }
+
+  public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
+      .replace(':page', queryRequest.page.toString())
+      .replace(':count', queryRequest.count.toString())
+      .replace(':from', encodeURIComponent(queryRequest.from))
+      .replace(':to', encodeURIComponent(queryRequest.to))
+      .replace(':format', queryRequest.format.toString())
+      .replace(':type', queryRequest.type.toString())
+      .replace(':sort', queryRequest.sort.toString()))
+      .map((res) => {
+        let data: BaseResponse<any, DayBookRequestModel> = res;
+        data.queryString = queryRequest;
+        data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null));
   }
 }
