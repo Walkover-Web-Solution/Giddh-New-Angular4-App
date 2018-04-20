@@ -19,6 +19,7 @@ import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../../store/customActions';
 import { GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
+import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 
 @Injectable()
 export class LedgerActions {
@@ -309,6 +310,22 @@ export class LedgerActions {
       };
     });
 
+    @Effect() private ExportGroupLedger$: Observable<Action> = this.action$
+    .ofType(LEDGER.GROUP_EXPORT_LEDGER)
+    .switchMap((action: CustomActions) => {
+      return this._ledgerService.GroupExportLedger(action.payload.groupUniqueName, action.payload.queryRequest)
+        .map((res) => {
+          if (res.status === 'success') {
+            this._toasty.clearAllToaster();
+            this._toasty.successToast(res.body, res.status);
+          } else {
+            this._toasty.clearAllToaster();
+            this._toasty.errorToast(res.message, res.code);
+          }
+          return { type: 'EmptyAction' };
+        });
+    });
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -526,6 +543,13 @@ export class LedgerActions {
     return {
       type: LEDGER.GET_RECONCILIATION,
       payload: request
+    };
+  }
+
+  public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): CustomActions {
+    return {
+      type: LEDGER.GROUP_EXPORT_LEDGER,
+      payload: { groupUniqueName, queryRequest }
     };
   }
 
