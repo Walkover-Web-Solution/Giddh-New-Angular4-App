@@ -28,7 +28,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   public companyPAN: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(
+    private store: Store<AppState>,
+    private invoiceAction: InvoiceActions,
+    private invoiceTemplatesService: InvoiceTemplatesService,
+    private _invoiceUiDataService: InvoiceUiDataService) {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
