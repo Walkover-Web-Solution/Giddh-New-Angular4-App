@@ -48,6 +48,8 @@ export class SignupComponent implements OnInit, OnDestroy {
   public selectedBanner: string = null;
   public loginUsing: string = null;
   public signUpWithPasswdForm: FormGroup;
+  public showPwdHint: boolean = false;
+  public isSignupWithPasswordInProcess$: Observable<boolean>;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -97,6 +99,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         // this.router.navigate(['home']);
       }
     });
+    this.isSignupWithPasswordInProcess$ = store.select(state => {
+      return state.login.isSignupWithPasswordInProcess;
+    }).takeUntil(this.destroyed$);
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {

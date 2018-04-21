@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public loginUsing: string = null;
   public urlPath: string = '';
   public loginWithPasswdForm: FormGroup;
+  public isLoginWithPasswordInProcess$: Observable<boolean>;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -97,6 +98,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         // this.router.navigate(['home']);
       }
     });
+    this.isLoginWithPasswordInProcess$ = store.select(state => {
+      return state.login.isLoginWithPasswordInProcess;
+    }).takeUntil(this.destroyed$);
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
