@@ -99,7 +99,7 @@ const THEAD_ARR_OPTIONAL = [
   }
 ];
 const THEAD_ARR_READONLY = [
-    {
+  {
     display: true,
     label: 'Amount'
   },
@@ -149,6 +149,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
+  @ViewChild('invoiceForm') public invoiceForm: NgForm;
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
   public isOthrDtlCollapsed: boolean = true;
@@ -184,7 +185,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = Observable.of({ status: false });
   // modals related
   public modalConfig = {
     animated: true,
@@ -246,12 +247,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // bind state sources
     this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
       let arr: IOption[] = [];
-        if (states) {
-          states.map(d => {
-            arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
-          });
-        }
-        this.statesSource$ = Observable.of(arr);
+      if (states) {
+        states.map(d => {
+          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
+      this.statesSource$ = Observable.of(arr);
     });
   }
 
@@ -293,7 +294,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           return item;
         });
-      }else {
+      } else {
         this.companyTaxesList$ = Observable.of([]);
       }
     });
@@ -335,7 +336,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName });
         }
         // creating bank account list
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
+        if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
           bankaccounts.push({ label: item.name, value: item.uniqueName });
         }
 
@@ -494,7 +495,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = true;
-    this.forceClear$ = Observable.of({status: true});
+    this.forceClear$ = Observable.of({ status: true });
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -516,7 +517,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       } catch (error) {
         return '';
       }
-    }else {
+    } else {
       return '';
     }
   }
@@ -538,7 +539,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!data.accountDetails.uniqueName) {
         if (this.typeaheadNoResultsOfCustomer) {
           this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
-        }else {
+        } else {
           this._toasty.warningToast('Customer Name can\'t be empty');
         }
         return;
@@ -570,7 +571,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
 
     // check for valid entries and transactions
-    if ( data.entries) {
+    if (data.entries) {
       _.forEach(data.entries, (entry) => {
         _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
           // convert date object
@@ -581,12 +582,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
             this._toasty.warningToast(txnResponse);
             txnErr = true;
             return false;
-          }else {
+          } else {
             txnErr = false;
           }
         });
       });
-    }else {
+    } else {
       this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
       return;
     }
@@ -603,7 +604,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     let obj: GenericRequestForGenerateSCD = {
-      voucher : data,
+      voucher: data,
       updateAccountDetails: this.updateAccount
     };
 
@@ -637,7 +638,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public onNoResultsClicked(idx?: number) {
     if (_.isUndefined(idx)) {
       this.getAllFlattenAc();
-    }else {
+    } else {
       this.entryIdx = idx;
     }
     this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
@@ -647,7 +648,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public toggleBodyClass() {
     if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in') {
       document.querySelector('body').classList.add('fixed');
-    }else {
+    } else {
       document.querySelector('body').classList.remove('fixed');
     }
   }
@@ -691,7 +692,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     _.forEach(txns, (txn: SalesTransactionItemClass) => {
       if (txn.total === 0) {
         res += 0;
-      }else {
+      } else {
         res += this.checkForInfinity((txn.total - txn.taxableValue));
       }
     });
@@ -707,7 +708,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     _.forEach(txns, (txn: SalesTransactionItemClass) => {
       if (txn.quantity && txn.rate) {
         res += this.checkForInfinity(txn.rate) * this.checkForInfinity(txn.quantity);
-      }else {
+      } else {
         res += Number(this.checkForInfinity(txn.amount));
       }
     });
@@ -782,20 +783,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (o.hsnNumber) {
                   txn.hsnNumber = o.hsnNumber;
                   txn.hsnOrSac = 'hsn';
-                }else {
+                } else {
                   txn.hsnNumber = null;
                 }
                 if (o.sacNumber) {
                   txn.sacNumber = o.sacNumber;
                   txn.hsnOrSac = 'sac';
-                }else {
+                } else {
                   txn.sacNumber = null;
                 }
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
                   txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
                   txn.rate = null;
-                  if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
+                  if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
                     txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
                   }
                   let obj: IStockUnit = {
@@ -820,7 +821,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 // toggle stock related fields
                 this.toggleStockFields(txn);
                 return txn;
-              }else {
+              } else {
                 txn.isStockTxn = false;
                 this.toggleStockFields(txn);
               }
@@ -831,7 +832,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
       });
-    }else {
+    } else {
       txn.isStockTxn = false;
       this.toggleStockFields(txn);
       txn.amount = null;
@@ -852,12 +853,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // check if any transaction is stockTxn then return false
     if (this.invFormData.entries.length > 1) {
       _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, { isStockTxn : true });
+        let idx = _.findIndex(entry.transactions, { isStockTxn: true });
         if (idx !== -1) {
           this.allKindOfTxns = true;
           breakFunc = true;
           return false;
-        }else {
+        } else {
           breakFunc = false;
           this.allKindOfTxns = false;
         }
@@ -869,10 +870,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       _.map(this.theadArrOpt, (item: IContentCommon) => {
         item.display = breakFunc;
       });
-    }else {
+    } else {
       _.map(this.theadArrOpt, (item: IContentCommon) => {
         // show labels related to stock entry
-        if (_.indexOf(STOCK_OPT_FIELDS, item.label) !== -1 ) {
+        if (_.indexOf(STOCK_OPT_FIELDS, item.label) !== -1) {
           item.display = txn.isStockTxn;
         }
         // hide amount label
@@ -923,7 +924,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toggleBodyClass();
   }
 
-  public addBlankRow(txn: SalesTransactionItemClass , pushedBy?: string) {
+  public addBlankRow(txn: SalesTransactionItemClass, pushedBy?: string) {
     if (pushedBy) {
       let entry: SalesEntryClass = new SalesEntryClass();
       this.invFormData.entries.push(entry);
@@ -956,11 +957,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public removeTransaction(entryIdx: number) {
-    if (this.invFormData.entries.length > 1 ) {
+    if (this.invFormData.entries.length > 1) {
       this.invFormData.entries = _.remove(this.invFormData.entries, (entry, index) => {
         return index !== entryIdx;
       });
-    }else {
+    } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
   }
@@ -979,7 +980,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedTaxes.length > 0) {
       this.companyTaxesList$.take(1).subscribe(data => {
         data.map((item: any) => {
-          if ( _.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0 ) {
+          if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
             let o: IInvoiceTax = {
               accountName: item.accounts[0].name,
               accountUniqueName: item.accounts[0].uniqueName,
@@ -1018,7 +1019,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       setTimeout(() => {
         this.createGroupModal.show();
       }, 1000);
-    }else {
+    } else {
       this.showCreateAcModal = true;
       this.createAcCategory = e.type;
       // delay just for ng cause
@@ -1046,6 +1047,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeIndx = indx;
     if (indx === lastIndx) {
       this.addBlankRow(null, 'code');
+    }
+  }
+
+  public doAction(action: number) {
+    switch (action) {
+      case 1: // Generate & Close
+        break;
+      case 2: // Generate & Recurring
+        this.onSubmitInvoiceForm(this.invoiceForm);
+        this.toggleRecurringAsidePane();
+        break;
+      case 3: // Generate Invoice
+        break;
+      default:
+        break;
     }
   }
 
