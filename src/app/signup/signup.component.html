@@ -32,11 +32,11 @@
 
 
                 <!-- login with userName form -->
-                <form class="" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm" (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'">
+                <form class="" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm" (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'" autocomplete="off">
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" type="text" formControlName="email" placeholder="Email Id" />
-                        <input class="form-control" type="password" formControlName="password" name="password" placeholder="Password" [minlength]="8" [maxlength]="20" />
-                        <div class="hint">
+                        <input class="form-control" type="password" (focus)="showPwdHint = true" (blur)="showPwdHint = false" formControlName="password" name="password" placeholder="Password" [minlength]="8" [maxlength]="20" autocomplete="off" />
+                        <div class="hint" [hidden]="!showPwdHint">
                             <ul>
                                 <li>Provide minimum 8 and maximum 20 characters.</li>
                                 <li>1 uppercase letter.</li>
@@ -44,7 +44,7 @@
                                 <li>1 number and 1 special character (@$!%*?&_).</li>
                             </ul>
                         </div>
-                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!signUpWithPasswdForm.controls['email'].valid">Signup</button>
+                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!signUpWithPasswdForm.controls['email'].valid" [ladda]="isSignupWithPasswordInProcess$ | async">Signup</button>
                     </div>
                 </form>
                 <!-- form end/ -->
