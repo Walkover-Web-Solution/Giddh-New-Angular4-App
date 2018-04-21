@@ -48,16 +48,16 @@
                 </div>
 
             </li>-->
-            <!--<li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
+            <li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
-            </li>-->
-            <!--<li [hidden]="!templateUISectionVisibility.logo">
+            </li>
+            <li [hidden]="!templateUISectionVisibility.logo">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mrT1">
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
-                                <input type="file" id="logo-edit" [options]="fileUploadOptions" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
+                                <input type="file" accept="image/png, image/jpeg" id="logo-edit" [options]="fileUploadOptions" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
                             </label>
                             <label for="logo-edit">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-            </li>-->
+            </li>
 
             <li [hidden]="templateUISectionVisibility.color" (click)="onChangeVisibility('color')">
                 <i class="ico-swatch"></i> <label>Try other colour</label>

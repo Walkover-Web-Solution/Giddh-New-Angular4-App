@@ -125,7 +125,7 @@ export class EditInvoiceComponent implements OnInit {
     if (data.name) {
       data.updatedAt = null;
       data.updatedBy = null;
-      data.copyFrom = 'gst_template_a';
+      data.copyFrom = 'gst_template_a'; // this should be dynamic
       data.sections[0].content[3].label = '';
       data.sections[0].content[0].label = '';
       data.sections[1].content[8].field = 'taxes';
