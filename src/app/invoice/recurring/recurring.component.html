@@ -1,0 +1,94 @@
+<form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit(recurringForm)">
+
+  <div class="form-group mrR1">
+    <label class="d-block">Invoice Type</label>
+    <div class="ng-select-wrap">
+      <sh-select name="accountUniqueName" [placeholder]="'Select Account'" [options]="invoiceTypeOptions" [notFoundLink]="false"
+        [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{ option.label }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
+    </div>
+  </div>
+
+  <div class="form-group mrR1">
+    <label class="d-block">Search Customer</label>
+    <input type="text" class="form-control" name="description" placeholder="By description">
+  </div>
+
+  <div class="form-group mrR1">
+    <label class="d-block">Interval</label>
+    <div class="ng-select-wrap">
+      <sh-select name="accountUniqueName" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false" [multiple]="false"
+        [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{ option.label }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
+    </div>
+  </div>
+
+  <div class="form-group mrR1">
+    <label class="d-block">Last Invoice Date</label>
+    <div class="input-group">
+      <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" bsDatepicker required>
+    </div>
+  </div>
+
+  <div class="form-group mrR1">
+    <label class="d-block">&nbsp;</label>
+    <button class="btn btn-success btn-sm">GO</button>
+  </div>
+</form>
+
+
+<div class="no-data mrT2">
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
+</div>
+
+<table class="table basic table-bordered mrT2">
+  <thead class="t-h-bg1">
+    <tr>
+      <th>#</th>
+      <th>Invoice Number</th>
+      <th>Customer Name</th>
+      <th>Interval</th>
+      <th>Last Invoice Date</th>
+      <th>Next Invoice Date</th>
+      <th>Status</th>
+      <th class="text-center">Invoice Amt</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="100%">
+        <div class="alC">
+          <pagination [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+            [itemsPerPage]="1" [rotate]="false"></pagination>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>
+        <a href="javascript:void(0);"></a>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="text-center">
+        <i class="glyphicon glyphicon-trash cp"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>

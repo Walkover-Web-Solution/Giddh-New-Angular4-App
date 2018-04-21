@@ -32,6 +32,7 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 import { SalesTaxListComponent } from 'app/sales/tax-list/sales.tax.list.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { AsideMenuRecurringEntryComponent } from './aside-menu-recurring-entry/aside.menu.recurringEntry.component';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -41,6 +42,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SalesInvoiceComponent,
     AsideMenuAccountComponent,
     AsideMenuProductServiceComponent,
+    AsideMenuRecurringEntryComponent,
     DiscountListComponent,
     SalesAddStockComponent,
     SalesAddStockGroupComponent,
@@ -75,7 +77,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     TooltipModule,
     SalesAddStockGroupComponent
   ],
-  entryComponents: [ ],
+  entryComponents: [],
   providers: []
 })
 export class SalesModule {

@@ -1,0 +1,63 @@
+<div class="aside-pane">
+  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+  <div class="aside-header">
+    <h3 class="aside-title">Recurring Account</h3>
+  </div>
+  <div class="aside-body">
+
+    <div class="form-group pdT2">
+      <label class="mrB1">Start Date</label>
+      <div class="input-group">
+        <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" bsDatepicker required>
+      </div>
+    </div>
+
+    <div class="form-group pdT2">
+      <label class="mrB1">End Date</label>
+      <div class="input-group">
+        <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" bsDatepicker required>
+      </div>
+    </div>
+
+    <div class="form-group pdT2">
+      <div class="input-group">
+        <input type="checkbox" /> never expire
+      </div>
+    </div>
+
+    <div class="form-group pdT2">
+      <label class="mrB1">Interval</label>
+      <div class="ng-select-wrap liq">
+        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName"
+          [options]="intervalOptions" style="width:100%">
+          <ng-template #optionTemplate let-option="option">
+            <div class="account-list-item">{{option?.label}}</div>
+            <div class="account-list-item fs12">{{option?.value}}</div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="form-group pdT2">
+      <div class="ng-select-wrap liq">
+        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName"
+          [options]="timeOptions" style="width:100%">
+          <ng-template #optionTemplate let-option="option">
+            <div class="account-list-item">{{option?.label}}</div>
+            <div class="account-list-item fs12">{{option?.value}}</div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="form-group mrR1">
+      <label class="d-block">&nbsp;</label>
+      <button class="btn btn-success btn-sm">Cancel</button>
+    </div>
+
+    <div class="form-group mrR1">
+      <label class="d-block">&nbsp;</label>
+      <button class="btn btn-success btn-sm">Save</button>
+    </div>
+  </div>
+</div>
