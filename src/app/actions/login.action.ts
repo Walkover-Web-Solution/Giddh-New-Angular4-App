@@ -461,7 +461,9 @@ export class LoginActions {
     .ofType(LoginActions.SignupWithPasswdResponse)
     .map((action: CustomActions) => {
       if (action.payload.status === 'success') {
-        this._toaster.successToast(action.payload.body);
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+        this._router.navigate(['/pages/new-user']);
+        return { type: 'EmptyAction' };
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
