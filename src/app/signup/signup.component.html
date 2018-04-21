@@ -32,11 +32,19 @@
 
 
                 <!-- login with userName form -->
-                <form class="" id="verifyUsernameForm" name="verifyUsernameForm" novalidate *ngIf="loginUsing === 'userName'">
+                <form class="" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm" (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'">
                     <div class="clearfix form-group">
-                        <input class="form-control mrB1" type="text" placeholder="Username" required />
-                        <input class="form-control" type="text" placeholder="Password" required />
-                        <button class="btn btn-success btn-lg btn-block mrT1">Signup</button>
+                        <input class="form-control mrB1" type="text" formControlName="email" placeholder="Email Id" />
+                        <input class="form-control" type="password" formControlName="password" name="password" placeholder="Password" [minlength]="8" [maxlength]="20" />
+                        <div class="hint">
+                            <ul>
+                                <li>Provide minimum 8 and maximum 20 characters.</li>
+                                <li>1 uppercase letter.</li>
+                                <li>1 lowercase letter.</li>
+                                <li>1 number and 1 special character (@$!%*?&_).</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!signUpWithPasswdForm.controls['email'].valid">Signup</button>
                     </div>
                 </form>
                 <!-- form end/ -->
@@ -53,8 +61,8 @@
 
             </ul>
             <div class="login_option">
-                <!-- <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, -->
-                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a>
+                <!--  -->
+                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a>
             </div>
             <div class="mrT4">
                 Already have an account? <a href="{{urlPath}}login" class="btn btn-sm btn-primary mrL">Login</a>
