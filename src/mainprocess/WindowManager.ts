@@ -83,7 +83,7 @@ export default class WindowManager {
         }
 
         // tslint:disable-next-line:no-unused-expression
-        // new AppUpdater();
+        new AppUpdater();
     }
 
     public focusFirstWindow(): void {
