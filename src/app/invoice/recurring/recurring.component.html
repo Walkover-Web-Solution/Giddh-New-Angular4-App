@@ -47,12 +47,12 @@
 </form>
 
 
-<div class="no-data mrT2">
-  <h1>No Entry found in sales!</h1>
-  <h1>Have to do some sales before creating invoice</h1>
+<div class="no-data mrT2" *ngIf="(recurringData$ | async)?.length === 0">
+  <h1>No Recurring Vouchers Found!</h1>
+  <h1>Create Some Recurring Vouchers</h1>
 </div>
 
-<table class="table basic table-bordered mrT2">
+<table class="table basic table-bordered mrT2" *ngIf="(recurringData$ | async)?.length > 0">
   <thead class="t-h-bg1">
     <tr>
       <th>#</th>
@@ -76,19 +76,17 @@
     </tr>
   </tfoot>
   <tbody>
-    <tr>
-      <td></td>
+    <tr *ngFor="let col of (recurringData$ | async);let i = index">
+      <td>{{ i + 1 }}</td>
       <td>
-        <a href="javascript:void(0);"></a>
+        <a href="javascript:void(0);">{{ col.voucherNumber }}</a>
       </td>
+      <td>{{ col.uniqueName }}</td>
       <td></td>
       <td></td>
+      <td>{{ col.nextCronDate }}</td>
       <td></td>
-      <td></td>
-      <td></td>
-      <td class="text-center">
-        <i class="glyphicon glyphicon-trash cp"></i>
-      </td>
+      <td class="text-center"></td>
     </tr>
   </tbody>
 </table>
