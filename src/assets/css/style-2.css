@@ -4578,3 +4578,7 @@ table td[class*=col-]:last-child {
 .illustration_box img {
     max-width: 300px;
 }
+
+.m-r-15 {
+    margin-right: 15px;
+}

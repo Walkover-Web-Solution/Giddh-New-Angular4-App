@@ -47,6 +47,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
   public comparisonFilterDropDown$: Observable<IOption[]>;
 
   public datePickerOptions: any = {
+    parentEl: '#date-range-picker-parent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
