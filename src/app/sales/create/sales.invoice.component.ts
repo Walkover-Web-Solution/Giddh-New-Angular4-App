@@ -160,6 +160,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public salesAccounts$: Observable<IOption[]> = Observable.of(null);
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
+  public asideMenuStateForRecurringEntry: string = 'out';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
   public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
@@ -644,7 +645,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleBodyClass() {
-    if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in') {
+    if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in') {
       document.querySelector('body').classList.add('fixed');
     }else {
       document.querySelector('body').classList.remove('fixed');
@@ -911,6 +912,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       event.preventDefault();
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  public toggleRecurringAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
 
