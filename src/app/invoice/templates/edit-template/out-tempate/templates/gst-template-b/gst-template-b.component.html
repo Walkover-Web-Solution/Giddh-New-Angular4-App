@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" id="template2">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div class="">
+        <div id="template-header">
+            <header [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]" (click)="onClickSection('header')">
+                <table class="mrB1 pdRL3">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h1>{{( inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].label.length > 0) ? inputTemplate.sections[0].content[23].label : 'INVOICE' }}</h1>
+                                <figure>
+                                    <p *ngIf="inputTemplate.sections[0].content[5].display"><span>{{(inputTemplate.sections[0].content[5].label.length > 0) ? inputTemplate.sections[0].content[5].label : 'Number'}}: 201770323-64</span> <span class="mrL2">{{(inputTemplate.sections[0].content[4].label.length > 0) ? inputTemplate.sections[0].content[4].label : 'Date'}}: 22/08/2017</span> </p>
+                                    <p><span>{{(inputTemplate.sections[0].content[15].label.length > 0) ? inputTemplate.sections[0].content[15].label : 'GSTIN'}}: {{companyGSTIN}}</span> <span class="mrL2">{{inputTemplate.sections[0].content[2].label}}: {{companyPAN}}</span></p>
+                                </figure>
+                            </td>
+                            <td class="text-right vmiddle">
+                                    <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' /></figure>
+                                <!-- <div *ngIf="!logoPath">
+                                    <label class="cp" for="upload_logo" id="upload_label">Your Logo <i class="paper_clip"></i></label>
+                                    <input id="upload_logo" type='file' (change)="readUrl($event)" accept="image/*" />
+                                </div>
+                                <div *ngIf="logoPath" class="pos-rel">
+                                    <img [src]="logoPath" alt="" class="logo">
+                                    <p class="pos-abs"><a (click)="clearUploadedImg()" href="javsascript:void(0)" class="btn btn-link">clear</a></p>
+                                </div> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </header>
+
+            <table class="meta pdRL3">
+                <tbody>
+                    <tr>
+                        <td>
+                            <p><strong>{{(inputTemplate.sections[0].content[14].label.length > 0) ? inputTemplate.sections[0].content[14].label : 'Billing Address'}}</strong></p>
+                            <p>Green Soft Solutions 24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                            <p><strong>{{(inputTemplate.sections[0].content[15].label.length > 0) ? inputTemplate.sections[0].content[15].label : 'GSTIN'}}: {{companyGSTIN}}</strong></p>
+                        </td>
+                        <td colspan="2"></td>
+                        <td class="text-right vmiddle total-amount">
+                            <h2 class="">945/-</h2>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="cargo-Detail pdRL3">
+                <tr>
+                    <td>
+                        <span *ngIf="inputTemplate.sections[0].content[24].display">
+                            <strong>Attention to:</strong> <span>Mr. Alok Gangrade</span>
+                        </span> 
+                        <span class="mrL2" *ngIf="inputTemplate.sections[0].content[12].display">
+                            <strong>{{(inputTemplate.sections[0].content[12].label.length > 0) ? inputTemplate.sections[0].content[12].label : 'Due Date'}}:</strong> <span>22/08/2017</span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span *ngIf="inputTemplate.sections[0].content[6].display"><strong>{{(inputTemplate.sections[0].content[6].label.length > 0) ? inputTemplate.sections[0].content[6].label : 'Ship Date'}}:</strong> <span>22/08/2017</span></span> 
+                        <span *ngIf="inputTemplate.sections[0].content[7].display" class="mrL2"><strong>{{(inputTemplate.sections[0].content[7].label.length > 0) ? inputTemplate.sections[0].content[7].label : 'Ship Via'}}:</strong> <span>FedEx</span></span>
+                        <span *ngIf="inputTemplate.sections[0].content[8].display" class="mrL2"><strong>{{(inputTemplate.sections[0].content[8].label.length > 0) ? inputTemplate.sections[0].content[8].label : 'Tracking No'}}:</strong> <span>213456</span></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div id="Template-table" class="pos-rel" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]" (click)="onClickSection('table')">
+            <span class="arrow-down"></span>
+            <table class="item product-table pdRL3" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th *ngIf="inputTemplate.sections[1].content[0].display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[0].label.length > 0) ? inputTemplate.sections[1].content[0].label : 'S No'}}</th>
+                        <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[2].label.length > 0) ? inputTemplate.sections[1].content[2].label : 'Description'}}</th>
+                        <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[3].label.length > 0) ? inputTemplate.sections[1].content[3].label : 'HSN/SAC'}}</th>
+                        <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[8].label.length > 0) ? inputTemplate.sections[1].content[8].label : 'Tax Rate'}}</th>
+                        <th *ngIf="inputTemplate.sections[1].content[10].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[10].label.length > 0) ? inputTemplate.sections[1].content[10].label : 'Qty.'}}</th>
+                        <th *ngIf="inputTemplate.sections[1].content[5].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[5].label.length > 0) ? inputTemplate.sections[1].content[5].label : 'Rate'}}</th>
+                        <th colspan="2" *ngIf="inputTemplate.sections[1].content[9].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[9].label.length > 0) ? inputTemplate.sections[1].content[9].label : 'Amount'}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-left">1</td>
+                        <td *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Transactional Route</td>
+                        <td *ngIf="inputTemplate.sections[1].content[3].display">123456</td>
+                        <td *ngIf="inputTemplate.sections[1].content[8].display">18%</td>
+                        <td *ngIf="inputTemplate.sections[1].content[10].display">5</td>
+                        <td *ngIf="inputTemplate.sections[1].content[5].display">5000.00</td>
+                        <td *ngIf="inputTemplate.sections[1].content[9].display">25000.00</td>
+                    </tr>
+                    <tr>
+                        <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-left">2</td>
+                        <td *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Promotional Route</td>
+                        <td *ngIf="inputTemplate.sections[1].content[3].display">123456</td>
+                        <td *ngIf="inputTemplate.sections[1].content[8].display">18%</td>
+                        <td *ngIf="inputTemplate.sections[1].content[10].display">5</td>
+                        <td *ngIf="inputTemplate.sections[1].content[5].display">5000.00</td>
+                        <td *ngIf="inputTemplate.sections[1].content[9].display">25000.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7"></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th class="text-left">{{inputTemplate.sections[2].content[0].label}}</th>
+                        <th class="text-right">32500.00</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th class="text-left">Discount</th>
+                        <th class="text-right">00.00</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th class="text-left">IGST</th>
+                        <th class="text-right">5250.00</th>
+                    </tr>
+
+                    <tr>
+                        <th colspan="5" class="text-left inwords">Thirty Seven Thousand Seven Hundred Fifty Only</th>
+                        <th class="text-left"><strong>Total</strong></th>
+                        <th class="text-right"><strong>37750.00</strong></th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <table class="item pdRL3" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th class="text-left">S.No</th>
+                        <th class="text-left">HSN/SAC</th>
+                        <th>Taxable Amt.</th>
+                        <th>IGST Rate</th>
+                        <th>Amt.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-left">1</td>
+                        <td class="text-left">123456</td>
+                        <td>25000.00</td>
+                        <td>18%</td>
+                        <td>4500.00</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">2</td>
+                        <td class="text-left">654321</td>
+                        <td>7500.00</td>
+                        <td>10%</td>
+                        <td>750.00</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="bdrB" colspan="2"></th>
+                        <th colspan="1" class="bdrB text-right"></th>
+                        <th class="bdrB text-right"><strong>Total</strong><strong class="mrL2">32500.00</strong></th>
+                        <th class="text-right bdrB"><strong>5250.00</strong></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div id="Template-footer" class="pdRL3" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]" (click)="onClickSection('footer')">
+            <table class="subfooter">
+                <tbody>
+                    <tr>
+                        <td *ngIf="!inputTemplate.sections[2].content[6].label" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
+                            <h1>THANK YOU</h1>
+                            <h4>FOR YOUR BUSINESS.</h4>
+                        </td>
+                        <td colspan="1"></td>
+                        <td style="text-align: center;vertical-align: bottom;">
+                            <p class="bdrB"></p>
+                            <p> <strong>Walkover Web Solutions Private Limited</strong></p>
+                            <p>(Signature)</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <ul class="note">
+                                <li>Tax to be paid on reverse charge</li>
+                                <li>All payments to be made in cash. Contact us for queries on these quotations. </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <footer style="text-align: center;">
+                <p><strong>Walkover Web Solutions Private Limited</strong></p>
+                <p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+            </footer>
+        </div>
+
+    </div>
+</body>
+
+</html>

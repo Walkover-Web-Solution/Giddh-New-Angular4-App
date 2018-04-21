@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -10,12 +10,13 @@ import { TemplateContentUISectionVisibility } from '../../../../../../services/i
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 
 @Component({
-  selector: 'gst-template-a',
-  templateUrl: './gst-template-a.component.html',
-  styleUrls: ['./gst-template-a.component.css']
+  selector: 'gst-template-b',
+  templateUrl: './gst-template-b.component.html',
+  styleUrls: ['./gst-template-b.component.css'],
+  encapsulation: ViewEncapsulation.Native
 })
 
-export class GstTemplateAComponent implements OnInit, OnDestroy {
+export class GstTemplateBComponent implements OnInit, OnDestroy {
 
   @Input() public isPreviewMode: boolean = false;
   @Input() public showLogo: boolean = true;
