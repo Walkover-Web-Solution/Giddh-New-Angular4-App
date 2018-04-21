@@ -43,6 +43,8 @@ import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
 import { forEach, map, cloneDeep } from '../../lodash-optimized';
 import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -218,7 +220,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     private salesService: SalesService,
     private _toasty: ToasterService,
     private _companyService: CompanyService,
-    private _generalActions: GeneralActions
+    private _generalActions: GeneralActions,
+    private _invoiceActions: InvoiceActions
   ) {
 
     this.invFormData = new VoucherClass();
@@ -232,6 +235,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
@@ -404,13 +409,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     })).subscribe();
 
     this.addBlankRow(null, 'code');
+    this.store.select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
+      if (setting && setting.invoiceSettings) {
+        const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
+        this.invFormData.voucherDetails.dueDate = dueDate._d;
+      }
+    })).takeUntil(this.destroyed$).subscribe();
   }
 
   public assignDates() {
     let o = cloneDeep(this.invFormData);
     let date = this.universalDate || new Date();
     o.voucherDetails.voucherDate = date;
-    o.voucherDetails.dueDate = date;
+    // o.voucherDetails.dueDate = date;
     o.templateDetails.other.shippingDate = date;
     forEach(o.entries, (entry: SalesEntryClass) => {
       forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
