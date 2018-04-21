@@ -28,6 +28,8 @@ import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interfac
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
+import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
+import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 
 @Injectable()
 export class InvoiceActions {
@@ -36,7 +38,7 @@ export class InvoiceActions {
   @Effect()
   public GetAllInvoices$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_INVOICES)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body))
     .map(response => {
       return this.GetAllInvoicesResponse(response);
     });
@@ -48,11 +50,27 @@ export class InvoiceActions {
       return { type: 'EmptyAction' };
     });
 
+  // GET All Invoices
+  @Effect()
+  public GetAllRecurringInvoices$: Observable<Action> = this.action$
+    .ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA)
+    .switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers())
+    .map(response => {
+      return this.GetAllRecurringInvoicesResponse(response);
+    });
+
+  @Effect()
+  public GetAllRecurringInvoicesResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE)
+    .map(response => {
+      return { type: 'EmptyAction' };
+    });
+
   // get all ledgers for invoice
   @Effect()
   public GetAllLedgersForInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body))
     .map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
       type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
       payload: res
@@ -65,7 +83,7 @@ export class InvoiceActions {
   @Effect()
   public PreviewInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.PREVIEW_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(res, {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: res
@@ -78,7 +96,7 @@ export class InvoiceActions {
   @Effect()
   public PreviewOfGeneratedInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber))
+    .switchMap((action: CustomActions) => this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber))
     .map(res => this.validateResponse<PreviewInvoiceResponseClass, string>(res, {
       type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
       payload: res
@@ -91,7 +109,7 @@ export class InvoiceActions {
   @Effect()
   public UpdateGeneratedInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<string, GenerateInvoiceRequestClass>(res, {
       type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
       payload: res
@@ -104,7 +122,7 @@ export class InvoiceActions {
   @Effect()
   public GenerateInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: res
@@ -128,7 +146,7 @@ export class InvoiceActions {
   @Effect()
   public GenerateBulkInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
     .map(response => {
       return this.GenerateBulkInvoiceResponse(response);
     });
@@ -156,7 +174,7 @@ export class InvoiceActions {
   @Effect()
   public DeleteInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.DELETE_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteInvoice(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload))
     .map(response => {
       return this.DeleteInvoiceResponse(response);
     });
@@ -178,7 +196,7 @@ export class InvoiceActions {
   @Effect()
   public ActionOnInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action))
+    .switchMap((action: CustomActions) => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action))
     .map(response => {
       return this.ActionOnInvoiceResponse(response);
     });
@@ -199,7 +217,7 @@ export class InvoiceActions {
   @Effect()
   public GetTemplateDetailsOfInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetInvoiceTemplateDetails(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.GetInvoiceTemplateDetails(action.payload))
     .map(res => this.validateResponse<InvoiceTemplateDetailsResponse, string>(res, {
       type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
       payload: res
@@ -216,7 +234,7 @@ export class InvoiceActions {
   @Effect()
   public getInvoiceSetting$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.GET_INVOICE_SETTING)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetInvoiceSetting())
+    .switchMap((action: CustomActions) => this._invoiceService.GetInvoiceSetting())
     .map(res => this.validateResponse<InvoiceSetting, string>(res, {
       type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
       payload: res
@@ -231,7 +249,7 @@ export class InvoiceActions {
   @Effect()
   public DeleteWebhook$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.DELETE_WEBHOOK)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteInvoiceWebhook(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceWebhook(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
       payload: res
@@ -246,7 +264,7 @@ export class InvoiceActions {
   @Effect()
   public UpdateInvoiceEmail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.UPDATE_INVOICE_EMAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateInvoiceEmail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceEmail(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
       payload: res
@@ -261,7 +279,7 @@ export class InvoiceActions {
   @Effect()
   public SaveInvoiceWebhook$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.SAVE_INVOICE_WEBHOOK)
-    .switchMap((action: CustomActions) =>  this._invoiceService.SaveInvoiceWebhook(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.SaveInvoiceWebhook(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
       payload: res
@@ -276,7 +294,7 @@ export class InvoiceActions {
   @Effect()
   public updateInvoiceSetting$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.UPDATE_INVOICE_SETTING)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateInvoiceSetting(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceSetting(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
       payload: res
@@ -291,7 +309,7 @@ export class InvoiceActions {
   @Effect()
   public GetRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.GET_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetRazorPayDetail())
+    .switchMap((action: CustomActions) => this._invoiceService.GetRazorPayDetail())
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
       payload: res
@@ -306,7 +324,7 @@ export class InvoiceActions {
   @Effect()
   public UpdateRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateRazorPayDetail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateRazorPayDetail(action.payload))
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
       payload: res
@@ -321,7 +339,7 @@ export class InvoiceActions {
   @Effect()
   public DeleteRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.DELETE_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteRazorPayDetail())
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteRazorPayDetail())
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE,
       payload: res
@@ -336,7 +354,7 @@ export class InvoiceActions {
   @Effect()
   public DeleteInvoiceEmail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.DELETE_INVOICE_EMAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteInvoiceEmail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceEmail(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE,
       payload: res
@@ -351,7 +369,7 @@ export class InvoiceActions {
   @Effect()
   public SaveRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.SAVE_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.SaveRazorPayDetail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.SaveRazorPayDetail(action.payload))
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
       payload: res
@@ -428,7 +446,7 @@ export class InvoiceActions {
   @Effect()
   private GetSampleTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.getTemplates())
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.getTemplates())
     .map(response => {
       return this.getSampleTemplateResponse(response);
     });
@@ -448,7 +466,7 @@ export class InvoiceActions {
   @Effect()
   private getAllCreatedTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.getAllCreatedTemplates())
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates())
     .map(response => {
       return this.getAllCreatedTemplatesResponse(response);
     });
@@ -468,7 +486,7 @@ export class InvoiceActions {
   @Effect()
   private setTemplateAsDefault$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.setTemplateAsDefault(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload))
     .map(response => {
       return this.setTemplateAsDefaultResponse(response);
     });
@@ -490,7 +508,7 @@ export class InvoiceActions {
   @Effect()
   private deleteTemplate$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.deleteTemplate(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.deleteTemplate(action.payload))
     .map(response => {
       return this.deleteTemplateResponse(response);
     });
@@ -511,6 +529,7 @@ export class InvoiceActions {
   constructor(
     private action$: Actions,
     private _invoiceService: InvoiceService,
+    private _recurringService: RecurringVoucherService,
     private _invoiceTemplatesService: InvoiceTemplatesService,
     private _toasty: ToasterService,
     private _router: Router
@@ -552,6 +571,19 @@ export class InvoiceActions {
   public GetAllInvoicesResponse(model: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest>): CustomActions {
     return {
       type: INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE,
+      payload: model
+    };
+  }
+
+  public GetAllRecurringInvoices(): CustomActions {
+    return {
+      type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA
+    };
+  }
+
+  public GetAllRecurringInvoicesResponse(model: BaseResponse<RecurringInvoice[], string>): CustomActions {
+    return {
+      type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE,
       payload: model
     };
   }

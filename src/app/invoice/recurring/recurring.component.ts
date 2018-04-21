@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { NgForm } from '@angular/forms';
+import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
+import { Observable } from 'rxjs/Observable';
+import { AppState } from '../../store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-recurring',
@@ -10,8 +14,9 @@ import { NgForm } from '@angular/forms';
 export class RecurringComponent implements OnInit {
   public invoiceTypeOptions: IOption[];
   public intervalOptions: IOption[];
-  constructor() {
-    //
+  public recurringData$: Observable<RecurringInvoice[]>;
+  constructor(private store: Store<AppState>) {
+    this.recurringData$ = this.store.select(s => s.invoice.recurringInvoiceData);
   }
 
   public ngOnInit() {
