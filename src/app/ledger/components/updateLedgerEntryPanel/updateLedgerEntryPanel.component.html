@@ -299,9 +299,25 @@
                     </table>
                     <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
                         <table>
+                            <tr>
+                                <td class="select2-parent pdR1">
+                                    <label class="default_clr">Voucher Type</label>
+                                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
+                                </td>
+                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
+                                    <label class="default_clr">Invoice No.</label>                                    
+                                    <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
+                                </td>
+                                <td class="">
+                                    <label class="default_clr">Voucher No.</label>
+                                    <input type="text" placeholder="Voucher no." class="form-control" [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />                             
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="mrT1">
                             <tbody>
                                 <tr>
-                                    <td class="pdR">
+                                    <td class="pdR1">
                                         <label class="default_clr">Cheque Number</label>
                                         <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="vm.selectedLedger.chequeNumber" />
                                     </td>
@@ -313,21 +329,16 @@
                             </tbody>
                         </table>
                         <table class="mrT1">
-                            <tr>
-                                <td class="pdR1">
-                                    <label class="default_clr pull-left">Voucher Type</label>
-                                </td>
-                                <td class="select2-parent">
-                                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'"></sh-select>
-                                </td>
-                                <td class="pdL1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
-                                    <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
-                                </td>
-                                <td class="pdL1">
-                                    {{vm.selectedLedger?.voucherNo}}
-                                </td>
-                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td class="pdR1">
+                                        <label class="default_clr">Assign Tag</label>
+                                        <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [multiple]="true" name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
+
                     </div>
                     <div class="row">
                         <div class="col-xs-12 clearfix mrT1">

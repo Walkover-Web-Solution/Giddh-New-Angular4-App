@@ -273,6 +273,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+      this.hideEledgerWrap();
       let dateObj = resp[0];
       let params = resp[1];
       if (dateObj) {

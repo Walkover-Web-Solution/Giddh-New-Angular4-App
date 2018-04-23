@@ -18,6 +18,7 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { GeneralService } from '../../../../services/general.service';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
@@ -52,7 +53,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   constructor(private socialAuthService: AuthService,
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-    private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions) {
+    private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
@@ -112,7 +113,9 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'home';
+        this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this._route.navigate(['home']);
         this.closeModal();
       }
     });
