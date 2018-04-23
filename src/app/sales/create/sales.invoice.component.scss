@@ -1,5 +1,6 @@
 // define vars
 $themeClr: #fe5f00;
+$greyClr: #6d6d6d;
 // mixins
 
 /**
@@ -95,55 +96,54 @@ $themeClr: #fe5f00;
 }
 
 // select box
-.pure-css-select-wrapper{
-  position: relative;
-  display: block;
-  width: 20em;
-  height: 3em;
-  line-height: 3;
-  overflow: hidden;
-  border-radius: .25em;
-  /* Reset Select */
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    outline: 0;
-    box-shadow: none;
-    border: 0 !important;
-    background: transparent;
-    background-image: none;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0 0 0 .5em;
-    cursor: pointer;
-  }
-  select::-ms-expand {
-    display: none;
-  }
-  /* Arrow */
-  &::after {
-    content: '\25BC';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    padding: 0 1em;
-    color: #cccccc;
-    pointer-events: none;
-  }
-  /* Transition */
-  &:hover::after {
-    color: #bbbbbb;
-  }
-  &::after {
-    -webkit-transition: .25s all ease;
-    -o-transition: .25s all ease;
-    transition: .25s all ease;
-  }
+.pure-css-select-wrapper {
+    position: relative;
+    display: block;
+    width: 20em;
+    height: 3em;
+    line-height: 3;
+    overflow: hidden;
+    border-radius: .25em;
+    /* Reset Select */
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        outline: 0;
+        box-shadow: none;
+        border: 0 !important;
+        background: transparent;
+        background-image: none;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0 0 0 .5em;
+        cursor: pointer;
+    }
+    select::-ms-expand {
+        display: none;
+    }
+    /* Arrow */
+    &::after {
+        content: '\25BC';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0 1em;
+        color: #cccccc;
+        pointer-events: none;
+    }
+    /* Transition */
+    &:hover::after {
+        color: #bbbbbb;
+    }
+    &::after {
+        -webkit-transition: .25s all ease;
+        -o-transition: .25s all ease;
+        transition: .25s all ease;
+    }
 }
-
 
 // styles
 .form-group {
@@ -189,9 +189,9 @@ $themeClr: #fe5f00;
     &.noMarg {
         @include marg(A, 0);
     }
-    .form-control.voucher-selector{
-      width: 200px;
-      text-transform: capitalize;
+    .form-control.voucher-selector {
+        width: 200px;
+        text-transform: capitalize;
     }
 }
 
@@ -206,12 +206,13 @@ $themeClr: #fe5f00;
 }
 
 #actionPane {
-    width: calc(100% + 10px);
-    height: 80px;
-    left: -5px;
+    width: 100%;
+    // height: 80px;
+    // left: -5px;
     position: relative;
+    float: left;
     @include padBth(20px, 0);
-    @include bgClr(#7d7d7d);
+    @include bgClr(#cccccc);
 }
 
 .dropup {
@@ -226,7 +227,7 @@ $themeClr: #fe5f00;
     .collapse-pane-heading {
         @extend .cp;
         @include marg(B, 0px);
-        color: $themeClr;
+        color: $greyClr;
         display: flex;
         align-items: center;
         height: 30px;
@@ -237,7 +238,7 @@ $themeClr: #fe5f00;
             align-items: center;
         }
         .ico-box {
-            @include bdr(1px, solid, $themeClr);
+            @include bdr(1px, solid, $greyClr);
             @include box(20px, 20px);
             @include marg(R, 10px);
             @include radius(3px);
@@ -254,6 +255,7 @@ $themeClr: #fe5f00;
 
 .action-panel-td {
     width: 80px;
+    padding: 0 !important;
     span {
         padding: 5px;
         display: inline-block
@@ -335,4 +337,103 @@ ng-select.splSales {
 
 .salesTax .taxInput {
     text-align: right;
+}
+
+.billing-address {
+    background: #fff;
+    border: 1px solid #d6d6d6;
+    // padding: 5px;
+    &.disabled {
+        background: #eee;
+    }
+    textarea {
+        border: none;
+        // padding: 0 !important;
+    }
+}
+
+.input-custom {
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.pl0 {
+    padding-left: 0;
+}
+
+.balance-due {
+    display: block;
+    color: #6b6c72;
+    line-height: 1.2rem;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.sp-rupees {
+    display: block;
+    font-size: 2.4rem;
+}
+
+.table-custom-invoice {
+    >thead {
+        >tr {
+            >th {
+                border: 1px dotted #c7c7c7 !important;
+                padding: 10px 8px;
+                &:first-child {
+                    border-left: none !important;
+                }
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+        }
+    }
+    >tbody {
+        >tr {
+            >td {
+                border: 1px dotted #c7c7c7 !important;
+                padding: 10px 8px;
+                &:first-child {
+                    border-left: none !important;
+                }
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+        }
+    }
+}
+
+.row-active {
+    box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.1)
+}
+
+.attentionTo {
+    width: 250px !important;
+}
+
+.dateinvoice {
+    max-width: 110px !important;
+}
+
+.max-600 {
+    max-width: 600px;
+}
+
+.spcl_dropdown {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 20px;
+    // color: #393a3d;
+    padding: 0;
+}
+
+.disabled {
+    background: #eee;
+    pointer-events: none;
+    opacity: 0.7;
 }
