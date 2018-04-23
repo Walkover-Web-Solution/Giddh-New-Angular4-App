@@ -312,6 +312,26 @@ export class SettingsIntegrationActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public UpdateAutoCollectUser$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload))
+    .map(response => this.UpdateAutoCollectUserResponse(response));
+
+  @Effect()
+  public UpdateAutoCollectUserResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        // console.log(data);
+        // this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
