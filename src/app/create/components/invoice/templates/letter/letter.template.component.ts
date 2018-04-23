@@ -40,10 +40,10 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   @ViewChild('invoicePreviewModal') public invoicePreviewModal: ModalDirective;
 
   public invFormData: VoucherClass;
-  public isGenDtlCollapsed: boolean = true;
-  public isMlngAddrCollapsed: boolean = true;
+  public isGenDtlCollapsed: boolean = false;
+  public isMlngAddrCollapsed: boolean = false;
   public isOthrDtlCollapsed: boolean = false;
-  public isCustDtlCollapsed: boolean = true;
+  public isCustDtlCollapsed: boolean = false;
   public selectedFiles: any;
   public logoPath: any;
   public data: VoucherClass;
@@ -275,7 +275,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     this.CreateInvoiceForm = this.fb.group({
       entries: this.fb.array([this.returnArrayData()]),
       userDetails: this.fb.group({
-        countryCode: ['', Validators.required],
+        countryCode: ['IN', Validators.required],
         userName: [''],
         userEmail: '',
         userMobileNumber: '',
