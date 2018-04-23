@@ -4583,3 +4583,7 @@ table td[class*=col-]:last-child {
 .max900 {
     max-width: 900px;
 }
+
+.m-r-15 {
+    margin-right: 15px;
+}

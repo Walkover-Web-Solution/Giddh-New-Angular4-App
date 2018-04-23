@@ -20,8 +20,15 @@ export class PermissionDataService {
         let superAdminIndx = currentCompany.userEntityRoles.findIndex((role) => {
          return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
         });
+        let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
+        if (!companyEntityIndx) {
+          companyEntityIndx = currentCompany.userEntityRoles.findIndex((role) => {
+            return (role.entity.entity === 'COMPANY');
+          });
+        }
+        companyEntityIndx = companyEntityIndx !== -1 ? companyEntityIndx : 0;
         this.isUserSuperAdmin = superAdminIndx !== -1 ? true : false;
-        this.getData = currentCompany.userEntityRoles[0].role.scopes;
+        this.getData = currentCompany.userEntityRoles[companyEntityIndx].role.scopes;
       }
     })).subscribe();
   }
