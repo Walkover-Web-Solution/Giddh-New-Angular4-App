@@ -264,6 +264,14 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
+    case SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
+      let savecashFreeRes: BaseResponse<any, any> = action.payload;
+      if (savecashFreeRes.status === 'success') {
+        newState.integration.payoutForm = savecashFreeRes.request;
+        return Object.assign({}, state, newState);
+      }
+      return state;
     case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE:
       let dltCashFreeRes: BaseResponse<string, string> = action.payload;
       if (dltCashFreeRes.status === 'success') {
@@ -272,11 +280,19 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
 
-    // case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
     case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE:
       let autoCollectRes: BaseResponse<any, any> = action.payload;
       if (autoCollectRes.status === 'success') {
         newState.integration.autoCollect = autoCollectRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
+      let saveautoCollectRes: BaseResponse<any, any> = action.payload;
+      if (saveautoCollectRes.status === 'success') {
+        newState.integration.autoCollect = saveautoCollectRes.request;
         return Object.assign({}, state, newState);
       }
       return state;
@@ -292,6 +308,15 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       let paymentGatewayRes: BaseResponse<any, any> = action.payload;
       if (paymentGatewayRes.status === 'success') {
         newState.integration.paymentGateway = paymentGatewayRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE:
+      let paymntGtwy: BaseResponse<any, any> = action.payload;
+      if (paymntGtwy.status === 'success') {
+        newState.integration.paymentGateway = paymntGtwy.request;
         return Object.assign({}, state, newState);
       }
       return state;
