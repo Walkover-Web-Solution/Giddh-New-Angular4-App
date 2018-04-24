@@ -44,6 +44,16 @@ const VALUE_FILTER = [
   .bdrT {
     border-color: #ccc;
   }
+  :host ::ng-deep .fb__1-container {
+    justify-content: flex-start;
+  }
+  :host ::ng-deep .fb__1-container .form-group {
+    margin-right: 10px;
+    margin-bottom:0;
+  }
+  :host ::ng-deep .fb__1-container .date-range-picker {
+    min-width: 150px;
+  }
   `]
 })
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -174,7 +184,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public goToManageGroup() {
     if (this.groupUniqueName) {
-      this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName]);
+      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      this.setInventoryAsideState(true, true, true);
+      // this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName]);
     }
   }
 
@@ -209,5 +221,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public filterFormData() {
     this.getGroupReport(true);
+  }
+
+  /**
+   * setInventoryAsideState
+   */
+  public setInventoryAsideState(isOpen, isGroup, isUpdate) {
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
   }
 }

@@ -270,7 +270,7 @@ h1 {
 }
 
 .login_box {
-    background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
+    background: #FFF8EA url('/assets/images/new/banner-grid-design.png') repeat;
     padding: 20px 70px;
 }
 
@@ -456,6 +456,12 @@ small {
 
 .img_hover:hover img:first-child {
     display: none;
+}
+
+.hint ul {
+    font-size: 13px;
+    padding: 7px;
+    padding-left: 18px;
 }
 
 @media only screen and (max-width: 768px) {
