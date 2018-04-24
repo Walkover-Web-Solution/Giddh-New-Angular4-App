@@ -176,7 +176,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
-  public autoFillShipping: boolean = true;
+  public autoFillShipping: boolean = false;
   public toggleFieldForSales: boolean = true;
   public dueAmount: number;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -239,7 +239,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({ value: c.countryName, label: `${c.countryName}` });
     });
 
     // bind state sources
@@ -247,7 +247,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       let arr: IOption[] = [];
         if (states) {
           states.map(d => {
-            arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+            arr.push({ label: `${d.name}`, value: d.code });
           });
         }
         this.statesSource$ = Observable.of(arr);

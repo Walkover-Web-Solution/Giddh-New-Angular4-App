@@ -12,6 +12,9 @@ import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/a
 import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { SessionActions } from '../actions/session.action';
+import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'user-details',
@@ -45,11 +48,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public selectedCompany: CompanyResponse = null;
   public user: UserDetails = null;
   public apiTabActivated: boolean = false;
+  public userSessionResponse$: Observable<any>;
+  public userSessionList: any[] = [];
+  public moment = moment;
+  public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
+  public userSessionId: any = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
     private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
-    private _companyActions: CompanyActions, private router: Router) {
+    private _companyActions: CompanyActions, private router: Router, private _sessionAction: SessionActions) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -64,6 +72,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.isAddNewMobileNoSuccess$ = this.store.select(s => s.login.isAddNewMobileNoSuccess).takeUntil(this.destroyed$);
     this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).takeUntil(this.destroyed$);
     this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).takeUntil(this.destroyed$);
+    this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).takeUntil(this.destroyed$);
+
     this.authenticateTwoWay$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.authenticateTwoWay;
@@ -114,6 +124,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       }
       if (session.user) {
         this.user = cloneDeep(session.user.user);
+        this.userSessionId = _.cloneDeep(session.user.session.id);
       }
     });
 
@@ -124,6 +135,15 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'user-details';
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
+    this.userSessionResponse$.subscribe(s => {
+      if (s && s.length) {
+        this.userSessionList = s;
+      } else {
+        this.store.dispatch(this._sessionAction.getAllSession());
+      }
+    });
+
   }
 
   public addNumber(no: string) {
@@ -289,5 +309,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  /**
+   * deleteSession
+   */
+  public deleteSession(sessionId: string) {
+    this.store.dispatch(this._sessionAction.deleteSession(sessionId));
+  }
+
+  public clearAllSession() {
+    this.store.dispatch(this._sessionAction.deleteAllSession());
   }
 }
