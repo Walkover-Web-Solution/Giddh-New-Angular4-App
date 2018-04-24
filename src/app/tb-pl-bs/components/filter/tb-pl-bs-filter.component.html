@@ -68,7 +68,7 @@
         </div>
         <!-- Filter by Tag -->
         <div class="form-group pull-left mrL1 pdL">
-            <sh-select [options]="tags$ | async" name="selectedTag" [(ngModel)]="selectedTag" [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'" [ItemHeight]="33" [width]="'200px'"></sh-select>    
+            <sh-select [options]="tags$ | async" name="selectedTag" [(ngModel)]="selectedTag" [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'" [ItemHeight]="33" [width]="'200px'"></sh-select>
         </div>
         <div class="col-xs-3">
             <button class="btn btn-default btn-sm" (click)="emitExpand()"> {{expand ? 'Collapse All' : 'Expand All'}}</button>
