@@ -7,6 +7,8 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 
 @Component({
   selector: 'stock-list',
@@ -14,14 +16,16 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     .active {
       color: #d35f29 !important;
     }
-    .stock-items li div {
-      padding-left: 15px;
-    }
   `],
   template: `
-  <ul class="list-unstyled stock-items" [hidden]="!Groups.isOpen" >
-    <li  (click)="OpenStock(item, $event)" *ngFor="let item of Groups.stocks" >
-      <div [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">{{item.name}}</div>
+  <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen" >
+    <li class="clearfix" *ngFor="let item of Groups.stocks" >
+      <a (click)="OpenStock(item, $event)" class="pull-left">
+        <div [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">{{item.name}}</div>
+      </a>
+      <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
+        Edit
+      </button>
     </li>
   </ul>
   `
@@ -30,6 +34,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   public activeStockUniqueName$: Observable<string>;
   public activeGroup$: Observable<StockGroupResponse>;
   public sub: Subscription;
+  public groupUniqueName: string;
 
   @Input()
   public Stocks: any[];
@@ -37,11 +42,16 @@ export class StockListComponent implements OnInit, OnDestroy {
   public Groups: IGroupsWithStocksHierarchyMinItem;
   public stockUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
     this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
   }
   public ngOnInit() {
+
+    this.sub = this.route.params.subscribe(params => {
+      this.groupUniqueName = params['groupUniqueName'];
+    });
+
     if (this.Groups.stocks) {
       // this.Groups.stocks = [];
       // this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name']);
@@ -55,5 +65,21 @@ export class StockListComponent implements OnInit, OnDestroy {
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
     this._router.navigate(['/pages', 'inventory', 'add-group', this.Groups.uniqueName, 'stock-report', item.uniqueName]);
+  }
+
+  public goToManageStock(stock) {
+    if (stock && stock.uniqueName) {
+      this.store.dispatch(this.inventoryAction.showLoaderForStock());
+      this.store.dispatch(this.sideBarAction.GetInventoryStock(stock.uniqueName, this.groupUniqueName));
+      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      this.setInventoryAsideState(true, false, true);
+    }
+  }
+
+  /**
+   * setInventoryAsideState
+   */
+  public setInventoryAsideState(isOpen, isGroup, isUpdate) {
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
   }
 }

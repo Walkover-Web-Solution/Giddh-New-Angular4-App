@@ -42,6 +42,11 @@ export interface InventoryState {
   createCustomStockSuccess: boolean;
   showNewGroupAsidePane: boolean;
   showNewCustomUnitAsidePane: boolean;
+  inventoryAsideState: {
+    isOpen: boolean,
+    isGroup: boolean,
+    isUpdate: boolean,
+  };
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -90,7 +95,12 @@ const initialState: InventoryState = {
   groupStockReport: null,
   createCustomStockSuccess: false,
   showNewGroupAsidePane: false,
-  showNewCustomUnitAsidePane: false
+  showNewCustomUnitAsidePane: false,
+  inventoryAsideState: {
+    isOpen: false,
+    isGroup: false,
+    isUpdate: false,
+  }
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -540,6 +550,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       return Object.assign({}, state, { showNewGroupAsidePane: action.payload });
     case InventoryActionsConst.NewCustomUnitAsidePane:
       return Object.assign({}, state, { showNewCustomUnitAsidePane: action.payload });
+    case InventoryActionsConst.ManageInventoryAside:
+      return Object.assign({}, state, { inventoryAsideState: action.payload });
     default:
       return state;
   }
