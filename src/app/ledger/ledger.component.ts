@@ -110,6 +110,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public eCrBalAmnt: number;
   public advanceSearchRequest: any;
   public isBankOrCashAccount: boolean;
+  public closingBalanceBeforeReconcile: { amount: number, type: string };
+  public reconcileClosingBalanceForBank: { amount: number, type: string };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -271,6 +273,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+      this.hideEledgerWrap();
       let dateObj = resp[0];
       let params = resp[1];
       if (dateObj) {
@@ -345,8 +348,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.lc.transactionData$.subscribe(lt => {
+    this.lc.transactionData$.subscribe((lt: any) => {
       if (lt) {
+        if (lt.closingBalanceForBank) {
+          this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
+          this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
+        }
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
         setTimeout(() => {
@@ -527,6 +534,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
+    this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.trxRequest)));
   }
 
@@ -833,6 +841,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getReconciliation() {
+    this.lc.transactionData$.take(2).subscribe((val) => {
+      if (val) {
+        this.closingBalanceBeforeReconcile =  val.closingBalance;
+        this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+      }
+    });
     let dataToSend = {
       reconcileDate: null,
       closingBalance: 0,
