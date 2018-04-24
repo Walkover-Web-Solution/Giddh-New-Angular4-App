@@ -2511,7 +2511,8 @@ label {
 }
 
 .form_bg {
-    background: #f4f5f5;
+    background: #f5f5f5;
+    padding: 10px 20px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3722,7 +3723,7 @@ input[type='checkbox'][disabled] {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.icon-btn .btn-xs {
+.ico-btn .btn-xs {
     padding: 1px 5px;
     font-size: 12px;
     line-height: 1.5;
@@ -4420,14 +4421,15 @@ table td[class*=col-]:last-child {
 /* ======================================= INVENTORY CSS ===================================== */
 
 .form_header {
-    padding: 12px 20px;
-    background: #e5e5e5;
+    padding: 12px 15px;
+    background: #f5f5f5;
     color: #333333;
+    border-bottom: 1px solid #ddd;
 }
 
 .form_body {
     background: #fff;
-    padding: 20px;
+    /* padding: 15px; */
 }
 
 .noHover:hover td {
@@ -4466,7 +4468,11 @@ table td[class*=col-]:last-child {
 
 /* left bar menu */
 
-.user_dropdown {
+<<<<<<< HEAD .form_body .toggle-btn label {
+    color: #7f7f7f;
+}
+
+=======>>>>>>>36e15550f7c2c8d39b14b8dc346da2c05fafb04b .user_dropdown {
     width: 200px;
     right: 4px;
 }
@@ -4550,8 +4556,19 @@ table td[class*=col-]:last-child {
 
 .userName_wrap {
     width: calc(100% - 40px);
-
 }
+
+<<<<<<< HEAD .parent-Group>.stock-grp-list:first-child {
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow: auto;
+}
+
+.dropdown-menu>li>a {
+    padding: 2px 10px;
+}
+
+=======>>>>>>>36e15550f7c2c8d39b14b8dc346da2c05fafb04b
 /* ==================================================
     Branch
 ================================================== */
@@ -4570,11 +4587,21 @@ table td[class*=col-]:last-child {
 .illustration_box {
     border-radius: 4px;
     padding: 25px 20px;
-    box-shadow: 0 0 8px #b3b3b329;
-    background: #fdfdfd;
-    margin-top: 70px;
+    /* box-shadow: 0 0 8px #b3b3b329;
+    background: #fdfdfd; */
+    margin-top: 40px;
 }
 
 .illustration_box img {
-    max-width: 300px;
+    /* max-width: 85%; */
+    opacity: 0.7;
+    /* max-width: 300px; */
+}
+
+.max900 {
+    max-width: 900px;
+}
+
+.m-r-15 {
+    margin-right: 15px;
 }

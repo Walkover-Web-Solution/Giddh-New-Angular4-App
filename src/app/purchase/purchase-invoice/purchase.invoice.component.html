@@ -266,7 +266,7 @@
                     <td class="text-center">
                         <input type="checkbox" (click)="updateOncheck(invoice, 'availItc', $event.target.checked);" [(ngModel)]="invoice.availItc" [disabled]="!editMode || (selectedRowIndex != i && editMode)" />
                     </td>
-                    <td class="text-center icon-btn">
+                    <td class="text-center ico-btn">
                         <button class="btn btn-xs" type="button" [disabled]="" *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)="editRow(i)">
                                 <i aria-hidden="true" class="fa fa-pencil"></i>
                             </button>
