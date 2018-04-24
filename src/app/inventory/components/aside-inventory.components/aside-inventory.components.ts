@@ -81,6 +81,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
   public manageInProcess$: Observable<any>;
   public addGroup: boolean;
   public addStock: boolean;
+  public createStockSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -90,6 +91,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
     this.openGroupAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).takeUntil(this.destroyed$);
     this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).takeUntil(this.destroyed$);
     this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).takeUntil(this.destroyed$);
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -116,6 +118,12 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
       if (d) {
         this.closeAsidePane();
       }
+    });
+    // subscribe createStockSuccess for resting form
+    this.createStockSuccess$.subscribe(s => {
+      if (s) {
+        this.closeAsidePane();
+        }
     });
 
   }
