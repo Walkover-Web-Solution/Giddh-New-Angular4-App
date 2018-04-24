@@ -192,6 +192,6 @@ button.form-control:focus {
 
 .bottom-border-only {
     border: none !important;
-    border-bottom: 1px solid gray !important;
+    border-bottom: 1px solid #d6d6d6 !important;
     border-radius: 0 !important;
 }
