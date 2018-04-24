@@ -12,7 +12,7 @@ export interface ChangeEvent {
   selector: 'virtual-scroll',
   template: `
     <div class="total-padding" [style.height]="(items.length === 0 ? noResultLinkEnabled ? NoFoundMsgHeight + NoFoundLinkHeight : NoFoundMsgHeight : scrollHeight) + 'px'"></div>
-    <div class="scrollable-content" #content [style.transform]="'translateY(' + topPadding + 'px)'">
+    <div class="scrollable-content" #content [style.transform]="'translateY(' + topPadding + 'px)'" [style.padding-top.px]="salesShSelectPading">
       <ng-content></ng-content>
     </div>
   `,
@@ -80,6 +80,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
   @ViewChild('content', {read: ElementRef})
   public contentElementRef: ElementRef;
+  @Input() public salesShSelectPading: number;
 
   public onScrollListener: any;
   public topPadding: number;
