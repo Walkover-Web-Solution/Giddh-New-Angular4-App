@@ -444,6 +444,12 @@ small {
     bottom: 0;
 }
 
+.hint ul {
+    font-size: 13px;
+    padding: 7px;
+    padding-left: 18px;
+}
+
 @media only screen and (max-width: 1200px) {
     .slide_content {
         padding: 0 55px;
@@ -489,5 +495,8 @@ small {
     }
     .client_testimonial {
         margin: 0 auto;
+    }
+    .hint ul {
+        text-align: left
     }
 }
