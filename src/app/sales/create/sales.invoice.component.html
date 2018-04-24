@@ -14,7 +14,7 @@
     </div>
 </div>
 <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate>
-    <div class="clearfix mrB2">
+    <div class="clearfix mrB1">
         <div class="clearfix pdT2">
             <div class="col-xs-9">
                 <div class="flex-row">
@@ -115,7 +115,7 @@
                     <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                     </div> -->
                     </div>
-                    <div class="row mt20">
+                    <div class="row mt10">
                         <div class="form-group pl0 m-r-15">
                             <!--col-xs-3 -->
                             <label>Invoice No.</label>
@@ -160,7 +160,7 @@
                     <div class="row">
                         <div class="">
                             <div class="col-xs-4 pl0">
-                                <div class="row mt10">
+                                <div class="row mt5">
                                     <div class="form-group">
                                         <label>Billing Address</label>
                                         <div class="billing-address clearfix">
@@ -168,7 +168,7 @@
                                             <div class="">
                                                 <div class="col-sm-4 pd mrB1">
                                                     <!-- <label>Country</label> -->
-                                                    <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="country" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
+                                                    <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="billlingCountry" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
                                                     <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
                                                 </div>
                                                 <div class="col-sm-4 pd mrB1">
@@ -198,7 +198,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-4 mrL2">
-                                <div class="row mt10">
+                                <div class="row mt5">
                                     <div class="form-group p0 width100">
                                         <label>
                         <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
@@ -217,12 +217,12 @@
                                                         <!-- <label>State</label> -->
                                                         <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
                                                         <!-- (selected)="autoFillShippingDetails()" -->
-                                                        <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
+                                                        <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
                                                     </div>
                                                     <div class="col-sm-4 pd mrB1">
                                                         <!-- <label>GSTIN</label> -->
                                                         <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)"
-                                                        />
+                                                            placeholder="GSTIN" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -345,7 +345,7 @@
                                     </tbody>
                                 </table>
                             </td>
-    
+
                             <!-- <td style="width: 120px;">
                                 <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" [disabled]="!transaction.isStockTxn"
                                 />
@@ -387,14 +387,14 @@
                         </tr>
                         <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
                             <td>{{ entryIdx+1 }}</td>
-                            <td>{{moment(transaction.date).format(GIDDH_DATE_FORMAT)}}</td>
-                            <td>{{transaction.accountName}} <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.uniqueName}})</span> </td>
-                            <td>{{transaction.description}}</td>
-                            <td>
+                            <td style="min-width: 115px;width: 115px">{{moment(transaction.date).format(GIDDH_DATE_FORMAT)}}</td>
+                            <td style="min-width:215px">{{transaction.accountName}} <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.uniqueName}})</span> </td>
+                            <td style="min-width:220px">{{transaction.description}}</td>
+                            <td style="width:102px">
                                 <span [hidden]="transaction.hsnOrSac !== 'hsn'">{{transaction.hsnNumber}}</span>
                                 <span [hidden]="transaction.hsnOrSac !== 'sac'">{{transaction.sacNumber}}</span>
                             </td>
-                            <td>
+                            <td style="width: 300px;">
                                 <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
                                     <tbody>
                                         <tr>
@@ -414,19 +414,19 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td class="text-right">{{transaction.amount}}</td>
-                            <td class="text-right">
+                            <td class="text-right" style="width: 110px;">{{transaction.amount}}</td>
+                            <td class="text-right" style="width: 100px">
                                 <span *ngFor="let discount of entry.discounts; let disIndx = index">
                                     <span *ngIf="discount.amount">{{discount.amount}}<span *ngIf="disIndx != (entry.discounts?.length -1)"> +</span></span>
                                 </span>
                             </td>
                             <!-- <td>{{transaction.taxableValue}}</td> -->
-                            <td class="text-right">{{entry.taxList.toString()}}</td>
-                            <td class="text-right">{{transaction.total}}</td>
+                            <td class="text-right" style="width: 100px">{{entry.taxList.toString()}}</td>
+                            <td class="text-right" style="width: 120px;">{{transaction.total}}</td>
                             <td></td>
                         </tr>
                     </ng-container>
-    
+
                 </tbody>
             </table>
             <!-- sub total and total calc -->
