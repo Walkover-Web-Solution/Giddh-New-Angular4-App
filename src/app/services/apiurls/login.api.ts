@@ -1,7 +1,9 @@
 
 export const LOGIN_API = {
-  SignupWithPassword: 'signup',
-  LoginWithPassword: 'login-with-password',
+  // SignupWithPassword: 'signup',
+  SignupWithPassword: 'v2/signup',
+  // LoginWithPassword: 'login-with-password',
+  LoginWithPassword: 'v2/login-with-password',
   SignupWithEmail: 'signup-with-email',
   VerifyEmail: 'v2/verify-email',
   SignupWithMobile: 'generate-otp',
