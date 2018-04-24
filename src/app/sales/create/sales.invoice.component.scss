@@ -323,12 +323,16 @@ ng-select.splSales {
 [data-field="Unit"],
 [data-field="Rate"],
 [data-field="Amount"],
-[data-field="Discount"],
+[data-field="Disc."],
 [data-field="Taxable"],
 [data-field="Tax"],
 [data-field="Total"],
 [data-field="S.No"] {
     text-align: right;
+}
+
+[data-field="Action"] {
+    text-align: center;
 }
 
 .table>thead>tr th {
@@ -427,7 +431,7 @@ ng-select.splSales {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: 20px;
+    font-size: 24px;
     // color: #393a3d;
     padding: 0;
 }

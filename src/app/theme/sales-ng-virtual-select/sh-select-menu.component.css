@@ -51,3 +51,10 @@
 #noresult:hover {
     background: transparent;
 }
+
+.no-result-link {
+    top: 0;
+    z-index: 99;
+    background: #fff;
+    width: calc(100% - 15px);
+}
