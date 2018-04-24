@@ -377,9 +377,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.makeCustomerList();
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
-      setTimeout(() => {
-        this.invFormData.accountDetails.uniqueName = 'cashaccount';
-      }, 1000);
+      this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
+        if (acc && acc.length === 1) {
+          this.invFormData.accountDetails.uniqueName = acc[0].value;
+        }
+      });
 
       // listen for newly added stock and assign value
       Observable.combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
