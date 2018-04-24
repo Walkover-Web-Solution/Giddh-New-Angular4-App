@@ -104,7 +104,7 @@
                                 <span>{{""}}</span>
                             </td> -->
                             <td class="pdR1" *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
-                                <label class="default_clr">Invoice No.</label>                                
+                                <label class="default_clr">Invoice No.</label>
                                 <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
                         </tr>
@@ -125,18 +125,16 @@
                         </tbody>
                     </table>
                     <table class="mrT1">
-                            <tbody>
-                                <tr>
-                                    <td class="">
-                                        <label class="default_clr">Assign Tag</label>                                
-                                        <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <tbody>
+                            <tr>
+                                <td class="">
+                                    <label class="default_clr">Assign Tag</label>
+                                    <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-
             </div>
         </div>
         <!--map bank transactions-->
