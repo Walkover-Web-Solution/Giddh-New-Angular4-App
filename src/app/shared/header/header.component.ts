@@ -184,7 +184,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.user$.subscribe((u) => {
       if (u) {
         let userEmail = u.email;
-        this.getUserAvatar(userEmail);
+        // this.getUserAvatar(userEmail);
         let userEmailDomain = userEmail.replace(/.*@/, '');
         if (userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1) {
           this.userIsCompanyUser = true;
