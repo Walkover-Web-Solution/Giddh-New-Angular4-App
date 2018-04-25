@@ -16,6 +16,7 @@ import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { DOCUMENT } from '@angular/platform-browser';
+import { ToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'login',
@@ -46,6 +47,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public selectedBanner: string = null;
   public loginUsing: string = null;
   public urlPath: string = '';
+  public loginWithPasswdForm: FormGroup;
+  public isLoginWithPasswordInProcess$: Observable<boolean>;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -59,6 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private loginAction: LoginActions,
     private authService: AuthService,
     @Inject(DOCUMENT) private document: Document,
+    private _toaster: ToasterService
     ) {
     this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -94,6 +98,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         // this.router.navigate(['home']);
       }
     });
+    this.isLoginWithPasswordInProcess$ = store.select(state => {
+      return state.login.isLoginWithPasswordInProcess;
+    }).takeUntil(this.destroyed$);
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
@@ -121,6 +128,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     this.twoWayOthForm = this._fb.group({
       otp: ['', [Validators.required]]
+    });
+    this.loginWithPasswdForm = this._fb.group({
+      uniqueKey: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$')]]
     });
     this.setCountryCode({ value: 'India', label: 'India' });
 
@@ -320,5 +331,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     let bannerArr = ['1', '2', '3', '4', '5'];
     let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
     this.selectedBanner = 'slide' + selectedSlide;
+  }
+
+  public loginWithPasswd(model: FormGroup) {
+    let ObjToSend = model.value;
+    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    if (pattern.test(ObjToSend.password)) {
+      this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
+    } else {
+      return this._toaster.errorToast('Password is weak');
+    }
   }
 }

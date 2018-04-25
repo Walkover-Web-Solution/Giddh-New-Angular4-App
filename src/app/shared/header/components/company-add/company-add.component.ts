@@ -112,10 +112,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       if (s && !this.createBranch) {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = 'home';
+        stateDetailsRequest.lastState = 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this._route.navigate(['home']);
+        this._route.navigate(['sales']);
         this.closeModal();
       }
     });
