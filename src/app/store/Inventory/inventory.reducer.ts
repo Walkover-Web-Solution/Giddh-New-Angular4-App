@@ -47,6 +47,7 @@ export interface InventoryState {
     isGroup: boolean,
     isUpdate: boolean,
   };
+  deleteStockSuccess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -100,7 +101,8 @@ const initialState: InventoryState = {
     isOpen: false,
     isGroup: false,
     isUpdate: false,
-  }
+  },
+  deleteStockSuccess: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -437,7 +439,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       }
       return Object.assign({}, state, { isStockUpdateInProcess: false });
     case InventoryActionsConst.RemoveStock:
-      return Object.assign({}, state, { isStockDeleteInProcess: true });
+        return Object.assign({}, state, { isStockDeleteInProcess: true, deleteStockSuccess: false });
     case InventoryActionsConst.RemoveStockResponse:
       let remStockResp: BaseResponse<string, string> = action.payload;
       if (remStockResp.status === 'success') {
@@ -448,7 +450,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           groupsWithStocks: groupArray,
           activeStock: null,
           activeStockUniqueName: null,
-          isStockDeleteInProcess: false
+          isStockDeleteInProcess: false,
+          deleteStockSuccess: true
         });
       }
       return Object.assign({}, state, { isStockDeleteInProcess: false });
