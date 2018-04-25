@@ -10,16 +10,25 @@ import { isNull, pick } from '../../lodash-optimized';
  */
 export const VOUCHER_TYPE_LIST: any[] = [
   {
-    value: 'Invoice',
+    value: 'Sales',
+    label: 'Sales',
+    additional: {
     label: 'Invoice'
+    }
   },
   {
     value: 'Credit Note',
+    label: 'Credit Note',
+    additional: {
     label: 'Credit Note'
+    }
   },
   {
     value: 'Debit Note',
+    label: 'Debit Note',
+    additional: {
     label: 'Debit Note'
+    }
   }
 ];
 /*
@@ -262,11 +271,15 @@ export class SalesEntryClass {
   public taxList?: string[];
   public voucherType: string;
   public entryTotal: number;
+  public taxSum?: number;
+  public discountSum?: number;
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
     this.taxes = [];
     this.taxList = [];
     this.discounts = [];
+    this.taxSum = 0;
+    this.discountSum = 0;
   }
 }
 

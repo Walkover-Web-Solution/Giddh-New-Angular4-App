@@ -20,7 +20,10 @@ import { ITaxDetail } from 'app/models/interfaces/tax.interface';
       cursor: not-allowed;
       opacity: .5;
     }
-  `],
+    .form-control[readonly] {
+      background: #fff !important;
+    }
+    `],
   providers: []
 })
 
