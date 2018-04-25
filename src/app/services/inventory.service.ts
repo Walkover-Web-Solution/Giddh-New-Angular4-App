@@ -344,7 +344,7 @@ export class InventoryService {
    * get GetGroupStocksReport
    */
   public GetGroupStocksReport(stockReportRequest: GroupStockReportRequest): Observable<BaseResponse<GroupStockReportResponse, GroupStockReportRequest>> {
-    console.log('stockReportRequest is :', stockReportRequest);
+    // console.log('stockReportRequest is :', stockReportRequest);
     let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT;
     if (stockReportRequest.entity) {
       url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));

@@ -139,7 +139,7 @@
     "@angular/compiler-cli": "5.1.0",
     "@angular/core": "5.1.0",
     "@angular/forms": "5.1.0",
-    "@angular/language-service": "5.1.0",
+    "@angular/language-service": "^5.2.9",
     "@angular/platform-browser": "5.1.0",
     "@angular/platform-browser-dynamic": "5.1.0",
     "@angular/platform-server": "5.1.0",
