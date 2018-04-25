@@ -241,6 +241,7 @@
         <tab heading="Session" [active]="">
             <div class="box clearfix mrT2">
                 <h1 class="section_head pdT0">Activity History</h1>
+                <button class="btn btn-primary" (click)="clearAllSession()">Delete All</button>
                 <p class="grey_clr">Access and manage your activity history details from anywhere at anytime. This will help you to monitor all your account access.</p>
                 <div class="max900 row mrT1">
                     <table class="table-bordered basic table">
@@ -254,27 +255,30 @@
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>111.118.250.236</td>
-                                <td>02/04/2018</td>
-                                <td>11:22:00</td>
-                                <td>0d:01:55:02</td>
-                                <td>Chrome</td>
-                                <td class="ico-btn text-center">Current</td>
-                            </tr>
-                            <tr>
+                        <tbody *ngIf="userSessionList.length">
+                            <!-- <tr>
                                 <td>111.118.250.236</td>
                                 <td>02/04/2018</td>
                                 <td>11:22:00</td>
                                 <td>0d:01:55:02</td>
                                 <td>Chrome</td>
                                 <td class="ico-btn text-center">
-                                    <button type="button" class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
+                                </td>
+                            </tr> -->
+                            <tr *ngFor="let session of userSessionList">
+                                <td>{{ session.ipAddress }}</td>
+                                <td>{{ moment(session.createdAt).format('DD/MM/YYYY') }}</td>
+                                <td>{{ moment(session.createdAt).format('LTS') }}</td>
+                                <td>{{moment(session.createdAt).subtract(moment(), 'days')}}</td>
+                                <td> {{ session.userAgent }}</td>
+                                <td class="ico-btn text-center">
+                                    <span *ngIf="userSessionId === session.sessionId">Current</span>
+                                    <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId)" *ngIf="userSessionId !== session.sessionId"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                                 </td>
                             </tr>
+
                         </tbody>
-                        <tbody>
+                        <tbody *ngIf="!userSessionList.length">
                             <tr>
                                 <td colspan="6" class="text-center empty_table">
                                     <h1>No Record Found !!</h1>

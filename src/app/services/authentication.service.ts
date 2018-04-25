@@ -221,7 +221,19 @@ export class AuthenticationService {
       }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
 
-  // fetech user profile picture using emailId
+  public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
+    model.email = this._generalService.user.email;
+    model.environment = this.config.apiUrl;
+    model.userUniqueName = this._generalService.user.uniqueName;
+    return this._http.post(this.config.apiUrl + 'exception/invalid-json', model).map((res) => {
+        let data: BaseResponse<AuthKeyResponse, string> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+  }
+
+  // fetch user profile picture using emailId
   public getUserAvatar(userId) {
     return this._http.get('https://picasaweb.google.com/data/entry/api/user/:user_id?alt=json'
       .replace(':user_id', userId)).map(res => {
@@ -229,4 +241,44 @@ export class AuthenticationService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
   }
+
+  // Get User Sessions
+  public GetUserSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.get(this.config.apiUrl + LOGIN_API.GET_SESSION
+      .replace(':userEmail', userEmail)).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Delete Single Sessions
+  public DeleteSession(sessionId) {
+    let userEmail = this._generalService.user.email;
+    let id = { sessionId };
+    return this._http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION, id).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Delete All Sessions
+  public DeleteAllSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION.replace(':userEmail', userEmail)).map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Delete All Sessions
+  public UpdateSession() {
+    let userEmail = this._generalService.user.email;
+    return this._http.put(this.config.apiUrl + LOGIN_API.UPDATE_SESSION
+      .replace(':userEmail', userEmail), '').map(res => {
+        let data = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
 }

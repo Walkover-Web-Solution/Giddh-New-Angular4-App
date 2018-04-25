@@ -41,7 +41,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
        <div [ngClass]="{'active': (activeGroupUniqueName$ | async) === grp.uniqueName}">{{grp.name}}</div>
       </a>
       <i *ngIf="grp.childStockGroups.length > 0" class="icon-arrow-down pr" [ngClass]="{'open': grp.isOpen}" (click)="OpenGroup(grp,$event)" [routerLink]="[ 'group', grp.uniqueName, 'stock-report' ]"></i>
-        <button class="btn btn-link btn-xs pull-right" (click)="goToManageGroup(grp)" *ngIf="grp.isOpen && (activeGroup.uniqueName === grp.uniqueName)">
+        <button class="btn btn-link btn-xs pull-right" (click)="goToManageGroup(grp)" *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName)">
           Edit
         </button>
         <stock-list [Groups]='grp'>

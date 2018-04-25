@@ -27,6 +27,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
+import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
 
 @Component({
   selector: 'account-operations',
@@ -54,6 +55,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+  @ViewChild('groupExportLedgerModal') public groupExportLedgerModal: ModalDirective;
   @Input() public breadcrumbPath: string[] = [];
   @Input() public breadcrumbUniquePath: string[] = [];
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -80,6 +82,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public companyTaxDropDown: Observable<IOption[]>;
   public groupsList: IOption[];
   public accounts$: Observable<IOption[]>;
+  public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
 
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
@@ -104,6 +107,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isHsnSacEnabledAcc: boolean = false;
   public showTaxes: boolean = false;
   public isUserSuperAdmin: boolean = false;
+  public showGroupLedgerExportButton$: Observable<boolean>;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -249,6 +253,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
+        if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
+          this.showGroupLedgerExportButton$ = Observable.of(true);
+        } else {
+          this.showGroupLedgerExportButton$ = Observable.of(false);
+        }
         // this.taxGroupForm.get('taxes').reset();
         // let showAddForm: boolean = null;
         // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
@@ -650,6 +659,24 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+  }
+
+  public exportGroupLedger() {
+    this.groupExportLedgerModal.show();
+  }
+
+  public hideGroupExportModal(response: any) {
+    this.groupExportLedgerModal.hide();
+    this.activeGroupUniqueName$.take(1).subscribe((grpUniqueName: string) => {
+      if (response !== 'close') {
+        this.groupExportLedgerQueryRequest.type = response.type;
+        this.groupExportLedgerQueryRequest.format = response.fileType;
+        this.groupExportLedgerQueryRequest.sort = response.order;
+        this.groupExportLedgerQueryRequest.from = response.from;
+        this.groupExportLedgerQueryRequest.to = response.to;
+        this.store.dispatch(this._ledgerActions.GroupExportLedger(grpUniqueName, this.groupExportLedgerQueryRequest));
+      }
+    });
   }
 
   public ngOnDestroy() {

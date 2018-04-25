@@ -1,12 +1,9 @@
-import { TaxDetail } from './../../services/purchase-invoice.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { CompanyService } from '../../services/companyService.service';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -15,8 +12,9 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Select2OptionData } from '../../theme/select2';
 import { IOption } from '../../theme/ng-select/ng-select';
+import { ToasterService } from '../../services/toaster.service';
+import { IForceClear } from '../../models/api-models/Sales';
 
 const taxesType = [
   { label: 'GST', value: 'GST' },
@@ -54,6 +52,7 @@ export class SettingTaxesComponent implements OnInit {
   public accounts$: IOption[];
   public taxList: IOption[] = taxesType;
   public duration: IOption[] = taxDuration;
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -62,6 +61,7 @@ export class SettingTaxesComponent implements OnInit {
     private _companyActions: CompanyActions,
     private _accountService: AccountService,
     private _settingsTaxesActions: SettingsTaxesActions,
+    private _toaster: ToasterService
   ) {
     for (let i = 1; i <= 31; i++) {
       let day = i.toString();
@@ -74,6 +74,7 @@ export class SettingTaxesComponent implements OnInit {
   public ngOnInit() {
     this.store.select(p => p.company).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.taxes) {
+        this.forceClear$ = Observable.of({status: true});
         _.map(o.taxes, (tax) => {
           _.each(tax.taxDetail, (t) => {
             t.date = moment(t.date, GIDDH_DATE_FORMAT);
@@ -84,6 +85,12 @@ export class SettingTaxesComponent implements OnInit {
       }
     });
     this.getFlattenAccounts('');
+
+    this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
+      if (bool) {
+        this.getFlattenAccounts('');
+      }
+    });
   }
 
   public onSubmit(data) {
@@ -108,8 +115,11 @@ export class SettingTaxesComponent implements OnInit {
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
     dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
-
-    this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
+    if (dataToSave.duration) {
+      this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
+    } else {
+      this._toaster.errorToast('Please select tax duration.', 'Validation');
+    }
   }
 
   public deleteTax(taxToDelete) {
@@ -170,10 +180,9 @@ export class SettingTaxesComponent implements OnInit {
    *
    */
   public getFlattenAccounts(value) {
-    let count = '5';
     let query = value || '';
     // get flattern accounts
-    this._accountService.GetFlattenAccounts(query, '', count).debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
+    this._accountService.GetFlattenAccounts(query, '').debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
@@ -182,6 +191,10 @@ export class SettingTaxesComponent implements OnInit {
         });
         this.accounts$ = accounts;
     }});
+  }
+
+  public customAccountFilter(term: string, item: IOption) {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public customDateSorting(a: IOption, b: IOption) {
