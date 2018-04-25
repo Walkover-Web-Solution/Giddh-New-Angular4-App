@@ -40,9 +40,9 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   @ViewChild('invoicePreviewModal') public invoicePreviewModal: ModalDirective;
 
   public invFormData: VoucherClass;
-  public isGenDtlCollapsed: boolean = true;
-  public isMlngAddrCollapsed: boolean = true;
-  public isOthrDtlCollapsed: boolean = true;
+  public isGenDtlCollapsed: boolean = false;
+  public isMlngAddrCollapsed: boolean = false;
+  public isOthrDtlCollapsed: boolean = false;
   public isCustDtlCollapsed: boolean = false;
   public selectedFiles: any;
   public logoPath: any;
@@ -141,6 +141,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
     this.isOthrDtlCollapsed = false;
+    this.isCustDtlCollapsed = false;
 
     if (this.CreateInvoiceForm.valid) {
       this._createHttpService.Generate(data).subscribe(response => {
@@ -204,7 +205,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   public addBlankRow() {
     this.calculateAndSetTotal();
     const transactionEntries = this.CreateInvoiceForm.controls['entries'] as FormArray;
-    transactionEntries.push(this.retunArrayData());
+    transactionEntries.push(this.returnArrayData());
   }
 
   public calculateAndSetTotal() {
@@ -258,7 +259,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   ////////// Reactive form //////////////
 
-  public retunArrayData() {
+  public returnArrayData() {
     return this.fb.group({
       entryDate: '',
       description: '',
@@ -272,9 +273,9 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public setCreateInvoiceForm() {
     this.CreateInvoiceForm = this.fb.group({
-      entries: this.fb.array([this.retunArrayData()]),
+      entries: this.fb.array([this.returnArrayData()]),
       userDetails: this.fb.group({
-        countryCode: ['', Validators.required],
+        countryCode: ['IN', Validators.required],
         userName: [''],
         userEmail: '',
         userMobileNumber: '',
@@ -346,12 +347,24 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   }
 
   public getStateCode(type: string, statesEle: SelectComponent) {
-    let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
+    let allData = _.cloneDeep(this.CreateInvoiceForm.value);
+    console.log('allData is :', allData);
+    let gstVal;
+    if (type === 'senderInfo') {
+      gstVal = allData.companyDetails.companyGstDetails.gstNumber;
+    } else {
+      gstVal = allData.userDetails[type].gstNumber;
+    }
+    // let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(st => {
         let s = st.find(item => item.value === gstVal.substr(0, 2));
         if (s) {
-          this.invFormData.accountDetails[type].stateCode = s.value;
+          if (type === 'senderInfo') {
+            this.CreateInvoiceForm.get('companyDetails').get('companyGstDetails').get('stateCode').patchValue(s.value);
+          } else {
+            this.CreateInvoiceForm.get('userDetails').get(type).get('stateCode').patchValue(s.value);
+          }
         } else {
           this.invFormData.accountDetails[type].stateCode = null;
           this._toasty.clearAllToaster();
