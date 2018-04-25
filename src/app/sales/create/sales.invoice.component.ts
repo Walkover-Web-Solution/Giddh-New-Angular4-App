@@ -45,6 +45,7 @@ import { forEach, map, cloneDeep } from '../../lodash-optimized';
 import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { Router } from '@angular/router';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -151,7 +152,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
-  public isOthrDtlCollapsed: boolean = true;
+  public isOthrDtlCollapsed: boolean = false;
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: VoucherClass;
@@ -199,6 +200,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
   public activeIndx: number;
   public selectedPageLabel: string =  VOUCHER_TYPE_LIST[0].additional.label;
+  public isCustomerSelected = false;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -222,7 +224,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     private _toasty: ToasterService,
     private _companyService: CompanyService,
     private _generalActions: GeneralActions,
-    private _invoiceActions: InvoiceActions
+    private _invoiceActions: InvoiceActions,
+    private router: Router
   ) {
 
     this.invFormData = new VoucherClass();
@@ -307,6 +310,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         };
         this.invFormData.voucherDetails.customerName = item.label;
         this.onSelectCustomer(item);
+        this.isCustomerSelected = true;
       }
     });
 
@@ -379,8 +383,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
       this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
-        if (acc && acc.length === 1) {
-          this.invFormData.accountDetails.uniqueName = acc[0].value;
+        if (acc && acc.length > 0) {
+        this.invFormData.accountDetails.uniqueName = 'cash';
         }
       });
 
@@ -496,8 +500,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
-    this.isOthrDtlCollapsed = true;
+    this.isOthrDtlCollapsed = false;
     this.forceClear$ = Observable.of({status: true});
+    this.isCustomerSelected = false;
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -626,6 +631,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           try {
             this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
+            this.router.navigate(['/pages', 'invoice', 'preview']);
           } catch (error) {
             this._toasty.successToast('Voucher Generated Successfully');
           }
@@ -896,6 +902,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (item.value) {
       this.invFormData.voucherDetails.customerName = item.label;
       this.getAccountDetails(item.value);
+      this.isCustomerSelected = true;
     }
   }
 
@@ -1047,4 +1054,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  public resetCustomerName(event) {
+    // console.log(event);
+    if (!event.target.value) {
+      this.forceClear$ = Observable.of({status: true});
+      this.isCustomerSelected = false;
+    }
+    // if (!this.invFormData.voucherDetails.customerName && !this.invFormData.voucherDetails.customerName.label) {
+
+    // }
+  }
 }
