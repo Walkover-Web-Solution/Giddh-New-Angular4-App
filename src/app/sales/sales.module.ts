@@ -27,9 +27,11 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 import { SalesTaxListComponent } from 'app/sales/tax-list/sales.tax.list.component';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -65,7 +67,9 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     DigitsOnlyModule,
     DecimalDigitsModule,
     ShSelectModule,
-    QuickAccountModule.forRoot()
+    SalesShSelectModule,
+    QuickAccountModule.forRoot(),
+    BsDropdownModule
   ],
   exports: [
     TooltipModule,

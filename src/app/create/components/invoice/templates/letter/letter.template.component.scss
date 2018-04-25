@@ -326,7 +326,7 @@ $themeClr: #fe5f00;
     margin: 0 auto;
     position: fixed;
     @include padBth(20px, 0);
-    @include bgClr(#7d7d7d);
+    @include bgClr(#444);
 }
 
 .dropup {
@@ -339,7 +339,6 @@ $themeClr: #fe5f00;
 .collapse-pane {
     padding: 7px 0;
     .collapse-pane-heading {
-        @extend .cp;
         @include marg(B, 0px);
         color: $themeClr;
         display: flex;
@@ -350,6 +349,7 @@ $themeClr: #fe5f00;
             align-self: stretch;
             display: flex;
             align-items: center;
+            @extend .cp;
         }
         .ico-box {
             @include bdr(1px, solid, $themeClr);
@@ -399,6 +399,7 @@ $themeClr: #fe5f00;
 .tableSec {
     display: table;
     width: 100%;
+    font-size: 14px;
     .tableRow {
         display: table-row;
         vertical-align: top;
@@ -458,4 +459,16 @@ ng-select.splSales {
 
 .form-container {
     margin-bottom: 80px;
+}
+
+.mt13 {
+    margin-top: 13px;
+}
+
+.mt30 {
+    margin-top: 30px;
+}
+
+:host ::ng-deep .has-error .form-control {
+    border-color: red !important;
 }
