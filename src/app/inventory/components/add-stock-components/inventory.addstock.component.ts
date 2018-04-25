@@ -680,17 +680,20 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
     let parentSelected = false;
-    if (!_.isString && formObj.parentGroup.value) {
-      formObj.parentGroup = formObj.parentGroup.value;
+    // if (!_.isString && formObj.parentGroup.value) {
+    //   formObj.parentGroup = formObj.parentGroup.value;
+    //   parentSelected = true;
+    // }
+    if (formObj.parentGroup) {
       parentSelected = true;
     }
-
-    if (!parentSelected) {
-      let defaultGrp = null;
+    let defaultGrpisExist = false;
       this.groupsData$.subscribe(p => {
-        defaultGrp = p.find(q => q.value === 'maingroup');
+        if (p) {
+          defaultGrpisExist = p.findIndex(q => q.value === formObj.parentGroup) > 1;
+        }
       });
-      if (!defaultGrp) {
+      if (!defaultGrpisExist) {
         let stockRequest = {
             name: 'Main Group',
             uniqueName: 'maingroup'
@@ -698,16 +701,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         formObj.parentGroup = stockRequest.uniqueName;
         this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
       } else {
-        formObj.parentGroup = defaultGrp.value;
-        this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
-      }
+      this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
+    }
 
       this.createGroupSuccess$.subscribe(s => {
-        if (s && !defaultGrp) {
+        if (s && !defaultGrpisExist) {
             this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
         }
       });
-    }
 
   }
 
