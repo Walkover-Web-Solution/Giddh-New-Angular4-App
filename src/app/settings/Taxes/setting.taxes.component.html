@@ -115,8 +115,7 @@
                                 <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mrB1">
                                     <!-- <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> -->
                                     <div class="input-group">
-                                        <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')" name="tax_date_{{i}}_{{j}}" (focus)="showDatePickerInTable = true;"
-                                            class="form-control" required/>
+                                        <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')" name="tax_date_{{i}}_{{j}}" (focus)="showDatePickerInTable = true;" class="form-control" required/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" (click)="showDatePickerInTable = !showDatePickerInTable">
                                                 <i class="glyphicon glyphicon-calendar"></i>
@@ -164,7 +163,7 @@
                             </td>
                             <td>{{tax.taxType ? tax.taxType : 'Others'}}</td>
 
-                            <td class="text-center icon-btn">
+                            <td class="text-center ico-btn">
                                 <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="reloadTaxList();taxToEdit = [];taxToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true" tooltip="Edit"></i></button>
                                 <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax);"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                                 <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="updateTax(i); taxToEdit[i] = false"><i class="fa fa-check" aria-hidden="true" tooltip="Save"></i></button>

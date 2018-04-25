@@ -1,7 +1,9 @@
 
 export const LOGIN_API = {
-  SignupWithPassword: 'signup',
-  LoginWithPassword: 'login-with-password',
+  // SignupWithPassword: 'signup',
+  SignupWithPassword: 'v2/signup',
+  // LoginWithPassword: 'login-with-password',
+  LoginWithPassword: 'v2/login-with-password',
   SignupWithEmail: 'signup-with-email',
   VerifyEmail: 'v2/verify-email',
   SignupWithMobile: 'generate-otp',
@@ -17,4 +19,8 @@ export const LOGIN_API = {
   ADD_BALANCE: 'users/:uniqueName/balance',
   GET_AUTH_KEY: 'users/:uniqueName/get-auth-key',
   REGENERATE_AUTH_KEY: 'users/:userEmail/generate-auth-key',
+  GET_SESSION: 'users/:userEmail/sessions',
+  DELETE_SESSION: 'users/:userEmail/destroy-session',
+  UPDATE_SESSION: 'users/:userEmail/increment-session',
+  DELETE_ALL_SESSION: 'users/:userEmail/sessions'
 };
