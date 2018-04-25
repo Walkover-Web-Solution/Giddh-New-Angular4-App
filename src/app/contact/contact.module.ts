@@ -10,14 +10,17 @@ import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
+import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
+import { SharedModule } from '../shared/shared.module';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 @NgModule({
   declarations: [
-    // Components / Directives/ Pipes
-    ContactComponent
+    ContactComponent,
+    AsideMenuAccountInContactComponent
   ],
   exports: [
   ],
@@ -30,7 +33,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ShSelectModule,
     TabsModule,
     BsDropdownModule,
-    TooltipModule
+    TooltipModule,
+    SharedModule,
+    SelectModule.forRoot(),
   ],
   providers: [ ]
 })
