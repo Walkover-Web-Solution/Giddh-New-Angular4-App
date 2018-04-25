@@ -198,6 +198,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public moment = moment;
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
   public activeIndx: number;
+  public selectedPageLabel: string =  VOUCHER_TYPE_LIST[0].additional.label;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -444,8 +445,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public pageChanged(val: string) {
+  public pageChanged(val: string, label: string) {
     this.selectedPage = val;
+    this.selectedPageLabel = label;
     this.makeCustomerList();
     this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
     this.toggleActionText = this.selectedPage;
@@ -963,6 +965,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
+    entry.taxSum = _.sumBy(entry.taxes, function(o) { return o.amount; });
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
@@ -980,6 +983,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
               amount: item.taxDetail[0].taxValue
             };
             entry.taxes.push(o);
+            entry.taxSum += o.amount;
           }
         });
       });
@@ -1001,6 +1005,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
+    entry.discountSum = _.sumBy(entry.discounts, function(o) { return o.amount; });
   }
 
   // get action type from aside window and open respective modal
