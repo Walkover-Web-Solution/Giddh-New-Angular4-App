@@ -1,106 +1,145 @@
 <div class="container-fluid">
 
-    <div class="top_bar clearfix">
-        <div class="form-inline">
-            <div class="pull-left">
-                <button class="btn btn-sm btn-default isActive">Customers</button>
-                <button class="btn btn-sm btn-default">Vendors</button>
-            </div>
-            <div class="pull-right">
-                <div class="form-group mrR1 max250">
-                    <input type="text" placeholder="Search" class="form-control" />
-                </div>
-                <div class="btn-group" dropdown>
-                    <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle">
-                    Add <span class="caret"></span>
-                </button>
-                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                        <li role="menuitem"><a class="dropdown-item">Add Customer</a></li>
-                        <li role="menuitem"><a class="dropdown-item">Add Vendor</a></li>
-                    </ul>
-                </div>
-
-                <div class="btn-group mrL1" dropdown [tooltip]="'Enable / Disable Column'" [placement]="'left'">
-                    <i dropdownToggle class="icon-options pd cp fs20"></i>
-                    <!-- <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle"> <span class="fa fa-filter"></span>
-                </button> -->
-                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Name</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Mobile No.</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Email Id</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> State</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Amt. Due</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Total amt of transactions</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Frequent transactions</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Highest transactions</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> GSTIN</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item"><input type="checkbox" /> Description</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+  <div class="top_bar clearfix">
+    <div class="form-inline">
+      <div class="pull-left">
+        <button class="btn btn-sm btn-default" (click)="setActiveTab('customer')" [ngClass]="{'isActive': activeTab === 'customer'}">Customers</button>
+        <button class="btn btn-sm btn-default" (click)="setActiveTab('vendor')" [ngClass]="{'isActive': activeTab === 'vendor'}">Vendors</button>
+      </div>
+      <div class="pull-right">
+        <div class="form-group mrR1 max250">
+          <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)" />
         </div>
-    </div>
-    <table class="table basic table-bordered">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Mobile No.</th>
-                <th>Email Id</th>
-                <th>State</th>
-                <th>Amt. Due</th>
-                <th>Total amt of transactions</th>
-                <th>Frequent transactions</th>
-                <th>Highest transactions</th>
-                <th>GSTIN</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Customer 1</td>
-                <td>9234922342</td>
-                <td>abc@gmail.com</td>
-                <td>Madhya Pradesh</td>
-                <td>15,000.00</td>
-                <td>1,50,000.00</td>
-                <td>T-shirt, shirt <button class="btn btn-default btn-xs pull-right">Sale</button></td>
-                <td>65,000.00 </td>
-                <td>23134567890123456</td>
-                <td>Contrary to popular belief, Lorem Ipsum is not simply random text</td>
-            </tr>
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle">
+            Add
+            <span class="caret"></span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+            <li role="menuitem">
+              <a class="dropdown-item cp" (click)="openAddAndManage('customer')">Add Customer</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item cp" (click)="openAddAndManage('vendor')">Add Vendor</a>
+            </li>
+          </ul>
+        </div>
 
-            <tr>
-                <td>Customer 2</td>
-                <td>9345223422</td>
-                <td>abc@gmail.com</td>
-                <td>Madhya Pradesh</td>
-                <td>25,000.00</td>
-                <td>2,50,000.00</td>
-                <td>Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button></td>
-                <td>45,000.00</td>
-                <td>23134567890123456</td>
-                <td>Contrary to popular belief, Lorem Ipsum is not simply random text</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="btn-group mrL1" dropdown [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+          <i dropdownToggle class="icon-options pd cp fs20"></i>
+          <!-- <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle"> <span class="fa fa-filter"></span>
+                </button> -->
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Name</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Mobile No.</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Email Id</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> State</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Amt. Due</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Total amt of transactions</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Frequent transactions</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Highest transactions</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> GSTIN</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Description</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table basic table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <!-- <th>Mobile No.</th>
+        <th>Email Id</th>
+        <th>State</th> -->
+        <th>Amt. Due</th>
+        <!-- <th>Total amt of transactions</th>
+        <th>Frequent transactions</th>
+        <th>Highest transactions</th>
+        <th>GSTIN</th>
+        <th>Description</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="activeTab === 'customer'">
+        <tr *ngFor="let account of sundryDebtorsAccounts$ | async">
+          <td>{{account.name}}</td>
+          <!-- <td>{{account.mobileNo}}</td>
+          <td>{{account.email}}</td>
+          <td></td> -->
+          <td>{{account.closingBalance?.amount}}</td>
+          <!-- <td></td>
+          <td> 
+            Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button> -->
+          <!-- </td>
+          <td> </td>
+          <td></td>
+          <td></td> -->
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'vendor'">
+        <tr *ngFor="let account of sundryCreditorsAccounts$ | async">
+          <td>{{account.name}}</td>
+          <!-- <td>{{account.mobileNo}}</td>
+          <td>{{account.email}}</td>
+          <td></td> -->
+          <td>{{account.closingBalance?.amount}}</td>
+          <!-- <td></td>
+          <td> -->
+            <!-- Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button> -->
+          <!-- </td>
+          <td> </td>
+          <td></td>
+          <td></td> -->
+        </tr>
+      </ng-container>
+
+
+      <!-- <tr>
+            <td>Customer 2</td>
+            <td>9345223422</td>
+            <td>abc@gmail.com</td>
+            <td>Madhya Pradesh</td>
+            <td>25,000.00</td>
+            <td>2,50,000.00</td>
+            <td>Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button></td>
+            <td>45,000.00</td>
+            <td>23134567890123456</td>
+            <td>Contrary to popular belief, Lorem Ipsum is not simply random text</td>
+        </tr> -->
+    </tbody>
+  </table>
 </div>
+
+<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
