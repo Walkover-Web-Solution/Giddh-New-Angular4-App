@@ -50,6 +50,9 @@ export class SignupComponent implements OnInit, OnDestroy {
   public signUpWithPasswdForm: FormGroup;
   public showPwdHint: boolean = false;
   public isSignupWithPasswordInProcess$: Observable<boolean>;
+  public signupVerifyForm: FormGroup;
+  public isSignupWithPasswordSuccess$: Observable<boolean>;
+  public signupVerifyEmail$: Observable<string>;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -102,6 +105,13 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.isSignupWithPasswordInProcess$ = store.select(state => {
       return state.login.isSignupWithPasswordInProcess;
     }).takeUntil(this.destroyed$);
+
+    this.isSignupWithPasswordSuccess$ = store.select(state => {
+      return state.login.isSignupWithPasswordSuccess;
+    }).takeUntil(this.destroyed$);
+
+    this.signupVerifyEmail$ = this.store.select(p => p.login.signupVerifyEmail).takeUntil(this.destroyed$);
+
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
@@ -133,6 +143,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.signUpWithPasswdForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$')]]
+    });
+    this.signupVerifyForm = this._fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      verificationCode: ['', Validators.required]
     });
     this.setCountryCode({ value: 'India', label: 'India' });
 
@@ -174,6 +188,13 @@ export class SignupComponent implements OnInit, OnDestroy {
       if (a) {
         this.hideTowWayAuthModal();
         this.store.dispatch(this.loginAction.resetTwoWayAuthModal());
+      }
+    });
+
+    this.signupVerifyEmail$.subscribe(a => {
+      if (a) {
+        // console.log(a);
+        this.signupVerifyForm.get('email').patchValue(a);
       }
     });
   }
