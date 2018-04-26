@@ -119,6 +119,9 @@
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row" (click)="selectBankTxn(txn)" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
+                                                            <td class="col-xs-1 text-center">
+                                                                <input type="checkbox" />
+                                                            </td>
                                                             <td class="col-xs-2">
                                                                 <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                                             </td>
@@ -172,6 +175,9 @@
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
+                                                            <td class="col-xs-1 text-center">
+                                                                <input type="checkbox" /> 
+                                                            </td>
                                                             <td class="col-xs-2">
                                                                 <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                                             </td>
@@ -248,6 +254,12 @@
         </section>
         <!--/bank ledger-->
 
+        <section class="ico-btn text-right">
+            <button class="btn btn-xs"><i class="fa fa-trash-o"></i></button>
+            <button class="btn btn-xs"><i class="fa fa-file-text-o"></i></button>
+            <button class="btn btn-xs"><i class="fa fa-paperclip"></i></button>            
+        </section>
+
         <!--account table-->
         <table class="col-xs-12 ledger-head mrT3">
             <thead>
@@ -270,6 +282,7 @@
                 <table class="width100">
                     <thead>
                         <tr class="t-h-bg1">
+                            <th class="col-xs-1"></th>
                             <th class="col-xs-2">
                                 <span ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')" class="cp">Date</span>
                             </th>
@@ -282,6 +295,7 @@
                 <table class="width100">
                     <tbody>
                         <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">
+                            <th class="col-xs-1"></th>                            
                             <td class="col-xs-2"></td>
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
@@ -291,9 +305,10 @@
                         </tr>
 
                         <tr class="ledger-row" *ngIf="((lc.transactionData$ | async)?.forwardedBalance.type !== 'DEBIT') || ((lc.transactionData$ | async)?.forwardedBalance.amount == 0)">
-                            <td colspan="3" class="col-xs-12">&nbsp;</td>
+                            <td colspan="4" class="col-xs-12">&nbsp;</td>
                         </tr>
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
+                            <td class="col-xs-1 text-center"><input type="checkbox" /></td>                            
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
                                 <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
@@ -318,8 +333,8 @@
                             <td class="width100" *ngIf="txn.type === 'DEBIT'">
                                 <table class="width100">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row compoundEntry">
-
+                                        <tr class="ledger-row">
+                                            <td class="col-xs-1 text-center"><input type="checkbox" /></td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
@@ -380,6 +395,7 @@
                 <table class="width100">
                     <thead>
                         <tr class="t-h-bg1">
+                            <th class="col-xs-1"></th>
                             <th class="col-xs-2">
                                 <span ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')" class="cp">Date</span>
                             </th>
@@ -392,6 +408,7 @@
                 <table class="width100">
                     <tbody>
                         <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
+                            <td class="col-xs-1"></td>
                             <td class="col-xs-2"></td>
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
@@ -402,10 +419,11 @@
                         </tr>
 
                         <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type !== 'CREDIT' || ((lc.transactionData$ | async)?.forwardedBalance.amount == 0)">
-                            <td class="col-xs-12" colspan="3">&nbsp;</td>
+                            <td class="col-xs-12" colspan="4">&nbsp;</td>
                         </tr>
 
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
+                            <td class="col-xs-1 text-center"><input type="checkbox" /></td>                            
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
                                 <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
@@ -431,8 +449,10 @@
                             <td class="width100" *ngIf="txn.type === 'CREDIT'">
                                 <table class="width100">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row compoundEntry">
-
+                                        <tr class="ledger-row">
+                                            <td class="col-xs-1 text-center">
+                                                <input type="checkbox" />
+                                            </td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>

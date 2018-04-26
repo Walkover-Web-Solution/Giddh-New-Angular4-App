@@ -273,4 +273,17 @@ export class LedgerService {
       })
       .catch((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null));
   }
+
+  /*
+  * delete Multiple Ledger transaction
+  */
+ public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNames: string[]): Observable<BaseResponse<string, string>> {
+  this.user = this._generalService.user;
+  this.companyUniqueName = this._generalService.companyUniqueName;
+  return this._http.delete(this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { entryUniqueNames }).map((res) => {
+    let data: BaseResponse<string, string> = res;
+    data.queryString = {accountUniqueName, entryUniqueNames};
+    return data;
+  }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNames}));
+}
 }
