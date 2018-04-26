@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
-  selector: 'app-aside-recurring-entry',
+  selector: 'app-aside-reasdcurring-entry',
   templateUrl: './aside.menu.recurringEntry.component.html',
   styles: [`
     :host {
@@ -47,7 +47,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
   `],
 })
 
-export class AsideMenuRecurringEntryComponent implements OnInit {
+export class OldAsideMenuRecurringEntryComponent implements OnInit {
   public IsNotExpirable: boolean;
   public today: Date = new Date();
   public maxEndDate: Date = new Date();

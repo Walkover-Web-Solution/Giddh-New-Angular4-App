@@ -11,9 +11,10 @@
           <div class="input-group">
             <input name="dateRange" formControlName="nextCronDate" type="text"
                    autocomplete="off"
-                   class="form-control" bsDatepicker
+                   class="form-control"
+                   bsDatepicker
                    [minDate]="today"
-                   [bsConfig]="config">
+                   [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
           </div>
         </div>
 
@@ -23,7 +24,9 @@
             <input name="dateRange" formControlName="cronEndDate" type="text"
                    autocomplete="off"
                    [minDate]="maxEndDate"
-                   class="form-control" bsDatepicker [bsConfig]="config">
+                   class="form-control"
+                   bsDatepicker
+                   [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}">
           </div>
         </div>
       </div>
@@ -75,7 +78,7 @@
       <div class="row" *ngIf="mode === 'update'">
         <div class="col-lg-3 form-group mrR1">
           <label class="d-block">&nbsp;</label>
-          <button class="btn btn-danger btn-sm" (click)="closeAsidePane($event)">Delete</button>
+          <button class="btn btn-danger btn-sm" [ladda]="isDeleteLoading" (click)="deleteInvoice()">Delete</button>
         </div>
 
         <div class="col-lg-3 form-group mrR1">

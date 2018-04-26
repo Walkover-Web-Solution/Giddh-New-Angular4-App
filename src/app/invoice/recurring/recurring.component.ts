@@ -1,4 +1,4 @@
-import { animate, Component, OnChanges, OnInit, SimpleChanges, state, style, transition, trigger } from '@angular/core';
+import { animate, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, state, style, transition, trigger } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { NgForm } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -26,6 +26,7 @@ import * as moment from 'moment';
 })
 
 export class RecurringComponent implements OnInit, OnChanges {
+  public currentPage = 1;
   public asideMenuStateForRecurringEntry: string = 'out';
   public invoiceTypeOptions: IOption[];
   public intervalOptions: IOption[];
@@ -38,9 +39,11 @@ export class RecurringComponent implements OnInit, OnChanges {
     lastInvoiceDate: ''
   };
 
-  constructor(private store: Store<AppState>, private _invoiceActions: InvoiceActions) {
+  constructor(private store: Store<AppState>,
+              private cdr: ChangeDetectorRef,
+              private _invoiceActions: InvoiceActions) {
     this.recurringData$ = this.store.select(s => s.invoice.recurringInvoiceData.recurringInvoices);
-    this.recurringData$.subscribe(p => console.log(p));
+    this.recurringData$.subscribe(p => this.cdr.reattach());
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -67,11 +70,18 @@ export class RecurringComponent implements OnInit, OnChanges {
     this.toggleRecurringAsidePane();
   }
 
-  public toggleRecurringAsidePane(event?): void {
-    if (event) {
-      event.preventDefault();
+  public pageChanged({page}) {
+    this.cdr.detach();
+    this.currentPage = page;
+    this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, page));
+  }
+
+  public toggleRecurringAsidePane(toggle?: string): void {
+    if (toggle) {
+      this.asideMenuStateForRecurringEntry = toggle;
+    } else {
+      this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
     }
-    this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
 
