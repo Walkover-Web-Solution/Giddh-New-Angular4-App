@@ -345,8 +345,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
     this.manageInProcess$.subscribe(s => {
       if (s.isOpen && !s.isGroup && !s.isUpdate) {
-
-        // console.log('this.activeGroup', this.activeGroup);
       }
     });
   }
@@ -684,16 +682,21 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     //   formObj.parentGroup = formObj.parentGroup.value;
     //   parentSelected = true;
     // }
+    let defaultGrpisExist = false;
     if (formObj.parentGroup) {
       parentSelected = true;
-    }
-    let defaultGrpisExist = false;
+    } else {
       this.groupsData$.subscribe(p => {
         if (p) {
-          defaultGrpisExist = p.findIndex(q => q.value === formObj.parentGroup) > 1;
+          defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
+          if (defaultGrpisExist) {
+            formObj.parentGroup = 'maingroup';
+          }
         }
       });
-      if (!defaultGrpisExist) {
+    }
+
+      if (!formObj.parentGroup) {
         let stockRequest = {
             name: 'Main Group',
             uniqueName: 'maingroup'
@@ -705,7 +708,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
       this.createGroupSuccess$.subscribe(s => {
-        if (s && !defaultGrpisExist) {
+        if (s && formObj.parentGroup) {
             this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
         }
       });
@@ -891,7 +894,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         } else {
-          this.addStockForm.get('parentGroup').patchValue('maingroup');
+          this.groupsData$.subscribe(p => {
+            if (p) {
+              let defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
+              if (defaultGrpisExist) {
+                this.addStockForm.get('parentGroup').patchValue('maingroup');
+              }
+            }
+          });
         }
         this.isUpdatingStockForm = false;
         this.companyTaxesList$.subscribe(a => {
