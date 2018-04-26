@@ -32,9 +32,9 @@
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
             <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" /> Name</a>
+                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
             </li>
-            <li role="menuitem">
+            <!-- <li role="menuitem">
               <a class="dropdown-item">
                 <input type="checkbox" /> Mobile No.</a>
             </li>
@@ -45,12 +45,12 @@
             <li role="menuitem">
               <a class="dropdown-item">
                 <input type="checkbox" /> State</a>
-            </li>
+            </li> -->
             <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" /> Amt. Due</a>
+                <input type="checkbox" name="field_filter.due_amount" [(ngModel)]="showFieldFilter.due_amount" /> Amt. Due</a>
             </li>
-            <li role="menuitem">
+            <!-- <li role="menuitem">
               <a class="dropdown-item">
                 <input type="checkbox" /> Total amt of transactions</a>
             </li>
@@ -69,7 +69,7 @@
             <li role="menuitem">
               <a class="dropdown-item">
                 <input type="checkbox" /> Description</a>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -82,12 +82,13 @@
         <!-- <th>Mobile No.</th>
         <th>Email Id</th>
         <th>State</th> -->
-        <th>Amt. Due</th>
+        <th *ngIf="showFieldFilter.due_amount">Amt. Due</th>
         <!-- <th>Total amt of transactions</th>
         <th>Frequent transactions</th>
         <th>Highest transactions</th>
         <th>GSTIN</th>
         <th>Description</th> -->
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -97,7 +98,7 @@
           <!-- <td>{{account.mobileNo}}</td>
           <td>{{account.email}}</td>
           <td></td> -->
-          <td>{{account.closingBalance?.amount}}</td>
+          <td *ngIf="showFieldFilter.due_amount">{{account.closingBalance?.amount}}</td>
           <!-- <td></td>
           <td> 
             Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button> -->
@@ -105,6 +106,9 @@
           <td> </td>
           <td></td>
           <td></td> -->
+          <td>
+            <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
+          </td>
         </tr>
       </ng-container>
 
@@ -114,7 +118,7 @@
           <!-- <td>{{account.mobileNo}}</td>
           <td>{{account.email}}</td>
           <td></td> -->
-          <td>{{account.closingBalance?.amount}}</td>
+          <td *ngIf="showFieldFilter.due_amount">{{account.closingBalance?.amount}}</td>
           <!-- <td></td>
           <td> -->
             <!-- Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button> -->
@@ -122,6 +126,9 @@
           <td> </td>
           <td></td>
           <td></td> -->
+          <td>
+            <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
+          </td>
         </tr>
       </ng-container>
 
@@ -142,4 +149,31 @@
   </table>
 </div>
 
-<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+<aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+
+<!-- Pay now modal -->
+<div bsModal #payNowModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div *ngIf="selectedAccForPayment">
+                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title">Pay to {{selectedAccForPayment.name}} </h3>
+                    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onPaymentModalCancel()"></i>
+                </div>
+                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                    <form name="newRole" novalidate class="" autocomplete="off">
+                        <div class="modal_wrap mrB2">
+                            <h3>Amount Due Rs: {{selectedAccForPayment.closingBalance?.amount}}</h3>
+                            <h3><b>Pay through Cash Free</b></h3>
+                            <!-- <h4><small>Balance in account Rs. N.A.</small></h4> -->
+                            <input #amountBox type="number" class="form-control">
+                        </div>
+                        <div>
+                            <button [disabled]="!amountBox.value" type="submit" class="btn btn-md btn-success btn-block" (click)="onConfirmation(amountBox.value)">Pay</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,7 +9,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TooltipModule, ModalModule } from 'ngx-bootstrap';
 import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -36,6 +36,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TooltipModule,
     SharedModule,
     SelectModule.forRoot(),
+    ModalModule
   ],
   providers: [ ]
 })
