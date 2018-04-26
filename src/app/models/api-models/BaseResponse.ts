@@ -10,3 +10,10 @@ export class BaseResponse<TResponce, TRequest> {
   // public request?: any;
   public queryString?: any;
 }
+
+export interface PagedResponse {
+  count: number;
+  page: number;
+  totalPages: number;
+  totalItems: number;
+}

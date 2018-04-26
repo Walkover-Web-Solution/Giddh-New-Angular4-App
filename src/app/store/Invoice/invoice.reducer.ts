@@ -1,12 +1,11 @@
-import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
-import { INVOICE_ACTIONS, INVOICE } from '../../actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
+import { INVOICE, INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GetAllInvoicesPaginatedResponse, GetAllLedgersOfInvoicesResponse, IBulkInvoiceGenerationFalingError, ILedgersInvoiceResult, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../customActions';
-import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
+import { RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
 
 export interface InvoiceState {
   invoices: GetAllInvoicesPaginatedResponse;
@@ -21,7 +20,11 @@ export interface InvoiceState {
   isLoadingInvoices: boolean;
   isBulkInvoiceGenerated: boolean;
   isBulkInvoiceGeneratedWithoutErrors: boolean;
-  recurringInvoiceData: RecurringInvoice[];
+  recurringInvoiceData: {
+    recurringInvoices: RecurringInvoices,
+    isRequestSuccess?: boolean,
+    isRequestInFlight?: boolean
+  };
 }
 
 export const initialState: InvoiceState = {
@@ -37,7 +40,9 @@ export const initialState: InvoiceState = {
   isLoadingInvoices: false,
   isBulkInvoiceGenerated: false,
   isBulkInvoiceGeneratedWithoutErrors: false,
-  recurringInvoiceData: []
+  recurringInvoiceData: {
+    recurringInvoices: null,
+  }
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -103,11 +108,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       } else {
         newState.invoiceDataHasError = true;
       }
-      return { ...state, ...newState };
+      return {...state, ...newState};
     }
     case INVOICE_ACTIONS.PREVIEW_INVOICE:
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
-      return { ...state, invoiceData: null, invoiceDataHasError: false };
+      return {...state, invoiceData: null, invoiceDataHasError: false};
     }
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
       let newState = _.cloneDeep(state);
@@ -117,10 +122,10 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       } else {
         newState.invoiceDataHasError = true;
       }
-      return { ...state, ...newState };
+      return {...state, ...newState};
     }
     case INVOICE_ACTIONS.VISIT_FROM_PREVIEW: {
-      return Object.assign({}, state, { visitedFromPreview: true });
+      return Object.assign({}, state, {visitedFromPreview: true});
     }
     case INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE: {
       return Object.assign({}, state, {
@@ -362,6 +367,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE: {
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, recurringInvoices: action.payload}};
+      return s;
+    }
+    case INVOICE.RECURRING.CREATE_RECURRING_INVOICE: {
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: true}};
+      return s;
+    }
+    case INVOICE.RECURRING.CREATE_RECURRING_INVOICE_RESPONSE: {
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: false, isRequesSuccess: !!action.payload}};
+      return s;
     }
     default: {
       return state;
