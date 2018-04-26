@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, trigger, state, style, animate, transition } from '@angular/core';
+import { Component, OnDestroy, OnInit, trigger, state, style, animate, transition, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -14,11 +14,19 @@ import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
+import { ContactService } from '../services/contact.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 const CustomerType = [
   { label: 'Customer', value: 'customer' },
   { label: 'Vendor', value: 'vendor' }
 ];
+
+export interface PayNowRequest {
+  accountUniqueName: string;
+  amount: number;
+  description: string;
+}
 
 @Component({
   selector: 'contact-detail',
@@ -52,18 +60,36 @@ export class ContactComponent implements OnInit, OnDestroy {
   public activeTab: string = 'customer';
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
+  public selectedAccForPayment: any;
+  public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
+  public showFieldFilter = {
+    name: true,
+    due_amount: true
+  };
+  @ViewChild('payNowModal') public payNowModal: ModalDirective;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private createAccountIsSuccess$: Observable<boolean>;
 
   constructor(
     private store: Store<AppState>,
     private _toasty: ToasterService,
     private router: Router,
-    private _dashboardService: DashboardService) {
-
+    private _dashboardService: DashboardService,
+    private _contactService: ContactService,
+    private _toaster: ToasterService) {
+      this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     this.getAccounts('sundrydebtors');
+
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
+      if (yes) {
+        this.toggleAccountAsidePane();
+        this.getAccounts('sundrydebtors');
+      }
+    });
   }
 
   public setActiveTab(tabName: 'customer' | 'vendor') {
@@ -85,7 +111,8 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   public openAddAndManage(openFor: 'customer' | 'vendor') {
-    //
+    this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+    this.toggleAccountAsidePane();
   }
 
   public toggleAccountAsidePane(event?): void {
@@ -99,9 +126,34 @@ export class ContactComponent implements OnInit, OnDestroy {
   public toggleBodyClass() {
     if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in') {
       document.querySelector('body').classList.add('fixed');
-    }else {
+    } else {
       document.querySelector('body').classList.remove('fixed');
     }
+  }
+
+  public payNow(acc: string) {
+    this.selectedAccForPayment = acc;
+    this.payNowModal.show();
+  }
+
+  public onPaymentModalCancel() {
+    this.payNowModal.hide();
+  }
+
+  public onConfirmation(amountToPay: number) {
+    let payNowData: PayNowRequest = {
+      accountUniqueName: this.selectedAccForPayment.uniqueName,
+      amount: amountToPay,
+      description: ''
+    };
+
+    this._contactService.payNow(payNowData).subscribe((res) => {
+      if (res.status === 'success') {
+        this._toaster.successToast('Payment done successfully with reference id: ' + res.body.referenceId);
+      } else {
+        this._toaster.errorToast(res.message, res.code);
+      }
+    });
   }
 
   private getAccounts(groupUniqueName: string) {

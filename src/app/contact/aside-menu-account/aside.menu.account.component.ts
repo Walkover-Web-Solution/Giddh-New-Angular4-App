@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -48,6 +48,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 })
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
+  @Input() public activeGroupUniqueName: string;
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   public flatAccountWGroupsList$: Observable<IOption[]>;
   public select2Options: Select2Options = {
@@ -56,7 +57,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     placeholder: 'Select Group',
     allowClear: true
   };
-  public activeGroupUniqueName: string;
   public isGstEnabledAcc: boolean = true;
   public isHsnSacEnabledAcc: boolean = false;
   public fetchingAccUniqueName$: Observable<boolean>;
@@ -64,6 +64,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   public createAccountInProcess$: Observable<boolean>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private groups = [
+    { label: 'Sundry Debtors', value: 'sundrydebtors'},
+    { label: 'Sundry Creditors', value: 'sundrycreditors'}
+  ];
 
   constructor(
     private store: Store<AppState>,
@@ -77,21 +81,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    // get groups list and refine list
-    this.groupService.GetGroupSubgroups('currentassets').subscribe(res => {
-      let result: IOption[] = [];
-      if (res.status === 'success' && res.body.length > 0) {
-        let sundryGrp = _.find(res.body, { uniqueName: 'sundrydebtors'});
-        if (sundryGrp) {
-          let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
-          _.forEach(flatGrps, (grp: GroupResponse) => {
-            result.push({ label: grp.name, value: grp.uniqueName });
-          });
-        }
-      }
-      this.flatAccountWGroupsList$ = Observable.of(result);
-      this.activeGroupUniqueName = 'sundrydebtors';
-    });
+    this.flatAccountWGroupsList$ = Observable.of(this.groups);
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
