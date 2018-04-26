@@ -1,33 +1,33 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
 const INV_PAGE = [
-  { name: 'Invoice', uniqueName: 'invoice' },
-  { name: 'Proforma', uniqueName: 'proforma' }
+  {name: 'Invoice', uniqueName: 'invoice'},
+  {name: 'Proforma', uniqueName: 'proforma'}
 ];
 
 @Component({
   selector: 'invoice-page-dd',
   templateUrl: './invoice.page.dd.component.html',
   styles: [`
-  .navbar-brand {
-    height: auto;
-    padding: 5px 15px;
-  }
+    .navbar-brand {
+      height: auto;
+      padding: 5px 15px;
+    }
   `]
 })
 
-export class InvoicePageDDComponent {
+export class InvoicePageDDComponent implements OnInit {
 
   public navItems: INameUniqueName[] = INV_PAGE;
   public selectedPage: string = null;
 
   public dropDownPages: any[] = [
-    { name: 'Invoice', uniqueName: 'invoice', path: 'preview' },
-    { name: 'Recurring', uniqueName: 'recurring', path: 'recurring' }
+    {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
+    {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'}
   ];
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
@@ -45,6 +45,12 @@ export class InvoicePageDDComponent {
     // });
   }
 
+  public ngOnInit(): void {
+    if (this.router.routerState.snapshot.url.includes('recurring')) {
+      this.selectedPage = 'Recurring';
+    }
+  }
+
   private removeObjFromArr(str) {
     let res = _.remove(INV_PAGE, (item: INameUniqueName) => {
       return item.uniqueName !== str;
@@ -55,6 +61,7 @@ export class InvoicePageDDComponent {
   private onShown(): void {
     // console.log('Dropdown is shown');
   }
+
   private changePage(page): void {
     this.selectedPage = page.name;
     this._cdRef.detectChanges();

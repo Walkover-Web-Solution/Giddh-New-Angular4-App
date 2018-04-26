@@ -55,6 +55,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   public intervalOptions: IOption[];
   public timeOptions: IOption[];
   public isLoading: boolean;
+  public isDeleteLoading: boolean;
   public form: FormGroup;
   public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
   @Input() public voucherNumber: string;
@@ -69,7 +70,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
     this.form = this._fb.group({
       voucherNumber: [this.voucherNumber, Validators.required],
       duration: ['', Validators.required],
-      nextCronDate: [moment().format('DD-MM-YYYY'), Validators.required],
+      nextCronDate: ['', Validators.required],
       cronEndDate: ['', Validators.required],
     });
     this.form.controls.nextCronDate.valueChanges.subscribe(p => {
@@ -84,20 +85,27 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    if (changes.voucherNumber) {
+      this.form.controls.voucherNumber.patchValue(this.voucherNumber);
+    }
     if (this.invoice) {
       this.form.patchValue({
         voucherNumber: this.invoice.voucherNumber,
         duration: this.invoice.duration.toLowerCase(),
-        nextCronDate: this.invoice.nextCronDate,
-        cronEndDate: this.invoice.cronEndDate
+        nextCronDate: this.invoice.nextCronDate && moment(this.invoice.nextCronDate, 'DD-MM-YYYY').toDate(),
+        cronEndDate: this.invoice.cronEndDate && moment(this.invoice.cronEndDate, 'DD-MM-YYYY').toDate()
       });
+      if (!this.invoice.cronEndDate) {
+        this.isExpirableChanged({checked: true});
+      }
     }
   }
 
   public ngOnInit() {
     this.intervalOptions = [
       {label: 'Weekly', value: 'weekly'},
-      {label: 'Quarterly', value: 'qarterly'},
+      {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
       {label: 'Yearly', value: 'yearly'}
     ];
@@ -112,6 +120,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
     this._store.select(p => p.invoice.recurringInvoiceData)
       .subscribe(p => {
         this.isLoading = p.isRequestInFlight;
+        this.isDeleteLoading = p.isDeleteRequestInFlight;
         if (p.isRequestSuccess) {
           this.closeAsidePane(null);
         }
@@ -122,9 +131,19 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
     this.closeAsideEvent.emit(event);
   }
 
+  public deleteInvoice() {
+    this.isDeleteLoading = true;
+    this._store.dispatch(this._invoiceActions.deleteRecurringInvoice(this.invoice.uniqueName));
+  }
+
   public isExpirableChanged({checked}) {
     this.IsNotExpirable = checked;
-    this.form.controls.cronEndDate.setValidators(!checked ? Validators.required : null);
+    if (checked) {
+      this.form.controls.cronEndDate.setValidators([]);
+    } else {
+      this.form.controls.cronEndDate.setValidators(Validators.required);
+    }
+    this.form.controls.cronEndDate.updateValueAndValidity();
   }
 
   public saveRecurringInvoice() {
@@ -133,7 +152,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
       this.isLoading = true;
       const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
       const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
-      const invoiceModel: RecurringInvoice = {...this.form.value, cronEndDate, nextCronDate};
+      const invoiceModel: RecurringInvoice = {...this.invoice, ...this.form.value, cronEndDate, nextCronDate};
       if (this.mode === 'create') {
         this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
       } else {

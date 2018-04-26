@@ -24,6 +24,7 @@ export interface InvoiceState {
     recurringInvoices: RecurringInvoices,
     isRequestSuccess?: boolean,
     isRequestInFlight?: boolean
+    isDeleteRequestInFlight?: boolean
   };
 }
 
@@ -373,12 +374,53 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       return s;
     }
     case INVOICE.RECURRING.CREATE_RECURRING_INVOICE: {
-      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: true}};
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: true, isRequestSuccess: false}};
       return s;
     }
     case INVOICE.RECURRING.CREATE_RECURRING_INVOICE_RESPONSE: {
-      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: false, isRequesSuccess: !!action.payload}};
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: !!action.payload}};
       return s;
+    }
+    case INVOICE.RECURRING.UPDATE_RECURRING_INVOICE: {
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: true, isRequestSuccess: false}};
+      return s;
+    }
+    case INVOICE.RECURRING.DELETE_RECURRING_INVOICE: {
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, isDeRequestInFlight: true, isRequestSuccess: false}};
+      return s;
+    }
+    case INVOICE.RECURRING.DELETE_RECURRING_INVOICE_RESPONSE: {
+      if (action.payload) {
+        const invoice = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
+          .find(p => p.uniqueName === action.payload);
+        invoice.status = 'inactive';
+        const recurringVoucherDetails = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
+          .filter(p => p.uniqueName !== action.payload)
+          .concat(invoice);
+        return {
+          ...state, recurringInvoiceData: {
+            ...state.recurringInvoiceData,
+            recurringInvoices: {...state.recurringInvoiceData.recurringInvoices, recurringVoucherDetails},
+            isDeleteRequestInFlight: false, isRequestSuccess: true
+          }
+        };
+      }
+      return {...state, recurringInvoiceData: {...state.recurringInvoiceData, isDeleteRequestInFlight: false, isRequestSuccess: false}};
+    }
+    case INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE: {
+      if (action.payload) {
+        const recurringVoucherDetails = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
+          .filter(p => p.uniqueName !== action.payload.uniqueName)
+          .concat(action.payload);
+        return {
+          ...state, recurringInvoiceData: {
+            ...state.recurringInvoiceData,
+            recurringInvoices: {...state.recurringInvoiceData.recurringInvoices, recurringVoucherDetails},
+            isRequestInFlight: false, isRequestSuccess: true
+          }
+        };
+      }
+      return {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false}};
     }
     default: {
       return state;

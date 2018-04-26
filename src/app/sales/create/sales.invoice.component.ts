@@ -34,6 +34,7 @@ import { createSelector } from 'reselect';
 import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { Router } from '@angular/router';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -209,6 +210,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     private accountService: AccountService,
     private salesAction: SalesActions,
     private companyActions: CompanyActions,
+    private router: Router,
     private ledgerActions: LedgerActions,
     private salesService: SalesService,
     private _toasty: ToasterService,
@@ -909,11 +911,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toggleBodyClass();
   }
 
-  public toggleRecurringAsidePane(event?): void {
-    if (event) {
-      event.preventDefault();
+  public toggleRecurringAsidePane(toggle?: string): void {
+    if (toggle) {
+      this.asideMenuStateForRecurringEntry = toggle;
+    } else {
+      this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
     }
-    this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
 
@@ -1061,7 +1064,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public postResponseAction() {
     if (this.toggleActionText.includes('Close')) {
-      //
+      this.router.navigate(['/pages', 'invoice', 'preview']);
     } else if (this.toggleActionText.includes('Recurring')) {
       this.toggleRecurringAsidePane();
     }
