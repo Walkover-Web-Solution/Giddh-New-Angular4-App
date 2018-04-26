@@ -333,7 +333,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       }
       return Object.assign({}, state, { isUpdateGroupInProcess: false });
     case InventoryActionsConst.RemoveGroup:
-      return Object.assign({}, state, { isDeleteGroupInProcess: true, deleteGroupSuccess: false; });
+      return Object.assign({}, state, { isDeleteGroupInProcess: true, deleteGroupSuccess: false });
     case InventoryActionsConst.RemoveGroupResponse:
       let removeGrpResp = action.payload as BaseResponse<string, string>;
       if (removeGrpResp.status === 'success') {
