@@ -429,7 +429,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     let date = this.universalDate || new Date();
     o.voucherDetails.voucherDate = date;
     // o.voucherDetails.dueDate = date;
-    o.templateDetails.other.shippingDate = date;
+    // o.templateDetails.other.shippingDate = date;
     forEach(o.entries, (entry: SalesEntryClass) => {
       forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
         txn.date = date;
