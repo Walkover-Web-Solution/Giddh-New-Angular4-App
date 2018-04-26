@@ -516,7 +516,8 @@ export class InvoiceActions {
   private UpdateRecurringVouchers$: Observable<Action> = this.action$
     .ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE)
     .switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload))
-    .map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true, this.updateRecurringInvoiceResponse(res.body), 'Recurring Invoice Updated.'));
+    .map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
+      this.updateRecurringInvoiceResponse(null), 'Recurring Invoice Updated.'));
 
   /**
    * DELETE Recurring Vouchers
@@ -525,7 +526,9 @@ export class InvoiceActions {
   private DeleteRecurringVouchers$: Observable<Action> = this.action$
     .ofType(INVOICE.RECURRING.DELETE_RECURRING_INVOICE)
     .switchMap((action: CustomActions) => this._recurringService.deleteRecurringVouchers(action.payload))
-    .map(res => this.validateResponse<string, string>(res, this.deleteRecurringInvoiceResponse(res.body), true, this.deleteRecurringInvoiceResponse(res.body)));
+    .map(res => this.validateResponse<string, string>(res, this.deleteRecurringInvoiceResponse(res.request),
+      true,
+      this.deleteRecurringInvoiceResponse(null)));
 
   constructor(
     private action$: Actions,
@@ -577,10 +580,10 @@ export class InvoiceActions {
     };
   }
 
-  public GetAllRecurringInvoices(filter?): CustomActions {
+  public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 5): CustomActions {
     return {
       type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA,
-      payload: filter
+      payload: {filter, page, count}
     };
   }
 

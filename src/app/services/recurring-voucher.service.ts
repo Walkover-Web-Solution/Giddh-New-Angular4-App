@@ -16,18 +16,22 @@ export class RecurringVoucherService {
               @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
-  public getRecurringVouchers(filter?) {
+  public getRecurringVouchers({filter, page, count}) {
     const companyUniqueName = this._generalService.companyUniqueName;
     if (filter) {
       return this._http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
-        .replace('{{companyname}}', companyUniqueName), filter).map((res) => {
+        .replace('{{companyname}}', companyUniqueName)
+        .replace(':page', page.toString())
+        .replace(':count', count.toString()), filter).map((res) => {
         let data: BaseResponse<RecurringInvoice[], string> = res;
         data.queryString = {};
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e));
     }
     return this._http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
-      .replace('{{companyname}}', companyUniqueName)).map((res) => {
+      .replace('{{companyname}}', companyUniqueName)
+      .replace(':page', page.toString())
+      .replace(':count', count.toString())).map((res) => {
       let data: BaseResponse<RecurringInvoice[], string> = res;
       data.queryString = {};
       return data;
@@ -48,7 +52,8 @@ export class RecurringVoucherService {
     const companyUniqueName = this._generalService.companyUniqueName;
     const req = {
       duration: model.duration,
-      date: model.nextCronDate
+      nextCronDate: model.nextCronDate,
+      cronEndDate: model.cronEndDate
     };
     return this._http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
       .replace('{{companyname}}', companyUniqueName)
@@ -67,6 +72,7 @@ export class RecurringVoucherService {
       .replace('{{uniqueName}}', id)).map((res) => {
       let data: BaseResponse<string, string> = res;
       data.queryString = {};
+      data.request = id;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }

@@ -78,17 +78,22 @@
   <tr>
     <td colspan="100%">
       <div class="alC">
-        <pagination [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
-                    [itemsPerPage]="1" [rotate]="false"></pagination>
+        <pagination [maxSize]="5"
+                    [totalItems]="(recurringData$ | async)?.totalItems"
+                    [itemsPerPage]="5"
+                    (pageChanged)="pageChanged($event)"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [rotate]="false"></pagination>
       </div>
     </td>
   </tr>
   </tfoot>
   <tbody>
   <tr *ngFor="let col of (recurringData$ | async).recurringVoucherDetails;let i = index">
-    <td>{{ i + 1 }}</td>
+    <td>{{ ((currentPage-1)* 5)+i + 1 }}</td>
     <td>
-      <a (click)="openUpdatePanel(col)">{{ col.voucherNumber }}</a>
+      <a (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
     </td>
     <td>{{ col.customerName }}</td>
     <td>{{ col.duration }}</td>
@@ -99,6 +104,8 @@
   </tr>
   </tbody>
 </table>
-<app-aside-recurring-entry [invoice]="selectedInvoice" [class]="asideMenuStateForRecurringEntry"
+<app-aside-recurring-entry [invoice]="selectedInvoice"
+                           [class]="asideMenuStateForRecurringEntry"
                            [@slideInOut]="asideMenuStateForRecurringEntry"
-                           (closeAsideEvent)="toggleRecurringAsidePane($event)"></app-aside-recurring-entry>
+                           [mode]="'update'"
+                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
