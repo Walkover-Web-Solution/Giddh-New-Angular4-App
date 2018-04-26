@@ -37,6 +37,8 @@ export interface AuthenticationState {
   isVerifyAddNewMobileNoSuccess: boolean;
   isLoginWithPasswordInProcess: boolean;
   isSignupWithPasswordInProcess: boolean;
+  isSignupWithPasswordSuccess: boolean;
+  signupVerifyEmail: string;
 }
 
 export enum userLoginStateEnum {
@@ -86,7 +88,9 @@ const initialState = {
   isVerifyAddNewMobileNoSuccess: false,
   needsToRedirectToLedger: false,
   isLoginWithPasswordInProcess: false,
-  isSignupWithPasswordInProcess: false
+  isSignupWithPasswordInProcess: false,
+  isSignupWithPasswordSuccess: false,
+  signupVerifyEmail: null
 };
 
 const sessionInitialState: SessionState = {
@@ -326,8 +330,21 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
       });
     case LoginActions.SignupWithPasswdRequest:
       return Object.assign({}, state, {
-        isSignupWithPasswordInProcess: true
+        isSignupWithPasswordInProcess: true,
+        isSignupWithPasswordSuccess: false,
+        signupVerifyEmail: null
       });
+    case LoginActions.SignupWithPasswdResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          isSignupWithPasswordInProcess: false,
+          isSignupWithPasswordSuccess: true,
+          signupVerifyEmail: res.request.email
+        });
+    }
+      return state;
+    }
     default:
       return state;
   }
@@ -542,16 +559,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           return Object.assign({}, state, d);
         }
       }
-      return state;
-    }
-    case LoginActions.SignupWithPasswdResponse: {
-      let res: BaseResponse<any, any> = action.payload;
-      if (res.status === 'success') {
-        return Object.assign({}, state, {
-          user: res.body,
-          isSignupWithPasswordInProcess: false
-        });
-    }
       return state;
     }
     case LoginActions.LoginWithPasswdResponse: {
