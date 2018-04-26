@@ -48,6 +48,9 @@ export interface InventoryState {
     isUpdate: boolean,
   };
   deleteStockSuccess: boolean;
+  deleteGroupSuccess: boolean;
+  UpdateGroupSuccess: boolean;
+  UpdateStockSuccess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -102,7 +105,10 @@ const initialState: InventoryState = {
     isGroup: false,
     isUpdate: false,
   },
-  deleteStockSuccess: false
+  deleteStockSuccess: false,
+  deleteGroupSuccess: false,
+  UpdateGroupSuccess: false,
+  UpdateStockSuccess: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -274,7 +280,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         return state;
       }
     case InventoryActionsConst.UpdateGroup:
-      return Object.assign({}, state, { isUpdateGroupInProcess: true });
+      return Object.assign({}, state, { isUpdateGroupInProcess: true, UpdateGroupSuccess: false });
     case InventoryActionsConst.UpdateGroupResponse:
       let resp = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (resp.status === 'success') {
@@ -321,12 +327,13 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           groupsWithStocks: groupArray,
           activeGroup: resp.body,
           activeGroupUniqueName: '',
-          isUpdateGroupInProcess: false
+          isUpdateGroupInProcess: false,
+          UpdateGroupSuccess: true
         });
       }
       return Object.assign({}, state, { isUpdateGroupInProcess: false });
     case InventoryActionsConst.RemoveGroup:
-      return Object.assign({}, state, { isDeleteGroupInProcess: true });
+      return Object.assign({}, state, { isDeleteGroupInProcess: true, deleteGroupSuccess: false });
     case InventoryActionsConst.RemoveGroupResponse:
       let removeGrpResp = action.payload as BaseResponse<string, string>;
       if (removeGrpResp.status === 'success') {
@@ -346,7 +353,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           groupsWithStocks: groupArray,
           activeGroup: null,
           activeGroupUniqueName: '',
-          isDeleteGroupInProcess: false
+          isDeleteGroupInProcess: false,
+          deleteGroupSuccess: true
         });
       }
       return Object.assign({}, state, { isDeleteGroupInProcess: false });
@@ -417,7 +425,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       }
       return Object.assign({}, state, { isStockAddInProcess: false });
     case InventoryActionsConst.UpdateStock:
-      return Object.assign({}, state, { isStockUpdateInProcess: true });
+      return Object.assign({}, state, { isStockUpdateInProcess: true, UpdateStockSuccess: false });
     case InventoryActionsConst.UpdateStockResponse:
       let updateStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
       if (updateStockResp.status === 'success') {
@@ -434,7 +442,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           groupsWithStocks: groupArray,
           activeStock: updateStockResp.body,
           activeStockUniqueName: updateStockResp.body.uniqueName,
-          isStockUpdateInProcess: false
+          isStockUpdateInProcess: false,
+          UpdateStockSuccess: true
         });
       }
       return Object.assign({}, state, { isStockUpdateInProcess: false });
