@@ -80,6 +80,8 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
   public createGroupSuccess$: Observable<boolean>;
   public removeGroupSuccess$: Observable<boolean>;
   public removeStockSuccess$: Observable<boolean>;
+  public UpdateGroupSuccess$: Observable<boolean>;
+  public UpdateStockSuccess$: Observable<boolean>;
   public manageInProcess$: Observable<any>;
   public addGroup: boolean;
   public addStock: boolean;
@@ -95,7 +97,9 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
     this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).takeUntil(this.destroyed$);
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
     this.removeStockSuccess$ = this.store.select(s => s.inventory.deleteStockSuccess).takeUntil(this.destroyed$);
-
+    this.removeGroupSuccess$ = this.store.select(s => s.inventory.deleteGroupSuccess).takeUntil(this.destroyed$);
+    this.UpdateStockSuccess$ = this.store.select(s => s.inventory.UpdateStockSuccess).takeUntil(this.destroyed$);
+    this.UpdateGroupSuccess$ = this.store.select(s => s.inventory.UpdateGroupSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -119,7 +123,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
     });
 
     this.createGroupSuccess$.subscribe(d => {
-      if (d) {
+      if (d && this.isAddGroupOpen) {
         this.closeAsidePane();
       }
     });
@@ -132,6 +136,24 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
 
     // subscribe createStockSuccess for resting form
     this.removeStockSuccess$.subscribe(s => {
+      if (s) {
+        this.closeAsidePane();
+        }
+    });
+
+    this.removeGroupSuccess$.subscribe(s => {
+      if (s) {
+        this.closeAsidePane();
+        }
+    });
+
+    this.UpdateStockSuccess$.subscribe(s => {
+      if (s) {
+        this.closeAsidePane();
+        }
+    });
+
+    this.UpdateGroupSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
         }
