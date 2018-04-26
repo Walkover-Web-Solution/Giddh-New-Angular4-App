@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { InvoiceRoutingModule } from './invoice.routing.module';
-import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 // import { TooltipModule } from 'ngx-bootstrap/tooltip';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
@@ -12,10 +11,10 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 // import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
-    InvoiceRoutingModule
+    InvoiceRoutingModule,
   ]
 })
-export class InvoiceModule { }
+export class InvoiceModule {
+}

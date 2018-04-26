@@ -17,7 +17,7 @@ import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 
-import { FontPickerModule, FONT_PICKER_CONFIG, FontPickerConfigInterface } from 'ngx-font-picker';
+import { FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
@@ -39,6 +39,7 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
+import { AsideMenuRecurringEntryModule } from "../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module";
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -50,12 +51,12 @@ const INVOICE_ROUTES: Routes = [
     canActivate: [NeedsAuthentication],
     component: InvoiceComponent,
     children: [
-      { path: '', redirectTo: 'preview', pathMatch: 'full' },
-      { path: 'preview', component: InvoicePreviewComponent },
-      { path: 'generate', component: InvoiceGenerateComponent },
-      { path: 'templates', component: EditInvoiceComponent },
-      { path: 'settings', component: InvoiceSettingComponent },
-      { path: 'recurring', component: RecurringComponent}
+      {path: '', redirectTo: 'preview', pathMatch: 'full'},
+      {path: 'preview', component: InvoicePreviewComponent},
+      {path: 'generate', component: InvoiceGenerateComponent},
+      {path: 'templates', component: EditInvoiceComponent},
+      {path: 'settings', component: InvoiceSettingComponent},
+      {path: 'recurring', component: RecurringComponent}
     ]
   }
 ];
@@ -101,11 +102,12 @@ const INVOICE_ROUTES: Routes = [
     ElementViewChildModule,
     DecimalDigitsModule,
     DatepickerModule,
-    BsDropdownModule
+    BsDropdownModule,
+    AsideMenuRecurringEntryModule,
   ],
   exports: [
     RouterModule,
-    TooltipModule
+    TooltipModule,
   ],
   entryComponents: [DownloadOrSendInvoiceOnMailComponent],
   providers: [InvoiceUiDataService, {
@@ -114,4 +116,5 @@ const INVOICE_ROUTES: Routes = [
   }
   ]
 })
-export class InvoiceRoutingModule { }
+export class InvoiceRoutingModule {
+}

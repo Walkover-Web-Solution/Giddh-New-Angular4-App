@@ -6,23 +6,27 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({
   styles: [`
-    .invoice-bg{
+    .invoice-bg {
       padding-top: 15px;
     }
-    .invoice-nav.navbar-nav>li>a{
+
+    .invoice-nav.navbar-nav > li > a {
       padding: 6px 30px;
-      font-size:14px;
-      color:#333;
+      font-size: 14px;
+      color: #333;
       background-color: #e6e6e6
     }
-    .invoice-nav.navbar-nav>li>a:hover{
+
+    .invoice-nav.navbar-nav > li > a:hover {
       background-color: #ff5f00;
       color: #fff;
     }
-    .invoice-nav.navbar-nav>li>a.active{
+
+    .invoice-nav.navbar-nav > li > a.active {
       background-color: #fff;
       color: #ff5f00;
     }
+
     .navbar {
       min-height: auto;
       margin-bottom: 10px;
@@ -32,10 +36,10 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 })
 export class InvoiceComponent implements OnInit {
   constructor(private store: Store<AppState>,
-    private companyActions: CompanyActions
+              private companyActions: CompanyActions
   ) {
     //
-   }
+  }
 
   public ngOnInit() {
     let companyUniqueName = null;

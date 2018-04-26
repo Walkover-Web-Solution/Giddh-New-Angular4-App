@@ -16,8 +16,16 @@ export class RecurringVoucherService {
               @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
-  public getRecurringVouchers() {
+  public getRecurringVouchers(filter?) {
     const companyUniqueName = this._generalService.companyUniqueName;
+    if (filter) {
+      return this._http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
+        .replace('{{companyname}}', companyUniqueName), filter).map((res) => {
+        let data: BaseResponse<RecurringInvoice[], string> = res;
+        data.queryString = {};
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e));
+    }
     return this._http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
       .replace('{{companyname}}', companyUniqueName)).map((res) => {
       let data: BaseResponse<RecurringInvoice[], string> = res;

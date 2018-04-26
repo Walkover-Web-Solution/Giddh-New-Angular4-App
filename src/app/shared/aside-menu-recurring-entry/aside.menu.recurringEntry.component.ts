@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -47,8 +47,9 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
   `],
 })
 
-export class AsideMenuRecurringEntryComponent implements OnInit {
+export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   public IsNotExpirable: boolean;
+
   public today: Date = new Date();
   public maxEndDate: Date = new Date();
   public intervalOptions: IOption[];
@@ -80,6 +81,17 @@ export class AsideMenuRecurringEntryComponent implements OnInit {
         this.form.controls.cronEndDate.patchValue('');
       }
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (this.invoice) {
+      this.form.patchValue({
+        voucherNumber: this.invoice.voucherNumber,
+        duration: this.invoice.duration.toLowerCase(),
+        nextCronDate: this.invoice.nextCronDate,
+        cronEndDate: this.invoice.cronEndDate
+      });
+    }
   }
 
   public ngOnInit() {
@@ -119,8 +131,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit {
     console.log(this.form.value);
     if (this.form.valid && !this.isLoading) {
       this.isLoading = true;
-      const cronEndDate = this.IsNotExpirable ? '' : moment(this.form.value.cronEndDate).format('DD-MM-YYYY');
-      const nextCronDate = moment(this.form.value.nextCronDate).format('DD-MM-YYYY');
+      const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
+      const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
       const invoiceModel: RecurringInvoice = {...this.form.value, cronEndDate, nextCronDate};
       if (this.mode === 'create') {
         this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
@@ -128,5 +140,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit {
         this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
       }
     }
+  }
+
+  public getFormattedDate(date): string {
+    return moment(date, date instanceof Date ? null : 'DD-MM-YYYY').format('DD-MM-YYYY');
   }
 }
