@@ -296,6 +296,8 @@ export class TransactionVM {
   public unitRate?: IInventoryUnit[];
   public isStock?: boolean = false;
   public inventory?: IInventory | any;
+  public currency?: string;
+  public convertedAmount?: string;
 }
 
 export interface IInventory {

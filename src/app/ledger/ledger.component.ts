@@ -11,7 +11,7 @@ import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, Transacti
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
+import { cloneDeep, filter, find, orderBy, each } from '../lodash-optimized';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
@@ -112,6 +112,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isBankOrCashAccount: boolean;
   public closingBalanceBeforeReconcile: { amount: number, type: string };
   public reconcileClosingBalanceForBank: { amount: number, type: string };
+  // public accountBaseCurrency: string;
+  // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -251,6 +253,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // txn.taxes = [];
           // txn.discount = 0;
           // txn.discounts = [];
+          // txn.currency = e.additional.currency;
+          // if (e.additional.currency && (this.accountBaseCurrency !== e.additional.currency)) {
+          //   this.showMultiCurrency = true;
+          // } else {
+          //   this.showMultiCurrency = false;
+          // }
           return;
         }
       });
@@ -467,6 +475,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isBankOrCashAccount = false;
           }
         }
+        // if (data.currency) {
+        //   this.accountBaseCurrency = data.currency;
+        // }
       } else {
         this.hideEledgerWrap();
       }
@@ -475,7 +486,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.general.addAndManageClosed], (yesOrNo: boolean) => {
       this.getTransactionData();
     })).debounceTime(300).subscribe();
-
   }
 
   public initTrxRequest(accountUnq: string) {
