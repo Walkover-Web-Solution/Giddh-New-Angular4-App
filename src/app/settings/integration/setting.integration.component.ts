@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import { EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { EmailKeyClass, RazorPayClass, SmsKeyClass, CashfreeClass } from '../../models/api-models/SettingsIntegraion';
 import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -33,8 +33,10 @@ export class SettingIntegrationComponent implements OnInit {
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
   public razorPayObj: RazorPayClass = new RazorPayClass();
+  public cashfreeObj: CashfreeClass = new CashfreeClass();
   public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
+  public cashfreeAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -68,16 +70,25 @@ export class SettingIntegrationComponent implements OnInit {
         this.setDummyData();
         this.updateRazor = false;
       }
+      // set cashfree form data
+      if (o.cashfreeForm) {
+        this.cashfreeObj = _.cloneDeep(o.cashfreeForm);
+        // this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.cashfreeAdded = true;
+      } else {
+        this.cashfreeObj = new CashfreeClass();
+        this.cashfreeAdded = false;
+      }
     });
 
     this.flattenAccountsStream$.subscribe(data => {
       if (data) {
-            let accounts: IOption[] = [];
-            _.forEach(data, (item) => {
-              accounts.push({ label: item.name, value: item.uniqueName });
-            });
-            this.accounts$ = Observable.of(accounts);
-          }
+        let accounts: IOption[] = [];
+        _.forEach(data, (item) => {
+          accounts.push({ label: item.name, value: item.uniqueName });
+        });
+        this.accounts$ = Observable.of(accounts);
+      }
     });
     // get accounts
     // this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -156,4 +167,10 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
   }
 
+  public submitCashfreeDetail(f: NgForm) {
+    if (f.valid) {
+      console.log(f.value);
+      // this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
+    }
+  }
 }
