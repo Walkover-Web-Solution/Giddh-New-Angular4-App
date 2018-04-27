@@ -35,7 +35,6 @@ import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
-
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -143,7 +142,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
-  public isOthrDtlCollapsed: boolean = true;
+  public isOthrDtlCollapsed: boolean = false;
   public typeaheadNoResultsOfCustomer: boolean = false;
   public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: VoucherClass;
@@ -169,14 +168,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
-  public autoFillShipping: boolean = true;
+  public autoFillShipping: boolean = false;
   public toggleFieldForSales: boolean = true;
   public dueAmount: number;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = Observable.of({ status: false });
   // modals related
   public modalConfig = {
     animated: true,
@@ -191,6 +190,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public moment = moment;
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
   public activeIndx: number;
+  public selectedPageLabel: string = VOUCHER_TYPE_LIST[0].additional.label;
+  public isCustomerSelected = false;
   public voucherNumber: string;
 
   // private below
@@ -234,7 +235,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryName, label: `${c.countryName}` });
     });
 
     // bind state sources
@@ -242,7 +243,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({label: `${d.code} - ${d.name}`, value: d.code});
+          arr.push({ label: `${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = Observable.of(arr);
@@ -301,6 +302,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         };
         this.invFormData.voucherDetails.customerName = item.label;
         this.onSelectCustomer(item);
+        this.isCustomerSelected = true;
       }
     });
 
@@ -323,58 +325,60 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
           let additional = item.email + item.mobileNo;
-          this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
+          this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : '' });
         }
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-          this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
+          this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName });
         }
         // creating bank account list
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          bankaccounts.push({label: item.name, value: item.uniqueName});
+          bankaccounts.push({ label: item.name, value: item.uniqueName });
         }
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
           if (item.stocks) {
             // normal entry
-            this.prdSerAcListForDeb.push({value: uuid.v4(), label: item.name, additional: item});
+            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
 
             // stock entry
             item.stocks.map(as => {
               this.prdSerAcListForDeb.push({
                 value: uuid.v4(),
                 label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, {stock: as})
+                additional: Object.assign({}, item, { stock: as })
               });
             });
           } else {
-            this.prdSerAcListForDeb.push({value: uuid.v4(), label: item.name, additional: item});
+            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
           }
         }
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
           if (item.stocks) {
             // normal entry
-            this.prdSerAcListForCred.push({value: uuid.v4(), label: item.name, additional: item});
+            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
 
             // stock entry
             item.stocks.map(as => {
               this.prdSerAcListForCred.push({
                 value: uuid.v4(),
                 label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, {stock: as})
+                additional: Object.assign({}, item, { stock: as })
               });
             });
           } else {
-            this.prdSerAcListForCred.push({value: uuid.v4(), label: item.name, additional: item});
+            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
           }
         }
       });
       this.makeCustomerList();
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
-      setTimeout(() => {
-        this.invFormData.accountDetails.uniqueName = 'cashaccount';
-      }, 1000);
+      this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
+        if (acc && acc.length > 0) {
+          this.invFormData.accountDetails.uniqueName = 'cash';
+        }
+      });
 
       // listen for newly added stock and assign value
       Observable.combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
@@ -417,7 +421,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     let date = this.universalDate || new Date();
     o.voucherDetails.voucherDate = date;
     // o.voucherDetails.dueDate = date;
-    o.templateDetails.other.shippingDate = date;
+    // o.templateDetails.other.shippingDate = date;
     forEach(o.entries, (entry: SalesEntryClass) => {
       forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
         txn.date = date;
@@ -437,8 +441,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public pageChanged(val: string) {
+  public pageChanged(val: string, label: string) {
     this.selectedPage = val;
+    this.selectedPageLabel = label;
     this.makeCustomerList();
     this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
     this.toggleActionText = this.selectedPage;
@@ -487,8 +492,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
-    this.isOthrDtlCollapsed = true;
-    this.forceClear$ = Observable.of({status: true});
+    this.isOthrDtlCollapsed = false;
+    this.forceClear$ = Observable.of({ status: true });
+    this.isCustomerSelected = false;
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -617,6 +623,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           try {
             this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
+            // don't know what to do about this line
+            // this.router.navigate(['/pages', 'invoice', 'preview']);
             this.voucherNumber = response.body.voucherDetails.voucherNumber;
             this.postResponseAction();
           } catch (error) {
@@ -848,7 +856,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // check if any transaction is stockTxn then return false
     if (this.invFormData.entries.length > 1) {
       _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, {isStockTxn: true});
+        let idx = _.findIndex(entry.transactions, { isStockTxn: true });
         if (idx !== -1) {
           this.allKindOfTxns = true;
           breakFunc = true;
@@ -889,6 +897,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (item.value) {
       this.invFormData.voucherDetails.customerName = item.label;
       this.getAccountDetails(item.value);
+      this.isCustomerSelected = true;
     }
   }
 
@@ -967,6 +976,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
+    entry.taxSum = _.sumBy(entry.taxes, function (o) { return o.amount; });
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
@@ -984,6 +994,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
               amount: item.taxDetail[0].taxValue
             };
             entry.taxes.push(o);
+            entry.taxSum += o.amount;
           }
         });
       });
@@ -1005,6 +1016,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
+    entry.discountSum = _.sumBy(entry.discounts, function (o) { return o.amount; });
   }
 
   // get action type from aside window and open respective modal
@@ -1068,5 +1080,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     } else if (this.toggleActionText.includes('Recurring')) {
       this.toggleRecurringAsidePane();
     }
+  }
+  public resetCustomerName(event) {
+    // console.log(event);
+    if (!event.target.value) {
+      this.forceClear$ = Observable.of({ status: true });
+      this.isCustomerSelected = false;
+    }
+    // if (!this.invFormData.voucherDetails.customerName && !this.invFormData.voucherDetails.customerName.label) {
+
+    // }
   }
 }

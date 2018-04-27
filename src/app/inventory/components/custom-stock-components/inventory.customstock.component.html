@@ -1,54 +1,55 @@
-<section class="">
-    <section class="row">
-        <div class="col-xs-12">
+<section class="" style="margin-top: -15px;">
+    <section class="">
+        <div class="">
             <div class="form_header">
-                <label *ngIf="!editMode">Create Unit</label>
-                <label *ngIf="editMode">Modify Unit</label>
+                <h2 *ngIf="!editMode">Create Unit</h2>
+                <h2 *ngIf="editMode">Modify Unit</h2>
             </div>
 
             <form #customUnitForm="ngForm" name="customUnitForm" class="form_body" novalidate>
-                <div class="row">
-                    <div class="form-group col-xs-6">
-                        <label>Unit Name<sup>*</sup></label>
-                        <sh-select [options]="stockUnitsList" name="name" [(ngModel)]="customUnitObj.name" *ngIf="country == 'india'" [placeholder]="'Select unit'" (selected)="setUnitName($event?.label)" [ItemHeight]="33" (onClear)="clearUnit()" [forceClearReactive]="forceClear$ | async"></sh-select>
-                        <input placeholder="Unit name" type="text" class="form-control" name="name" [(ngModel)]="customUnitObj.name" required *ngIf="country != 'india'">
-                    </div>
+                <div class="form_bg clearfix">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>Unit Name<sup>*</sup></label>
+                            <sh-select [options]="stockUnitsList" name="name" [(ngModel)]="customUnitObj.name" *ngIf="country == 'india'" [placeholder]="'Select unit'" (selected)="setUnitName($event?.label)" [ItemHeight]="33" (onClear)="clearUnit()" [forceClearReactive]="forceClear$ | async"></sh-select>
+                            <input placeholder="Unit name" type="text" class="form-control" name="name" [(ngModel)]="customUnitObj.name" required *ngIf="country != 'india'">
+                        </div>
 
-                    <div class="form-group col-xs-6">
-                        <label>Unit Code<sup>*</sup></label>
-                        <input placeholder="Unique name" type="text" name="code" [(ngModel)]="customUnitObj.code" class="form-control" required [disabled]="country == 'india'">
-                    </div>
+                        <div class="form-group col-xs-6">
+                            <label>Unit Code<sup>*</sup></label>
+                            <input placeholder="Unique name" type="text" name="code" [(ngModel)]="customUnitObj.code" class="form-control" required [disabled]="country == 'india'">
+                        </div>
 
-                    <div class="form-group col-xs-6">
-                        <label>Parent Unit</label>
-                        <sh-select [options]="stockUnitsDropDown$ | async" name="parentStockUnit" [placeholder]="'Choose a parent unit'" [(ngModel)]="customUnitObj.parentStockUnitCode" (selected)="change($event?.value)" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
-                    </div>
+                        <div class="form-group col-xs-6">
+                            <label>Parent Unit</label>
+                            <sh-select [options]="stockUnitsDropDown$ | async" name="parentStockUnit" [placeholder]="'Choose a parent unit'" [(ngModel)]="customUnitObj.parentStockUnitCode" (selected)="change($event?.value)" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
+                        </div>
 
-                    <div class="form-group col-xs-6">
-                        <img src="./assets/images/divide-ico.svg" class="divide-ico">
-                        <label>Quantity per Unit<sup>*</sup></label>
-                        <input placeholder="Quantity" type="text" decimalDigitsDirective [DecimalPlaces]="3" [(ngModel)]="customUnitObj.quantityPerUnit" name="quantityPerUnit" class="form-control" required>
+                        <div class="form-group col-xs-6">
+                            <img src="./assets/images/divide-ico.svg" class="divide-ico">
+                            <label>Quantity per Unit<sup>*</sup></label>
+                            <input placeholder="Quantity" type="text" decimalDigitsDirective [DecimalPlaces]="3" [(ngModel)]="customUnitObj.quantityPerUnit" name="quantityPerUnit" class="form-control" required>
+                        </div>
+
+                    </div>
+                    <div class="row mrB">
+                        <div class="col-xs-12" *ngIf="!editMode">
+                            <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()" [disabled]="customUnitForm.invalid" [ladda]="createCustomStockInProcess$ | async">Save
+                </button>
+                            <button type="submit" class="btn btn-sm btn-danger" (click)="clearFields()">Clear</button>
+                        </div>
+
+                        <div class="col-xs-12" *ngIf="editMode">
+                            <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()" [disabled]="customUnitForm.invalid">Update</button>
+                            <button type="submit" class="btn btn-sm btn-danger" (click)="clearFields()">Cancel</button>
+                        </div>
                     </div>
 
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-12" *ngIf="!editMode">
-                        <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()" [disabled]="customUnitForm.invalid" [ladda]="createCustomStockInProcess$ | async">Save
-            </button>
-                        <button type="submit" class="btn btn-sm btn-danger" (click)="clearFields()">Clear</button>
-                    </div>
-
-                    <div class="col-xs-12" *ngIf="editMode">
-                        <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()" [disabled]="customUnitForm.invalid">Update</button>
-                        <button type="submit" class="btn btn-sm btn-danger" (click)="clearFields()">Cancel</button>
-                    </div>
-                </div>
-
             </form>
 
 
-            <div class="mrT2 clearfix">
+            <div class="mrT2 col-xs-12 clearfix">
                 <table class="table basic">
                     <thead>
                         <tr>
@@ -64,7 +65,7 @@
                             <td>{{item.name}} ({{item.code}})</td>
                             <td>{{item.parentStockUnit?.name}} <span *ngIf="!item.parentStockUnit?.name">-</span></td>
                             <td class="text-right">{{item.quantityPerUnit}}</td>
-                            <td class="action icon-btn">
+                            <td class="action ico-btn">
                                 <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)"><i class="fa fa-pencil" ></i></button>
                                 <button class="btn-default btn-xs" [disabled]="editMode" [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item.code) > -1" (click)="deleteUnit(item.code)"><i class="fa fa-trash"></i></button>
                             </td>
