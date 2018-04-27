@@ -458,12 +458,6 @@ small {
     display: none;
 }
 
-.hint ul {
-    font-size: 13px;
-    padding: 7px;
-    padding-left: 18px;
-}
-
 @media only screen and (max-width: 768px) {
     .flex-container {
         background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
