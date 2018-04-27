@@ -5,17 +5,21 @@
         <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
             <div class="form-group col-xs-4">
                 <div class="row">
-                    <label>Auth Key</label><br>
+                    <label>Auth Key</label>
+                    <br>
                     <input type="text" placeholder="Enter auth-key" class="form-control" [ngModel]="smsFormObj.authKey" name="authKey" required/>
                 </div>
             </div>
             <div class="form-group col-xs-4">
-                <label>Sender ID</label><br>
-                <input type="text" placeholder="Enter sender Id" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
+                <label>Sender ID</label>
+                <br>
+                <input type="text" placeholder="Enter sender Id" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required
+                />
             </div>
             <div class="form-group col-xs-4">
                 <div class="row">
-                    <label>&nbsp;</label><br>
+                    <label>&nbsp;</label>
+                    <br>
                     <button type="submit" class="btn btn-success mrR1" [disabled]="smsFormObjCtrl.invalid">Save</button>
                 </div>
             </div>
@@ -30,17 +34,21 @@
     <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="">
         <div class="form-group col-xs-4">
             <div class="row">
-                <label>Auth Key</label><br>
+                <label>Auth Key</label>
+                <br>
                 <input type="text" placeholder="Enter auth-key" class="form-control" [ngModel]="emailFormObj.authKey" name="authKey" required/>
             </div>
         </div>
         <div class="form-group col-xs-4">
-            <label>Email Subject</label><br>
-            <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
+            <label>Email Subject</label>
+            <br>
+            <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject"
+                required />
         </div>
         <div class="form-group col-xs-4">
             <div class="row">
-                <label>&nbsp;</label><br>
+                <label>&nbsp;</label>
+                <br>
                 <button type="submit" class="btn btn-success mrR1" [disabled]="emailform.invalid">Save</button>
             </div>
         </div>
@@ -54,16 +62,78 @@
 
         <div class="form-group col-xs-4">
             <div class="row">
-                <label>Key Id <span class="required">*</span></label>
-                <input class="form-control" type="text" placeholder="Key Id" name="userName" [(ngModel)]="razorPayObj.userName" required autocomplete="off">
+                <label>Key Id
+                    <span class="required">*</span>
+                </label>
+                <input class="form-control" type="text" placeholder="Key Id" name="userName" [(ngModel)]="razorPayObj.userName" required
+                    autocomplete="off">
             </div>
         </div>
         <div class="form-group col-xs-4">
-            <label>Secret<span class="required">*</span></label>
-            <input class="form-control" type="password" placeholder="Secret key" name="password" [(ngModel)]="razorPayObj.password" required autocomplete="off">
+            <label>Secret
+                <span class="required">*</span>
+            </label>
+            <input class="form-control" type="password" placeholder="Secret key" name="password" [(ngModel)]="razorPayObj.password" required
+                autocomplete="off">
         </div>
 
         <div class="col-xs-12">
+            <div class="row">
+                <div class="form-group col-xs-4">
+                    <div class="row">
+                        <label>Link Account</label>
+                        <div class="input-group">
+                            <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName"
+                                [options]="accounts$ | async" (selected)="selectAccount($event)"></sh-select>
+                            <div class="input-group-addon cp">
+                                <span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 mrT1" id="inlnImg">
+                    <label>&nbsp;</label>
+                    <br>
+                    <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment" name="autoCapturePayment" /> Automatic capture on payment
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12 form-group ">
+                <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save</button>
+                <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update</button>
+                <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<h3 class="section_head mrT2">Cashfree Details</h3>
+<div class="box clearfix">
+    <h3 class="fs18 mrB1">Cashfree Details</h3>
+    <form #cashfreeform="ngForm" novalidate class="" (ngSubmit)="submitCashfreeDetail(cashfreeform)">
+
+        <div class="form-group col-xs-4">
+            <div class="row">
+                <label>Client Id
+                    <span class="required">*</span>
+                </label>
+                <input class="form-control" type="text" placeholder="Client Id" name="userName" [(ngModel)]="cashfreeObj.userName" required
+                    autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group col-xs-4">
+            <label>Client Secret Key
+                <span class="required">*</span>
+            </label>
+            <input class="form-control" type="password" placeholder="Client Secret key" name="password" [(ngModel)]="cashfreeObj.password"
+                required autocomplete="off">
+        </div>
+
+        <!-- <div class="col-xs-12">
             <div class="row">
                 <div class="form-group col-xs-4">
                     <div class="row">
@@ -79,14 +149,14 @@
                     <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment" name="autoCapturePayment" /> Automatic capture on payment
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <div class="row">
             <div class="col-xs-12 form-group ">
-                <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save</button>
-                <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update</button>
-                <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">Delete</button>
+                <button type="submit" *ngIf="!cashfreeAdded" class="btn btn-success" [disabled]="cashfreeform.invalid">Save</button>
+                <button *ngIf="cashfreeAdded" class="btn btn-success" [disabled]="cashfreeform.invalid">Update</button>
+                <button *ngIf="cashfreeAdded" class="btn btn-danger">Delete</button>
             </div>
         </div>
     </form>
