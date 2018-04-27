@@ -134,8 +134,8 @@
                 <form class="pos-rel" id="loginWithPwd" [formGroup]="loginWithPasswdForm" (ngSubmit)="loginWithPasswd(loginWithPasswdForm)" *ngIf="loginUsing === 'userName'">
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" formControlName="uniqueKey" type="text" placeholder="Username" />
-                        <input class="form-control" type="password" formControlName="password" placeholder="Password" (focus)="showPwdHint = true" (blur)="showPwdHint = false" />
-                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [ladda]="isLoginWithPasswordInProcess$ | async">Login</button>
+                        <input class="form-control" type="password" formControlName="password" placeholder="Password" />
+                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit">Login</button>
                     </div>
                 </form>
                 <!-- form end/ -->
