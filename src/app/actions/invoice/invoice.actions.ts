@@ -128,7 +128,7 @@ export class InvoiceActions {
   @Effect()
   public GenerateBulkInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
+    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom))
     .map(response => {
       return this.GenerateBulkInvoiceResponse(response);
     });
@@ -626,10 +626,10 @@ export class InvoiceActions {
     };
   }
 
-  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): CustomActions {
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
     return {
       type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,
-      payload: { reqObj, body: model }
+      payload: { reqObj, body: model, requestedFrom }
     };
   }
 
