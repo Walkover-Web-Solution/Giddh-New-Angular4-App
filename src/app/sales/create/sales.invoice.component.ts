@@ -35,6 +35,7 @@ import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
+
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -175,7 +176,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = Observable.of({ status: false });
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   // modals related
   public modalConfig = {
     animated: true,
@@ -235,7 +236,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryName}` });
+      this.countrySource.push({value: c.countryName, label: `${c.countryName}`});
     });
 
     // bind state sources
@@ -243,7 +244,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
+          arr.push({label: `${d.name}`, value: d.code});
         });
       }
       this.statesSource$ = Observable.of(arr);
@@ -325,49 +326,49 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
           let additional = item.email + item.mobileNo;
-          this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : '' });
+          this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
         }
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-          this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName });
+          this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
         }
         // creating bank account list
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          bankaccounts.push({ label: item.name, value: item.uniqueName });
+          bankaccounts.push({label: item.name, value: item.uniqueName});
         }
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
           if (item.stocks) {
             // normal entry
-            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
+            this.prdSerAcListForDeb.push({value: uuid.v4(), label: item.name, additional: item});
 
             // stock entry
             item.stocks.map(as => {
               this.prdSerAcListForDeb.push({
                 value: uuid.v4(),
                 label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, { stock: as })
+                additional: Object.assign({}, item, {stock: as})
               });
             });
           } else {
-            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
+            this.prdSerAcListForDeb.push({value: uuid.v4(), label: item.name, additional: item});
           }
         }
 
         if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
           if (item.stocks) {
             // normal entry
-            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
+            this.prdSerAcListForCred.push({value: uuid.v4(), label: item.name, additional: item});
 
             // stock entry
             item.stocks.map(as => {
               this.prdSerAcListForCred.push({
                 value: uuid.v4(),
                 label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, { stock: as })
+                additional: Object.assign({}, item, {stock: as})
               });
             });
           } else {
-            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
+            this.prdSerAcListForCred.push({value: uuid.v4(), label: item.name, additional: item});
           }
         }
       });
@@ -446,7 +447,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedPageLabel = label;
     this.makeCustomerList();
     this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
-    this.toggleActionText = this.selectedPage;
+    // this.toggleActionText = this.selectedPage;
   }
 
   public getAllFlattenAc() {
@@ -493,7 +494,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = false;
-    this.forceClear$ = Observable.of({ status: true });
+    this.forceClear$ = Observable.of({status: true});
     this.isCustomerSelected = false;
   }
 
@@ -856,7 +857,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // check if any transaction is stockTxn then return false
     if (this.invFormData.entries.length > 1) {
       _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, { isStockTxn: true });
+        let idx = _.findIndex(entry.transactions, {isStockTxn: true});
         if (idx !== -1) {
           this.allKindOfTxns = true;
           breakFunc = true;
@@ -922,6 +923,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public toggleRecurringAsidePane(toggle?: string): void {
     if (toggle) {
+      if (toggle === 'out' && this.asideMenuStateForRecurringEntry !== 'out') {
+        this.router.navigate(['/pages', 'invoice', 'recurring']);
+      }
       this.asideMenuStateForRecurringEntry = toggle;
     } else {
       this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
@@ -976,7 +980,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
-    entry.taxSum = _.sumBy(entry.taxes, function (o) { return o.amount; });
+    entry.taxSum = _.sumBy(entry.taxes, function (o) {
+      return o.amount;
+    });
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
@@ -1016,7 +1022,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function (o) { return o.amount; });
+    entry.discountSum = _.sumBy(entry.discounts, function (o) {
+      return o.amount;
+    });
   }
 
   // get action type from aside window and open respective modal
@@ -1081,10 +1089,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.toggleRecurringAsidePane();
     }
   }
+
   public resetCustomerName(event) {
     // console.log(event);
     if (!event.target.value) {
-      this.forceClear$ = Observable.of({ status: true });
+      this.forceClear$ = Observable.of({status: true});
       this.isCustomerSelected = false;
     }
     // if (!this.invFormData.voucherDetails.customerName && !this.invFormData.voucherDetails.customerName.label) {
