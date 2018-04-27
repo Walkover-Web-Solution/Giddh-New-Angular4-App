@@ -12,13 +12,14 @@ import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { DayBookRequestModel, DaybookQueryRequest } from '../models/api-models/DaybookRequest';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, private _httpClient: HttpClient, public _router: Router,
               private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
@@ -277,13 +278,14 @@ export class LedgerService {
   /*
   * delete Multiple Ledger transaction
   */
- public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNames: string[]): Observable<BaseResponse<string, string>> {
+ public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<string, string>> {
   this.user = this._generalService.user;
+  let sessionId = this._generalService.sessionId;
   this.companyUniqueName = this._generalService.companyUniqueName;
-  return this._http.delete(this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { entryUniqueNames }).map((res) => {
-    let data: BaseResponse<string, string> = res;
-    data.queryString = {accountUniqueName, entryUniqueNames};
+  return this._httpClient.request('delete', this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { headers: { 'Session-Id': sessionId }, body: { entryUniqueNames: entryUniqueNamesArray }}).map((res) => {
+    let data: any = res;
+    data.queryString = {accountUniqueName, entryUniqueNamesArray};
     return data;
-  }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNames}));
+  }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray}));
 }
 }
