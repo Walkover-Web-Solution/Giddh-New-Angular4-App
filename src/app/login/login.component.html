@@ -131,18 +131,10 @@
                 <!-- form end/ -->
 
                 <!-- login with userName form -->
-                <form class="" id="loginWithPwd" [formGroup]="loginWithPasswdForm" (ngSubmit)="loginWithPasswd(loginWithPasswdForm)" *ngIf="loginUsing === 'userName'">
+                <form class="pos-rel" id="loginWithPwd" [formGroup]="loginWithPasswdForm" (ngSubmit)="loginWithPasswd(loginWithPasswdForm)" *ngIf="loginUsing === 'userName'">
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" formControlName="uniqueKey" type="text" placeholder="Username" />
                         <input class="form-control" type="password" formControlName="password" placeholder="Password" (focus)="showPwdHint = true" (blur)="showPwdHint = false" />
-                        <div class="hint" [hidden]="!showPwdHint">
-                            <ul>
-                                <li>Provide minimum 8 and maximum 20 characters.</li>
-                                <li>1 uppercase letter.</li>
-                                <li>1 lowercase letter.</li>
-                                <li>1 number and 1 special character (@$!%*?&_).</li>
-                            </ul>
-                        </div>
                         <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [ladda]="isLoginWithPasswordInProcess$ | async">Login</button>
                     </div>
                 </form>
