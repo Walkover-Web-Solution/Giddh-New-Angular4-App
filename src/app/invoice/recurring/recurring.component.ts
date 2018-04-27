@@ -1,4 +1,4 @@
-import { animate, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, state, style, transition, trigger } from '@angular/core';
+import { animate, ChangeDetectorRef, Component, OnInit, state, style, transition, trigger } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { NgForm } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -25,7 +25,7 @@ import * as moment from 'moment';
   ]
 })
 
-export class RecurringComponent implements OnInit, OnChanges {
+export class RecurringComponent implements OnInit {
   public currentPage = 1;
   public asideMenuStateForRecurringEntry: string = 'out';
   public invoiceTypeOptions: IOption[];
@@ -33,9 +33,9 @@ export class RecurringComponent implements OnInit, OnChanges {
   public recurringData$: Observable<RecurringInvoices>;
   public selectedInvoice: RecurringInvoice;
   public filter = {
-    invoiceType: '',
+    status: '',
     customerName: '',
-    interval: '',
+    duration: '',
     lastInvoiceDate: ''
   };
 
@@ -46,10 +46,6 @@ export class RecurringComponent implements OnInit, OnChanges {
     this.recurringData$.subscribe(p => this.cdr.reattach());
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-  }
-
   public ngOnInit() {
     this.invoiceTypeOptions = [
       {label: 'Active', value: 'active'},
@@ -58,7 +54,7 @@ export class RecurringComponent implements OnInit, OnChanges {
 
     this.intervalOptions = [
       {label: 'Weekly', value: 'weekly'},
-      {label: 'Quarterly', value: 'qarterly'},
+      {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
       {label: 'Yearly', value: 'yearly'}
     ];
@@ -94,10 +90,14 @@ export class RecurringComponent implements OnInit, OnChanges {
   }
 
   public submit(f: NgForm) {
-    if (this.filter.lastInvoiceDate) {
-      this.filter.lastInvoiceDate = moment(this.filter.lastInvoiceDate).format('DD-MM-YYYY');
+    const filter = {...this.filter};
+    if (filter.lastInvoiceDate) {
+      filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format('DD-MM-YYYY');
     }
-    this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(this.filter));
-
+    if (Object.keys(filter).some(p => filter[p])) {
+      this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(filter));
+    } else {
+      this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
+    }
   }
 }
