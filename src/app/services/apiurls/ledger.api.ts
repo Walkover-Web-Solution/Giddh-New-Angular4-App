@@ -26,5 +26,6 @@ export const LEDGER_API = {
   GET_MAGIC_LINK_DATA_WITH_DATE: 'magic-link/:id?from=:from&to=:to', // Method: GET
   MAGIC_LINK_DOWNLOAD_FILE: 'magic-link/:id/download-invoice/:invoiceNum', // Method: GET
   ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=asc&page=:page&count=:count&q=:q',
-  GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type'
+  GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type',
+  MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2'
 };
