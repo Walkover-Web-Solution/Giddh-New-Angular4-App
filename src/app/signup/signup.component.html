@@ -32,11 +32,12 @@
 
 
                 <!-- login with userName form -->
-                <form class="" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm" (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'" [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
+                <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm" (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)" *ngIf="loginUsing === 'userName'" [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" type="text" formControlName="email" placeholder="Email Id" />
-                        <input class="form-control" type="password" (focus)="showPwdHint = true" (blur)="showPwdHint = false" formControlName="password" name="password" placeholder="Password" [minlength]="8" [maxlength]="20" autocomplete="off" />
+                        <input class="form-control" type="password" (ngModelChange)="validatePwd(signUpWithPasswdForm.controls['password'].value)" formControlName="password" name="password" placeholder="Password" [minlength]="8" [maxlength]="20" autocomplete="false" />
                         <div class="hint" [hidden]="!showPwdHint">
+                            <!--  -->
                             <ul>
                                 <li>Provide minimum 8 and maximum 20 characters.</li>
                                 <li>1 uppercase letter.</li>

@@ -365,4 +365,14 @@ export class SignupComponent implements OnInit, OnDestroy {
       return this._toaster.errorToast('Password is weak');
     }
   }
+
+  public validatePwd(value) {
+    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    if (pattern.test(value)) {
+      // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
+      this.showPwdHint = false;
+    } else {
+      return this.showPwdHint = true;
+    }
+  }
 }
