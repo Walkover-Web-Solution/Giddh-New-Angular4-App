@@ -14,6 +14,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from 'app/models/api-models/Sales';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -112,7 +113,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
         if (a.parentStockGroup) {
           this.selectedGroup = { label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName };
-          updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.uniqueName;
+          // updGroupObj.parentStockGroupUniqueName = this.selectedGroup.value;
           this.parentStockSearchString = a.parentStockGroup.uniqueName;
           updGroupObj.isSubGroup = true;
         } else {
@@ -122,9 +123,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
           this.forceClear$ = Observable.of({status: true});
         }
         this.addGroupForm.patchValue(updGroupObj);
+        if (a.parentStockGroup) {
+          this.addGroupForm.patchValue({parentStockGroupUniqueName: {label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName }});
+        }
 
       } else {
-        this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
+          if (a) {
+            this.addGroupForm.patchValue({ isSubGroup: true, parentStockGroupUniqueName: {label: a.name, value: a.uniqueName } });
+          } else {
+            this.addGroupForm.patchValue({ name: '', uniqueName: '', isSubGroup: false });
+          }
         this.parentStockSearchString = '';
       }
     });
@@ -239,6 +247,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     if (!stockRequest.isSubGroup) {
       stockRequest.isSubGroup = false;
     }
+    if (_.isObject(stockRequest.parentStockGroupUniqueName)) {
+       let uniqName: any = _.cloneDeep(stockRequest.parentStockGroupUniqueName);
+      stockRequest.parentStockGroupUniqueName = uniqName.value;
+    }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
   }
 
@@ -254,12 +266,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     if (this.addGroupForm.value.isSubGroup) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
+    if (_.isObject(stockRequest.parentStockGroupUniqueName)) {
+       let uniqName: any = _.cloneDeep(stockRequest.parentStockGroupUniqueName);
+      stockRequest.parentStockGroupUniqueName = uniqName.value;
+    }
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
     this.store.select(p => p.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$).distinctUntilChanged().filter(p => !p).subscribe((a) => {
       this.activeGroup$.take(1).subscribe(b => activeGroup = b);
-      this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/pages', 'inventory', 'add-group', activeGroup.uniqueName]);
-      });
+      // this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+      //   this.router.navigate(['/pages', 'inventory', 'group', activeGroup.uniqueName, 'stock-report']);
+      // });
     });
   }
 

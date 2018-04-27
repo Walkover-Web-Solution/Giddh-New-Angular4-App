@@ -52,7 +52,6 @@
                             </a>
                         </li>
 
-
                         <li [checkPermission]="['MENU', 'REPORT']">
                             <a [routerLink]="['trial-balance-and-profit-loss']">
                                 <span class="navico-tbpl"></span>
@@ -66,7 +65,7 @@
                                 <span class="label">Audit Logs</span>
                             </a>
                         </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'" [tooltip]="'Taxes'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                             <a [routerLink]="['/pages/purchase/invoice']">
                                 <span class="navico-tax"></span>
                                 <span class="label">Taxes</span>
@@ -345,7 +344,7 @@
                             <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
                                 <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <!-- <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i> -->
+                                    <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                                 </li>
                             </ul>
                         </li>
