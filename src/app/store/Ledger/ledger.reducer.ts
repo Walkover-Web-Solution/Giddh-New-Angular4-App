@@ -267,6 +267,14 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       }
       return state;
     }
+
+    case  LEDGER.GET_CURRENCY_RATE_RESPONSE: {
+      let res = action.payload;
+      if (res.status === 'success') {
+        console.log('res:', res.rates);
+      }
+      return state;
+    }
     default: {
       return state;
     }
