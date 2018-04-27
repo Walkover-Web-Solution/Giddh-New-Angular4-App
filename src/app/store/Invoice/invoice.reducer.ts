@@ -155,6 +155,10 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
           let newState = _.cloneDeep(state);
           let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
           let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
+          // Check if requested form ledger
+          if (res.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
+            return state;
+          }
           if (res.status === 'success' && reqObj.length > 0) {
             // check for failed entries
             if (_.isArray(res.body) && res.body.length > 0) {
