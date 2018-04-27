@@ -147,6 +147,7 @@ export class StockDetailResponse implements IStockDetail {
   public name: string;
   public uniqueName: string;
   public hsnNumber?: number;
+  public taxes?: string[];
 }
 
 /*
@@ -166,6 +167,7 @@ export class CreateStockRequest {
   public stockUnitCode: string;
   public uniqueName: string;
   public hsnNumber?: number;
+  public taxes?: string[];
 }
 
 /*

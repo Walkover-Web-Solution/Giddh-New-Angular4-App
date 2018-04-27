@@ -20,6 +20,9 @@ import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAc
     :host .dropdown-menu{
       overflow: auto;
     }
+    .form-control[readonly] {
+      background: #fff !important;
+    }
   `]
 })
 
