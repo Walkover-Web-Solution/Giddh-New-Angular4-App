@@ -74,10 +74,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public mapBodyContent: string;
   public selectedItemToMap: ReconcileResponse;
   public tags$: Observable<TagRequest[]>;
-
   public activeAccount$: Observable<AccountResponse>;
-
   public currentAccountApplicableTaxes: string[] = [];
+  public isMulticurrency: boolean;
+  public accountBaseCurrency: string;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -139,6 +139,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           let appTaxes = [];
           acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
           this.currentAccountApplicableTaxes = appTaxes;
+        }
+        if (acc.currency) {
+          this.accountBaseCurrency = acc.currency;
         }
       }
     });
@@ -208,6 +211,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
     }
     this.calculateCompoundTotal();
+    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+      this.isMulticurrency = true;
+      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
+    } else {
+      this.isMulticurrency = false;
+    }
   }
 
   public amountChanged() {
@@ -453,5 +462,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
       this.clickedOutsideEvent.emit(e);
     }
+  }
+
+    /**
+   * calculateConversionRate
+   */
+  public calculateConversionRate(baseCurr, convertTo, amount) {
+    console.log(baseCurr, convertTo, amount);
   }
 }
