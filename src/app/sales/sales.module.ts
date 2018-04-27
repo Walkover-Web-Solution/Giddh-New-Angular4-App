@@ -21,7 +21,6 @@ import { CreateAccountServiceComponent } from './aside-menu-product-service/comp
 import { SalesRoutingModule } from './sales.routing.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { Select2Module } from '../theme/select2';
 import { SharedModule } from '../shared/shared.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
@@ -32,6 +31,7 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 import { SalesTaxListComponent } from 'app/sales/tax-list/sales.tax.list.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { AsideMenuRecurringEntryModule } from "../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module";
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -69,13 +69,14 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     ShSelectModule,
     SalesShSelectModule,
     QuickAccountModule.forRoot(),
-    BsDropdownModule
+    BsDropdownModule,
+    AsideMenuRecurringEntryModule
   ],
   exports: [
     TooltipModule,
-    SalesAddStockGroupComponent
+    SalesAddStockGroupComponent,
   ],
-  entryComponents: [ ],
+  entryComponents: [],
   providers: []
 })
 export class SalesModule {
