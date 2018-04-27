@@ -66,7 +66,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   constructor(private _store: Store<AppState>,
               private _fb: FormBuilder,
               private _invoiceActions: InvoiceActions) {
-    //
+    this.today.setDate(this.today.getDate() + 1);
     this.form = this._fb.group({
       voucherNumber: [this.voucherNumber, Validators.required],
       duration: ['', Validators.required],
