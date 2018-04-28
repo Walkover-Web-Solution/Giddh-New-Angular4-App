@@ -64,7 +64,12 @@ export class ContactComponent implements OnInit, OnDestroy {
   public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
   public showFieldFilter = {
     name: true,
-    due_amount: true
+    due_amount: true,
+    email: true,
+    mobile: true,
+    closingBalance: true,
+    state: true,
+    gstin: true,
   };
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
 
