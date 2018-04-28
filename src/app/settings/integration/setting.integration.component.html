@@ -13,8 +13,7 @@
             <div class="form-group col-xs-4">
                 <label>Sender ID</label>
                 <br>
-                <input type="text" placeholder="Enter sender Id" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required
-                />
+                <input type="text" placeholder="Enter sender Id" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
             </div>
             <div class="form-group col-xs-4">
                 <div class="row">
@@ -42,8 +41,7 @@
         <div class="form-group col-xs-4">
             <label>Email Subject</label>
             <br>
-            <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject"
-                required />
+            <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
         </div>
         <div class="form-group col-xs-4">
             <div class="row">
@@ -65,16 +63,14 @@
                 <label>Key Id
                     <span class="required">*</span>
                 </label>
-                <input class="form-control" type="text" placeholder="Key Id" name="userName" [(ngModel)]="razorPayObj.userName" required
-                    autocomplete="off">
+                <input class="form-control" type="text" placeholder="Key Id" name="razorPayObj.userName" [(ngModel)]="razorPayObj.userName" required autocomplete="off">
             </div>
         </div>
         <div class="form-group col-xs-4">
             <label>Secret
                 <span class="required">*</span>
             </label>
-            <input class="form-control" type="password" placeholder="Secret key" name="password" [(ngModel)]="razorPayObj.password" required
-                autocomplete="off">
+            <input class="form-control" type="password" placeholder="Secret key" name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required autocomplete="off">
         </div>
 
         <div class="col-xs-12">
@@ -83,8 +79,7 @@
                     <div class="row">
                         <label>Link Account</label>
                         <div class="input-group">
-                            <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName"
-                                [options]="accounts$ | async" (selected)="selectAccount($event)"></sh-select>
+                            <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)"></sh-select>
                             <div class="input-group-addon cp">
                                 <span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span>
                             </div>
@@ -111,53 +106,98 @@
 </div>
 
 
-<h3 class="section_head mrT2">Cashfree Details</h3>
+<h3 class="section_head mrT2">Cashfree Integration</h3>
 <div class="box clearfix">
-    <h3 class="fs18 mrB1">Cashfree Details</h3>
-    <form #cashfreeform="ngForm" novalidate class="" (ngSubmit)="submitCashfreeDetail(cashfreeform)">
+    <h3 class="fs18 mrB1">Smart Payout</h3>
+    <form #payoutForm="ngForm" novalidate class="">
 
         <div class="form-group col-xs-4">
             <div class="row">
                 <label>Client Id
                     <span class="required">*</span>
                 </label>
-                <input class="form-control" type="text" placeholder="Client Id" name="userName" [(ngModel)]="cashfreeObj.userName" required
-                    autocomplete="off">
+                <input class="form-control" type="text" placeholder="Client Id" name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required autocomplete="off">
             </div>
         </div>
         <div class="form-group col-xs-4">
             <label>Client Secret Key
                 <span class="required">*</span>
             </label>
-            <input class="form-control" type="password" placeholder="Client Secret key" name="password" [(ngModel)]="cashfreeObj.password"
-                required autocomplete="off">
+            <input class="form-control" type="password" placeholder="Client Secret key" name="payoutForm.password" [(ngModel)]="payoutObj.password" required autocomplete="off">
         </div>
 
-        <!-- <div class="col-xs-12">
+        <div class="col-xs-12">
             <div class="row">
                 <div class="form-group col-xs-4">
                     <div class="row">
                         <label>Link Account</label>
-                        <div class="input-group">
-                            <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)"></sh-select>                            
-                            <div class="input-group-addon cp"><span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span></div>
-                        </div>
+                        <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.account" [options]="accounts$ | async" (selected)="selectCashfreeAccount($event)"></sh-select>
                     </div>
                 </div>
-                <div class="form-group col-xs-4 mrT1" id="inlnImg">
-                    <label>&nbsp;</label><br>
-                    <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment" name="autoCapturePayment" /> Automatic capture on payment
+                <div class="form-group col-xs-4 mrT1">
+                    <label>&nbsp;</label>
+                    <br>
+                    <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" /> Automatic capture on payment
                 </div>
-            </div>
-        </div> -->
 
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-xs-12 form-group ">
-                <button type="submit" *ngIf="!cashfreeAdded" class="btn btn-success" [disabled]="cashfreeform.invalid">Save</button>
-                <button *ngIf="cashfreeAdded" class="btn btn-success" [disabled]="cashfreeform.invalid">Update</button>
-                <button *ngIf="cashfreeAdded" class="btn btn-danger">Delete</button>
+                <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="submitCashfreeDetail(payoutObj)">Save</button>
+                <button class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">Update</button>
+                <button class="btn btn-danger" (click)="deleteCashFreeAccount()">Delete</button>
+                <!-- *ngIf="payoutAdded" -->
             </div>
         </div>
     </form>
+
+
+    <div class="clearfix mrT2">
+        <h3 class="fs18 mrB1">Auto Collect</h3>
+        <form #autoCollectform="ngForm" novalidate class="">
+
+            <div class="form-group col-xs-4">
+                <div class="row">
+                    <label>Client Id
+                    <span class="required">*</span>
+                </label>
+                    <input class="form-control" type="text" placeholder="Client Id" name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-xs-4">
+                <label>Client Secret Key
+                <span class="required">*</span>
+            </label>
+                <input class="form-control" type="password" placeholder="Client Secret key" name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required autocomplete="off">
+            </div>
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <div class="row">
+                            <label>Link Account</label>
+                            <sh-select placeholder="Link Account" name="autoCollectObj.account" [(ngModel)]="autoCollectObj" [options]="accounts$ | async" (selected)="selectCashfreeAccount($event)"></sh-select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 mrT1">
+                        <label>&nbsp;</label>
+                        <br>
+                        <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment" name="autoCollectObj.autoCapturePayment" /> Automatic capture on payment
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 form-group ">
+                    <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Save</button>
+                    <button type="reset" class="btn btn-danger" (click)="deleteAutoCollect()">Delete</button>
+                    <!-- *ngIf="autoCollectAdded" -->
+                </div>
+            </div>
+        </form>
+    </div>
+
 </div>

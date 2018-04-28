@@ -131,6 +131,26 @@ export class SettingsIntegrationService {
     }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
   }
 
+  public GetCashFreeDetail(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      // data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+  }
+
+  public UpdateCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
   public DeleteCashFreeDetail(): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -138,6 +158,15 @@ export class SettingsIntegrationService {
       let data: BaseResponse<string, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
+
+  public GetAutoCollectUser(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
   }
 
   public AddAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
