@@ -43,6 +43,7 @@ import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { SettingsBranchService } from './settings.branch.service';
 import { SettingsTagService } from './settings.tag.service';
 import { ContactService } from './contact.service';
+import { SettingsTriggersService } from './settings.triggers.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -92,7 +93,8 @@ export class ServiceModule {
         DaybookService,
         SettingsBranchService,
         SettingsTagService,
-        ContactService
+        ContactService,
+        SettingsTriggersService
       ]
     };
   }
