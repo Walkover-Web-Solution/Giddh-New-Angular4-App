@@ -353,6 +353,25 @@ export class LedgerActions {
       };
     });
 
+  public GetCurrencyRate$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_CURRENCY_RATE)
+    .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
+    .map(response => {
+      return this.GetCurrencyRateResponse(response);
+    });
+
+  @Effect()
+  public GetCurrencyRateResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_CURRENCY_RATE_RESPONSE)
+    .map((action: CustomActions) => {
+      // if (action.payload.status === 'error') {
+      //   this._toasty.errorToast(action.payload.message, action.payload.code);
+      // }
+      return {
+        type: 'EmptyAction'
+      };
+    });
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -590,6 +609,20 @@ export class LedgerActions {
   public DeleteMultipleLedgerEntriesResponse(res: BaseResponse<string, string>): CustomActions {
     return {
       type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE,
+      payload: res
+    };
+  }
+
+  public GetCurrencyRate(curreny: string): CustomActions {
+    return {
+      type: LEDGER.GET_CURRENCY_RATE,
+      payload: curreny
+    };
+  }
+
+  public GetCurrencyRateResponse(res): CustomActions {
+    return {
+      type: LEDGER.GET_CURRENCY_RATE_RESPONSE,
       payload: res
     };
   }

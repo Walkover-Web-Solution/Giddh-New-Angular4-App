@@ -450,6 +450,36 @@ small {
     padding-left: 18px;
 }
 
+.hint {
+    position: absolute;
+    /* left: -335px; */
+    left: 0;
+    z-index: 1;
+    background: #fff;
+    /* bottom: 0; */
+    bottom: -74px;
+    border-radius: 0;
+    padding: 4px;
+    border: 1px solid #ddd;
+}
+
+.hint:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid #dddddd;
+    /* right: -8px; */
+    /* top: 3px; */
+    left: 6px;
+    top: -12px;
+    transform: rotate(-90deg);
+    right: inherit;
+}
+
 @media only screen and (max-width: 1200px) {
     .slide_content {
         padding: 0 55px;
@@ -498,5 +528,14 @@ small {
     }
     .hint ul {
         text-align: left
+    }
+    .hint {
+        bottom: -74px;
+    }
+    .hint:before {
+        left: 6px;
+        top: -12px;
+        transform: rotate(-90deg);
+        right: inherit;
     }
 }
