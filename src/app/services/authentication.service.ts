@@ -256,8 +256,9 @@ export class AuthenticationService {
   public DeleteSession(sessionId) {
     let userEmail = this._generalService.user.email;
     let id = { sessionId };
-    return this._http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION, id).map(res => {
+    return this._http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION.replace(':userEmail', userEmail), id).map(res => {
         let data = res;
+        data.queryString = id;
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
   }
