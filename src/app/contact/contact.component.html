@@ -34,21 +34,25 @@
               <a class="dropdown-item">
                 <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
             </li>
-            <!-- <li role="menuitem">
+            <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" /> Mobile No.</a>
+                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
             </li>
             <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" /> Email Id</a>
+                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
             </li>
             <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" /> State</a>
-            </li> -->
+                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state"/> State</a>
+            </li>
             <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.due_amount" [(ngModel)]="showFieldFilter.due_amount" /> Amt. Due</a>
+                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" /> Amt. Due</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
             </li>
             <!-- <li role="menuitem">
               <a class="dropdown-item">
@@ -64,10 +68,6 @@
             </li>
             <li role="menuitem">
               <a class="dropdown-item">
-                <input type="checkbox" /> GSTIN</a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
                 <input type="checkbox" /> Description</a>
             </li> -->
           </ul>
@@ -79,15 +79,11 @@
     <thead>
       <tr>
         <th>Name</th>
-        <!-- <th>Mobile No.</th>
-        <th>Email Id</th>
-        <th>State</th> -->
-        <th *ngIf="showFieldFilter.due_amount">Amt. Due</th>
-        <!-- <th>Total amt of transactions</th>
-        <th>Frequent transactions</th>
-        <th>Highest transactions</th>
-        <th>GSTIN</th>
-        <th>Description</th> -->
+        <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
+        <th *ngIf="showFieldFilter.email">Email Id</th>
+        <th *ngIf="showFieldFilter.state">State</th>
+        <th *ngIf="showFieldFilter.gstin">GSTIN</th>
+        <th *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -95,17 +91,11 @@
       <ng-container *ngIf="activeTab === 'customer'">
         <tr *ngFor="let account of sundryDebtorsAccounts$ | async">
           <td>{{account.name}}</td>
-          <!-- <td>{{account.mobileNo}}</td>
-          <td>{{account.email}}</td>
-          <td></td> -->
-          <td *ngIf="showFieldFilter.due_amount">{{account.closingBalance?.amount}}</td>
-          <!-- <td></td>
-          <td> 
-            Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button> -->
-          <!-- </td>
-          <td> </td>
-          <td></td>
-          <td></td> -->
+          <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+          <td *ngIf="showFieldFilter.email">{{account.emailId}}</td>
+          <td *ngIf="showFieldFilter.state">{{account.state}}</td>
+          <td *ngIf="showFieldFilter.gstin">{{account.gstin}}</td>
+          <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
           <td>
             <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
           </td>
@@ -115,36 +105,16 @@
       <ng-container *ngIf="activeTab === 'vendor'">
         <tr *ngFor="let account of sundryCreditorsAccounts$ | async">
           <td>{{account.name}}</td>
-          <!-- <td>{{account.mobileNo}}</td>
-          <td>{{account.email}}</td>
-          <td></td> -->
-          <td *ngIf="showFieldFilter.due_amount">{{account.closingBalance?.amount}}</td>
-          <!-- <td></td>
-          <td> -->
-            <!-- Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button> -->
-          <!-- </td>
-          <td> </td>
-          <td></td>
-          <td></td> -->
+          <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+          <td *ngIf="showFieldFilter.email">{{account.emailId}}</td>
+          <td *ngIf="showFieldFilter.state">{{account.state}}</td>
+          <td *ngIf="showFieldFilter.gstin">{{account.gstin}}</td>
+          <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
           <td>
             <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
           </td>
         </tr>
       </ng-container>
-
-
-      <!-- <tr>
-            <td>Customer 2</td>
-            <td>9345223422</td>
-            <td>abc@gmail.com</td>
-            <td>Madhya Pradesh</td>
-            <td>25,000.00</td>
-            <td>2,50,000.00</td>
-            <td>Pen, pencil <button class="btn btn-default btn-xs pull-right">Sale</button></td>
-            <td>45,000.00</td>
-            <td>23134567890123456</td>
-            <td>Contrary to popular belief, Lorem Ipsum is not simply random text</td>
-        </tr> -->
     </tbody>
   </table>
 </div>
