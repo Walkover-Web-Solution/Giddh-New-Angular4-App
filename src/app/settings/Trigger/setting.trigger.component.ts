@@ -100,7 +100,6 @@ export class SettingTriggerComponent implements OnInit {
 
   public ngOnInit() {
     this.store.select(p => p.settings.triggers).takeUntil(this.destroyed$).subscribe((o) => {
-      console.log('the 0 is :', o);
       if (o) {
         this.forceClear$ = Observable.of({status: true});
         this.availableTriggers = _.cloneDeep(o);
