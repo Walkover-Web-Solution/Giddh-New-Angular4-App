@@ -74,13 +74,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public mapBodyContent: string;
   public selectedItemToMap: ReconcileResponse;
   public tags$: Observable<TagRequest[]>;
-
   public activeAccount$: Observable<AccountResponse>;
-
   public currentAccountApplicableTaxes: string[] = [];
+  public isMulticurrency: boolean;
+  public accountBaseCurrency: string;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  private currentBaseCurrency: string;
+  private currencyRateResponse: any;
 
   constructor(private store: Store<AppState>,
     private _ledgerService: LedgerService,
@@ -139,6 +142,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           let appTaxes = [];
           acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
           this.currentAccountApplicableTaxes = appTaxes;
+        }
+        if (acc.currency) {
+          this.accountBaseCurrency = acc.currency;
         }
       }
     });
@@ -208,6 +214,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
     }
     this.calculateCompoundTotal();
+    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+      this.isMulticurrency = true;
+      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
+      // alert(convertedAmount);
+      // this.currentTxn.convertedAmount = convertedAmount;
+    } else {
+      this.isMulticurrency = false;
+    }
   }
 
   public amountChanged() {
@@ -452,6 +466,31 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public clickedOutsideOfComponent(e) {
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
       this.clickedOutsideEvent.emit(e);
+    }
+  }
+
+    /**
+   * calculateConversionRate
+   */
+  public calculateConversionRate(baseCurr, convertTo, amount) {
+    if (this.currentBaseCurrency === baseCurr && this.currencyRateResponse) {
+      this.calculateAmountInConvertedCurrency(this.currencyRateResponse, baseCurr, convertTo, amount);
+    } else {
+      this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
+        if (res) {
+          this.calculateAmountInConvertedCurrency(res.rates, baseCurr, convertTo, amount);
+        }
+      });
+    }
+  }
+
+  private calculateAmountInConvertedCurrency(ratesResponse, baseCurr, convertTo, amount) {
+    for (let key in ratesResponse) {
+      if (key === convertTo) {
+        this.currentTxn.convertedAmount =  amount * ratesResponse[key];
+        this.currentBaseCurrency = baseCurr;
+        this.currencyRateResponse = _.cloneDeep(ratesResponse);
+      }
     }
   }
 }
