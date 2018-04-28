@@ -33,10 +33,14 @@ export class SettingIntegrationComponent implements OnInit {
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
   public razorPayObj: RazorPayClass = new RazorPayClass();
-  public cashfreeObj: CashfreeClass = new CashfreeClass();
+  public payoutObj: CashfreeClass = new CashfreeClass();
+  public autoCollectObj: CashfreeClass = new CashfreeClass();
+  public paymentGateway: CashfreeClass = new CashfreeClass();
   public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
-  public cashfreeAdded: boolean = false;
+  public paymentAdded: boolean = false;
+  public autoCollectAdded: boolean = false;
+  public payoutAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -71,13 +75,21 @@ export class SettingIntegrationComponent implements OnInit {
         this.updateRazor = false;
       }
       // set cashfree form data
-      if (o.cashfreeForm) {
-        this.cashfreeObj = _.cloneDeep(o.cashfreeForm);
-        // this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-        this.cashfreeAdded = true;
+      if (o.payoutForm) {
+        this.payoutObj = _.cloneDeep(o.payoutForm);
+        // this.payoutObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.payoutAdded = true;
       } else {
-        this.cashfreeObj = new CashfreeClass();
-        this.cashfreeAdded = false;
+        this.payoutObj = new CashfreeClass();
+        this.payoutAdded = false;
+      }
+      if (o.autoCollect) {
+        this.autoCollectObj = _.cloneDeep(o.autoCollect);
+        // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.autoCollectAdded = true;
+      } else {
+        this.autoCollectObj = new CashfreeClass();
+        this.autoCollectAdded = false;
       }
     });
 
@@ -100,12 +112,15 @@ export class SettingIntegrationComponent implements OnInit {
     //     this.accounts$ = Observable.of(accounts);
     //   }
     // });
+
   }
 
   public getInitialData() {
     this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
     this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
   }
 
   public setDummyData() {
@@ -167,10 +182,33 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
   }
 
-  public submitCashfreeDetail(f: NgForm) {
-    if (f.valid) {
-      console.log(f.value);
-      // this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
+  public selectCashfreeAccount(event: IOption) {
+    console.log(event);
+  }
+
+  public submitCashfreeDetail(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(f));
     }
+  }
+
+  public deleteCashFreeAccount() {
+    this.store.dispatch(this.settingsIntegrationActions.DeleteCashfreeDetails());
+  }
+
+  public updateCashfreeDetail(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.UpdateCashfreeDetails(f));
+    }
+  }
+
+  public submitAutoCollect(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.AddAutoCollectUser(f));
+    }
+  }
+
+  public deleteAutoCollect() {
+    this.store.dispatch(this.settingsIntegrationActions.DeleteAutoCollectUser());
   }
 }

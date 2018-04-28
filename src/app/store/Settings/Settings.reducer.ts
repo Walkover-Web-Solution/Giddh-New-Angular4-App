@@ -249,6 +249,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
     }
+<<<<<<< HEAD
     case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
@@ -257,6 +258,40 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
+=======
+    case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE:
+      let cashFreeRes: BaseResponse<any, any> = action.payload;
+      if (cashFreeRes.status === 'success') {
+        newState.integration.payoutForm = cashFreeRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE:
+      let dltCashFreeRes: BaseResponse<string, string> = action.payload;
+      if (dltRzrPayRes.status === 'success') {
+        newState.integration.payoutForm = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE:
+      let autoCollectRes: BaseResponse<any, any> = action.payload;
+      if (autoCollectRes.status === 'success') {
+        newState.integration.autoCollect = autoCollectRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE:
+      let dltautoCollectRes: BaseResponse<string, string> = action.payload;
+      if (dltautoCollectRes.status === 'success') {
+        newState.integration.autoCollect = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+>>>>>>> 773f9024... mustafa | midway cashfree integration
     default: {
       return state;
     }

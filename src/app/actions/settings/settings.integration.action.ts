@@ -126,7 +126,7 @@ export class SettingsIntegrationActions {
         this.toasty.clearAllToaster();
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast('CashFree Account has been successfully saved');
+        this.toasty.successToast(data.body, '');
       }
       return { type: 'EmptyAction' };
     });
@@ -146,6 +146,109 @@ export class SettingsIntegrationActions {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public AddAutoCollectUser$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.AddAutoCollectUser(action.payload))
+    .map(response => this.AddAutoCollectUserResponse(response));
+
+  @Effect()
+  public AddAutoCollectUserResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.clearAllToaster();
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.message, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public DeleteAutoCollectUser$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAutoCollectUser())
+    .map(response => this.DeleteAutoCollectUserResponse(response));
+
+  @Effect()
+  public DeleteAutoCollectUserResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.clearAllToaster();
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.message, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public GetCashfreeDetails$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetCashFreeDetail())
+    .map(response => this.GetCashfreeDetailsResponse(response));
+
+  @Effect()
+  public GetCashfreeDetailsResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.clearAllToaster();
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        console.log(data);
+        // this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public GetAutoCollectDetails$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetAutoCollectUser())
+    .map(response => this.GetAutoCollectDetailsResponse(response));
+
+  @Effect()
+  public GetAutoCollectDetailsResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.clearAllToaster();
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        console.log(data);
+        // this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public UpdateCashfreeDetails$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateCashFreeDetail(action.payload))
+    .map(response => this.UpdateCashfreeDetailsResponse(response));
+
+  @Effect()
+  public UpdateCashfreeDetailsResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.clearAllToaster();
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        console.log(data);
+        // this.toasty.successToast(data.body, '');
       }
       return { type: 'EmptyAction' };
     });
@@ -211,7 +314,7 @@ export class SettingsIntegrationActions {
 
   public SaveCashfreeDetails(value: CashfreeClass): CustomActions {
     return {
-      type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS,
+      type: SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS,
       payload: value
     };
   }
@@ -219,6 +322,20 @@ export class SettingsIntegrationActions {
   public SaveCashfreeDetailsResponse(res): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE,
+      payload: res
+    };
+  }
+
+  public UpdateCashfreeDetails(value: CashfreeClass): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS,
+      payload: value
+    };
+  }
+
+  public UpdateCashfreeDetailsResponse(res): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE,
       payload: res
     };
   }
@@ -274,6 +391,32 @@ export class SettingsIntegrationActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE,
       payload: res
+    };
+  }
+
+  public GetCashfreeDetails(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS,
+    };
+  }
+
+  public GetCashfreeDetailsResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE,
+      payload: models
+    };
+  }
+
+  public GetAutoCollectDetails(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER,
+    };
+  }
+
+  public GetAutoCollectDetailsResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE,
+      payload: models
     };
   }
 
