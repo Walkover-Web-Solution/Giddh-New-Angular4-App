@@ -310,7 +310,8 @@ export class LedgerActions {
       };
     });
 
-    @Effect() private ExportGroupLedger$: Observable<Action> = this.action$
+    @Effect()
+    public ExportGroupLedger$: Observable<Action> = this.action$
     .ofType(LEDGER.GROUP_EXPORT_LEDGER)
     .switchMap((action: CustomActions) => {
       return this._ledgerService.GroupExportLedger(action.payload.groupUniqueName, action.payload.queryRequest)
@@ -324,6 +325,26 @@ export class LedgerActions {
           }
           return { type: 'EmptyAction' };
         });
+    });
+
+  @Effect()
+  public GetCurrencyRate$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_CURRENCY_RATE)
+    .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
+    .map(response => {
+      return this.GetCurrencyRateResponse(response);
+    });
+
+  @Effect()
+  public GetCurrencyRateResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_CURRENCY_RATE_RESPONSE)
+    .map((action: CustomActions) => {
+      // if (action.payload.status === 'error') {
+      //   this._toasty.errorToast(action.payload.message, action.payload.code);
+      // }
+      return {
+        type: 'EmptyAction'
+      };
     });
 
   constructor(private action$: Actions,
@@ -550,6 +571,20 @@ export class LedgerActions {
     return {
       type: LEDGER.GROUP_EXPORT_LEDGER,
       payload: { groupUniqueName, queryRequest }
+    };
+  }
+
+  public GetCurrencyRate(curreny: string): CustomActions {
+    return {
+      type: LEDGER.GET_CURRENCY_RATE,
+      payload: curreny
+    };
+  }
+
+  public GetCurrencyRateResponse(res): CustomActions {
+    return {
+      type: LEDGER.GET_CURRENCY_RATE_RESPONSE,
+      payload: res
     };
   }
 

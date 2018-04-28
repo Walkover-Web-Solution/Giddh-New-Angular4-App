@@ -161,6 +161,9 @@
         </div>
 
         <div class="row">
+            <div class="col-xs-12 pdT1 form-inline text-right" *ngIf="isMulticurrency">
+                <input type="text" class="form-control max100 text-right" [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" /> <label> ({{currentTxn.selectedAccount.currency}})</label>
+            </div>
             <div class="col-xs-12 clearfix mrT1">
                 <div class="mrR1 form-group pull-left cp">
                     <label class="pull-left cp fs16">
@@ -182,6 +185,7 @@
                     </label>
                 </div>
             </div>
+
             <div class="col-xs-12 pdT1">
                 <button [hidden]="isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
           Reset
