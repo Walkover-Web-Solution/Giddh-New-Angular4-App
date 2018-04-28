@@ -36,6 +36,7 @@ import { SettingsPermissionActions } from './settings/permissions/settings.permi
 import { SettingsBranchActions } from './settings/branch/settings.branch.action';
 import { SessionActions } from './session.action';
 import { SettingsTagActions } from './settings/tag/settings.tag.actions';
+import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -75,7 +76,8 @@ import { SettingsTagActions } from './settings/tag/settings.tag.actions';
       InvoicePurchaseActions,
       SettingsFinancialYearActions,
       SettingsPermissionActions,
-      SessionActions
+      SessionActions,
+      SettingsTriggersActions
     ])
   ],
   exports: [EffectsModule]
