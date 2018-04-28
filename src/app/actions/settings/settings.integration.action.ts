@@ -201,13 +201,6 @@ export class SettingsIntegrationActions {
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.clearAllToaster();
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        console.log(data);
-        // this.toasty.successToast(data.body, '');
-      }
       return { type: 'EmptyAction' };
     });
 
@@ -222,13 +215,6 @@ export class SettingsIntegrationActions {
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.clearAllToaster();
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        console.log(data);
-        // this.toasty.successToast(data.body, '');
-      }
       return { type: 'EmptyAction' };
     });
 
@@ -247,8 +233,81 @@ export class SettingsIntegrationActions {
         this.toasty.clearAllToaster();
         this.toasty.errorToast(data.message, data.code);
       } else {
-        console.log(data);
-        // this.toasty.successToast(data.body, '');
+        // console.log(data);
+        this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public GetPaymentGateway$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetPaymentGateway())
+    .map(response => this.GetPaymentGatewayResponse(response));
+
+  @Effect()
+  public GetPaymentGatewayResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public AddPaymentGateway$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.AddPaymentGateway(action.payload))
+    .map(response => this.AddPaymentGatewayResponse(response));
+
+  @Effect()
+  public AddPaymentGatewayResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public UpdatePaymentGateway$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdatePaymentGateway(action.payload))
+    .map(response => this.UpdatePaymentGatewayResponse(response));
+
+  @Effect()
+  public UpdatePaymentGatewayResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        // console.log(data);
+        this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public DeletePaymentGateway$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway())
+    .map(response => this.DeletePaymentGatewayResponse(response));
+
+  @Effect()
+  public DeletePaymentGatewayResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        // console.log(data);
+        this.toasty.successToast(data.body, '');
       }
       return { type: 'EmptyAction' };
     });
@@ -416,6 +475,60 @@ export class SettingsIntegrationActions {
   public GetAutoCollectDetailsResponse(models): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE,
+      payload: models
+    };
+  }
+
+  public GetPaymentGateway(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY,
+    };
+  }
+
+  public GetPaymentGatewayResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE,
+      payload: models
+    };
+  }
+
+  public AddPaymentGateway(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY,
+      payload: models
+    };
+  }
+
+  public AddPaymentGatewayResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE,
+      payload: models
+    };
+  }
+
+  public UpdatePaymentGateway(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY,
+      payload: models
+    };
+  }
+
+  public UpdatePaymentGatewayResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE,
+      payload: models
+    };
+  }
+
+  public DeletePaymentGateway(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY,
+    };
+  }
+
+  public DeletePaymentGatewayResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE,
       payload: models
     };
   }

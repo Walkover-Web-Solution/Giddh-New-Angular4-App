@@ -260,7 +260,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     }
 =======
     case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
-    case SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE:
       let cashFreeRes: BaseResponse<any, any> = action.payload;
       if (cashFreeRes.status === 'success') {
         newState.integration.payoutForm = cashFreeRes.body;
@@ -269,14 +268,13 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return state;
     case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE:
       let dltCashFreeRes: BaseResponse<string, string> = action.payload;
-      if (dltRzrPayRes.status === 'success') {
-        newState.integration.payoutForm = null;
+      if (dltCashFreeRes.status === 'success') {
+        newState.integration.payoutForm = {};
         return Object.assign({}, state, newState);
       }
       return state;
 
-    case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
-    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE:
+    // case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
     case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE:
       let autoCollectRes: BaseResponse<any, any> = action.payload;
       if (autoCollectRes.status === 'success') {
@@ -287,7 +285,22 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE:
       let dltautoCollectRes: BaseResponse<string, string> = action.payload;
       if (dltautoCollectRes.status === 'success') {
-        newState.integration.autoCollect = null;
+        newState.integration.autoCollect = {};
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE:
+      let paymentGatewayRes: BaseResponse<any, any> = action.payload;
+      if (paymentGatewayRes.status === 'success') {
+        newState.integration.paymentGateway = paymentGatewayRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE:
+      let dltpaymentGatewayRes: BaseResponse<string, string> = action.payload;
+      if (dltpaymentGatewayRes.status === 'success') {
+        newState.integration.paymentGateway = {};
         return Object.assign({}, state, newState);
       }
       return state;
