@@ -146,9 +146,9 @@
         <div class="row">
             <div class="col-xs-12 form-group ">
                 <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="submitCashfreeDetail(payoutObj)">Save</button>
-                <button class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">Update</button>
-                <button class="btn btn-danger" (click)="deleteCashFreeAccount()">Delete</button>
-                <!-- *ngIf="payoutAdded" -->
+                <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">Update</button>
+                <button *ngIf="payoutAdded" class="btn btn-danger" (click)="deleteCashFreeAccount()">Delete</button>
+                <!--  -->
             </div>
         </div>
     </form>
@@ -193,7 +193,37 @@
             <div class="row">
                 <div class="col-xs-12 form-group ">
                     <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Save</button>
-                    <button type="reset" class="btn btn-danger" (click)="deleteAutoCollect()">Delete</button>
+                    <!-- <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Update</button>                     -->
+                    <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger" (click)="deleteAutoCollect()">Delete</button>
+                    <!--  -->
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="clearfix mrT2">
+        <h3 class="fs18 mrB1">Payment Gateway</h3>
+        <form #paymentGatewayForm="ngForm" novalidate class="">
+
+            <div class="form-group col-xs-4">
+                <div class="row">
+                    <label>Client Id
+                    <span class="required">*</span>
+                </label>
+                    <input class="form-control" type="text" placeholder="Client Id" name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-xs-4">
+                <label>Client Secret Key
+                <span class="required">*</span>
+            </label>
+                <input class="form-control" type="password" placeholder="Client Secret key" name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required autocomplete="off">
+            </div>
+            <div class="row">
+                <div class="col-xs-12 form-group ">
+                    <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">Save</button>
+                    <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Save</button>
+                    <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger" (click)="deletePaymentGateway()">Delete</button>
                     <!-- *ngIf="autoCollectAdded" -->
                 </div>
             </div>
