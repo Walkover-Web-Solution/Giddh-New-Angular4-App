@@ -1,4 +1,4 @@
-import { CreateStockRequest, GroupStockReportRequest, GroupStockReportResponse, InventoryEntry, InventoryFilter, InventoryUser, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
+import { CreateStockRequest, GroupStockReportRequest, GroupStockReportResponse, InventoryEntry, InventoryFilter, InventoryReport, InventoryUser, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -495,26 +495,28 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, ''));
   }
 
-  public GetInventoryEntry(uniqueName: string): Observable<BaseResponse<InventoryEntry, string>> {
+  public GetInventoryEntry(inventoryUserUniqueName: string, uniqueName: string): Observable<BaseResponse<InventoryEntry, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
-      .get(this.config.apiUrl + INVENTORY_API.USER.GET
+      .get(this.config.apiUrl + INVENTORY_API.ENTRY.GET
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':inventoryUserUniqueName', encodeURIComponent(uniqueName))
+        .replace(':inventoryUserUniqueName', encodeURIComponent(inventoryUserUniqueName))
+        .replace(':inventoryEntryUniqueName', encodeURIComponent(uniqueName))
       ).map((res) => {
         let data: BaseResponse<InventoryEntry, string> = res;
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<InventoryEntry, string>(e, ''));
   }
 
-  public UpdateInventoryEntry(entry: InventoryEntry, inventoryUserUniqueName: string): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
+  public UpdateInventoryEntry(entry: InventoryEntry, inventoryUserUniqueName: string, inventoryEntryUniqueName: string): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
-      .patch(this.config.apiUrl + INVENTORY_API.USER.GET_ALL
+      .patch(this.config.apiUrl + INVENTORY_API.ENTRY.UPDATE
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':inventoryUserUniqueName', encodeURIComponent(inventoryUserUniqueName)), entry
+        .replace(':inventoryUserUniqueName', encodeURIComponent(inventoryUserUniqueName))
+        .replace(':inventoryEntryUniqueName', encodeURIComponent(inventoryEntryUniqueName)), entry
         ,
       ).map((res) => {
         let data: BaseResponse<InventoryEntry, InventoryEntry> = res;
@@ -522,12 +524,13 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '', {}));
   }
 
-  public DeleteInventoryEntry(uniqueName: string): Observable<BaseResponse<string, string>> {
+  public DeleteInventoryEntry(inventoryUserUniqueName: string, uniqueName: string): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
       .delete(this.config.apiUrl + INVENTORY_API.ENTRY.DELETE
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':inventoryUserUniqueName', encodeURIComponent(inventoryUserUniqueName))
         .replace(':inventoryEntryUniqueName', encodeURIComponent(uniqueName))
       ).map((res) => {
         let data: BaseResponse<string, string> = res;
@@ -536,18 +539,18 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', {}));
   }
 
-  public GetInventoryReport(stockUniqueName: string, from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<string, string>> {
+  public GetInventoryReport(stockUniqueName: string, from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
-      .delete(this.config.apiUrl + INVENTORY_API.ENTRY.DELETE
+      .delete(this.config.apiUrl + INVENTORY_API.REPORT
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
       ).map((res) => {
-        let data: BaseResponse<string, string> = res;
+        let data: BaseResponse<InventoryReport, string> = res;
         data.request = '';
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', {}));
+      }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
   }
 
 }
