@@ -82,6 +82,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  private currentBaseCurrency: string;
+  private currencyRateResponse: any;
+
   constructor(private store: Store<AppState>,
     private _ledgerService: LedgerService,
     private _ledgerActions: LedgerActions,
@@ -214,6 +217,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
       this.isMulticurrency = true;
       this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
+      // alert(convertedAmount);
+      // this.currentTxn.convertedAmount = convertedAmount;
     } else {
       this.isMulticurrency = false;
     }
@@ -468,6 +473,24 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount) {
-    console.log(baseCurr, convertTo, amount);
+    if (this.currentBaseCurrency === baseCurr && this.currencyRateResponse) {
+      this.calculateAmountInConvertedCurrency(this.currencyRateResponse, baseCurr, convertTo, amount);
+    } else {
+      this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
+        if (res) {
+          this.calculateAmountInConvertedCurrency(res.rates, baseCurr, convertTo, amount);
+        }
+      });
+    }
+  }
+
+  private calculateAmountInConvertedCurrency(ratesResponse, baseCurr, convertTo, amount) {
+    for (let key in ratesResponse) {
+      if (key === convertTo) {
+        this.currentTxn.convertedAmount =  amount * ratesResponse[key];
+        this.currentBaseCurrency = baseCurr;
+        this.currencyRateResponse = _.cloneDeep(ratesResponse);
+      }
+    }
   }
 }
