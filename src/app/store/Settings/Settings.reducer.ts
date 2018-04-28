@@ -249,7 +249,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
     }
-<<<<<<< HEAD
     case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
@@ -258,7 +257,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
-=======
     case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
       let cashFreeRes: BaseResponse<any, any> = action.payload;
       if (cashFreeRes.status === 'success') {
@@ -304,7 +302,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
->>>>>>> 773f9024... mustafa | midway cashfree integration
     default: {
       return state;
     }
