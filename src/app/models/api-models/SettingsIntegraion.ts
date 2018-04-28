@@ -10,14 +10,18 @@ export interface IntegrationPage {
   smsForm: any;
   emailForm: any;
   razorPayForm: any;
-  cashfreeForm: any;
+  payoutForm: any;
+  autoCollect: CashfreeClass;
+  paymentGateway: CashfreeClass;
 }
 
 export class IntegrationPageClass {
   public smsForm: SmsKeyClass;
   public emailForm: EmailKeyClass;
   public razorPayForm: RazorPayDetailsResponse;
-  public cashfreeForm: CashfreeClass;
+  public payoutForm: CashfreeClass;
+  public autoCollect: CashfreeClass;
+  public paymentGateway: CashfreeClass;
 }
 
 export class SmsKeyClass {
@@ -48,4 +52,13 @@ export class RazorPayDetailsResponse {
 export class CashfreeClass {
   public userName: string;
   public password: string;
+  public account: INameUniqueName;
+  public autoCapturePayment: boolean;
+}
+
+export class CashfreeClassResponse {
+  public userName: string;
+  public password: string;
+  public account: INameUniqueName;
+  public autoCapturePayment: boolean;
 }
