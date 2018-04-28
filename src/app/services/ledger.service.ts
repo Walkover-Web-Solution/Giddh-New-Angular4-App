@@ -252,8 +252,9 @@ export class LedgerService {
   }
 
   public GetCurrencyRate(baseCurrency): Observable<BaseResponse<any, any>> {
-    let apiKey = '78b916b2e521a0a4731adaac';
-    return this._http.get('https://r.sokt.io/t/QVPTY3w3r4P9raj8XCQE/javascript-sample-currency-converter?amount=10&convert_from=USD&convert_to=INR').map((res) => {
+    // let apiKey = '78b916b2e521a0a4731adaac';
+    // return this._http.get('https://r.sokt.io/t/QVPTY3w3r4P9raj8XCQE/javascript-sample-currency-converter?amount=10&convert_from=USD&convert_to=INR').map((res) => {
+    return this._http.get('https://api.fixer.io/latest?base=' + baseCurrency).map((res) => {
       let data: any = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));

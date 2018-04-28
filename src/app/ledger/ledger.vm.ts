@@ -297,7 +297,7 @@ export class TransactionVM {
   public isStock?: boolean = false;
   public inventory?: IInventory | any;
   public currency?: string;
-  public convertedAmount?: string;
+  public convertedAmount?: number;
 }
 
 export interface IInventory {
