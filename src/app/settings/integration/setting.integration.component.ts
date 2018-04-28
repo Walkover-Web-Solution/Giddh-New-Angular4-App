@@ -38,7 +38,7 @@ export class SettingIntegrationComponent implements OnInit {
   public paymentGateway: CashfreeClass = new CashfreeClass();
   public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
-  public paymentAdded: boolean = false;
+  public paymentGatewayAdded: boolean = false;
   public autoCollectAdded: boolean = false;
   public payoutAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -91,6 +91,14 @@ export class SettingIntegrationComponent implements OnInit {
         this.autoCollectObj = new CashfreeClass();
         this.autoCollectAdded = false;
       }
+      if (o.paymentGateway) {
+        this.paymentGateway = _.cloneDeep(o.paymentGateway);
+        // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.paymentGatewayAdded = true;
+      } else {
+        this.paymentGateway = new CashfreeClass();
+        this.paymentGatewayAdded = false;
+      }
     });
 
     this.flattenAccountsStream$.subscribe(data => {
@@ -121,6 +129,7 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
     this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
   }
 
   public setDummyData() {
@@ -211,4 +220,29 @@ export class SettingIntegrationComponent implements OnInit {
   public deleteAutoCollect() {
     this.store.dispatch(this.settingsIntegrationActions.DeleteAutoCollectUser());
   }
+
+  /**
+   * submitPaymentGateway
+   */
+  public submitPaymentGateway(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.AddPaymentGateway(f));
+    }
+  }
+
+  /**
+   * UpdatePaymentGateway
+   */
+  public updatePaymentGateway(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentGateway(f));
+    }
+  }
+
+  /**
+   * DeletePaymentGateway
+   */
+  public deletePaymentGateway() {
+      this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
+    }
 }

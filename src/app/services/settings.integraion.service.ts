@@ -198,6 +198,15 @@ export class SettingsIntegrationService {
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
+  public GetPaymentGateway(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+  }
+
   public AddPaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
