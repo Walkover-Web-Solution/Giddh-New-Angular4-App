@@ -1,0 +1,90 @@
+<section class="h100">
+  <form class="fb__1-container mrB1" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
+    <div class="form-group">
+      <!-- <label class="d-block">From - To</label> -->
+      <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+             class="form-control date-range-picker" (hideDaterangepicker)="selectedDate($event)"
+             (applyDaterangepicker)="selectedDate($event)"/>
+    </div>
+    <div class="form-group">
+      <sh-select name="stockName"
+                 [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
+    </div>
+    <!--    <div class="form-group">
+       &lt;!&ndash; <label class="d-block">Others</label> &ndash;&gt;
+       <sh-select [(ngModel)]="GroupStockReportRequest.entity" name="entity" [options]="entityFilterDropDown$ | async"
+                  [placeholder]="'&#45;&#45; Others &#45;&#45;'" [multiple]="false" [ItemHeight]="33"></sh-select>
+     </div>
+     <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
+       &lt;!&ndash; <label class="d-block">&nbsp;</label> &ndash;&gt;
+       <sh-select [(ngModel)]="GroupStockReportRequest.value" name="value" [options]="valueFilterDropDown$ | async"
+                  [placeholder]="'&#45;&#45; select &#45;&#45;'" [multiple]="false" [ItemHeight]="33"></sh-select>
+     </div>
+     <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
+       &lt;!&ndash; <label class="d-block">&nbsp;</label> &ndash;&gt;
+       <sh-select [(ngModel)]="GroupStockReportRequest.condition" name="condition"
+                  [options]="comparisonFilterDropDown$ | async" [placeholder]="'&#45;&#45; select &#45;&#45;'" [multiple]="false"
+                  [ItemHeight]="33"></sh-select>
+     </div>
+     <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
+       &lt;!&ndash; <label class="d-block">&nbsp;</label> &ndash;&gt;
+       <input [(ngModel)]="GroupStockReportRequest.number" name="number" type="text" class="form-control"/>
+     </div>-->
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Go</button>
+    </div>
+  </form>
+
+  <section>
+    <table class="table basic">
+      <thead>
+      <tr>
+        <th class="bdrR">Date</th>
+        <th class="text-center bdrR bdrB">Product Name</th>
+        <th class="text-center bdrR bdrB">Sender's Name</th>
+        <th class="text-center bdrR bdrB">Receiver's Name</th>
+        <th class="text-center bdrB">Qty</th>
+        <th class="text-center bdrB">Description</th>
+        <th class="text-center bdrB">Closing Balance</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="true">
+      <!--   <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
+           <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
+             <td class="bdrR" colspan="2">{{txn.stockName}}</td>
+             <td>{{txn.openingBalance?.quantity}} {{txn.openingBalance?.stockUnit}}</td>
+             <td class="text-right bdrR">{{txn.openingBalance?.amount}}</td>
+             <td>{{txn.inwards?.quantity}} {{txn.inwards?.stockUnit}}</td>
+             <td class="text-right bdrR">{{txn.inwards?.amount}}</td>
+             <td>{{txn.outwards?.quantity}} {{txn.outwards?.stockUnit}}</td>
+             <td class="text-right bdrR">{{txn.outwards?.amount}}</td>
+             <td>{{txn.closingBalance?.quantity}} {{txn.closingBalance?.stockUnit}}</td>
+             <td class="text-right">{{txn.closingBalance?.amount}}</td>
+           </ng-container>
+         </tr>-->
+      </tbody>
+      <tbody *ngIf="true">
+      <tr>
+        <td colspan="12" class="text-center empty_table">
+          <h1>No Report Found !!</h1>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [maxSize]="5"
+                        [totalItems]="1"
+                        [itemsPerPage]="10"
+                        (pageChanged)="pageChanged($event)"
+                        class="pagination-sm"
+                        [boundaryLinks]="true"
+                        [rotate]="false"></pagination>
+          </div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </section>
+</section>
