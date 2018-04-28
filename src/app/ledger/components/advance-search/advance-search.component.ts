@@ -1,35 +1,32 @@
-import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import { from } from 'rxjs/observable/from';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
-import { GroupService } from './../../../services/group.service';
+import { GroupService } from '../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { BsDatepickerConfig, BsDaterangepickerComponent } from 'ngx-bootstrap/datepicker';
-import { Subscription } from 'rxjs/Rx';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ILedgerAdvanceSearchRequest, Inventory } from './../../../models/api-models/Ledger';
-import { CompanyActions } from '../../../actions/company.actions';
-import { AppState } from './../../../store/roots';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { IOption } from './../../../theme/ng-select/option.interface';
-import { AccountService } from './../../../services/account.service';
-import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit, ViewChildren, ViewChild, QueryList, SimpleChanges, OnDestroy, AfterViewInit, OnChanges } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
+import { IOption } from '../../../theme/ng-select/option.interface';
+import { AccountService } from '../../../services/account.service';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' },
-  { label: 'Exclude', value: 'exclude' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'},
+  {label: 'Exclude', value: 'exclude'}
 ];
+
 @Component({
   selector: 'advance-search-model',
   templateUrl: './advance-search.component.html'
@@ -39,30 +36,24 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
-  @Input() public fromDateInLedger: string;
-  @Input() public toDateInLedger: string;
-  @Input() public accountUniqueName: string;
+  public bsRangeValue: string[];
+  @Input() public advanceSearchRequest: AdvanceSearchRequest;
   @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
-  public showChequeDatePicker: boolean  = false;
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
+  public showChequeDatePicker: boolean = false;
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
   public stockListDropDown$: Observable<IOption[]>;
   public comparisonFilterDropDown$: Observable<IOption[]>;
-
   private moment = moment;
-  private fromDate: string = '';
-  private toDate: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
-    this.setAdvanceSearchForm();
-    this.setVoucherTypes();
+  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService) {
     this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
@@ -102,34 +93,67 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.groups$ = Observable.of(groups);
       }
     });
+    this.setAdvanceSearchForm();
+    this.setVoucherTypes();
   }
 
   public ngOnChanges(s: SimpleChanges) {
-    this.dateRangePicker._bsValue = [];
-    if ('fromDateInLedger' in s && s.fromDateInLedger.currentValue && s.fromDateInLedger.currentValue !== s.fromDateInLedger.previousValue) {
-      this.fromDate = s.fromDateInLedger.currentValue;
-      let f: any = moment(s.fromDateInLedger.currentValue, GIDDH_DATE_FORMAT);
-      this.dateRangePicker._bsValue[0] = f._d;
-    }
-    if ('toDateInLedger' in s && s.toDateInLedger.currentValue && s.toDateInLedger.currentValue !== s.toDateInLedger.previousValue) {
-      this.toDate = s.toDateInLedger.currentValue;
-      let t: any = moment(s.toDateInLedger.currentValue, GIDDH_DATE_FORMAT);
-      this.dateRangePicker._bsValue[1] = t._d;
+    if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue) {
+      let f: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+      let t: any = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+
+      if (this.advanceSearchForm) {
+        let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+        bsDaterangepicker.patchValue([f, t]);
+      }
     }
   }
 
   public resetAdvanceSearchModal() {
+    this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
+    // this.advanceSearchRequest.from = moment().format('DD-MM-YYYY');
+    // this.advanceSearchRequest.to = moment().subtract(30, 'days').format('DD-MM-YYYY');
     if (this.dropDowns) {
       this.dropDowns.forEach((el) => {
         el.clear();
       });
     }
-    this.dateRangePicker.bsValue = [];
-    this.setAdvanceSearchForm();
+    let f: any = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT);
+    let t: any = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT);
+    this.bsRangeValue = [];
+    this.bsRangeValue.push(f._d);
+    this.bsRangeValue.push(t._d);
+    this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
+    // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
+    // this.setAdvanceSearchForm();
   }
 
   public setAdvanceSearchForm() {
+    // this.advanceSearchForm = this.fb.group({
+    //   uniqueNames: [this.advanceSearchRequest.dataToSend.accountUniqueNames],
+    //   isInvoiceGenerated: [this.advanceSearchRequest.dataToSend.isInvoiceGenerated],
+    //   accountUniqueNames: [this.advanceSearchRequest.dataToSend.accountUniqueNames],
+    //   groupUniqueNames: [this.advanceSearchRequest.dataToSend.groupUniqueNames],
+    //   amountLessThan: [this.advanceSearchRequest.dataToSend.amountLessThan],
+    //   includeAmount: [this.advanceSearchRequest.dataToSend.includeAmount],
+    //   amountEqualTo: [this.advanceSearchRequest.dataToSend.amountEqualTo],
+    //   amountGreaterThan: [this.advanceSearchRequest.dataToSend.amountGreaterThan],
+    //   amount: [this.advanceSearchRequest.dataToSend.amount, Validators.required],
+    //   includeDescription: [this.advanceSearchRequest.dataToSend.includeDescription, Validators.required],
+    //   description: [this.advanceSearchRequest.dataToSend.description, Validators.required],
+    //   includeTag: [this.advanceSearchRequest.dataToSend.includeTag, Validators.required],
+    //   includeParticulars: [this.advanceSearchRequest.dataToSend.includeParticulars, Validators.required],
+    //   includeVouchers: [this.advanceSearchRequest.dataToSend.includeVouchers, Validators.required],
+    //   chequeNumber: ['', Validators.required],
+    //   dateOnCheque: ['', Validators.required],
+    //   tags: this.fb.array(this.advanceSearchRequest.dataToSend.tags),
+    //   particulars: [this.advanceSearchRequest.dataToSend.particulars],
+    //   vouchers: [this.advanceSearchRequest.dataToSend.vouchers],
+    //   inventory: this.fb.group(this.advanceSearchRequest.dataToSend.inventory),
+    // });
+    // this.advanceSearchForm.
     this.advanceSearchForm = this.fb.group({
+      bsRangeValue: [[]],
       uniqueNames: [[]],
       isInvoiceGenerated: [null],
       accountUniqueNames: [[]],
@@ -164,6 +188,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         includeItemGreaterThan: false
       }),
     });
+    this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
   }
 
   public setVoucherTypes() {
@@ -195,7 +220,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(null);
+    this.closeModelEvent.emit(true);
+    // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
   }
 
   /**
@@ -203,19 +229,29 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
    */
   public onDateRangeSelected(data) {
     if (data && data.length) {
-      this.fromDate = moment(data[0]).format('DD-MM-YYYY');
-      this.toDate = moment(data[1]).format('DD-MM-YYYY');
+      // this.advanceSearchRequest.from = moment(data[0]).format('DD-MM-YYYY');
+      // this.advanceSearchRequest.to = moment(data[1]).format('DD-MM-YYYY');
     }
+    // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
   }
 
   /**
    * onSearch
    */
   public onSearch() {
-    const dataToSend = this.prepareRequest();
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
-    this.closeModelEvent.emit(dataToSend);
+    this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
+    this.closeModelEvent.emit(false);
+    // const dataToSend = this.prepareRequest();
+    // this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate, 1, 15));
+    // this.closeModelEvent.emit({
+    //   dataToSend, accountUniqueName: this.accountUniqueName,
+    //   fromDate: this.fromDate, toDate: this.toDate
+    // });
     // this.advanceSearchForm.reset();
+  }
+
+  public resetAndSearch() {
+    this.resetAdvanceSearchModal();
   }
 
   public prepareRequest() {
@@ -237,22 +273,19 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     switch (type) {
       case 'particulars':
         this.advanceSearchForm.get('particulars').patchValue(values);
-      break;
+        break;
       case 'accountUniqueNames':
         this.advanceSearchForm.get('accountUniqueNames').patchValue(values);
-      break;
+        break;
       case 'vouchers':
         this.advanceSearchForm.get('vouchers').patchValue(values);
-      break;
+        break;
       case 'inventory':
         this.advanceSearchForm.get('inventory.inventories').patchValue(values);
-      break;
+        break;
       case 'groupUniqueNames':
         this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
-      break;
-      case 'groupUniqueNames':
-        this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
-      break;
+        break;
     }
   }
 
@@ -273,109 +306,109 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'amount-lessThan':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(true);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'amount-greaterThanOrEquals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-lessThanOrEquals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(true);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-equals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-exclude':
         this.advanceSearchForm.get('includeAmount').patchValue(false);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-greaterThan':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-lessThan':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-greaterThanOrEquals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-lessThanOrEquals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-equals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-exclude':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-greaterThan':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-lessThan':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-greaterThanOrEquals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-lessThanOrEquals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-equals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-exclude':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
     }
   }
 

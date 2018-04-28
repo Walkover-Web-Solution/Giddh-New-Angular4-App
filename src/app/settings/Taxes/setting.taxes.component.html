@@ -17,7 +17,8 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Linked Account</label><br>
-                <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>
+                <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="true"
+                         [customFilter]="customAccountFilter"  placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" ></sh-select>
             </div>
         </div>
         <div class="row">
@@ -157,7 +158,7 @@
                             </td>
                             <td>
                                 <div class="custom-select pos-rel">
-                                    <sh-select [options]="duration" [disabled]="!taxToEdit[i]" [isFilterEnabled]="false" [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}" [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
+                                    <sh-select [options]="duration" [disabled]="true" [isFilterEnabled]="false" [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}" [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
                                 </div>
                             </td>
                             <td>{{tax.taxType ? tax.taxType : 'Others'}}</td>

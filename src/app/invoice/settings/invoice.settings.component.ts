@@ -44,6 +44,7 @@ export class InvoiceSettingComponent implements OnInit {
   };
   public showDatePicker: boolean = false;
   public moment = moment;
+  public isAutoPaidOn: boolean;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -78,6 +79,7 @@ export class InvoiceSettingComponent implements OnInit {
 
         this.settingResponse = setting;
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
+        this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime' ? true : false;
 
         // using last state to compare data before dispatching action
         this.invoiceLastState = _.cloneDeep(setting.invoiceSettings);
@@ -173,6 +175,12 @@ export class InvoiceSettingComponent implements OnInit {
 
         if (this.formToSave.invoiceSettings.lockDate) {
           this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        if (this.isAutoPaidOn) {
+          this.formToSave.invoiceSettings.autoPaid = 'runtime';
+        } else {
+          this.formToSave.invoiceSettings.autoPaid = 'never';
         }
 
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
