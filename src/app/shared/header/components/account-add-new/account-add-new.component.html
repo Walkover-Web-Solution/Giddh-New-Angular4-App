@@ -142,7 +142,7 @@
                     <div class="">
                         <label for="">Opening Balance</label>
                         <div class="input-group">
-                            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00">
+                            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00" />
                             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
@@ -169,7 +169,7 @@
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
-                        <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id="" placeholder="00.00">
+                        <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" placeholder="00.00" />
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
