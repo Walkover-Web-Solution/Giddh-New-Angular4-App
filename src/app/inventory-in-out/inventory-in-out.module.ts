@@ -10,6 +10,14 @@ import { CommonModule } from '@angular/common';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { AsideMenuComponent } from './components/aside-menu/aside-menu.component';
+import { TransferNoteComponent } from './components/forms/transfer-note/transfer-note.component';
+import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
+import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { LaddaModule } from 'angular2-ladda';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -18,7 +26,11 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     PersonListComponent,
     StockListComponent,
     InventoryHeaderComponent,
-    InventoryInOutReportComponent
+    InventoryInOutReportComponent,
+    AsideMenuComponent,
+    TransferNoteComponent,
+    InwardNoteComponent,
+    OutwardNoteComponent
   ],
   exports: [],
   providers: [],
@@ -26,7 +38,10 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     CommonModule,
     ShSelectModule,
     PaginationModule,
-    Daterangepicker
+    Daterangepicker,
+    ReactiveFormsModule,
+    FormsModule,
+    BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule
   ],
 })
 export class InventoryInOutModule {
