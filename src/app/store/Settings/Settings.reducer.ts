@@ -15,6 +15,7 @@ import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../service
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
+import { SETTINGS_TRIGGERS_ACTIONS } from '../../actions/settings/triggers/settings.triggers.const';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -32,6 +33,7 @@ export interface SettingsState {
   branches: any;
   tags: any;
   parentCompany: CompanyResponse;
+  triggers: any;
 }
 
 export const initialState: SettingsState = {
@@ -42,7 +44,8 @@ export const initialState: SettingsState = {
   usersWithCompanyPermissions: null,
   branches: null,
   tags: null,
-  parentCompany: null
+  parentCompany: null,
+  triggers: null
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -245,6 +248,14 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         newState.tags = null;
         return Object.assign({}, state, newState);
       }
+    }
+    case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
+      let response: BaseResponse<any, any> = action.payload;
+      if (response.status === 'success') {
+        newState.triggers = response.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
     default: {
       return state;
