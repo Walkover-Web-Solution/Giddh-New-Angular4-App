@@ -451,6 +451,13 @@ export class LoginActions {
     });
 
   @Effect()
+  public ReportInvalidJSON$: Observable<Action> = this.actions$
+    .ofType('REPORT_INVALID_JSON')
+    .switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload))
+    .map((res) => {
+      return { type: 'EmptyAction' };
+    });
+
   public SignupWithPasswdRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithPasswdRequest)
     .switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload))

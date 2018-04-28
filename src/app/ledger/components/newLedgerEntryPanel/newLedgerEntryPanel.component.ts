@@ -29,6 +29,7 @@ import { Configuration } from 'app/app.constant';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
+import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -43,7 +44,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
   @Input() public isBankTransaction: boolean = false;
-  @Input() public trxRequest: TransactionsRequest;
+  @Input() public trxRequest: AdvanceSearchRequest;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
