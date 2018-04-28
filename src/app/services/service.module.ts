@@ -42,6 +42,8 @@ import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { SettingsBranchService } from './settings.branch.service';
 import { SettingsTagService } from './settings.tag.service';
+import { ContactService } from './contact.service';
+import { SettingsTriggersService } from './settings.triggers.service';
 import { RecurringVoucherService } from './recurring-voucher.service';
 
 /**
@@ -92,6 +94,8 @@ export class ServiceModule {
         DaybookService,
         SettingsBranchService,
         SettingsTagService,
+        ContactService,
+        SettingsTriggersService,
         RecurringVoucherService
       ]
     };

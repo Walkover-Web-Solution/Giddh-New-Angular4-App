@@ -328,6 +328,31 @@ export class LedgerActions {
     });
 
   @Effect()
+  public DeleteMultipleLedgerEntries$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES)
+    .switchMap((action: CustomActions) => this._ledgerService.DeleteMultipleLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueNames))
+    .map(res => this.DeleteMultipleLedgerEntriesResponse(res));
+
+  @Effect()
+  public DeleteMultipleLedgerEntriesResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE)
+    .map((action: CustomActions) => {
+      let res: any = action.payload as BaseResponse<string, string>;
+      if (res.status === 'success') {
+        let errorMessage = res.body[0].reason;
+        if (errorMessage) {
+          this._toasty.errorToast(errorMessage, 'Error');
+        } else {
+          this._toasty.successToast('Entries deleted successfully', 'Success');
+        }
+      } else {
+        this._toasty.errorToast(res.message);
+      }
+      return {
+        type: 'EmptyAction'
+      };
+    });
+
   public GetCurrencyRate$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_CURRENCY_RATE)
     .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
@@ -571,6 +596,20 @@ export class LedgerActions {
     return {
       type: LEDGER.GROUP_EXPORT_LEDGER,
       payload: { groupUniqueName, queryRequest }
+    };
+  }
+
+  public DeleteMultipleLedgerEntries(accountUniqueName: string, entryUniqueNames: string[]): CustomActions {
+    return {
+      type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES,
+      payload: { accountUniqueName, entryUniqueNames }
+    };
+  }
+
+  public DeleteMultipleLedgerEntriesResponse(res: BaseResponse<string, string>): CustomActions {
+    return {
+      type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE,
+      payload: res
     };
   }
 

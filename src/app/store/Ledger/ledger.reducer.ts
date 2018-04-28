@@ -6,6 +6,7 @@ import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
+import { INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -27,6 +28,7 @@ export interface LedgerState {
   isQuickAccountCreatedSuccessfully: boolean;
   transactionDetails: LedgerResponse;
   isAdvanceSearchApplied: boolean;
+  ledgerBulkActionSuccess: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -41,7 +43,8 @@ export const initialState: LedgerState = {
   isQuickAccountInProcess: false,
   isQuickAccountCreatedSuccessfully: false,
   transactionDetails: null,
-  isAdvanceSearchApplied: false
+  isAdvanceSearchApplied: false,
+  ledgerBulkActionSuccess: false
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -267,7 +270,18 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       }
       return state;
     }
-
+    case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES: {
+      return Object.assign({}, state, { ledgerBulkActionSuccess: false });
+    }
+    case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE: {
+      return Object.assign({}, state, { ledgerBulkActionSuccess: true });
+    }
+    case INVOICE_ACTIONS.GENERATE_BULK_INVOICE: {
+      return Object.assign({}, state, { ledgerBulkActionSuccess: false });
+    }
+    case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
+      return Object.assign({}, state, { ledgerBulkActionSuccess: true });
+    }
     case  LEDGER.GET_CURRENCY_RATE_RESPONSE: {
       let res = action.payload;
       if (res.status === 'success') {
