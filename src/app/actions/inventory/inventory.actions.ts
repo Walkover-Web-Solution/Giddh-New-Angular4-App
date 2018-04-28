@@ -193,7 +193,7 @@ export class InventoryAction {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast(data.body, '');
-        this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName]);
+        this.router.navigate(['/pages', 'inventory', 'group', data.queryString.stockGroupUniqueName, 'stock-report']);
       }
       return {type: 'EmptyAction'};
     });

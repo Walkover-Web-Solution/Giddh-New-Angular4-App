@@ -24,6 +24,26 @@
                         </div>
                     </div>
                 </div>
+                <div class="clearfix bdrB ">
+                    <div class="row">
+                        <div class="col-xs-5 lh34"><label>Use Custom Invoice</label></div>
+                        <div class="col-xs-7 pdT1">
+                            <div class="form-group clearfix">
+                                <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left" name="useCustomInvoiceNumber" />
+                                <div class="form-inline pull-left clearfix mrT1">
+                                    <div class="form-group max150">
+                                        <label class="clearfix width100">Initial Invoice No.</label>
+                                        <input type="text" class="form-control w100" [(ngModel)]="invoiceSetting.initialInvoiceNumber" name="invoiceNum" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
+                                    </div>
+                                    <div class="form-group mrL2">
+                                        <label class="clearfix width100">Invoice No. Prefix</label>
+                                        <input type="text" class="form-control w100" [(ngModel)]="invoiceSetting.invoiceNumberPrefix" name="invoicePrefix" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="clearfix bdrB pdT1">
                     <div class="row">
                         <div class="col-xs-5 lh34"><label>Send alert</label></div>

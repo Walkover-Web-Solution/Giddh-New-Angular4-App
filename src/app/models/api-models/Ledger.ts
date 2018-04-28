@@ -324,4 +324,5 @@ export interface DebitTransaction {
   description: string;
   voucherName: string;
   tag: string;
+  convertedAmount?: string;
 }

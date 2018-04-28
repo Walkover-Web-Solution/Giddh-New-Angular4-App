@@ -17,6 +17,9 @@ export class InvoiceISetting {
     public emailVerified: boolean;
     public showSeal: boolean;
     public lockDate?: any;
+    public useCustomInvoiceNumber: boolean;
+    public invoiceNumberPrefix: string;
+    public initialInvoiceNumber: string;
 }
 export interface InvoiceWebhooks {
     entity: string;

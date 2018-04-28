@@ -345,8 +345,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
     this.manageInProcess$.subscribe(s => {
       if (s.isOpen && !s.isGroup && !s.isUpdate) {
-
-        // console.log('this.activeGroup', this.activeGroup);
       }
     });
   }
@@ -680,17 +678,25 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
     let parentSelected = false;
-    if (!_.isString && formObj.parentGroup.value) {
-      formObj.parentGroup = formObj.parentGroup.value;
+    // if (!_.isString && formObj.parentGroup.value) {
+    //   formObj.parentGroup = formObj.parentGroup.value;
+    //   parentSelected = true;
+    // }
+    let defaultGrpisExist = false;
+    if (formObj.parentGroup) {
       parentSelected = true;
+    } else {
+      this.groupsData$.subscribe(p => {
+        if (p) {
+          defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
+          if (defaultGrpisExist) {
+            formObj.parentGroup = 'maingroup';
+          }
+        }
+      });
     }
 
-    if (!parentSelected) {
-      let defaultGrp = null;
-      this.groupsData$.subscribe(p => {
-        defaultGrp = p.find(q => q.value === 'maingroup');
-      });
-      if (!defaultGrp) {
+      if (!formObj.parentGroup) {
         let stockRequest = {
             name: 'Main Group',
             uniqueName: 'maingroup'
@@ -698,16 +704,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         formObj.parentGroup = stockRequest.uniqueName;
         this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
       } else {
-        formObj.parentGroup = defaultGrp.value;
-        this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
-      }
+      this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
+    }
 
       this.createGroupSuccess$.subscribe(s => {
-        if (s && !defaultGrp) {
+        if (s && formObj.parentGroup) {
             this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
         }
       });
-    }
 
   }
 
@@ -890,7 +894,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         } else {
-          this.addStockForm.get('parentGroup').patchValue('maingroup');
+          this.groupsData$.subscribe(p => {
+            if (p) {
+              let defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
+              if (defaultGrpisExist) {
+                this.addStockForm.get('parentGroup').patchValue('maingroup');
+              }
+            }
+          });
         }
         this.isUpdatingStockForm = false;
         this.companyTaxesList$.subscribe(a => {
