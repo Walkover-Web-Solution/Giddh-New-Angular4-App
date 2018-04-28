@@ -65,8 +65,11 @@ export class ContactComponent implements OnInit, OnDestroy {
   public showFieldFilter = {
     name: true,
     due_amount: true,
-    email: false,
-    mobile: false
+    email: true,
+    mobile: true,
+    closingBalance: true,
+    state: true,
+    gstin: true,
   };
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
 
