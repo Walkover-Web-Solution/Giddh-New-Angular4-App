@@ -282,6 +282,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
       return Object.assign({}, state, { ledgerBulkActionSuccess: true });
     }
+    case  LEDGER.GET_CURRENCY_RATE_RESPONSE: {
+      let res = action.payload;
+      if (res.status === 'success') {
+        console.log('res:', res.rates);
+      }
+      return state;
+    }
     default: {
       return state;
     }

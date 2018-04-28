@@ -44,6 +44,7 @@ import { SettingsBranchService } from './settings.branch.service';
 import { SettingsTagService } from './settings.tag.service';
 import { ContactService } from './contact.service';
 import { SettingsTriggersService } from './settings.triggers.service';
+import { RecurringVoucherService } from './recurring-voucher.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -94,7 +95,8 @@ export class ServiceModule {
         SettingsBranchService,
         SettingsTagService,
         ContactService,
-        SettingsTriggersService
+        SettingsTriggersService,
+        RecurringVoucherService
       ]
     };
   }

@@ -114,6 +114,7 @@ export interface ITransactionItem {
   type: string;
   unconfirmedEntry: boolean;
   selectedAccount?: IFlattenAccountsResultItem | any;
+  convertedAmount?: string;
 }
 
 /**
