@@ -2,7 +2,7 @@ import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Component, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
+import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks, CashFreeSetting } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -12,6 +12,11 @@ import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegra
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { IOption } from '../../theme/ng-select/option.interface';
+
+const PaymentGateway = [
+  {value: 'razorpay', label: 'razorpay'},
+  {value: 'cashfree', label: 'cashfree'}
+];
 
 @Component({
   templateUrl: './invoice.settings.component.html',
@@ -45,7 +50,8 @@ export class InvoiceSettingComponent implements OnInit {
   public showDatePicker: boolean = false;
   public moment = moment;
   public isAutoPaidOn: boolean;
-
+  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting() ;
+  public paymentGatewayList: IOption[] = PaymentGateway;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -94,7 +100,6 @@ export class InvoiceSettingComponent implements OnInit {
         // adding blank webhook row on load
         let webhookRow = _.cloneDeep(this.webhookMock);
         this.invoiceWebhook.push(webhookRow);
-
         if (setting.razorPayform && !_.isEmpty(setting.razorPayform)) {
           this.razorpayObj = _.cloneDeep(setting.razorPayform);
           this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
@@ -112,6 +117,7 @@ export class InvoiceSettingComponent implements OnInit {
         if (this.invoiceSetting.lockDate) {
           this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
         }
+        this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
 
       } else if (!setting || !setting.webhooks) {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
@@ -182,7 +188,7 @@ export class InvoiceSettingComponent implements OnInit {
         } else {
           this.formToSave.invoiceSettings.autoPaid = 'never';
         }
-
+        this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
       // }
 
