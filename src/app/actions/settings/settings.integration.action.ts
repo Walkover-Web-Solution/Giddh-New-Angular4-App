@@ -165,7 +165,7 @@ export class SettingsIntegrationActions {
         this.toasty.clearAllToaster();
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast(data.message, '');
+        this.toasty.successToast(data.body, '');
       }
       return { type: 'EmptyAction' };
     });
