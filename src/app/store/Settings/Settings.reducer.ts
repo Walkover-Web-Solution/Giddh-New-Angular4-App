@@ -257,6 +257,76 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
+    case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
+      let cashFreeRes: BaseResponse<any, any> = action.payload;
+      if (cashFreeRes.status === 'success') {
+        newState.integration.payoutForm = cashFreeRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
+      let savecashFreeRes: BaseResponse<any, any> = action.payload;
+      if (savecashFreeRes.status === 'success') {
+        newState.integration.payoutForm = savecashFreeRes.request;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE:
+      let dltCashFreeRes: BaseResponse<string, string> = action.payload;
+      if (dltCashFreeRes.status === 'success') {
+        newState.integration.payoutForm = {};
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE:
+      let autoCollectRes: BaseResponse<any, any> = action.payload;
+      if (autoCollectRes.status === 'success') {
+        newState.integration.autoCollect = autoCollectRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
+      let saveautoCollectRes: BaseResponse<any, any> = action.payload;
+      if (saveautoCollectRes.status === 'success') {
+        newState.integration.autoCollect = saveautoCollectRes.request;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE:
+      let dltautoCollectRes: BaseResponse<string, string> = action.payload;
+      if (dltautoCollectRes.status === 'success') {
+        newState.integration.autoCollect = {};
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE:
+      let paymentGatewayRes: BaseResponse<any, any> = action.payload;
+      if (paymentGatewayRes.status === 'success') {
+        newState.integration.paymentGateway = paymentGatewayRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE:
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE:
+      let paymntGtwy: BaseResponse<any, any> = action.payload;
+      if (paymntGtwy.status === 'success') {
+        newState.integration.paymentGateway = paymntGtwy.request;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE:
+      let dltpaymentGatewayRes: BaseResponse<string, string> = action.payload;
+      if (dltpaymentGatewayRes.status === 'success') {
+        newState.integration.paymentGateway = {};
+        return Object.assign({}, state, newState);
+      }
+      return state;
     default: {
       return state;
     }

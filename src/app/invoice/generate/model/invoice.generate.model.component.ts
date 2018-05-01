@@ -26,7 +26,7 @@ export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
           if (o && o.invoiceData && o.invoiceTemplateConditions) {
             this.goAhead = true;
           }else {
-            this.hasErr = true;
+            // this.hasErr = true;
           }
         }
       );

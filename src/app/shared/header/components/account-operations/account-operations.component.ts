@@ -108,6 +108,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showTaxes: boolean = false;
   public isUserSuperAdmin: boolean = false;
   public showGroupLedgerExportButton$: Observable<boolean>;
+  public showBankDetail: boolean = false;
+  public virtualAccountEnable$: Observable<any>;
+  public showVirtualAccount: boolean = false;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -125,6 +128,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors).takeUntil(this.destroyed$);
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
@@ -270,11 +274,28 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         //   this.taxGroupForm.get('taxes').setValue(taxes);
         //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         // }
+
+        this.virtualAccountEnable$.subscribe(s => {
+          if (s && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
+            this.showVirtualAccount = true;
+          } else {
+            this.showVirtualAccount = false;
+          }
+        });
+
         if (this.breadcrumbUniquePath) {
           if (this.breadcrumbUniquePath[0]) {
             let col = this.breadcrumbUniquePath[0];
             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+          }
+          if (this.breadcrumbUniquePath[1]) {
+            let col = this.breadcrumbUniquePath[1];
+            if ( col === 'sundrycreditors' ) {
+              this.showBankDetail = true;
+            } else {
+              this.showBankDetail = false;
+            }
           }
         }
       }
@@ -297,6 +318,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.moveAccountForm.reset();
       }
     });
+
   }
 
   public ngAfterViewInit() {
