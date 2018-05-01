@@ -17,6 +17,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   }
   #inventory-sidebar {
     background: #fff;
+    min-height: 100vh;
   }
   `]
 })

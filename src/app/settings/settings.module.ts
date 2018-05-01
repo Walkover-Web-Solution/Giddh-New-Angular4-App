@@ -28,6 +28,7 @@ import { BranchComponent } from './branch/branch.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
+import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { SettingsTagsComponent } from './tags/tags.component';
     SettingPermissionComponent,
     SettingPermissionFormComponent,
     BranchComponent,
-    SettingsTagsComponent
+    SettingsTagsComponent,
+    SettingTriggerComponent
   ],
   imports: [
     CommonModule,

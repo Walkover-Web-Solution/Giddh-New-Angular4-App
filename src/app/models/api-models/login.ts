@@ -1,7 +1,7 @@
 export interface SignUpWithPassword {
   email: string;
   password: string;
-  mobileNo: string;
+  mobileNo?: string;
 }
 
 export interface LoginWithPassword {

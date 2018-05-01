@@ -104,7 +104,7 @@
                                 <span>{{""}}</span>
                             </td> -->
                             <td class="pdR1" *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
-                                <label class="default_clr">Invoice No.</label>                                
+                                <label class="default_clr">Invoice No.</label>
                                 <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
                         </tr>
@@ -125,18 +125,16 @@
                         </tbody>
                     </table>
                     <table class="mrT1">
-                            <tbody>
-                                <tr>
-                                    <td class="">
-                                        <label class="default_clr">Assign Tag</label>                                
-                                        <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <tbody>
+                            <tr>
+                                <td class="">
+                                    <label class="default_clr">Assign Tag</label>
+                                    <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-
             </div>
         </div>
         <!--map bank transactions-->
@@ -163,6 +161,9 @@
         </div>
 
         <div class="row">
+            <div class="col-xs-12 pdT1 form-inline text-right" *ngIf="isMulticurrency">
+                <input type="text" class="form-control max100 text-right" [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" /> <label> ({{currentTxn.selectedAccount.currency}})</label>
+            </div>
             <div class="col-xs-12 clearfix mrT1">
                 <div class="mrR1 form-group pull-left cp">
                     <label class="pull-left cp fs16">
@@ -184,6 +185,7 @@
                     </label>
                 </div>
             </div>
+
             <div class="col-xs-12 pdT1">
                 <button [hidden]="isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
           Reset

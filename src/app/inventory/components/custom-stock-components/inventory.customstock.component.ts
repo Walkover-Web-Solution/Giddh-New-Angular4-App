@@ -44,15 +44,17 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     private sidebarAction: SidebarAction, private settingsProfileActions: SettingsProfileActions) {
     this.customUnitObj = new StockUnitRequest();
     this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).takeUntil(this.destroyed$);
-    this.stockUnitsDropDown$ = this.store.select(p => {
-      if (p.inventory.stockUnits.length) {
-        let units = p.inventory.stockUnits;
 
-        return units.map(unit => {
-          return { label: unit.name, value: unit.code };
+    this.store.select(state => state.inventory.stockUnits).takeUntil(this.destroyed$).subscribe( p  => {
+      if (p && p.length) {
+        let units = p;
+        let unitArr = units.map(unit => {
+          return { label: `${unit.name} (${unit.code})`, value: unit.code };
         });
+        this.stockUnitsDropDown$ = Observable.of(unitArr);
       }
     });
+
     this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
       if (!_.isEmpty(o)) {
         this.companyProfile = _.cloneDeep(o);
