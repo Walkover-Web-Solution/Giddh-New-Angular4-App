@@ -54,6 +54,7 @@ export class CashfreeClass {
   public password: string;
   public account: INameUniqueName;
   public autoCapturePayment: boolean;
+  public fakeAccObj: boolean;
 }
 
 export class CashfreeClassResponse {
