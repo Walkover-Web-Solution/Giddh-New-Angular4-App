@@ -17,7 +17,9 @@
                 <tab heading="Financial Year" (select)="financialYearSelected($event)">
                     <financial-year #financialYearComp></financial-year>
                 </tab>
-                <tab *ngIf="isUserSuperAdmin" (select)="permissionTabSelected($event)" heading="Permission">
+                <!-- Arpit: Sagar told me to remove this condition from permission tab -->
+                <!-- *ngIf="isUserSuperAdmin" -->                
+                <tab  (select)="permissionTabSelected($event)" heading="Permission">
                     <setting-permission #permissionComp></setting-permission>
                 </tab>
                 <tab heading="Branch">
@@ -25,6 +27,9 @@
                 </tab>
                 <tab heading="Tags" (select)="tagsTabSelected($event)">
                     <setting-tags #tagComp></setting-tags>
+                </tab>
+                <tab heading="Trigger">
+                    <setting-trigger></setting-trigger>
                 </tab>
             </tabset>
         </div>

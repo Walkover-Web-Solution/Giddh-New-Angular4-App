@@ -14,8 +14,14 @@
     <div>
       <!--group-->
       <div class="pull-right col-xs-4 pdR0">
-        <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
-        </button>
+        <div class="pull-right">
+          <button class="btn btn-share" *ngIf="(showEditGroup$ | async) && (showGroupLedgerExportButton$ | async)" (click)="exportGroupLedger()">
+            Export
+          </button>
+          <button class="btn btn-share" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">
+            Share
+          </button>
+        </div>
         <div class="primary_clr text-right pull-right mrT1 clearfix" *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
           Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
         </div>
@@ -269,4 +275,14 @@
     </div>
   </div>
 </div>
+
+<!-- export ladger popup -->
+<div bsModal #groupExportLedgerModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <export-group-ledger (closeExportGroupLedgerModal)="hideGroupExportModal($event)"></export-group-ledger>
+      </div>
+    </div>
+</div>
+<!-- ./ export ladger popup -->
 <!-- modals -->
