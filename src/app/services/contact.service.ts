@@ -28,4 +28,13 @@ export class ContactService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, body, ''));
   }
+
+  public GetContacts(): Observable<BaseResponse<any, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + 'company/:companyUniqueName/groups/customer-vendor-report'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.request = '';
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''));
+  }
 }
