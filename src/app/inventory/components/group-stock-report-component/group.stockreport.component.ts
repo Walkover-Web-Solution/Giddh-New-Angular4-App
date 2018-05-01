@@ -1,5 +1,4 @@
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { GroupStockReportRequest, StockGroupResponse, GroupStockReportResponse } from '../../../models/api-models/Inventory';
+import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 
@@ -43,6 +42,16 @@ const VALUE_FILTER = [
   styles: [`
   .bdrT {
     border-color: #ccc;
+  }
+  :host ::ng-deep .fb__1-container {
+    justify-content: flex-start;
+  }
+  :host ::ng-deep .fb__1-container .form-group {
+    margin-right: 10px;
+    margin-bottom:0;
+  }
+  :host ::ng-deep .fb__1-container .date-range-picker {
+    min-width: 150px;
   }
   `]
 })
@@ -96,7 +105,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         moment()
       ]
     },
-    startDate: moment().subtract(30, 'days'),
+    startDate: moment().subtract(1, 'month'),
     endDate: moment()
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -133,7 +142,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         let activeStock = null;
         if (this.groupUniqueName) {
           this.GroupStockReportRequest.count = 10;
-          this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
+          this.fromDate = moment().subtract(1, 'month').format('DD-MM-YYYY');
           this.toDate = moment().format('DD-MM-YYYY');
           this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
           this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
@@ -174,7 +183,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public goToManageGroup() {
     if (this.groupUniqueName) {
-      this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName]);
+      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      this.setInventoryAsideState(true, true, true);
+      // this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName]);
     }
   }
 
@@ -209,5 +220,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public filterFormData() {
     this.getGroupReport(true);
+  }
+
+  /**
+   * setInventoryAsideState
+   */
+  public setInventoryAsideState(isOpen, isGroup, isUpdate) {
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
   }
 }

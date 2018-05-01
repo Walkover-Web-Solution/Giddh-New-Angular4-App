@@ -38,6 +38,7 @@ export const ROUTES: Routes = [
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
   { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+  { path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full' },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -61,6 +62,7 @@ export const ROUTES: Routes = [
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
       { path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
+      { path: 'contact', loadChildren: './contact/contact.module#ContactModule' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
