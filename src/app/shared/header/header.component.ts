@@ -504,13 +504,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
     // });
   }
-  // CMD + K functionalirt
-  @HostListener('document:keydown', ['$event'])
-  public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
-      this.showNavigationModal();
-    }
-  }
+  // CMD + K functionality // Arpit: Temporary commenting
+  // @HostListener('document:keydown', ['$event'])
+  // public handleKeyboardUpEvent(event: KeyboardEvent) {
+  //   if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+  //     this.showNavigationModal();
+  //   }
+  // }
 
   public onNavigationSelected(ev) {
     this.hideNavigationModal();
