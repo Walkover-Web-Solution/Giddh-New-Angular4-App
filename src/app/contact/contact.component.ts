@@ -129,7 +129,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   public toggleBodyClass() {
-    if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in') {
+    if (this.accountAsideMenuState === 'in') {
       document.querySelector('body').classList.add('fixed');
     } else {
       document.querySelector('body').classList.remove('fixed');
@@ -162,17 +162,20 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   private getAccounts(groupUniqueName: string) {
-    this._dashboardService.GetClosingBalance(groupUniqueName, '', '', false).takeUntil(this.destroyed$).subscribe(response => {
-      if (response.status === 'success') {
-        if (groupUniqueName === 'sundrydebtors') {
-          this.sundryDebtorsAccountsBackup = response.body[0].accounts;
-          this.sundryDebtorsAccounts$ = Observable.of(response.body[0].accounts);
-          this.getAccounts('sundrycreditors');
-        } else {
-          this.sundryCreditorsAccountsBackup = response.body[0].accounts;
-          this.sundryCreditorsAccounts$ = Observable.of(response.body[0].accounts);
-        }
-      }
+    this._contactService.GetContacts().subscribe((res) => {
+      console.log('The response is :', res);
     });
+    // this._dashboardService.GetClosingBalance(groupUniqueName, '', '', false).takeUntil(this.destroyed$).subscribe(response => {
+    //   if (response.status === 'success') {
+    //     if (groupUniqueName === 'sundrydebtors') {
+    //       this.sundryDebtorsAccountsBackup = response.body[0].accounts;
+    //       this.sundryDebtorsAccounts$ = Observable.of(response.body[0].accounts);
+    //       this.getAccounts('sundrycreditors');
+    //     } else {
+    //       this.sundryCreditorsAccountsBackup = response.body[0].accounts;
+    //       this.sundryCreditorsAccounts$ = Observable.of(response.body[0].accounts);
+    //     }
+    //   }
+    // });
   }
 }
