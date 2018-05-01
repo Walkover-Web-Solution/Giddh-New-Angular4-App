@@ -222,7 +222,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group ">
                     <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">Save</button>
-                    <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Save</button>
+                    <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Update</button>
                     <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger" (click)="deletePaymentGateway()">Delete</button>
                     <!-- *ngIf="autoCollectAdded" -->
                 </div>
