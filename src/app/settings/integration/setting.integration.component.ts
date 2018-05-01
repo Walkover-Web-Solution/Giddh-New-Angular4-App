@@ -42,6 +42,7 @@ export class SettingIntegrationComponent implements OnInit {
   public autoCollectAdded: boolean = false;
   public payoutAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public bankAccounts$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -75,7 +76,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.updateRazor = false;
       }
       // set cashfree form data
-      if (o.payoutForm) {
+      if (o.payoutForm && o.payoutForm.userName) {
         this.payoutObj = _.cloneDeep(o.payoutForm);
         // this.payoutObj.password = 'YOU_ARE_NOT_ALLOWED';
         this.payoutAdded = true;
@@ -83,7 +84,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.payoutObj = new CashfreeClass();
         this.payoutAdded = false;
       }
-      if (o.autoCollect) {
+      if (o.autoCollect && o.payoutForm.userName) {
         this.autoCollectObj = _.cloneDeep(o.autoCollect);
         // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
         this.autoCollectAdded = true;
@@ -91,7 +92,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.autoCollectObj = new CashfreeClass();
         this.autoCollectAdded = false;
       }
-      if (o.paymentGateway) {
+      if (o.paymentGateway && o.payoutForm.userName) {
         this.paymentGateway = _.cloneDeep(o.paymentGateway);
         // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
         this.paymentGatewayAdded = true;
@@ -104,10 +105,16 @@ export class SettingIntegrationComponent implements OnInit {
     this.flattenAccountsStream$.subscribe(data => {
       if (data) {
         let accounts: IOption[] = [];
+        let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
           accounts.push({ label: item.name, value: item.uniqueName });
+          let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
+          if (findBankIndx !== -1) {
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
+          }
         });
         this.accounts$ = Observable.of(accounts);
+        this.bankAccounts$ = Observable.of(accounts);
       }
     });
     // get accounts
@@ -191,13 +198,18 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
   }
 
-  public selectCashfreeAccount(event: IOption) {
-    console.log(event);
+  public selectCashfreeAccount(event: IOption, objToApnd) {
+    let accObj = {
+      name: event.label,
+      uniqueName: event.value
+    };
+    objToApnd.account = accObj;
   }
 
   public submitCashfreeDetail(f) {
     if (f.userName && f.password) {
-      this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(f));
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
     }
   }
 
@@ -207,13 +219,22 @@ export class SettingIntegrationComponent implements OnInit {
 
   public updateCashfreeDetail(f) {
     if (f.userName && f.password) {
-      this.store.dispatch(this.settingsIntegrationActions.UpdateCashfreeDetails(f));
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.UpdateCashfreeDetails(objToSend));
     }
   }
 
   public submitAutoCollect(f) {
     if (f.userName && f.password) {
-      this.store.dispatch(this.settingsIntegrationActions.AddAutoCollectUser(f));
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.AddAutoCollectUser(objToSend));
+    }
+  }
+
+  public updateAutoCollect(f) {
+    if (f.userName && f.password) {
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.UpdateAutoCollectUser(objToSend));
     }
   }
 
