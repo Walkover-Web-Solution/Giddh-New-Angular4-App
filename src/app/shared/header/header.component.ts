@@ -42,6 +42,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Search', value: '/pages/search' },
   { label: 'Permissions', value: '/pages/permissions/list' },
   { label: 'Settings', value: '/pages/settings' },
+  { label: 'Settings > Taxes', value: '/pages/settings', additional: { tab: 'taxes' } },
   { label: 'Contact', value: '/pages/contact' }
 ];
 
@@ -504,7 +505,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
     // });
   }
-  // CMD + K functionality // Arpit: Temporary commenting
+  // CMD + K functionality // Arpit: Commenting temporary
   // @HostListener('document:keydown', ['$event'])
   // public handleKeyboardUpEvent(event: KeyboardEvent) {
   //   if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
@@ -512,10 +513,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   //   }
   // }
 
-  public onNavigationSelected(ev) {
+  public onNavigationSelected(ev: IOption) {
     this.hideNavigationModal();
     if (ev && ev.value) {
-      this.router.navigate([ev.value]);
+      if (ev.additional && ev.additional.tab) {
+        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab } });
+      } else {
+        this.router.navigate([ev.value]);
+      }
     }
   }
 
