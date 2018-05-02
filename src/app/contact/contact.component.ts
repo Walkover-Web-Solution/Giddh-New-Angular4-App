@@ -16,6 +16,9 @@ import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 
 const CustomerType = [
   { label: 'Customer', value: 'customer' },
@@ -62,6 +65,11 @@ export class ContactComponent implements OnInit, OnDestroy {
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
   public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
+  public cashFreeAvailableBalance: number;
+  public payoutForm: CashfreeClass;
+  public bankAccounts$: Observable<IOption[]>;
+  public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public payoutObj: CashfreeClass = new CashfreeClass();
   public showFieldFilter = {
     name: true,
     due_amount: true,
@@ -82,9 +90,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     private router: Router,
     private _dashboardService: DashboardService,
     private _contactService: ContactService,
-    private _toaster: ToasterService) {
+    private _toaster: ToasterService,
+    private settingsIntegrationActions: SettingsIntegrationActions) {
       this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
-  }
+      this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    }
 
   public ngOnInit() {
     this.getAccounts('sundrydebtors');
@@ -93,6 +103,23 @@ export class ContactComponent implements OnInit, OnDestroy {
       if (yes) {
         this.toggleAccountAsidePane();
         this.getAccounts('sundrydebtors');
+      }
+    });
+
+    this.getCashFreeBalance();
+
+    this.flattenAccountsStream$.subscribe(data => {
+      if (data) {
+        let accounts: IOption[] = [];
+        let bankAccounts: IOption[] = [];
+        _.forEach(data, (item) => {
+          accounts.push({ label: item.name, value: item.uniqueName });
+          let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
+          if (findBankIndx !== -1) {
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
+          }
+        });
+        this.bankAccounts$ = Observable.of(accounts);
       }
     });
   }
@@ -161,6 +188,22 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
+  public selectCashfreeAccount(event: IOption, objToApnd) {
+    let accObj = {
+      name: event.label,
+      uniqueName: event.value
+    };
+    objToApnd.account = accObj;
+  }
+
+  public submitCashfreeDetail(f) {
+    console.log('the f is :', f);
+    if (f && f.userName && f.password) {
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
+    }
+  }
+
   private getAccounts(groupUniqueName: string) {
     this._contactService.GetContacts().subscribe((res) => {
       if (res.status === 'success') {
@@ -182,5 +225,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     //     }
     //   }
     // });
+  }
+
+  private getCashFreeBalance() {
+    this._contactService.GetCashFreeBalance().subscribe((res) => {
+      if (res.status === 'success') {
+        this.cashFreeAvailableBalance = res.body.availableBalance;
+      }
+    });
   }
 }
