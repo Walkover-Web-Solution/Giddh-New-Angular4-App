@@ -221,7 +221,19 @@ export class AuthenticationService {
       }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
 
-  // fetech user profile picture using emailId
+  public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
+    model.email = this._generalService.user.email;
+    model.environment = this.config.apiUrl;
+    model.userUniqueName = this._generalService.user.uniqueName;
+    return this._http.post(this.config.apiUrl + 'exception/invalid-json', model).map((res) => {
+        let data: BaseResponse<AuthKeyResponse, string> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+  }
+
+  // fetch user profile picture using emailId
   public getUserAvatar(userId) {
     return this._http.get('https://picasaweb.google.com/data/entry/api/user/:user_id?alt=json'
       .replace(':user_id', userId)).map(res => {

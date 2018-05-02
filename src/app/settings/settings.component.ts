@@ -60,7 +60,9 @@ export class SettingsComponent implements OnInit {
   }
 
   public integrationSelected(e) {
-    this.integrationComponent.getInitialData();
+    if (e.heading === 'Integration') {
+      this.integrationComponent.getInitialData();
+    }
   }
 
   public financialYearSelected(e) {
