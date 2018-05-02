@@ -84,21 +84,21 @@
         <th *ngIf="showFieldFilter.state">State</th>
         <th *ngIf="showFieldFilter.gstin">GSTIN</th>
         <th *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
-        <th>Action</th>
+        <th *ngIf="activeTab === 'vendor'">Action</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngIf="activeTab === 'customer'">
         <tr *ngFor="let account of sundryDebtorsAccounts$ | async">
-          <td>{{account.name}}</td>
+          <td>{{account.accountName}}</td>
           <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-          <td *ngIf="showFieldFilter.email">{{account.emailId}}</td>
+          <td *ngIf="showFieldFilter.email">{{account.email}}</td>
           <td *ngIf="showFieldFilter.state">{{account.state}}</td>
           <td *ngIf="showFieldFilter.gstin">{{account.gstin}}</td>
           <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
-          <td>
+          <!-- <td>
             <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
-          </td>
+          </td> -->
         </tr>
         <tr *ngIf="!(sundryDebtorsAccounts$ | async)">
             <td colspan="7" class="text-center empty_table">
@@ -109,9 +109,9 @@
 
       <ng-container *ngIf="activeTab === 'vendor'">
         <tr *ngFor="let account of sundryCreditorsAccounts$ | async">
-          <td>{{account.name}}</td>
+          <td>{{account.accountName}}</td>
           <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-          <td *ngIf="showFieldFilter.email">{{account.emailId}}</td>
+          <td *ngIf="showFieldFilter.email">{{account.email}}</td>
           <td *ngIf="showFieldFilter.state">{{account.state}}</td>
           <td *ngIf="showFieldFilter.gstin">{{account.gstin}}</td>
           <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>

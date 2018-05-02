@@ -104,9 +104,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   public search(ev: any) {
     let searchStr =  ev.target.value;
     if (this.activeTab === 'customer') {
-      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.filter((acc) => acc.name.includes(searchStr)));
+      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.filter((acc) => acc.accountName.includes(searchStr)));
     } else {
-      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.filter((acc) => acc.name.includes(searchStr)));
+      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.filter((acc) => acc.accountName.includes(searchStr)));
     }
   }
 
@@ -163,7 +163,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   private getAccounts(groupUniqueName: string) {
     this._contactService.GetContacts().subscribe((res) => {
-      console.log('The response is :', res);
+      if (res.status === 'success') {
+        this.sundryDebtorsAccountsBackup = res.body.customers;
+        this.sundryDebtorsAccounts$ = Observable.of(res.body.customers);
+        this.sundryCreditorsAccountsBackup = res.body.vendors;
+        this.sundryCreditorsAccounts$ = Observable.of(res.body.vendors);
+      }
     });
     // this._dashboardService.GetClosingBalance(groupUniqueName, '', '', false).takeUntil(this.destroyed$).subscribe(response => {
     //   if (response.status === 'success') {
