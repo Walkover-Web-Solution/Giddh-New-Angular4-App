@@ -67,6 +67,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public isHsnSacEnabledAcc: boolean = false;
   @Input() public updateAccountInProcess$: Observable<boolean>;
   @Input() public updateAccountIsSuccess$: Observable<boolean>;
+  @Input() public showBankDetail: boolean = false;
+  @Input() public showVirtualAccount: boolean = false;
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -164,7 +166,19 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       hsnOrSac: [''],
       currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }]
+      sacNumber: [{ value: '', disabled: false }],
+      accountBankDetails: this._fb.array([
+        this._fb.group({
+          bankName: [''],
+          bankAccountNo: [''],
+          ifsc: ['']
+        })
+      ]),
+      cashFreeVirtualAccountData: this._fb.group({
+        ifscCode: [''],
+        name: [''],
+        virtualAccountNumber: ['']
+      })
     });
     // fill form with active account
     this.activeAccount$.subscribe(acc => {
@@ -433,6 +447,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (accountRequest.mobileCode && accountRequest.mobileNo) {
         accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
         delete accountRequest['mobileCode'];
+      }
+      if (!this.showVirtualAccount) {
+        delete accountRequest['cashFreeVirtualAccountData'];
+      }
+      if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+        this._toaster.errorToast('Mobile no. & email Id is mandatory');
+        return;
       }
     }
 

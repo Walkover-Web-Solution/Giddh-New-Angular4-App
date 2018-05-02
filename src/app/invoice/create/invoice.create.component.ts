@@ -280,7 +280,7 @@ export class InvoiceCreateComponent implements OnInit {
       }
       this.updtFlag = false;
     }else {
-      this._toasty.warningToast('Something went wrong, please reload the page');
+      // this._toasty.warningToast('Something went wrong, please reload the page');
     }
   }
 

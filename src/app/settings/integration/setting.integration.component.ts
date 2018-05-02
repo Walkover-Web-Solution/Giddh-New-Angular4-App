@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import { EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { EmailKeyClass, RazorPayClass, SmsKeyClass, CashfreeClass } from '../../models/api-models/SettingsIntegraion';
 import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -33,9 +33,16 @@ export class SettingIntegrationComponent implements OnInit {
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
   public razorPayObj: RazorPayClass = new RazorPayClass();
+  public payoutObj: CashfreeClass = new CashfreeClass();
+  public autoCollectObj: CashfreeClass = new CashfreeClass();
+  public paymentGateway: CashfreeClass = new CashfreeClass();
   public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
+  public paymentGatewayAdded: boolean = false;
+  public autoCollectAdded: boolean = false;
+  public payoutAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public bankAccounts$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -68,16 +75,47 @@ export class SettingIntegrationComponent implements OnInit {
         this.setDummyData();
         this.updateRazor = false;
       }
+      // set cashfree form data
+      if (o.payoutForm && o.payoutForm.userName) {
+        this.payoutObj = _.cloneDeep(o.payoutForm);
+        // this.payoutObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.payoutAdded = true;
+      } else {
+        this.payoutObj = new CashfreeClass();
+        this.payoutAdded = false;
+      }
+      if (o.autoCollect && o.autoCollect.userName) {
+        this.autoCollectObj = _.cloneDeep(o.autoCollect);
+        // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.autoCollectAdded = true;
+      } else {
+        this.autoCollectObj = new CashfreeClass();
+        this.autoCollectAdded = false;
+      }
+      if (o.paymentGateway && o.paymentGateway.userName) {
+        this.paymentGateway = _.cloneDeep(o.paymentGateway);
+        // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.paymentGatewayAdded = true;
+      } else {
+        this.paymentGateway = new CashfreeClass();
+        this.paymentGatewayAdded = false;
+      }
     });
 
     this.flattenAccountsStream$.subscribe(data => {
       if (data) {
-            let accounts: IOption[] = [];
-            _.forEach(data, (item) => {
-              accounts.push({ label: item.name, value: item.uniqueName });
-            });
-            this.accounts$ = Observable.of(accounts);
+        let accounts: IOption[] = [];
+        let bankAccounts: IOption[] = [];
+        _.forEach(data, (item) => {
+          accounts.push({ label: item.name, value: item.uniqueName });
+          let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
+          if (findBankIndx !== -1) {
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
+        });
+        this.accounts$ = Observable.of(accounts);
+        this.bankAccounts$ = Observable.of(accounts);
+      }
     });
     // get accounts
     // this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -89,12 +127,16 @@ export class SettingIntegrationComponent implements OnInit {
     //     this.accounts$ = Observable.of(accounts);
     //   }
     // });
+
   }
 
   public getInitialData() {
     this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
     this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
   }
 
   public setDummyData() {
@@ -156,4 +198,72 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
   }
 
+  public selectCashfreeAccount(event: IOption, objToApnd) {
+    let accObj = {
+      name: event.label,
+      uniqueName: event.value
+    };
+    objToApnd.account = accObj;
+  }
+
+  public submitCashfreeDetail(f) {
+    if (f.userName && f.password) {
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
+    }
+  }
+
+  public deleteCashFreeAccount() {
+    this.store.dispatch(this.settingsIntegrationActions.DeleteCashfreeDetails());
+  }
+
+  public updateCashfreeDetail(f) {
+    if (f.userName && f.password) {
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.UpdateCashfreeDetails(objToSend));
+    }
+  }
+
+  public submitAutoCollect(f) {
+    if (f.userName && f.password) {
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.AddAutoCollectUser(objToSend));
+    }
+  }
+
+  public updateAutoCollect(f) {
+    if (f.userName && f.password) {
+      let objToSend = _.cloneDeep(f);
+      this.store.dispatch(this.settingsIntegrationActions.UpdateAutoCollectUser(objToSend));
+    }
+  }
+
+  public deleteAutoCollect() {
+    this.store.dispatch(this.settingsIntegrationActions.DeleteAutoCollectUser());
+  }
+
+  /**
+   * submitPaymentGateway
+   */
+  public submitPaymentGateway(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.AddPaymentGateway(f));
+    }
+  }
+
+  /**
+   * UpdatePaymentGateway
+   */
+  public updatePaymentGateway(f) {
+    if (f.userName && f.password) {
+      this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentGateway(f));
+    }
+  }
+
+  /**
+   * DeletePaymentGateway
+   */
+  public deletePaymentGateway() {
+      this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
+    }
 }
