@@ -100,7 +100,7 @@ const sessionInitialState: SessionState = {
   companyUniqueName: '',
   companies: [],
   isCompanyCreated: false,
-  isCompanyCreationInProcess: false,
+  isCompanyCreationInProcess: true,
   isCompanyCreationSuccess: false,
   isRefreshing: false,
   userLoginState: userLoginStateEnum.notLoggedIn,

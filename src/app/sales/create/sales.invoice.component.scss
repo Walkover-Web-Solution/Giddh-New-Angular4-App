@@ -217,7 +217,14 @@ $greyClr: #6d6d6d;
 
 .dropup {
     .dropdown-menu {
-        left: -80px;
+        li {
+            a {
+                &:hover {
+                    color: #ff5e01;
+                    background: #f4f5f8;
+                }
+            }
+        }
     }
 }
 

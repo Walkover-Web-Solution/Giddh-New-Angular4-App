@@ -105,7 +105,12 @@
                                 <span class="label">Settings</span>
                             </a>
                         </li>
-
+                        <!-- <li>
+                            <a [routerLink]="['/pages/contact']">
+                                <span class="navico-daybook"></span>
+                                <span class="label">Contacts</span>
+                            </a>
+                        </li> -->
 
 
                         <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
@@ -439,6 +444,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
+        </div>
+    </div>
+</div>
+<!--CMD + K modal  -->
+<div bsModal #navigationModal="bs-modal" class="modal" role="dialog" (onHide)="onNavigationHide($event)">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <sh-select #navigationShSelect [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Select menu" [options]="navigationOptionList" [ItemHeight]="33"></sh-select>
         </div>
     </div>
 </div>
