@@ -31,7 +31,7 @@ export class ContactService {
 
   public GetContacts(): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + 'company/:companyUniqueName/groups/customer-vendor-report'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + 'v2/company/:companyUniqueName/groups/customer-vendor-report'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
