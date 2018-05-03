@@ -312,7 +312,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
 
-    case SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE:
     case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE:
       let paymntGtwy: BaseResponse<any, any> = action.payload;
       if (paymntGtwy.status === 'success') {

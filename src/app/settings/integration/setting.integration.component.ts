@@ -84,7 +84,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.payoutObj = new CashfreeClass();
         this.payoutAdded = false;
       }
-      if (o.autoCollect && o.payoutForm.userName) {
+      if (o.autoCollect && o.autoCollect.userName) {
         this.autoCollectObj = _.cloneDeep(o.autoCollect);
         // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
         this.autoCollectAdded = true;
@@ -92,7 +92,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.autoCollectObj = new CashfreeClass();
         this.autoCollectAdded = false;
       }
-      if (o.paymentGateway && o.payoutForm.userName) {
+      if (o.paymentGateway && o.paymentGateway.userName) {
         this.paymentGateway = _.cloneDeep(o.paymentGateway);
         // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
         this.paymentGatewayAdded = true;
