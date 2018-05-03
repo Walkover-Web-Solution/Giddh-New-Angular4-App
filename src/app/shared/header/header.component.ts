@@ -548,7 +548,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.forceClear$ = Observable.of({status: false});
     this.navigationModalVisible = true;
     this.navigationModal.show();
-    // setTimeout(() => this.navigationShSelect.show(''), 200);
+    setTimeout(() => this.navigationShSelect.show(''), 200);
   }
 
   private hideNavigationModal() {
@@ -556,6 +556,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();
-    // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
+    setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
   }
 }
