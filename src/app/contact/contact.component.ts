@@ -56,9 +56,9 @@ export interface PayNowRequest {
 export class ContactComponent implements OnInit, OnDestroy {
   public CustomerType = CustomerType;
   public flattenAccounts: any = [];
-  public sundryDebtorsAccountsBackup: any[] = [];
+  public sundryDebtorsAccountsBackup: any = {};
   public sundryDebtorsAccounts$: Observable<any>;
-  public sundryCreditorsAccountsBackup: any[] = [];
+  public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
   public activeTab: string = 'customer';
   public accountAsideMenuState: string = 'out';
@@ -90,7 +90,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     private router: Router,
     private _dashboardService: DashboardService,
     private _contactService: ContactService,
-    private _toaster: ToasterService,
     private settingsIntegrationActions: SettingsIntegrationActions) {
       this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
       this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
@@ -131,9 +130,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   public search(ev: any) {
     let searchStr =  ev.target.value;
     if (this.activeTab === 'customer') {
-      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.filter((acc) => acc.accountName.includes(searchStr)));
+      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
     } else {
-      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.filter((acc) => acc.accountName.includes(searchStr)));
+      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
     }
   }
 
@@ -181,9 +180,9 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this._contactService.payNow(payNowData).subscribe((res) => {
       if (res.status === 'success') {
-        this._toaster.successToast('Payment done successfully with reference id: ' + res.body.referenceId);
+        this._toasty.successToast('Payment done successfully with reference id: ' + res.body.referenceId);
       } else {
-        this._toaster.errorToast(res.message, res.code);
+        this._toasty.errorToast(res.message, res.code);
       }
     });
   }
@@ -197,34 +196,36 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   public submitCashfreeDetail(f) {
-    console.log('the f is :', f);
     if (f && f.userName && f.password) {
       let objToSend = _.cloneDeep(f);
       this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
+    } else {
+      this._toasty.errorToast('Please enter Cashfree details.', 'Validation');
+      return;
     }
   }
 
-  private getAccounts(groupUniqueName: string) {
-    this._contactService.GetContacts().subscribe((res) => {
+  public pageChanged(event: any): void {
+    let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+    this.getAccounts(selectedGrp, event.page, 'pagination');
+  }
+
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string) {
+    pageNumber = pageNumber ? pageNumber : 1;
+    this._contactService.GetContacts(groupUniqueName, pageNumber).subscribe((res) => {
       if (res.status === 'success') {
-        this.sundryDebtorsAccountsBackup = res.body.customers;
-        this.sundryDebtorsAccounts$ = Observable.of(res.body.customers);
-        this.sundryCreditorsAccountsBackup = res.body.vendors;
-        this.sundryCreditorsAccounts$ = Observable.of(res.body.vendors);
+        if (groupUniqueName === 'sundrydebtors') {
+          this.sundryDebtorsAccountsBackup = res.body;
+          this.sundryDebtorsAccounts$ = Observable.of(res.body.results);
+          if (requestedFrom !== 'pagination') {
+            this.getAccounts('sundrycreditors', pageNumber);
+          }
+        } else {
+          this.sundryCreditorsAccountsBackup = res.body;
+          this.sundryCreditorsAccounts$ = Observable.of(res.body.results);
+        }
       }
     });
-    // this._dashboardService.GetClosingBalance(groupUniqueName, '', '', false).takeUntil(this.destroyed$).subscribe(response => {
-    //   if (response.status === 'success') {
-    //     if (groupUniqueName === 'sundrydebtors') {
-    //       this.sundryDebtorsAccountsBackup = response.body[0].accounts;
-    //       this.sundryDebtorsAccounts$ = Observable.of(response.body[0].accounts);
-    //       this.getAccounts('sundrycreditors');
-    //     } else {
-    //       this.sundryCreditorsAccountsBackup = response.body[0].accounts;
-    //       this.sundryCreditorsAccounts$ = Observable.of(response.body[0].accounts);
-    //     }
-    //   }
-    // });
   }
 
   private getCashFreeBalance() {

@@ -57,7 +57,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Settings > Branch', value: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
   { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
   { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
-  // { label: 'Contact', value: '/pages/contact' },
+  { label: 'Contact', value: '/pages/contact' },
 ];
 
 @Component({
@@ -519,7 +519,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
     // });
   }
-  // CMD + K functionality // Arpit: Commenting temporary
+  // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
     if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
@@ -548,7 +548,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.forceClear$ = Observable.of({status: false});
     this.navigationModalVisible = true;
     this.navigationModal.show();
-    setTimeout(() => this.navigationShSelect.show(''), 200);
+    // setTimeout(() => this.navigationShSelect.show(''), 200);
   }
 
   private hideNavigationModal() {
@@ -556,6 +556,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();
-    setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
+    // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
   }
 }

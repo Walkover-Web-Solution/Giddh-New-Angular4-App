@@ -91,17 +91,17 @@
     <tbody>
       <ng-container *ngIf="activeTab === 'customer'">
         <tr *ngFor="let account of sundryDebtorsAccounts$ | async">
-          <td>{{account.accountName}}</td>
+          <td>{{account.name}}</td>
           <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
           <td *ngIf="showFieldFilter.email">{{account.email}}</td>
-          <td *ngIf="showFieldFilter.state">{{account.state}}</td>
-          <td *ngIf="showFieldFilter.gstin">{{account.gstin}}</td>
+          <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
+          <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
           <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
           <!-- <td>
             <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
           </td> -->
         </tr>
-        <tr *ngIf="!(sundryDebtorsAccounts$ | async)">
+        <tr *ngIf="!(sundryDebtorsAccounts$ | async)?.length">
           <td colspan="7" class="text-center empty_table">
             <h1>No Record Found !!</h1>
           </td>
@@ -110,23 +110,41 @@
 
       <ng-container *ngIf="activeTab === 'vendor'">
         <tr *ngFor="let account of sundryCreditorsAccounts$ | async">
-          <td>{{account.accountName}}</td>
+          <td>{{account.name}}</td>
           <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
           <td *ngIf="showFieldFilter.email">{{account.email}}</td>
-          <td *ngIf="showFieldFilter.state">{{account.state}}</td>
-          <td *ngIf="showFieldFilter.gstin">{{account.gstin}}</td>
+          <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
+          <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
           <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
           <td>
             <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
           </td>
         </tr>
-        <tr *ngIf="!(sundryCreditorsAccounts$ | async)">
+        <tr *ngIf="!(sundryCreditorsAccounts$ | async)?.length">
           <td colspan="7" class="text-center empty_table">
             <h1>No Record Found !!</h1>
           </td>
         </tr>
       </ng-container>
     </tbody>
+    <tfoot>
+      <tr *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+              [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
+          <td colspan="100%">
+            <div class="alC">
+              <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+                [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            </div>
+          </td>
+        </tr>
+    </tfoot>
   </table>
 </div>
 
