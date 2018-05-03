@@ -28,6 +28,7 @@ import { AccountService } from '../../../../services/account.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
 import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
+import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 
 @Component({
   selector: 'account-operations',
@@ -116,7 +117,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-    private accountService: AccountService, _permissionDataService: PermissionDataService) {
+    private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
     this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
@@ -128,7 +129,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors).takeUntil(this.destroyed$);
+    this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).takeUntil(this.destroyed$);
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
@@ -196,6 +197,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
+    this.store.dispatch(this.invoiceActions.getInvoiceSetting());
   }
 
   public ngOnInit() {
@@ -276,7 +278,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         // }
 
         this.virtualAccountEnable$.subscribe(s => {
-          if (s && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
+          if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
             this.showVirtualAccount = true;
           } else {
             this.showVirtualAccount = false;
