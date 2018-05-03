@@ -283,7 +283,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public onUploadOutput(output: UploadOutput): void {
+  public onUploadOutputUpdate(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
       let companyUniqueName = null;
@@ -304,6 +304,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else if (output.type === 'done') {
       this._loaderService.hide();
       if (output.file.response.status === 'success') {
+        console.log('Hello output.file.response is :', output.file.response);
         // this.isFileUploading = false;
         this.vm.selectedLedger.attachedFile = output.file.response.body.uniqueName;
         this.vm.selectedLedger.attachedFileName = output.file.response.body.name;
