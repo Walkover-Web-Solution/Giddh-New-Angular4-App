@@ -254,15 +254,15 @@
         </section>
         <!--/bank ledger-->
 
-        <section class="ico-btn text-right">
-            <button class="btn btn-xs" (click)="performBulkAction('delete')"><i class="fa fa-trash-o"></i></button>
-            <button class="btn btn-xs" (click)="performBulkAction('generate')"><i class="fa fa-file-text-o"></i></button>
-            <button class="btn btn-xs" (click)="fileInput.click()"><i class="fa fa-paperclip"></i></button>  
-            <input type="file" #fileInput style="display: none;" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">          
+        <section class="ico-btn text-right mrT1">
+            <button class="btn btn-xs" (click)="performBulkAction('delete')" container="body" tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i></button>
+            <button class="btn btn-xs" (click)="performBulkAction('generate')" container="body" tooltip="Generate Invoice" [placement]="'top'"><i class="fa fa-file-text-o"></i></button>
+            <button class="btn btn-xs" (click)="openSelectFilePopup(BulkUploadfileInput);" container="body" tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>  
+            <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">          
         </section>
 
         <!--account table-->
-        <table class="col-xs-12 ledger-head mrT3">
+        <table class="col-xs-12 ledger-head mrT1">
             <thead>
                 <tr>
                     <th class="col-xs-6">
