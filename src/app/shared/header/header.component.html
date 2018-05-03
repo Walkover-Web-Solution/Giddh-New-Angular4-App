@@ -451,7 +451,7 @@
 <div bsModal #navigationModal="bs-modal" class="modal" role="dialog" (onHide)="onNavigationHide($event)">
     <div class="modal-dialog modal-small">
         <div class="modal-content">
-            <sales-sh-select #navigationShSelect [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Jump to..." [options]="navigationOptionList" [ItemHeight]="33"></sales-sh-select>
+            <sh-select #navigationShSelect [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Jump to..." [options]="navigationOptionList" [ItemHeight]="33"></sh-select>
         </div>
     </div>
 </div>
