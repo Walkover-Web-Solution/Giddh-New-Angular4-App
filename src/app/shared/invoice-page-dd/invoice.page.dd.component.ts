@@ -17,6 +17,15 @@ const INV_PAGE = [
       height: auto;
       padding: 5px 15px;
     }
+  .spcl_dropdown {
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      font-size: 24px;
+      // color: #393a3d;
+      padding: 0;
+  }
   `]
 })
 

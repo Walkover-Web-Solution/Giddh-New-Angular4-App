@@ -39,7 +39,7 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
-import { AsideMenuRecurringEntryModule } from "../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module";
+import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
