@@ -455,6 +455,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         this._toaster.errorToast('Mobile no. & email Id is mandatory');
         return;
       }
+      if (this.showBankDetail) {
+        if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+          accountRequest['accountBankDetails'] = [];
+        }
+      } else {
+        delete accountRequest['accountBankDetails'];
+      }
     }
 
     this.submitClicked.emit({
