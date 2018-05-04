@@ -107,3 +107,7 @@
     font-size: 36px;
     margin-bottom: 10px;
 }
+
+.has-error .form-control {
+    border-color: red !important;
+}
