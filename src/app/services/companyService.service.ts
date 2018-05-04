@@ -107,11 +107,15 @@ export class CompanyService {
 
   // Effects need to be review
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
-    return this._http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
-      let data: BaseResponse<string, StateDetailsRequest> = res;
-      data.request = stateDetails;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
+    if (stateDetails.companyUniqueName) {
+      return this._http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
+        let data: BaseResponse<string, StateDetailsRequest> = res;
+        data.request = stateDetails;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public getApplicationDate(): Observable<BaseResponse<string, any>> {

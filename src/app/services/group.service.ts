@@ -123,11 +123,15 @@ export class GroupService {
   public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
-      let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
-      data.request = q;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
+        let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
+        data.request = q;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<MoveGroupResponse, MoveGroupRequest>> {
@@ -197,12 +201,17 @@ export class GroupService {
   public GetGroupSubgroups(groupUniqueName: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
-      let data: BaseResponse<any, string> = res;
-      data.request = groupUniqueName;
-      data.queryString = { groupUniqueName };
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName }));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+        let data: BaseResponse<any, string> = res;
+        data.request = groupUniqueName;
+        data.queryString = { groupUniqueName };
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName }));
+    } else {
+      return Observable.empty();
+    }
+
   }
 
 }
