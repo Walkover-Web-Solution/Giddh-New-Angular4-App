@@ -365,6 +365,20 @@ export class HomeActions {
         payload: res
       }));
 
+  @Effect()
+  public GetRatioAnalysis$: Observable<Action> = this.action$
+
+    .ofType(HOME.GET_RATIO_ANALYSIS)
+    .switchMap((action: CustomActions) => {
+      return this._dashboardService.GetRationAnalysis(action.payload);
+    }).map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
+      type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
+        payload: res
+      }));
+
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
   }
@@ -439,6 +453,20 @@ export class HomeActions {
       type: HOME.RESET_HOME_STATE
     };
   }
+
+  public getRatioAnalysis(date: string) {
+    return {
+      type: HOME.GET_RATIO_ANALYSIS,
+      payload: date
+    };
+  }
+  public getRatioAnalysisResponse(res) {
+    return {
+      type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
+      payload: res
+    };
+  }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
