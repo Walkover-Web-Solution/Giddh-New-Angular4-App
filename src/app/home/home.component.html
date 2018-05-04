@@ -1,43 +1,47 @@
 <!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="20" min-scrollbar-length="20" auto-height> -->
 <section id="dashboard" class="clearfix">
-  <!-- <div class=" col-xs-12 clearfix">
+    <!-- <div class=" col-xs-12 clearfix">
     <button class="btn btn-default pull-right" (click)="hardRefresh()">Clear Cache & Refresh</button>
   </div> -->
 
-  <div class="container-fluid top_bar">
-    <div class="row">
+    <div class="container-fluid top_bar">
+        <div class="row">
 
-      <div class="col-xs-4">
-        <live-accounts #liveaccount></live-accounts>
-      </div>
+            <div class="col-xs-4">
+                <live-accounts #liveaccount></live-accounts>
+            </div>
 
-      <div class="col-xs-4">
-          <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
-      </div>
+            <div class="col-xs-4">
+                <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
+            </div>
 
 
-      <div class="col-xs-4">
-        <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
-      </div>
+            <div class="col-xs-4">
+                <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
+            </div>
 
-      <div class="col-xs-6">
-        <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
-      </div>
+            <div class="col-xs-6">
+                <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
+            </div>
 
-      <div class="col-xs-6">
-        <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
-      </div>
+            <div class="col-xs-6">
+                <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
+            </div>
 
-      <div class="col-xs-6">
-        <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
-      </div>
+            <div class="col-xs-6">
+                <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
+            </div>
 
+            <div class="col-xs-6">
+                <ratio-analysis-chart [comparisionChartData]="comparisionChartData$" #ratio></ratio-analysis-chart>
+            </div>
+
+        </div>
     </div>
-  </div>
 
-  <!--<div class="col-xs-6">-->
-  <!--<profit-loss ng-controller="profitlossController"></profit-loss>-->
-  <!--</div>-->
-  <!--<combined ng-controller="combinedController"></combined>-->
+    <!--<div class="col-xs-6">-->
+    <!--<profit-loss ng-controller="profitlossController"></profit-loss>-->
+    <!--</div>-->
+    <!--<combined ng-controller="combinedController"></combined>-->
 </section>
 <!-- </perfect-scrollbar> -->

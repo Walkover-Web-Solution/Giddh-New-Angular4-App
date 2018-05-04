@@ -1,0 +1,35 @@
+<div id="live">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <strong>Ratio Analysis</strong>
+            <div class="pull-right dashboard-filter">
+                <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
+            </div>
+        </div>
+
+        <div class="panel-body pos-rel">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+                <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+                <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+            </div>
+            <div class="chart-div" google-chart chart="chartData">
+                <perfect-scrollbar [scrollIndicators]="true">
+                    <div class="col-xs-3">
+                        <chart [options]="currentRatioOption" #currentRatio></chart>
+                    </div>
+                    <div class="col-xs-3">
+                        <chart [options]="debtOptions" #debtRatio></chart>
+                    </div>
+                    <div class="col-xs-3">
+                        <chart [options]="proprietaryOption" #propreitaryRatio></chart>
+                    </div>
+                    <div class="col-xs-3">
+                        <chart [options]="fixedAssetOption" #fixedAsset></chart>
+                    </div>
+
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+</div>
