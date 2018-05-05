@@ -64,6 +64,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
+  public baseCurrency: string = null;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private _toasty: ToasterService, private _accountService: AccountService,
@@ -85,6 +86,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public ngOnInit() {
+
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
@@ -121,6 +123,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = Observable.of(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
+
+          this.activeAccount$.subscribe((acc) => {
+            if (acc && acc.currency && this.isMultiCurrencyAvailable) {
+              this.baseCurrency = acc.currency;
+            }
+          });
 
           // check if current account category is type 'income' or 'expenses'
           let parentAcc = accountDetails.parentGroups[0].uniqueName;
@@ -284,6 +292,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (acc.currency !== txn.selectedAccount.currency) {
           this.isMultiCurrencyAvailable = true;
           isMultiCurrencyAvailable = true;
+          this.baseCurrency = acc.currency;
         }
       });
     }

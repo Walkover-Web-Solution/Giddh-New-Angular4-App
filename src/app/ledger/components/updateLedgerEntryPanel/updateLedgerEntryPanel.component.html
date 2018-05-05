@@ -31,6 +31,7 @@
                                 <th class="col-xs-6" style="border-top:none">Paticular</th>
                                 <th class="col-xs-2" style="border-top:none">
                                     Amount
+                                    <span *ngIf="isMultiCurrencyAvailable">{{ baseCurrency }}</span>
                                 </th>
                                 <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">
                                     Amount
@@ -74,9 +75,9 @@
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
                                     </td>
-                                    <td class="col-xs-2" *ngIf="isMultiCurrencyAvailable">
-                                        <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="onTxnAmountChange(txn)">
-                                        <span>({{txn.convertedAmountCurrency}})</span>
+                                    <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+                                        <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control multicurrency_input" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="onTxnAmountChange(txn)">
+                                        <span class="currency_type" *ngIf="isMultiCurrencyAvailable && txn.convertedAmount">({{txn.convertedAmountCurrency}})</span>
                                     </td>
                                 </ng-container>
                             </tr>
@@ -95,7 +96,7 @@
                   </span>
                                 </th>
                                 <th class="col-xs-6" style="border-top:none">Paticular</th>
-                                <th class="col-xs-2" style="border-top:none">Amount</th>
+                                <th class="col-xs-2" style="border-top:none">Amount <span *ngIf="isMultiCurrencyAvailable">{{ baseCurrency }}</span></th>
                                 <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">Amount</th>
                             </tr>
                         </thead>
@@ -136,9 +137,9 @@
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
                                     </td>
-                                    <td class="col-xs-2" *ngIf="isMultiCurrencyAvailable">
-                                        <input class="form-control" type="text" [(ngModel)]="txn.convertedAmount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
-                                        <span>({{txn.convertedAmountCurrency}})</span>
+                                    <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+                                        <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
+                                        <span class="currency_type" *ngIf="isMultiCurrencyAvailable && txn.convertedAmount">({{txn.convertedAmountCurrency}})</span>
                                     </td>
                                 </ng-container>
                             </tr>
