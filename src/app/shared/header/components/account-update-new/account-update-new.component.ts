@@ -448,20 +448,21 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
         delete accountRequest['mobileCode'];
       }
-      if (!this.showVirtualAccount) {
-        delete accountRequest['cashFreeVirtualAccountData'];
+    }
+
+    if (!this.showVirtualAccount) {
+      delete accountRequest['cashFreeVirtualAccountData'];
+    }
+    if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+      this._toaster.errorToast('Mobile no. & email Id is mandatory');
+      return;
+    }
+    if (this.showBankDetail) {
+      if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+        accountRequest['accountBankDetails'] = [];
       }
-      if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-        this._toaster.errorToast('Mobile no. & email Id is mandatory');
-        return;
-      }
-      if (this.showBankDetail) {
-        if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-          accountRequest['accountBankDetails'] = [];
-        }
-      } else {
-        delete accountRequest['accountBankDetails'];
-      }
+    } else {
+      delete accountRequest['accountBankDetails'];
     }
 
     this.submitClicked.emit({
