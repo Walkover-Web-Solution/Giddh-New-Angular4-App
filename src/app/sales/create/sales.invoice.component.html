@@ -699,7 +699,7 @@
                             (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 <app-aside-recurring-entry [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry"
                            [@slideInOut]="asideMenuStateForRecurringEntry"
-                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+                           (closeAsideEvent)="toggleRecurringAsidePane($event)"></app-aside-recurring-entry>
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">
   <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">

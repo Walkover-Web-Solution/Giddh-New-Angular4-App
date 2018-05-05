@@ -500,7 +500,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public triggerSubmitInvoiceForm(f: NgForm) {
     this.updateAccount = true;
-    this.onSubmitInvoiceForm(f);
+    if (!this.toggleActionText.includes('Recurring')) {
+      this.onSubmitInvoiceForm(f);
+    } else {
+      this.toggleRecurringAsidePane();
+    }
   }
 
   public autoFillShippingDetails() {
