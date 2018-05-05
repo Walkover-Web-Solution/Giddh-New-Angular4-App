@@ -74,6 +74,9 @@ export class HttpWrapperService {
     if (!options.headers['Content-Type']) {
       options.headers['Content-Type'] = 'application/json';
     }
+    if (options.headers['Content-Type'] === 'multipart/form-data') {
+      delete options.headers['Content-Type'];
+    }
     if (!options.headers['Accept']) {
       options.headers['Accept'] = 'application/json';
     }

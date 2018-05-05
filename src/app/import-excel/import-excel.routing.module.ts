@@ -11,8 +11,8 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
         path: '', component: ImportComponent, children: [
           {path: '', redirectTo: 'select'},
           {path: 'select', component: ImportTypeSelectComponent},
-          {path: 'groups', component: ImportWizardComponent},
-          {path: 'accounts', component: ImportWizardComponent},
+          {path: 'group', component: ImportWizardComponent},
+          {path: 'account', component: ImportWizardComponent},
           {path: 'trial-balance', component: ImportWizardComponent},
         ]
       }

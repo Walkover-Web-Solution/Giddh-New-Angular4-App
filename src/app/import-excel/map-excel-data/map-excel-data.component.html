@@ -1,7 +1,7 @@
 <!-- Map Field start-->
 <div class="mapFields max500">
   <strong>Map your fields to Giddh fields</strong>
-  <table class="table basic table-bordered mrT1">
+  <table class="table basic table-bordered mrT1" *ngIf="importData">
     <thead>
     <tr>
       <th>Giddh Field</th>
@@ -10,32 +10,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>Name</td>
+    <tr *ngFor="let i of getMappings()">
+      <td>{{i}}</td>
       <td>
         <!-- use sh-select instead -->
-        <input type="text" class="form-control"/></td>
-      <td><i class="fa fa-check text-success fs18"></i></td>
-    </tr>
-    <tr>
-      <td>Company</td>
-      <td>
-        <!-- use sh-select instead -->
-        <input type="text" class="form-control"/></td>
-      <td><i class="fa fa-check text-success fs18"></i></td>
-    </tr>
-    <tr>
-      <td>Email</td>
-      <td>
-        <!-- use sh-select instead -->
-        <input type="text" class="form-control"/></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Phone</td>
-      <td>
-        <!-- use sh-select instead -->
-        <input type="text" class="form-control"/></td>
+        <sh-select
+          [options]="getOptionsFromMap(importData.mappings.mappingInfo[i])" class="pull-left mrR1"
+          [placeholder]="'Select Field'"
+        ></sh-select>
       <td><i class="fa fa-check text-success fs18"></i></td>
     </tr>
     </tbody>
