@@ -7,19 +7,12 @@
         </li>
     </ul>
 </span> -->
-
-<div class="form-group mrB mrT2 clearfix">
-  <div class="col-xs-12 clearfix">
-    <div class="btn-group" dropdown>
-      <button id="button-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
-        {{selectedPage}} <span class="caret"></span>
-      </button>
-      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+<div class="btn-group" dropdown>
+    <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
+{{selectedPage}}
+<span class="caret"></span>
+</button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
         <li role="menuitem" *ngFor="let pg of dropDownPages" (click)="changePage(pg)"><a class="dropdown-item cp">{{ pg.name }}</a></li>
-      </ul>
-    </div>
-    <!-- <label>Select Type</label> -->
-    <!-- <sales-sh-select [width]="'150px'" [showLabelOnly]="true" [showClear]="false" [options]="pageList" [placeholder]="'Select Invoice Type'" (selected)="pageChanged()" name="selectedPage" [(ngModel)]="selectedPage"></sales-sh-select> -->
-
-  </div>
+    </ul>
 </div>
