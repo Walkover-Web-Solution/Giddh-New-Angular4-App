@@ -5,6 +5,7 @@ import { ImportExcelData } from '../../models/api-models/import-excel';
 export enum ImportExcelRequestStates {
   Default,
   UploadFileInProgress,
+  UploadFileError,
   UploadFileSuccess,
   ProcessImportInProgress,
   ProcessImportSuccess
@@ -25,7 +26,12 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       return {...state, requestState: ImportExcelRequestStates.UploadFileInProgress};
     }
     case IMPORT_EXCEL.UPLOAD_FILE_RESPONSE: {
-      return {...state, requestState: ImportExcelRequestStates.UploadFileSuccess, importExcelData: action.payload};
+
+      return {
+        ...state,
+        requestState: action.payload ? ImportExcelRequestStates.UploadFileSuccess : ImportExcelRequestStates.UploadFileError,
+        importExcelData: action.payload
+      };
     }
     case IMPORT_EXCEL.PROCESS_IMPORT_REQUEST: {
       return {...state, requestState: ImportExcelRequestStates.ProcessImportInProgress};

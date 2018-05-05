@@ -17,9 +17,11 @@
 
   <div class="col-xs-12">
     <div class="clearfix mrT2">
+      <upload-file
+        [isLoading]="isUploadInProgress"
+        (onFileUpload)="onFileUpload($event)"></upload-file>
       <div [ngSwitch]="step">
         <ng-container *ngSwitchCase="1">
-          <upload-file (onFileUpload)="onFileUpload($event)"></upload-file>
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <map-excel-data (onNext)="onNext()" (onBack)="onBack()"></map-excel-data>
