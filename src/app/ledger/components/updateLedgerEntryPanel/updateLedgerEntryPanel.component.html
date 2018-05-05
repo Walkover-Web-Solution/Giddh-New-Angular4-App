@@ -32,7 +32,7 @@
                                 <th class="col-xs-2" style="border-top:none">
                                     Amount
                                 </th>
-                                <th class="col-xs-2" style="border-top:none">
+                                <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">
                                     Amount
                                 </th>
                             </tr>
@@ -66,7 +66,7 @@
                                         </sh-select>
                                     </td>
                                     <td class="col-xs-2">
-                                        <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="vm.onTxnAmountChange(txn)">
+                                        <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="onTxnAmountChange(txn)">
                                         <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
@@ -74,8 +74,8 @@
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
                                     </td>
-                                    <td class="col-xs-2">
-                                        <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="vm.onTxnAmountChange(txn)">
+                                    <td class="col-xs-2" *ngIf="isMultiCurrencyAvailable">
+                                        <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="onTxnAmountChange(txn)">
                                         <span>({{txn.convertedAmountCurrency}})</span>
                                     </td>
                                 </ng-container>
@@ -96,7 +96,7 @@
                                 </th>
                                 <th class="col-xs-6" style="border-top:none">Paticular</th>
                                 <th class="col-xs-2" style="border-top:none">Amount</th>
-                                <th class="col-xs-2" style="border-top:none">Amount</th>
+                                <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">Amount</th>
                             </tr>
                         </thead>
                     </table>
@@ -128,7 +128,7 @@
                                         </sh-select>
                                     </td>
                                     <td class="col-xs-2">
-                                        <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.onTxnAmountChange(txn)">
+                                        <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
                                         <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
@@ -136,8 +136,8 @@
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
                                     </td>
-                                    <td class="col-xs-2">
-                                        <input class="form-control" type="text" [(ngModel)]="txn.convertedAmount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2" (change)="vm.onTxnAmountChange(txn)">
+                                    <td class="col-xs-2" *ngIf="isMultiCurrencyAvailable">
+                                        <input class="form-control" type="text" [(ngModel)]="txn.convertedAmount" (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
                                         <span>({{txn.convertedAmountCurrency}})</span>
                                     </td>
                                 </ng-container>

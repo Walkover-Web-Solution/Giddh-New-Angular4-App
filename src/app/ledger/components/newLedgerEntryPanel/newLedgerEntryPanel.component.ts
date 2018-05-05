@@ -468,14 +468,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-    /**
+  /**
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
     this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
       let rates = res.body;
       if (rates) {
-        _.forEach(rates, function(value, key) {
+        _.forEach(rates, (value, key) => {
           if (key === convertTo) { return obj.convertedAmount = amount * rates[key]; }
         });
       }
