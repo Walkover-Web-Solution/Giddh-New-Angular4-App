@@ -63,6 +63,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
+  public isMultiCurrencyAvailable: boolean = false;
+  public baseCurrency: string = null;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private _toasty: ToasterService, private _accountService: AccountService,
@@ -84,6 +86,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public ngOnInit() {
+
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
@@ -120,6 +123,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = Observable.of(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
+
+          this.activeAccount$.subscribe((acc) => {
+            if (acc && acc.currency && this.isMultiCurrencyAvailable) {
+              this.baseCurrency = acc.currency;
+            }
+          });
 
           // check if current account category is type 'income' or 'expenses'
           let parentAcc = accountDetails.parentGroups[0].uniqueName;
@@ -211,6 +220,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.selectedLedgerBackup = resp[1];
 
           this.vm.selectedLedger.transactions.map(t => {
+            if (!this.isMultiCurrencyAvailable) {
+              this.isMultiCurrencyAvailable = t.convertedAmountCurrency ? true : false;
+            }
             if (t.inventory) {
               let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
               if (findStocks) {
@@ -274,12 +286,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
+    let isMultiCurrencyAvailable: boolean = false;
+    if (txn.selectedAccount && txn.selectedAccount.currency) {
+      this.activeAccount$.take(1).subscribe((acc) => {
+        if (acc.currency !== txn.selectedAccount.currency) {
+          this.isMultiCurrencyAvailable = true;
+          isMultiCurrencyAvailable = true;
+          this.baseCurrency = acc.currency;
+        }
+      });
+    }
     if (Number(txn.amount) === 0) {
       txn.amount = undefined;
     }
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
-      this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem(type));
+      let blankTrxnRow = this.vm.blankTransactionItem(type);
+      if (isMultiCurrencyAvailable) {
+        blankTrxnRow.convertedAmount = null;
+        blankTrxnRow.convertedAmountCurrency = null;
+      }
+      this.vm.selectedLedger.transactions.push(blankTrxnRow);
     }
   }
 
@@ -429,6 +456,38 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }
+  }
+
+  public onTxnAmountChange(txn) {
+    let currencyFound: boolean = false;
+    let ref = this.activeAccount$.subscribe((acc) => {
+      if (acc && acc.currency && !currencyFound) {
+        this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
+        this.vm.onTxnAmountChange(txn);
+        currencyFound = true;
+      }
+    });
+    if (currencyFound) {
+      ref.unsubscribe();
+    }
+  }
+
+    /**
+   * calculateConversionRate
+   */
+  public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
+    this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
+      let rates = res.body;
+      if (rates) {
+        _.forEach(rates, (value, key) => {
+          if (key === convertTo) {
+            obj.convertedAmount = amount * rates[key];
+            obj.convertedAmountCurrency = convertTo;
+            return obj;
+          }
+        });
+      }
+    });
   }
 
   public showDeleteAttachedFileModal() {
