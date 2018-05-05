@@ -647,8 +647,9 @@
 <div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq" [from]="advanceSearchRequest?.from"
-        [to]="advanceSearchRequest?.to" (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+      <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
+      <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq"
+        (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
     </div>
 </div>
 </div>
@@ -657,7 +658,8 @@
 <div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"
+       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
+      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
         (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
     </div>
     </div>
