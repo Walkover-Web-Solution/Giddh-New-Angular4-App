@@ -10,7 +10,8 @@ import { AppState } from '../../store';
 })
 
 export class UploadFileComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Output() public onNext = new EventEmitter();
+  @Output() public onFileUpload = new EventEmitter();
+  public file: File = null;
 
   constructor(
     private store: Store<AppState>,
@@ -28,5 +29,9 @@ export class UploadFileComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnDestroy() {
     //
+  }
+
+  public onFileChange(file: FileList) {
+    this.file = file.item(0);
   }
 }
