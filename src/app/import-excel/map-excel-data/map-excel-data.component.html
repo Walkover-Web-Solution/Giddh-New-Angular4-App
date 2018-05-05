@@ -1,0 +1,48 @@
+<!-- Map Field start-->
+<div class="mapFields max500">
+  <strong>Map your fields to Giddh fields</strong>
+  <table class="table basic table-bordered mrT1">
+    <thead>
+    <tr>
+      <th>Giddh Field</th>
+      <th>Your Field</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Name</td>
+      <td>
+        <!-- use sh-select instead -->
+        <input type="text" class="form-control"/></td>
+      <td><i class="fa fa-check text-success fs18"></i></td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>
+        <!-- use sh-select instead -->
+        <input type="text" class="form-control"/></td>
+      <td><i class="fa fa-check text-success fs18"></i></td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>
+        <!-- use sh-select instead -->
+        <input type="text" class="form-control"/></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td>
+        <!-- use sh-select instead -->
+        <input type="text" class="form-control"/></td>
+      <td><i class="fa fa-check text-success fs18"></i></td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="mrT2 text-right">
+    <button class="btn btn-default" (click)="onBack.emit()">Back</button>
+    <button class="btn btn-success" (click)="onNext.emit()">Next</button>
+  </div>
+</div>
+<!-- Map Field end -->
