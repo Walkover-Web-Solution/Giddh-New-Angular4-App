@@ -1,7 +1,4 @@
-import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppState } from '../../store';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'import-process',  // <home></home>
@@ -12,11 +9,10 @@ import { AppState } from '../../store';
 export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public onSubmit = new EventEmitter();
   @Output() public onBack = new EventEmitter();
+  @Input() public isLoading: boolean;
 
-  constructor(
-    private store: Store<AppState>,
-    private _router: Router,
-  ) {
+  constructor() {
+    //
   }
 
   public ngOnInit() {

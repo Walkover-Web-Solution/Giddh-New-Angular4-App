@@ -21,7 +21,9 @@
     </div>
   </div>
   <div class="max500 center-block mrT2">
-    <button class="btn btn-success pull-right" [disabled]="file === null" (click)="onFileUpload.emit(file)">Next
+    <button class="btn btn-success pull-right"
+            [ladda]="isLoading"
+            [disabled]="file === null" (click)="onFileUpload.emit(file)">Next
     </button>
   </div>
 </div>

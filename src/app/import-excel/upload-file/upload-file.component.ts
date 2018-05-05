@@ -1,34 +1,31 @@
-import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppState } from '../../store';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'upload-file',  // <home></home>
+  selector: 'upload-file',
   styleUrls: ['./upload-file.component.scss'],
-  templateUrl: './upload-file.component.html'
+  templateUrl: './upload-file.component.html',
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UploadFileComponent implements OnInit, OnDestroy, AfterViewInit {
+export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() public isLoading: boolean;
   @Output() public onFileUpload = new EventEmitter();
   public file: File = null;
 
-  constructor(
-    private store: Store<AppState>,
-    private _router: Router,
-  ) {
+  constructor() {
+    //
   }
 
   public ngOnInit() {
     //
   }
 
-  public ngAfterViewInit(): void {
+  public ngOnDestroy() {
     //
   }
 
-  public ngOnDestroy() {
-    //
+  public ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
   }
 
   public onFileChange(file: FileList) {

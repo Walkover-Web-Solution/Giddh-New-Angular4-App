@@ -19,7 +19,7 @@ export class ImportExcelActions {
     .switchMap((action: CustomActions) => {
       return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
     }).map((res) => {
-      return this.validateResponse(res, this.uploadFileResponse(res.response), true);
+      return this.validateResponse(res, this.uploadFileResponse(res.response), true, this.uploadFileResponse(res.response));
     });
   @Effect()
   public processImport$: Observable<Action> = this.action$
