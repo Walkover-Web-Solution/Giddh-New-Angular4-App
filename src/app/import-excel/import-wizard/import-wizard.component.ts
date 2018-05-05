@@ -15,6 +15,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public step: number = 1;
   public entity: string;
   public isUploadInProgress: boolean = false;
+  public excelState: ImportExcelState;
 
   constructor(
     private store: Store<AppState>,
@@ -25,6 +26,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public dataChanged = (excelState: ImportExcelState) => {
+    this.excelState = excelState;
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
       this.step = 2;
     }

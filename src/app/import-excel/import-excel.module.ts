@@ -9,6 +9,7 @@ import { MapExcelDataComponent } from './map-excel-data/map-excel-data.component
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { LaddaModule } from 'angular2-ladda';
     CommonModule,
     FormsModule,
     ImportExcelRoutingModule,
-    LaddaModule
+    LaddaModule,
+    ShSelectModule
   ],
 })
 export class ImportExcelModule {

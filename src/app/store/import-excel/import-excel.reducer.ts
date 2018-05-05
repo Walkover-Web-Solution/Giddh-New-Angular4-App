@@ -26,7 +26,7 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       return {...state, requestState: ImportExcelRequestStates.UploadFileInProgress};
     }
     case IMPORT_EXCEL.UPLOAD_FILE_RESPONSE: {
-
+      console.log(action);
       return {
         ...state,
         requestState: action.payload ? ImportExcelRequestStates.UploadFileSuccess : ImportExcelRequestStates.UploadFileError,
