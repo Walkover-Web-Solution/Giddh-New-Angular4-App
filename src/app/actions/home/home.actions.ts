@@ -6,7 +6,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
-import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../../models/interfaces/dashboard.interface';
+import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse, ITotalOverDuesResponse } from '../../models/interfaces/dashboard.interface';
 import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../../store/customActions';
@@ -379,6 +379,25 @@ export class HomeActions {
         payload: res
       }));
 
+  @Effect()
+  public GetTotalOverdues$: Observable<Action> = this.action$
+    .ofType(HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES)
+    .switchMap((action: CustomActions) => {
+      return Observable.zip(
+        this._dashboardService.GetClosingBalance('sundrydebtors', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+        this._dashboardService.GetClosingBalance('sundrycreditors', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+      );
+    }).map((res) => {
+      if (res[0].status === 'success' && res[1].status === 'success') {
+        let obj: ITotalOverDuesResponse[] = [];
+        obj.push(res[0].body[0]);
+        obj.push(res[1].body[0]);
+        return {
+          type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES_RESPONSE,
+          payload: obj
+        };
+      }
+    });
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
   }
@@ -463,6 +482,19 @@ export class HomeActions {
   public getRatioAnalysisResponse(res) {
     return {
       type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
+      payload: res
+    };
+  }
+
+  public getTotalOverdues(fromDate: string, toDate: string) {
+    return {
+      type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES,
+      payload: fromDate, toDate
+    };
+  }
+  public getTotalOverduesResponse(res) {
+    return {
+      type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES_RESPONSE,
       payload: res
     };
   }
