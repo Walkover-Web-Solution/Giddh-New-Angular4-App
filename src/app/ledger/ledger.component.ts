@@ -998,4 +998,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public onCancelSelectInvoiceModal() {
     this.bulkActionGenerateVoucherModal.hide();
   }
+
+  public openSelectFilePopup(fileInput: any) {
+    if (!this.entryUniqueNamesForBulkAction.length) {
+      this._toaster.errorToast('Please select at least one entry.', 'Error');
+      return;
+    }
+    fileInput.click();
+  }
 }

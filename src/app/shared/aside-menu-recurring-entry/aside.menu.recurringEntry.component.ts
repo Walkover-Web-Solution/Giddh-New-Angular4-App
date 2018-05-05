@@ -18,7 +18,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      width: 400px;
       z-index: 1045;
     }
 
@@ -42,7 +42,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
     }
 
     :host .aside-pane {
-      width: 480px;
+      width: 400px;
     }
   `],
 })
@@ -107,7 +107,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
       {label: 'Weekly', value: 'weekly'},
       {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
-      {label: 'Yearly', value: 'yearly'}
+      {label: 'Yearly', value: 'yearly'},
+      {label: 'Monthly', value: 'monthly'}
     ];
 
     this.timeOptions = [
