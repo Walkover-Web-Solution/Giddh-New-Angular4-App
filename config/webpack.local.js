@@ -36,7 +36,7 @@ module.exports = function(options) {
     const PORT = process.env.PORT || 3000;
     const AppUrl = 'http://localapp.giddh.com:3000/';
     // const ApiUrl = 'http://apitest.giddh.com/';
-    const ApiUrl = 'http://apidev.giddh.com/';
+  const ApiUrl = 'http://apitest.giddh.com/';
     const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
         host: HOST,
         port: PORT,

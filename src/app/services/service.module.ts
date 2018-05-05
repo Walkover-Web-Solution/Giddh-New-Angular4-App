@@ -1,5 +1,5 @@
 import { MagicLinkService } from './magic-link.service';
-import { PermissionDataService } from './../permissions/permission-data.service';
+import { PermissionDataService } from '../permissions/permission-data.service';
 import { LogsService } from './logs.service';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -39,7 +39,6 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { SettingsBranchService } from './settings.branch.service';
 import { SettingsTagService } from './settings.tag.service';
 import { ContactService } from './contact.service';
