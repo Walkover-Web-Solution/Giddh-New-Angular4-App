@@ -3,6 +3,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
+import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
 
 @Component({
   selector: 'import-wizard',  // <home></home>
@@ -13,6 +14,7 @@ import { ImportExcelActions } from '../../actions/import-excel/import-excel.acti
 export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public step: number = 1;
   public entity: string;
+  public isUploadInProgress: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -22,8 +24,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
   }
 
-  public ngOnInit() {
-    this._activatedRoute.url.subscribe(p => this.entity = p[0].path);
+  public dataChanged = (excelState: ImportExcelState) => {
+    if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
+      this.step = 2;
+    }
+    this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
 
   public ngAfterViewInit(): void {
@@ -36,7 +41,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onFileUpload(file: File) {
     this.store.dispatch(this._importActions.uploadFileRequest(this.entity, file));
-    this.step++;
   }
 
   public onNext() {
@@ -45,5 +49,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onBack() {
     this.step--;
+  }
+
+  public ngOnInit() {
+    this._activatedRoute.url.subscribe(p => this.entity = p[0].path);
+    this.store.select(p => p.importExcel)
+      .subscribe(this.dataChanged);
   }
 }
