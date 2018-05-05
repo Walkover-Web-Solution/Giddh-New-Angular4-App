@@ -23,7 +23,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 export class RatioAnalysisChartComponent implements OnInit {
   @Input() public refresh: boolean = false;
 
-  public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
+  // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -35,12 +35,15 @@ export class RatioAnalysisChartComponent implements OnInit {
   public debtOptions: Options;
   public proprietaryOption: Options;
   public fixedAssetOption: Options;
+  public rationResponse$: Observable<any>;
+  public ratioObj: any = {} ;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
+    this.rationResponse$ = this.store.select(p => p.home.RatioAnalysis).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -81,13 +84,15 @@ export class RatioAnalysisChartComponent implements OnInit {
       }
     });
 
-    this.comparisionChartData
+    this.rationResponse$
       .skipWhile(p => (isNullOrUndefined(p)))
       .subscribe(p => {
-        console.log(p);
+        this.ratioObj = p;
+        // console.log(p);
         this.generateCharts();
         this.requestInFlight = false;
       });
+
   }
   public hardRefresh() {
     this.refresh = true;
@@ -95,20 +100,27 @@ export class RatioAnalysisChartComponent implements OnInit {
   }
   public fetchChartData() {
     this.requestInFlight = true;
-    this.ApiToCALL = [];
+    // this.ApiToCALL = [];
 
     this.refresh = false;
   }
 
   public generateCharts() {
     this.currentRatioOption = {
+      colors: ['#d37c59', '#005b77'],
       chart: {
           type: 'pie',
-          width: 250,
-          height: '250px'
+          polar: false,
+          width: 170,
+          height: '180px'
       },
       title: {
-        text: ''
+        verticalAlign: 'middle',
+        align: 'center',
+        text: '<span class="pie-text_center">' + this.ratioObj.currentRatio + '</span>',
+        style: { color: '#005b77', fontSize: '26px' },
+        useHTML: true,
+        y: 8
       },
       yAxis: {
         title: {
@@ -121,10 +133,6 @@ export class RatioAnalysisChartComponent implements OnInit {
         categories: []
       },
       legend: {
-        layout: 'horizontal',
-        align: 'center',
-        verticalAlign: 'bottom',
-        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' },
         enabled: false
       },
       credits: {
@@ -132,138 +140,210 @@ export class RatioAnalysisChartComponent implements OnInit {
       },
       plotOptions: {
           pie: {
-              shadow: false,
-              size: '40%',
-              innerSize: '60%',
-          }
+            showInLegend: true,
+            innerSize: '70%',
+            allowPointSelect: true,
+            dataLabels: {
+                enabled: false,
+                crop: true,
+                defer: true
+            },
+            shadow: false,
+            center: [
+                '50%',
+                '50%'
+            ],
+          },
+        series: {
+            animation: false,
+            dataLabels: {}
+        }
       },
       series: [{
-          name: 'Browsers',
-          data: [['Firefox', 2.62], ['Chrome', 1]]
-      }]
+          name: 'Current Ratio',
+          data: [['Current Assets', this.ratioObj.currentRatio * 10 / 10], ['Current Liabilities', 10]],
+      }],
     };
+
     this.debtOptions = {
+      colors: ['#d37c59', '#005b77'],
       chart: {
           type: 'pie',
-          width: 250,
-          height: '250px'
+          polar: false,
+          width: 170,
+          height: '180px'
+        //   height: '250px'
       },
       title: {
-          text: ''
+        verticalAlign: 'middle',
+        align: 'center',
+        text: '<span class="pie-text_center">' + this.ratioObj.debtEquityRatio + '</span>',
+        style: { color: '#005b77', fontSize: '26px' },
+        useHTML: true,
+        y: 8
       },
       yAxis: {
-          title: {
-              text: ''
-          }
+        title: {
+          text: ''
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
+      },
+      xAxis: {
+        categories: []
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
       },
       plotOptions: {
           pie: {
-              shadow: false,
-              size: '40%',
-              innerSize: '60%',
-          }
-      },
-      tooltip: {
-          // formatter: function() {
-          //     return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
-          // }
+            showInLegend: true,
+            innerSize: '70%',
+            allowPointSelect: true,
+            dataLabels: {
+                enabled: false,
+                crop: true,
+                defer: true
+            },
+            shadow: false,
+            center: [
+                '50%',
+                '50%'
+            ],
+          },
+        series: {
+            animation: false,
+            dataLabels: {}
+        }
       },
       series: [{
-          name: 'Browsers',
-          data: [['Firefox', 2.62], ['Chrome', 1]]
+          name: 'Debt Equity Ratio',
+          data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 10 / 10], ['Shareholders fund', 10]],
+
       }]
     };
 
     this.proprietaryOption = {
+      colors: ['#d37c59', '#005b77'],
       chart: {
           type: 'pie',
-          width: 250,
-          height: '250px'
+          polar: false,
+          width: 170,
+          height: '180px'
+        //   height: '250px'
       },
       title: {
-          text: ''
+        verticalAlign: 'middle',
+        align: 'center',
+        text: '<span class="pie-text_center">' + this.ratioObj.fixedAssetRatio + '</span>',
+        style: { color: '#005b77', fontSize: '26px' },
+        useHTML: true,
+        y: 8
       },
       yAxis: {
-          title: {
-              text: ''
-          }
+        title: {
+          text: ''
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
+      },
+      xAxis: {
+        categories: []
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
       },
       plotOptions: {
           pie: {
-              shadow: false,
-              size: '40%',
-              innerSize: '60%',
-          }
-      },
-      tooltip: {
-          // formatter: function() {
-          //     return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
-          // }
+            showInLegend: true,
+            innerSize: '70%',
+            allowPointSelect: true,
+            dataLabels: {
+                enabled: false,
+                crop: true,
+                defer: true
+            },
+            shadow: false,
+            center: [
+                '50%',
+                '50%'
+            ],
+          },
+        series: {
+            animation: false,
+            dataLabels: {}
+        }
       },
       series: [{
-          name: 'Browsers',
-          data: [['Firefox', 2.62], ['Chrome', 1]]
+          name: 'Proprietary Ratio',
+          data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 10 / 10], ['Total Assets', 10]],
+
       }]
     };
 
     this.fixedAssetOption = {
+      colors: ['#d37c59', '#005b77'],
       chart: {
           type: 'pie',
-          width: 250,
-          height: '250px'
+          polar: false,
+          width: 170,
+          height: '180px'
       },
       title: {
-          text: ''
+        verticalAlign: 'middle',
+        align: 'center',
+        text: '<span class="pie-text_center">' + this.ratioObj.proprietaryRatio + '</span>',
+        style: { color: '#005b77', fontSize: '26px' },
+        useHTML: true,
+        y: 8
       },
       yAxis: {
-          title: {
-              text: ''
-          }
+        title: {
+          text: ''
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
+      },
+      xAxis: {
+        categories: []
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
       },
       plotOptions: {
           pie: {
-              shadow: false,
-              size: '40%',
-              innerSize: '60%',
-          }
-      },
-      tooltip: {
-          // formatter: function() {
-          //     return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
-          // }
+            showInLegend: true,
+            innerSize: '70%',
+            allowPointSelect: true,
+            dataLabels: {
+                enabled: false,
+                crop: true,
+                defer: true
+            },
+            shadow: false,
+            center: [
+                '50%',
+                '50%'
+            ],
+          },
+        series: {
+            animation: false,
+            dataLabels: {}
+        }
       },
       series: [{
-          name: 'Browsers',
-          data: [['Firefox', 2.62], ['Chrome', 1]]
+          name: 'Fixed Assets Ratio',
+          data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 10 / 10], ['Shareholders fund', 10]],
       }]
     };
-      // chart: {
-      //   height: '273px',
-      //   width: 900,
-      //   zoomType: 'x'
-      // },
-      // title: {
-      //   text: ''
-      // },
-      // yAxis: {
-      //   title: {
-      //     text: ''
-      //   },
-      //   gridLineWidth: 0,
-      //   minorGridLineWidth: 0,
-      // },
-      // xAxis: {
-      //   categories: []
-      // },
-      // legend: {
-      //   layout: 'horizontal',
-      //   align: 'center',
-      //   verticalAlign: 'bottom',
-      //   itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' },
-      //   enabled: false
-      // },
-      // credits: {
-      //   enabled: false
-      // },
   }
 }

@@ -7,11 +7,12 @@
     <div class="container-fluid top_bar">
         <div class="row">
 
-            <div class="col-xs-4">
-                <live-accounts #liveaccount></live-accounts>
+            <div class="col-xs-4 col-lg-3">
+                <!-- <live-accounts #liveaccount></live-accounts> -->
+                <toal-overdues-chart #overdues></toal-overdues-chart>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-4 col-lg-5">
                 <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
             </div>
 
@@ -33,7 +34,7 @@
             </div>
 
             <div class="col-xs-6">
-                <ratio-analysis-chart [comparisionChartData]="comparisionChartData$" #ratio></ratio-analysis-chart>
+                <ratio-analysis-chart #ratio></ratio-analysis-chart>
             </div>
 
         </div>

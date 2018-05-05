@@ -163,7 +163,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       },
       xAxis: {
         categories: this.accountStrings.map(p => p.name),
-        crosshair: true
+        crosshair: true,
+        min: 0,
+        max: 2,
       },
       yAxis: {
         min: 0,
@@ -182,6 +184,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         useHTML: true
       },
       plotOptions: {
+        bar: {
+          groupPadding: 0,
+          pointPadding: 0
+        },
         column: {
           pointPadding: 0,
           borderWidth: 0
