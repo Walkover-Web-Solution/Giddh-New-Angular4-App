@@ -19,7 +19,7 @@
     <div class="clearfix mrT2">
       <div [ngSwitch]="step">
         <ng-container *ngSwitchCase="1">
-          <upload-file (onNext)="onNext()"></upload-file>
+          <upload-file (onFileUpload)="onFileUpload($event)"></upload-file>
         </ng-container>
         <ng-container *ngSwitchCase="2">
           <map-excel-data (onNext)="onNext()" (onBack)="onBack()"></map-excel-data>

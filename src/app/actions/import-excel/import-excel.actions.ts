@@ -19,7 +19,7 @@ export class ImportExcelActions {
     .switchMap((action: CustomActions) => {
       return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
     }).map((res) => {
-      return this.validateResponse(res, this.uploadFileResponse(res.response));
+      return this.validateResponse(res, this.uploadFileResponse(res.response), true);
     });
   @Effect()
   public processImport$: Observable<Action> = this.action$
@@ -27,7 +27,7 @@ export class ImportExcelActions {
     .switchMap((action: CustomActions) => {
       return this._importExcelService.processImport(action.payload.entity, action.payload.data);
     }).map((res) => {
-      return this.validateResponse(res, this.processImportResponse(res.response));
+      return this.validateResponse(res, this.processImportResponse(res.response), true);
     });
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {
