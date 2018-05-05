@@ -74,6 +74,11 @@ export interface IRevenueChartClosingBalanceResponse {
   otherincomeLastyear?: ClosingBalanceResponse;
 }
 
+export interface ITotalOverDuesResponse {
+  sundryDebtorsClosing?: IDashboardCbMainItem;
+  sundryCreditorsClosing?: IDashboardCbMainItem;
+}
+
 export class IComparisionChartResponse {
   // Referesh
   public refresh?: boolean;
