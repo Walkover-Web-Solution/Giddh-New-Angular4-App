@@ -23,7 +23,7 @@ export class ImportExcelService {
       .replace(':entity', entity)
     ;
     const formData: FormData = new FormData();
-    formData.append('fileKey', model, model.name);
+    formData.append('file', model, model.name);
     return this._http.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}}).map((res) => {
       let data: BaseResponse<ImportExcelData, string> = res;
       return data;
