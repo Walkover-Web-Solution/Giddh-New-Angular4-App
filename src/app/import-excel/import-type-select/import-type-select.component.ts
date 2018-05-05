@@ -1,15 +1,15 @@
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppState } from '../../store';
 
 @Component({
-  selector: 'import-excel',  // <home></home>
-  styleUrls: ['./import-excel.component.scss'],
-  templateUrl: './import-excel.component.html'
+  selector: 'import-type-select',  // <home></home>
+  styleUrls: ['./import-type-select.component.scss'],
+  templateUrl: './import-type-select.component.html'
 })
 
-export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImportTypeSelectComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private store: Store<AppState>,
@@ -28,5 +28,4 @@ export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnDestroy() {
     //
   }
-
 }

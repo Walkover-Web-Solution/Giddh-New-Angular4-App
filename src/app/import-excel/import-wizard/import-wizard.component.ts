@@ -1,15 +1,16 @@
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppState } from '../../store';
 
 @Component({
-  selector: 'import-excel',  // <home></home>
-  styleUrls: ['./import-excel.component.scss'],
-  templateUrl: './import-excel.component.html'
+  selector: 'import-wizard',  // <home></home>
+  styleUrls: ['./import-wizard.component.scss'],
+  templateUrl: './import-wizard.component.html'
 })
 
-export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
+  public step: number = 1;
 
   constructor(
     private store: Store<AppState>,
@@ -29,4 +30,11 @@ export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
     //
   }
 
+  public onNext() {
+    this.step++;
+  }
+
+  public onBack() {
+    this.step--;
+  }
 }
