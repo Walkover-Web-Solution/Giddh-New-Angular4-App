@@ -1,5 +1,5 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
   <div class="aside-header">
     <h3 class="aside-title">Recurring Account</h3>
   </div>
@@ -67,7 +67,7 @@
       <div class="row" *ngIf="mode === 'create'">
         <div class="col-lg-3 form-group mrR1">
           <label class="d-block">&nbsp;</label>
-          <button class="btn btn-sm" (click)="closeAsidePane($event)">Cancel</button>
+          <button class="btn btn-sm" (click)="closeAsidePane()">Cancel</button>
         </div>
 
         <div class="col-lg-3 form-group mrR1">

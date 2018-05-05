@@ -543,9 +543,13 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
-      .delete(this.config.apiUrl + INVENTORY_API.REPORT
+      .get(this.config.apiUrl + INVENTORY_API.REPORT
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+        .replace(':from', encodeURIComponent(from))
+        .replace(':to', encodeURIComponent(to))
+        .replace(':page', encodeURIComponent(page.toString()))
+        .replace(':count', encodeURIComponent(count.toString()))
       ).map((res) => {
         let data: BaseResponse<InventoryReport, string> = res;
         data.request = '';
@@ -553,4 +557,23 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
   }
 
+  public GetInventoryAllInOutReport(from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    if (filterParams) {
+
+    }
+    return this._http
+      .get(this.config.apiUrl + INVENTORY_API.REPORT_ALL
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':from', encodeURIComponent(from))
+        .replace(':to', encodeURIComponent(to))
+        .replace(':page', encodeURIComponent(page.toString()))
+        .replace(':count', encodeURIComponent(count.toString()))
+      ).map((res) => {
+        let data: BaseResponse<InventoryReport, string> = res;
+        data.request = '';
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
+  }
 }

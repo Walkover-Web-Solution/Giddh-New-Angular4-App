@@ -16,6 +16,7 @@ export const INVENTORY_API = {
     DELETE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
   },
   REPORT: '/company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
+  REPORT_ALL: '/company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
 
   CREATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group', // post call
   UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
