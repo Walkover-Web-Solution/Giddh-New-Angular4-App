@@ -229,12 +229,16 @@ export class InvoiceService {
   public GetInvoiceSetting(): Observable<BaseResponse<InvoiceSetting, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName))
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
         let data: BaseResponse<InvoiceSetting, string> = res;
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e));
+    } else {
+      return Observable.empty();
+    }
   }
 
   /**
