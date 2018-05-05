@@ -419,6 +419,8 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
         delete accountRequest['mobileCode'];
       }
+    }
+
       if (this.showBankDetail) {
         if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
           accountRequest['accountBankDetails'] = [];
@@ -433,7 +435,6 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this._toaster.errorToast('Mobile no. & email Id is mandatory');
         return;
       }
-    }
 
     this.submitClicked.emit({
       activeGroupUniqueName: this.activeGroupUniqueName,
