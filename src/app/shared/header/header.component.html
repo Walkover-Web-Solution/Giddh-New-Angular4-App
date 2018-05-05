@@ -448,10 +448,14 @@
     </div>
 </div>
 <!--CMD + K modal  -->
-<div bsModal #navigationModal="bs-modal" class="modal" role="dialog" (onHide)="onNavigationHide($event)">
+<div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
     <div class="modal-dialog modal-small">
         <div class="modal-content">
-            <sh-select #navigationShSelect [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Jump to..." [options]="navigationOptionList" [ItemHeight]="33"></sh-select>
+            <sh-select #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Search for page..."
+                [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
+            <div class="shortcuts">
+                <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+            </div>
         </div>
     </div>
 </div>
