@@ -49,7 +49,6 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   public IsNotExpirable: boolean;
-
   public today: Date = new Date();
   public maxEndDate: Date = new Date();
   public intervalOptions: IOption[];
@@ -61,7 +60,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   @Input() public voucherNumber: string;
   @Input() public mode: 'create' | 'update' = 'create';
   @Input() public invoice: RecurringInvoice;
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeAsideEvent: EventEmitter<RecurringInvoice> = new EventEmitter(true);
 
   constructor(private _store: Store<AppState>,
               private _fb: FormBuilder,
@@ -85,7 +84,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (changes.voucherNumber) {
       this.form.controls.voucherNumber.patchValue(this.voucherNumber);
     }
@@ -104,7 +102,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.intervalOptions = [
-      {label: 'Weekly', value: 'weekly'},
+      {label: 'Weekly', value: 'weeeekly'},
       {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
       {label: 'Yearly', value: 'yearly'}
@@ -127,7 +125,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
       });
   }
 
-  public closeAsidePane(event) {
+  public closeAsidePane(event: RecurringInvoice) {
     this.closeAsideEvent.emit(event);
   }
 
@@ -147,16 +145,15 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public saveRecurringInvoice() {
-    console.log(this.form.value);
     if (this.form.valid && !this.isLoading) {
       this.isLoading = true;
       const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
       const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
       const invoiceModel: RecurringInvoice = {...this.invoice, ...this.form.value, cronEndDate, nextCronDate};
-      if (this.mode === 'create') {
-        this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
-      } else {
+      if (this.mode === 'update') {
         this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
+      } else {
+        this.closeAsidePane(this.invoice);
       }
     }
   }

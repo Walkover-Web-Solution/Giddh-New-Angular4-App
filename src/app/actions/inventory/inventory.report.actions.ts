@@ -31,6 +31,7 @@ export class InventoryReportActions {
       }
       return {type: 'EmptyAction'};
     });
+
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService) {
 
@@ -47,6 +48,13 @@ export class InventoryReportActions {
     return {
       type: INVENTORY_ENTRY_ACTIONS.GET_ENTRY_RESPONSE,
       payload: value
+    };
+  }
+
+  public getInOutReport(from?: string, to?: string, page?: number, count?: number, reportFilters?: InventoryFilter): CustomActions {
+    return {
+      type: INVENTORY_REPORT_ACTIONS.GENERATE_REPORT,
+      payload: {reportFilters, from, to, page, count}
     };
   }
 }
