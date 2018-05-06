@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ImportExcelData } from '../../models/api-models/import-excel';
 
 @Component({
   selector: 'import-process',  // <home></home>
@@ -10,6 +11,7 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   @Output() public onSubmit = new EventEmitter();
   @Output() public onBack = new EventEmitter();
   @Input() public isLoading: boolean;
+  @Input() public importData: ImportExcelData;
 
   constructor() {
     //

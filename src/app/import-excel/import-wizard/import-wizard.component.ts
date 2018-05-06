@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
+import { ImportExcelData } from '../../models/api-models/import-excel';
 
 @Component({
   selector: 'import-wizard',  // <home></home>
@@ -16,6 +17,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public entity: string;
   public isUploadInProgress: boolean = false;
   public excelState: ImportExcelState;
+  public mappedData: ImportExcelData;
 
   constructor(
     private store: Store<AppState>,
@@ -45,7 +47,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(this._importActions.uploadFileRequest(this.entity, file));
   }
 
-  public onNext() {
+  public onNext(importData: ImportExcelData) {
+    console.log(importData);
+    this.mappedData = importData;
     this.step++;
   }
 
