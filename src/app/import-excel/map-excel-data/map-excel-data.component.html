@@ -10,13 +10,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let i of getMappings()">
-      <td>{{i}}</td>
+    <tr *ngFor="let data of dataModel">
+      <td>{{data.field}}</td>
       <td>
         <!-- use sh-select instead -->
         <sh-select
-          [options]="getOptionsFromMap(importData.mappings.mappingInfo[i])" class="pull-left mrR1"
+          [options]="data.options" class="pull-left mrR1"
           [placeholder]="'Select Field'"
+          (selected)="columnSelected($event,data)"
         ></sh-select>
       <td><i class="fa fa-check text-success fs18"></i></td>
     </tr>
@@ -24,7 +25,7 @@
   </table>
   <div class="mrT2 text-right">
     <button class="btn btn-default" (click)="onBack.emit()">Back</button>
-    <button class="btn btn-success" (click)="onNext.emit()">Next</button>
+    <button class="btn btn-success" (click)="onNext.emit(importData)">Next</button>
   </div>
 </div>
 <!-- Map Field end -->
