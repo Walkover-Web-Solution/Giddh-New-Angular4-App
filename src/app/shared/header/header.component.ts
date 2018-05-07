@@ -150,8 +150,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public navigationOptionList: IOption[] = NAVIGATION_ITEM_LIST;
   public selectedNavigation: string = '';
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public navigationModalVisible: boolean = false;
   private loggedInUserEmail: string;
-  private navigationModalVisible: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
