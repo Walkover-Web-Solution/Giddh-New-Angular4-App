@@ -1,6 +1,6 @@
 import { CustomActions } from '../customActions';
 import { IMPORT_EXCEL } from '../../actions/import-excel/import-excel.const';
-import { ImportExcelData } from '../../models/api-models/import-excel';
+import { ImportExcelResponseData } from '../../models/api-models/import-excel';
 
 export enum ImportExcelRequestStates {
   Default,
@@ -13,7 +13,7 @@ export enum ImportExcelRequestStates {
 
 export interface ImportExcelState {
   requestState: ImportExcelRequestStates;
-  importExcelData?: ImportExcelData;
+  importExcelData?: ImportExcelResponseData;
 }
 
 export const initialState: ImportExcelState = {
