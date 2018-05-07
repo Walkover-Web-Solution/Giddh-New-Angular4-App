@@ -31,7 +31,7 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Dashboard', value: '/pages/home' },
-  { label: 'Accounting Voucher', value: '/pages/accounting-voucher' },
+  { label: 'Journal Voucher', value: '/pages/accounting-voucher' },
   { label: 'Sales', value: '/pages/sales' },
   { label: 'Invoice', value: '/pages/invoice/preview' },
   { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
@@ -547,6 +547,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private showNavigationModal() {
+    this.navigationOptionList.forEach((ele) => {
+      ele.isHilighted = false;
+    });
     this.forceClear$ = Observable.of({status: false});
     this.navigationModalVisible = true;
     this.navigationModal.show();
