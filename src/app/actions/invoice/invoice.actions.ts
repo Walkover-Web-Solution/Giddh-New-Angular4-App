@@ -1,33 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
-import { AppState } from '../../store/roots';
-import { INVOICE_ACTIONS, INVOICE } from './invoice.const';
+import { INVOICE, INVOICE_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import {
-  IGetAllInvoicesResponse,
-  CommonPaginatedRequest,
-  GetAllLedgersForInvoiceResponse,
-  InvoiceFilterClass,
-  PreviewInvoiceRequest,
-  PreviewInvoiceResponseClass,
-  GetInvoiceTemplateDetailsResponse,
-  InvoiceTemplateDetailsResponse,
-  GenerateInvoiceRequestClass,
-  GenerateBulkInvoiceRequest,
-  CustomTemplateResponse,
-  IBulkInvoiceGenerationFalingError
-} from '../../models/api-models/Invoice';
-import { Font } from 'ngx-font-picker';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
+import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
+import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 
 @Injectable()
 export class InvoiceActions {
@@ -36,7 +23,7 @@ export class InvoiceActions {
   @Effect()
   public GetAllInvoices$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_INVOICES)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body))
     .map(response => {
       return this.GetAllInvoicesResponse(response);
     });
@@ -45,73 +32,73 @@ export class InvoiceActions {
   public GetAllInvoicesResponse$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE)
     .map(response => {
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   // get all ledgers for invoice
   @Effect()
   public GetAllLedgersForInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body))
     .map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
       type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
+      payload: res
+    }));
 
   // Preview Invoice
   @Effect()
   public PreviewInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.PREVIEW_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(res, {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
+      payload: res
+    }));
 
   // Preview of Generated Invoice
   @Effect()
   public PreviewOfGeneratedInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber))
+    .switchMap((action: CustomActions) => this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber))
     .map(res => this.validateResponse<PreviewInvoiceResponseClass, string>(res, {
       type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+      payload: res
+    }));
 
   // Preview of Generated Invoice
   @Effect()
   public UpdateGeneratedInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<string, GenerateInvoiceRequestClass>(res, {
       type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
+      payload: res
+    }));
 
   // Generate Invoice
   @Effect()
   public GenerateInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body))
+    .switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+      payload: res
+    }));
 
   // Generate Bulk Invoice
   // @Effect()
@@ -128,7 +115,7 @@ export class InvoiceActions {
   @Effect()
   public GenerateBulkInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
+    .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom))
     .map(response => {
       return this.GenerateBulkInvoiceResponse(response);
     });
@@ -149,14 +136,14 @@ export class InvoiceActions {
           });
         }
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   // Delete Invoice
   @Effect()
   public DeleteInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.DELETE_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteInvoice(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload))
     .map(response => {
       return this.DeleteInvoiceResponse(response);
     });
@@ -171,14 +158,14 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast('Invoice Deleted Successfully');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   // Action On Invoice
   @Effect()
   public ActionOnInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE)
-    .switchMap((action: CustomActions) =>  this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action))
+    .switchMap((action: CustomActions) => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action))
     .map(response => {
       return this.ActionOnInvoiceResponse(response);
     });
@@ -193,20 +180,20 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast('Invoice Successfully Updated.');
       }
-      return { type: 'EmptyAction' }; // Refresh the list
+      return {type: 'EmptyAction'}; // Refresh the list
     });
 
   @Effect()
   public GetTemplateDetailsOfInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetInvoiceTemplateDetails(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.GetInvoiceTemplateDetails(action.payload))
     .map(res => this.validateResponse<InvoiceTemplateDetailsResponse, string>(res, {
       type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
+      payload: res
+    }));
 
   // *********************************** MUSTAFA //***********************************\\
 
@@ -216,14 +203,14 @@ export class InvoiceActions {
   @Effect()
   public getInvoiceSetting$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.GET_INVOICE_SETTING)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetInvoiceSetting())
+    .switchMap((action: CustomActions) => this._invoiceService.GetInvoiceSetting())
     .map(res => this.validateResponse<InvoiceSetting, string>(res, {
       type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
+      payload: res
+    }));
 
   /**
    * DELETE INVOICE WEBHOOK
@@ -231,14 +218,14 @@ export class InvoiceActions {
   @Effect()
   public DeleteWebhook$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.DELETE_WEBHOOK)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteInvoiceWebhook(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceWebhook(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
+      payload: res
+    }));
 
   /**
    * UPDATE INVOICE EMAILID
@@ -246,14 +233,14 @@ export class InvoiceActions {
   @Effect()
   public UpdateInvoiceEmail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.UPDATE_INVOICE_EMAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateInvoiceEmail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceEmail(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
+      payload: res
+    }));
 
   /**
    * SAVE INVOICE WEBHOOK
@@ -261,14 +248,14 @@ export class InvoiceActions {
   @Effect()
   public SaveInvoiceWebhook$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.SAVE_INVOICE_WEBHOOK)
-    .switchMap((action: CustomActions) =>  this._invoiceService.SaveInvoiceWebhook(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.SaveInvoiceWebhook(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
+      payload: res
+    }));
 
   /**
    * UPDATE INVOICE SETTING
@@ -276,14 +263,14 @@ export class InvoiceActions {
   @Effect()
   public updateInvoiceSetting$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.UPDATE_INVOICE_SETTING)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateInvoiceSetting(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceSetting(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
+      payload: res
+    }));
 
   /**
    * GET RAZORPAY DETAIL
@@ -291,14 +278,14 @@ export class InvoiceActions {
   @Effect()
   public GetRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.GET_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.GetRazorPayDetail())
+    .switchMap((action: CustomActions) => this._invoiceService.GetRazorPayDetail())
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
+      payload: res
+    }));
 
   /**
    * UPDATE RAZORPAY DETAIL
@@ -306,14 +293,14 @@ export class InvoiceActions {
   @Effect()
   public UpdateRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.UpdateRazorPayDetail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.UpdateRazorPayDetail(action.payload))
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
+      payload: res
+    }));
 
   /**
    * DELETE RAZORPAY DETAIL
@@ -321,14 +308,14 @@ export class InvoiceActions {
   @Effect()
   public DeleteRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.DELETE_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteRazorPayDetail())
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteRazorPayDetail())
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
+      payload: res
+    }));
 
   /**
    * DELETE INVOICE EMAIL
@@ -336,14 +323,14 @@ export class InvoiceActions {
   @Effect()
   public DeleteInvoiceEmail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.DELETE_INVOICE_EMAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.DeleteInvoiceEmail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceEmail(action.payload))
     .map(res => this.validateResponse<string, string>(res, {
       type: INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE,
+      payload: res
+    }));
 
   /**
    * SAVE RAZORPAY DETAIL
@@ -351,14 +338,14 @@ export class InvoiceActions {
   @Effect()
   public SaveRazorPayDetail$: Observable<Action> = this.action$
     .ofType(INVOICE.SETTING.SAVE_RAZORPAY_DETAIL)
-    .switchMap((action: CustomActions) =>  this._invoiceService.SaveRazorPayDetail(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceService.SaveRazorPayDetail(action.payload))
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
       payload: res
     }, true, {
-        type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
-        payload: res
-      }));
+      type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public DownloadInvoice$: Observable<Action> = this.action$
@@ -384,7 +371,7 @@ export class InvoiceActions {
         let fileName = req.invoiceNumber[0];
         this.downloadFile(data.body, type, fileName);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -405,7 +392,7 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast(data.body);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
   // *********************************** MUSTAFA //***********************************\\
 
@@ -428,7 +415,7 @@ export class InvoiceActions {
   @Effect()
   private GetSampleTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.getTemplates())
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.getTemplates())
     .map(response => {
       return this.getSampleTemplateResponse(response);
     });
@@ -441,14 +428,14 @@ export class InvoiceActions {
       if (data && data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   // GET CUSTOM CREATED TEMPLATES
   @Effect()
   private getAllCreatedTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.getAllCreatedTemplates())
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates())
     .map(response => {
       return this.getAllCreatedTemplatesResponse(response);
     });
@@ -461,14 +448,14 @@ export class InvoiceActions {
       if (data && data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   // SET TEMPLATE AS DEFAULT
   @Effect()
   private setTemplateAsDefault$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.setTemplateAsDefault(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload))
     .map(response => {
       return this.setTemplateAsDefaultResponse(response);
     });
@@ -483,14 +470,14 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast('Template successfully marked as default.');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   // DELETE TEMPLATE
   @Effect()
   private deleteTemplate$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE)
-    .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.deleteTemplate(action.payload))
+    .switchMap((action: CustomActions) => this._invoiceTemplatesService.deleteTemplate(action.payload))
     .map(response => {
       return this.deleteTemplateResponse(response);
     });
@@ -505,16 +492,53 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast(data.body);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
+  // GET All Recurring Vouchers
+  @Effect()
+  private GetAllRecurringInvoices$: Observable<Action> = this.action$
+    .ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA)
+    .switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers(action.payload))
+    .map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res.body), true, this.GetAllRecurringInvoicesResponse(res.body)));
+  /**
+   * SAVE Recurring Voucher
+   */
+  @Effect()
+  private SaveRecurrigVoucher$: Observable<Action> = this.action$
+    .ofType(INVOICE.RECURRING.CREATE_RECURRING_INVOICE)
+    .switchMap((action: CustomActions) => this._recurringService.createRecurringVouchers(action.payload))
+    .map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), 'Recurring Invoice Created.'));
+
+  /**
+   * UPDATE Recurring Vouchers
+   */
+  @Effect()
+  private UpdateRecurringVouchers$: Observable<Action> = this.action$
+    .ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE)
+    .switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload))
+    .map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
+      this.updateRecurringInvoiceResponse(null), 'Recurring Invoice Updated.'));
+
+  /**
+   * DELETE Recurring Vouchers
+   */
+  @Effect()
+  private DeleteRecurringVouchers$: Observable<Action> = this.action$
+    .ofType(INVOICE.RECURRING.DELETE_RECURRING_INVOICE)
+    .switchMap((action: CustomActions) => this._recurringService.deleteRecurringVouchers(action.payload))
+    .map(res => this.validateResponse<string, string>(res, this.deleteRecurringInvoiceResponse(res.request),
+      true,
+      this.deleteRecurringInvoiceResponse(null)));
 
   constructor(
     private action$: Actions,
     private _invoiceService: InvoiceService,
+    private _recurringService: RecurringVoucherService,
     private _invoiceTemplatesService: InvoiceTemplatesService,
     private _toasty: ToasterService,
     private _router: Router
-  ) { }
+  ) {
+  }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
@@ -534,7 +558,7 @@ export class InvoiceActions {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   public downloadFile(data: Response, type: string, fileName) {
@@ -545,7 +569,7 @@ export class InvoiceActions {
   public GetAllInvoices(model: CommonPaginatedRequest, body): CustomActions {
     return {
       type: INVOICE_ACTIONS.GET_ALL_INVOICES,
-      payload: { model, body }
+      payload: {model, body}
     };
   }
 
@@ -556,10 +580,24 @@ export class InvoiceActions {
     };
   }
 
+  public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 10): CustomActions {
+    return {
+      type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA,
+      payload: {filter, page, count}
+    };
+  }
+
+  public GetAllRecurringInvoicesResponse(model: RecurringInvoice[]): CustomActions {
+    return {
+      type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE,
+      payload: model
+    };
+  }
+
   public GetAllLedgersForInvoice(model: CommonPaginatedRequest, data: InvoiceFilterClass): CustomActions {
     return {
       type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE,
-      payload: { model, body: data }
+      payload: {model, body: data}
     };
   }
 
@@ -573,7 +611,7 @@ export class InvoiceActions {
   public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): CustomActions {
     return {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE,
-      payload: { accountUniqueName, body: model }
+      payload: {accountUniqueName, body: model}
     };
   }
 
@@ -594,7 +632,7 @@ export class InvoiceActions {
   public PreviewOfGeneratedInvoice(accountUniqueName: string, invoiceNumber: string): CustomActions {
     return {
       type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE,
-      payload: { accountUniqueName, invoiceNumber }
+      payload: {accountUniqueName, invoiceNumber}
     };
   }
 
@@ -608,14 +646,14 @@ export class InvoiceActions {
   public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): CustomActions {
     return {
       type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE,
-      payload: { accountUniqueName, body: model }
+      payload: {accountUniqueName, body: model}
     };
   }
 
   public GenerateInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): CustomActions {
     return {
       type: INVOICE_ACTIONS.GENERATE_INVOICE,
-      payload: { accountUniqueName, body: model }
+      payload: {accountUniqueName, body: model}
     };
   }
 
@@ -626,10 +664,10 @@ export class InvoiceActions {
     };
   }
 
-  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): CustomActions {
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
     return {
       type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,
-      payload: { reqObj, body: model }
+      payload: { reqObj, body: model, requestedFrom }
     };
   }
 
@@ -668,10 +706,10 @@ export class InvoiceActions {
     };
   }
 
-  public ActionOnInvoice(invoiceUniqueName: string, action: object, ): CustomActions {
+  public ActionOnInvoice(invoiceUniqueName: string, action: object): CustomActions {
     return {
       type: INVOICE_ACTIONS.ACTION_ON_INVOICE,
-      payload: { invoiceUniqueName, action }
+      payload: {invoiceUniqueName, action}
     };
   }
 
@@ -774,46 +812,49 @@ export class InvoiceActions {
   public setTemplateId(id: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.SELECT_TEMPLATE,
-      payload: { id }
+      payload: {id}
     };
   }
+
   public setFont(font: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.SET_FONT,
-      payload: { font }
+      payload: {font}
     };
   }
+
   public setColor(primaryColor: string, secondaryColor: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
-      payload: { templateColor: primaryColor, tableColor: secondaryColor }
+      payload: {templateColor: primaryColor, tableColor: secondaryColor}
     };
   }
+
   public updateGSTIN(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_GSTIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updatePAN(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_PAN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public update(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_PAN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public setColumnWidth(width: number, colName: string): CustomActions {
     return {
       type: INVOICE.CONTENT.SET_COLUMN_WIDTH,
-      payload: { width, colName }
+      payload: {width, colName}
     };
 
   }
@@ -821,140 +862,140 @@ export class InvoiceActions {
   public updateInvoiceDate(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_INVOICE_DATE,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateInvoiceNo(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_INVOICE_NO,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateShippingDate(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SHIPPING_DATE,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateShippingNo(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SHIPPING_NO,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateShippingVia(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SHIPPING_VIA,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateTrackingDate(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TRACKING_DATE,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateTrackingNo(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TRACKING_NO,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateCustomerName(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_CUSTOMER_NAME,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateCustomerEmail(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_CUSTOMER_EMAIL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateCustomerMobileNo(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_CUSTOMER_MOBILE_NO,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateDueDate(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_DUE_DATE,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateBillingState(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_BILLING_STATE,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateBillingAddress(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_BILLING_ADDRESS,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateBillingGSTIN(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_BILLING_GSTIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateShippingState(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SHIPPING_STATE,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateShippingAddress(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SHIPPING_ADDRESS,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateShippingGSTIN(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SHIPPING_GSTIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateCustomField1(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_1,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateCustomField2(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_2,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateCustomField3(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_3,
-      payload: { data }
+      payload: {data}
     };
   }
 
@@ -975,128 +1016,129 @@ export class InvoiceActions {
   public updateSnoLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_SNOLABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateDateLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_DATE_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateItemLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_ITEM_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateHsnSacLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_HSNSAC_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateItemCodeLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_ITEM_CODE_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateDescLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_DESC_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateRateLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_RATE_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateDiscountLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_DISCOUNT_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateTaxableValueLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TAXABLE_VALUE_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateTaxLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TAX_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateTotalLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TOTAL_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateQuantityLabel(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_QUANTITY_LABEL,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public setTopPageMargin(data: number): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TOP_MARGIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public setLeftPageMargin(data: number): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_LEFT_MARGIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public setBottomPageMargin(data: number): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_BOTTOM_MARGIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public setRightPageMargin(data: number): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_RIGHT_MARGIN,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateMessage1(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_MESSAGE1,
-      payload: { data }
+      payload: {data}
     };
   }
 
   public updateMessage2(data: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.UPDATE_MESSAGE2,
-      payload: { data }
+      payload: {data}
     };
   }
+
   // public setDivVisible(div: IsDivVisible): CustomActions {
   //   // console.log(div);
   //   return {
@@ -1175,7 +1217,7 @@ export class InvoiceActions {
   public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], typeOfInvoice?: string[] }): CustomActions {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
-      payload: { accountUniqueName, dataToSend }
+      payload: {accountUniqueName, dataToSend}
     };
   }
 
@@ -1189,7 +1231,7 @@ export class InvoiceActions {
   public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
-      payload: { accountUniqueName, dataToSend }
+      payload: {accountUniqueName, dataToSend}
     };
   }
 
@@ -1200,7 +1242,53 @@ export class InvoiceActions {
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  public createRecurringInvoice(model: RecurringInvoice): CustomActions {
+    return {
+      type: INVOICE.RECURRING.CREATE_RECURRING_INVOICE,
+      payload: model
+    };
+  }
+
+  public createRecurringInvoiceResponse(model: RecurringInvoice): CustomActions {
+    return {
+      type: INVOICE.RECURRING.CREATE_RECURRING_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public updateRecurringInvoice(model: RecurringInvoice): CustomActions {
+    return {
+      type: INVOICE.RECURRING.UPDATE_RECURRING_INVOICE,
+      payload: model
+    };
+  }
+
+  public updateRecurringInvoiceResponse(model: RecurringInvoice): CustomActions {
+    return {
+      type: INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public deleteRecurringInvoice(uniqueName: string): CustomActions {
+    return {
+      type: INVOICE.RECURRING.DELETE_RECURRING_INVOICE,
+      payload: uniqueName
+    };
+  }
+
+  public deleteRecurringInvoiceResponse(res: string): CustomActions {
+    return {
+      type: INVOICE.RECURRING.DELETE_RECURRING_INVOICE_RESPONSE,
+      payload: res
+    };
+  }
+
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
+                                                successAction: CustomActions,
+                                                showToast: boolean = false,
+                                                errorAction: CustomActions = {type: 'EmptyAction'},
+                                                message?: string): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
@@ -1209,6 +1297,8 @@ export class InvoiceActions {
     } else {
       if (showToast && typeof response.body === 'string') {
         this._toasty.successToast(response.body);
+      } else if (message) {
+        this._toasty.successToast(message);
       }
     }
     return successAction;

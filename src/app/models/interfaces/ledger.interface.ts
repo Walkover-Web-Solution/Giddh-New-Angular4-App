@@ -18,6 +18,8 @@ export interface ILedgerTransactionItem {
   selectedAccount?: IFlattenAccountsResultItem | any;
   unitRate?: IInventoryUnit[];
   isUpdated?: boolean;
+  convertedAmount?: number;
+  convertedAmountCurrency?: string;
 }
 
 export interface IInventory {
@@ -114,6 +116,7 @@ export interface ITransactionItem {
   type: string;
   unconfirmedEntry: boolean;
   selectedAccount?: IFlattenAccountsResultItem | any;
+  convertedAmount?: string;
 }
 
 /**

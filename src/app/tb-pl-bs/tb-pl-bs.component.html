@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <tabset id="settingTab">
+    <tabset id="settingTab" #staticTabsTBPL>
         <tab heading="Trial Balance">
             <tb [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
         </tab>

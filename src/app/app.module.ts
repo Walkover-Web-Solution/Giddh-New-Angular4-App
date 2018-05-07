@@ -1,15 +1,13 @@
 import { GiddhHttpInterceptor } from './services/http.interceptor';
 // import { SuccessComponent } from './settings/linked-accounts/success.component';
-import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
 import { RouterModule, PreloadingStrategy, PreloadAllModules } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActionReducer, MetaReducer, Store, StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import * as _ from './lodash-optimized';
 /*
  * Platform and Environment providers/pipes/pipes
@@ -26,7 +24,7 @@ import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
 import { ToastrModule } from 'ngx-toastr';
-import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';

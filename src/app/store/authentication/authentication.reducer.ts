@@ -35,6 +35,10 @@ export interface AuthenticationState {
   isAddNewMobileNoSuccess: boolean;
   isVerifyAddNewMobileNoInProcess: boolean;
   isVerifyAddNewMobileNoSuccess: boolean;
+  isLoginWithPasswordInProcess: boolean;
+  isSignupWithPasswordInProcess: boolean;
+  isSignupWithPasswordSuccess: boolean;
+  signupVerifyEmail: string;
 }
 
 export enum userLoginStateEnum {
@@ -83,6 +87,10 @@ const initialState = {
   isVerifyAddNewMobileNoInProcess: false,
   isVerifyAddNewMobileNoSuccess: false,
   needsToRedirectToLedger: false,
+  isLoginWithPasswordInProcess: false,
+  isSignupWithPasswordInProcess: false,
+  isSignupWithPasswordSuccess: false,
+  signupVerifyEmail: null
 };
 
 const sessionInitialState: SessionState = {
@@ -316,6 +324,27 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         isVerifyAddNewMobileNoInProcess: false,
         isVerifyAddNewMobileNoSuccess: false
       };
+    case LoginActions.LoginWithPasswdRequest:
+      return Object.assign({}, state, {
+        isLoginWithPasswordInProcess: true
+      });
+    case LoginActions.SignupWithPasswdRequest:
+      return Object.assign({}, state, {
+        isSignupWithPasswordInProcess: true,
+        isSignupWithPasswordSuccess: false,
+        signupVerifyEmail: null
+      });
+    case LoginActions.SignupWithPasswdResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          isSignupWithPasswordInProcess: false,
+          isSignupWithPasswordSuccess: true,
+          signupVerifyEmail: res.request.email
+        });
+    }
+      return state;
+    }
     default:
       return state;
   }
@@ -530,6 +559,16 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           return Object.assign({}, state, d);
         }
       }
+      return state;
+    }
+    case LoginActions.LoginWithPasswdResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          user: res.body,
+          isLoginWithPasswordInProcess: false
+        });
+    }
       return state;
     }
     default:
