@@ -7,7 +7,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
-import { ImportExcelData } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { ImportExcelService } from '../../services/import-excel.service';
 
 @Injectable()
@@ -41,21 +41,21 @@ export class ImportExcelActions {
     };
   }
 
-  public uploadFileResponse(response: ImportExcelData): CustomActions {
+  public uploadFileResponse(response: ImportExcelResponseData): CustomActions {
     return {
       type: IMPORT_EXCEL.UPLOAD_FILE_RESPONSE,
       payload: response
     };
   }
 
-  public processImportRequest(entity: string, data: ImportExcelData): CustomActions {
+  public processImportRequest(entity: string, data: ImportExcelRequestData): CustomActions {
     return {
       type: IMPORT_EXCEL.PROCESS_IMPORT_REQUEST,
       payload: {entity, data}
     };
   }
 
-  public processImportResponse(response: ImportExcelData): CustomActions {
+  public processImportResponse(response: ImportExcelResponseData): CustomActions {
     return {
       type: IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE,
       payload: response

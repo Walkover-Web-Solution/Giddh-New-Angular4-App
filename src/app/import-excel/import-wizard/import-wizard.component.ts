@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
-import { ImportExcelData } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 
 @Component({
   selector: 'import-wizard',  // <home></home>
@@ -17,7 +17,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public entity: string;
   public isUploadInProgress: boolean = false;
   public excelState: ImportExcelState;
-  public mappedData: ImportExcelData;
+  public mappedData: ImportExcelResponseData;
 
   constructor(
     private store: Store<AppState>,
@@ -35,6 +35,12 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
 
+  public ngOnInit() {
+    this._activatedRoute.url.subscribe(p => this.entity = p[0].path);
+    this.store.select(p => p.importExcel)
+      .subscribe(this.dataChanged);
+  }
+
   public ngAfterViewInit(): void {
     //
   }
@@ -47,7 +53,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(this._importActions.uploadFileRequest(this.entity, file));
   }
 
-  public onNext(importData: ImportExcelData) {
+  public onNext(importData: ImportExcelResponseData) {
     console.log(importData);
     this.mappedData = importData;
     this.step++;
@@ -57,9 +63,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.step--;
   }
 
-  public ngOnInit() {
-    this._activatedRoute.url.subscribe(p => this.entity = p[0].path);
-    this.store.select(p => p.importExcel)
-      .subscribe(this.dataChanged);
+  public onSubmit(data: ImportExcelRequestData) {
+    this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
   }
 }
