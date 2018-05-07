@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.4.0",
+  "version": "6.5.0",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -63,7 +63,7 @@
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
     "node": "node",
-    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mwl --x64 --publish always",
+    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mw --x32 --x64 --publish always",
     "package": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  -mw --x64",
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
@@ -113,12 +113,14 @@
     "angular2-ui-switch": "git+https://github.com/daominhsangvn/angular2-ui-switch",
     "builder-util": "3.4.4",
     "configstore": "3.1.1",
-    "electron-debug": "1.5.0",
-    "electron-is-dev": "0.3.0",
-    "electron-log": "2.2.14",
-    "electron-oauth": "2.4.3",
-    "electron-publisher-s3": "20.7.0",
-    "electron-updater": "2.21.3",
+    "electron-builder-squirrel-windows": "^20.10.0",
+    "electron-debug": "^1.5.0",
+    "electron-is-dev": "^0.3.0",
+    "electron-log": "^2.2.14",
+    "electron-oauth": "^2.4.3",
+    "electron-publisher-s3": "20.13.1",
+    "electron-unhandled": "^1.1.0",
+    "electron-updater": "2.21.10",
     "jquery": "3.2.1",
     "jspdf": "1.3.3",
     "jspdf-autotable": "2.3.2",
@@ -174,12 +176,13 @@
     "cross-env": "5.0.1",
     "css-loader": "0.28.4",
     "devtron": "1.4.0",
-    "electron": "1.8.4",
-    "electron-builder": "19.49.2",
-    "electron-connect": "0.6.2",
+    "electron": "2.0.0",
+    "electron-builder": "20.11.1",
+    "electron-connect": "0.6.3",
     "electron-connect-webpack-plugin": "0.1.1",
+    "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
-    "electron-rebuild": "1.6.0",
+    "electron-rebuild": "1.7.3",
     "exports-loader": "0.6.4",
     "expose-loader": "0.7.3",
     "express": "4.15.3",
@@ -240,10 +243,10 @@
     "typescript": "2.5.2",
     "uglifyjs-webpack-plugin": "1.1.5",
     "url-loader": "0.5.8",
-    "webpack": "3.8.1",
+    "webpack": "3.10.0",
     "webpack-bundle-analyzer": "2.9.1",
-    "webpack-dev-middleware": "1.10.1",
-    "webpack-dev-server": "2.7.1",
+    "webpack-dev-middleware": "1.12.2",
+    "webpack-dev-server": "2.11.1",
     "webpack-dll-bundles-plugin": "1.0.0-beta.5",
     "webpack-hot-middleware": "2.18.0",
     "webpack-md5-hash": "0.0.5",
@@ -255,12 +258,10 @@
   },
   "build": {
     "appId": "org.walkover.giddh",
-    "publish": [
-      {
-        "provider": "s3",
-        "bucket": "tetingmankuuuuu"
-      }
-    ],
+    "publish": [{
+      "provider": "s3",
+      "bucket": "tetingmankuuuuu"
+    }],
     "directories": {
       "buildResources": "src/resources",
       "output": "packages",
@@ -284,9 +285,7 @@
       "target": [
         "nsis",
         "nsis-web",
-        "squirrel",
-        "zip",
-        "appx"
+        "zip"
       ]
     },
     "nsis": {

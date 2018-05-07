@@ -38,14 +38,14 @@ export default class AppUpdater {
             }
         });
 
-        autoUpdater.on('update-downloaded', () => {
-            dialog.showMessageBox({
-                title: 'Install Updates',
-                message: 'Updates downloaded, application will be quit for update...'
-            }, () => {
-                setImmediate(() => autoUpdater.quitAndInstall());
-            });
-        });
+        // autoUpdater.on('update-downloaded', () => {
+        //     dialog.showMessageBox({
+        //         title: 'Install Updates',
+        //         message: 'Updates downloaded, application will be quit for update...'
+        //     }, () => {
+        //         setImmediate(() => autoUpdater.quitAndInstall());
+        //     });
+        // });
 
     }
 }

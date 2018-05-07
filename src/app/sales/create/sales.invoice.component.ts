@@ -899,6 +899,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.invFormData.voucherDetails.customerName = item.label;
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
+      this.invFormData.accountDetails.name = '';
     }
   }
 
