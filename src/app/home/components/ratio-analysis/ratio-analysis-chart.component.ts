@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +20,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
   styleUrls: ['../../home.component.scss']
 })
 
-export class RatioAnalysisChartComponent implements OnInit {
+export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
   @Input() public refresh: boolean = false;
 
   // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
@@ -345,5 +345,10 @@ export class RatioAnalysisChartComponent implements OnInit {
           data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 10 / 10], ['Shareholders fund', 10]],
       }]
     };
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
