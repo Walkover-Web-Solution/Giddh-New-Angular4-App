@@ -39,14 +39,32 @@ export interface DataItem {
   invalid: boolean;
 }
 
-export interface Data {
+export interface DataResult {
+  results: DataItem[];
+  page: number;
+  count: number;
+}
+
+export interface ResponseData {
+  numRows: number;
+  totalRows: number;
+  items: DataResult;
+}
+
+export interface RequestData {
   numRows: number;
   totalRows: number;
   items: DataItem[];
 }
 
-export interface ImportExcelData {
+export interface ImportExcelResponseData {
   headers: Headers;
   mappings: Mappings;
-  data: Data;
+  data: ResponseData;
+}
+
+export interface ImportExcelRequestData {
+  headers: Headers;
+  mappings: Mappings;
+  data: RequestData;
 }
