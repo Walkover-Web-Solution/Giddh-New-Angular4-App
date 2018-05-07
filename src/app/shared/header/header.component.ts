@@ -558,6 +558,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();
-    setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
+    // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
   }
 }
