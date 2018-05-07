@@ -33,7 +33,8 @@ export default class WindowManager {
             // to stay active until the user quits explicitly with Cmd + Q
             if (process.platform === 'darwin') {
                 // reopen initial window
-                this.openWindows();
+                // this.openWindows();
+                app.quit();
             } else {
                 app.quit();
             }
