@@ -487,10 +487,10 @@ export class HomeActions {
     };
   }
 
-  public getTotalOverdues(fromDate: string, toDate: string) {
+  public getTotalOverdues(fromDate: string, toDate: string, refresh: boolean) {
     return {
       type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES,
-      payload: fromDate, toDate
+      payload: { fromDate, toDate, refresh }
     };
   }
   public getTotalOverduesResponse(res) {
