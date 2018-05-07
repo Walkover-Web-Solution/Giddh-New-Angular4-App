@@ -397,6 +397,7 @@ export class HomeActions {
           payload: obj
         };
       }
+      return { type: 'EmptyAction' };
     });
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
