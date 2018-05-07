@@ -1,7 +1,7 @@
 import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -25,6 +25,40 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { DaterangePickerComponent } from 'app/theme/ng2-daterangepicker/daterangepicker.component';
 import { AuthenticationService } from '../../services/authentication.service';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { IForceClear } from '../../models/api-models/Sales';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+
+export const NAVIGATION_ITEM_LIST: IOption[] = [
+  { label: 'Dashboard', value: '/pages/home' },
+  { label: 'Journal Voucher', value: '/pages/accounting-voucher' },
+  { label: 'Sales', value: '/pages/sales' },
+  { label: 'Invoice', value: '/pages/invoice/preview' },
+  { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
+  { label: 'Invoice > Templates', value: '/pages/invoice/templates' },
+  { label: 'Invoice > Settings', value: '/pages/invoice/settings' },
+  { label: 'Daybook', value: '/pages/daybook' },
+  { label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 }  },
+  { label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 }  },
+  { label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 }  },
+  { label: 'Audit Logs', value: '/pages/audit-logs' },
+  { label: 'Taxes', value: '/pages/purchase/invoice' },
+  { label: 'Inventory', value: '/pages/inventory' },
+  { label: 'Manufacturing', value: '/pages/manufacturing/report' },
+  { label: 'Search', value: '/pages/search' },
+  { label: 'Permissions', value: '/pages/permissions/list' },
+  { label: 'Settings', value: '/pages/settings' },
+  { label: 'Settings > Taxes', value: '/pages/settings', additional: { tab: 'taxes', tabIndex: 0 } },
+  { label: 'Settings > Integration', value: '/pages/settings', additional: { tab: 'integration', tabIndex: 1 } },
+  { label: 'Settings > Linked Accounts', value: '/pages/settings', additional: { tab: 'linked-accounts', tabIndex: 2 } },
+  { label: 'Settings > Profile', value: '/pages/settings', additional: { tab: 'profile', tabIndex: 3 } },
+  { label: 'Settings > Financial Year', value: '/pages/settings', additional: { tab: 'financial-year', tabIndex: 4 } },
+  { label: 'Settings > Permission', value: '/pages/settings', additional: { tab: 'permission', tabIndex: 5 } },
+  { label: 'Settings > Branch', value: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
+  { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
+  { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
+  { label: 'Contact', value: '/pages/contact' },
+];
 
 @Component({
   selector: 'app-header',
@@ -46,7 +80,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
+  @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @ViewChild('navigationShSelect') public navigationShSelect: ShSelectComponent;
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -111,6 +147,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isDateRangeSelected: boolean = false;
   public userFullName: string;
   public userAvatar: string;
+  public navigationOptionList: IOption[] = NAVIGATION_ITEM_LIST;
+  public selectedNavigation: string = '';
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public navigationModalVisible: boolean = false;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -297,7 +337,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public hideManageGroupsModal() {
     this.store.select(c => c.session.lastState).take(1).subscribe((s: string) => {
-      if (s && s.indexOf('ledger/') > -1) {
+      if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1 )) {
         this.store.dispatch(this._generalActions.addAndManageClosed());
       }
     });
@@ -474,9 +514,53 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public getUserAvatar(userId) {
-    this.authService.getUserAvatar(userId).subscribe(res => {
-      let data = res;
-      this.userAvatar = res.entry.gphoto$thumbnail.$t;
+    // this.authService.getUserAvatar(userId).subscribe(res => {
+    //   let data = res;
+    //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
+    // });
+  }
+  // CMD + K functionality
+  @HostListener('document:keydown', ['$event'])
+  public handleKeyboardUpEvent(event: KeyboardEvent) {
+    if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showNavigationModal();
+    }
+  }
+
+  public onNavigationSelected(ev: IOption) {
+    this.hideNavigationModal();
+    if (ev && ev.value) {
+      if (ev.additional && ev.additional.tab) {
+        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
+      } else {
+        this.router.navigate([ev.value]);
+      }
+    }
+  }
+
+  public onNavigationHide(ev) {
+    if (this.navigationModalVisible) {
+      this.hideNavigationModal();
+    }
+  }
+
+  private showNavigationModal() {
+    this.navigationOptionList.forEach((ele) => {
+      ele.isHilighted = false;
     });
+    this.forceClear$ = Observable.of({status: false});
+    this.navigationModalVisible = true;
+    this.navigationModal.show();
+    setTimeout(() => this.navigationShSelect.show(''), 200);
+  }
+
+  private hideNavigationModal() {
+    this.forceClear$ = Observable.of({status: true});
+    this.selectedNavigation = '';
+    this.navigationModalVisible = false;
+    this.navigationModal.hide();
+    // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
   }
 }

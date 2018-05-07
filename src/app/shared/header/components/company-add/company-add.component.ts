@@ -48,6 +48,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public country: string;
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
+  public isCitySelectedByDropdown: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
@@ -112,16 +113,18 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       if (s && !this.createBranch) {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = 'home';
+        stateDetailsRequest.lastState = 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this._route.navigate(['home']);
+        this._route.navigate(['sales']);
         this.closeModal();
       }
     });
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
+    this.company.city = e.item;
+    this.isCitySelectedByDropdown = true;
     this.dataSourceBackup.forEach(item => {
       if (item.city === e.item) {
         this.company.country = item.country;
@@ -146,6 +149,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     //     }
     //   }
     // });
+  }
+
+  public onChangeCityName() {
+    this.isCitySelectedByDropdown = false;
   }
 
   public ngOnDestroy() {

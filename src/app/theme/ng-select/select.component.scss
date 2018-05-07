@@ -11,7 +11,8 @@ ng-select {
     }
     // Container.
     >div {
-        border: 1px solid #ddd;
+        border: none;
+        border-bottom:1px solid #ddd;
         box-sizing: border-box;
         cursor: pointer;
         user-select: none;
