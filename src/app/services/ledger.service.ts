@@ -11,13 +11,15 @@ import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { DayBookRequestModel, DaybookQueryRequest } from '../models/api-models/DaybookRequest';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, private _httpClient: HttpClient, public _router: Router,
               private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
@@ -165,7 +167,7 @@ export class LedgerService {
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
-    let dataToSend = { voucherNumber: model.invoiceNumber };
+    let dataToSend = {voucherNumber: model.invoiceNumber};
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend)
@@ -223,12 +225,12 @@ export class LedgerService {
       .catch((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, {accountUniqueName}));
   }
 
-  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: string = '', count: string = ''): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: number = 1, count: number = 15, q: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      .replace(':fromDate', from).replace(':toDate', to).replace(':page', page).replace(':count', encodeURIComponent(count)), model)
+      .replace(':fromDate', from).replace(':toDate', to).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':q', encodeURIComponent(q.toString())), model)
       .map((res) => {
         let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
         data.request = model;
@@ -249,5 +251,49 @@ export class LedgerService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}));
+  }
+
+  public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
+      .replace(':page', queryRequest.page.toString())
+      .replace(':count', queryRequest.count.toString())
+      .replace(':from', encodeURIComponent(queryRequest.from))
+      .replace(':to', encodeURIComponent(queryRequest.to))
+      .replace(':format', queryRequest.format.toString())
+      .replace(':type', queryRequest.type.toString())
+      .replace(':sort', queryRequest.sort.toString()))
+      .map((res) => {
+        let data: BaseResponse<any, DayBookRequestModel> = res;
+        data.queryString = queryRequest;
+        data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null));
+  }
+
+  /*
+  * delete Multiple Ledger transaction
+  */
+ public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<string, string>> {
+  this.user = this._generalService.user;
+  let sessionId = this._generalService.sessionId;
+  this.companyUniqueName = this._generalService.companyUniqueName;
+  return this._httpClient.request('delete', this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { headers: { 'Session-Id': sessionId }, body: { entryUniqueNames: entryUniqueNamesArray }}).map((res) => {
+    let data: any = res;
+    data.queryString = {accountUniqueName, entryUniqueNamesArray};
+    return data;
+  }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray}));
+}
+
+public GetCurrencyRate(baseCurrency): Observable<BaseResponse<any, any>> {
+  this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + 'company/' + this.companyUniqueName + '/curreny-converter/' + baseCurrency).map((res) => {
+      let data: any = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
 }

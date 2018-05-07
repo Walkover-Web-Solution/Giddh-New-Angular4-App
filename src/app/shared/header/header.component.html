@@ -52,7 +52,6 @@
                             </a>
                         </li>
 
-
                         <li [checkPermission]="['MENU', 'REPORT']">
                             <a [routerLink]="['trial-balance-and-profit-loss']">
                                 <span class="navico-tbpl"></span>
@@ -66,7 +65,7 @@
                                 <span class="label">Audit Logs</span>
                             </a>
                         </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'" [tooltip]="'Taxes'" [placement]="'right'">
+                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                             <a [routerLink]="['/pages/purchase/invoice']">
                                 <span class="navico-tax"></span>
                                 <span class="label">Taxes</span>
@@ -106,7 +105,12 @@
                                 <span class="label">Settings</span>
                             </a>
                         </li>
-
+                        <li>
+                            <a [routerLink]="['/pages/contact']">
+                                <span class="navico-daybook"></span>
+                                <span class="label">Contacts</span>
+                            </a>
+                        </li>
 
 
                         <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
@@ -345,7 +349,7 @@
                             <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
                                 <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <!-- <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i> -->
+                                    <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                                 </li>
                             </ul>
                         </li>
@@ -440,6 +444,18 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
+        </div>
+    </div>
+</div>
+<!--CMD + K modal  -->
+<div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
+    <div class="modal-dialog modal-small">
+        <div class="modal-content">
+            <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Search for page..."
+                [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
+            <div *ngIf="navigationModalVisible" class="shortcuts">
+                <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+            </div>
         </div>
     </div>
 </div>

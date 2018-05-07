@@ -5,6 +5,7 @@ export interface InvoiceSetting {
     proformaSettings: InvoiceISetting;
     webhooks: InvoiceWebhooks[];
     razorPayform?: RazorPayDetailsResponse;
+    companyCashFreeSettings?: CashFreeSetting;
 }
 
 export class InvoiceISetting {
@@ -17,6 +18,10 @@ export class InvoiceISetting {
     public emailVerified: boolean;
     public showSeal: boolean;
     public lockDate?: any;
+    public useCustomInvoiceNumber: boolean;
+    public invoiceNumberPrefix: string;
+    public initialInvoiceNumber: string;
+    public defaultPaymentGateway: string;
 }
 export interface InvoiceWebhooks {
     entity: string;
@@ -36,4 +41,9 @@ Walkover Test11343`;
   public useGreeting?: boolean;
   public greeting?: string;
   public username?: string;
+}
+
+export class CashFreeSetting {
+    public autoCreateVirtualAccountsForDebtors: boolean;
+    public noOfEntriesToEnableAutoCreateVirtualAccountForDebtors: boolean;
 }

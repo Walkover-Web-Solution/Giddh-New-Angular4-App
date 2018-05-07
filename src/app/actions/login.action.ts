@@ -21,6 +21,7 @@ import { GeneralService } from '../services/general.service';
 import { sortBy } from 'app/lodash-optimized';
 import { AccountService } from 'app/services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
 
 @Injectable()
 export class LoginActions {
@@ -69,6 +70,12 @@ export class LoginActions {
 
   public static NEEDS_TO_REDIRECT_TO_LEDGER = 'NEEDS_TO_REDIRECT_TO_LEDGER';
   public static RESET_NEEDS_TO_REDIRECT_TO_LEDGER = 'RESET_NEEDS_TO_REDIRECT_TO_LEDGER';
+
+  public static SignupWithPasswdRequest = 'SignupWithPasswdRequest';
+  public static SignupWithPasswdResponse = 'SignupWithPasswdResponse';
+
+  public static LoginWithPasswdRequest = 'LoginWithPasswdRequest';
+  public static LoginWithPasswdResponse = 'LoginWithPasswdResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -443,6 +450,52 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public ReportInvalidJSON$: Observable<Action> = this.actions$
+    .ofType('REPORT_INVALID_JSON')
+    .switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload))
+    .map((res) => {
+      return { type: 'EmptyAction' };
+    });
+
+  public SignupWithPasswdRequest$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SignupWithPasswdRequest)
+    .switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload))
+    .map(response => this.SignupWithPasswdResponse(response));
+
+  @Effect()
+  public SignupWithPasswdResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SignupWithPasswdResponse)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        this._toaster.successToast(action.payload.body);
+        // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+        // this._router.navigate(['/pages/new-user']);
+        return { type: 'EmptyAction' };
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public LoginWithPasswdRequest$: Observable<Action> = this.actions$
+    .ofType(LoginActions.LoginWithPasswdRequest)
+    .switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload))
+    .map(response => this.LoginWithPasswdResponse(response));
+
+  @Effect()
+  public LoginWithPasswdResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.LoginWithPasswdResponse)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        return this.LoginSuccess();
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -724,6 +777,34 @@ export class LoginActions {
     return {
       type: LoginActions.SetCurrencyInStore,
       payload: resp
+    };
+  }
+
+  public SignupWithPasswdRequest(value: object): CustomActions {
+    return {
+      type: LoginActions.SignupWithPasswdRequest,
+      payload: value
+    };
+  }
+
+  public SignupWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, SignUpWithPassword>): CustomActions {
+    return {
+      type: LoginActions.SignupWithPasswdResponse,
+      payload: value
+    };
+  }
+
+  public LoginWithPasswdRequest(value: LoginWithPassword): CustomActions {
+    return {
+      type: LoginActions.LoginWithPasswdRequest,
+      payload: value
+    };
+  }
+
+  public LoginWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, LoginWithPassword>): CustomActions {
+    return {
+      type: LoginActions.LoginWithPasswdResponse,
+      payload: value
     };
   }
 

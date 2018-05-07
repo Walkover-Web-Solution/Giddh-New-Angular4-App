@@ -47,6 +47,7 @@ export class AccountResponse implements IAccountCreate {
   public uniqueName: string;
   public name: string;
   public isComposite?: boolean;
+  public currency?: string;
 }
 
 /**
@@ -185,6 +186,7 @@ export class AccountRequestV2 {
   public country: { countryCode: string };
   public sacNumber: string;
   public mobileCode?: string;
+  public accountBankDetails?: AccountBankDetails[];
 }
 export class AccountResponseV2 {
   public name: string;
@@ -215,6 +217,8 @@ export class AccountResponseV2 {
   public pincode?: string;
   public uniqueName: string;
   public addresses: IAccountAddress[];
+  public accountBankDetails: AccountBankDetails[];
+  public cashFreeVirtualAccountData: CashFreeVirtualAccount;
 }
 
 /*
@@ -226,4 +230,16 @@ export class ShareEntityRequest {
   public emailId: string;
   public entity: string;
   public entityUniqueName: string;
+}
+
+export class AccountBankDetails {
+  public bankName?: string;
+  public bankAccountNo: string;
+  public ifsc: string;
+}
+
+export class CashFreeVirtualAccount {
+  public name: string;
+  public virtualAccountNumber: string;
+  public ifscCode: string;
 }

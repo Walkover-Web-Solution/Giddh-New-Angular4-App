@@ -166,7 +166,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (this.groupUniqueName && this.stockUniqueName) {
       this.store.dispatch(this.inventoryAction.showLoaderForStock());
       this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
-      this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName, 'add-stock', this.stockUniqueName]);
+      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      this.setInventoryAsideState(true, false, true);
+      // this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName, 'add-stock', this.stockUniqueName]);
     }
   }
 
@@ -198,5 +200,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     // this.stockReportRequest.page = 0;
 
     this.getStockReport(true);
+  }
+
+  /**
+   * setInventoryAsideState
+   */
+  public setInventoryAsideState(isOpen, isGroup, isUpdate) {
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
   }
 }

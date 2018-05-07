@@ -1,0 +1,232 @@
+<div class="container-fluid">
+
+  <div class="top_bar clearfix">
+    <div class="form-inline">
+      <div class="pull-left">
+        <button class="btn btn-sm btn-default" (click)="setActiveTab('customer')" [ngClass]="{'isActive': activeTab === 'customer'}">Customers</button>
+        <button class="btn btn-sm btn-default" (click)="setActiveTab('vendor')" [ngClass]="{'isActive': activeTab === 'vendor'}">Vendors</button>
+      </div>
+      <div class="pull-right">
+        <div class="form-group mrR1 max250">
+          <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)" />
+        </div>
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle">
+            Add
+            <span class="caret"></span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+            <li role="menuitem">
+              <a class="dropdown-item cp" (click)="openAddAndManage('customer')">Add Customer</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item cp" (click)="openAddAndManage('vendor')">Add Vendor</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+          <i dropdownToggle class="icon-options pd cp fs20"></i>
+          <!-- <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle"> <span class="fa fa-filter"></span>
+                </button> -->
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" /> Amt. Due</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
+            </li>
+            <!-- <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Total amt of transactions</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Frequent transactions</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Highest transactions</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" /> Description</a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table basic table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
+        <th *ngIf="showFieldFilter.email">Email Id</th>
+        <th *ngIf="showFieldFilter.state">State</th>
+        <th *ngIf="showFieldFilter.gstin">GSTIN</th>
+        <th *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
+        <th *ngIf="activeTab === 'vendor'">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="activeTab === 'customer'">
+        <tr *ngFor="let account of sundryDebtorsAccounts$ | async">
+          <td>{{account.name}}</td>
+          <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+          <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+          <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
+          <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+          <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+          <!-- <td>
+            <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
+          </td> -->
+        </tr>
+        <tr *ngIf="!(sundryDebtorsAccounts$ | async)?.length">
+          <td colspan="7" class="text-center empty_table">
+            <h1>No Record Found !!</h1>
+          </td>
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'vendor'">
+        <tr *ngFor="let account of sundryCreditorsAccounts$ | async">
+          <td>{{account.name}}</td>
+          <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+          <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+          <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
+          <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+          <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+          <td>
+            <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
+            <button *ngIf="!cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Add Cashfree</button>
+          </td>
+        </tr>
+        <tr *ngIf="!(sundryCreditorsAccounts$ | async)?.length">
+          <td colspan="7" class="text-center empty_table">
+            <h1>No Record Found !!</h1>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+    <tfoot>
+      <tr *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+              [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
+          <td colspan="100%">
+            <div class="alC">
+              <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+                [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            </div>
+          </td>
+        </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+  (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+
+<!-- Pay now modal -->
+<div bsModal #payNowModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md" *ngIf="cashFreeAvailableBalance">
+    <div class="modal-content">
+      <div *ngIf="selectedAccForPayment">
+        <div class="modal-header themeBg pdL2 pdR2 clearfix">
+          <h3 class="modal-title bg" id="modal-title">Pay to {{selectedAccForPayment.name}} </h3>
+          <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onPaymentModalCancel()"></i>
+        </div>
+        <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+          <form name="newRole" novalidate class="" autocomplete="off">
+            <div class="modal_wrap mrB2">
+              <h3 class="text-right mr2">Amount Due Rs: {{selectedAccForPayment.closingBalance?.amount}}</h3>
+              <h3 class="mrB2">
+                <b>Pay through Cash Free</b>
+              </h3>
+              <h4 *ngIf="cashFreeAvailableBalance">
+                <small>Balance in account Rs. {{cashFreeAvailableBalance}}</small>
+              </h4>
+              <input #amountBox type="number" class="form-control">
+            </div>
+            <div>
+              <button [disabled]="!amountBox.value" type="submit" class="btn btn-md btn-success btn-block" (click)="onConfirmation(amountBox.value)">Pay</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-dialog modal-small" *ngIf="!cashFreeAvailableBalance">
+    <div class="modal-content">
+      <div *ngIf="selectedAccForPayment">
+        <div class="modal-header themeBg pdL2 pdR2 clearfix">
+          <h3 class="modal-title bg" id="modal-title">Add Cashfree details</h3>
+          <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onPaymentModalCancel()"></i>
+        </div>
+        <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+          <form name="newRole" novalidate class="" autocomplete="off" (submit)="submitCashfreeDetail(payoutObj)">
+            <div class="form-group col-xs-12">
+              <div class="row">
+                <label>Client Id
+                  <span class="required">*</span>
+                </label>
+                <input class="form-control" type="text" placeholder="Client Id" name="payoutForm.userName" [(ngModel)]="payoutObj.userName"
+                  required autocomplete="off">
+              </div>
+            </div>
+            <div class="form-group col-xs-12">
+              <div class="row">
+                <label>Client Secret Key
+                  <span class="required">*</span>
+                </label>
+                <input class="form-control" type="password" placeholder="Client Secret key" name="payoutForm.password" [(ngModel)]="payoutObj.password"
+                  required autocomplete="off">
+              </div>
+            </div>
+            <div class="form-group col-xs-12">
+              <div class="row">
+                <label>Link Account</label>
+                <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async"
+                  (selected)="selectCashfreeAccount($event, payoutObj)"></sh-select>
+              </div>
+            </div>
+            <div class="form-group col-xs-12">
+              <div class="row">
+                <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment"
+                /> Automatic capture on payment
+              </div>
+            </div>
+            <input type="submit" class="btn btn-success" value="Save">
+            <input type="button" class="btn btn-warning" value="Cancel" (click)="onPaymentModalCancel()">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

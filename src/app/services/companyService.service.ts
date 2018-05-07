@@ -107,11 +107,15 @@ export class CompanyService {
 
   // Effects need to be review
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
-    return this._http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
-      let data: BaseResponse<string, StateDetailsRequest> = res;
-      data.request = stateDetails;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
+    if (stateDetails.companyUniqueName) {
+      return this._http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
+        let data: BaseResponse<string, StateDetailsRequest> = res;
+        data.request = stateDetails;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public getApplicationDate(): Observable<BaseResponse<string, any>> {
@@ -136,10 +140,14 @@ export class CompanyService {
   public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<TaxResponse[], string> = res;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+        let data: BaseResponse<TaxResponse[], string> = res;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public getComapnyUsers(): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
