@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -34,7 +34,7 @@ import { DashboardService } from '../../../services/dashboard.service';
   ]
 })
 
-export class TotalOverduesChartComponent implements OnInit {
+export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   @Input() public refresh: boolean = false;
 
   // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
@@ -188,6 +188,11 @@ export class TotalOverduesChartComponent implements OnInit {
           data: [['Total Recievable', this.totalRecievable / 100], ['Total Payable', this.totalPayable / 100]],
       }],
     };
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
