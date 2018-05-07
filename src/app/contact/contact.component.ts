@@ -100,6 +100,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
+    this.filterDropDownList.placement = 'left';
+
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
