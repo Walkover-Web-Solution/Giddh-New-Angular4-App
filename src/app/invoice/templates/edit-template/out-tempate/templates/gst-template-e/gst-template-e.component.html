@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" id="royal">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+    <style type="text/css">
+        /* reset */
+        
+        #royal * {
+            border: 0;
+            box-sizing: content-box;
+            color: #231f20;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            line-height: 18px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            vertical-align: top;
+        }
+        
+         :focus {
+            outline: 0;
+            border: 1px solid #ddd !important;
+        }
+        
+        contenteditable {
+            border: 1px solid transparent;
+        }
+        /* NOTE:  comment padding, max-width, border in #royal css for java */
+        
+        #royal {
+            font: 12px/1 'Open Sans', sans-serif;
+            overflow: auto;
+            background: #fff;
+            border: 1px solid #bfbfbf;
+            max-width: 8.3in;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        #royal header h1 {
+            /* margin-bottom: 10px; */
+            font-size: 74px;
+            color: #4b4c4f;
+            line-height: 58px;
+        }
+        
+        #royal header .sub_head {
+            font-size: 15px;
+            margin-left: 5px;
+        }
+        
+        #royal .text-right {
+            text-align: right;
+        }
+        
+        #royal .text-left {
+            text-align: left !important;
+        }
+        
+        #royal .pull-right {
+            float: right;
+        }
+        
+        #royal .pull-left {
+            float: left;
+        }
+        
+        #royal table {
+            width: 100%;
+            table-layout: fixed;
+            line-height: 20px;
+            border-collapse: inherit
+        }
+        
+        #royal .logo {
+            max-width: 120px;
+            width: 100%;
+        }
+        
+        #royal strong {
+            font-weight: bold;
+        }
+        
+        #royal .total-amount {
+            text-align: center;
+            vertical-align: bottom;
+            padding-bottom: 10px
+        }
+        
+        #royal .total-amount h2 {
+            font-size: 24px;
+            padding: 0 0;
+            display: inline-block;
+            float: right;
+        }
+        
+        #royal .mrL2 {
+            margin-left: 20px;
+        }
+        
+        #royal .mrB2 {
+            margin-bottom: 20px;
+        }
+        
+        #royal .mrB1 {
+            margin-bottom: 10px;
+        }
+        
+        #royal .meta {
+            margin: 20px 0;
+        }
+        
+        #royal .meta h4 {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 19px;
+        }
+        
+        #royal .product-table {
+            background: #df49270d;
+            position: relative;
+            /* padding-bottom: 10px; */
+        }
+        
+        #royal .product-table tbody tr td:last-child,
+        #royal .product-table tfoot tr th:last-child {
+            /* background: #df49270d; */
+        }
+        
+        #royal .product-table tfoot tr:last-child th {
+            padding: 15px 0;
+        }
+        
+        #royal .product-table thead tr th:last-child {
+            position: relative;
+        }
+        
+        #royal .product-table tbody tr td:nth-last-child(2),
+        #royal .product-table tfoot tr th:nth-last-child(2) {
+            padding-right: 20px;
+        }
+        
+        #royal .product-table tfoot tr:nth-last-child(2) th {
+            padding-bottom: 10px;
+        }
+        
+        #royal .product-table tfoot tr:last-child {
+            padding: 7px 0;
+        }
+        
+        #royal .product-table tbody tr:last-child td {
+            padding-bottom: 50px;
+        }
+        /* #royal .product-table:before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            content: ' ';
+            background: #f7f7f7;
+            left: -20px;
+            width: 100%;
+            z-index: -1;
+        } */
+        /* #royal .product-table:after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            content: ' ';
+            background: #ededed;
+            right: -20px;
+            width: 100%;
+            z-index: -1;
+        } */
+        
+        #royal .inwords {
+            color: #939393
+        }
+        
+        #royal .item {
+            table-layout: auto !important;
+        }
+        
+        #royal .item tbody tr td,
+        #royal .item thead tr th {
+            text-align: right;
+        }
+        
+        #royal .item thead tr th {
+            padding: 14px 0px;
+            border-bottom: 1px solid #666666;
+            line-height: 1.2rem;
+            font-weight: bold;
+        }
+        
+        #royal .item tfoot tr th,
+        #royal .item tbody tr td {
+            padding: 3px 0;
+        }
+        
+        #royal .item tfoot tr:last-child th {
+            border-top: 1px solid #666666;
+            padding: 14px 0px;
+            line-height: 1.2rem;
+            vertical-align: middle
+        }
+        
+        #royal .total-row {
+            border-top: 1px solid #000000;
+        }
+        
+        #royal .tax-table p {
+            color: #595959;
+        }
+        
+        #royal .tax-table tfoot th {
+            font-weight: bold
+        }
+        
+        #royal .bdrB {
+            border-bottom: 1px solid#666;
+        }
+        
+        #royal .subfooter {
+            margin-top: 100px;
+        }
+        
+        #royal .subfooter h1 {
+            font-size: 24px;
+            display: inline-block;
+        }
+        
+        #royal .subfooter .normal {
+            font-size: 12px;
+            vertical-align: baseline
+        }
+        
+        #royal .vmiddle {
+            vertical-align: middle;
+        }
+        
+        #royal .note {
+            margin-top: 20px;
+            padding-left: 15px;
+        }
+        
+        #royal .note li {
+            list-style-type: initial;
+        }
+        
+        #royal footer {
+            margin-top: 7px;
+            border-top: 2px solid #010101;
+            padding: 6px 0 0;
+            line-height: 20px;
+        }
+        
+        #royal .pos-rel {
+            position: relative;
+        }
+        
+        #royal .primary-clr {
+            color: #df4927;
+        }
+        
+        #royal .text-center {
+            text-align: center
+        }
+        
+        #royal .mrB {
+            margin-bottom: 10px;
+        }
+        
+        #royal .secondry_clr {
+            color: #4b4c4f;
+        }
+        
+        .address {
+            max-width: 220px;
+        }
+        
+        @page {
+            margin: 0;
+            size: A4 portrait;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="template-header">
+        <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
+        <header>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h1>hello</h1>
+                            <h4 class="sub_head">This is your INVOICE</h4>
+                        </td>
+                        <td class="text-right">
+                            <img style="max-width: 160px;" class="clogo" src="http://image3.mouthshut.com/images/imagesp/925869367s.png" alt="" />
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </header>
+
+        <table class="meta">
+            <tbody>
+                <tr>
+                    <td>
+                        <figure>
+                            <p><span contenteditable="true">Number: 201770323-64</span> <span class="mrL2" contenteditable="true">Date: 22/08/2017</span> </p>
+                            <p><span contenteditable="true">GSTIN: 11AAAAAA000A1Z0</span> <span class="mrL2" contenteditable="true">PAN: AAACW9768L</span></p>
+                        </figure>
+                    </td>
+                </tr>
+                <tr class="secondry_clr">
+                    <td style="padding-top: 20px;">
+                        <p><strong>Billing Address</strong></p>
+                        <p contenteditable="true" class="address">Green Soft Solutions 24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                        <p contenteditable="true"><strong>GSTIN: 22BBBBBB000A1Z0</strong></p>
+                    </td>
+                    <!-- <td colspan="1"></td> -->
+                    <td class="total-amount">
+                        <h2 class="amt secondry_clr">8350/-</h2>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="Template-table" class="pos-rel">
+        <!-- <span class="arrow-down"></span> -->
+        <table class="item product-table mrB2" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th class="text-left">Description</th>
+                    <th>HSN/SAC</th>
+                    <th>Qty.</th>
+                    <th>Price</th>
+                    <th>Disc</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left" contenteditable="true">Transactional Route</td>
+                    <td class="text-right">1223244</td>
+                    <td class="text-right">1</td>
+                    <td contenteditable="true" class="text-right">7260.87</td>
+                    <td contenteditable="true" class="text-right">0</td>
+                    <td contenteditable="true" class="text-right">7260.87</td>
+                </tr>
+
+                <tr>
+                    <td class="text-left" colspan="5"></td>
+                    <td class="text-left" colspan="1"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5" class="text-right">Sub Total</th>
+                    <th class="text-right">32500.00</th>
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">Discount</th>
+                    <th class="text-right">00.00</th>
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">CGST</th>
+                    <th class="text-right">5250.00</th>
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">SGST</th>
+                    <th class="text-right">5250.00</th>
+                </tr>
+
+                <tr>
+                    <th class="text-left total-row inwords" colspan="4">Nine Hundred Forty Five only</th>
+                    <th class="text-right total-row"><strong>TOTAL</strong></th>
+                    <th class="text-right total-row"><strong>37750.00</strong></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <table class="item" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th class="text-left">HSN/SAC</th>
+                    <th>Taxable Amt.</th>
+                    <th>CGST Rate</th>
+                    <th>Amt.</th>
+                    <th>SGST Rate</th>
+                    <th>Amt.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left" contenteditable="true">123456</td>
+                    <td contenteditable="true">10000.00</td>
+                    <td contenteditable="true">9%</td>
+                    <td>900.00</td>
+                    <td contenteditable="true">9%</td>
+                    <td>900.00</td>
+                </tr>
+                <tr>
+                    <td class="text-left" contenteditable="true">123456</td>
+                    <td contenteditable="true">10000.00</td>
+                    <td contenteditable="true">9%</td>
+                    <td>900.00</td>
+                    <td contenteditable="true">9%</td>
+                    <td>900.00</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="bdrB" colspan="3"></th>
+                    <th colspan="1" class="bdrB text-right"></th>
+                    <th class="bdrB text-right"><strong>Total</strong><strong class="mrL2">32500.00</strong></th>
+                    <th class="text-right bdrB"><strong>5250.00</strong></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div id="Template-footer">
+        <table class="subfooter">
+            <tbody>
+                <tr>
+                    <td style="vertical-align: bottom;" colspan="2">
+                        <h1 class="primary-clr">THANK YOU</h1>
+                        <h4 class="primary-clr">FOR YOUR BUSINESS.</h4>
+                    </td>
+                    <td style="text-align: center;vertical-align: bottom;">
+                        <p class="bdrB"></p>
+                        <p contenteditable="true"> <strong>Walkover Web Solutions Private Limited</strong></p>
+                        <p>(Signature)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <ul class="note">
+                            <li contenteditable="true">Tax to be paid on reverse charge</li>
+                            <li contenteditable="true">All payments to be made in cash. Contact us for queries on these quotations. </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer style="text-align: center;">
+            <p contenteditable="true"><strong>Walkover Web Solutions Private Limited</strong></p>
+            <p contenteditable="true">405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

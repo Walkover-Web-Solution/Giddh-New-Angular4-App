@@ -6,6 +6,9 @@ import { ContentFilterComponent } from './edit-template/filters-container/conten
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { GstTemplateAComponent } from './edit-template/out-tempate/templates/gst-template-a/gst-template-a.component';
 import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst-template-b/gst-template-b.component';
+import { GstTemplateCComponent } from './edit-template/out-tempate/templates/gst-template-c/gst-template-c.component';
+import { GstTemplateDComponent } from './edit-template/out-tempate/templates/gst-template-d/gst-template-d.component';
+import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
 
 @NgModule({
   imports: [
@@ -18,7 +21,10 @@ import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst
     OutTemplateComponent,
     ContentFilterComponent,
     GstTemplateAComponent,
-    GstTemplateBComponent
+    GstTemplateBComponent,
+    GstTemplateCComponent,
+    GstTemplateDComponent,
+    GstTemplateEComponent
   ],
   exports: [
     OutTemplateComponent,
