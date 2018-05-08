@@ -131,13 +131,13 @@
                 <div class="form-group col-xs-4">
                     <div class="row">
                         <label>Link Account</label>
-                        <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.account" [options]="accounts$ | async" (selected)="selectCashfreeAccount($event)"></sh-select>
+                        <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, payoutObj)"></sh-select>
                     </div>
                 </div>
                 <div class="form-group col-xs-4 mrT1">
                     <label>&nbsp;</label>
                     <br>
-                    <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" /> Automatic capture on payment
+                    <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" [checked]="autoCollectObj.account?.uniqueName" /> Automatic capture on payment
                 </div>
 
             </div>
@@ -178,13 +178,13 @@
                     <div class="form-group col-xs-4">
                         <div class="row">
                             <label>Link Account</label>
-                            <sh-select placeholder="Link Account" name="autoCollectObj.account" [(ngModel)]="autoCollectObj" [options]="accounts$ | async" (selected)="selectCashfreeAccount($event)"></sh-select>
+                            <sh-select placeholder="Link Account" name="autoCollectObj.account" [(ngModel)]="autoCollectObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
                         </div>
                     </div>
                     <div class="form-group col-xs-4 mrT1">
                         <label>&nbsp;</label>
                         <br>
-                        <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment" name="autoCollectObj.autoCapturePayment" /> Automatic capture on payment
+                        <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment" name="autoCollectObj.autoCapturePayment" [checked]="autoCollectObj.account?.uniqueName" /> Automatic capture on payment
                     </div>
 
                 </div>
@@ -193,7 +193,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group ">
                     <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Save</button>
-                    <!-- <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Update</button>                     -->
+                    <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="updateAutoCollect(autoCollectObj)">Update</button>
                     <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger" (click)="deleteAutoCollect()">Delete</button>
                     <!--  -->
                 </div>
@@ -222,7 +222,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group ">
                     <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">Save</button>
-                    <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Save</button>
+                    <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Update</button>
                     <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger" (click)="deletePaymentGateway()">Delete</button>
                     <!-- *ngIf="autoCollectAdded" -->
                 </div>
