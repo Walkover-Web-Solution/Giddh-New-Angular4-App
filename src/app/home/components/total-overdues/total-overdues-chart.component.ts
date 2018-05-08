@@ -97,7 +97,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds));
+    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false));
 
     this.totalOverDuesResponse$
       .skipWhile(p => (isNullOrUndefined(p)))
