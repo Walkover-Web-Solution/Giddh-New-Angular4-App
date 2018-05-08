@@ -14,9 +14,9 @@ interface DataModel {
 
 export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();
-
   @Output() public onBack = new EventEmitter();
   @Input() public isLoading: boolean;
+  @Input() public entity: string;
   public dataModel: DataModel[];
   private _importData: ImportExcelRequestData;
 

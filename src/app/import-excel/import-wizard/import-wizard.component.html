@@ -30,6 +30,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="3">
           <import-process
+            [entity]="entity"
             [importData]="mappedData"
             (onSubmit)="onSubmit($event)" (onBack)="onBack()"></import-process>
         </ng-container>
