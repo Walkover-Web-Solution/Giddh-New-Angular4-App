@@ -17,9 +17,12 @@
         <sh-select
           [options]="data.options" class="pull-left mrR1"
           [placeholder]="'Select Field'"
+          [ngModel]="data.selected"
           (selected)="columnSelected($event,data)"
+          (onClear)="columnSelected($event,data)"
         ></sh-select>
-      <td><i class="fa fa-check text-success fs18"></i></td>
+      <td><i class="fa fa-check text-success fs18" *ngIf="importData.mappings.mappingInfo[data.field].length > 0"></i>
+      </td>
     </tr>
     </tbody>
   </table>
