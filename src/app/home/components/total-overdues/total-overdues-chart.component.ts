@@ -51,6 +51,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public totalRecievable: number = 0;
   public totalPayable: number = 0;
   public overDueObj: any = {} ;
+  public ReceivableDurationAmt: number = 0 ;
+  public PaybaleDurationAmt: number = 0 ;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -107,10 +109,12 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
           this.overDueObj.forEach((grp) => {
             if (grp.uniqueName === 'sundrydebtors') {
               this.sundryDebtorResponse = grp;
-                this.totalRecievable = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
+              this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
+              this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
             } else {
               this.sundryCreditorResponse = grp;
-                this.totalPayable = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
+                this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
+                this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
                 // this.totalPayable = this.calculateTotalRecievable(this.sundryCreditorResponse);
             }
           });
@@ -130,8 +134,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public fetchChartData() {
     this.requestInFlight = true;
     // this.ApiToCALL = [];
-
-    this.refresh = false;
+    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, true));
+    if (this.lastFinancialYear) {
+    this.store.dispatch(this._homeActions.getTotalOverdues(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds, true));
+    }
   }
 
   public generateCharts() {
@@ -140,7 +146,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       chart: {
           type: 'pie',
           polar: false,
-          width: 400,
+          className: 'overdue_chart',
+          width: 300,
           height: '180px'
       },
       title: {
@@ -173,10 +180,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 defer: true
             },
             shadow: false,
-            center: [
-                '50%',
-                '50%'
-            ],
+            // center: [
+            //     '50%',
+            //     '50%'
+            // ],
           },
         series: {
             animation: false,
@@ -185,7 +192,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       },
       series: [{
           name: 'Total Overdues',
-          data: [['Total Recievable', this.totalRecievable / 100], ['Total Payable', this.totalPayable / 100]],
+          data: [['Total Recievable', this.totalRecievable * 100 / (this.totalRecievable + this.totalPayable)], ['Total Payable', this.totalPayable * 100 / (this.totalPayable + this.totalRecievable)]],
       }],
     };
   }
