@@ -4,7 +4,6 @@
         <h2>Header</h2>
 
         <div class="clearfix">
-            <!--<div class="form-group"><input type="checkbox" [(ngModel)]="showCompanyName" (ngModelChange)="onChangeCompanyNameVisibility()" checked/> Company Name</div>-->
             <div class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name</div>
             <div class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[4].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Date

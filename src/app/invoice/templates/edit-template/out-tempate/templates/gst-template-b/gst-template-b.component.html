@@ -8,15 +8,15 @@
 
 <body>
     <div class="">
-        <div id="template-header">
-            <header [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]" (click)="onClickSection('header')">
+        <div id="template-header" (click)="onClickSection('header')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]">
+            <header>
                 <table class="mrB1 pdRL3">
                     <tbody>
                         <tr>
                             <td>
                                 <h1>{{( inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].label.length > 0) ? inputTemplate.sections[0].content[23].label : 'INVOICE' }}</h1>
                                 <figure>
-                                    <p *ngIf="inputTemplate.sections[0].content[5].display"><span>{{(inputTemplate.sections[0].content[5].label.length > 0) ? inputTemplate.sections[0].content[5].label : 'Number'}}: 201770323-64</span> <span class="mrL2">{{(inputTemplate.sections[0].content[4].label.length > 0) ? inputTemplate.sections[0].content[4].label : 'Date'}}: 22/08/2017</span> </p>
+                                    <p><span *ngIf="inputTemplate.sections[0].content[5].display">{{(inputTemplate.sections[0].content[5].label.length > 0) ? inputTemplate.sections[0].content[5].label : 'Number'}}: 201770323-64</span> <span [ngClass]="{'mrL2': inputTemplate.sections[0].content[5].display}" *ngIf="inputTemplate.sections[0].content[4].display">{{(inputTemplate.sections[0].content[4].label.length > 0) ? inputTemplate.sections[0].content[4].label : 'Date'}}: 22/08/2017</span></p>
                                     <p><span>{{(inputTemplate.sections[0].content[15].label.length > 0) ? inputTemplate.sections[0].content[15].label : 'GSTIN'}}: {{companyGSTIN}}</span> <span class="mrL2">{{inputTemplate.sections[0].content[2].label}}: {{companyPAN}}</span></p>
                                 </figure>
                             </td>
@@ -176,14 +176,14 @@
             <table class="subfooter">
                 <tbody>
                     <tr>
-                        <td *ngIf="!inputTemplate.sections[2].content[6].label" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
+                        <td *ngIf="inputTemplate.sections[2].content[6].display" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
                             <h1>THANK YOU</h1>
                             <h4>FOR YOUR BUSINESS.</h4>
                         </td>
                         <td colspan="1"></td>
                         <td style="text-align: center;vertical-align: bottom;">
                             <p class="bdrB"></p>
-                            <p> <strong>Walkover Web Solutions Private Limited</strong></p>
+                            <p> <strong *ngIf="inputTemplate.sections[2].content[9].display">Walkover Web Solutions Private Limited</strong></p>
                             <p>(Signature)</p>
                         </td>
                     </tr>
@@ -199,8 +199,8 @@
             </table>
 
             <footer style="text-align: center;">
-                <p><strong>Walkover Web Solutions Private Limited</strong></p>
-                <p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+                <p><strong *ngIf="inputTemplate.sections[0].content[0].display">Walkover Web Solutions Private Limited</strong></p>
+                <p *ngIf="inputTemplate.sections[2].content[7].display">405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
             </footer>
         </div>
 
