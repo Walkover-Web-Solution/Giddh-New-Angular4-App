@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ImportExcelRequestData, ImportExcelResponseData, MapHeader } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-select/option.interface';
 
 interface DataModel {
@@ -61,18 +61,17 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public columnSelected(val: IOption, data: DataModel) {
-    console.log(val);
-    const mapping: MapHeader[] = this._importData.mappings.mappingInfo[data.field];
-    mapping.find(p => p.columnNumber === +val.value).isSelected = true;
+    this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {
+    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+    Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
     this.dataModel = Object.keys(value.mappings.mappingInfo)
       .map(field => ({
         field,
-        options: value.mappings.mappingInfo[field]
-          .map(p => ({value: p.columnNumber, label: p.columnHeader})),
-        selected: value.mappings.mappingInfo[field].find(p => p.isSelected)
+        options,
+        selected: value.mappings.mappingInfo[field][0].columnNumber.toString()
       }));
   }
 }
