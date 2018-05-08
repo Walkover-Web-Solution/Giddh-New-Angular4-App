@@ -124,6 +124,7 @@ export class SettingsIntegrationService {
   public SaveCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
     return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
@@ -136,7 +137,6 @@ export class SettingsIntegrationService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<any, any> = res;
-      // data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
   }
@@ -144,6 +144,7 @@ export class SettingsIntegrationService {
   public UpdateCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
     return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
@@ -172,6 +173,7 @@ export class SettingsIntegrationService {
   public AddAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
     return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
@@ -182,6 +184,7 @@ export class SettingsIntegrationService {
   public UpdateAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
     return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;

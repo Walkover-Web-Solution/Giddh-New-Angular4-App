@@ -3296,7 +3296,8 @@ label {
 
 #dashboard .panel-default>.panel-heading {
     background-color: transparent;
-    border-color: #d6d6d6;
+    /* border-color: #d6d6d6; */
+    border: 0;
 }
 
 #dashboard .panel-heading i {
@@ -4557,6 +4558,7 @@ table td[class*=col-]:last-child {
 .dropdown-menu>li>a {
     padding: 2px 10px;
 }
+
 
 /* ==================================================
     Branch
