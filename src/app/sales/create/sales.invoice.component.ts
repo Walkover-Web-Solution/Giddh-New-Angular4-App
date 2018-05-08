@@ -498,8 +498,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isCustomerSelected = false;
   }
 
-  public triggerSubmitInvoiceForm(f: NgForm) {
-    this.updateAccount = true;
+  public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
+    this.updateAccount = isUpdate;
     this.onSubmitInvoiceForm(f);
   }
 
