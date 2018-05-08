@@ -135,9 +135,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     this.requestInFlight = true;
     // this.ApiToCALL = [];
     this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, true));
-    if (this.lastFinancialYear) {
-    this.store.dispatch(this._homeActions.getTotalOverdues(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds, true));
-    }
   }
 
   public generateCharts() {
