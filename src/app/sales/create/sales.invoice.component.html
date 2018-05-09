@@ -303,8 +303,8 @@
                             </td>
                             <td style="width:102px">
                                 <div class="">
-                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
-                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
+                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" disabled maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
+                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" disabled maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
                                 </div>
                             </td>
                             <!-- show/hide fields -->
@@ -560,10 +560,10 @@
                 <div class="col-xs-12">
                     <div class="pull-right pr">
                         <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
-                        <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default" *ngIf="isCustomerSelected">Generate {{selectedPageLabel}} &amp; Update A/c</button>
+                        <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)" class="btn btn-default" *ngIf="isCustomerSelected">Generate {{selectedPageLabel}} &amp; Update A/c</button>
                         <div class="btn-group" dropdown [dropup]="true">
 
-                            <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{selectedPageLabel}}
+                            <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default">Generate {{selectedPageLabel}}
   </button>
                             <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
     <span class="caret"></span>
@@ -571,9 +571,9 @@
   </button>
                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
                                 <li role="menuitem">
-                                    <a class="dropdown-item cp" (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm)">Generate & Close</a>
+                                    <a class="dropdown-item cp" (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
                                 </li>
-                                <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm)">
+                                <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
                                     <a class="dropdown-item cp">Generate & Recurring</a>
                                 </li>
                             </ul>
