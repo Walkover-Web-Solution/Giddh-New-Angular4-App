@@ -9,6 +9,7 @@ import { TaxControlData } from '../../../theme/tax-control/tax-control.component
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
 import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
+import { LedgerService } from '../../../services/ledger.service';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -221,6 +222,7 @@ export class UpdateLedgerVm {
   }
 
   public onTxnAmountChange(txn: ILedgerTransactionItem) {
+
     if (!txn.isUpdated) {
       if (this.selectedLedger.taxes.length && !txn.isTax) {
         txn.isUpdated = true;

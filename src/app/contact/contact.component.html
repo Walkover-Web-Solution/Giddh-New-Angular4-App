@@ -25,7 +25,7 @@
           </ul>
         </div>
 
-        <div class="btn-group mrL1" dropdown [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+        <div class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
           <i dropdownToggle class="icon-options pd cp fs20"></i>
           <!-- <button dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle"> <span class="fa fa-filter"></span>
                 </button> -->
@@ -117,7 +117,8 @@
           <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
           <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
           <td>
-            <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
+            <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
+            <button *ngIf="!cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Add Cashfree</button>
           </td>
         </tr>
         <tr *ngIf="!(sundryCreditorsAccounts$ | async)?.length">

@@ -31,7 +31,7 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Dashboard', value: '/pages/home' },
-  { label: 'Accounting Voucher', value: '/pages/accounting-voucher' },
+  { label: 'Journal Voucher', value: '/pages/accounting-voucher' },
   { label: 'Sales', value: '/pages/sales' },
   { label: 'Invoice', value: '/pages/invoice/preview' },
   { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
@@ -150,8 +150,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public navigationOptionList: IOption[] = NAVIGATION_ITEM_LIST;
   public selectedNavigation: string = '';
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public navigationModalVisible: boolean = false;
   private loggedInUserEmail: string;
-  private navigationModalVisible: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -523,6 +523,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
     if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+      event.preventDefault();
+      event.stopPropagation();
       this.showNavigationModal();
     }
   }
@@ -545,6 +547,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private showNavigationModal() {
+    this.navigationOptionList.forEach((ele) => {
+      ele.isHilighted = false;
+    });
     this.forceClear$ = Observable.of({status: false});
     this.navigationModalVisible = true;
     this.navigationModal.show();
@@ -556,6 +561,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();
-    setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
+    // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
   }
 }

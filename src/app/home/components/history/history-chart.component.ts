@@ -15,7 +15,8 @@ import { API_TO_CALL, CHART_CALLED_FROM } from '../../../actions/home/home.const
 
 @Component({
   selector: 'history-chart',
-  templateUrl: 'history-chart.component.html'
+  templateUrl: 'history-chart.component.html',
+  styleUrls: ['../../home.component.scss']
 })
 
 export class HistoryChartComponent implements OnInit {
@@ -111,7 +112,7 @@ export class HistoryChartComponent implements OnInit {
       }
       if (p.name === 'Profit/Loss') {
         p.data = this.profitLossData;
-        p.color = '#aeaec4';
+        p.color = '#28283c';
       }
       if (p.name === 'LY Expense') {
         p.data = this.expenseDataLY;
@@ -119,16 +120,16 @@ export class HistoryChartComponent implements OnInit {
       }
       if (p.name === 'LY Revenue') {
         p.data = this.revenueDataLY;
-        p.color = '#c45022';
+        p.color = '#d37c59';
       }
       if (p.name === 'LY Profit/Loss') {
         p.data = this.profitLossDataLY;
-        p.color = '#28283c';
+        p.color = '#aeaec4';
       }
     });
     this.options = {
       chart: {
-        height: '320px',
+        height: '273px',
         width: 900,
       },
       title: {
@@ -137,7 +138,9 @@ export class HistoryChartComponent implements OnInit {
       yAxis: {
         title: {
           text: ''
-        }
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
       },
       xAxis: {
         categories: this.monthArray
@@ -146,7 +149,8 @@ export class HistoryChartComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
+        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' },
+        enabled: false
       },
       credits: {
         enabled: false
