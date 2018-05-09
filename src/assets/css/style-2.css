@@ -3296,7 +3296,8 @@ label {
 
 #dashboard .panel-default>.panel-heading {
     background-color: transparent;
-    border-color: #d6d6d6;
+    /* border-color: #d6d6d6; */
+    border: 0;
 }
 
 #dashboard .panel-heading i {
@@ -4558,6 +4559,7 @@ table td[class*=col-]:last-child {
     padding: 2px 10px;
 }
 
+
 /* ==================================================
     Branch
 ================================================== */
@@ -4594,3 +4596,18 @@ table td[class*=col-]:last-child {
 .m-r-15 {
     margin-right: 15px;
 }
+
+.overdue_chart {
+    margin: 0 auto;
+}
+
+
+/* .overdue_chart {
+    width: 100% !important;
+    height: 174px !important;
+}
+
+.overdue_chart svg {
+    width: 100% !important;
+    height: 174px !important;
+} */
