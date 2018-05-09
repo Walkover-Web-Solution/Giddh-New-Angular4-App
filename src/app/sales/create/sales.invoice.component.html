@@ -300,8 +300,8 @@
                             </td>
                             <td style="width:102px">
                                 <div class="">
-                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
-                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
+                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" disabled maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
+                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" disabled maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
                                 </div>
                             </td>
                             <!-- show/hide fields -->
