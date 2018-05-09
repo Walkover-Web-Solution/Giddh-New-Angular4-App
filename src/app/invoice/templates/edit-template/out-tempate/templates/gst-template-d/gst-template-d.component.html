@@ -119,8 +119,8 @@
 	</style>
 </head>
 <body>
-<div>
-		<header>
+<div id="template-header" (click)="onClickSection('header')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]">
+	<header>
 		<figure class="col-xs-6">
 			<h1>Walkover Web Solutions Private Limited</h1>
 		</figure>
@@ -134,18 +134,20 @@
 						<table class="numDetail">
 							<tbody>
 								<tr>
-									<td><label>GSTIN</label> 01234567890123</td>
-									
+									<td>
+										<label>GSTIN</label> 01234567890123</td>
+
 								</tr>
 								<tr>
-									<td><label>PAN</label> 1234567890</td>
-									
-								</tr>						
+									<td>
+										<label>PAN</label> 1234567890</td>
+
+								</tr>
 							</tbody>
 						</table>
 					</td>
 					<td colspan="2">
-						
+
 					</td>
 					<td class="pull-right">
 						<table>
@@ -157,15 +159,17 @@
 								<tr>
 									<td>Invoice No.</td>
 									<td>201770323-64</td>
-								</tr>						
+								</tr>
 							</tbody>
 						</table>
 					</td>
 
-				</tr>			
-		</tbody>
+				</tr>
+			</tbody>
 		</table>
-		</header>
+	</header>
+</div>
+	<div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]">
 		<table class="meta" cellspacing="0" cellpadding="0">
 			<tbody>
 				<tr>
@@ -385,6 +389,8 @@
 			</table>
 
 		</article>
+		</div>
+		<div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]">
 		<aside>
 		<table cellpadding="0" cellspacing="0" class="subfooter">
 			<tbody>
@@ -414,6 +420,6 @@
 			<p>Walkover Web Solutions Private Limited</p>
 			<p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
 		</footer>
-</div>
+		</div>
 	</body>
 </html>
