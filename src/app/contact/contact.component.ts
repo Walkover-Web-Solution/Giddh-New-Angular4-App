@@ -15,7 +15,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, BsDropdownDirective } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -79,7 +79,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     state: true,
     gstin: true,
   };
+
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
+  @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private createAccountIsSuccess$: Observable<boolean>;
@@ -90,12 +92,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     private router: Router,
     private _dashboardService: DashboardService,
     private _contactService: ContactService,
-    private settingsIntegrationActions: SettingsIntegrationActions) {
+    private settingsIntegrationActions: SettingsIntegrationActions,
+    private _companyActions: CompanyActions) {
       this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
       this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
     }
 
   public ngOnInit() {
+
+    this.filterDropDownList.placement = 'left';
+
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'contact';
+
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
     this.getAccounts('sundrydebtors');
 
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
@@ -208,6 +222,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.getAccounts(selectedGrp, event.page, 'pagination');
+  }
+
+  public hideListItems() {
+    this.filterDropDownList.hide();
   }
 
   private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string) {
