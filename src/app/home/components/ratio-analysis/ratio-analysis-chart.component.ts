@@ -107,7 +107,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
   public generateCharts() {
     this.currentRatioOption = {
-      colors: ['#d37c59', '#005b77'],
+      colors: ['#005b77', '#d37c59'],
       chart: {
           type: 'pie',
           polar: false,
@@ -161,12 +161,12 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       },
       series: [{
           name: 'Current Ratio',
-          data: [['Current Assets', this.ratioObj.currentRatio * 10 / 10], ['Current Liabilities', 10]],
+          data: [['Current Assets', this.ratioObj.currentRatio * 100 ], ['Current Liabilities', 100]],
       }],
     };
 
     this.debtOptions = {
-      colors: ['#d37c59', '#005b77'],
+      colors: ['#005b77', '#d37c59'],
       chart: {
           type: 'pie',
           polar: false,
@@ -221,13 +221,13 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       },
       series: [{
           name: 'Debt Equity Ratio',
-          data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 10 / 10], ['Shareholders fund', 10]],
+          data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 100], ['Shareholders fund', 100]],
 
       }]
     };
 
     this.proprietaryOption = {
-      colors: ['#d37c59', '#005b77'],
+      colors: ['#005b77', '#d37c59'],
       chart: {
           type: 'pie',
           polar: false,
@@ -282,13 +282,13 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       },
       series: [{
           name: 'Proprietary Ratio',
-          data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 10 / 10], ['Total Assets', 10]],
+          data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
 
       }]
     };
 
     this.fixedAssetOption = {
-      colors: ['#d37c59', '#005b77'],
+      colors: ['#005b77', '#d37c59'],
       chart: {
           type: 'pie',
           polar: false,
@@ -342,7 +342,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       },
       series: [{
           name: 'Fixed Assets Ratio',
-          data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 10 / 10], ['Shareholders fund', 10]],
+          data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 100], ['Shareholders fund', 100]],
       }]
     };
   }
