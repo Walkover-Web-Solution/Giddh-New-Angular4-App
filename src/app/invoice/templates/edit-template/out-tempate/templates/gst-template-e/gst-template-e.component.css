@@ -270,7 +270,27 @@
   padding: 0 15px !important;
   border-left: 1px solid $color_punch_approx !important;
 }
+
 #Template-table {
   width: 100%;
   float: left;
+}
+
+.disabled-area {
+  position: relative;
+  float: left;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.disabled-area:after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  background: rgba(204, 204, 204, 0.5);
+  border: 1px dashed #808080;
 }
