@@ -296,7 +296,7 @@
 
 <body>
 
-    <div id="template-header">
+    <div id="template-header" (click)="onClickSection('header')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]">
         <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
         <header>
             <table>
@@ -339,7 +339,7 @@
             </tbody>
         </table>
     </div>
-    <div id="Template-table" class="pos-rel">
+    <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]">
         <!-- <span class="arrow-down"></span> -->
         <table class="item product-table mrB2" cellspacing="0" cellpadding="0">
             <thead>
@@ -433,7 +433,7 @@
         </table>
     </div>
 
-    <div id="Template-footer">
+    <div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]">
         <table class="subfooter">
             <tbody>
                 <tr>
