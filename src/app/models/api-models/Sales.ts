@@ -32,7 +32,7 @@ export const VOUCHER_TYPE_LIST: any[] = [
   },
   {
     value: 'Purchase',
-    label: 'pur',
+    label: 'Purchase',
     additional: {
     label: 'Purchase'
     }
