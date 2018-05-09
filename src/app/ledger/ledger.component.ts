@@ -539,7 +539,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getBankTransactions() {
-    if (this.advanceSearchRequest.accountUniqueName && this.advanceSearchRequest.from) {
+    // && this.advanceSearchRequest.from
+    if (this.advanceSearchRequest.accountUniqueName) {
       this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
