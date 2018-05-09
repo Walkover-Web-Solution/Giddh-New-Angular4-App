@@ -47,7 +47,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public useInBuiltFilterForFlattenAc: boolean = false;
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
   @Input() public doNotReset: boolean = false;
-  @Input() public showListFirstTime: boolean = true;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -174,7 +173,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public updateFilter(filterProp) {
-    this.showListFirstTime = true;
     const lowercaseFilter = filterProp.toLocaleLowerCase();
     if (this.useInBuiltFilterForFlattenAc && this._options) {
       this.filteredData = this.filterByIOption(this._options, lowercaseFilter, FLATTEN_SEARCH_TERM);
