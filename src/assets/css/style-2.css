@@ -4596,3 +4596,18 @@ table td[class*=col-]:last-child {
 .m-r-15 {
     margin-right: 15px;
 }
+
+.overdue_chart {
+    margin: 0 auto;
+}
+
+
+/* .overdue_chart {
+    width: 100% !important;
+    height: 174px !important;
+}
+
+.overdue_chart svg {
+    width: 100% !important;
+    height: 174px !important;
+} */
