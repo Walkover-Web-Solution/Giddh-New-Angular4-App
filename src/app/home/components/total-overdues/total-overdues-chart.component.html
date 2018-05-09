@@ -21,6 +21,9 @@
                             <span class="mrB1">Total Receivable</span>
                             <span class="total_amt pull-right primary_text">{{ totalRecievable | number:'1.2-2' }}</span>
                         </div>
+                        <div class="clearfix">
+                            <small>Last 30 days</small> <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
+                        </div>
                         <!-- <div class="">
                             <div class="btn-group" dropdown>
                                 <button type="button" class="btn btn-danger">Action</button>
@@ -46,7 +49,9 @@
                         <div class="">
                             <span class="mrB1">Total Payable</span>
                             <span class="total_amt pull-right secondary_text">{{ totalPayable | number:'1.2-2' }}</span>
-                            <!-- <span class="total_amt pull-right">{{ overDueObj.sundrycreditors.creditTotal - overDueObj.sundrycreditors.debitTotal }}</span> -->
+                        </div>
+                        <div class="clearfix">
+                            <small>Last 30 days</small> <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
                         </div>
                     </div>
 
