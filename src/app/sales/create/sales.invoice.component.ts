@@ -498,8 +498,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isCustomerSelected = false;
   }
 
-  public triggerSubmitInvoiceForm(f: NgForm) {
-    this.updateAccount = true;
+  public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
+    this.updateAccount = isUpdate;
     this.onSubmitInvoiceForm(f);
   }
 
@@ -784,18 +784,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 });
                 txn.accountName = o.name;
                 txn.accountUniqueName = o.uniqueName;
-                if (o.hsnNumber) {
-                  txn.hsnNumber = o.hsnNumber;
-                  txn.hsnOrSac = 'hsn';
-                } else {
-                  txn.hsnNumber = null;
-                }
-                if (o.sacNumber) {
-                  txn.sacNumber = o.sacNumber;
-                  txn.hsnOrSac = 'sac';
-                } else {
-                  txn.sacNumber = null;
-                }
+                // if (o.hsnNumber) {
+                //   txn.hsnNumber = o.hsnNumber;
+                //   txn.hsnOrSac = 'hsn';
+                // } else {
+                //   txn.hsnNumber = null;
+                // }
+                // if (o.sacNumber) {
+                //   txn.sacNumber = o.sacNumber;
+                //   txn.hsnOrSac = 'sac';
+                // } else {
+                //   txn.sacNumber = null;
+                // }
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
                   txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
@@ -824,6 +824,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 }
                 // toggle stock related fields
                 this.toggleStockFields(txn);
+                txn.sacNumber = null;
+                txn.hsnNumber = null;
+                if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+                  txn.hsnNumber = txn.stockDetails.hsnNumber;
+                  txn.hsnOrSac = 'hsn';
+                }
+                if (txn.stockDetails && txn.stockDetails.sacNumber) {
+                  txn.sacNumber = txn.stockDetails.sacNumber;
+                  txn.hsnOrSac = 'sac';
+                }
                 return txn;
               } else {
                 txn.isStockTxn = false;
