@@ -30,6 +30,12 @@
                                 <span class="label">Sales</span>
                             </a>
                         </li>
+                        <li>
+                            <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
+                                <span class="navico-sales"></span>
+                                <span class="label">Purchase</span>
+                            </a>
+                        </li>
                         <li [checkPermission]="['MENU', 'INVOICE']">
                             <a [routerLink]="['/pages/invoice']">
                                 <span class="navico-invoice"></span>
@@ -451,8 +457,8 @@
 <div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
     <div class="modal-dialog modal-small">
         <div class="modal-content">
-            <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Search for page..."
-                [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
+            <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation"
+                placeholder="Search for page..." [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
             <div *ngIf="navigationModalVisible" class="shortcuts">
                 <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
             </div>
