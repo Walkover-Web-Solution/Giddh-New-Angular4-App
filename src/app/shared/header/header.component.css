@@ -10,7 +10,7 @@
     background: #1a1a1a;
     width: 46px;
     transition: width .1s ease;
-    padding: 7px 0;
+    padding: 0 0;
     padding-bottom: 120px;
 }
 
@@ -127,4 +127,13 @@
 
 .universal_modal.modal.in .modal-dialog {
     transform: translateY(100px) !important;
+}
+
+:host ::ng-deep .left_fixed_header perfect-scrollbar>.ps.ps--scrolling-y>.ps__rail-y {
+    opacity: 0;
+}
+
+:host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-top) .ps-indicator-top,
+ :host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
+    background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
 }
