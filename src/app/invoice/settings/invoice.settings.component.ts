@@ -117,6 +117,7 @@ export class InvoiceSettingComponent implements OnInit {
         if (this.invoiceSetting.lockDate) {
           this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
         }
+        debugger;
         this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
 
       } else if (!setting || !setting.webhooks) {
