@@ -1,4 +1,5 @@
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
+
 export class AccountChartDataLastCurrentYear implements INameUniqueName {
   public uniqueName: string;
   public name: string;

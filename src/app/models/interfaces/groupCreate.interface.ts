@@ -1,5 +1,5 @@
 import { IUserInfo } from './userInfo.interface';
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 import { IGroup } from './group.interface';
 
 export interface ICreateGroup extends IGroup {

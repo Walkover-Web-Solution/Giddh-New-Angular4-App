@@ -1,16 +1,16 @@
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
-import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../../../models/api-models/Inventory';
 import { eventsConst } from 'app/shared/header/components/eventsConst';
-import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupResponse, MoveGroupRequest } from 'app/models/api-models/Group';
+import { GroupCreateRequest, GroupResponse, GroupUpateRequest } from 'app/models/api-models/Group';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ChangeDetectorRef } from '@angular/core';
 import * as _ from 'app/lodash-optimized';
 import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
-import { AccountResponseV2, AccountRequestV2, AccountMoveRequest } from 'app/models/api-models/Account';
-import { _localeFactory } from '@angular/core/src/application_module';
+import { AccountRequestV2, AccountResponseV2 } from 'app/models/api-models/Account';
+
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];
   public parentIndex: number;

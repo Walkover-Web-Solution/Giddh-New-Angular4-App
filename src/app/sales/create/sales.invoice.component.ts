@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AccountDetailsClass, FakeDiscountItem, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';

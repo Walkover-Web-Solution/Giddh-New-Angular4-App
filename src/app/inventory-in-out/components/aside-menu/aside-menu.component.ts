@@ -1,4 +1,12 @@
 import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AppState } from '../../../store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
+import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
+import { InventoryEntry, InventoryUser } from '../../../models/api-models/Inventory-in-out';
+import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
 
 @Component({
   selector: 'aside-menu',
@@ -52,11 +60,18 @@ import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } fro
 })
 
 export class AsideMenuComponent implements OnInit, OnChanges {
+  public stockList$: Observable<IStocksItem[]>;
+  public userList$: Observable<InventoryUser[]>;
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   public view = '';
 
-  constructor() {
-    //
+  constructor(private _store: Store<AppState>,
+              private _inventoryAction: InventoryAction,
+              private _inventoryEntryAction: InventoryEntryActions,
+              private _inventoryUserAction: InventoryUsersActions,
+  ) {
+    this._store.dispatch(this._inventoryAction.GetStock());
+    this._store.dispatch(this._inventoryUserAction.getAllUsers());
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -64,7 +79,11 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.stockList$ = this._store
+      .select(p => p.inventory.stocksList && p.inventory.stocksList.results);
+
+    this.userList$ = this._store
+      .select(p => p.inventoryInOutState.inventoryUsers && p.inventoryInOutState.inventoryUsers);
   }
 
   public onCancel() {
@@ -74,5 +93,10 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   public closeAsidePane(event?) {
     this.closeAsideEvent.emit();
     this.view = '';
+  }
+
+  public onSave(entry: InventoryEntry) {
+    console.log(entry);
+    this._store.dispatch(this._inventoryEntryAction.addNewEntry(entry));
   }
 }

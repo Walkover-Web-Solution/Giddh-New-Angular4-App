@@ -1,29 +1,21 @@
 import * as  _ from '../../../../lodash-optimized';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  decimalDigits,
-  digitsOnly,
-  stockManufacturingDetailsValidator
-} from '../../../../shared/helpers/customValidationHelper';
-import { CreateStockRequest, StockDetailResponse, StockGroupResponse, StockUnitResponse } from '../../../../models/api-models/Inventory';
+import { decimalDigits, digitsOnly } from '../../../../shared/helpers/customValidationHelper';
+import { CreateStockRequest, INameUniqueName, StockDetailResponse, StockUnitResponse } from '../../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AccountService } from '../../../../services/account.service';
 import { CustomStockUnitAction } from '../../../../actions/inventory/customStockUnit.actions';
-import { IStockItemDetail, IUnitRateItem } from '../../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { InventoryService } from '../../../../services/inventory.service';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groupsWithStocks.interface';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SalesActions } from '../../../../actions/sales/sales.action';
-import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
