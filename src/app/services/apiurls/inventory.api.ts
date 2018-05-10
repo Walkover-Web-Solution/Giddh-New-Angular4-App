@@ -7,7 +7,7 @@ export const INVENTORY_API = {
     UPDATE: COMMON_USER + '/:inventoryUserUniqueName',
     GET: COMMON_USER + '/:inventoryUserUniqueName',
     DELETE: COMMON_USER + '/:inventoryUserUniqueName',
-    GET_ALL: COMMON_USER + '?q=:q&refresh=false&page=:page&count=:count'
+    GET_ALL: COMMON_USER + '?q=:q&refresh=:refresh&page=:page&count=:count'
   },
   ENTRY: {
     CREATE: COMMON_ENTRY,

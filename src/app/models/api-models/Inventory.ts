@@ -1,6 +1,11 @@
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
+
+export interface INameUniqueName {
+  uniqueName: string;
+  name: string;
+  isActive?: boolean;
+}
 
 /*
  * Model for Create Stock Group api request
@@ -28,6 +33,7 @@ export class StockGroupResponse {
   public stocks: INameUniqueName[];
   public uniqueName: string;
 }
+
 
 /**
  * Model for Stocks api response
@@ -204,72 +210,3 @@ interface IGroupStockReport {
   stockName: string;
 }
 
-export interface Stock {
-  uniqueName: string;
-}
-
-export interface StockUnit {
-  code: string;
-}
-
-export interface InventoryUser {
-  name: string;
-  uniqueName: string;
-}
-
-export interface Transaction {
-  type: string;
-  quantity: number;
-  inventoryUser: InventoryUser;
-}
-
-export interface InventoryEntry {
-  stock: Stock;
-  stockUnit: StockUnit;
-  inventoryEntryDate: string;
-  description: string;
-  transactions: Transaction[];
-}
-
-export interface InventoryFilter {
-  quantity?: number;
-  quantityGreaterThan?: string;
-  quantityLessThan?: string;
-  quantityEqualTo?: string;
-  includeSenders?: string;
-  senders?: any[];
-  includeReceivers?: string;
-  receivers?: any[];
-}
-
-export interface InventoryReportTransactions {
-  uniqueName: string;
-  date: string;
-  quantity: number;
-  description: string;
-  stockUnit: {
-    name: string;
-    code: string;
-  };
-  sender: INameUniqueName;
-  receiver: INameUniqueName;
-  closingQuantity: number;
-  stock: INameUniqueName;
-}
-
-export interface InventoryReport {
-  page: number;
-  count: number;
-  totalPages: number;
-  totalItems: number;
-  fromDate: string;
-  toDate: string;
-  stock: INameUniqueName;
-  stockUnit: {
-    name: string;
-    code: string;
-  };
-  openingQuantity: number;
-  closingQuantity: number;
-  transactions: InventoryReportTransactions[];
-}

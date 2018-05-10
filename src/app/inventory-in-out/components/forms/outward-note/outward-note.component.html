@@ -2,13 +2,122 @@
   <h3 class="aside-title">
     <span>Outward Note</span>
     <span>Multiple</span>
-    <span>Receivers</span>/<span>Products</span>
+    <a href="javascript:void(0)"
+       [ngStyle]="{'font-weight': mode === 'receiver' ? 'bold' : 'normal' }"
+       (click)="mode = 'receiver'">Receivers</a>
+    /
+    <a href="javascript:void(0)"
+       [ngStyle]="{'font-weight': mode === 'product' ? 'bold' : 'normal' }"
+       (click)="mode = 'product'">Products</a>
   </h3>
 </div>
 <div class="aside-body">
   <div class="body">
-    Outward Note
-    <button type="button" class="btn btn-default" (click)="onCancel.emit()">Cancel</button>
-    <button type="button" class="btn btn-success">Save</button>
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-lg-6 form-group pdT2">
+          <label class="mrB1">Date</label>
+          <div class="input-group">
+            <input name="dateRange"
+                   formControlName="inventoryEntryDate" type="text"
+                   autocomplete="off"
+                   class="form-control"
+                   bsDatepicker
+                   [minDate]="today"
+                   [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+          </div>
+        </div>
+
+        <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'receiver'">
+          <label class="mrB1">Product Name</label>
+          <div class="input-group">
+            <sh-select
+              [options]="stockListOptions"
+              [multiple]="false"
+              [placeholder]="'Select Product'"
+              (selected)="stockChanged($event)"
+            ></sh-select>
+          </div>
+        </div>
+        <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'product'">
+          <label class="mrB1">Sender</label>
+          <div class="input-group">
+            <sh-select
+              [options]="userListOptions"
+              [multiple]="false"
+              [placeholder]="'Select Receiver'"
+              (selected)="userChanged($event)"
+            ></sh-select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row" formArrayName="transactions"
+           *ngFor="let item of form.get('transactions').controls; let i = index;let first = first;let last = last">
+        <div [formGroupName]="i">
+          <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'receiver'">
+            <label class="mrB1">Receiver</label>
+            <div class="input-group">
+              <sh-select
+                [options]="userListOptions"
+                [multiple]="false"
+                [placeholder]="'Select Receiver'"
+                (selected)="userChanged($event,i)"
+              ></sh-select>
+            </div>
+          </div>
+          <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'product'">
+            <label class="mrB1">Product Name</label>
+            <div class="input-group">
+              <sh-select
+                [options]="stockListOptions"
+                [multiple]="false"
+                [placeholder]="'Select Product'"
+                (selected)="stockChanged($event,i)"
+              ></sh-select>
+            </div>
+          </div>
+          <div class="col-lg-4 form-group pdT2">
+            <label class="mrB1">Quantity</label>
+            <div class="input-group">
+              <input name="dateRange" type="text"
+                     formControlName="quantity"
+                     class="form-control">
+            </div>
+          </div>
+          <div class="col-lg-2 form-group pdT2">
+            <a (click)="addTransactionItem()">
+              <i class="fa fa-plus" *ngIf="first || !last"></i>
+            </a>
+            <a (click)="deleteTransactionItem(i)">
+              <i class="fa fa-close" *ngIf="!first && last"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 form-group pdT2">
+          <label class="mrB1">Description</label>
+          <div class="input-group">
+            <input name="dateRange" formControlName="description" type="text"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 form-group mrR1">
+          <label class="d-block">&nbsp;</label>
+          <button class="btn btn-sm" (click)="onCancel.emit($event)">Cancel</button>
+        </div>
+
+        <div class="col-lg-3 form-group mrR1">
+          <label class="d-block">&nbsp;</label>
+          <button class="btn btn-success btn-sm" [ladda]="isLoading" (click)="save()">Save</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
