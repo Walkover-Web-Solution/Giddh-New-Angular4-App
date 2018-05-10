@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 
 const INV_PAGE = [
   {name: 'Invoice', uniqueName: 'invoice'},

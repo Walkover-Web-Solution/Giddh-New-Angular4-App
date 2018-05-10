@@ -1,4 +1,4 @@
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 import { IPagination } from './paginatedResponse.interface';
 import { IFlattenAccountsResultItem } from './flattenAccountsResultItem.interface';
 import { IInventoryUnit } from '../../ledger/ledger.vm';

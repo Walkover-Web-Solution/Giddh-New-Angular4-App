@@ -3,10 +3,17 @@
 
   <div [ngSwitch]="view">
     <ng-container *ngSwitchCase="'inward'">
-      <inward-note (onCancel)="onCancel()"></inward-note>
+      <inward-note [stockList]="stockList$ | async"
+                   [userList]="userList$ | async"
+                   (onSave)="onSave($event)"
+                   (onCancel)="onCancel()"></inward-note>
     </ng-container>
     <ng-container *ngSwitchCase="'outward'">
-      <outward-note (onCancel)="onCancel()"></outward-note>
+      <outward-note
+        [stockList]="stockList$ | async"
+        [userList]="userList$ | async"
+        (onSave)="onSave($event)"
+        (onCancel)="onCancel()"></outward-note>
     </ng-container>
     <ng-container *ngSwitchCase="'transfer'">
       <transfer-note (onCancel)="onCancel()"></transfer-note>

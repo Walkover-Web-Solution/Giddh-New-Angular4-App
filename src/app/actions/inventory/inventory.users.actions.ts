@@ -8,8 +8,9 @@ import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { INVENTORY_USER_ACTIONS } from './inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { InventoryUser } from '../../models/api-models/Inventory';
+import { InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs/Observable';
+import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 
 @Injectable()
 export class InventoryUsersActions {
@@ -94,6 +95,20 @@ export class InventoryUsersActions {
       return {type: 'EmptyAction'};
     });
 
+  @Effect()
+  public getAllUsers$: Observable<Action> = this.action$
+    .ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS)
+    .switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser())
+    .map(data => {
+      if (data.status === 'error') {
+        this._toasty.clearAllToaster();
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        return this.getAllUsersResponse(data);
+      }
+      return {type: 'EmptyAction'};
+    });
+
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {
   }
@@ -108,6 +123,19 @@ export class InventoryUsersActions {
   public getUserResponse(value: BaseResponse<InventoryUser, string>): CustomActions {
     return {
       type: INVENTORY_USER_ACTIONS.GET_USER_RESPONSE,
+      payload: value
+    };
+  }
+
+  public getAllUsers(): CustomActions {
+    return {
+      type: INVENTORY_USER_ACTIONS.GET_ALL_USERS,
+    };
+  }
+
+  public getAllUsersResponse(value: BaseResponse<IPaginatedResponse<InventoryUser>, string>): CustomActions {
+    return {
+      type: INVENTORY_USER_ACTIONS.GET_ALL_USERS_RESPONSE,
       payload: value
     };
   }

@@ -7,7 +7,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { INVENTORY_ENTRY_ACTIONS, INVENTORY_REPORT_ACTIONS } from './inventory.const';
-import { InventoryFilter, InventoryReport } from '../../models/api-models/Inventory';
+import { InventoryFilter, InventoryReport } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()

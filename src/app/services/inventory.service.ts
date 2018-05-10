@@ -1,4 +1,4 @@
-import { CreateStockRequest, GroupStockReportRequest, GroupStockReportResponse, InventoryEntry, InventoryFilter, InventoryReport, InventoryUser, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
+import { CreateStockRequest, GroupStockReportRequest, GroupStockReportResponse, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -12,6 +12,8 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { IGroupsWithStocksHierarchyMinItem } from '../models/interfaces/groupsWithStocks.interface';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { InventoryEntry, InventoryFilter, InventoryReport, InventoryUser } from '../models/api-models/Inventory-in-out';
+import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
 
 declare var _: any;
 
@@ -441,17 +443,21 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {uniqueName}));
   }
 
-  public GetAllInventoryUser(): Observable<BaseResponse<InventoryUser, string>> {
+  public GetAllInventoryUser(q: string = '', refresh = false, page = 1, count = 10): Observable<BaseResponse<IPaginatedResponse<InventoryUser>, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
       .get(this.config.apiUrl + INVENTORY_API.USER.GET_ALL
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':q', q)
+        .replace(':refresh', refresh.toString())
+        .replace(':page', page.toString())
+        .replace(':count', count.toString())
       ).map((res) => {
-        let data: BaseResponse<InventoryUser, string> = res;
+        let data: BaseResponse<IPaginatedResponse<InventoryUser>, string> = res;
         data.request = '';
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {}));
+      }).catch((e) => this.errorHandler.HandleCatch<IPaginatedResponse<InventoryUser>, string>(e, '', {}));
   }
 
   public UpdateInventoryUser(name: string): Observable<BaseResponse<InventoryUser, string>> {
@@ -481,13 +487,13 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', {}));
   }
 
-  public CreateInventoryEntry(entry: InventoryEntry, inventoryUserUniqueName: string): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
+  public CreateInventoryEntry(entry: InventoryEntry): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
       .post(this.config.apiUrl + INVENTORY_API.ENTRY.CREATE
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':inventoryUserUniqueName', encodeURIComponent(inventoryUserUniqueName)), entry
+        .replace(':inventoryUserUniqueName', encodeURIComponent(this.companyUniqueName)), entry
       )
       .map((res) => {
         let data: BaseResponse<InventoryEntry, InventoryEntry> = res;
