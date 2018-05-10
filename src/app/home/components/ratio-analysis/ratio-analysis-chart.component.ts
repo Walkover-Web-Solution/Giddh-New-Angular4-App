@@ -159,8 +159,17 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             dataLabels: {}
         }
       },
+      tooltip: {
+        headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
+        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
       series: [{
           name: 'Current Ratio',
+          // showInLegend: false,
           data: [['Current Assets', this.ratioObj.currentRatio * 100 ], ['Current Liabilities', 100]],
       }],
     };
@@ -219,8 +228,16 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             dataLabels: {}
         }
       },
+      tooltip: {
+        headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
+        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
       series: [{
-          name: 'Debt Equity Ratio',
+          // name: 'Debt Equity Ratio',
           data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 100], ['Shareholders fund', 100]],
 
       }]
@@ -234,6 +251,74 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
           width: 170,
           height: '180px'
         //   height: '250px'
+      },
+      title: {
+        verticalAlign: 'middle',
+        align: 'center',
+        text: '<span class="pie-text_center">' + this.ratioObj.proprietaryRatio + '</span>',
+        style: { color: '#005b77', fontSize: '26px' },
+        useHTML: true,
+        y: 8
+      },
+      yAxis: {
+        title: {
+          text: ''
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
+      },
+      xAxis: {
+        categories: []
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+          pie: {
+            showInLegend: true,
+            innerSize: '70%',
+            allowPointSelect: true,
+            dataLabels: {
+                enabled: false,
+                crop: true,
+                defer: true
+            },
+            shadow: false,
+            center: [
+                '50%',
+                '50%'
+            ],
+          },
+        series: {
+            animation: false,
+            dataLabels: {}
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
+        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      series: [{
+          name: 'Proprietary Ratio',
+          data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
+
+      }]
+    };
+
+    this.fixedAssetOption = {
+      colors: ['#005b77', '#d37c59'],
+      chart: {
+          type: 'pie',
+          polar: false,
+          width: 170,
+          height: '180px'
       },
       title: {
         verticalAlign: 'middle',
@@ -280,65 +365,13 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             dataLabels: {}
         }
       },
-      series: [{
-          name: 'Proprietary Ratio',
-          data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
-
-      }]
-    };
-
-    this.fixedAssetOption = {
-      colors: ['#005b77', '#d37c59'],
-      chart: {
-          type: 'pie',
-          polar: false,
-          width: 170,
-          height: '180px'
-      },
-      title: {
-        verticalAlign: 'middle',
-        align: 'center',
-        text: '<span class="pie-text_center">' + this.ratioObj.proprietaryRatio + '</span>',
-        style: { color: '#005b77', fontSize: '26px' },
-        useHTML: true,
-        y: 8
-      },
-      yAxis: {
-        title: {
-          text: ''
-        },
-        gridLineWidth: 0,
-        minorGridLineWidth: 0,
-      },
-      xAxis: {
-        categories: []
-      },
-      legend: {
-        enabled: false
-      },
-      credits: {
-        enabled: false
-      },
-      plotOptions: {
-          pie: {
-            showInLegend: true,
-            innerSize: '70%',
-            allowPointSelect: true,
-            dataLabels: {
-                enabled: false,
-                crop: true,
-                defer: true
-            },
-            shadow: false,
-            center: [
-                '50%',
-                '50%'
-            ],
-          },
-        series: {
-            animation: false,
-            dataLabels: {}
-        }
+      tooltip: {
+        headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
+        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
       },
       series: [{
           name: 'Fixed Assets Ratio',
