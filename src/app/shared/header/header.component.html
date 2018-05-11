@@ -24,34 +24,32 @@
                                 <span class="label">Contacts</span>
                             </a>
                         </li> -->
-
-                            <li [checkPermission]="['MENU', 'INVOICE']">
-                                <a [routerLink]="['/pages/sales']">
-                                    <span class="navico-sales"></span>
-                                    <span class="label">Sales</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
-                                    <span class="navico-sales"></span>
-                                    <span class="label">Purchase</span>
-                                </a>
-                            </li>
-                            <li [checkPermission]="['MENU', 'INVOICE']">
-                                <a [routerLink]="['/pages/invoice']">
-                                    <span class="navico-invoice"></span>
-                                    <span class="label">Invoice</span>
-                                </a>
-                            </li>
-                            <!-- *ngIf="userIsCompanyUser" -->
-                            <li [checkPermission]="['MENU', 'LEDGER']">
-                                <a [routerLink]="['/pages/accounting-voucher']">
-                                    <span class="navico-journal"></span>
-                                    <span class="label">Journal Voucher</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-
+                        <li [checkPermission]="['MENU', 'INVOICE']">
+                            <a [routerLink]="['/pages/sales']">
+                                <span class="navico-sales"></span>
+                                <span class="label">Sales</span>
+                            </a>
+                        </li>
+                        <!-- <li>
+                            <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
+                                <span class="navico-sales"></span>
+                                <span class="label">Purchase</span>
+                            </a>
+                        </li> -->
+                        <li [checkPermission]="['MENU', 'INVOICE']">
+                            <a [routerLink]="['/pages/invoice']">
+                                <span class="navico-invoice"></span>
+                                <span class="label">Invoice</span>
+                            </a>
+                        </li>
+                        <!-- *ngIf="userIsCompanyUser" -->
+                        <li [checkPermission]="['MENU', 'LEDGER']">
+                            <a [routerLink]="['/pages/accounting-voucher']">
+                                <span class="navico-journal"></span>
+                                <span class="label">Journal Voucher</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
                             <li [checkPermission]="['MENU', 'LEDGER']">
                                 <a [routerLink]="['/pages/daybook']">
                                     <span class="navico-daybook"></span>
