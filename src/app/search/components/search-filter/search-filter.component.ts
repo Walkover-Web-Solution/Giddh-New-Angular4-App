@@ -7,7 +7,11 @@ import { BsDropdownDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'search-filter',  // <home></home>
   templateUrl: './search-filter.component.html',
-  styles: [``]
+  styles: [`
+  .custom-select .select_drop{
+    right: 9px;
+  }
+  `]
 })
 export class SearchFilterComponent implements OnInit, OnDestroy {
   @Output() public searchQuery = new EventEmitter<SearchDataSet[]>();
