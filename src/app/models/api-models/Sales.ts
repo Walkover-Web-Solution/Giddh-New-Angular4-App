@@ -29,6 +29,13 @@ export const VOUCHER_TYPE_LIST: any[] = [
     additional: {
     label: 'Debit Note'
     }
+  },
+  {
+    value: 'Purchase',
+    label: 'Purchase',
+    additional: {
+    label: 'Purchase'
+    }
   }
 ];
 /*
