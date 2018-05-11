@@ -99,7 +99,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false));
+    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), false));
 
     this.totalOverDuesResponse$
       .skipWhile(p => (isNullOrUndefined(p)))
@@ -134,7 +134,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public fetchChartData() {
     this.requestInFlight = true;
     // this.ApiToCALL = [];
-    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, true));
+    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), true));
   }
 
   public generateCharts() {
@@ -186,6 +186,14 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             animation: false,
             dataLabels: {}
         }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.percentage:.1f} %</b> </td>' +
+        '</tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
       },
       series: [{
           name: 'Total Overdues',
