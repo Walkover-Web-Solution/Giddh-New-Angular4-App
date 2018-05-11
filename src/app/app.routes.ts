@@ -63,7 +63,7 @@ export const ROUTES: Routes = [
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
       { path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
-      { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
+      { path: 'contact', loadChildren: './contact/contact.module#ContactModule' },
       { path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
