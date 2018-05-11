@@ -10,7 +10,6 @@
 
                     <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}">
                         <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-
                             <li [checkPermission]="['MENU', 'DASHBOARD']">
                                 <a [routerLink]="['home']">
                                     <span class="navico-dashboard"></span>
@@ -135,7 +134,6 @@
                                 </li>
                             -->
                         </perfect-scrollbar>
-
                     </ul>
                     <ul [hidden]="true" *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
                         <li>
