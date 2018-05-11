@@ -1,11 +1,13 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { SearchDataSet } from '../../../models/api-models/Search';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
+import { BsDropdownDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'search-filter',  // <home></home>
-  templateUrl: './search-filter.component.html'
+  templateUrl: './search-filter.component.html',
+  styles: [``]
 })
 export class SearchFilterComponent implements OnInit, OnDestroy {
   @Output() public searchQuery = new EventEmitter<SearchDataSet[]>();
@@ -13,9 +15,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   @Output() public createCsv = new EventEmitter();
   @Output() public openEmailDialog = new EventEmitter();
   @Output() public openSmsDialog = new EventEmitter();
+  @ViewChild('filterDropdown') public filterDropdown: BsDropdownDirective;
   public queryTypes = [
-    { name: 'Closing', uniqueName: 'closingBalance' },
-    { name: 'Opening', uniqueName: 'openingBalance' },
+    { name: 'Closing Balance', uniqueName: 'closingBalance' },
+    { name: 'Opening Balance', uniqueName: 'openingBalance' },
     { name: 'Cr. total', uniqueName: 'creditTotal' },
     { name: 'Dr. total', uniqueName: 'debitTotal' }
   ];
@@ -31,6 +34,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   ];
   public searchQueryForm: FormGroup;
   public searchDataSet: FormArray;
+  public toggleFilters: boolean = false;
 
   /**
    * TypeScript public modifiers
@@ -38,10 +42,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder) {
     this.searchQueryForm = this.fb.group({
       searchQuery: this.fb.array([this.fb.group({
-        queryType: ['', Validators.required],
+        queryType: ['closingBalance', Validators.required],
         balType: ['CREDIT', Validators.required],
-        queryDiffer: ['', Validators.required],
-        amount: ['', [Validators.required, digitsOnly]],
+        queryDiffer: ['Greater', Validators.required],
+        amount: ['1', [Validators.required, digitsOnly]],
       })])
     });
     this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;
@@ -63,10 +67,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 
   public addSearchRow() {
     this.searchDataSet.push(this.fb.group({
-      queryType: ['', Validators.required],
+      queryType: ['closingBalance', Validators.required],
       balType: ['CREDIT', Validators.required],
-      queryDiffer: ['', Validators.required],
-      amount: ['', Validators.required],
+      queryDiffer: ['Greater', Validators.required],
+      amount: ['1', Validators.required],
     }));
 
   }
