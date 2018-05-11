@@ -10,117 +10,117 @@
 
                     <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}">
                         <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-                        <li [checkPermission]="['MENU', 'DASHBOARD']">
-                            <a [routerLink]="['home']">
-                                <span class="navico-dashboard"></span>
-                                <span class="label">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li [checkPermission]="['MENU', 'DASHBOARD']">
+                                <a [routerLink]="['home']">
+                                    <span class="navico-dashboard"></span>
+                                    <span class="label">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
+                            <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
                             <a [routerLink]="['/pages/sales']">
                                 <span class="navico-sales"></span>
                                 <span class="label">Contacts</span>
                             </a>
                         </li> -->
 
-                        <li [checkPermission]="['MENU', 'INVOICE']">
-                            <a [routerLink]="['/pages/sales']">
-                                <span class="navico-sales"></span>
-                                <span class="label">Sales</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
-                                <span class="navico-sales"></span>
-                                <span class="label">Purchase</span>
-                            </a>
-                        </li>
-                        <li [checkPermission]="['MENU', 'INVOICE']">
-                            <a [routerLink]="['/pages/invoice']">
-                                <span class="navico-invoice"></span>
-                                <span class="label">Invoice</span>
-                            </a>
-                        </li>
-                        <!-- *ngIf="userIsCompanyUser" -->
-                        <li [checkPermission]="['MENU', 'LEDGER']">
-                            <a [routerLink]="['/pages/accounting-voucher']">
-                                <span class="navico-journal"></span>
-                                <span class="label">Journal Voucher</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li [checkPermission]="['MENU', 'INVOICE']">
+                                <a [routerLink]="['/pages/sales']">
+                                    <span class="navico-sales"></span>
+                                    <span class="label">Sales</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
+                                    <span class="navico-sales"></span>
+                                    <span class="label">Purchase</span>
+                                </a>
+                            </li>
+                            <li [checkPermission]="['MENU', 'INVOICE']">
+                                <a [routerLink]="['/pages/invoice']">
+                                    <span class="navico-invoice"></span>
+                                    <span class="label">Invoice</span>
+                                </a>
+                            </li>
+                            <!-- *ngIf="userIsCompanyUser" -->
+                            <li [checkPermission]="['MENU', 'LEDGER']">
+                                <a [routerLink]="['/pages/accounting-voucher']">
+                                    <span class="navico-journal"></span>
+                                    <span class="label">Journal Voucher</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <li [checkPermission]="['MENU', 'LEDGER']">
-                            <a [routerLink]="['/pages/daybook']">
-                                <span class="navico-daybook"></span>
-                                <span class="label">Daybook</span>
-                            </a>
-                        </li>
+                            <li [checkPermission]="['MENU', 'LEDGER']">
+                                <a [routerLink]="['/pages/daybook']">
+                                    <span class="navico-daybook"></span>
+                                    <span class="label">Daybook</span>
+                                </a>
+                            </li>
 
-                        <li [checkPermission]="['MENU', 'REPORT']">
-                            <a [routerLink]="['trial-balance-and-profit-loss']">
-                                <span class="navico-tbpl"></span>
-                                <span class="label">TB, P&L and B/S</span>
-                            </a>
-                        </li>
+                            <li [checkPermission]="['MENU', 'REPORT']">
+                                <a [routerLink]="['trial-balance-and-profit-loss']">
+                                    <span class="navico-tbpl"></span>
+                                    <span class="label">TB, P&L and B/S</span>
+                                </a>
+                            </li>
 
-                        <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
-                            <a [routerLink]="['audit-logs']">
-                                <span class="navico-log"></span>
-                                <span class="label">Audit Logs</span>
-                            </a>
-                        </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
-                            <a [routerLink]="['/pages/purchase/invoice']">
-                                <span class="navico-tax"></span>
-                                <span class="label">Taxes</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
+                                <a [routerLink]="['audit-logs']">
+                                    <span class="navico-log"></span>
+                                    <span class="label">Audit Logs</span>
+                                </a>
+                            </li>
+                            <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                                <a [routerLink]="['/pages/purchase/invoice']">
+                                    <span class="navico-tax"></span>
+                                    <span class="label">Taxes</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                            <a [routerLink]="['/inventory']">
-                                <span class="navico-inventory"></span>
-                                <span class="label">Inventory</span>
-                            </a>
-                        </li>
-                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                            <a [routerLink]="['manufacturing']">
-                                <span class="navico-manufacturing"></span>
-                                <span class="label">Manufacturing</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                                <a [routerLink]="['/inventory']">
+                                    <span class="navico-inventory"></span>
+                                    <span class="label">Inventory</span>
+                                </a>
+                            </li>
+                            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                                <a [routerLink]="['manufacturing']">
+                                    <span class="navico-manufacturing"></span>
+                                    <span class="label">Manufacturing</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <li [checkPermission]="['MENU', 'SEARCH']">
-                            <a [routerLink]="['search']">
-                                <span class="navico-search"></span>
-                                <span class="label">Search</span>
-                            </a>
-                        </li>
-                        <li class="dmLi" [hidden]="!userIsSuperUser">
-                            <a [routerLink]="['permissions']">
-                                <span class="navico-permission"></span>
-                                <span class="label">Permissions</span>
-                            </a>
-                        </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']">
-                            <a [routerLink]="['/pages/settings']">
-                                <span class="navico-setting"></span>
-                                <span class="label">Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/pages/contact']">
-                                <span class="navico-daybook"></span>
-                                <span class="label">Contacts</span>
-                            </a>
-                        </li>
+                            <li [checkPermission]="['MENU', 'SEARCH']">
+                                <a [routerLink]="['search']">
+                                    <span class="navico-search"></span>
+                                    <span class="label">Search</span>
+                                </a>
+                            </li>
+                            <li class="dmLi" [hidden]="!userIsSuperUser">
+                                <a [routerLink]="['permissions']">
+                                    <span class="navico-permission"></span>
+                                    <span class="label">Permissions</span>
+                                </a>
+                            </li>
+                            <li [checkPermission]="['MENU', 'SETTINGS']">
+                                <a [routerLink]="['/pages/settings']">
+                                    <span class="navico-setting"></span>
+                                    <span class="label">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/pages/contact']">
+                                    <span class="navico-daybook"></span>
+                                    <span class="label">Contacts</span>
+                                </a>
+                            </li>
 
 
-                        <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
+                            <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
                                     <a href="">
                                         <span class="navico-recurring"></span>
                                         <span class="label">Recurring Entry</span>
@@ -135,7 +135,6 @@
                             -->
                         </perfect-scrollbar>
                     </ul>
-
                     <ul [hidden]="true" *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
                         <li>
                             <div>
