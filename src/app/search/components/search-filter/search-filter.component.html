@@ -64,7 +64,7 @@
                 <button type="button" class="btn btn-default" dropdownToggle>Send as 
       <span class="caret"></span>                      
       </button>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic" [style.min-width.px]="90">
                     <li role="menuitem">
                         <a class="dropdown-item cp" (click)="openEmailDialog.emit()">Email</a>
                     </li>

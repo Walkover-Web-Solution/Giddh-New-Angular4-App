@@ -15,7 +15,7 @@
         <table class="table table-bordered basic mrT1">
             <thead>
                 <tr>
-                    <th>
+                    <th [style.width.px]="25">
                         <div>
                             <input type="checkbox" (change)="toggleSelectAll(isAllChecked)" [(ngModel)]="isAllChecked">
                         </div>
@@ -90,11 +90,16 @@
                     <td class="alR">{{item.debitTotal.toFixed(2) }}</td>
                     <td class="alR">{{item.creditTotal.toFixed(2)}}</td>
                     <td class="alR">
+                        {{item.closingBalance.toFixed(2) }}
                         <span *ngIf="item.closingBalance > 0">
-                        {{item.closingBalance.toFixed(2) }}                          
                           <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
-                        <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span> &nbsp;
+                        <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span>
                         </span>
+                    </td>
+                </tr>
+                <tr *ngIf="!(searchResponseFiltered$ | async).length">
+                    <td colspan="9" class="text-center empty_table">
+                        <h1>No Record Found !!</h1>
                     </td>
                 </tr>
             </tbody>
