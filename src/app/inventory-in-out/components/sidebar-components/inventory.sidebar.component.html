@@ -3,7 +3,7 @@
     <div class="width100 pd1 pdT0">
       <input class="form-control" type="search" placeholder="Search Stock" #search>
     </div>
-    <stock-list></stock-list>
-    <person-list></person-list>
+    <stock-list [stockList]="stocksList$ | async"></stock-list>
+    <person-list [personList]="inventoryUsers$ | async"></person-list>
   </div>
 </section>

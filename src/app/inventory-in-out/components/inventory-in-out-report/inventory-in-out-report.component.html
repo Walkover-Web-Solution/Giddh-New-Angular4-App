@@ -1,20 +1,33 @@
 <section class="h100">
-  <form class="fb__1-container mrB1" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
+  <form class="fb__1-container mrB1" name="groupReportForm" novalidate (ngSubmit)="applyFilters(1)">
     <div class="form-group">
       <!-- <label class="d-block">From - To</label> -->
       <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-             class="form-control date-range-picker" (hideDaterangepicker)="selectedDate($event)"
-             (applyDaterangepicker)="selectedDate($event)"/>
+             class="form-control date-range-picker"
+             (applyDaterangepicker)="dateSelected($event)"/>
     </div>
     <div class="form-group">
       <sh-select name="stockName"
+                 [options]="stockOptions"
+                 (selected)="searchChanged($event)"
                  [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
     </div>
-    <!--    <div class="form-group">
-       &lt;!&ndash; <label class="d-block">Others</label> &ndash;&gt;
-       <sh-select [(ngModel)]="GroupStockReportRequest.entity" name="entity" [options]="entityFilterDropDown$ | async"
-                  [placeholder]="'&#45;&#45; Others &#45;&#45;'" [multiple]="false" [ItemHeight]="33"></sh-select>
-     </div>
+    <div class="form-group" *ngIf="type === 'stock'">
+      <!--<label class="d-block">Others</label> -->
+      <sh-select name="entity" [options]="COMPARISON_FILTER"
+                 (selected)="compareChanged($event)"
+                 [placeholder]="'Select'" [multiple]="false"></sh-select>
+    </div>
+    <div class="form-group" *ngIf="type === 'person'">
+      <!--<label class="d-block">Others</label> -->
+      <sh-select name="entity" [options]="PERSON_FILTER"
+                 (selected)="compareChanged($event)"
+                 [placeholder]="'Select'" [multiple]="false"></sh-select>
+    </div>
+    <div class="form-group" *ngIf="type === 'stock'">
+      <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity" class="form-control"/>
+    </div>
+    <!--
      <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
        &lt;!&ndash; <label class="d-block">&nbsp;</label> &ndash;&gt;
        <sh-select [(ngModel)]="GroupStockReportRequest.value" name="value" [options]="valueFilterDropDown$ | async"
@@ -43,41 +56,37 @@
         <th class="text-center bdrR bdrB">Product Name</th>
         <th class="text-center bdrR bdrB">Sender's Name</th>
         <th class="text-center bdrR bdrB">Receiver's Name</th>
-        <th class="text-center bdrB">Qty</th>
-        <th class="text-center bdrB">Description</th>
-        <th class="text-center bdrB">Closing Balance</th>
+        <th class="text-center bdrR bdrB">Qty</th>
+        <th class="text-center bdrR bdrB">Description</th>
+        <th class="text-center bdrR bdrB">Closing Balance</th>
       </tr>
       </thead>
-      <tbody *ngIf="true">
-      <!--   <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
-           <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
-             <td class="bdrR" colspan="2">{{txn.stockName}}</td>
-             <td>{{txn.openingBalance?.quantity}} {{txn.openingBalance?.stockUnit}}</td>
-             <td class="text-right bdrR">{{txn.openingBalance?.amount}}</td>
-             <td>{{txn.inwards?.quantity}} {{txn.inwards?.stockUnit}}</td>
-             <td class="text-right bdrR">{{txn.inwards?.amount}}</td>
-             <td>{{txn.outwards?.quantity}} {{txn.outwards?.stockUnit}}</td>
-             <td class="text-right bdrR">{{txn.outwards?.amount}}</td>
-             <td>{{txn.closingBalance?.quantity}} {{txn.closingBalance?.stockUnit}}</td>
-             <td class="text-right">{{txn.closingBalance?.amount}}</td>
-           </ng-container>
-         </tr>-->
+      <tbody *ngIf="inventoryReport">
+      <tr *ngFor="let txn of inventoryReport.transactions">
+        <td class="text-center bdrR">{{txn.date}}</td>
+        <td class="bdrR">{{txn.stock.name}}</td>
+        <td class="bdrR">{{txn.sender.name}}</td>
+        <td class="bdrR">{{txn.receiver.name}}</td>
+        <td class="text-right bdrR">{{txn.quantity}}</td>
+        <td class="bdrR">{{txn.description}}</td>
+        <td class="text-right bdrR">{{txn.closingQuantity}}</td>
+      </tr>
       </tbody>
-      <tbody *ngIf="true">
+      <tbody *ngIf="!inventoryReport">
       <tr>
         <td colspan="12" class="text-center empty_table">
           <h1>No Report Found !!</h1>
         </td>
       </tr>
       </tbody>
-      <tfoot>
+      <tfoot *ngIf="inventoryReport">
       <tr>
         <td colspan="100%">
           <div class="alC">
             <pagination [maxSize]="5"
-                        [totalItems]="1"
+                        [totalItems]="inventoryReport.totalItems"
                         [itemsPerPage]="10"
-                        (pageChanged)="pageChanged($event)"
+                        (pageChanged)="applyFilters($event.page)"
                         class="pagination-sm"
                         [boundaryLinks]="true"
                         [rotate]="false"></pagination>

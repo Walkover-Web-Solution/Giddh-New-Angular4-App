@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 
 @Component({
   selector: 'person-list',
@@ -34,8 +35,8 @@ import { Component } from '@angular/core';
   // [routerLink]="[ 'add-group', grp.uniqueName ]"
   template: `
     <span>Person</span>
-    <ul class="list-unstyled stock-grp-list clearfix">
-      <li>Person 1</li>
+    <ul class="list-unstyled stock-grp-list clearfix" *ngIf="personList">
+      <li *ngFor="let p of personList"><a [routerLink]="['/pages','inventory-in-out','person',p.uniqueName]"> {{p.name}}</a></li>
       <!-- <li class="clearfix" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups">
          <a (click)="OpenGroup(grp,$event)" class="pull-left" [routerLink]="[ 'group', grp.uniqueName, 'stock-report' ]">
            <div [ngClass]="{'active': (activeGroupUniqueName$ | async) === grp.uniqueName}">{{grp.name}}</div>
@@ -53,5 +54,5 @@ import { Component } from '@angular/core';
   `
 })
 export class PersonListComponent {
-
+  @Input() public personList: InventoryUser[];
 }

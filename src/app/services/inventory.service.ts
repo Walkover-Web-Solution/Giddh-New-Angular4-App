@@ -487,13 +487,13 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', {}));
   }
 
-  public CreateInventoryEntry(entry: InventoryEntry): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
+  public CreateInventoryEntry(entry: InventoryEntry, reciever?: InventoryUser): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
       .post(this.config.apiUrl + INVENTORY_API.ENTRY.CREATE
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':inventoryUserUniqueName', encodeURIComponent(this.companyUniqueName)), entry
+        .replace(':inventoryUserUniqueName', encodeURIComponent((reciever && reciever.uniqueName) || this.companyUniqueName)), entry
       )
       .map((res) => {
         let data: BaseResponse<InventoryEntry, InventoryEntry> = res;
@@ -545,22 +545,34 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', {}));
   }
 
-  public GetInventoryReport(stockUniqueName: string, from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
+  public GetInventoryReport({stockUniqueName, from = '', to = '', page = 1, count = 10, reportFilters}: {
+    stockUniqueName: string, from: string, to: string, page: number, count: number, reportFilters?: InventoryFilter
+  }): Observable<BaseResponse<InventoryReport, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http
-      .get(this.config.apiUrl + INVENTORY_API.REPORT
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
-        .replace(':from', encodeURIComponent(from))
-        .replace(':to', encodeURIComponent(to))
-        .replace(':page', encodeURIComponent(page.toString()))
-        .replace(':count', encodeURIComponent(count.toString()))
-      ).map((res) => {
-        let data: BaseResponse<InventoryReport, string> = res;
-        data.request = '';
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
+    let url;
+    if (reportFilters && (reportFilters.senders || reportFilters.receivers)) {
+      url = this.config.apiUrl + INVENTORY_API.REPORT_ALL;
+    } else {
+      url = this.config.apiUrl + INVENTORY_API.REPORT;
+    }
+    url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+      .replace(':from', encodeURIComponent(from))
+      .replace(':to', encodeURIComponent(to))
+      .replace(':page', encodeURIComponent(page.toString()))
+      .replace(':count', encodeURIComponent(count.toString()));
+    let response;
+    if (reportFilters) {
+      response = this._http.post(url, reportFilters);
+    } else {
+      response = this._http.get(url);
+    }
+    return response.map((res) => {
+      let data: BaseResponse<InventoryReport, string> = res;
+      data.request = '';
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
   }
 
   public GetInventoryAllInOutReport(from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {

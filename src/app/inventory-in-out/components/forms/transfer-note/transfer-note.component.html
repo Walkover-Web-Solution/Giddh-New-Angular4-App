@@ -3,8 +3,89 @@
 </div>
 <div class="aside-body">
   <div class="body">
-    Transfer Note
-    <button type="button" class="btn btn-default" (click)="onCancel.emit()">Cancel</button>
-    <button type="button" class="btn btn-success">Save</button>
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-lg-6 form-group pdT2">
+          <label class="mrB1">Date</label>
+          <div class="input-group">
+            <input name="dateRange"
+                   formControlName="inventoryEntryDate" type="text"
+                   autocomplete="off"
+                   class="form-control"
+                   bsDatepicker
+                   [minDate]="today"
+                   [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+          </div>
+        </div>
+
+        <div class="col-lg-6 form-group pdT2">
+          <label class="mrB1">Product Name</label>
+          <div class="input-group">
+            <sh-select
+              [options]="stockListOptions"
+              [multiple]="false"
+              [placeholder]="'Select Product'"
+              (selected)="stockChanged($event)"
+            ></sh-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 form-group pdT2">
+          <label class="mrB1">Sender's Name</label>
+          <div class="input-group">
+            <sh-select
+              [options]="userListOptions"
+              [multiple]="false"
+              [placeholder]="'Select Receiver'"
+              (selected)="userChanged($event)"
+            ></sh-select>
+          </div>
+        </div>
+        <div class="col-lg-6 form-group pdT2">
+          <label class="mrB1">Receiver's Name</label>
+          <div class="input-group">
+            <sh-select
+              [options]="userListOptions"
+              [multiple]="false"
+              [placeholder]="'Select Receiver'"
+              (selected)="recieverUniqueName = $event.value"
+            ></sh-select>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-lg-4 form-group pdT2">
+          <label class="mrB1">Quantity</label>
+          <div class="input-group">
+            <input name="dateRange" type="text"
+                   (change)="quantityChanged($event)"
+                   class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-8 form-group pdT2">
+          <label class="mrB1">Description</label>
+          <div class="input-group">
+            <input name="dateRange" formControlName="description" type="text"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 form-group mrR1">
+          <label class="d-block">&nbsp;</label>
+          <button class="btn btn-sm" (click)="onCancel.emit($event)">Cancel</button>
+        </div>
+
+        <div class="col-lg-3 form-group mrR1">
+          <label class="d-block">&nbsp;</label>
+          <button class="btn btn-success btn-sm" [ladda]="isLoading" (click)="save()">Save</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

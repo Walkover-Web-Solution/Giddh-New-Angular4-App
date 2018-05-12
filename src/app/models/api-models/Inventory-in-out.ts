@@ -29,13 +29,13 @@ export interface InventoryEntry {
 
 export interface InventoryFilter {
   quantity?: number;
-  quantityGreaterThan?: string;
-  quantityLessThan?: string;
-  quantityEqualTo?: string;
-  includeSenders?: string;
-  senders?: any[];
-  includeReceivers?: string;
-  receivers?: any[];
+  quantityGreaterThan?: boolean;
+  quantityLessThan?: boolean;
+  quantityEqualTo?: boolean;
+  includeSenders?: boolean;
+  senders?: string[];
+  includeReceivers?: boolean;
+  receivers?: string[];
 }
 
 export interface InventoryReportTransactions {

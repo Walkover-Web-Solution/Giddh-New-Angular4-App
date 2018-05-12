@@ -20,16 +20,17 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   @Input() public stockList: IStocksItem[];
   @Input() public userList: InventoryUser[];
+  @Input() public isLoading: boolean;
   public stockListOptions: IOption[];
   public userListOptions: IOption[];
   public form: FormGroup;
   public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
   public mode: 'sender' | 'product' = 'sender';
+  public today = new Date();
 
   constructor(private _fb: FormBuilder) {
-
     this.form = this._fb.group({
-      inventoryEntryDate: ['', Validators.required],
+      inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
       transactions: this._fb.array([], Validators.required),
       description: ['']
     });
@@ -75,23 +76,29 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   public userChanged(option: IOption, index: number) {
     const items = this.form.get('transactions') as FormArray;
-    const inventoryUser = this.userList.find(p => p.uniqueName === option.value);
-    if (index) {
+    const user = this.userList.find(p => p.uniqueName === option.value);
+    const inventoryUser = user ? {uniqueName: user.uniqueName} : null;
+    if (index >= 0) {
       const control = items.at(index);
-      control.patchValue({...control.value, inventoryUser: {uniqueName: inventoryUser.uniqueName}});
+      control.patchValue({
+        ...control.value,
+        inventoryUser
+      });
     } else {
-      items.controls.forEach(c => c.patchValue({...c.value, inventoryUser: {uniqueName: inventoryUser.uniqueName}}));
+      items.controls.forEach(c => c.patchValue({...c.value, inventoryUser}));
     }
   }
 
   public stockChanged(option: IOption, index: number) {
     const items = this.form.get('transactions') as FormArray;
-    const stock = this.stockList.find(p => p.uniqueName === option.value);
-    if (index) {
+    const stockItem = this.stockList.find(p => p.uniqueName === option.value);
+    const stock = stockItem ? {uniqueName: stockItem.uniqueName} : null;
+    const stockUnit = stockItem ? {code: stockItem.stockUnit.code} : null;
+    if (index >= 0) {
       const control = items.at(index);
-      control.patchValue({...control.value, stock: {uniqueName: stock.uniqueName}, stockUnit: {code: stock.stockUnit.code}});
+      control.patchValue({...control.value, stock, stockUnit});
     } else {
-      items.controls.forEach(c => c.patchValue({...c.value, stock: {uniqueName: stock.uniqueName}, stockUnit: {code: stock.stockUnit.code}}));
+      items.controls.forEach(c => c.patchValue({...c.value, stock, stockUnit}));
     }
   }
 
