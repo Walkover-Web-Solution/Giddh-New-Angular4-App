@@ -5,6 +5,7 @@
     <ng-container *ngSwitchCase="'inward'">
       <inward-note [stockList]="stockList$ | async"
                    [userList]="userList$ | async"
+                   [isLoading]="isLoading"
                    (onSave)="onSave($event)"
                    (onCancel)="onCancel()"></inward-note>
     </ng-container>
@@ -12,11 +13,17 @@
       <outward-note
         [stockList]="stockList$ | async"
         [userList]="userList$ | async"
+        [isLoading]="isLoading"
         (onSave)="onSave($event)"
         (onCancel)="onCancel()"></outward-note>
     </ng-container>
     <ng-container *ngSwitchCase="'transfer'">
-      <transfer-note (onCancel)="onCancel()"></transfer-note>
+      <transfer-note
+        [stockList]="stockList$ | async"
+        [userList]="userList$ | async"
+        [isLoading]="isLoading"
+        (onSave)="onSave($event.entry,$event.user)"
+        (onCancel)="onCancel()"></transfer-note>
     </ng-container>
     <ng-container *ngSwitchCase="'createStock'">
 

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { INVENTORY_ENTRY_ACTIONS } from './inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { InventoryEntry } from '../../models/api-models/Inventory-in-out';
+import { InventoryEntry, InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class InventoryEntryActions {
   @Effect()
   public addNewEntry$: Observable<Action> = this.action$
     .ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY)
-    .switchMap((action: CustomActions) => this._inventoryService.CreateInventoryEntry(action.payload.entry))
+    .switchMap((action: CustomActions) => this._inventoryService.CreateInventoryEntry(action.payload.entry, action.payload.reciever))
     .map(response => this.addNewEntryResponse(response));
 
   @Effect()
@@ -112,10 +112,10 @@ export class InventoryEntryActions {
     };
   }
 
-  public addNewEntry(entry: InventoryEntry): CustomActions {
+  public addNewEntry(entry: InventoryEntry, reciever?: InventoryUser): CustomActions {
     return {
       type: INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY,
-      payload: {entry}
+      payload: {entry, reciever}
     };
   }
 

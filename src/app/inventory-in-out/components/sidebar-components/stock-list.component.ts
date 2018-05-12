@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 
 @Component({
   selector: 'stock-list',
@@ -9,19 +10,11 @@ import { Component } from '@angular/core';
   `],
   template: `
     <span>Stock</span>
-    <ul class="list-unstyled  stock-grp-list clearfix">
-      <li><a [routerLink]="['/pages','inventory-in-out','stock','asd']"> Stock 1</a></li>
-      <!--   <li class="clearfix" *ngFor="let item of Groups.stocks" >
-           <a (click)="OpenStock(item, $event)" class="pull-left">
-             <div [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">{{item.name}}</div>
-           </a>
-           <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
-             Edit
-           </button>
-         </li>-->
+    <ul class="list-unstyled  stock-grp-list clearfix" *ngIf="stockList">
+      <li *ngFor="let s of stockList"><a [routerLink]="['/pages','inventory-in-out','stock',s.uniqueName]"> {{s.name}}</a></li>
     </ul>
   `
 })
 export class StockListComponent {
-
+  @Input() public stockList: IStocksItem[];
 }
