@@ -551,7 +551,7 @@ export class InventoryService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url;
-    if (reportFilters && (reportFilters.senders || reportFilters.receivers)) {
+    if (reportFilters && ((reportFilters.senders && reportFilters.senders.length > 0) || (reportFilters.receivers && reportFilters.receivers.length > 0))) {
       url = this.config.apiUrl + INVENTORY_API.REPORT_ALL;
     } else {
       url = this.config.apiUrl + INVENTORY_API.REPORT;
