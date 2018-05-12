@@ -7,14 +7,6 @@ import { InventoryReportActions } from '../../../actions/inventory/inventory.rep
 import { InventoryFilter, InventoryReport } from '../../../models/api-models/Inventory-in-out';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
-const ENTITY_FILTER = [
-  {label: 'Inwards', value: 'inwards'},
-  {label: 'Outwards', value: 'outwards'},
-  {label: 'Opening Stock', value: 'Opening Stock'},
-  {label: 'Closing Stock', value: 'Closing Stock'}
-];
-
-
 @Component({
   selector: 'invetory-in-out-report',  // <home></home>
   templateUrl: './inventory-in-out-report.component.html',
@@ -161,7 +153,6 @@ export class InventoryInOutReportComponent {
   }
 
   public applyFilters(page: number, applyFilter: boolean = true) {
-    console.log(page);
     this._store.dispatch(this.inventoryReportActions
       .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
   }
