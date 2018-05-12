@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import moment from 'moment';
-
-const COMPARISON_FILTER = [
-  {label: 'Greater Than', value: 'Greater Than'},
-  {label: 'Less Than', value: 'Less than'},
-  {label: 'Greater Than or Equals', value: 'Greater than or Equals'},
-  {label: 'Less Than or Equals', value: 'Less than or Equals'},
-  {label: 'Equals', value: 'Equals'}
-];
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { InventoryReportActions } from '../../../actions/inventory/inventory.report.actions';
+import { InventoryFilter, InventoryReport } from '../../../models/api-models/Inventory-in-out';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 const ENTITY_FILTER = [
   {label: 'Inwards', value: 'inwards'},
@@ -16,10 +14,6 @@ const ENTITY_FILTER = [
   {label: 'Closing Stock', value: 'Closing Stock'}
 ];
 
-const VALUE_FILTER = [
-  {label: 'Quantity', value: 'quantity'},
-  {label: 'Value', value: 'Value'}
-];
 
 @Component({
   selector: 'invetory-in-out-report',  // <home></home>
@@ -79,4 +73,96 @@ export class InventoryInOutReportComponent {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  public inventoryReport: InventoryReport;
+  public filter: InventoryFilter = {};
+  public stockOptions: IOption[] = [];
+  public startDate: string = moment().subtract(30, 'days').format('DD-MM-YYYY');
+  public endDate: string = moment().format('DD-MM-YYYY');
+  public uniqueName: string;
+  public type: string;
+  public COMPARISON_FILTER = [
+    {label: 'Greater Then', value: '>'},
+    {label: 'Less Then', value: '<'},
+    {label: 'Greater Then or Equals', value: '>='},
+    {label: 'Less Then or Equals', value: '<='},
+    {label: 'Equals', value: '='}
+  ];
+  public PERSON_FILTER = [
+    {label: 'Sender', value: 'Sender'},
+    {label: 'Receiver', value: 'Receiver'}
+  ];
+
+  constructor(private  _router: ActivatedRoute,
+              private inventoryReportActions: InventoryReportActions,
+              private _store: Store<AppState>) {
+
+    this._router.params.subscribe(p => {
+      this.uniqueName = p.uniqueName;
+      this.type = p.type;
+      this.applyFilters(1, false);
+    });
+    this._store.select(p => p.inventoryInOutState.inventoryReport)
+      .subscribe(p => this.inventoryReport = p);
+    this._store.select(p => ({stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers}))
+      .subscribe(p => p.inventoryUsers && p.stocksList &&
+        (this.stockOptions = p.stocksList.results.map(r => ({label: r.name, value: r.uniqueName, additional: 'stock'}))
+          .concat(p.inventoryUsers.map(r => ({label: r.name, value: r.uniqueName, additional: 'person'})))));
+  }
+
+  public dateSelected(val) {
+    const {startDate, endDate} = val.picker;
+    this.startDate = startDate.format('DD-MM-YYYY');
+    this.endDate = endDate.format('DD-MM-YYYY');
+  }
+
+  public searchChanged(val: IOption) {
+    this.filter.senders =
+      this.filter.receivers = [];
+    this.uniqueName = val.value;
+    this.type = val.additional;
+  }
+
+  public compareChanged(option: IOption) {
+    switch (option.value) {
+      case '>':
+        this.filter.quantityGreaterThan = true;
+        this.filter.quantityEqualTo = false;
+        this.filter.quantityLessThan = false;
+        break;
+      case '<':
+        this.filter.quantityGreaterThan = false;
+        this.filter.quantityEqualTo = false;
+        this.filter.quantityLessThan = true;
+        break;
+      case '<=':
+        this.filter.quantityGreaterThan = false;
+        this.filter.quantityEqualTo = true;
+        this.filter.quantityLessThan = true;
+        break;
+      case '>=':
+        this.filter.quantityGreaterThan = true;
+        this.filter.quantityEqualTo = true;
+        this.filter.quantityLessThan = false;
+        break;
+      case '=':
+        this.filter.quantityGreaterThan = false;
+        this.filter.quantityEqualTo = true;
+        this.filter.quantityLessThan = false;
+        break;
+      case 'Sender':
+        this.filter.senders = [this.uniqueName];
+        this.filter.receivers = [];
+        break;
+      case 'Receiver':
+        this.filter.senders = [];
+        this.filter.receivers = [this.uniqueName];
+        break;
+    }
+  }
+
+  public applyFilters(page: number, applyFilter: boolean = true) {
+    console.log(page);
+    this._store.dispatch(this.inventoryReportActions
+      .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
+  }
 }

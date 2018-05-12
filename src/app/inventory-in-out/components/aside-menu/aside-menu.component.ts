@@ -64,6 +64,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   public userList$: Observable<InventoryUser[]>;
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   public view = '';
+  public isLoading: boolean;
 
   constructor(private _store: Store<AppState>,
               private _inventoryAction: InventoryAction,
@@ -83,7 +84,15 @@ export class AsideMenuComponent implements OnInit, OnChanges {
       .select(p => p.inventory.stocksList && p.inventory.stocksList.results);
 
     this.userList$ = this._store
-      .select(p => p.inventoryInOutState.inventoryUsers && p.inventoryInOutState.inventoryUsers);
+      .select(p => p.inventoryInOutState.inventoryUsers);
+
+    this._store
+      .select(p => p.inventoryInOutState.entrySuccess)
+      .subscribe(p => p && this.closeAsidePane(p));
+
+    this._store
+      .select(p => p.inventoryInOutState.entryInProcess)
+      .subscribe(p => this.isLoading = p);
   }
 
   public onCancel() {
@@ -95,8 +104,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     this.view = '';
   }
 
-  public onSave(entry: InventoryEntry) {
-    console.log(entry);
-    this._store.dispatch(this._inventoryEntryAction.addNewEntry(entry));
+  public onSave(entry: InventoryEntry, reciever?: InventoryUser) {
+    this._store.dispatch(this._inventoryEntryAction.addNewEntry(entry, reciever));
   }
 }

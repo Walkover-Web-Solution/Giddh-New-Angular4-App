@@ -9,8 +9,7 @@ import { InventoryInOutReportComponent } from './components/inventory-in-out-rep
       {
         path: '', component: InventoryInOutComponent,
         children: [
-          {path: 'stock/:stockUniqueName', component: InventoryInOutReportComponent},
-
+          {path: ':type/:uniqueName', component: InventoryInOutReportComponent},
         ]
       }
 
