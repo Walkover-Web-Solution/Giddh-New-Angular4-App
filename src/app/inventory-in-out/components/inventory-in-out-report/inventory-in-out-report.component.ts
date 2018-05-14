@@ -124,6 +124,7 @@ export class InventoryInOutReportComponent {
   }
 
   public compareChanged(option: IOption) {
+    this.filter = {};
     switch (option.value) {
       case '>':
         this.filter.quantityGreaterThan = true;
