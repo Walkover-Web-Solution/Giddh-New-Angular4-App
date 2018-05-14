@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy, SimpleChanges, OnChanges, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -98,7 +98,7 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
     this.groupService.GetGroupSubgroups(parentGrp).subscribe(res => {
       let result: IOption[] = [];
       if (res.status === 'success' && res.body.length > 0) {
-        let sundryGrp = _.find(res.body, { uniqueName: findItem});
+        let sundryGrp = _.find(res.body, {uniqueName: findItem});
         if (sundryGrp) {
           let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
           _.forEach(flatGrps, (grp: GroupResponse) => {
@@ -113,8 +113,8 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnChanges(s: SimpleChanges) {
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
-      this.getGroups('currentliabilities', 'sundrycreditors' );
-    } else if (s && s['isPurchaseInvoice'] && !s['isPurchaseInvoice'].currentValue){
+      this.getGroups('currentliabilities', 'sundrycreditors');
+    } else if (s && s['isPurchaseInvoice'] && !s['isPurchaseInvoice'].currentValue) {
       this.getGroups('currentassets', 'sundrydebtors');
     }
   }
