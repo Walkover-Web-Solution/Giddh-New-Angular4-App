@@ -195,10 +195,11 @@ export class LedgerService {
       .catch((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, {accountUniqueName}));
   }
 
-  public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any): Observable<BaseResponse<string, ExportLedgerRequest>> {
+  public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<string, ExportLedgerRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + LEDGER_API.EXPORT_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+    let API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
+    return this._http.post(API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
       .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort)), body)
       .map((res) => {
@@ -290,9 +291,8 @@ export class LedgerService {
 }
 
 public GetCurrencyRate(baseCurrency): Observable<BaseResponse<any, any>> {
-    // let apiKey = '78b916b2e521a0a4731adaac';
-    // return this._http.get('https://r.sokt.io/t/QVPTY3w3r4P9raj8XCQE/javascript-sample-currency-converter?amount=10&convert_from=USD&convert_to=INR').map((res) => {
-    return this._http.get('https://api.fixer.io/latest?base=' + baseCurrency).map((res) => {
+  this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + 'company/' + this.companyUniqueName + '/curreny-converter/' + baseCurrency).map((res) => {
       let data: any = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));

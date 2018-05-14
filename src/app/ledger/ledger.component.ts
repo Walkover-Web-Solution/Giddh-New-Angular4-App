@@ -539,15 +539,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getBankTransactions() {
-    if (this.advanceSearchRequest.accountUniqueName && this.advanceSearchRequest.from) {
+    // && this.advanceSearchRequest.from
+    if (this.advanceSearchRequest.accountUniqueName) {
       this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
-    } else {
-      this._toaster.warningToast('Something went wrong please reload page');
     }
+    // else {
+    //   this._toaster.warningToast('Something went wrong please reload page');
+    // }
   }
 
   public selectBankTxn(txn: TransactionVM) {
@@ -997,5 +999,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onCancelSelectInvoiceModal() {
     this.bulkActionGenerateVoucherModal.hide();
+  }
+
+  public openSelectFilePopup(fileInput: any) {
+    if (!this.entryUniqueNamesForBulkAction.length) {
+      this._toaster.errorToast('Please select at least one entry.', 'Error');
+      return;
+    }
+    fileInput.click();
   }
 }

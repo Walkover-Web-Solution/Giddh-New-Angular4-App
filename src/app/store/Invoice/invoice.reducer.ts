@@ -297,6 +297,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       if (res.status === 'success') {
         let form = res.queryString.form;
         newState.settings.invoiceSettings = form.invoiceSettings;
+        newState.settings.companyCashFreeSettings = form.companyCashFreeSettings;
         return Object.assign({}, state, newState);
       }
       return state;
