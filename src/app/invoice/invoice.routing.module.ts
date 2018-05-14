@@ -43,7 +43,7 @@ import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-en
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
-  apiKey: 'AIzaSyA9S7DY0khhn9JYcfyRWb1F6Rd2rwtF_mA'
+  apiKey: 'AIzaSyAAvwBeHl0uuVSEVeZ3bTylwIkRGKCFvdI'
 };
 const INVOICE_ROUTES: Routes = [
   {

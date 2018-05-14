@@ -458,6 +458,7 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
   public SignupWithPasswdRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithPasswdRequest)
     .switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload))
