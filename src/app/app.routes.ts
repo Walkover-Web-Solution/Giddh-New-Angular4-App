@@ -9,7 +9,6 @@ import { DummyComponent } from './dummy.component';
 import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
-import { CheckIfPublicPath } from './decorators/checkIfPublicPath';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 
 export const ROUTES: Routes = [
@@ -39,7 +38,8 @@ export const ROUTES: Routes = [
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
   { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
   { path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full' },
-  { path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full' },
+  { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
+  {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -64,7 +64,8 @@ export const ROUTES: Routes = [
       { path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
       { path: 'contact', loadChildren: './contact/contact.module#ContactModule' },
-      { path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
+      { path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule' },
+      {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
