@@ -143,10 +143,14 @@ export class InventoryInOutReportComponent {
         break;
       case 'Sender':
         this.filter.senders = [this.uniqueName];
+        this.filter.includeReceivers = false;
+        this.filter.includeSenders = true;
         this.filter.receivers = [];
         break;
       case 'Receiver':
         this.filter.senders = [];
+        this.filter.includeSenders = false;
+        this.filter.includeReceivers = true;
         this.filter.receivers = [this.uniqueName];
         break;
     }
