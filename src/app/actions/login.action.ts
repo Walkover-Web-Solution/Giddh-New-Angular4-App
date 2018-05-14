@@ -1,11 +1,11 @@
 import { ICurrencyResponse } from './../models/api-models/Company';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { CompanyActions } from './company.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
@@ -21,7 +21,7 @@ import { GeneralService } from '../services/general.service';
 import { sortBy } from 'app/lodash-optimized';
 import { AccountService } from 'app/services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
+import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 
 @Injectable()
 export class LoginActions {

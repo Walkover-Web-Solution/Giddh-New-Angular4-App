@@ -1,7 +1,7 @@
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, EventEmitter } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -10,7 +10,7 @@ import { DownloadLedgerRequest, IELedgerResponse, TransactionsResponse } from '.
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy, each } from '../lodash-optimized';
+import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
@@ -40,7 +40,7 @@ import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAc
 import { Subject } from 'rxjs/Subject';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { UploadOutput, UploadInput, UploaderOptions } from 'ngx-uploader';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';

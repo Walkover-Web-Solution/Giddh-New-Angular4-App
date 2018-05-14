@@ -3,14 +3,15 @@
         <div class="btn-group" dropdown>
             <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
         {{selectedPageLabel}}
-        <span class="caret" *ngIf="!isPurchaseInvoice"></span>
+              <span class="caret" *ngIf="!isPurchaseInvoice"></span>
       </button>
             <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <ng-container *ngFor="let item of pageList">
-                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" [hidden]="!isPurchaseInvoice && item.value === 'Purchase'">
-                        <a class="dropdown-item cp">{{ item.additional?.label }}</a>
-                    </li>
-                </ng-container>
+              <ng-container *ngFor="let item of pageList">
+                <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
+                    [hidden]="!isPurchaseInvoice && item.value === 'Purchase'">
+                  <a class="dropdown-item cp">{{ item.additional?.label }}</a>
+                </li>
+              </ng-container>
             </ul>
         </div>
         <!-- <label>Select Type</label> -->
@@ -27,7 +28,7 @@
                         <div class="form-group noMarg">
                             <label>Customer Name</label>
                             <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
-                            <!--  -->
+                          <!--  -->
                             <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
                                 [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)">
@@ -303,8 +304,12 @@
                             </td>
                             <td style="width:102px">
                                 <div class="">
-                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" disabled maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
-                                    <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" disabled maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
+                                  <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" disabled maxLength="10"
+                                         placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}"
+                                         class="form-control text-right" [(ngModel)]="transaction.hsnNumber"/>
+                                  <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" disabled maxLength="10"
+                                         placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}"
+                                         class="form-control text-right" [(ngModel)]="transaction.sacNumber"/>
                                 </div>
                             </td>
                             <!-- show/hide fields -->
@@ -561,26 +566,34 @@
                     <div class="pull-right pr">
                         <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
 
-                        <span class="" *ngIf="isPurchaseInvoice">
-                            <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)" class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c</button>
-                            <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default">Save</button>
+                      <span class="" *ngIf="isPurchaseInvoice">
+                            <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                    class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c</button>
+                            <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                    class="btn btn-default">Save</button>
                         </span>
 
-                        <span class="" *ngIf="!isPurchaseInvoice">
+                      <span class="" *ngIf="!isPurchaseInvoice">
 
-                            <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)" class="btn btn-default" *ngIf="isCustomerSelected">Generate {{selectedPageLabel}} &amp; Update A/c</button>
+                            <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                    class="btn btn-default" *ngIf="isCustomerSelected">Generate {{selectedPageLabel}} &amp; Update A/c</button>
 
                             <div class="btn-group" dropdown [dropup]="true">
 
-                                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default">Generate {{selectedPageLabel}}
+                                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                        class="btn btn-default">Generate {{selectedPageLabel}}
   </button>
-                                <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
+                                <button id="button-split" type="button" dropdownToggle
+                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                                        aria-controls="dropdown-split">
     <span class="caret"></span>
                         <span class="sr-only">Split button!</span>
                         </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                            aria-labelledby="button-basic">
                             <li role="menuitem">
-                                <a class="dropdown-item cp" (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
+                                <a class="dropdown-item cp"
+                                   (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
                             </li>
                             <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
                                 <a class="dropdown-item cp">Generate & Recurring</a>
@@ -589,9 +602,9 @@
                     </div>
                     </span>
 
-                    <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default" [disabled]="!isCustomerSelected">Generate {{selectedPageLabel}} {{toggleActionText}}</button> -->
-                    <!--<button type="submit" class="btn btn-success">Generate {{selectedPageLabel}}</button>-->
-                </div>
+                      <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default" [disabled]="!isCustomerSelected">Generate {{selectedPageLabel}} {{toggleActionText}}</button> -->
+                      <!--<button type="submit" class="btn btn-success">Generate {{selectedPageLabel}}</button>-->
+                    </div>
                 </div>
             </section>
         </section>
@@ -599,7 +612,9 @@
 </form>
 <!-- open account aside -->
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
-<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"></aside-menu-account>
+<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+                    (closeAsideEvent)="toggleAccountAsidePane($event)"
+                    [isPurchaseInvoice]="isPurchaseInvoice"></aside-menu-account>
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 <app-aside-recurring-entry [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
