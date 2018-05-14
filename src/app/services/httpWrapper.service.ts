@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
@@ -71,8 +71,15 @@ export class HttpWrapperService {
     }
     // options.withCredentials = true;
     options.headers['cache-control'] = 'no-cache';
-    options.headers['Content-Type'] = 'application/json';
-    options.headers['Accept'] = 'application/json';
+    if (!options.headers['Content-Type']) {
+      options.headers['Content-Type'] = 'application/json';
+    }
+    if (options.headers['Content-Type'] === 'multipart/form-data') {
+      delete options.headers['Content-Type'];
+    }
+    if (!options.headers['Accept']) {
+      options.headers['Accept'] = 'application/json';
+    }
     options.headers = new HttpHeaders(options.headers);
     return options;
   }

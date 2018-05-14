@@ -26,7 +26,7 @@
                 </div>
                 <div class="clearfix bdrB ">
                     <div class="row">
-                      <div class="col-xs-5 lh34"><label>Use custom invoice</label></div>
+                        <div class="col-xs-5 lh34"><label>Use custom invoice</label></div>
                         <div class="col-xs-7 pdT1">
                             <div class="form-group clearfix">
                                 <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left" name="useCustomInvoiceNumber" />
@@ -45,18 +45,16 @@
                     </div>
                 </div>
 
-              <div class="clearfix bdrB ">
-                <div class="row">
-                  <div class="col-xs-5 lh34"><label>Default payment gateway</label></div>
-                  <div class="col-xs-7 pdT1">
-                    <div class="form-group clearfix max150">
-                      <sh-select placeholder="Payment Gateway" name="paymentGateway"
-                                 [(ngModel)]="invoiceSetting.defaultPaymentGateway"
-                                 [options]="paymentGatewayList"></sh-select>
+                <div class="clearfix bdrB ">
+                    <div class="row">
+                        <div class="col-xs-5 lh34"><label>Default payment gateway</label></div>
+                        <div class="col-xs-7 pdT1">
+                            <div class="form-group clearfix max150">
+                                <sh-select placeholder="Payment Gateway" name="paymentGateway" [(ngModel)]="invoiceSetting.defaultPaymentGateway" [options]="paymentGatewayList"></sh-select>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
                 <div class="clearfix bdrB pdT1">
                     <div class="row">
                         <div class="col-xs-5 lh34"><label>Send alert</label></div>
@@ -103,27 +101,27 @@
                 <div class="clearfix bdrB pdT1">
                     <div class="row">
                         <div class="col-xs-5">
-                          <label>Auto paid</label>
+                            <label>Auto paid</label>
                         </div>
-                      <div class="col-xs-7 form-group">
-                        <input type="checkbox" [(ngModel)]="isAutoPaidOn" name="invoiceAutopaid"/>
-                      </div>
+                        <div class="col-xs-7 form-group">
+                            <input type="checkbox" [(ngModel)]="isAutoPaidOn" name="invoiceAutopaid" />
+                        </div>
                     </div>
                 </div>
-              <div class="clearfix bdrB pdT1">
-                <div class="row">
-                  <div class="col-xs-5">
-                    <label>Invoice lock date</label>
-                  </div>
-                  <div class="col-xs-7 form-group">
-                    <input type="text" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" />
-                    <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                      <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
+                <div class="clearfix bdrB pdT1">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <label>Invoice lock date</label>
+                        </div>
+                        <div class="col-xs-7 form-group">
+                            <input type="text" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" />
+                            <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                                <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
+                            </div>
+                            <!-- <input type="text" class="form-control w100" [ngModel]="invoiceSetting.lockDate" name="invoiceLockDate" bsDatepicker autocomplete="off"/> -->
+                        </div>
                     </div>
-                    <!-- <input type="text" class="form-control w100" [ngModel]="invoiceSetting.lockDate" name="invoiceLockDate" bsDatepicker autocomplete="off"/> -->
-                  </div>
                 </div>
-              </div>
                 <div class="clearfix bdrB pdT1">
                     <div class="row">
                         <div class="col-xs-5"><label>Show seal according to status of payment</label></div>
@@ -161,17 +159,16 @@
                     </div>
                 </div>
 
-              <div class="clearfix pdT1">
-                <div class="row">
-                  <div class="col-xs-5"><label>Create Virtual Accounts For Customers</label></div>
-                  <div class="col-xs-7">
-                    <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
-                      <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors"
-                             class="pull-left" name="autoCreateVirtualAccountsForDebtors"/>
+                <div class="clearfix pdT1">
+                    <div class="row">
+                        <div class="col-xs-5"><label>Create Virtual Accounts For Customers</label></div>
+                        <div class="col-xs-7">
+                          <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
+                                <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" class="pull-left" name="autoCreateVirtualAccountsForDebtors" />
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
                 <div class="form-group mrT3 ">
                     <button class="btn btn-default " (click)="UpdateForm(invoiceSetting) ">Save</button>
                     <button class="btn btn-default " (click)="resetForm() ">Cancel</button>
