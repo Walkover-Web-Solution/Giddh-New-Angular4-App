@@ -15,6 +15,9 @@
                    bsDatepicker
                    [minDate]="today"
                    [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+            <span
+              [hidden]="!form.get('inventoryEntryDate').errors?.required"
+              class="text-danger">Please select Date.</span>
           </div>
         </div>
 
@@ -27,6 +30,9 @@
               [placeholder]="'Select Product'"
               (selected)="stockChanged($event)"
             ></sh-select>
+            <span
+              [hidden]="!form.get('transactions')?.controls[0].controls['stock']?.errors?.required"
+              class="text-danger">Please select Product Name.</span>
           </div>
         </div>
       </div>
@@ -38,9 +44,12 @@
             <sh-select
               [options]="userListOptions"
               [multiple]="false"
-              [placeholder]="'Select Receiver'"
+              [placeholder]="'Select Sender'"
               (selected)="userChanged($event)"
             ></sh-select>
+            <span
+              [hidden]="!form.get('transactions').controls[0].controls['inventoryUser']?.errors?.required"
+              class="text-danger">Please select Sender.</span>
           </div>
         </div>
         <div class="col-lg-6 form-group pdT2">
@@ -52,6 +61,8 @@
               [placeholder]="'Select Receiver'"
               (selected)="recieverUniqueName = $event.value"
             ></sh-select>
+            <span [hidden]="recieverUniqueName"
+                  class="text-danger">Please select Receiver.</span>
           </div>
         </div>
       </div>
@@ -64,6 +75,9 @@
             <input name="dateRange" type="text"
                    (change)="quantityChanged($event)"
                    class="form-control">
+            <span
+              [hidden]="!form.get('transactions').controls[0].controls['quantity'].errors?.required"
+              class="text-danger">Please enter Quantity.</span>
           </div>
         </div>
         <div class="col-lg-8 form-group pdT2">

@@ -91,7 +91,16 @@ export class InventoryInOutReportComponent {
     this._router.params.subscribe(p => {
       this.uniqueName = p.uniqueName;
       this.type = p.type;
-      this.applyFilters(1, false);
+      this.filter = {};
+      if (this.type === 'person') {
+        this.filter.includeSenders = true;
+        this.filter.includeReceivers = true;
+        this.filter.receivers = [this.uniqueName];
+        this.filter.senders = [this.uniqueName];
+        this.applyFilters(1, true);
+      } else {
+        this.applyFilters(1, false);
+      }
     });
     this._store.select(p => p.inventoryInOutState.inventoryReport)
       .subscribe(p => this.inventoryReport = p);

@@ -80,7 +80,6 @@ export class TransferNoteComponent implements OnChanges {
   }
 
   public quantityChanged(event) {
-    console.log(event);
     const items = this.form.get('transactions') as FormArray;
     items.controls.forEach(c => c.patchValue({...c.value, quantity: event.target.value}));
 
