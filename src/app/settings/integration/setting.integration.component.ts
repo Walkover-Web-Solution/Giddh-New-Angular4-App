@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import { EmailKeyClass, RazorPayClass, SmsKeyClass, CashfreeClass } from '../../models/api-models/SettingsIntegraion';
+import { CashfreeClass, EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -107,10 +107,10 @@ export class SettingIntegrationComponent implements OnInit {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.accounts$ = Observable.of(accounts);
@@ -264,6 +264,6 @@ export class SettingIntegrationComponent implements OnInit {
    * DeletePaymentGateway
    */
   public deletePaymentGateway() {
-      this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
-    }
+    this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
+  }
 }
