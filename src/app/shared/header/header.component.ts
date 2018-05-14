@@ -219,6 +219,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+    this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
     this.user$.subscribe((u) => {
@@ -562,5 +563,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.navigationModalVisible = false;
     this.navigationModal.hide();
     // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
+  }
+
+  private getElectronAppVersion() {
+    this.authService.GetElectronAppVersion().subscribe((res) => {
+      console.log('the res is :', res);
+    });
   }
 }
