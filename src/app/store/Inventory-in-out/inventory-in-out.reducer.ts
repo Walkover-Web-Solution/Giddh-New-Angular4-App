@@ -16,7 +16,7 @@ export interface InventoryInOutState {
 
 const initialState: InventoryInOutState = {
   stocksList: null,
-  inventoryUsers: null,
+  inventoryUsers: [],
   inventoryReport: null,
   entryInProcess: false,
   entrySuccess: false
