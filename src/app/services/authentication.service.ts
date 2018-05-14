@@ -287,15 +287,14 @@ export class AuthenticationService {
       let args: any = { headers: {} };
       args.headers['cache-control'] = 'no-cache';
       args.headers['Content-Type'] = 'application/xml';
-      args.headers['Accept'] = 'application/xml';
+      // args.headers['Accept'] = 'application/xml';
       args.headers = new HttpHeaders(args.headers);
       return this._httpClient.get('https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/latest.yml', {
-        headers: args.headers
+        headers: args.headers,
+        responseType: 'text'
       }).map((res) => {
-        alert('res');
-        console.log('res in service is :', res);
-        let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
-        return data;
+        // let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<any, any>;
+        return res;
       }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args));
   }
 
