@@ -165,7 +165,7 @@ export class SettingsIntegrationActions {
         this.toasty.clearAllToaster();
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast(data.message, '');
+        this.toasty.successToast(data.body, '');
       }
       return { type: 'EmptyAction' };
     });
@@ -308,6 +308,26 @@ export class SettingsIntegrationActions {
       } else {
         // console.log(data);
         this.toasty.successToast(data.body, '');
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public UpdateAutoCollectUser$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload))
+    .map(response => this.UpdateAutoCollectUserResponse(response));
+
+  @Effect()
+  public UpdateAutoCollectUserResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        // console.log(data);
+        // this.toasty.successToast(data.body, '');
       }
       return { type: 'EmptyAction' };
     });

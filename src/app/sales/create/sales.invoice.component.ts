@@ -1,4 +1,4 @@
-import { AfterViewInit, animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { AfterViewInit, animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep, forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -134,8 +134,8 @@ const THEAD_ARR_READONLY = [
   ]
 })
 
-export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
-
+export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+  @Input() public isPurchaseInvoice: boolean = false;
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
@@ -436,7 +436,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
       this.customerAcList$ = Observable.of(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForDeb, 'label'));
-    } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value) {
+    } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
       this.customerAcList$ = Observable.of(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
@@ -498,8 +498,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isCustomerSelected = false;
   }
 
-  public triggerSubmitInvoiceForm(f: NgForm) {
-    this.updateAccount = true;
+  public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
+    this.updateAccount = isUpdate;
     this.onSubmitInvoiceForm(f);
   }
 
@@ -784,18 +784,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
                 txn.accountName = o.name;
                 txn.accountUniqueName = o.uniqueName;
-                if (o.hsnNumber) {
-                  txn.hsnNumber = o.hsnNumber;
-                  txn.hsnOrSac = 'hsn';
-                } else {
-                  txn.hsnNumber = null;
-                }
-                if (o.sacNumber) {
-                  txn.sacNumber = o.sacNumber;
-                  txn.hsnOrSac = 'sac';
-                } else {
-                  txn.sacNumber = null;
-                }
+                // if (o.hsnNumber) {
+                //   txn.hsnNumber = o.hsnNumber;
+                //   txn.hsnOrSac = 'hsn';
+                // } else {
+                //   txn.hsnNumber = null;
+                // }
+                // if (o.sacNumber) {
+                //   txn.sacNumber = o.sacNumber;
+                //   txn.hsnOrSac = 'sac';
+                // } else {
+                //   txn.sacNumber = null;
+                // }
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
                   txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
@@ -824,6 +824,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
                 // toggle stock related fields
                 this.toggleStockFields(txn);
+                txn.sacNumber = null;
+                txn.hsnNumber = null;
+                if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+                  txn.hsnNumber = txn.stockDetails.hsnNumber;
+                  txn.hsnOrSac = 'hsn';
+                }
+                if (txn.stockDetails && txn.stockDetails.sacNumber) {
+                  txn.sacNumber = txn.stockDetails.sacNumber;
+                  txn.hsnOrSac = 'sac';
+                }
                 return txn;
               } else {
                 txn.isStockTxn = false;
@@ -899,6 +909,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.invFormData.voucherDetails.customerName = item.label;
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
+      this.invFormData.accountDetails.name = '';
     }
   }
 
@@ -980,7 +991,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
-    entry.taxSum = _.sumBy(entry.taxes, function (o) {
+    entry.taxSum = _.sumBy(entry.taxes, function(o) {
       return o.amount;
     });
   }
@@ -1022,7 +1033,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function (o) {
+    entry.discountSum = _.sumBy(entry.discounts, function(o) {
       return o.amount;
     });
   }
@@ -1096,8 +1107,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.forceClear$ = Observable.of({status: true});
       this.isCustomerSelected = false;
     }
-    // if (!this.invFormData.voucherDetails.customerName && !this.invFormData.voucherDetails.customerName.label) {
+  }
 
-    // }
+  public ngOnChanges(s: SimpleChanges) {
+    if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
+      this.pageChanged('Purchase', 'Purchase');
+    }
   }
 }

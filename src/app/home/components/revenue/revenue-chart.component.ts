@@ -9,12 +9,13 @@ import { HomeActions } from '../../../actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
+import * as _ from 'lodash';
 import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
 
 @Component({
   selector: 'revenue-chart',
-  templateUrl: 'revenue-chart.component.html'
+  templateUrl: 'revenue-chart.component.html',
+  styleUrls: ['../../home.component.scss']
 })
 
 export class RevenueChartComponent implements OnInit, OnDestroy {
@@ -31,6 +32,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   public lastYearAccounts: IChildGroups[] = [];
   public activeYearAccountsRanks: number[] = [];
   public lastYearAccountsRanks: number[] = [];
+  public activeYearTotal: number = 0;
+  public lastYearTotal: number = 0;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -143,12 +146,14 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     });
     this.activeYearAccountsRanks = this.accountStrings.map(p => p.activeYear);
     this.lastYearAccountsRanks = this.accountStrings.map(p => p.lastYear);
+    this.activeYearTotal = _.sum(this.activeYearAccountsRanks);
+    this.lastYearTotal = _.sum(this.lastYearAccountsRanks);
 
     this.options = {
       colors: ['#c45022', '#d37c59'],
       chart: {
         type: 'column',
-        height: '320px'
+        height: '256px'
       },
       title: {
         text: ''
@@ -158,13 +163,15 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       },
       xAxis: {
         categories: this.accountStrings.map(p => p.name),
-        crosshair: true
+        crosshair: true,
       },
       yAxis: {
-        min: 0,
+        // min: 0,
         title: {
           text: ''
-        }
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
       },
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -175,8 +182,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         useHTML: true
       },
       plotOptions: {
+        bar: {
+          groupPadding: 0,
+          pointPadding: 0
+        },
         column: {
-          pointPadding: 0.2,
+          pointPadding: 0,
           borderWidth: 0
         }
       },
@@ -191,7 +202,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       }],
       credits: {
         enabled: false
-      }
+      },
+    legend: {
+      enabled: false
+    }
     };
   }
 
