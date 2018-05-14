@@ -89,7 +89,7 @@ export class FinancialYearComponent implements OnInit {
       this.setYearRange();
       if (o) {
         // Arpit: Sagar told me to remove this filter
-        // this.financialYearObj = _.cloneDeep(o);
+        this.financialYearObj = _.cloneDeep(o);
         // let yearOptions = _.cloneDeep(this.yearOptions);
         // o.financialYears.forEach((fYear) => {
         //   let year = moment(fYear.financialYearStarts, GIDDH_DATE_FORMAT).year();
