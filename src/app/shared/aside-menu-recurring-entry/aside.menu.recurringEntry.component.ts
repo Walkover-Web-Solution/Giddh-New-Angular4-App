@@ -85,7 +85,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    // console.log(changes);
     if (changes.voucherNumber) {
       this.form.controls.voucherNumber.patchValue(this.voucherNumber);
     }
@@ -148,7 +148,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public saveRecurringInvoice() {
-    console.log(this.form.value);
+    // console.log(this.form.value);
     if (this.form.valid && !this.isLoading) {
       this.isLoading = true;
       const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
