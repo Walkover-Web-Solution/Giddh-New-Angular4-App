@@ -1,11 +1,9 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from './../../../actions/accounts.actions';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
-import { ShareAccountRequest, AccountSharedWithResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../../services/account.service';
-import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/index';
@@ -27,8 +25,9 @@ export class ShareLedgerComponent implements OnInit {
   public isCopied: boolean = false;
   public activeAccountSharedWith: any[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private _ledgerService: LedgerService, private _accountService: AccountService,
-    private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
+              private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
   }
 
   public ngOnInit() {
