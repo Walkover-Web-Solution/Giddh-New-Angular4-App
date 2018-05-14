@@ -18,7 +18,7 @@ import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/logi
 export class AuthenticationService {
 
   constructor(private errorHandler: ErrorHandler,
-    public _Http: HttpClient,
+    public _httpClient: HttpClient,
     public _http: HttpWrapperService,
     public _router: Router,
     private _generalService: GeneralService,
@@ -113,7 +113,7 @@ export class AuthenticationService {
     args.headers['Accept'] = 'application/json';
     args.headers['Access-Token'] = token;
     args.headers = new HttpHeaders(args.headers);
-    return this._Http.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE, {
+    return this._httpClient.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE, {
       headers: args.headers,
       responseType: 'json'
     }).map((res) => {
@@ -132,7 +132,7 @@ export class AuthenticationService {
     args.headers['User-Email'] = model.email;
     args.headers = new HttpHeaders(args.headers);
 
-    return this._Http.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_LINKEDIN, {
+    return this._httpClient.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_LINKEDIN, {
       headers: args.headers,
       responseType: 'json'
     }).map((res) => {
@@ -280,6 +280,22 @@ export class AuthenticationService {
         let data = res;
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+  }
+
+  // Get Electron App Version
+  public GetElectronAppVersion() {
+      let args: any = { headers: {} };
+      args.headers['cache-control'] = 'no-cache';
+      args.headers['Content-Type'] = 'application/xml';
+      // args.headers['Accept'] = 'application/xml';
+      args.headers = new HttpHeaders(args.headers);
+      return this._httpClient.get('https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/latest.yml', {
+        headers: args.headers,
+        responseType: 'text'
+      }).map((res) => {
+        // let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<any, any>;
+        return res;
+      }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args));
   }
 
 }
