@@ -1,4 +1,4 @@
-import { AfterViewInit, animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep, forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -991,7 +991,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
-    entry.taxSum = _.sumBy(entry.taxes, function(o) {
+    entry.taxSum = _.sumBy(entry.taxes, function (o) {
       return o.amount;
     });
   }
@@ -1033,7 +1033,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function(o) {
+    entry.discountSum = _.sumBy(entry.discounts, function (o) {
       return o.amount;
     });
   }

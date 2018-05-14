@@ -39,7 +39,6 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { SettingsBranchService } from './settings.branch.service';
 import { SettingsTagService } from './settings.tag.service';
 import { ContactService } from './contact.service';

@@ -1,13 +1,11 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
-import * as _ from '../../lodash-optimized';
 import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
-import { GroupResponse } from '../../models/api-models/Group';
 import { IOption } from '../../theme/ng-select/option.interface';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
@@ -65,8 +63,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private groups = [
-    { label: 'Sundry Debtors', value: 'sundrydebtors'},
-    { label: 'Sundry Creditors', value: 'sundrycreditors'}
+    {label: 'Sundry Debtors', value: 'sundrydebtors'},
+    {label: 'Sundry Creditors', value: 'sundrycreditors'}
   ];
 
   constructor(
