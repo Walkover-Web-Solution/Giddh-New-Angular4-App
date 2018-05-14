@@ -163,8 +163,6 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       xAxis: {
         categories: this.accountStrings.map(p => p.name),
         crosshair: true,
-        min: 0,
-        max: 2,
       },
       yAxis: {
         min: 0,
