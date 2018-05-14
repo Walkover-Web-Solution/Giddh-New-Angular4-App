@@ -44,9 +44,11 @@
     </div>
     <div class="sticky-footer pd2">
         <!--<button class="btn btn-default">Preview</button>-->
-        <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate()">Save</button>
-        <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate()">Update</button>
-        <button class="btn btn-danger" (click)="onCloseTemplateModal()">Close</button>
+        <div class="pull-left">
+            <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate()">Save</button>
+            <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate()">Update</button>
+            <button class="btn btn-danger" (click)="onCloseTemplateModal()">Close</button>
+        </div>
     </div>
 </div>
 
