@@ -546,9 +546,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
-    } else {
-      this._toaster.warningToast('Something went wrong please reload page');
     }
+    // else {
+    //   this._toaster.warningToast('Something went wrong please reload page');
+    // }
   }
 
   public selectBankTxn(txn: TransactionVM) {

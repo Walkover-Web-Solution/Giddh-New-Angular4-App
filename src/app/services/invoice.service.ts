@@ -9,8 +9,8 @@ import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequ
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { GeneralService } from './general.service';
-import { IServiceConfigArgs, ServiceConfig } from './service.config';
-
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 declare var _: any;
 @Injectable()
 export class InvoiceService {
@@ -18,7 +18,7 @@ export class InvoiceService {
   private user: UserDetails;
   private companyUniqueName: string;
   private _: any;
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _httpClient: HttpClient,  private _generalService: GeneralService,
     @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this._ = config._;
     _ = config._;
@@ -113,7 +113,7 @@ export class InvoiceService {
   public GetGeneratedInvoicePreview(accountUniqueName: string, invoiceNumber: string): Observable<BaseResponse<PreviewInvoiceResponseClass, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':invoiceNumber', invoiceNumber))
+    return this._http.post(this.config.apiUrl + INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), { invoiceNumber })
       .map((res) => {
         let data: BaseResponse<PreviewInvoiceResponseClass, string> = res;
         data.request = invoiceNumber;
@@ -194,11 +194,22 @@ export class InvoiceService {
    * URL:: company/:companyUniqueName/invoices/:invoiceUniqueName
    */
   public DeleteInvoice(invoiceNumber: string): Observable<BaseResponse<string, string>> {
+    let sessionId = this._generalService.sessionId;
+    let args: any = { headers: {} };
+    if (sessionId) {
+      args.headers['Session-Id'] = sessionId;
+    }
+    args.headers['Content-Type'] = 'application/json';
+    args.headers['Accept'] = 'application/json';
+    args.headers = new HttpHeaders(args.headers);
+
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + INVOICE_API.DELETE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber))
+    return this._httpClient.request('delete', this.config.apiUrl + INVOICE_API.DELETE_INVOICE.replace(':companyUniqueName', this.companyUniqueName), { body : {invoiceNumber}, headers: args.headers })
       .map((res) => {
-        let data: BaseResponse<string, string> = res;
+        // let data: BaseResponse<string, string> = res;
+        let data: any = res;
+        console.log('the data is :', data);
         data.request = invoiceNumber;
         data.queryString = { invoiceNumber };
         return data;

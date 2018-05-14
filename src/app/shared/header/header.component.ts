@@ -149,6 +149,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public selectedNavigation: string = '';
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   public navigationModalVisible: boolean = false;
+  public apkVersion: string;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -217,6 +218,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+    this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
     this.user$.subscribe((u) => {
@@ -560,5 +562,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.navigationModalVisible = false;
     this.navigationModal.hide();
     // setTimeout(() => this.navigationShSelect.showListFirstTime = false, 200);
+  }
+
+  private getElectronAppVersion() {
+    this.authService.GetElectronAppVersion().subscribe((res: string) => {
+      let version = res.split('files')[0];
+      let versNum = version.split(' ')[1];
+      this.apkVersion = versNum;
+    });
   }
 }
