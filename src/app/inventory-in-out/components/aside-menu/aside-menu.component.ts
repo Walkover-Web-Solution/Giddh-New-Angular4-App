@@ -7,6 +7,7 @@ import { InventoryUsersActions } from '../../../actions/inventory/inventory.user
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryEntry, InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
   selector: 'aside-menu',
@@ -69,6 +70,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   constructor(private _store: Store<AppState>,
               private _inventoryAction: InventoryAction,
               private _inventoryEntryAction: InventoryEntryActions,
+              private _generalService: GeneralService,
               private _inventoryUserAction: InventoryUsersActions,
   ) {
     this._store.dispatch(this._inventoryAction.GetStock());
@@ -84,7 +86,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
       .select(p => p.inventory.stocksList && p.inventory.stocksList.results);
 
     this.userList$ = this._store
-      .select(p => p.inventoryInOutState.inventoryUsers);
+      .select(p => p.inventoryInOutState.inventoryUsers.filter(p => p.uniqueName !== this._generalService.companyUniqueName));
 
     this._store
       .select(p => p.inventoryInOutState.entrySuccess)

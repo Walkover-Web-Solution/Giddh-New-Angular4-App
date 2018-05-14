@@ -45,7 +45,7 @@
         <th class="text-center bdrR bdrB">Receiver's Name</th>
         <th class="text-center bdrR bdrB">Qty</th>
         <th class="text-center bdrR bdrB">Description</th>
-        <th class="text-center bdrR bdrB">Closing Balance</th>
+        <th class="text-center bdrR bdrB" *ngIf="type ==='stock'">Closing Balance</th>
       </tr>
       </thead>
       <tbody *ngIf="inventoryReport">
@@ -56,7 +56,7 @@
         <td class="bdrR">{{txn.receiver.name}}</td>
         <td class="text-right bdrR">{{txn.quantity}}</td>
         <td class="bdrR">{{txn.description}}</td>
-        <td class="text-right bdrR">{{txn.closingQuantity}}</td>
+        <td class="text-right bdrR" *ngIf="type ==='stock'">{{txn.closingQuantity}}</td>
       </tr>
       </tbody>
       <tbody *ngIf="!inventoryReport">
