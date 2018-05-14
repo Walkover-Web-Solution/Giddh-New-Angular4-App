@@ -14,7 +14,8 @@ import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'networth-chart',
-  templateUrl: 'networth-chart.component.html'
+  templateUrl: 'networth-chart.component.html',
+  styleUrls: ['../../home.component.scss']
 })
 
 export class NetworthChartComponent implements OnInit {
@@ -34,12 +35,19 @@ export class NetworthChartComponent implements OnInit {
     credits: {
       enabled: false
     },
-    series: []
+    series: [],
+    yAxis: {
+      gridLineWidth: 0,
+      minorGridLineWidth: 0,
+      title: {
+        text: ''
+      },
+    }
   };
   public yearlyOption = {
     colors: ['#c45022'],
     chart: {
-      type: 'line', height: '320px'
+      type: 'line', height: '280px', width: 900
     },
     title: {
       text: ''
@@ -50,7 +58,17 @@ export class NetworthChartComponent implements OnInit {
     credits: {
       enabled: false
     },
-    series: []
+    series: [],
+    yAxis: {
+      gridLineWidth: 0,
+      minorGridLineWidth: 0,
+      title: {
+        text: ''
+      },
+    },
+    legend: {
+      enabled: false
+    }
   };
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -61,12 +79,12 @@ export class NetworthChartComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
   private networthData: any;
-  private currentchart: string = 'Monthly';
+  private currentchart: string = 'Yearly';
   private AllSeries: IndividualSeriesOptionsExtension[];
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.options = this.monthlyOption;
+    this.options = this.yearlyOption;
   }
 
   public togle(str: string) {

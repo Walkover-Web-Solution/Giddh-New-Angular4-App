@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { Router } from '@angular/router';
 
 @Component({
   styles: [`
@@ -35,8 +36,10 @@ import { StateDetailsRequest } from '../models/api-models/Company';
   templateUrl: './invoice.component.html'
 })
 export class InvoiceComponent implements OnInit {
+  public isRecurringSelected: boolean = false;
   constructor(private store: Store<AppState>,
-              private companyActions: CompanyActions
+              private companyActions: CompanyActions,
+              private router: Router
   ) {
     //
   }
@@ -49,5 +52,15 @@ export class InvoiceComponent implements OnInit {
     stateDetailsRequest.lastState = 'invoice';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    this.router.events.subscribe((event: any) => {
+        if (event && event.url && event.url.includes('recurring')) {
+          this.isRecurringSelected = true;
+        } else {
+          this.isRecurringSelected = false;
+        }
+    });
+    if (this.router.routerState.snapshot.url.includes('recurring')) {
+      this.isRecurringSelected = true;
+    }
   }
 }
