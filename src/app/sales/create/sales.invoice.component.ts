@@ -1,4 +1,4 @@
-import { AfterViewInit, animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { AfterViewInit, animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep, forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -134,8 +134,8 @@ const THEAD_ARR_READONLY = [
   ]
 })
 
-export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
-
+export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+  @Input() public isPurchaseInvoice: boolean = false;
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
@@ -436,7 +436,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
       this.customerAcList$ = Observable.of(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForDeb, 'label'));
-    } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value) {
+    } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
       this.customerAcList$ = Observable.of(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
@@ -1107,8 +1107,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.forceClear$ = Observable.of({status: true});
       this.isCustomerSelected = false;
     }
-    // if (!this.invFormData.voucherDetails.customerName && !this.invFormData.voucherDetails.customerName.label) {
+  }
 
-    // }
+  public ngOnChanges(s: SimpleChanges) {
+    if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
+      this.pageChanged('Purchase', 'Purchase');
+    }
   }
 }
