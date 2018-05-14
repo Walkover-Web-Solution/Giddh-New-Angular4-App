@@ -74,8 +74,8 @@ export class FinancialYearComponent implements OnInit {
   }
 
   public setYearRange() {
-    let endYear = moment().subtract(1, 'year').year();
-    let startYear = moment().subtract(7, 'year').year();
+    let endYear = moment().year(); // moment().subtract(1, 'year').year();
+    let startYear = moment().subtract(7, 'year').year(); // moment().subtract(7, 'year').year();
     let yearArray = _.range(startYear, endYear);
     this.yearOptions = yearArray.map(q => {
       return { label: q, value: q };
@@ -88,16 +88,17 @@ export class FinancialYearComponent implements OnInit {
     this.store.select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
       this.setYearRange();
       if (o) {
+        // Arpit: Sagar told me to remove this filter
         this.financialYearObj = _.cloneDeep(o);
-        let yearOptions = _.cloneDeep(this.yearOptions);
-        o.financialYears.forEach((fYear) => {
-          let year = moment(fYear.financialYearStarts, GIDDH_DATE_FORMAT).year();
-          let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
-          if (yearIndx !== -1) {
-            yearOptions.splice(yearIndx, 1);
-          }
-        });
-        this.yearOptions = _.cloneDeep(yearOptions);
+        // let yearOptions = _.cloneDeep(this.yearOptions);
+        // o.financialYears.forEach((fYear) => {
+        //   let year = moment(fYear.financialYearStarts, GIDDH_DATE_FORMAT).year();
+        //   let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
+        //   if (yearIndx !== -1) {
+        //     yearOptions.splice(yearIndx, 1);
+        //   }
+        // });
+        // this.yearOptions = _.cloneDeep(yearOptions);
       } else if (_.isNull(o)) {
         this.store.dispatch(this._companyActions.RefreshCompanies());
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());

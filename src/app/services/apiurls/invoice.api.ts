@@ -28,6 +28,6 @@ export const INVOICE_API_2 = {
   GENERATE_INVOICE: URI_ONLY_FOR_INVOICE + 'generate',
   PREVIEW_INVOICE: URI_ONLY_FOR_INVOICE + 'preview',
   DOWNLOAD_INVOICE: URI_ONLY_FOR_INVOICE + 'download',
-  GENERATED_INVOICE_PREVIEW: URI_ONLY_FOR_INVOICE + ':invoiceNumber/preview',
+  GENERATED_INVOICE_PREVIEW: PART_A + 'accounts/:accountUniqueName/invoice/preview',
   GET_INVOICE_TEMPLATE_DETAILS: PART_A + 'templates/:templateUniqueName'
 };

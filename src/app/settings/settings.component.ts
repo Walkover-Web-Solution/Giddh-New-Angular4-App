@@ -12,6 +12,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -28,12 +30,15 @@ export class SettingsComponent implements OnInit {
   @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
 
   public isUserSuperAdmin: boolean = false;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
     private companyActions: CompanyActions,
     private settingsProfileActions: SettingsProfileActions,
-    private _permissionDataService: PermissionDataService) {
+    private _permissionDataService: PermissionDataService,
+    public _route: ActivatedRoute,
+  ) {
       this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
     }
   public ngOnInit() {
@@ -44,7 +49,12 @@ export class SettingsComponent implements OnInit {
     stateDetailsRequest.lastState = 'settings';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    this.selectTab(0);
+    // this.selectTab(0);
+    this._route.queryParams.takeUntil(this.destroyed$).subscribe((val) => {
+      if (val && val.tab && val.tabIndex) {
+        this.selectTab(val.tabIndex);
+      }
+    });
   }
 
   public selectTab(id: number) {
