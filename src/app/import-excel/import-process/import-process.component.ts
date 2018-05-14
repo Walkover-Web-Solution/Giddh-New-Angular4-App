@@ -50,6 +50,11 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     this._importData.data.items.forEach(p => p.setImport = value);
   }
 
+  public save() {
+    const data = {...this.importData.data, items: this.importData.data.items.filter(p => p.setImport)};
+    this.onSubmit.emit({...this.importData, data});
+  }
+
   private prepareData(value: ImportExcelRequestData) {
     this.dataModel = Object.keys(value.mappings.mappingInfo)
       .map(field => ({

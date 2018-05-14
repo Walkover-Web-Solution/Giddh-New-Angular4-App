@@ -1,4 +1,4 @@
-import { AfterViewInit, animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep, forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
