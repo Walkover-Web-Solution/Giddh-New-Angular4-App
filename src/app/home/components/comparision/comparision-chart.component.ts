@@ -15,7 +15,8 @@ import { CHART_CALLED_FROM, API_TO_CALL } from '../../../actions/home/home.const
 
 @Component({
   selector: 'compare-chart',
-  templateUrl: 'comparision-chart.component.html'
+  templateUrl: 'comparision-chart.component.html',
+  styleUrls: ['../../home.component.scss']
 })
 
 export class ComparisionChartComponent implements OnInit {
@@ -204,11 +205,11 @@ export class ComparisionChartComponent implements OnInit {
       }
       if (p.name === 'Revenue') {
         p.data = this.revenueData;
-        p.color = '#d37c59';
+        p.color = '#c45022';
       }
       if (p.name === 'Profit/Loss') {
         p.data = this.profitLossData;
-        p.color = '#aeaec4';
+        p.color = '#28283c';
       }
       if (p.name === 'LY Expense') {
         p.data = this.expenseDataLY;
@@ -216,16 +217,16 @@ export class ComparisionChartComponent implements OnInit {
       }
       if (p.name === 'LY Revenue') {
         p.data = this.revenueDataLY;
-        p.color = '#c45022';
+        p.color = '#d37c59';
       }
       if (p.name === 'LY Profit/Loss') {
         p.data = this.profitLossDataLY;
-        p.color = '#28283c';
+        p.color = '#aeaec4';
       }
     });
     this.options = {
       chart: {
-        height: '320px',
+        height: '273px',
         width: 900,
         zoomType: 'x'
       },
@@ -235,7 +236,9 @@ export class ComparisionChartComponent implements OnInit {
       yAxis: {
         title: {
           text: ''
-        }
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
       },
       xAxis: {
         categories: this.monthArray
@@ -244,12 +247,13 @@ export class ComparisionChartComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
+        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' },
+        enabled: false
       },
       credits: {
         enabled: false
       },
-      series: this.AllSeries.filter(p => p.visible)
+      series: this.AllSeries.filter(p => p.visible),
     };
   }
 }

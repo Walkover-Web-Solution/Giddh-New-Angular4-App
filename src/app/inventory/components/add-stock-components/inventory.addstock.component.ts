@@ -345,6 +345,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
     this.manageInProcess$.subscribe(s => {
       if (s.isOpen && !s.isGroup && !s.isUpdate) {
+        //
       }
     });
   }
@@ -666,6 +667,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     stockObj.isFsStock = formObj.isFsStock;
+    stockObj.taxes = formObj.taxes;
 
     if (stockObj.isFsStock) {
       formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
