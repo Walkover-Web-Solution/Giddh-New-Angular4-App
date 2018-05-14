@@ -10,111 +10,111 @@
 
                     <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}">
                         <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-                        <li [checkPermission]="['MENU', 'DASHBOARD']">
-                            <a [routerLink]="['home']">
-                                <span class="navico-dashboard"></span>
-                                <span class="label">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li [checkPermission]="['MENU', 'DASHBOARD']">
+                                <a [routerLink]="['home']">
+                                    <span class="navico-dashboard"></span>
+                                    <span class="label">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
+                            <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
                             <a [routerLink]="['/pages/sales']">
                                 <span class="navico-sales"></span>
                                 <span class="label">Contacts</span>
                             </a>
                         </li> -->
 
-                        <li [checkPermission]="['MENU', 'INVOICE']">
-                            <a [routerLink]="['/pages/sales']">
-                                <span class="navico-sales"></span>
-                                <span class="label">Sales</span>
-                            </a>
-                        </li>
-                        <li [checkPermission]="['MENU', 'INVOICE']">
-                            <a [routerLink]="['/pages/invoice']">
-                                <span class="navico-invoice"></span>
-                                <span class="label">Invoice</span>
-                            </a>
-                        </li>
-                        <!-- *ngIf="userIsCompanyUser" -->
-                        <li [checkPermission]="['MENU', 'LEDGER']">
-                            <a [routerLink]="['/pages/accounting-voucher']">
-                                <span class="navico-journal"></span>
-                                <span class="label">Journal Voucher</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li [checkPermission]="['MENU', 'INVOICE']">
+                                <a [routerLink]="['/pages/sales']">
+                                    <span class="navico-sales"></span>
+                                    <span class="label">Sales</span>
+                                </a>
+                            </li>
+                            <li [checkPermission]="['MENU', 'INVOICE']">
+                                <a [routerLink]="['/pages/invoice']">
+                                    <span class="navico-invoice"></span>
+                                    <span class="label">Invoice</span>
+                                </a>
+                            </li>
+                            <!-- *ngIf="userIsCompanyUser" -->
+                            <li [checkPermission]="['MENU', 'LEDGER']">
+                                <a [routerLink]="['/pages/accounting-voucher']">
+                                    <span class="navico-journal"></span>
+                                    <span class="label">Journal Voucher</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <li [checkPermission]="['MENU', 'LEDGER']">
-                            <a [routerLink]="['/pages/daybook']">
-                                <span class="navico-daybook"></span>
-                                <span class="label">Daybook</span>
-                            </a>
-                        </li>
+                            <li [checkPermission]="['MENU', 'LEDGER']">
+                                <a [routerLink]="['/pages/daybook']">
+                                    <span class="navico-daybook"></span>
+                                    <span class="label">Daybook</span>
+                                </a>
+                            </li>
 
-                        <li [checkPermission]="['MENU', 'REPORT']">
-                            <a [routerLink]="['trial-balance-and-profit-loss']">
-                                <span class="navico-tbpl"></span>
-                                <span class="label">TB, P&L and B/S</span>
-                            </a>
-                        </li>
+                            <li [checkPermission]="['MENU', 'REPORT']">
+                                <a [routerLink]="['trial-balance-and-profit-loss']">
+                                    <span class="navico-tbpl"></span>
+                                    <span class="label">TB, P&L and B/S</span>
+                                </a>
+                            </li>
 
-                        <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
-                            <a [routerLink]="['audit-logs']">
-                                <span class="navico-log"></span>
-                                <span class="label">Audit Logs</span>
-                            </a>
-                        </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
-                            <a [routerLink]="['/pages/purchase/invoice']">
-                                <span class="navico-tax"></span>
-                                <span class="label">Taxes</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
+                                <a [routerLink]="['audit-logs']">
+                                    <span class="navico-log"></span>
+                                    <span class="label">Audit Logs</span>
+                                </a>
+                            </li>
+                            <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                                <a [routerLink]="['/pages/purchase/invoice']">
+                                    <span class="navico-tax"></span>
+                                    <span class="label">Taxes</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                            <a [routerLink]="['/inventory']">
-                                <span class="navico-inventory"></span>
-                                <span class="label">Inventory</span>
-                            </a>
-                        </li>
-                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                            <a [routerLink]="['manufacturing']">
-                                <span class="navico-manufacturing"></span>
-                                <span class="label">Manufacturing</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                                <a [routerLink]="['/inventory']">
+                                    <span class="navico-inventory"></span>
+                                    <span class="label">Inventory</span>
+                                </a>
+                            </li>
+                            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                                <a [routerLink]="['manufacturing']">
+                                    <span class="navico-manufacturing"></span>
+                                    <span class="label">Manufacturing</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
-                        <li [checkPermission]="['MENU', 'SEARCH']">
-                            <a [routerLink]="['search']">
-                                <span class="navico-search"></span>
-                                <span class="label">Search</span>
-                            </a>
-                        </li>
-                        <li class="dmLi" [hidden]="!userIsSuperUser">
-                            <a [routerLink]="['permissions']">
-                                <span class="navico-permission"></span>
-                                <span class="label">Permissions</span>
-                            </a>
-                        </li>
-                        <li [checkPermission]="['MENU', 'SETTINGS']">
-                            <a [routerLink]="['/pages/settings']">
-                                <span class="navico-setting"></span>
-                                <span class="label">Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/pages/contact']">
-                                <span class="navico-daybook"></span>
-                                <span class="label">Contacts</span>
-                            </a>
-                        </li>
+                            <li [checkPermission]="['MENU', 'SEARCH']">
+                                <a [routerLink]="['search']">
+                                    <span class="navico-search"></span>
+                                    <span class="label">Search</span>
+                                </a>
+                            </li>
+                            <li class="dmLi" [hidden]="!userIsSuperUser">
+                                <a [routerLink]="['permissions']">
+                                    <span class="navico-permission"></span>
+                                    <span class="label">Permissions</span>
+                                </a>
+                            </li>
+                            <li [checkPermission]="['MENU', 'SETTINGS']">
+                                <a [routerLink]="['/pages/settings']">
+                                    <span class="navico-setting"></span>
+                                    <span class="label">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/pages/contact']">
+                                    <span class="navico-daybook"></span>
+                                    <span class="label">Contacts</span>
+                                </a>
+                            </li>
 
 
-                        <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
+                            <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
                                     <a href="">
                                         <span class="navico-recurring"></span>
                                         <span class="label">Recurring Entry</span>
@@ -401,10 +401,9 @@
                                 <h6>Downloads</h6>
                                 <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i class="fa fa-android"></i> Android</a></li>
                                 <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i class="fa fa-apple"></i> ios</a></li>
-                                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
-                                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
-                                <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz" target="_blank" title="linux app"><i class="fa fa-linux"></i> Linux</a></li>
-
+                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app+Setup+{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                                <!-- <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app-{{apkVersion}}.tar.gz" target="_blank" title="linux app"><i class="fa fa-linux"></i> Linux</a></li> -->
                             </ul>
                         </li>
                         <li role="separator" class="divider" style="width:100%"></li>
@@ -452,8 +451,8 @@
 <div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
     <div class="modal-dialog modal-small">
         <div class="modal-content">
-            <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation" placeholder="Search for page..."
-                [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
+            <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation"
+                placeholder="Search for page..." [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
             <div *ngIf="navigationModalVisible" class="shortcuts">
                 <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
             </div>
