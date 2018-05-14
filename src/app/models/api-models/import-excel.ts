@@ -48,7 +48,7 @@ export interface DataResult {
 export interface ResponseData {
   numRows: number;
   totalRows: number;
-  items: DataResult;
+  items: DataItem[];
 }
 
 export interface RequestData {
