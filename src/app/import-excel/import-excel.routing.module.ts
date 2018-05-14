@@ -13,7 +13,7 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
           {path: 'select', component: ImportTypeSelectComponent},
           {path: 'group', component: ImportWizardComponent},
           {path: 'account', component: ImportWizardComponent},
-          {path: 'trial-balance', component: ImportWizardComponent},
+          {path: 'entries', component: ImportWizardComponent},
         ]
       }
     ])
