@@ -37,6 +37,7 @@ import { SettingsBranchActions } from './settings/branch/settings.branch.action'
 import { SessionActions } from './session.action';
 import { SettingsTagActions } from './settings/tag/settings.tag.actions';
 import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
+import { ImportExcelActions } from './import-excel/import-excel.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -77,7 +78,8 @@ import { SettingsTriggersActions } from './settings/triggers/settings.triggers.a
       SettingsFinancialYearActions,
       SettingsPermissionActions,
       SessionActions,
-      SettingsTriggersActions
+      SettingsTriggersActions,
+      ImportExcelActions
     ])
   ],
   exports: [EffectsModule]
