@@ -2,7 +2,7 @@ import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Component, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks, CashFreeSetting } from '../../models/interfaces/invoice.setting.interface';
+import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

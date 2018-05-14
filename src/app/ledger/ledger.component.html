@@ -176,7 +176,8 @@
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
                                                             <td class="col-xs-1 text-center">
-                                                                <input type="checkbox" (click)="selectEntryForBulkAction($event, item)" /> 
+                                                              <input type="checkbox"
+                                                                     (click)="selectEntryForBulkAction($event, item)"/>
                                                             </td>
                                                             <td class="col-xs-2">
                                                                 <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
@@ -257,8 +258,11 @@
         <section class="ico-btn text-right mrT1">
             <button class="btn btn-xs" (click)="performBulkAction('delete')" container="body" tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i></button>
             <button class="btn btn-xs" (click)="performBulkAction('generate')" container="body" tooltip="Generate Invoice" [placement]="'top'"><i class="fa fa-file-text-o"></i></button>
-            <button class="btn btn-xs" (click)="openSelectFilePopup(BulkUploadfileInput);" container="body" tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>  
-            <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">          
+          <button class="btn btn-xs" (click)="openSelectFilePopup(BulkUploadfileInput);" container="body"
+                  tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>
+          <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                 id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+                 (uploadOutput)="onUploadOutput($event)">
         </section>
 
         <!--account table-->
@@ -296,7 +300,7 @@
                 <table class="width100">
                     <tbody>
                         <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">
-                            <th class="col-xs-1"></th>                            
+                          <th class="col-xs-1"></th>
                             <td class="col-xs-2"></td>
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
@@ -309,7 +313,9 @@
                             <td colspan="4" class="col-xs-12">&nbsp;</td>
                         </tr>
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
-                            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/></td>                            
+                          <td class="col-xs-1 text-center"><input type="checkbox"
+                                                                  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
+                          </td>
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
                                 <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
@@ -424,7 +430,9 @@
                         </tr>
 
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
-                            <td class="col-xs-1 text-center"><input type="checkbox"  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/></td>                            
+                          <td class="col-xs-1 text-center"><input type="checkbox"
+                                                                  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
+                          </td>
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
                                 <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
@@ -649,7 +657,7 @@
     <div class="modal-content">
       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
       <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq"
-        (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+                     (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
     </div>
 </div>
 </div>
@@ -658,7 +666,7 @@
 <div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
+      <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
       <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
         (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
     </div>
