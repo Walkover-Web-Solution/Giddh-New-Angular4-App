@@ -8,9 +8,9 @@ import { BsDropdownDirective } from 'ngx-bootstrap';
   selector: 'search-filter',  // <home></home>
   templateUrl: './search-filter.component.html',
   styles: [`
-  .custom-select .select_drop{
-    right: 9px;
-  }
+    .custom-select .select_drop {
+      right: 9px;
+    }
   `]
 })
 export class SearchFilterComponent implements OnInit, OnDestroy {
@@ -21,8 +21,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   @Output() public openSmsDialog = new EventEmitter();
   @ViewChild('filterDropdown') public filterDropdown: BsDropdownDirective;
   public queryTypes = [
-    { name: 'Closing Balance', uniqueName: 'closingBalance' },
-    { name: 'Opening Balance', uniqueName: 'openingBalance' },
+    {name: 'Closing Balance', uniqueName: 'closingBalance'},
+    {name: 'Opening Balance', uniqueName: 'openingBalance'},
     { name: 'Cr. total', uniqueName: 'creditTotal' },
     { name: 'Dr. total', uniqueName: 'debitTotal' }
   ];

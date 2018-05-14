@@ -1,7 +1,6 @@
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
-import { saveAs } from 'file-saver';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../models/api-models/Ledger';
@@ -23,7 +22,7 @@ export class ExportGroupLedgerComponent implements OnInit {
   public emailData: string = '';
   public fileType: string = 'pdf';
   public order: string = 'asc';
-  public dateRange: { from: string, to: string } = { from: '', to: '' };
+  public dateRange: { from: string, to: string } = {from: '', to: ''};
 
   public datePickerOptions: any = {
     locale: {
@@ -77,7 +76,7 @@ export class ExportGroupLedgerComponent implements OnInit {
   }
 
   public exportLedger() {
-    this.closeExportGroupLedgerModal.emit({ from: this.dateRange.from, to: this.dateRange.to, type: this.emailTypeSelected,  fileType: this.fileType, order: this.order });
+    this.closeExportGroupLedgerModal.emit({from: this.dateRange.from, to: this.dateRange.to, type: this.emailTypeSelected, fileType: this.fileType, order: this.order});
   }
 
   public onSelectDateRange(ev) {
