@@ -1,5 +1,5 @@
 import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
@@ -13,7 +13,8 @@ import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, Group
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+
 declare var _: any;
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
@@ -209,9 +210,9 @@ export class GroupService {
       return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
         let data: BaseResponse<any, string> = res;
         data.request = groupUniqueName;
-        data.queryString = { groupUniqueName };
+        data.queryString = {groupUniqueName};
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName }));
+      }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, {groupUniqueName}));
     } else {
       return Observable.empty();
     }

@@ -20,6 +20,7 @@ import * as fromSales from './Sales/sales.reducer';
 import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
 import * as fromDayBook from './Daybook/daybook.reducer';
 import * as fromUserSession from './General/session.reducer';
+import * as fromImportExcel from './import-excel/import-excel.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -46,6 +47,7 @@ export interface AppState {
   invoicePurchase: fromInvoicePurchase.InvoicePurchaseState;
   daybook: fromDayBook.Daybook;
   userLoggedInSessions: fromUserSession.SessionState;
+  importExcel: fromImportExcel.ImportExcelState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -71,5 +73,6 @@ export const reducers: ActionReducerMap<AppState> = {
   ledger: fromLedger.ledgerReducer,
   invoicePurchase: fromInvoicePurchase.InvoicePurchaseReducer,
   daybook: fromDayBook.daybookReducer,
-  userLoggedInSessions: fromUserSession.SessionReducer
+  userLoggedInSessions: fromUserSession.SessionReducer,
+  importExcel: fromImportExcel.importExcelReducer
 };

@@ -203,9 +203,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       credits: {
         enabled: false
       },
-    legend: {
-      enabled: false
-    }
+      legend: {
+        enabled: false
+      }
     };
   }
 

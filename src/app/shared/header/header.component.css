@@ -10,7 +10,7 @@
     background: #1a1a1a;
     width: 46px;
     transition: width .1s ease;
-    padding: 0;
+  padding: 0;
     padding-bottom: 120px;
 }
 
@@ -81,59 +81,59 @@
 }
 
 :host ::ng-deep #universal_search .form-control {
-    margin-bottom: 0;
-    border: none!important;
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
-    padding: 20px 20px !important;
-    height: auto;
-    font-size: 1.75rem;
-    font-weight: 700;
+  margin-bottom: 0;
+  border: none !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  padding: 20px 20px !important;
+  height: auto;
+  font-size: 1.75rem;
+  font-weight: 700;
 }
 
-:host ::ng-deep #universal_search virtual-scroll .scrollable-content .item>a {
-    border: 0 !important;
-    padding: 6px 20px;
+:host ::ng-deep #universal_search virtual-scroll .scrollable-content .item > a {
+  border: 0 !important;
+  padding: 6px 20px;
 }
 
 :host ::ng-deep #universal_search .menu {
-    position: relative;
-    box-shadow: none;
+  position: relative;
+  box-shadow: none;
 }
 
 .universal_modal .modal-content {
-    border: 0;
-    border-radius: 0;
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
-    border-bottom-left-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
+  border: 0;
+  border-radius: 0;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
 }
 
 .universal_modal .shortcuts {
-    background: #f9f9f9;
-    border-top: none;
-    margin: 0;
-    padding: 12px 16px 12px 20px;
-    color: #717274;
-    font-size: 12px;
-    border-bottom-left-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
+  background: #f9f9f9;
+  border-top: none;
+  margin: 0;
+  padding: 12px 16px 12px 20px;
+  color: #717274;
+  font-size: 12px;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
 }
 
 .universal_modal .form-group {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .universal_modal.modal.in .modal-dialog {
-    transform: translateY(100px) !important;
+  transform: translateY(100px) !important;
 }
 
-:host ::ng-deep .left_fixed_header perfect-scrollbar>.ps.ps--scrolling-y>.ps__rail-y {
-    opacity: 0;
+:host ::ng-deep .left_fixed_header perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y {
+  opacity: 0;
 }
 
-:host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-top) .ps-indicator-top,
- :host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
-    background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
+:host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top) .ps-indicator-top,
+:host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
+  background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
 }
