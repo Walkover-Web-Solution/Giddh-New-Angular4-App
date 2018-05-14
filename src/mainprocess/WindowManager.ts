@@ -1,5 +1,4 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
-import * as path from 'path';
 import AppUpdater from './AppUpdater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
@@ -33,8 +32,8 @@ export default class WindowManager {
             // to stay active until the user quits explicitly with Cmd + Q
             if (process.platform === 'darwin') {
                 // reopen initial window
-                // this.openWindows();
-                app.quit();
+              // this.openWindows();
+              app.quit();
             } else {
                 app.quit();
             }
@@ -84,7 +83,7 @@ export default class WindowManager {
         }
 
         // tslint:disable-next-line:no-unused-expression
-        new AppUpdater();
+      new AppUpdater();
     }
 
     public focusFirstWindow(): void {

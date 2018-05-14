@@ -1,0 +1,30 @@
+<!-- upload And Map Content start-->
+<div class="uploadAndMapContent">
+  <div class="upload_excel max500 center-block box mrT2 dashed_bdr">
+    <div class="clearfix pos-rel">
+      <label class="uploader_label" for="csvUploadInput"></label>
+      <div class="fileInputWrapper text-center">
+        <div class="clearfix mrB2">
+          <i class="fa fa-upload upload_icon" aria-hidden="true"></i>
+        </div>
+        <div class="clearfix">
+          <strong class="clearfix">Drop CSV or Excel file to upload</strong> or <a href="javascript:void(0)"
+                                                                                   class="btn-link">browse</a>
+          <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file"
+                 (change)="onFileChange($event.target.files)"
+                 droppable="true">
+        </div>
+        <button class="btn btn-link row sample_file-btn">Download a sample file <i class="fa fa-file-excel-o"
+                                                                                   aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="max500 center-block mrT2">
+    <button class="btn btn-success pull-right"
+            [ladda]="isLoading"
+            [disabled]="file === null" (click)="onFileUpload.emit(file)">Next
+    </button>
+  </div>
+</div>
+<!-- upload And Map Content end-->
