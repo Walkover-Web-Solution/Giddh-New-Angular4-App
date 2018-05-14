@@ -52,7 +52,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     this.importRequestData = {
       ...this._importData,
       data: {
-        items: this._importData.data.items.results
+        items: this._importData.data.items
           .map(p => ({...p, row: p.row.map((value, index) => ({...value, columnNumber: index.toString()}))}))
         , numRows: 0, totalRows: 0
       }
