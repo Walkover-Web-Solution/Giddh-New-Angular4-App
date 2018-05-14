@@ -12,7 +12,7 @@ export const INVOICE_API = {
   GET_INVOICE_TEMPLATES: COMMON_URL + 'templates/all',
   GET_INVOICE_TEMPLATE: COMMON_URL + 'templates-v2/templateUniqueName', // get call for single
   ACTION_ON_INVOICE: COMMON_URL + 'invoices/:invoiceUniqueName/action',
-  DELETE_INVOICE: COMMON_URL + 'invoices/:invoiceNumber',
+  DELETE_INVOICE: COMMON_URL + 'invoices',
   GENERATE_INVOICE: COMMON_URL + PART_B + 'generate',
   SETTING_INVOICE: COMMON_URL + 'settings', // GET/POST Invoice Setting
   DELETE_WEBHOOK: COMMON_URL + 'settings/webhooks/:webhookUniquename', // Delete Invoice Webhook
