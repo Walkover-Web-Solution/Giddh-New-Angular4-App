@@ -142,7 +142,7 @@
                     <div class="">
                         <label for="">Opening Balance</label>
                         <div class="input-group">
-                            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00">
+                            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00" />
                             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
@@ -169,7 +169,7 @@
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
-                        <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id="" placeholder="00.00">
+                        <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" placeholder="00.00" />
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
@@ -194,7 +194,7 @@
             <!-- mobile no and email -->
             <div class="row" *ngIf="isGstEnabledAcc">
                 <div class="form-group col-xs-6">
-                    <label for="">Mobile Number</label>
+                    <label for="">Mobile Number <sup *ngIf="showVirtualAccount">*</sup></label>
                     <!-- input-group -->
                     <div class="clearfix">
                         <sh-select class="pull-left" style="width: 65px;" [placeholder]="'+91'" [options]="countryPhoneCode" formControlName="mobileCode"></sh-select>
@@ -204,9 +204,31 @@
                     </div>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label for="">Email Id</label>
+                    <label for="">Email Id <sup *ngIf="showVirtualAccount">*</sup></label>
                     <input type="email" class="form-control" formControlName="email" name="emailId" />
                     <span class="error-msg" *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">*Invalid Email address</span>
+                </div>
+
+                <!-- Bank Account -->
+                <div *ngIf="showBankDetail">
+                    <div formArrayName="accountBankDetails">
+                        <div class="" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
+                            <div class="form-group col-xs-5">
+                                <label for="">Bank Name</label>
+                                <input type="text" class="form-control" name="bankName_{{i}}" formControlName="bankName" />
+                            </div>
+                            <div class="form-group col-xs-4">
+                                <div class="">
+                                    <label for="">Account No.</label>
+                                    <input type="text" class="form-control" name="accountNum_{{i}}" formControlName="bankAccountNo" />
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label for="">IFSC Code</label>
+                                <input type="text" class="form-control" name="ifsc_{{i}}" formControlName="ifsc" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

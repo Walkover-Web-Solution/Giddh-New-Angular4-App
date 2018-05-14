@@ -18,7 +18,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      width: 400px;
       z-index: 1045;
     }
 
@@ -42,7 +42,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
     }
 
     :host .aside-pane {
-      width: 480px;
+      width: 400px;
     }
   `],
 })
@@ -84,6 +84,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    // console.log(changes);
     if (changes.voucherNumber) {
       this.form.controls.voucherNumber.patchValue(this.voucherNumber);
     }
@@ -105,7 +106,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
       {label: 'Weekly', value: 'weeeekly'},
       {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
-      {label: 'Yearly', value: 'yearly'}
+      {label: 'Yearly', value: 'yearly'},
+      {label: 'Monthly', value: 'monthly'}
     ];
 
     this.timeOptions = [
@@ -145,6 +147,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public saveRecurringInvoice() {
+    // console.log(this.form.value);
     if (this.form.valid && !this.isLoading) {
       this.isLoading = true;
       const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);

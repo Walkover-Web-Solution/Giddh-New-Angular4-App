@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -7,14 +7,15 @@ import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../actions/home/home.actions';
 import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
-import { IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
+import * as _ from 'lodash';
+import { ICbAccount, IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
-import { INameUniqueName } from '../../../models/api-models/Inventory';
+import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 
 @Component({
   selector: 'expenses-chart',
-  templateUrl: 'expenses-chart.component.html'
+  templateUrl: 'expenses-chart.component.html',
+  styleUrls: ['../../home.component.scss']
 })
 
 export class ExpensesChartComponent implements OnInit, OnDestroy {
@@ -31,6 +32,8 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public lastYearAccounts: IChildGroups[] = [];
   public activeYearAccountsRanks: number[] = [];
   public lastYearAccountsRanks: number[] = [];
+  public activeYearTotal: number = 0;
+  public lastYearTotal: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
@@ -142,12 +145,14 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     });
     this.activeYearAccountsRanks = this.accountStrings.map(p => p.activeYear);
     this.lastYearAccountsRanks = this.accountStrings.map(p => p.lastYear);
+    this.activeYearTotal = _.sum(this.activeYearAccountsRanks);
+    this.lastYearTotal = _.sum(this.lastYearAccountsRanks);
 
     this.options = {
       colors: ['#28283c', '#aeaec4'],
       chart: {
         type: 'column',
-        height: '320px',
+        height: '256px'
       },
       title: {
         text: ''
@@ -157,13 +162,17 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       },
       xAxis: {
         categories: this.accountStrings.map(p => p.name),
-        crosshair: true
+        crosshair: true,
+        min: 0,
+        max: 2,
       },
       yAxis: {
         min: 0,
         title: {
           text: ''
-        }
+        },
+        gridLineWidth: 0,
+        minorGridLineWidth: 0,
       },
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -175,8 +184,12 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       },
       plotOptions: {
         column: {
-          pointPadding: 0.2,
+          pointPadding: 0,
           borderWidth: 0
+        },
+        bar: {
+          groupPadding: 0,
+          pointPadding: 0
         }
       },
       series: [{
@@ -189,6 +202,9 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
 
       }],
       credits: {
+        enabled: false
+      },
+      legend: {
         enabled: false
       }
     };

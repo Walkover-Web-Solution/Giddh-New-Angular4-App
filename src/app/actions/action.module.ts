@@ -39,6 +39,7 @@ import { SettingsTagActions } from './settings/tag/settings.tag.actions';
 import { InventoryReportActions } from './inventory/inventory.report.actions';
 import { InventoryEntryActions } from './inventory/inventory.entry.actions';
 import { InventoryUsersActions } from './inventory/inventory.users.actions';
+import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -81,7 +82,8 @@ import { InventoryUsersActions } from './inventory/inventory.users.actions';
       InvoicePurchaseActions,
       SettingsFinancialYearActions,
       SettingsPermissionActions,
-      SessionActions
+      SessionActions,
+      SettingsTriggersActions
     ])
   ],
   exports: [EffectsModule]
