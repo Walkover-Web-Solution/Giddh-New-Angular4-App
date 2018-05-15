@@ -70,9 +70,9 @@ export class StockListComponent implements OnInit, OnDestroy {
   public goToManageStock(stock) {
     if (stock && stock.uniqueName) {
       this.store.dispatch(this.inventoryAction.showLoaderForStock());
-      this.store.dispatch(this.sideBarAction.GetInventoryStock(stock.uniqueName, this.groupUniqueName));
-      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-      this.setInventoryAsideState(true, false, true);
+      this.store.dispatch(this.sideBarAction.GetInventoryStock(stock.uniqueName, this.Groups.uniqueName));
+      // this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      // this.setInventoryAsideState(true, false, true);
     }
   }
 
