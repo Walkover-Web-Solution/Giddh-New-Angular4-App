@@ -22,6 +22,7 @@ import { sortBy } from 'app/lodash-optimized';
 import { AccountService } from 'app/services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
+import { GeneralActions } from './general/general.actions';
 
 @Injectable()
 export class LoginActions {
@@ -374,6 +375,18 @@ export class LoginActions {
     });
 
   @Effect()
+  public ChangeCompanyResponse$: Observable<Action> = this.actions$
+    .ofType(CompanyActions.CHANGE_COMPANY_RESPONSE)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        // get groups with accounts for general use
+        this.store.dispatch(this._generalAction.getGroupWithAccounts());
+        this.store.dispatch(this._generalAction.getFlattenAccount());
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
   public addNewMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddNewMobileNo)
     .switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload))
@@ -510,7 +523,8 @@ export class LoginActions {
     private http: HttpClient,
     private _generalService: GeneralService,
     private _accountService: AccountService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private _generalAction: GeneralActions
   ) {
   }
 
