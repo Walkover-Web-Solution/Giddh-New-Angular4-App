@@ -1,8 +1,7 @@
-import { Action } from '@ngrx/store';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CustomActions } from '../customActions';
 

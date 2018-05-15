@@ -337,7 +337,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public hideManageGroupsModal() {
     this.store.select(c => c.session.lastState).take(1).subscribe((s: string) => {
-      if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1 )) {
+      if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
         this.store.dispatch(this._generalActions.addAndManageClosed());
       }
     });
@@ -519,6 +519,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
     // });
   }
+
   // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
@@ -533,7 +534,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.hideNavigationModal();
     if (ev && ev.value) {
       if (ev.additional && ev.additional.tab) {
-        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
+        this.router.navigate([ev.value], {queryParams: {tab: ev.additional.tab, tabIndex: ev.additional.tabIndex}});
       } else {
         this.router.navigate([ev.value]);
       }

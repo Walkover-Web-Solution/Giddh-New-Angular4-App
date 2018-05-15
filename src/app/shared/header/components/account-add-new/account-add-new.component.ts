@@ -254,7 +254,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       hsnOrSac: [''],
       currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }],
+      sacNumber: [{value: '', disabled: false}],
       accountBankDetails: this._fb.array([
         this._fb.group({
           bankName: [''],
@@ -420,20 +420,20 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-      if (this.showBankDetail) {
-        if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-          accountRequest['accountBankDetails'] = [];
-        }
-      } else {
-        delete accountRequest['accountBankDetails'];
+    if (this.showBankDetail) {
+      if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+        accountRequest['accountBankDetails'] = [];
       }
-      if (!this.showVirtualAccount) {
-        delete accountRequest['cashFreeVirtualAccountData'];
-      }
-      if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-        this._toaster.errorToast('Mobile no. & email Id is mandatory');
-        return;
-      }
+    } else {
+      delete accountRequest['accountBankDetails'];
+    }
+    if (!this.showVirtualAccount) {
+      delete accountRequest['cashFreeVirtualAccountData'];
+    }
+    if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+      this._toaster.errorToast('Mobile no. & email Id is mandatory');
+      return;
+    }
 
     this.submitClicked.emit({
       activeGroupUniqueName: this.activeGroupUniqueName,

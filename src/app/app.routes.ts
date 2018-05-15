@@ -17,6 +17,7 @@ export const ROUTES: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
+  {path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full'},
   // { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
   // { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
@@ -50,6 +51,7 @@ export const ROUTES: Routes = [
       { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },
+      {path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization]},
       { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthorization] },
       {
         path: 'trial-balance-and-profit-loss',
