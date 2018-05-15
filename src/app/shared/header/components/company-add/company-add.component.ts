@@ -115,6 +115,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
         this._route.navigate(['sales']);
         this.closeModal();
       }
