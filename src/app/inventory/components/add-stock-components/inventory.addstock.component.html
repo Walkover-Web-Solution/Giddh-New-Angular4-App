@@ -15,7 +15,8 @@
                                 <div class="form-group col-xs-5">
                                     <label>Under Group</label>
                                     <sh-select [options]="groupsData$ | async" formControlName="parentGroup" [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [notFoundLinkText]="'+ Add New'"
-                                        (noResultsClicked)="addNewGroupPane()" [notFoundLink]="false" [dropdownMinHeight]="33"></sh-select>
+                                               (noResultsClicked)="addNewGroupPane()" [notFoundLink]="false"
+                                               [dropdownMinHeight]="33"></sh-select>
                                 </div>
                             </div>
 
@@ -56,7 +57,7 @@
                                         <label>Tax</label>
                                         <div class="btn-group btn-block" dropdown>
                                             <button dropdownToggle type="button" class="dropdown-toggle form-control text-left"> Selected ({{ addStockForm.get('taxes').value.length }}) <span class="pull-right"><span class="caret"></span></span></button>
-                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
                                                 <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)">
                                                     <a class="dropdown-item" (click)="$event.stopPropagation()"><input type="checkbox" [checked]="tax.isChecked" (click)="selectTax($event, tax)" /> {{tax.name}}</a>
                                                 </li>
@@ -211,7 +212,13 @@
                                         <ng-container formArrayName="linkedStocks">
                                             <tr *ngFor="let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;let i = index; let l = last" [formGroupName]="i" class="fsstock">
                                                 <td>
-                                                    <sh-select [options]="stockListDropDown$ | async" formControlName="stockUniqueName" [multiple]="false" [placeholder]="'Select Stock Name'" [placeholder]="'Select Stock'" [ItemHeight]="33" (selected)="findAddedStock($event?.value, i)" [forceClearReactive]="forceClearStock$ | async"></sh-select>
+                                                  |
+                                                  <sh-select [options]="stockListDropDown$ | async"
+                                                             formControlName="stockUniqueName" [multiple]="false"
+                                                             [placeholder]="'Select Stock Name'"
+                                                             [placeholder]="'Select Stock'" [ItemHeight]="33"
+                                                             (selected)="findAddedStock($event?.value, i)"
+                                                             [forceClearReactive]="forceClearStock$ | async"></sh-select>
                                                 </td>
 
                                                 <td>

@@ -1,5 +1,4 @@
 // import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PermissionDataService } from './../permissions/permission-data.service';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { CommonModule } from '@angular/common';

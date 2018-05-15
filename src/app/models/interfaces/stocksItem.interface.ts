@@ -1,10 +1,11 @@
-import { INameUniqueName } from './nameUniqueName.interface';
 import { IPagination } from './paginatedResponse.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 
 export interface IStocksItem extends INameUniqueName {
   mappedPurchaseAccount: INameUniqueName;
   mappedSalesAccount: INameUniqueName;
   stockGroup: INameUniqueName;
+  stockUnit: IStockUnitItem;
   date?: any;
   voucherNumber?: any;
   stockName?: any;

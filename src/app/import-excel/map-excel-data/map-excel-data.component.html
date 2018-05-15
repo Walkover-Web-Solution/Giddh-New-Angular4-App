@@ -1,0 +1,34 @@
+<!-- Map Field start-->
+<div class="mapFields max500">
+  <strong>Map your fields to Giddh fields</strong>
+  <table class="table basic table-bordered mrT1" *ngIf="importData">
+    <thead>
+    <tr>
+      <th>Giddh Field</th>
+      <th>Your Field</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of dataModel">
+      <td>{{data.field}}</td>
+      <td>
+        <!-- use sh-select instead -->
+        <sh-select
+          [options]="data.options" class="pull-left mrR1"
+          [placeholder]="'Select Field'"
+          [ngModel]="data.selected"
+          (selected)="columnSelected($event,data)"
+          (onClear)="columnSelected($event,data)"
+        ></sh-select>
+      <td><i class="fa fa-check text-success fs18" *ngIf="importData.mappings.mappingInfo[data.field].length > 0"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="mrT2 text-right">
+    <button class="btn btn-default" (click)="onBack.emit()">Back</button>
+    <button class="btn btn-success" (click)="mapExcelData()">Next</button>
+  </div>
+</div>
+<!-- Map Field end -->

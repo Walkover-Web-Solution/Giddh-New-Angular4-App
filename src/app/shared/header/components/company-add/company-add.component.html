@@ -65,16 +65,22 @@
                                     <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Company name should contain atleast 5 characters and should not contain any special character.</small>
                                 </div>
                                 <div class="form-group">
-                
-                                    <input [ngbTypeahead]="dataSource" type="text" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$">
+
+                                  <input [ngbTypeahead]="dataSource" type="text" (keyup)="onChangeCityName()"
+                                         [(ngModel)]="company.city" name="city" [resultTemplate]="rt"
+                                         (selectItem)="typeaheadOnSelect($event)" class="form-control"
+                                         autocomplete="off" required maxlength="50" placeholder="Company City"
+                                         pattern="^[^\s]+(\s+[^\s]+)*$">
 
                                     <ng-template #rt let-r="result" let-t="term">
                                         <span>{{ r }}</span>
                                     </ng-template>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid || !isCitySelectedByDropdown">Create
-                                    </button>
+                                  <button class="btn btn-success" type="submit"
+                                          [ladda]="isCompanyCreationInProcess$ | async"
+                                          [disabled]="createCompanyForm.invalid || !isCitySelectedByDropdown">Create
+                                  </button>
                                 </div>
                             </form>
                             <!-- <input class=" btn btn-primary center-block" style="width:80px;margin-top:45px" type="submit" wz-next value="Next" /> -->

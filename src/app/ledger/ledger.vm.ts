@@ -7,7 +7,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as uuid from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
