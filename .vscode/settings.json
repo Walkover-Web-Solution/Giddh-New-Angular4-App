@@ -17,5 +17,6 @@
   "typescript.tsdk": "node_modules/typescript/lib/",
   "search.exclude": {
     "**/dist": true,
-  }
+  },
+  "mocha.enabled": false
 }
