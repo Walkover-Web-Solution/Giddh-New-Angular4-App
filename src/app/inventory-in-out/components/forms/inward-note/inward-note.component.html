@@ -3,13 +3,9 @@
     <h3 class="aside-title">
       <span>Inward Note</span>
       <span>Multiple</span>
-      <a href="javascript:void(0)"
-         [ngStyle]="{'font-weight': mode === 'sender' ? 'bold' : 'normal' }"
-         (click)="mode = 'sender'">Senders</a>
+      <a href="javascript:void(0)" [ngStyle]="{'font-weight': mode === 'sender' ? 'bold' : 'normal' }" (click)="mode = 'sender'">Senders</a>
       /
-      <a href="javascript:void(0)"
-         [ngStyle]="{'font-weight': mode === 'product' ? 'bold' : 'normal' }"
-         (click)="mode='product'">Products</a>
+      <a href="javascript:void(0)" [ngStyle]="{'font-weight': mode === 'product' ? 'bold' : 'normal' }" (click)="mode='product'">Products</a>
     </h3>
 
   </div>
@@ -21,89 +17,61 @@
         <div class="col-lg-6 form-group pdT2">
           <label class="mrB1">Date</label>
           <div class="input-group">
-            <input name="dateRange"
-                   formControlName="inventoryEntryDate" type="text"
-                   autocomplete="off"
-                   class="form-control"
-                   bsDatepicker
-                   [minDate]="today"
-                   [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
-            <span
-              [hidden]="!form.get('inventoryEntryDate').errors?.required"
-              class="text-danger">Please select Date.</span>
+            <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off" class="form-control" bsDatepicker
+              [minDate]="today" [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+            <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
+              <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']" class="text-danger">Please select Date.</span>
+            </span>
+            <!-- <span [hidden]="!form.get('inventoryEntryDate').errors?.required" class="text-danger">Please select Date.</span> -->
           </div>
         </div>
 
         <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'sender'">
           <label class="mrB1">Product Name</label>
           <div class="input-group">
-            <sh-select
-              [options]="stockListOptions"
-              [multiple]="false"
-              [placeholder]="'Select Product'"
-              (selected)="stockChanged($event)"
-            ></sh-select>
-            <span
-              [hidden]="!form.get('transactions')?.controls[0].controls['stock']?.errors?.required"
-              class="text-danger">Please select Product Name.</span>
+            <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'" (selected)="stockChanged($event)"></sh-select>
+            <span *ngIf="transactions && transactions.controls && transactions.controls[0] && transactions.controls[0].get('stock')?.invalid && (transactions.controls[0].get('stock')?.dirty || transactions.controls[0].get('stock').touched)">
+              <span *ngIf="transactions.controls[0].get('stock')?.errors && transactions.controls[0].get('stock')?.errors['required']"
+                class="text-danger">Please select Date.</span>
+            </span>
+            <!-- <span [hidden]="!form.get('transactions')?.controls[0].controls['stock']?.errors?.required" class="text-danger">Please select Product Name.</span> -->
           </div>
         </div>
         <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'product'">
           <label class="mrB1">Sender</label>
           <div class="input-group">
-            <sh-select
-              [options]="userListOptions"
-              [multiple]="false"
-              [placeholder]="'Select Sender'"
-              (selected)="userChanged($event)"
-            ></sh-select>
-            <span
-              [hidden]="!form.get('transactions').controls[0].controls['inventoryUser']?.errors?.required"
-              class="text-danger">Please select Sender.</span>
+            <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'" (selected)="userChanged($event)"></sh-select>
+            <span *ngIf="transactions && transactions.controls && transactions.controls[0] && transactions.controls[0].get('inventoryUser')?.invalid && (transactions.controls[0].get('inventoryUser')?.dirty || transactions.controls[0].get('inventoryUser').touched)">
+              <span *ngIf="transactions.controls[0].get('inventoryUser')?.errors && transactions.controls[0].get('inventoryUser')?.errors['required']"
+                class="text-danger">Please select Date.</span>
+            </span>
+            <!-- <span [hidden]="!form.get('transactions').controls[0].controls['inventoryUser']?.errors?.required" class="text-danger">Please select Sender.</span> -->
           </div>
         </div>
 
       </div>
 
-      <div class="row" formArrayName="transactions"
-           *ngFor="let item of form.get('transactions').controls; let i = index;let first = first;let last = last">
+      <div class="row" formArrayName="transactions" *ngFor="let item of transactions.controls; let i = index;let first = first;let last = last">
         <div [formGroupName]="i">
           <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'sender'">
             <label class="mrB1">Sender</label>
             <div class="input-group">
-              <sh-select
-                [options]="userListOptions"
-                [multiple]="false"
-                [placeholder]="'Select Sender'"
-                (selected)="userChanged($event,i)"
-              ></sh-select>
-              <span [hidden]="!item.controls['inventoryUser'].errors?.required"
-                    class="text-danger">Please select Sender.</span>
+              <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'" (selected)="userChanged($event,i)"></sh-select>
+              <span [hidden]="!item.get('inventoryUser')?.errors?.required" class="text-danger">Please select Sender.</span>
             </div>
           </div>
           <div class="col-lg-6 form-group pdT2" *ngIf="mode === 'product'">
             <label class="mrB1">Product Name</label>
             <div class="input-group">
-              <sh-select
-                [options]="stockListOptions"
-                [multiple]="false"
-                [placeholder]="'Select Product'"
-                (selected)="stockChanged($event,i)"
-              ></sh-select>
-              <span
-                [hidden]="!item.controls['stock'].errors?.required"
-                class="text-danger">Please select Product.</span>
+              <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'" (selected)="stockChanged($event,i)"></sh-select>
+              <span [hidden]="!item.get('stock')?.errors?.required" class="text-danger">Please select Product.</span>
             </div>
           </div>
           <div class="col-lg-4 form-group pdT2">
             <label class="mrB1">Quantity</label>
             <div class="input-group">
-              <input name="dateRange" type="text"
-                     formControlName="quantity"
-                     class="form-control">
-              <span
-                [hidden]="!item.controls['quantity'].errors?.required"
-                class="text-danger">Please enter quantity.</span>
+              <input name="dateRange" type="text" formControlName="quantity" class="form-control">
+              <span [hidden]="!item.get('quantity')?.errors?.required" class="text-danger">Please enter quantity.</span>
             </div>
           </div>
           <div class="col-lg-2 form-group pdT2">
@@ -121,8 +89,7 @@
         <div class="col-lg-12 form-group pdT2">
           <label class="mrB1">Description</label>
           <div class="input-group">
-            <input name="dateRange" formControlName="description" type="text"
-                   class="form-control">
+            <input name="dateRange" formControlName="description" type="text" class="form-control">
           </div>
         </div>
       </div>
@@ -141,4 +108,3 @@
     </form>
   </div>
 </div>
-
