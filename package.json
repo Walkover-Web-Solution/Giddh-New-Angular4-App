@@ -258,10 +258,12 @@
   },
   "build": {
     "appId": "org.walkover.giddh",
-    "publish": [{
-      "provider": "s3",
-      "bucket": "tetingmankuuuuu"
-    }],
+    "publish": [
+      {
+        "provider": "s3",
+        "bucket": "tetingmankuuuuu"
+      }
+    ],
     "directories": {
       "buildResources": "src/resources",
       "output": "packages",

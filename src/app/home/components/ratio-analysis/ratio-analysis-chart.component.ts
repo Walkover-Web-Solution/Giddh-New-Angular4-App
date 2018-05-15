@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -10,8 +10,6 @@ import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
-import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { CHART_CALLED_FROM, API_TO_CALL } from '../../../actions/home/home.const';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -36,7 +34,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
   public proprietaryOption: Options;
   public fixedAssetOption: Options;
   public rationResponse$: Observable<any>;
-  public ratioObj: any = {} ;
+  public ratioObj: any = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -47,7 +45,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-      this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT)));
+    this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT)));
     // get activeFinancialYear and lastFinancialYear
     this.companies$.subscribe(c => {
       if (c) {
@@ -57,7 +55,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
-          if (activeCompany) { this.activeFinancialYear = activeCompany.activeFinancialYear; }
+          if (activeCompany) {
+            this.activeFinancialYear = activeCompany.activeFinancialYear;
+          }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {
@@ -94,10 +94,12 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       });
 
   }
+
   public hardRefresh() {
     this.refresh = true;
     this.fetchChartData();
   }
+
   public fetchChartData() {
     this.requestInFlight = true;
     // this.ApiToCALL = [];
@@ -109,16 +111,16 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     this.currentRatioOption = {
       colors: ['#005b77', '#d37c59'],
       chart: {
-          type: 'pie',
-          polar: false,
-          width: 170,
-          height: '180px'
+        type: 'pie',
+        polar: false,
+        width: 170,
+        height: '180px'
       },
       title: {
         verticalAlign: 'middle',
         align: 'center',
         text: '<span class="pie-text_center">' + this.ratioObj.currentRatio + '</span>',
-        style: { color: '#005b77', fontSize: '26px' },
+        style: {color: '#005b77', fontSize: '26px'},
         useHTML: true,
         y: 8
       },
@@ -139,24 +141,24 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         enabled: false
       },
       plotOptions: {
-          pie: {
-            showInLegend: true,
-            innerSize: '70%',
-            allowPointSelect: true,
-            dataLabels: {
-                enabled: false,
-                crop: true,
-                defer: true
-            },
-            shadow: false,
-            center: [
-                '50%',
-                '50%'
-            ],
+        pie: {
+          showInLegend: true,
+          innerSize: '70%',
+          allowPointSelect: true,
+          dataLabels: {
+            enabled: false,
+            crop: true,
+            defer: true
           },
+          shadow: false,
+          center: [
+            '50%',
+            '50%'
+          ],
+        },
         series: {
-            animation: false,
-            dataLabels: {}
+          animation: false,
+          dataLabels: {}
         }
       },
       tooltip: {
@@ -168,26 +170,26 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         useHTML: true
       },
       series: [{
-          name: 'Current Ratio',
-          // showInLegend: false,
-          data: [['Current Assets', this.ratioObj.currentRatio * 100 ], ['Current Liabilities', 100]],
+        name: 'Current Ratio',
+        // showInLegend: false,
+        data: [['Current Assets', this.ratioObj.currentRatio * 100], ['Current Liabilities', 100]],
       }],
     };
 
     this.debtOptions = {
       colors: ['#005b77', '#d37c59'],
       chart: {
-          type: 'pie',
-          polar: false,
-          width: 170,
-          height: '180px'
+        type: 'pie',
+        polar: false,
+        width: 170,
+        height: '180px'
         //   height: '250px'
       },
       title: {
         verticalAlign: 'middle',
         align: 'center',
         text: '<span class="pie-text_center">' + this.ratioObj.debtEquityRatio + '</span>',
-        style: { color: '#005b77', fontSize: '26px' },
+        style: {color: '#005b77', fontSize: '26px'},
         useHTML: true,
         y: 8
       },
@@ -208,24 +210,24 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         enabled: false
       },
       plotOptions: {
-          pie: {
-            showInLegend: true,
-            innerSize: '70%',
-            allowPointSelect: true,
-            dataLabels: {
-                enabled: false,
-                crop: true,
-                defer: true
-            },
-            shadow: false,
-            center: [
-                '50%',
-                '50%'
-            ],
+        pie: {
+          showInLegend: true,
+          innerSize: '70%',
+          allowPointSelect: true,
+          dataLabels: {
+            enabled: false,
+            crop: true,
+            defer: true
           },
+          shadow: false,
+          center: [
+            '50%',
+            '50%'
+          ],
+        },
         series: {
-            animation: false,
-            dataLabels: {}
+          animation: false,
+          dataLabels: {}
         }
       },
       tooltip: {
@@ -237,8 +239,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         useHTML: true
       },
       series: [{
-          // name: 'Debt Equity Ratio',
-          data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 100], ['Shareholders fund', 100]],
+        // name: 'Debt Equity Ratio',
+        data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 100], ['Shareholders fund', 100]],
 
       }]
     };
@@ -246,17 +248,17 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     this.proprietaryOption = {
       colors: ['#005b77', '#d37c59'],
       chart: {
-          type: 'pie',
-          polar: false,
-          width: 170,
-          height: '180px'
+        type: 'pie',
+        polar: false,
+        width: 170,
+        height: '180px'
         //   height: '250px'
       },
       title: {
         verticalAlign: 'middle',
         align: 'center',
         text: '<span class="pie-text_center">' + this.ratioObj.proprietaryRatio + '</span>',
-        style: { color: '#005b77', fontSize: '26px' },
+        style: {color: '#005b77', fontSize: '26px'},
         useHTML: true,
         y: 8
       },
@@ -277,24 +279,24 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         enabled: false
       },
       plotOptions: {
-          pie: {
-            showInLegend: true,
-            innerSize: '70%',
-            allowPointSelect: true,
-            dataLabels: {
-                enabled: false,
-                crop: true,
-                defer: true
-            },
-            shadow: false,
-            center: [
-                '50%',
-                '50%'
-            ],
+        pie: {
+          showInLegend: true,
+          innerSize: '70%',
+          allowPointSelect: true,
+          dataLabels: {
+            enabled: false,
+            crop: true,
+            defer: true
           },
+          shadow: false,
+          center: [
+            '50%',
+            '50%'
+          ],
+        },
         series: {
-            animation: false,
-            dataLabels: {}
+          animation: false,
+          dataLabels: {}
         }
       },
       tooltip: {
@@ -306,8 +308,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         useHTML: true
       },
       series: [{
-          name: 'Proprietary Ratio',
-          data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
+        name: 'Proprietary Ratio',
+        data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
 
       }]
     };
@@ -315,16 +317,16 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     this.fixedAssetOption = {
       colors: ['#005b77', '#d37c59'],
       chart: {
-          type: 'pie',
-          polar: false,
-          width: 170,
-          height: '180px'
+        type: 'pie',
+        polar: false,
+        width: 170,
+        height: '180px'
       },
       title: {
         verticalAlign: 'middle',
         align: 'center',
         text: '<span class="pie-text_center">' + this.ratioObj.fixedAssetRatio + '</span>',
-        style: { color: '#005b77', fontSize: '26px' },
+        style: {color: '#005b77', fontSize: '26px'},
         useHTML: true,
         y: 8
       },
@@ -345,24 +347,24 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         enabled: false
       },
       plotOptions: {
-          pie: {
-            showInLegend: true,
-            innerSize: '70%',
-            allowPointSelect: true,
-            dataLabels: {
-                enabled: false,
-                crop: true,
-                defer: true
-            },
-            shadow: false,
-            center: [
-                '50%',
-                '50%'
-            ],
+        pie: {
+          showInLegend: true,
+          innerSize: '70%',
+          allowPointSelect: true,
+          dataLabels: {
+            enabled: false,
+            crop: true,
+            defer: true
           },
+          shadow: false,
+          center: [
+            '50%',
+            '50%'
+          ],
+        },
         series: {
-            animation: false,
-            dataLabels: {}
+          animation: false,
+          dataLabels: {}
         }
       },
       tooltip: {
@@ -374,8 +376,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         useHTML: true
       },
       series: [{
-          name: 'Fixed Assets Ratio',
-          data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 100], ['Shareholders fund', 100]],
+        name: 'Fixed Assets Ratio',
+        data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 100], ['Shareholders fund', 100]],
       }]
     };
   }

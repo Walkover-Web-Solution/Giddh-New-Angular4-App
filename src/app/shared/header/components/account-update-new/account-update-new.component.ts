@@ -166,7 +166,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       hsnOrSac: [''],
       currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }],
+      sacNumber: [{value: '', disabled: false}],
       accountBankDetails: this._fb.array([
         this._fb.group({
           bankName: [''],

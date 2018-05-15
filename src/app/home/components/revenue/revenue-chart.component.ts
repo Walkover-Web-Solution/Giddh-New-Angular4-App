@@ -1,4 +1,4 @@
-import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
@@ -203,9 +203,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       credits: {
         enabled: false
       },
-    legend: {
-      enabled: false
-    }
+      legend: {
+        enabled: false
+      }
     };
   }
 
