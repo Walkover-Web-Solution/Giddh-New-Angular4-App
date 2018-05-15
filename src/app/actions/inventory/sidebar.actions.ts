@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
+import { InventoryAction } from './inventory.actions';
 // import { from } from 'rxjs/observable/from';
 
 @Injectable()
@@ -52,7 +53,12 @@ export class SidebarAction {
       return this._inventoryService.GetStockDetails(action.payload.activeGroupUniqueName, action.payload.stockUniqueName);
     })
     .map(response => {
-      return this.GetInventoryStockResponse(response);
+      if (response) {
+        return this.GetInventoryStockResponse(response);
+      } else {
+        this._toasty.errorToast('Stock Not Found');
+        return { type: 'EmptyAction' };
+      }
     });
 
   @Effect()
@@ -62,6 +68,9 @@ export class SidebarAction {
       let data: BaseResponse<StockDetailResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
       }
       return { type: 'EmptyAction' };
     });
@@ -124,7 +133,8 @@ export class SidebarAction {
     private store: Store<AppState>,
     private _inventoryService: InventoryService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private inventoryAction: InventoryAction
   ) {
   }
 

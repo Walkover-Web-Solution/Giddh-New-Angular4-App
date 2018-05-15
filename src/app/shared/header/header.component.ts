@@ -368,10 +368,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public changeCompany(selectedCompanyUniqueName: string) {
     this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
-    // get groups with accounts for general use
-    this.store.dispatch(this._generalActions.getGroupWithAccounts());
-    this.store.dispatch(this._generalActions.getFlattenAccount());
-    // }
   }
 
   public deleteCompany(e: Event) {

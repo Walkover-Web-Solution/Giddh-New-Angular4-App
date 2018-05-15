@@ -344,8 +344,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }, 100);
 
     this.manageInProcess$.subscribe(s => {
-      if (s.isOpen && !s.isGroup && !s.isUpdate) {
-        //
+      if (!s.isOpen) {
+        // console.log('s:', s);
+        this.addStockForm.reset();
       }
     });
   }

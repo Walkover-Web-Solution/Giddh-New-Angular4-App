@@ -331,8 +331,7 @@ export class InventoryService {
           to: stockReportRequest.to,
           count: stockReportRequest.count,
           page: stockReportRequest.page
-        }
-        ;
+        };
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequest>(e, stockReportRequest, {
         stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
@@ -578,9 +577,6 @@ export class InventoryService {
   public GetInventoryAllInOutReport(from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    if (filterParams) {
-
-    }
     return this._http
       .get(this.config.apiUrl + INVENTORY_API.REPORT_ALL
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
