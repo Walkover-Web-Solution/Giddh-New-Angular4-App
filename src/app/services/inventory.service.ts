@@ -327,8 +327,7 @@ export class InventoryService {
           to: stockReportRequest.to,
           count: stockReportRequest.count,
           page: stockReportRequest.page
-        }
-          ;
+        };
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequest>(e, stockReportRequest, {
         stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
