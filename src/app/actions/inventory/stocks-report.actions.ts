@@ -29,11 +29,15 @@ export class StockReportActions {
       // }
       return this._inventoryService.GetStocksReport(action.payload)
         .map((r) => {
-          return this.validateResponse<StockReportResponse, StockReportRequest>(r, {
-            type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
-            payload: r.body
-          }, true);
-        });
+          if (r) {
+            return this.validateResponse<StockReportResponse, StockReportRequest>(r, {
+              type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
+              payload: r.body
+            }, true);
+          } else {
+          return { type: 'EmptyAction' };
+        }
+      });
 
     });
 
