@@ -8,16 +8,15 @@
                         <i class="glyphicon glyphicon-menu-hamburger"></i>
                     </a>
 
-                    <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}">
-                      <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1"
-                                         min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-                        <li [checkPermission]="['MENU', 'DASHBOARD']">
-                          <a [routerLink]="['home']">
-                            <span class="navico-dashboard"></span>
-                            <span class="label">Dashboard</span>
-                          </a>
-                        </li>
-                        <li class="divider"></li>
+                    <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                        <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+                            <li [checkPermission]="['MENU', 'DASHBOARD']">
+                                <a [routerLink]="['home']">
+                                    <span class="navico-dashboard"></span>
+                                    <span class="label">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
 
                             <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
                             <a [routerLink]="['/pages/sales']">
@@ -353,9 +352,9 @@
                         </li>
                         <li style="padding:0px;">
                             <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
-                                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                                <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                    <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                                 </li>
                             </ul>
                         </li>
