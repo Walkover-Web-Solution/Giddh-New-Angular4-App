@@ -476,7 +476,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       let rates = res.body;
       if (rates) {
         _.forEach(rates, (value, key) => {
-          if (key === convertTo) { return obj.convertedAmount = amount * rates[key]; }
+          if (key === convertTo) {
+            return obj.convertedAmount = amount * rates[key];
+          }
         });
       }
     });
