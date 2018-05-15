@@ -1,4 +1,4 @@
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 import { IClosingBalance, IForwardBalance } from './ledger.interface';
 import { ClosingBalanceResponse } from '../api-models/Dashboard';
 

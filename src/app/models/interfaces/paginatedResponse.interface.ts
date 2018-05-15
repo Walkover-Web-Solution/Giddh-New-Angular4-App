@@ -5,7 +5,7 @@ export interface IPagination {
   totalPages: number;
 }
 
-export interface IPaginatedResponse extends IPagination {
+export interface IPaginatedResponse<T= any> extends IPagination {
   size: number;
-  results: any[];
+  results: T[];
 }

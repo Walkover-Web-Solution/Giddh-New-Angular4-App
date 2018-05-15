@@ -1,7 +1,6 @@
 import * as _ from '../../lodash-optimized';
-import { IInvoiceTax } from './Invoice';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isNull, pick } from '../../lodash-optimized';
+import { IInvoiceTax } from './Invoice';
 
 /**
  * IMP by dude
@@ -34,7 +33,7 @@ export const VOUCHER_TYPE_LIST: any[] = [
     value: 'Purchase',
     label: 'Purchase',
     additional: {
-    label: 'Purchase'
+      label: 'Purchase'
     }
   }
 ];

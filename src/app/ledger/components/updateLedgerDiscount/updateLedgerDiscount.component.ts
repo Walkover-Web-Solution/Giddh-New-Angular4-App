@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
-import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../../models/api-models/Inventory';
 
 export class UpdateLedgerDiscountData {
   public particular: INameUniqueName = {name: '', uniqueName: ''};

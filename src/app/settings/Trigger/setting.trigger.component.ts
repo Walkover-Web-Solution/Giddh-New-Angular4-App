@@ -9,7 +9,6 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
-import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -18,35 +17,35 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { SettingsTriggersActions } from '../../actions/settings/triggers/settings.triggers.actions';
 
 const entityType = [
-  { label: 'Company', value: 'company' },
-  { label: 'Group', value: 'group' },
-  { label: 'Account', value: 'account' }
+  {label: 'Company', value: 'company'},
+  {label: 'Group', value: 'group'},
+  {label: 'Account', value: 'account'}
 ];
 
 const actionType = [
-  { label: 'Webhook', value: 'webhook' }
+  {label: 'Webhook', value: 'webhook'}
 ];
 
 const filterType = [
-  { label: 'Amount Greater Than', value: 'amountGreaterThan' },
-  { label: 'Amount Less Than', value: 'amountLessThan' },
-  { label: 'Amount Equals', value: 'amountEquals' },
-  { label: 'Description Equals', value: 'descriptionEquals' },
-  { label: 'Add', value: 'add' },
-  { label: 'Update', value: 'update' },
-  { label: 'Delete', value: 'delete' }
+  {label: 'Amount Greater Than', value: 'amountGreaterThan'},
+  {label: 'Amount Less Than', value: 'amountLessThan'},
+  {label: 'Amount Equals', value: 'amountEquals'},
+  {label: 'Description Equals', value: 'descriptionEquals'},
+  {label: 'Add', value: 'add'},
+  {label: 'Update', value: 'update'},
+  {label: 'Delete', value: 'delete'}
 ];
 
 const scopeList = [
-  { label: 'Invoice', value: 'invoice' },
-  { label: 'Entry', value: 'entry' }
+  {label: 'Invoice', value: 'invoice'},
+  {label: 'Entry', value: 'entry'}
 ];
 
 const taxDuration = [
-  { label: 'Monthly', value: 'MONTHLY' },
-  { label: 'Quarterly', value: 'QUARTERLY' },
-  { label: 'Half-Yearly', value: 'HALFYEARLY' },
-  { label: 'Yearly', value: 'YEARLY' }
+  {label: 'Monthly', value: 'MONTHLY'},
+  {label: 'Quarterly', value: 'QUARTERLY'},
+  {label: 'Half-Yearly', value: 'HALFYEARLY'},
+  {label: 'Yearly', value: 'YEARLY'}
 ];
 
 @Component({
@@ -92,7 +91,7 @@ export class SettingTriggerComponent implements OnInit {
   ) {
     for (let i = 1; i <= 31; i++) {
       let day = i.toString();
-      this.days.push({ label: day, value: day });
+      this.days.push({label: day, value: day});
     }
 
     this.store.dispatch(this._settingsTriggersActions.GetTriggers());
@@ -118,7 +117,7 @@ export class SettingTriggerComponent implements OnInit {
       if (groups) {
         let groupsRes: IOption[] = [];
         groups.map(d => {
-          groupsRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+          groupsRes.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
         });
         this.groups = _.cloneDeep(groupsRes);
       }
@@ -128,7 +127,7 @@ export class SettingTriggerComponent implements OnInit {
       if (companies) {
         let companiesRes: IOption[] = [];
         companies.map(d => {
-          companiesRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+          companiesRes.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
         });
         this.companies = _.cloneDeep(companiesRes);
       }
@@ -208,7 +207,7 @@ export class SettingTriggerComponent implements OnInit {
 
   public addMoreDateAndPercentage(taxIndex: number) {
     let taxes = _.cloneDeep(this.availableTriggers);
-    taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
+    taxes[taxIndex].taxDetail.push({date: null, taxValue: null});
     this.availableTriggers = taxes;
   }
 
@@ -228,10 +227,11 @@ export class SettingTriggerComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+          accounts.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
         });
         this.accounts = accounts;
-    }});
+      }
+    });
   }
 
   public customAccountFilter(term: string, item: IOption) {

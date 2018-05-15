@@ -1,4 +1,4 @@
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
@@ -9,10 +9,10 @@ import { LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AuthKeyResponse, LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
-import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 
 @Injectable()
 export class AuthenticationService {
@@ -226,11 +226,11 @@ export class AuthenticationService {
     model.environment = this.config.apiUrl;
     model.userUniqueName = this._generalService.user.uniqueName;
     return this._http.post(this.config.apiUrl + 'exception/invalid-json', model).map((res) => {
-        let data: BaseResponse<AuthKeyResponse, string> = res;
-        data.request = '';
-        data.queryString = {};
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+      let data: BaseResponse<AuthKeyResponse, string> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
 
   // fetch user profile picture using emailId

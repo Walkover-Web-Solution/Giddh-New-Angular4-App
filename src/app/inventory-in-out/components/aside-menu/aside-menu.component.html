@@ -1,0 +1,50 @@
+<div class="aside-pane">
+  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+
+  <div [ngSwitch]="view">
+    <ng-container *ngSwitchCase="'inward'">
+      <inward-note [stockList]="stockList$ | async"
+                   [userList]="userList$ | async"
+                   [isLoading]="isLoading"
+                   (onSave)="onSave($event)"
+                   (onCancel)="onCancel()"></inward-note>
+    </ng-container>
+    <ng-container *ngSwitchCase="'outward'">
+      <outward-note
+        [stockList]="stockList$ | async"
+        [userList]="userList$ | async"
+        [isLoading]="isLoading"
+        (onSave)="onSave($event)"
+        (onCancel)="onCancel()"></outward-note>
+    </ng-container>
+    <ng-container *ngSwitchCase="'transfer'">
+      <transfer-note
+        [stockList]="stockList$ | async"
+        [userList]="userList$ | async"
+        [isLoading]="isLoading"
+        (onSave)="onSave($event.entry,$event.user)"
+        (onCancel)="onCancel()"></transfer-note>
+    </ng-container>
+    <ng-container *ngSwitchCase="'createStock'">
+
+    </ng-container>
+    <ng-container *ngSwitchCase="'createAccount'">
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+
+      <div class="aside-header">
+        <h3 class="aside-title">Select Type</h3>
+      </div>
+      <div class="aside-body">
+        <div class="buttons-container">
+          <button type="button" class="btn btn-default" (click)="view='inward'">Inward Note</button>
+          <button type="button" class="btn btn-default" (click)="view='outward'">Outward Note</button>
+          <button type="button" class="btn btn-default" (click)="view='transfer'">Transfer Note</button>
+          <button type="button" class="btn btn-default" (click)="view='createStock'">Create Stock</button>
+          <button type="button" class="btn btn-default" (click)="view='createAccount'">Create Account</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+

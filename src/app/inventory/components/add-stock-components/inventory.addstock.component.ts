@@ -1,6 +1,6 @@
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable } from 'rxjs/Observable';
@@ -12,7 +12,7 @@ import * as  _ from '../../../lodash-optimized';
 import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { IStockItemDetail, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
+import { IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { Subject } from 'rxjs/Subject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';

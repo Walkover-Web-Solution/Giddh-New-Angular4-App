@@ -1,7 +1,7 @@
 import { setTimeout } from 'timers';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
-import { CompanyAddComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
+import { CompanyAddComponent, ManageGroupsAccountsComponent } from './components';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -15,7 +15,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import { ManageGroupsAccountsComponent } from './components';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'ng4-social-login';
@@ -23,7 +22,6 @@ import { userLoginStateEnum } from '../../store/authentication/authentication.re
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
-import { DaterangePickerComponent } from 'app/theme/ng2-daterangepicker/daterangepicker.component';
 import { AuthenticationService } from '../../services/authentication.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../models/api-models/Sales';
@@ -31,7 +29,7 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Dashboard', value: '/pages/home' },
-  { label: 'Journal Voucher', value: '/pages/accounting-voucher' },
+  {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
   { label: 'Sales', value: '/pages/sales' },
   { label: 'Invoice', value: '/pages/invoice/preview' },
   { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
@@ -339,7 +337,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public hideManageGroupsModal() {
     this.store.select(c => c.session.lastState).take(1).subscribe((s: string) => {
-      if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1 )) {
+      if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
         this.store.dispatch(this._generalActions.addAndManageClosed());
       }
     });
@@ -517,6 +515,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
     // });
   }
+
   // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
@@ -531,7 +530,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.hideNavigationModal();
     if (ev && ev.value) {
       if (ev.additional && ev.additional.tab) {
-        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
+        this.router.navigate([ev.value], {queryParams: {tab: ev.additional.tab, tabIndex: ev.additional.tabIndex}});
       } else {
         this.router.navigate([ev.value]);
       }
