@@ -258,7 +258,11 @@
                                             <ng-template [ngIf]="vm.stockTrxEntry">
                                                 <td class="text-right" class="pItem">
                                                     <label>Price</label>
-                                                    <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)" (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
+                                                  <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)"
+                                                         (change)="vm.inventoryPriceChanged($event.target.value)"
+                                                         decimalDigitsDirective [DecimalPlaces]="4"
+                                                         [(ngModel)]="vm.stockTrxEntry.inventory.rate"
+                                                         class="form-control text-right"/>
                                                 </td>
                                             </ng-template>
                                             <td *ngIf="vm.stockTrxEntry">
@@ -267,7 +271,11 @@
                                             </td>
                                             <td class="text-right pItem">
                                                 <label class="primary_clr">Amount</label>
-                                                <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount" />
+                                              <input type="text" name="" class="form-control text-right"
+                                                     decimalDigitsDirective [DecimalPlaces]="2"
+                                                     (paste)="vm.inventoryAmountChanged($event)"
+                                                     (change)="vm.inventoryAmountChanged($event.target.value)"
+                                                     [(ngModel)]="vm.totalAmount"/>
                                             </td>
                                             <td *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
                                                 <label class="d-block">&nbsp;</label>
@@ -296,7 +304,10 @@
                                             </td>
                                             <td class="text-right pItem">
                                                 <label class="primary_clr">Total</label>
-                                                <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)" (change)="vm.inventoryTotalChanged()" />
+                                              <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2"
+                                                     class="form-control" [(ngModel)]="vm.grandTotal"
+                                                     (paste)="vm.inventoryTotalChanged($event)"
+                                                     (change)="vm.inventoryTotalChanged()"/>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -335,12 +346,14 @@
                                     <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
                                 </td>
                                 <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note')">
-                                    <label class="default_clr">Invoice No.</label>
+                                  <label class="default_clr">Invoice No.</label>
                                     <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
                                 </td>
                                 <td class="">
                                     <label class="default_clr">Voucher No.</label>
-                                    <input type="text" placeholder="Voucher no." class="form-control" [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />
+                                  <input type="text" placeholder="Voucher no." class="form-control"
+                                         [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
+                                         [style.width.px]="80"/>
                                 </td>
                             </tr>
                         </table>
@@ -385,7 +398,8 @@
                             </div>
                             <div class="pull-right">
                                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
-                  <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
+                                  <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect
+                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                   <label for="invoiceFile" class="cp fs16">
                     <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                                 </label>

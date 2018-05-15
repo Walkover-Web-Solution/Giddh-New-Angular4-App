@@ -36,6 +36,9 @@ import { SettingsPermissionActions } from './settings/permissions/settings.permi
 import { SettingsBranchActions } from './settings/branch/settings.branch.action';
 import { SessionActions } from './session.action';
 import { SettingsTagActions } from './settings/tag/settings.tag.actions';
+import { InventoryReportActions } from './inventory/inventory.report.actions';
+import { InventoryEntryActions } from './inventory/inventory.entry.actions';
+import { InventoryUsersActions } from './inventory/inventory.users.actions';
 import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
 
@@ -55,6 +58,9 @@ import { ImportExcelActions } from './import-excel/import-excel.actions';
       AccountsAction,
       SidebarAction,
       InventoryAction,
+      InventoryReportActions,
+      InventoryEntryActions,
+      InventoryUsersActions,
       SidebarAction,
       CustomStockUnitAction,
       StockReportActions,

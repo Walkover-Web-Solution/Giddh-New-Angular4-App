@@ -58,20 +58,23 @@
 
 <div class="clearfix mrT2">
   <label>Select Account</label>
-  <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
+  <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
+             [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
   <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
   <label>Select Group</label>
-  <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
+  <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
+             [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
   <!--<select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
 </div>
 
 
 <div class="clearfix mrT2">
   <label>Select User</label>
-  <sh-select [options]="vm.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
+  <sh-select [options]="vm.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true"
+             [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
   <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
 </div>
 

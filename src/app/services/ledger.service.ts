@@ -279,19 +279,19 @@ export class LedgerService {
   /*
   * delete Multiple Ledger transaction
   */
- public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<string, string>> {
-  this.user = this._generalService.user;
-  let sessionId = this._generalService.sessionId;
-  this.companyUniqueName = this._generalService.companyUniqueName;
-  return this._httpClient.request('delete', this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { headers: { 'Session-Id': sessionId }, body: { entryUniqueNames: entryUniqueNamesArray }}).map((res) => {
-    let data: any = res;
-    data.queryString = {accountUniqueName, entryUniqueNamesArray};
-    return data;
-  }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray}));
-}
+  public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    let sessionId = this._generalService.sessionId;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._httpClient.request('delete', this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), {headers: {'Session-Id': sessionId}, body: {entryUniqueNames: entryUniqueNamesArray}}).map((res) => {
+      let data: any = res;
+      data.queryString = {accountUniqueName, entryUniqueNamesArray};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray}));
+  }
 
-public GetCurrencyRate(baseCurrency): Observable<BaseResponse<any, any>> {
-  this.companyUniqueName = this._generalService.companyUniqueName;
+  public GetCurrencyRate(baseCurrency): Observable<BaseResponse<any, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + 'company/' + this.companyUniqueName + '/curreny-converter/' + baseCurrency).map((res) => {
       let data: any = res;
       return data;

@@ -16,8 +16,8 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -89,9 +89,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _companyActions: CompanyActions) {
-      this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
-      this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
-    }
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+  }
 
   public ngOnInit() {
 
@@ -121,10 +121,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = Observable.of(accounts);
@@ -137,7 +137,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   public search(ev: any) {
-    let searchStr =  ev.target.value;
+    let searchStr = ev.target.value;
     if (this.activeTab === 'customer') {
       this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
     } else {

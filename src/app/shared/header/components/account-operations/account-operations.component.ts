@@ -116,8 +116,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-    private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
+              private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
+              private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
     this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
@@ -293,7 +293,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           }
           if (this.breadcrumbUniquePath[1]) {
             let col = this.breadcrumbUniquePath[1];
-            if ( col === 'sundrycreditors' ) {
+            if (col === 'sundrycreditors') {
               this.showBankDetail = true;
             } else {
               this.showBankDetail = false;

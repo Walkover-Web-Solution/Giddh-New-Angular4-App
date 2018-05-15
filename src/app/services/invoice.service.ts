@@ -100,7 +100,7 @@ export class InvoiceService {
       .map((res) => {
         let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res;
         data.request = model;
-        data.queryString = { reqObj, requestedFrom };
+        data.queryString = {reqObj, requestedFrom};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model));

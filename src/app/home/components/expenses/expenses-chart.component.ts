@@ -10,7 +10,7 @@ import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
-import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../../models/api-models/Inventory';
 
 @Component({
   selector: 'expenses-chart',

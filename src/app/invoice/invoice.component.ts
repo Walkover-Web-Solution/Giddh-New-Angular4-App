@@ -53,11 +53,11 @@ export class InvoiceComponent implements OnInit {
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     this.router.events.subscribe((event: any) => {
-        if (event && event.url && event.url.includes('recurring')) {
-          this.isRecurringSelected = true;
-        } else {
-          this.isRecurringSelected = false;
-        }
+      if (event && event.url && event.url.includes('recurring')) {
+        this.isRecurringSelected = true;
+      } else {
+        this.isRecurringSelected = false;
+      }
     });
     if (this.router.routerState.snapshot.url.includes('recurring')) {
       this.isRecurringSelected = true;

@@ -455,7 +455,7 @@ export class LoginActions {
     .ofType('REPORT_INVALID_JSON')
     .switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload))
     .map((res) => {
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
