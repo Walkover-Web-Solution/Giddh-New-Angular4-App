@@ -66,20 +66,15 @@
                                 </div>
                                 <div class="form-group">
 
-                                  <input [ngbTypeahead]="dataSource" type="text" (keyup)="onChangeCityName()"
-                                         [(ngModel)]="company.city" name="city" [resultTemplate]="rt"
-                                         (selectItem)="typeaheadOnSelect($event)" class="form-control"
-                                         autocomplete="off" required maxlength="50" placeholder="Company City"
-                                         pattern="^[^\s]+(\s+[^\s]+)*$">
+                                    <input [ngbTypeahead]="dataSource" type="text" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Company City"
+                                        pattern="^[^\s]+(\s+[^\s]+)*$">
 
                                     <ng-template #rt let-r="result" let-t="term">
                                         <span>{{ r }}</span>
                                     </ng-template>
                                 </div>
                                 <div class="modal-footer">
-                                  <button class="btn btn-success" type="submit"
-                                          [ladda]="isCompanyCreationInProcess$ | async"
-                                          [disabled]="createCompanyForm.invalid || !isCitySelectedByDropdown">Create
+                                    <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid || !isCitySelectedByDropdown">Create
                                   </button>
                                 </div>
                             </form>
