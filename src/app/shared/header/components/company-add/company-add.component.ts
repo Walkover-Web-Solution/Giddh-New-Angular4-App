@@ -123,13 +123,16 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
-    this.company.city = e.item;
-    this.isCitySelectedByDropdown = true;
-    this.dataSourceBackup.forEach(item => {
-      if (item.city === e.item) {
-        this.company.country = item.country;
-      }
-    });
+    setTimeout(() => {
+      this.company.city = e.item;
+      this.isCitySelectedByDropdown = true;
+      this.dataSourceBackup.forEach(item => {
+        if (item.city === e.item) {
+          this.company.country = item.country;
+        }
+      });
+    }, 400);
+
     // this.dataSourceBackup.forEach(item => {
     //   if (item.address_components[0].long_name === e.item) {
     //     // set country and state values

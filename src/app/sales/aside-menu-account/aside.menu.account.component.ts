@@ -43,6 +43,9 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
     :host .aside-pane {
       width: 480px;
     }
+    .aside-body {
+      margin-bottom: 80px;
+    }
   `],
   templateUrl: './aside.menu.account.component.html'
 })
