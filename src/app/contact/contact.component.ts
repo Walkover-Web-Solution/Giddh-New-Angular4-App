@@ -105,12 +105,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.getAccounts('sundrydebtors');
+    this.getAccounts('sundrydebtors', null, null, 'true');
 
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
       if (yes) {
         this.toggleAccountAsidePane();
-        this.getAccounts('sundrydebtors');
+        this.getAccounts('sundrydebtors', null, null, 'true');
       }
     });
 
@@ -223,15 +223,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.filterDropDownList.hide();
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string) {
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
     pageNumber = pageNumber ? pageNumber : 1;
-    this._contactService.GetContacts(groupUniqueName, pageNumber).subscribe((res) => {
+    refresh = refresh ? refresh : 'false';
+    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = res.body;
           this.sundryDebtorsAccounts$ = Observable.of(res.body.results);
           if (requestedFrom !== 'pagination') {
-            this.getAccounts('sundrycreditors', pageNumber);
+            this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           }
         } else {
           this.sundryCreditorsAccountsBackup = res.body;
