@@ -1,5 +1,7 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
+import * as path from 'path';
 import AppUpdater from './AppUpdater';
+import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
 import BrowserWindow = Electron.BrowserWindow;
@@ -8,6 +10,7 @@ import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOption
 export const WINDOW_NAVIGATED = 'windowNavigated';
 
 export default class WindowManager {
+    private appUpdater: AppUpdater = null;
     public static saveWindowState(window: BrowserWindow, descriptor: WindowItem): void {
         if (window.isMaximized()) {
             delete descriptor.width;
@@ -32,10 +35,18 @@ export default class WindowManager {
             // to stay active until the user quits explicitly with Cmd + Q
             if (process.platform === 'darwin') {
                 // reopen initial window
-              // this.openWindows();
-              app.quit();
+                // this.openWindows();
+                if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
+                    autoUpdater.quitAndInstall();
+                } else {
+                    app.quit();
+                }
             } else {
-                app.quit();
+                if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
+                    autoUpdater.quitAndInstall();
+                } else {
+                    app.quit();
+                }
             }
         });
     }
@@ -83,7 +94,7 @@ export default class WindowManager {
         }
 
         // tslint:disable-next-line:no-unused-expression
-      new AppUpdater();
+        this.appUpdater = new AppUpdater();
     }
 
     public focusFirstWindow(): void {
