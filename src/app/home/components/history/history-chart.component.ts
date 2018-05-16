@@ -149,7 +149,7 @@ export class HistoryChartComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' },
+        itemStyle: {color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold'},
         enabled: false
       },
       credits: {

@@ -2,15 +2,15 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Net worth</strong>
-            <!-- <div class="pull-right dashboard-filter">
-                <label>
-        <input type="radio" name="chart" class="radio_theme"  (click)="togle('Monthly')" checked />Monthly
-      </label>
-                <label>
-        <input type="radio" name="chart"  class="radio_theme" (click)="togle('Yearly')" />Yearly
-      </label>
-                <i class="glyphicon glyphicon-refresh pull-right mrL1" (click)="refreshChart()"></i>
-            </div> -->
+          <!-- <div class="pull-right dashboard-filter">
+              <label>
+      <input type="radio" name="chart" class="radio_theme"  (click)="togle('Monthly')" checked />Monthly
+    </label>
+              <label>
+      <input type="radio" name="chart"  class="radio_theme" (click)="togle('Yearly')" />Yearly
+    </label>
+              <i class="glyphicon glyphicon-refresh pull-right mrL1" (click)="refreshChart()"></i>
+          </div> -->
         </div>
         <div class="panel-body pos-rel">
             <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
@@ -20,7 +20,7 @@
             <!-- <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a> -->
             <div class="chart-div" google-chart chart="myChartData">
                 <perfect-scrollbar [scrollIndicators]="true">
-                    <chart [options]="options"></chart>
+                  <chart [options]="options"></chart>
                 </perfect-scrollbar>
             </div>
             <!--<canvas id="line" class="chart-div chart chart-line" chart-data="chartData"-->

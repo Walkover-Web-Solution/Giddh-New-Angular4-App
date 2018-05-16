@@ -3,14 +3,14 @@ import { AccountSharedWithResponse } from '../models/api-models/Account';
 import { CompanyRequest, CompanyResponse, GetCouponResp, StateDetailsRequest, StateDetailsResponse, States, TaxResponse } from '../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class CompanyService {
