@@ -2,7 +2,7 @@ import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { Component, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks, CashFreeSetting } from '../../models/interfaces/invoice.setting.interface';
+import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -50,7 +50,7 @@ export class InvoiceSettingComponent implements OnInit {
   public showDatePicker: boolean = false;
   public moment = moment;
   public isAutoPaidOn: boolean;
-  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting() ;
+  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting();
   public paymentGatewayList: IOption[] = PaymentGateway;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -117,6 +117,7 @@ export class InvoiceSettingComponent implements OnInit {
         if (this.invoiceSetting.lockDate) {
           this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
         }
+        debugger;
         this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
 
       } else if (!setting || !setting.webhooks) {
@@ -183,12 +184,12 @@ export class InvoiceSettingComponent implements OnInit {
           this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
-        if (this.isAutoPaidOn) {
-          this.formToSave.invoiceSettings.autoPaid = 'runtime';
-        } else {
-          this.formToSave.invoiceSettings.autoPaid = 'never';
-        }
-        this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
+    if (this.isAutoPaidOn) {
+      this.formToSave.invoiceSettings.autoPaid = 'runtime';
+    } else {
+      this.formToSave.invoiceSettings.autoPaid = 'never';
+    }
+    this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
       // }
 

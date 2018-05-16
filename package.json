@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.5.0",
+  "version": "6.5.5",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -10,7 +10,7 @@
     "webpack",
     "typescript"
   ],
-  "author": "Govinda Alwani <govi2010@gmail.com>",
+  "author": "Walkover Technologies<info@walkover.in>",
   "homepage": "https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App",
   "license": "MIT",
   "scripts": {
@@ -63,7 +63,7 @@
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
     "node": "node",
-    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mw --x32 --x64 --publish always",
+    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mw --ia32 --x64 --publish always",
     "package": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  -mw --x64",
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
@@ -258,10 +258,12 @@
   },
   "build": {
     "appId": "org.walkover.giddh",
-    "publish": [{
-      "provider": "s3",
-      "bucket": "tetingmankuuuuu"
-    }],
+    "publish": [
+      {
+        "provider": "s3",
+        "bucket": "tetingmankuuuuu"
+      }
+    ],
     "directories": {
       "buildResources": "src/resources",
       "output": "packages",
