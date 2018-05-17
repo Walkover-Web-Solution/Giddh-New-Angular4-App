@@ -34,7 +34,6 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
   `],
   // [routerLink]="[ 'add-group', grp.uniqueName ]"
   template: `
-    <span>Person</span>
     <ul class="list-unstyled stock-grp-list clearfix" *ngIf="personList">
       <li routerLinkActive="active" *ngFor="let p of personList"><a [routerLink]="['/pages','inventory-in-out','person',p.uniqueName]"> {{p.name}}</a></li>
       <!-- <li class="clearfix" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups">

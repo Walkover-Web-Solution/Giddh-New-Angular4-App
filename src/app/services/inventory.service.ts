@@ -442,7 +442,7 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {uniqueName}));
   }
 
-  public GetAllInventoryUser(q: string = '', refresh = false, page = 1, count = 10): Observable<BaseResponse<IPaginatedResponse<InventoryUser>, string>> {
+  public GetAllInventoryUser(q: string = '', refresh = false, page = 0, count = 0): Observable<BaseResponse<IPaginatedResponse<InventoryUser>, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http
