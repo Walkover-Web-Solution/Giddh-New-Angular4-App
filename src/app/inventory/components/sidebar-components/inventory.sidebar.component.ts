@@ -9,7 +9,7 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
-  selector: 'invetory-sidebar',  // <home></home>
+  selector: 'inventory-sidebar',  // <home></home>
   templateUrl: './inventory.sidebar.component.html',
   styles: [`
     .parent-Group > ul > li ul li div {
