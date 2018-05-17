@@ -1,7 +1,7 @@
 import { animate, Component, state, style, transition, trigger } from '@angular/core';
 
 @Component({
-  selector: 'inventory-header',
+  selector: 'inventory-inout-header',
   styles: [`
   `],
   animations: [
@@ -17,20 +17,34 @@ import { animate, Component, state, style, transition, trigger } from '@angular/
     ]),
   ],
   template: `
-    <div class="stock-bar inline pull-right">
+    <div class="inline pull-right">
       <div class="">
         <div class="pull-right">
-          <button (click)="toggleGroupStockAsidePane($event)" type="button" class="btn btn-default">New</button>
+
+        <div class="btn-group" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            New <span class="caret"></span>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-option dropdown-menu-right"
+              role="menu" aria-labelledby="button-basic">
+            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('inward', $event)">Inward Note</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('outward', $event)">Outward Note</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('transfer', $event)">Transfer Note</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('createStock', $event)">Create Stock</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('createAccount', $event)">Create Account</a></li>
+          </ul>
+        </div>
+        <!-- <button (click)="toggleGroupStockAsidePane($event)" type="button" class="btn btn-default">New</button> -->
         </div>
       </div>
     </div>
     <aside-menu
       [class]="asideMenuState"
       [@slideInOut]="asideMenuState"
-      (closeAsideEvent)="toggleGroupStockAsidePane($event)"></aside-menu>
-    <!--  <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-      <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>-->
-
+      (closeAsideEvent)="toggleGroupStockAsidePane('', $event)" [selectedAsideView]="selectedAsideView"></aside-menu>
+     <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+      <!-- <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>-->
   `
 })
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
@@ -38,13 +52,15 @@ import { animate, Component, state, style, transition, trigger } from '@angular/
 // [routerLink]="['custom-stock']"
 export class InventoryHeaderComponent {
   public asideMenuState: string = 'out';
+  public selectedAsideView: string = '';
 
-  public toggleGroupStockAsidePane(event?): void {
+  public toggleGroupStockAsidePane(view, event?): void {
     if (event) {
       event.preventDefault();
     }
     this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
+    this.selectedAsideView = view;
   }
 
   public toggleBodyClass() {

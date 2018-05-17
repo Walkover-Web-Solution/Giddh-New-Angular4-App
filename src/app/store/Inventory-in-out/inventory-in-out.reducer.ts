@@ -12,6 +12,7 @@ export interface InventoryInOutState {
   inventoryReport: InventoryReport;
   entryInProcess: boolean;
   entrySuccess: boolean;
+  userSuccess: boolean;
 }
 
 const initialState: InventoryInOutState = {
@@ -19,7 +20,8 @@ const initialState: InventoryInOutState = {
   inventoryUsers: [],
   inventoryReport: null,
   entryInProcess: false,
-  entrySuccess: false
+  entrySuccess: false,
+  userSuccess: false
 };
 
 export function InventoryInOutReducer(state: InventoryInOutState = initialState, action: CustomActions): InventoryInOutState {
@@ -35,6 +37,14 @@ export function InventoryInOutReducer(state: InventoryInOutState = initialState,
     }
     case INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE: {
       return {...state, entryInProcess: false, entrySuccess: action.payload.status === 'success'};
+    }
+    case INVENTORY_USER_ACTIONS.CREATE_USER: {
+      return {...state, userSuccess: false};
+    }
+    case INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE: {
+      let userState = _.cloneDeep(state.inventoryUsers);
+      userState.push(action.payload.body);
+      return {...state, userSuccess: true, inventoryUsers: userState};
     }
     default:
       return state;
