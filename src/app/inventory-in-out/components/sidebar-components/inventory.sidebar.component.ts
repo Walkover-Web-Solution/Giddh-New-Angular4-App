@@ -22,9 +22,14 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
       background: #fff;
       min-height: 100vh;
     }
+    :host ::ng-deep .nav-tabs>li{
+      width: 50%;
+      text-align: center;
+      background: #f5f5f5;
+    }
   `]
 })
-export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewInit {
+export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
   public stocksList$: Observable<IStocksItem[]>;
   public inventoryUsers$: Observable<InventoryUser[]>;
   public sidebarRect: any;
