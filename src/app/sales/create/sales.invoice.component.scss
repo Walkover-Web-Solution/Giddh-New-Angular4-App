@@ -217,14 +217,14 @@ $greyClr: #6d6d6d;
 
 .dropup {
     .dropdown-menu {
-      li {
-        a {
-          &:hover {
-            color: #ff5e01;
-            background: #f4f5f8;
-          }
+        li {
+            a {
+                &:hover {
+                    color: #ff5e01;
+                    background: #f4f5f8;
+                }
+            }
         }
-      }
     }
 }
 
@@ -447,4 +447,10 @@ ng-select.splSales {
     background: #eee;
     pointer-events: none;
     opacity: 0.7;
+}
+
+.tip_img {
+    max-width: 375px;
+    left: 15px;
+    position: relative;
 }
