@@ -5,7 +5,7 @@
     <div class="form_bg clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
-                <div class="col-lg-6 form-group">
+                <div class="col-xs-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off" class="form-control" bsDatepicker [minDate]="today" [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
                     <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
@@ -13,7 +13,7 @@
                     </span>
                 </div>
 
-                <div class="col-lg-6 form-group">
+                <div class="col-xs-6 form-group">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'" (selected)="stockChanged($event)" [ItemHeight]="'33'"></sh-select>
                     <span *ngIf="transactions && transactions.controls && transactions.controls[0] && transactions.controls[0].get('stock')?.invalid && (transactions.controls[0].get('stock')?.dirty || transactions.controls[0].get('stock').touched)">
@@ -24,7 +24,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6 form-group">
+                <div class="col-xs-6 form-group">
                     <label>Sender's Name <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'" (selected)="userChanged($event)" [ItemHeight]="'33'"></sh-select>
                     <span *ngIf="transactions && transactions.controls && transactions.controls[0] && transactions.controls[0].get('inventoryUser')?.invalid && (transactions.controls[0].get('inventoryUser')?.dirty || transactions.controls[0].get('inventoryUser').touched)">
@@ -32,7 +32,7 @@
                 class="text-danger">Please select Date.</span>
                     </span>
                 </div>
-                <div class="col-lg-6 form-group">
+                <div class="col-xs-6 form-group">
                     <label>Receiver's Name <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'" (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'"></sh-select>
                     <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span>
