@@ -16,7 +16,7 @@
     <div class="form_bg clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
-                <div class="col-lg-6 form-group">
+                <div class="col-xs-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off" class="form-control" bsDatepicker [minDate]="today" [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}" />
                     <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
@@ -24,7 +24,7 @@
                     </span>
                 </div>
 
-                <div class="col-lg-6 form-group" *ngIf="mode === 'receiver'">
+                <div class="col-xs-6 form-group" *ngIf="mode === 'receiver'">
                     <label class="mrB1">Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'" (selected)="stockChanged($event)"></sh-select>
                     <span *ngIf="transactions && transactions.controls && transactions.controls[0].controls && transactions.controls[0].get('stock')?.invalid && (transactions.controls[0].get('stock')?.dirty || transactions.controls[0].get('stock').touched)">
@@ -32,7 +32,7 @@
                 class="text-danger">Please select Date.</span>
                     </span>
                 </div>
-                <div class="col-lg-6 form-group" *ngIf="mode === 'product'">
+                <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
                     <label class="mrB1">Sender <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'" (selected)="userChanged($event)"></sh-select>
                     <span *ngIf="transactions && transactions.controls && transactions.controls[0] && transactions.controls[0].get('inventoryUser')?.invalid && (transactions.controls[0].get('inventoryUser')?.dirty || transactions.controls[0].get('inventoryUser').touched)">
@@ -45,30 +45,30 @@
 
 
             <div class="row">
-                <div class="col-lg-6" *ngIf="mode === 'receiver'">
+                <div class="col-xs-6" *ngIf="mode === 'receiver'">
                     <label class="fs14">Receiver <sup>*</sup></label>
                 </div>
-                <div class="col-lg-6" *ngIf="mode === 'product'">
+                <div class="col-xs-6" *ngIf="mode === 'product'">
                     <label class="fs14">Product Name <sup>*</sup></label>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-xs-6">
                     <label class="fs14">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
             <div class="row" formArrayName="transactions" *ngFor="let item of transactions.controls; let i = index;let first = first;let last = last">
                 <div [formGroupName]="i">
-                    <div class="col-lg-6 form-group" *ngIf="mode === 'receiver'">
+                    <div class="col-xs-6 form-group" *ngIf="mode === 'receiver'">
                         <!-- <label class="mrB1">Receiver</label> -->
                         <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'" (selected)="userChanged($event,i)"></sh-select>
                         <span [hidden]="!item.controls['inventoryUser'].errors?.required" class="text-danger">Please select Receiver.</span>
                     </div>
-                    <div class="col-lg-6 form-group" *ngIf="mode === 'product'">
+                    <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
                         <!-- <label class="mrB1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'" (selected)="stockChanged($event,i)"></sh-select>
                         <span [hidden]="!item.controls['stock'].errors?.required" class="text-danger">Please select Product.</span>
                     </div>
-                    <div class="col-lg-6 form-group">
+                    <div class="col-xs-6 form-group">
                         <!-- <label class="mrB1">Quantity</label> -->
 
                         <div class="row">

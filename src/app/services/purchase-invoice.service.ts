@@ -4,7 +4,7 @@ import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
+import { PURCHASE_INVOICE_API, GST_RETURN_API } from './apiurls/purchase-invoice.api';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
@@ -245,6 +245,26 @@ export class PurchaseInvoiceService {
     return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  public SaveJioGst(model: object): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_JIO_GST.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  public FileJioGstReturn(reqObj): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {reqObj};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }

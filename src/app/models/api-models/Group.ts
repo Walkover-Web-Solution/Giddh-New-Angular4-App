@@ -28,6 +28,8 @@ export class GroupResponse implements ICreateGroup {
   public createdBy: IUserInfo;
   public updatedAt: string;
   public updatedBy: IUserInfo;
+  public closingBalanceTriggerAmount: number;
+  public closingBalanceTriggerAmountType: string;
 
 }
 

@@ -9,6 +9,7 @@ import { GroupCreateRequest, GroupResponse } from '../../../../models/api-models
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { ToasterService } from '../../../../services/toaster.service';
 import { GeneralService } from 'app/services/general.service';
+import { digitsOnly } from '../../../helpers';
 
 @Component({
   selector: 'group-add',
@@ -41,7 +42,9 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
-      description: ['']
+      description: [''],
+      closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+      closingBalanceTriggerAmountType: ['CREDIT']
     });
 
     this.isCreateGroupSuccess$.distinctUntilChanged().subscribe(a => {
@@ -106,6 +109,12 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     grpObject.path = this.path;
     // add bredcrum to payload
     this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
+  }
+
+  public closingBalanceTypeChanged(type: string) {
+    if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
+      this.groupDetailForm.get('closingBalanceTriggerAmountType').patchValue(type);
+    }
   }
 
   public ngOnDestroy(): void {
