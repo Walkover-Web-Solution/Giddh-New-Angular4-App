@@ -991,7 +991,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
-    entry.taxSum = _.sumBy(entry.taxes, function (o) {
+    entry.taxSum = _.sumBy(entry.taxes, function(o) {
       return o.amount;
     });
   }
@@ -1033,7 +1033,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function (o) {
+    entry.discountSum = _.sumBy(entry.discounts, function(o) {
       return o.amount;
     });
   }
@@ -1106,6 +1106,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (!event.target.value) {
       this.forceClear$ = Observable.of({status: true});
       this.isCustomerSelected = false;
+      this.invFormData.accountDetails = new AccountDetailsClass();
+      this.invFormData.accountDetails.uniqueName = 'cash';
     }
   }
 
