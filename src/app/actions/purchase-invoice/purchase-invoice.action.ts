@@ -208,11 +208,38 @@ export class InvoicePurchaseActions {
   private SaveJioGstResponse$: Observable<Action> = this.action$
     .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE)
     .map((response: CustomActions) => {
-      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+      let data: BaseResponse<any, string> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast('Jio Gst Added Successfully');
+        this.toasty.successToast(data.body);
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  /**
+   * File Jio GSTR1
+   */
+  @Effect()
+  private FileJioGstReturn$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST)
+    .switchMap((action: CustomActions) => {
+      return this.purchaseInvoiceService.FileJioGstReturn(action.payload)
+        .map(response => this.FileJioGstReturnResponse(response));
+    });
+
+  /**
+   * File Jio GSTR1 Response
+   */
+  @Effect()
+  private FileJioGstReturnResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body);
       }
       return { type: 'EmptyAction' };
     });
@@ -364,6 +391,20 @@ export class InvoicePurchaseActions {
   public SaveJioGstResponse(response): CustomActions {
     return {
       type: GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE,
+      payload: response
+    };
+  }
+
+  public FileJioGstReturn(month, gstNumber): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.FILE_JIO_GST,
+      payload: {month, gstNumber}
+    };
+  }
+
+  public FileJioGstReturnResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE,
       payload: response
     };
   }
