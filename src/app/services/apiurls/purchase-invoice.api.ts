@@ -16,5 +16,6 @@ export const PURCHASE_INVOICE_API = {
 };
 
 export const GST_RETURN_API = {
-  SAVE_JIO_GST: GSTRETURN + 'settings'
+  SAVE_JIO_GST: GSTRETURN + 'settings',
+  FILE_JIO_GST_RETURN: GSTRETURN + 'post-data-to-jiogst?monthYear=:month&gstin=:company_gstin'
 };
