@@ -92,12 +92,12 @@
                     <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading... </small>
                 </div>
             </div>
-            <!-- hide due to unused 
-                <div class="col-xs-2 form-group pull-right">
-                    <label class="d-block">&nbsp;</label>
-                    <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
-                </div>
-                -->
+            <!-- hide due to unused -->
+            <div class="col-xs-2 form-group pull-right">
+                <label class="d-block">&nbsp;</label>
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
+            </div>
+
         </div>
     </form>
     <!-- Top filter end  -->
@@ -293,7 +293,7 @@
         </div>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+    <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
