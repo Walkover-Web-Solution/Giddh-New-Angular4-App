@@ -635,4 +635,17 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.userEmail = '';
     }
   }
+
+  /**
+   * fileJioGstReturn
+   */
+  public fileJioGstReturn() {
+    let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
+    let monthToSend = check.format('MM') + '-' + check.format('YYYY');
+      if (this.activeCompanyGstNumber) {
+        this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber));
+      } else {
+        this.toasty.errorToast('GST number not found.');
+      }
+  }
 }
