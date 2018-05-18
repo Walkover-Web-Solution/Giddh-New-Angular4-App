@@ -259,4 +259,14 @@ export class PurchaseInvoiceService {
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 
+  public FileJioGstReturn(reqObj): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {reqObj};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
 }
