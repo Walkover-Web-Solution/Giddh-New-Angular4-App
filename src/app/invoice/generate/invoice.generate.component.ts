@@ -179,11 +179,13 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     } else {
       this.allItemsSelected = false;
     }
-    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      item.isSelected = this.allItemsSelected ? true : false;
-      return item;
-    });
-    this.insertItemsIntoArr();
+    if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length) {
+      this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+        item.isSelected = this.allItemsSelected ? true : false;
+        return item;
+      });
+      this.insertItemsIntoArr();
+    }
   }
 
   public toggleItem(item: any, action: boolean) {
