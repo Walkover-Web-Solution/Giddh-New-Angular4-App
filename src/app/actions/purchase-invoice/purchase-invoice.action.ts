@@ -4,7 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
-import { PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
+import { PURCHASE_INVOICE_ACTIONS, GST_RETURN_ACTIONS } from './purchase-invoice.const';
 
 import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
@@ -190,6 +190,33 @@ export class InvoicePurchaseActions {
       return { type: 'EmptyAction' };
     });
 
+  /**
+   * Save Jio Gst Details
+   */
+  @Effect()
+  private SaveJioGst$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST)
+    .switchMap((action: CustomActions) => {
+      return this.purchaseInvoiceService.SaveJioGst(action.payload)
+        .map(response => this.SaveJioGstResponse(response));
+    });
+
+  /**
+   * Save Jio Gst Details RESPONSE
+   */
+  @Effect()
+  private SaveJioGstResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast('Jio Gst Added Successfully');
+      }
+      return { type: 'EmptyAction' };
+    });
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -323,6 +350,20 @@ export class InvoicePurchaseActions {
   public UpdateInvoiceResponse(response): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE,
+      payload: response
+    };
+  }
+
+  public SaveJioGst(model): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_JIO_GST,
+      payload: model
+    };
+  }
+
+  public SaveJioGstResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE,
       payload: response
     };
   }
