@@ -38,7 +38,8 @@ const filterType = [
 
 const scopeList = [
   {label: 'Invoice', value: 'invoice'},
-  {label: 'Entry', value: 'entry'}
+  {label: 'Entry', value: 'entry'},
+  {label: 'Closing Balance', value: 'closing balance'}
 ];
 
 const taxDuration = [
@@ -78,6 +79,7 @@ export class SettingTriggerComponent implements OnInit {
   public scopeList: IOption[] = scopeList;
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   public forceClearEntityList$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClearFilterList$: Observable<IForceClear> = Observable.of({status: false});
   public entityOptions$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -256,6 +258,29 @@ export class SettingTriggerComponent implements OnInit {
   public onResetEntityType() {
     this.newTriggerObj.entityType = '';
     this.forceClearEntityList$ = Observable.of({status: true});
+  }
+
+  /**
+   * onSelectScope
+   */
+  public onSelectScope(event) {
+    if (event.value === 'closing balance') {
+      this.onSelectClosingBalance();
+      if ( (this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountLessThan')) {
+        return;
+      } else {
+        this.forceClearFilterList$ = Observable.of({status: true});
+      }
+    } else {
+      this.filterList = filterType;
+    }
+  }
+
+  public onSelectClosingBalance() {
+    this.filterList = [
+        {label: 'Amount Greater Than', value: 'amountGreaterThan'},
+        {label: 'Amount Less Than', value: 'amountLessThan'},
+    ];
   }
 
 }
