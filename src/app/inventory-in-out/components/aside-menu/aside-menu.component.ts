@@ -106,6 +106,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
 
   public onCancel() {
     this.view = '';
+    this.closeAsidePane();
   }
 
   public closeAsidePane(event?) {
