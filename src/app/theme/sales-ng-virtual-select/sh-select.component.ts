@@ -49,6 +49,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
   @Input() public doNotReset: boolean = false;
   @Input() public showLabelOnly: boolean = false;
   @Input() public showBottomBorderOnly: boolean = false;
+  @Input() public salesShSelectPading: number = 0;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
