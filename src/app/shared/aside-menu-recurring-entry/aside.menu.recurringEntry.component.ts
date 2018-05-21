@@ -156,7 +156,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
       if (this.mode === 'update') {
         this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
       } else {
-        this.closeAsidePane(this.invoice);
+        this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
       }
     }
   }
