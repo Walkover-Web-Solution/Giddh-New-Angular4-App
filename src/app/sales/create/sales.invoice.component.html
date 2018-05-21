@@ -30,7 +30,7 @@
                             <!--  -->
                             <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)">
+                                [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                         <div class="item">{{ option.label }}</div>
