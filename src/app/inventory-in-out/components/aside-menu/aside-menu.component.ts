@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges, Input } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -56,6 +56,8 @@ import { GeneralService } from '../../../services/general.service';
 
     :host .aside-pane {
       width: 480px;
+      padding:0;
+      background: #fff;
     }
   `],
 })
@@ -64,6 +66,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   public stockList$: Observable<IStocksItem[]>;
   public userList$: Observable<InventoryUser[]>;
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Input() public selectedAsideView: string;
   public view = '';
   public isLoading: boolean;
 
@@ -86,7 +89,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
       .select(p => p.inventory.stocksList && p.inventory.stocksList.results);
 
     this.userList$ = this._store
-      .select(p => p.inventoryInOutState.inventoryUsers.filter(p => p.uniqueName !== this._generalService.companyUniqueName));
+      .select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
 
     this._store
       .select(p => p.inventoryInOutState.entrySuccess)
@@ -95,10 +98,15 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     this._store
       .select(p => p.inventoryInOutState.entryInProcess)
       .subscribe(p => this.isLoading = p);
+
+    this._store
+      .select(p => p.inventoryInOutState.userSuccess)
+      .subscribe(p => p && this.closeAsidePane(p));
   }
 
   public onCancel() {
     this.view = '';
+    this.closeAsidePane();
   }
 
   public closeAsidePane(event?) {
@@ -108,5 +116,9 @@ export class AsideMenuComponent implements OnInit, OnChanges {
 
   public onSave(entry: InventoryEntry, reciever?: InventoryUser) {
     this._store.dispatch(this._inventoryEntryAction.addNewEntry(entry, reciever));
+  }
+
+  public createAccount(value) {
+    this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
   }
 }
