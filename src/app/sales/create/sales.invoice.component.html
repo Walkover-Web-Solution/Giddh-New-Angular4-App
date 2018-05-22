@@ -30,7 +30,7 @@
                             <!--  -->
                             <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)">
+                                [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                         <div class="item">{{ option.label }}</div>
@@ -285,7 +285,7 @@
                         <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx !== entryIdx" class="row-active">
                             <td>{{ entryIdx+1 }}</td>
                             <td style="min-width: 115px;width: 115px">
-                                <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-left" [(ngModel)]="transaction.date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                                <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-left" [(ngModel)]="entry.entryDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                             </td>
                             <td style="min-width:215px">
                                 <div class="ng-select-wrap">
@@ -405,7 +405,7 @@
                         </tr>
                         <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
                             <td>{{ entryIdx+1 }}</td>
-                            <td style="min-width: 115px;width: 115px">{{moment(transaction.date).format(GIDDH_DATE_FORMAT)}}</td>
+                            <td style="min-width: 115px;width: 115px">{{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}</td>
                             <td style="min-width:215px">{{transaction.accountName}}
                                 <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.uniqueName}})</span>
                             </td>
