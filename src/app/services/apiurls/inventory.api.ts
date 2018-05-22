@@ -1,4 +1,4 @@
-const COMMON_USER = '/company/:companyUniqueName/inventory-users';
+const COMMON_USER = 'company/:companyUniqueName/inventory-users';
 const COMMON_ENTRY = COMMON_USER + '/:inventoryUserUniqueName/inventory-entries';
 
 export const INVENTORY_API = {
@@ -15,8 +15,8 @@ export const INVENTORY_API = {
     GET: COMMON_ENTRY + '/:inventoryEntryUniqueName',
     DELETE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
   },
-  REPORT: '/company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
-  REPORT_ALL: '/company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
+  REPORT: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
+  REPORT_ALL: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
 
   CREATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group', // post call
   UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call

@@ -261,7 +261,9 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
           bankAccountNo: [''],
           ifsc: ['']
         })
-      ])
+      ]),
+    closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+    closingBalanceTriggerAmountType: ['CREDIT']
     });
   }
 
@@ -439,6 +441,12 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       activeGroupUniqueName: this.activeGroupUniqueName,
       accountRequest: this.addAccountForm.value
     });
+  }
+
+  public closingBalanceTypeChanged(type: string) {
+    if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
+      this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+    }
   }
 
   /**
