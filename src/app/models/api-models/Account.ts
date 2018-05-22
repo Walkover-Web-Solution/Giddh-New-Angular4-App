@@ -219,6 +219,9 @@ export class AccountResponseV2 {
   public addresses: IAccountAddress[];
   public accountBankDetails: AccountBankDetails[];
   public cashFreeVirtualAccountData: CashFreeVirtualAccount;
+  public closingBalanceTriggerAmount: number;
+  public closingBalanceTriggerAmountType: string;
+
 }
 
 /*

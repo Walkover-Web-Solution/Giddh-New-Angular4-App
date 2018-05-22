@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { InventoryInOutRoutingModule } from './inventory-in-out.routing.module';
 import { InventoryInOutComponent } from './inventory-in-out.component';
-import { StockListComponent } from './components/sidebar-components/stock-list.component';
-import { InventorySidebarComponent } from './components/sidebar-components/inventory.sidebar.component';
+import { InOutStockListComponent } from './components/sidebar-components/stock-list.component';
+import { InventoryInOutSidebarComponent } from './components/sidebar-components/inventory.sidebar.component';
 import { PersonListComponent } from './components/sidebar-components/person-list.component';
 import { InventoryHeaderComponent } from './components/header-components/inventory-header-component';
 import { InventoryInOutReportComponent } from './components/inventory-in-out-report/inventory-in-out-report.component';
@@ -18,19 +18,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
+import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { InventoryModule } from '../inventory/inventory.module';
 
 @NgModule({
   declarations: [
     InventoryInOutComponent,
-    InventorySidebarComponent,
+    InventoryInOutSidebarComponent,
     PersonListComponent,
-    StockListComponent,
+    InOutStockListComponent,
     InventoryHeaderComponent,
     InventoryInOutReportComponent,
     AsideMenuComponent,
     TransferNoteComponent,
     InwardNoteComponent,
-    OutwardNoteComponent
+    OutwardNoteComponent,
+    InventoryUserComponent
   ],
   exports: [],
   providers: [],
@@ -41,7 +45,10 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     Daterangepicker,
     ReactiveFormsModule,
     FormsModule,
-    BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule
+    BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule,
+    BsDropdownModule,
+    InventoryModule,
+    TabsModule
   ],
 })
 export class InventoryInOutModule {
