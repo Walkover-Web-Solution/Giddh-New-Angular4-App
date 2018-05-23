@@ -178,7 +178,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         ifscCode: [''],
         name: [''],
         virtualAccountNumber: ['']
-      })
+      }),
+      closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+      closingBalanceTriggerAmountType: ['CREDIT']
     });
     // fill form with active account
     this.activeAccount$.subscribe(acc => {
@@ -469,6 +471,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName },
       accountRequest: this.addAccountForm.value
     });
+  }
+
+  public closingBalanceTypeChanged(type: string) {
+    if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
+      this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+    }
   }
 
   public ngOnDestroy() {
