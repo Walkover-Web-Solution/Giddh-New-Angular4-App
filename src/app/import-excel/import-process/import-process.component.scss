@@ -1,0 +1,14 @@
+table {
+    table-layout: fixed;
+}
+
+.basic>thead>tr>th {
+    overflow: hidden;
+    width: 100px;
+}
+
+.data_overview {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: scroll;
+}

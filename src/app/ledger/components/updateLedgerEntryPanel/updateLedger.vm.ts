@@ -1,14 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, findIndex, sumBy, uniq } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
-import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -221,6 +220,7 @@ export class UpdateLedgerVm {
   }
 
   public onTxnAmountChange(txn: ILedgerTransactionItem) {
+
     if (!txn.isUpdated) {
       if (this.selectedLedger.taxes.length && !txn.isTax) {
         txn.isUpdated = true;
@@ -280,7 +280,18 @@ export class UpdateLedgerVm {
     return txn.particular.uniqueName;
   }
 
-  public inventoryQuantityChanged(val: number) {
+  public inventoryQuantityChanged(val: any) {
+    // if val is typeof string change event should be fired and if not then paste event should be fired
+    if (typeof val !== 'string') {
+      let tempVal = val.clipboardData.getData('text/plain');
+      if (Number.isNaN(Number(tempVal))) {
+        val.stopImmediatePropagation();
+        val.preventDefault();
+        return;
+      }
+      val = tempVal;
+    }
+
     if (Number(this.stockTrxEntry.inventory.rate * val) !== this.stockTrxEntry.amount) {
       this.stockTrxEntry.isUpdated = true;
     }
@@ -292,7 +303,18 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryPriceChanged(val: number) {
+  public inventoryPriceChanged(val: any) {
+    // if val is typeof string change event should be fired and if not then paste event should be fired
+    if (typeof val !== 'string') {
+      let tempVal = val.clipboardData.getData('text/plain');
+      if (Number.isNaN(Number(tempVal))) {
+        val.stopImmediatePropagation();
+        val.preventDefault();
+        return;
+      }
+      val = tempVal;
+    }
+
     if (Number(val * this.stockTrxEntry.inventory.quantity) !== this.stockTrxEntry.amount) {
       this.stockTrxEntry.isUpdated = true;
     }
@@ -303,7 +325,18 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryAmountChanged(val: string) {
+  public inventoryAmountChanged(val: any) {
+    // if val is typeof string change event should be fired and if not then paste event should be fired
+    if (typeof val !== 'string') {
+      let tempVal = val.clipboardData.getData('text/plain');
+      if (Number.isNaN(Number(tempVal))) {
+        val.stopImmediatePropagation();
+        val.preventDefault();
+        return;
+      }
+      val = tempVal;
+    }
+
     if (this.stockTrxEntry) {
       if (this.stockTrxEntry.amount !== Number(Number(val).toFixed(2))) {
         this.stockTrxEntry.isUpdated = true;
@@ -328,7 +361,19 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryTotalChanged() {
+  public inventoryTotalChanged(event = null) {
+
+    // if val is typeof string change event should be fired and if not then paste event should be fired
+    if (event) {
+      let tempVal = event.clipboardData.getData('text/plain');
+      if (Number.isNaN(Number(tempVal))) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        return;
+      }
+      this.grandTotal = Number(tempVal);
+    }
+
     let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
       return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
     }) || 0;

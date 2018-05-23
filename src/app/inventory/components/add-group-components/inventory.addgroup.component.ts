@@ -38,6 +38,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
   public isDeleteGroupInProcess$: Observable<boolean>;
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
   public defaultGrpActive: boolean = false;
+  public manageInProcess$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -53,6 +54,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     this.isAddNewGroupInProcess$ = this.store.select(state => state.inventory.isAddNewGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isDeleteGroupInProcess$ = this.store.select(state => state.inventory.isDeleteGroupInProcess).takeUntil(this.destroyed$);
+    this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).takeUntil(this.destroyed$);
     this.store.take(1).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
         this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
@@ -145,6 +147,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         }
         this.getParentGroupData();
         // this.router.navigate(['/pages', 'inventory', 'add-group']);
+      }
+    });
+
+    this.manageInProcess$.subscribe(s => {
+      if (!s.isOpen) {
+        // console.log('s:', s);
+        this.addGroupForm.reset();
       }
     });
   }

@@ -103,7 +103,7 @@
                             <!-- <td class="pdL1">
                                 <span>{{""}}</span>
                             </td> -->
-                            <td class="pdR1" *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                            <td class="pdR1" *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'rcpt' || blankLedger.voucherType == 'pay')">
                                 <label class="default_clr">Invoice No.</label>
                                 <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
@@ -161,8 +161,9 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12 pdT1 form-inline text-right" *ngIf="isMulticurrency">
-                <input type="text" class="form-control max100 text-right" [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" /> <label> ({{currentTxn.selectedAccount.currency}})</label>
+            <div class="col-xs-12 pdT1 form-inline text-right" [hidden]="!isMulticurrency">
+                <input type="text" class="form-control max100 text-right" [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" /> <label>
+            ({{currentTxn.selectedAccount?.currency}})</label>
             </div>
             <div class="col-xs-12 clearfix mrT1">
                 <div class="mrR1 form-group pull-left cp">

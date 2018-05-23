@@ -1,6 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { HOME } from '../../actions/home/home.const';
-import { Action } from '@ngrx/store';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IGroupHistoryGroups, IRevenueChartClosingBalanceResponse } from '../../models/interfaces/dashboard.interface';
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
@@ -35,6 +34,8 @@ export interface HomeState {
   RefereshBankAccount?: RefreshBankAccountResponse;
   isReConnectBankAccount: boolean;
   ReConnectBankAccount?: RefreshBankAccountResponse;
+  RatioAnalysis?: any;
+  totalOverDues?: any;
 }
 
 export const initialState: HomeState = {
@@ -184,7 +185,8 @@ export const initialState: HomeState = {
     },
     ProfitLossLastYearMonthly: [],
     ProfitLossLastYearYearly: [],
-  }
+  },
+  totalOverDues: []
 };
 
 export function homeReducer(state = initialState, action: CustomActions): HomeState {
@@ -561,6 +563,20 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
     //     }
     //   });
     // }
+    case HOME.GET_RATIO_ANALYSIS_RESPONSE: {
+      let rationAnalysisRes: BaseResponse<any, string> = action.payload;
+      if (rationAnalysisRes.status === 'success') {
+        return Object.assign({}, state, {RatioAnalysis: rationAnalysisRes.body});
+      }
+    }
+    case HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES_RESPONSE: {
+      let overduesRes: any[] = action.payload;
+      if (overduesRes.length) {
+        return Object.assign({}, state, {totalOverDues: overduesRes});
+      }
+      return state;
+    }
+
     default: {
       return state;
     }

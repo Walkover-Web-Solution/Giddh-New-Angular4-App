@@ -1,6 +1,6 @@
 import { User } from 'oidc-client';
 import { ICreateGroup } from '../interfaces/groupCreate.interface';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from './Inventory';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { IGroup } from '../interfaces/group.interface';
 import { IAccountsInfo } from '../interfaces/accountInfo.interface';
@@ -28,6 +28,8 @@ export class GroupResponse implements ICreateGroup {
   public createdBy: IUserInfo;
   public updatedAt: string;
   public updatedBy: IUserInfo;
+  public closingBalanceTriggerAmount: number;
+  public closingBalanceTriggerAmountType: string;
 
 }
 

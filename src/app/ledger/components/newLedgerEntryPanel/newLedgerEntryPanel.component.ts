@@ -16,7 +16,7 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { LedgerService } from '../../../services/ledger.service';
-import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -29,6 +29,7 @@ import { Configuration } from 'app/app.constant';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
+import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -43,7 +44,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
   @Input() public isBankTransaction: boolean = false;
-  @Input() public trxRequest: TransactionsRequest;
+  @Input() public trxRequest: AdvanceSearchRequest;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
@@ -214,11 +215,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
     }
     this.calculateCompoundTotal();
-    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
       this.isMulticurrency = true;
-      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
-      // alert(convertedAmount);
-      // this.currentTxn.convertedAmount = convertedAmount;
+      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total, this.currentTxn);
     } else {
       this.isMulticurrency = false;
     }
@@ -469,28 +468,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-    /**
+  /**
    * calculateConversionRate
    */
-  public calculateConversionRate(baseCurr, convertTo, amount) {
-    if (this.currentBaseCurrency === baseCurr && this.currencyRateResponse) {
-      this.calculateAmountInConvertedCurrency(this.currencyRateResponse, baseCurr, convertTo, amount);
-    } else {
-      this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
-        if (res) {
-          this.calculateAmountInConvertedCurrency(res.rates, baseCurr, convertTo, amount);
-        }
-      });
-    }
-  }
-
-  private calculateAmountInConvertedCurrency(ratesResponse, baseCurr, convertTo, amount) {
-    for (let key in ratesResponse) {
-      if (key === convertTo) {
-        this.currentTxn.convertedAmount =  amount * ratesResponse[key];
-        this.currentBaseCurrency = baseCurr;
-        this.currencyRateResponse = _.cloneDeep(ratesResponse);
+  public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
+    this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
+      let rates = res.body;
+      if (rates) {
+        _.forEach(rates, (value, key) => {
+          if (key === convertTo) {
+            return obj.convertedAmount = amount * rates[key];
+          }
+        });
       }
-    }
+    });
   }
 }

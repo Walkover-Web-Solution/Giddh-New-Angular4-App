@@ -4,7 +4,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
-import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
