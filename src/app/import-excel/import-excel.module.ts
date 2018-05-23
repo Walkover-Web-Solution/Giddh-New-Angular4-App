@@ -10,6 +10,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     FormsModule,
     ImportExcelRoutingModule,
     LaddaModule,
-    ShSelectModule
+    ShSelectModule,
+    TooltipModule,
+    BsDropdownModule
   ],
 })
 export class ImportExcelModule {

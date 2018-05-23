@@ -5,6 +5,13 @@ import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+
+interface DataModel {
+  field: string;
+  options: IOption[];
+  selected: string;
+}
 
 @Component({
   selector: 'import-wizard',  // <home></home>
@@ -18,6 +25,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public isUploadInProgress: boolean = false;
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
+  public dataModel: DataModel[];
 
   constructor(
     private store: Store<AppState>,
@@ -30,7 +38,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public dataChanged = (excelState: ImportExcelState) => {
     this.excelState = excelState;
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
-      this.step = 2;
+      this.step = 3;
+      this.onNext(excelState.importExcelData);
+      this.prepareDataModel(excelState.importExcelData);
     }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
@@ -56,7 +66,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public onNext(importData: ImportExcelResponseData) {
     console.log(importData);
     this.mappedData = importData;
-    this.step++;
+    // this.step++;
   }
 
   public onBack() {
@@ -65,5 +75,16 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onSubmit(data: ImportExcelRequestData) {
     this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
+  }
+
+  private prepareDataModel(value: ImportExcelResponseData) {
+    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+    Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
+    this.dataModel = Object.keys(value.mappings.mappingInfo)
+      .map(field => ({
+        field,
+        options,
+        selected: value.mappings.mappingInfo[field][0].columnNumber.toString()
+      }));
   }
 }
