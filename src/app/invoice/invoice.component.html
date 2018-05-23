@@ -4,7 +4,7 @@
       <div class="">
         <invoice-page-dd></invoice-page-dd>
 
-        <ul class="nav navbar-nav navbar-right invoice-nav">
+        <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="!isRecurringSelected">
           <li>
             <a [routerLink]="['preview']" routerLinkActive="active">Preview</a>
           </li>

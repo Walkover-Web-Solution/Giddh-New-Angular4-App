@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -16,7 +16,6 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { setTimeout } from 'timers';
 
 @Component({
   selector: 'account-add-new',
@@ -53,7 +52,7 @@ import { setTimeout } from 'timers';
   `]
 })
 
-export class AccountAddNewComponent implements OnInit, OnDestroy {
+export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public addAccountForm: FormGroup;
   @Input() public activeGroupUniqueName: string;
   @Input() public fetchingAccUniqueName$: Observable<boolean>;
@@ -62,6 +61,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   @Input() public createAccountIsSuccess$: Observable<boolean>;
   @Input() public isGstEnabledAcc: boolean = false;
   @Input() public isHsnSacEnabledAcc: boolean = false;
+  @Input() public showBankDetail: boolean = false;
+  @Input() public showVirtualAccount: boolean = false;
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
@@ -253,7 +254,16 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       hsnOrSac: [''],
       currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }]
+      sacNumber: [{value: '', disabled: false}],
+      accountBankDetails: this._fb.array([
+        this._fb.group({
+          bankName: [''],
+          bankAccountNo: [''],
+          ifsc: ['']
+        })
+      ]),
+    closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+    closingBalanceTriggerAmountType: ['CREDIT']
     });
   }
 
@@ -412,10 +422,40 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (this.showBankDetail) {
+      if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+        accountRequest['accountBankDetails'] = [];
+      }
+    } else {
+      delete accountRequest['accountBankDetails'];
+    }
+    if (!this.showVirtualAccount) {
+      delete accountRequest['cashFreeVirtualAccountData'];
+    }
+    if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+      this._toaster.errorToast('Mobile no. & email Id is mandatory');
+      return;
+    }
+
     this.submitClicked.emit({
       activeGroupUniqueName: this.activeGroupUniqueName,
       accountRequest: this.addAccountForm.value
     });
+  }
+
+  public closingBalanceTypeChanged(type: string) {
+    if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
+      this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+    }
+  }
+
+  /**
+   * ngOnChanges
+   */
+  public ngOnChanges(s) {
+    if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
+      this.showOtherDetails = true;
+    }
   }
 
   public ngOnDestroy() {

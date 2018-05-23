@@ -490,6 +490,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
+        isCompanyCreated: false
         // isCompanyCreated: state.isCompanyCreated
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:

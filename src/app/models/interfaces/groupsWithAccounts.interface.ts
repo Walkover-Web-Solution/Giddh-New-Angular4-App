@@ -1,4 +1,4 @@
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 import { IAccountsInfo } from './accountInfo.interface';
 
 export interface IGroupsWithAccounts extends INameUniqueName {

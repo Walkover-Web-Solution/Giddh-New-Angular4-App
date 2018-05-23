@@ -2,6 +2,7 @@ import { autoUpdater } from 'electron-updater';
 import { dialog } from 'electron';
 let updater;
 export default class AppUpdater {
+    public isUpdateDownloaded: boolean = false;
     constructor() {
         const log = require('electron-log');
         log.transports.file.level = 'debug';
@@ -39,12 +40,7 @@ export default class AppUpdater {
         });
 
         autoUpdater.on('update-downloaded', () => {
-            dialog.showMessageBox({
-                title: 'Install Updates',
-                message: 'Updates downloaded, application will be quit for update...'
-            }, () => {
-                setImmediate(() => autoUpdater.quitAndInstall());
-            });
+            this.isUpdateDownloaded = true;
         });
 
     }

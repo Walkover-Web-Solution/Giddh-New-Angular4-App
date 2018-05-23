@@ -10,3 +10,14 @@
 table.width100 {
     position: relative
 }
+
+.currency_type {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+}
+
+.multicurrency_input {
+  padding-right: 35px !important;
+}

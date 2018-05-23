@@ -14,20 +14,20 @@ import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { BranchComponent } from './branch/branch.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
+import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,8 @@ import { SettingsTagsComponent } from './tags/tags.component';
     SettingPermissionComponent,
     SettingPermissionFormComponent,
     BranchComponent,
-    SettingsTagsComponent
+    SettingsTagsComponent,
+    SettingTriggerComponent
   ],
   imports: [
     CommonModule,

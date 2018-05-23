@@ -4,18 +4,18 @@
     <div class="panel-heading">
       <strong>Monthly</strong>
       <div class="pull-right dashboard-filter">
+        <!-- <label>
+  <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()" />LY
+</label>
         <label>
-          <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()" />LY
-        </label>
+  <input type="checkbox" [checked]="showExpense" (change)="toggle('Expense')" />Expenses
+</label>
         <label>
-          <input type="checkbox" [checked]="showExpense" (change)="toggle('Expense')" />Expenses
-        </label>
+  <input type="checkbox" [checked]="showRevenue" (change)="toggle('Revenue')" />Revenue
+</label>
         <label>
-          <input type="checkbox" [checked]="showRevenue" (change)="toggle('Revenue')" />Revenue
-        </label>
-        <label>
-          <input type="checkbox" [checked]="showProfitLoss" (change)="toggle('Profit/Loss')" />Profit / Loss
-        </label>
+  <input type="checkbox" [checked]="showProfitLoss" (change)="toggle('Profit/Loss')" />Profit / Loss
+</label> -->
         <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh();"></i>
       </div>
     </div>
@@ -29,6 +29,27 @@
         <perfect-scrollbar [scrollIndicators]="true">
           <chart [options]="options"></chart>
         </perfect-scrollbar>
+
+        <ul class="dashboard-option">
+          <li class="primaryDarkBg">
+            <input type="checkbox" [checked]="showExpense" (change)="toggle('Expense')"/>Expenses
+          </li>
+          <li class="primarylightBg">
+            <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()"/>Last Year
+          </li>
+          <li class="secondryDarkbg">
+            <input type="checkbox" [checked]="showRevenue" (change)="toggle('Revenue')"/>Revenue
+          </li>
+          <li class="secondrylightbg">
+            <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()"/>Last Year
+          </li>
+          <li class="defaultDarkBg">
+            <input type="checkbox" [checked]="showProfitLoss" (change)="toggle('Profit/Loss')"/>Profit / Loss
+          </li>
+          <li class="defaultLightBg">
+            <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()"/>Last Year
+          </li>
+        </ul>
       </div>
     </div>
   </div>

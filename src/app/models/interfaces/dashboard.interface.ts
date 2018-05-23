@@ -1,4 +1,4 @@
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 import { IClosingBalance, IForwardBalance } from './ledger.interface';
 import { ClosingBalanceResponse } from '../api-models/Dashboard';
 
@@ -72,6 +72,11 @@ export interface IRevenueChartClosingBalanceResponse {
   revenuefromoperationsLastyear?: ClosingBalanceResponse;
   otherincomeActiveyear?: ClosingBalanceResponse;
   otherincomeLastyear?: ClosingBalanceResponse;
+}
+
+export interface ITotalOverDuesResponse {
+  sundryDebtorsClosing?: IDashboardCbMainItem;
+  sundryCreditorsClosing?: IDashboardCbMainItem;
 }
 
 export class IComparisionChartResponse {

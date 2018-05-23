@@ -1,5 +1,5 @@
 import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
@@ -13,7 +13,8 @@ import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, Group
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+
 declare var _: any;
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
@@ -123,11 +124,15 @@ export class GroupService {
   public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
-      let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
-      data.request = q;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
+        let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
+        data.request = q;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<MoveGroupResponse, MoveGroupRequest>> {
@@ -166,7 +171,8 @@ export class GroupService {
   public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':q', encodeURIComponent(q || ''))
       .replace(':page', encodeURIComponent(page.toString()))
       .replace(':count', encodeURIComponent(count.toString()))
@@ -177,6 +183,9 @@ export class GroupService {
         // data.response.results.forEach(p => p.isOpen = false);
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups }));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public GetTaxHierarchy(groupUniqueName: string): Observable<BaseResponse<GroupsTaxHierarchyResponse, string>> {
@@ -197,12 +206,17 @@ export class GroupService {
   public GetGroupSubgroups(groupUniqueName: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
-      let data: BaseResponse<any, string> = res;
-      data.request = groupUniqueName;
-      data.queryString = { groupUniqueName };
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName }));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+        let data: BaseResponse<any, string> = res;
+        data.request = groupUniqueName;
+        data.queryString = {groupUniqueName};
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, {groupUniqueName}));
+    } else {
+      return Observable.empty();
+    }
+
   }
 
 }
