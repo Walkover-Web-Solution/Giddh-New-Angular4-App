@@ -1,14 +1,14 @@
+import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from './../../../actions/accounts.actions';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
-import { ShareAccountRequest, AccountSharedWithResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../../services/account.service';
-import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/index';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'share-ledger',
@@ -16,16 +16,18 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 })
 export class ShareLedgerComponent implements OnInit {
   @Input() public accountUniqueName: string = '';
-  @Input() public from: string = '';
-  @Input() public to: string = '';
+  // @Input() public from: string = '';
+  // @Input() public to: string = '';
+  @Input() public advanceSearchRequest: any;
   @Output() public closeShareLedgerModal: EventEmitter<boolean> = new EventEmitter();
   public email: string;
   public magicLink: string = '';
   public isCopied: boolean = false;
   public activeAccountSharedWith: any[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private _ledgerService: LedgerService, private _accountService: AccountService,
-    private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
+              private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
   }
 
   public ngOnInit() {
@@ -41,8 +43,9 @@ export class ShareLedgerComponent implements OnInit {
 
   public getMagicLink() {
     let magicLinkRequest = new MagicLinkRequest();
-    magicLinkRequest.from = this.from;
-    magicLinkRequest.to = this.to;
+    const data = _.cloneDeep(this.advanceSearchRequest);
+    magicLinkRequest.from = moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+    magicLinkRequest.to = moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
     this._ledgerService.GenerateMagicLink(magicLinkRequest, this.accountUniqueName).subscribe(resp => {
       if (resp.status === 'success') {
         this.magicLink = resp.body.magicLink;

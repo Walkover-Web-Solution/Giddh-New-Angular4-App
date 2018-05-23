@@ -45,15 +45,31 @@ export class ErrorHandler {
         data.code = 'Internal Error';
       } else {
         data = r.error as any;
-        if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
-          this.store.dispatch({ type: 'LoginOut' });
-        } else if (data.code === '') {
-          // handle unshared company response
-          // this.store.dispatch({type: 'CompanyRefresh'});
+        if (data) {
+          if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
+            this.store.dispatch({ type: 'LoginOut' });
+          } else if (data.code === 'INVALID_JSON') {
+            let dataToSend = {
+              requestBody: '', // r.error.request ? r.error.request : request
+              queryString:  data.queryString,
+              method: '',
+              url:  r.url,
+              email:  null,
+              userUniqueName: null,
+              environment: null,
+              key: r.error.message ? r.error.message.substring(r.error.message.indexOf(':') + 2, r.error.message.length) : null,
+            };
+            this.store.dispatch({ type: 'REPORT_INVALID_JSON', payload: dataToSend });
+          } else if (data.code === '') {
+            // handle unshared company response
+            // this.store.dispatch({type: 'CompanyRefresh'});
+          }
+          data.request = request;
+          data.queryString = queryString;
         }
+
       }
-      data.request = request;
-      data.queryString = queryString;
+
     }
     return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
       o.next(data);

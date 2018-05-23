@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { base64ToBlob, validateEmail } from '../../../shared/helpers/helperFunctions';
@@ -6,6 +7,7 @@ import { saveAs } from 'file-saver';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'export-ledger',
@@ -13,8 +15,8 @@ import { some } from '../../../lodash-optimized';
 })
 export class ExportLedgerComponent implements OnInit {
   @Input() public accountUniqueName: string = '';
-  @Input() public from: string = '';
-  @Input() public to: string = '';
+  // @Input() public from: string = '';
+  // @Input() public to: string = '';
   @Input() public advanceSearchRequest: any;
   @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
   public emailTypeSelected: string = '';
@@ -23,6 +25,7 @@ export class ExportLedgerComponent implements OnInit {
   public emailTypeMini: string = '';
   public emailTypeDetail: string;
   public emailData: string = '';
+  public withInvoiceNumber: boolean = false;
   constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService) {
     //
   }
@@ -39,14 +42,16 @@ export class ExportLedgerComponent implements OnInit {
   }
 
   public exportLedger() {
+    let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
     let exportRequest = new ExportLedgerRequest();
-    exportRequest.from = this.from;
-    exportRequest.to = this.to;
     exportRequest.format =  this.exportAs;
     exportRequest.sort = this.order;
     exportRequest.type = this.emailTypeSelected;
     const body = _.cloneDeep(this.advanceSearchRequest);
-    this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body).subscribe(a => {
+    exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+    exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+    delete body.dataToSend;
+    this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body, exportByInvoiceNumber).subscribe(a => {
       if (a.status === 'success') {
         if (a.queryString.fileType === 'excel') {
           let blob = base64ToBlob(a.body, 'application/vnd.ms-excel', 512);
@@ -81,7 +86,10 @@ export class ExportLedgerComponent implements OnInit {
     }
 
     if (sendData.recipients.length > 0) {
-      this._ledgerService.MailLedger(sendData, this.accountUniqueName, this.from, this.to, this.emailTypeSelected).subscribe(sent => {
+      const body = _.cloneDeep(this.advanceSearchRequest);
+      let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+      let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.emailTypeSelected).subscribe(sent => {
         if (sent.status === 'success') {
           this._toaster.successToast(sent.body, sent.status);
           this.emailData = '';

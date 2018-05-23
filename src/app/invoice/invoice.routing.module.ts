@@ -17,7 +17,7 @@ import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 
-import { FontPickerModule, FONT_PICKER_CONFIG, FontPickerConfigInterface } from 'ngx-font-picker';
+import { FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
@@ -37,10 +37,13 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { BsDropdownModule } from 'ngx-bootstrap';
+import { RecurringComponent } from './recurring/recurring.component';
+import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
-  apiKey: 'AIzaSyA9S7DY0khhn9JYcfyRWb1F6Rd2rwtF_mA'
+  apiKey: 'AIzaSyAAvwBeHl0uuVSEVeZ3bTylwIkRGKCFvdI'
 };
 const INVOICE_ROUTES: Routes = [
   {
@@ -48,11 +51,12 @@ const INVOICE_ROUTES: Routes = [
     canActivate: [NeedsAuthentication],
     component: InvoiceComponent,
     children: [
-      { path: '', redirectTo: 'preview', pathMatch: 'full' },
-      { path: 'preview', component: InvoicePreviewComponent },
-      { path: 'generate', component: InvoiceGenerateComponent },
-      { path: 'templates', component: EditInvoiceComponent },
-      { path: 'settings', component: InvoiceSettingComponent },
+      {path: '', redirectTo: 'preview', pathMatch: 'full'},
+      {path: 'preview', component: InvoicePreviewComponent},
+      {path: 'generate', component: InvoiceGenerateComponent},
+      {path: 'templates', component: EditInvoiceComponent},
+      {path: 'settings', component: InvoiceSettingComponent},
+      {path: 'recurring', component: RecurringComponent}
     ]
   }
 ];
@@ -76,7 +80,8 @@ const INVOICE_ROUTES: Routes = [
     DeleteTemplateConfirmationModelComponent,
     InvoiceTemplatePreviewModelComponent,
     EsignModalComponent,
-    InvoicePageDDComponent
+    InvoicePageDDComponent,
+    RecurringComponent
   ],
   imports: [
     FormsModule,
@@ -96,11 +101,13 @@ const INVOICE_ROUTES: Routes = [
     ClickOutsideModule,
     ElementViewChildModule,
     DecimalDigitsModule,
-    DatepickerModule
+    DatepickerModule,
+    BsDropdownModule,
+    AsideMenuRecurringEntryModule,
   ],
   exports: [
     RouterModule,
-    TooltipModule
+    TooltipModule,
   ],
   entryComponents: [DownloadOrSendInvoiceOnMailComponent],
   providers: [InvoiceUiDataService, {
@@ -109,4 +116,5 @@ const INVOICE_ROUTES: Routes = [
   }
   ]
 })
-export class InvoiceRoutingModule { }
+export class InvoiceRoutingModule {
+}

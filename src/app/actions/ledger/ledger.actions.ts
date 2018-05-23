@@ -19,6 +19,7 @@ import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../../store/customActions';
 import { GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
+import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 
 @Injectable()
 export class LedgerActions {
@@ -239,7 +240,8 @@ export class LedgerActions {
   @Effect()
   public AdvanceSearch$: Observable<Action> = this.action$
     .ofType(LEDGER.ADVANCE_SEARCH)
-    .switchMap((action: CustomActions) => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from, action.payload.to, '', '', ''))
+    .switchMap((action: CustomActions) => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from,
+      action.payload.to, '', action.payload.page, action.payload.count, action.payload.q))
     .map(response => {
       return this.advanceSearchResponse(response);
     });
@@ -291,24 +293,66 @@ export class LedgerActions {
     });
 
   @Effect()
-    public GetReconciliation$: Observable<Action> = this.action$
-      .ofType(LEDGER.GET_RECONCILIATION)
-      .switchMap((action: CustomActions) => {
-        let req: TransactionsRequest = action.payload as TransactionsRequest;
-        return this._ledgerService.GetReconciliation(req, req.accountUniqueName);
-      }).map(response => {
-        if (response.status === 'success') {
-          this._toasty.infoToast(response.body.message);
-        } else {
-          this._toasty.errorToast(response.message, response.code);
-        }
-        return {
-          type: LEDGER.GET_RECONCILIATION_RESPONSE,
-          payload: response
-        };
-      });
+  public GetReconciliation$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_RECONCILIATION)
+    .switchMap((action: CustomActions) => {
+      let req: TransactionsRequest = action.payload as TransactionsRequest;
+      return this._ledgerService.GetReconciliation(req, req.accountUniqueName);
+    }).map(response => {
+      if (response.status === 'success') {
+        this._toasty.infoToast(response.body.message);
+      } else {
+        this._toasty.errorToast(response.message, response.code);
+      }
+      return {
+        type: LEDGER.GET_RECONCILIATION_RESPONSE,
+        payload: response
+      };
+    });
 
   @Effect()
+  public ExportGroupLedger$: Observable<Action> = this.action$
+    .ofType(LEDGER.GROUP_EXPORT_LEDGER)
+    .switchMap((action: CustomActions) => {
+      return this._ledgerService.GroupExportLedger(action.payload.groupUniqueName, action.payload.queryRequest)
+        .map((res) => {
+          if (res.status === 'success') {
+            this._toasty.clearAllToaster();
+            this._toasty.successToast(res.body, res.status);
+          } else {
+            this._toasty.clearAllToaster();
+            this._toasty.errorToast(res.message, res.code);
+          }
+          return {type: 'EmptyAction'};
+        });
+    });
+
+  @Effect()
+  public DeleteMultipleLedgerEntries$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES)
+    .switchMap((action: CustomActions) => this._ledgerService.DeleteMultipleLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueNames))
+    .map(res => this.DeleteMultipleLedgerEntriesResponse(res));
+
+  @Effect()
+  public DeleteMultipleLedgerEntriesResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE)
+    .map((action: CustomActions) => {
+      let res: any = action.payload as BaseResponse<string, string>;
+      if (res.status === 'success') {
+        let errorMessage = res.body[0].reason;
+        if (errorMessage) {
+          this._toasty.errorToast(errorMessage, 'Error');
+        } else {
+          this._toasty.successToast('Entries deleted successfully', 'Success');
+        }
+      } else {
+        this._toasty.errorToast(res.message);
+      }
+      return {
+        type: 'EmptyAction'
+      };
+    });
+
   public GetCurrencyRate$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_CURRENCY_RATE)
     .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
@@ -505,10 +549,10 @@ export class LedgerActions {
     };
   }
 
-  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string): CustomActions {
+  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string, page: number, count: number, q: string): CustomActions {
     return {
       type: LEDGER.ADVANCE_SEARCH,
-      payload: {model, accountUniqueName, from, to}
+      payload: {model, accountUniqueName, from, to, page, count, q}
     };
   }
 
@@ -545,6 +589,27 @@ export class LedgerActions {
     return {
       type: LEDGER.GET_RECONCILIATION,
       payload: request
+    };
+  }
+
+  public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): CustomActions {
+    return {
+      type: LEDGER.GROUP_EXPORT_LEDGER,
+      payload: {groupUniqueName, queryRequest}
+    };
+  }
+
+  public DeleteMultipleLedgerEntries(accountUniqueName: string, entryUniqueNames: string[]): CustomActions {
+    return {
+      type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES,
+      payload: {accountUniqueName, entryUniqueNames}
+    };
+  }
+
+  public DeleteMultipleLedgerEntriesResponse(res: BaseResponse<string, string>): CustomActions {
+    return {
+      type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE,
+      payload: res
     };
   }
 

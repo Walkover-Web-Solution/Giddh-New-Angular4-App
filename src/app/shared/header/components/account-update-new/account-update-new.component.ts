@@ -67,6 +67,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public isHsnSacEnabledAcc: boolean = false;
   @Input() public updateAccountInProcess$: Observable<boolean>;
   @Input() public updateAccountIsSuccess$: Observable<boolean>;
+  @Input() public showBankDetail: boolean = false;
+  @Input() public showVirtualAccount: boolean = false;
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -164,7 +166,21 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       hsnOrSac: [''],
       currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }]
+      sacNumber: [{value: '', disabled: false}],
+      accountBankDetails: this._fb.array([
+        this._fb.group({
+          bankName: [''],
+          bankAccountNo: [''],
+          ifsc: ['']
+        })
+      ]),
+      cashFreeVirtualAccountData: this._fb.group({
+        ifscCode: [''],
+        name: [''],
+        virtualAccountNumber: ['']
+      }),
+      closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+      closingBalanceTriggerAmountType: ['CREDIT']
     });
     // fill form with active account
     this.activeAccount$.subscribe(acc => {
@@ -436,10 +452,31 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (!this.showVirtualAccount) {
+      delete accountRequest['cashFreeVirtualAccountData'];
+    }
+    if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+      this._toaster.errorToast('Mobile no. & email Id is mandatory');
+      return;
+    }
+    if (this.showBankDetail) {
+      if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+        accountRequest['accountBankDetails'] = [];
+      }
+    } else {
+      delete accountRequest['accountBankDetails'];
+    }
+
     this.submitClicked.emit({
       value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName },
       accountRequest: this.addAccountForm.value
     });
+  }
+
+  public closingBalanceTypeChanged(type: string) {
+    if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
+      this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+    }
   }
 
   public ngOnDestroy() {

@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
+import { CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class SettingsIntegrationService {
@@ -116,6 +116,124 @@ export class SettingsIntegrationService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<string, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
+
+  public SaveCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
+  public GetCashFreeDetail(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+  }
+
+  public UpdateCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
+  public DeleteCashFreeDetail(): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<string, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
+
+  public GetAutoCollectUser(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+  }
+
+  public AddAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
+  public UpdateAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    delete model['fakeAccObj'];
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
+  public DeleteAutoCollectUser(): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<string, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
+
+  public GetPaymentGateway(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+  }
+
+  public AddPaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
+  public UpdatePaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+  }
+
+  public DeletePaymentGateway(): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));

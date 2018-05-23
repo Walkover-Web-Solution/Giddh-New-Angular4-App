@@ -42,7 +42,9 @@ export class AuditLogsSidebarVM {
     { label: 'account', value: 'account' },
     { label: 'ledger', value: 'ledger' },
     { label: 'voucher', value: 'voucher' },
-    { label: 'logs', value: 'logs' }];
+    {label: 'logs', value: 'logs'},
+    {label: 'invoice', value: 'invoice'},
+  ];
   public selectedCompany: Observable<CompanyResponse>;
   public getLogsInprocess$: Observable<boolean>;
   public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Entry/Log Date', value: '0' }];

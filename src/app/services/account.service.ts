@@ -2,7 +2,7 @@ import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, OnInit, Inject, Optional } from '@angular/core';
+import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -10,7 +10,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { APPLY_TAX_API } from './apiurls/applyTax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class AccountService implements OnInit {
@@ -221,12 +221,16 @@ export class AccountService implements OnInit {
   public GetFlattenAccounts(q?: string, page?: string, count?: string): Observable<BaseResponse<FlattenAccountsResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':count', count || '').replace(':page', encodeURIComponent(page || ''))).map((res) => {
-      let data: BaseResponse<FlattenAccountsResponse, string> = res;
-      data.request = '';
-      data.queryString = { q, page, count };
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, string>(e));
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':count', count || '').replace(':page', encodeURIComponent(page || ''))).map((res) => {
+        let data: BaseResponse<FlattenAccountsResponse, string> = res;
+        data.request = '';
+        data.queryString = {q, page, count};
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, string>(e));
+    } else {
+      return Observable.empty();
+    }
   }
 
   public GetFlatternAccountsOfGroup(groupUniqueNames: { groupUniqueNames: string[] }, count?: any, q?: string, page?: any): Observable<BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }>> {

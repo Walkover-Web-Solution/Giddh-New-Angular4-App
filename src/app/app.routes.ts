@@ -9,7 +9,6 @@ import { DummyComponent } from './dummy.component';
 import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
-import { CheckIfPublicPath } from './decorators/checkIfPublicPath';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 
 export const ROUTES: Routes = [
@@ -18,6 +17,7 @@ export const ROUTES: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
+  {path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full'},
   // { path: 'success', component: SuccessComponent },
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
   // { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
@@ -38,6 +38,9 @@ export const ROUTES: Routes = [
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
   { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+  { path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full' },
+  { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
+  {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -48,6 +51,7 @@ export const ROUTES: Routes = [
       { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },
+      {path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization]},
       { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthorization] },
       {
         path: 'trial-balance-and-profit-loss',
@@ -61,6 +65,9 @@ export const ROUTES: Routes = [
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization] },
       { path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule' },
       { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
+      { path: 'contact', loadChildren: './contact/contact.module#ContactModule' },
+      { path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule' },
+      {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

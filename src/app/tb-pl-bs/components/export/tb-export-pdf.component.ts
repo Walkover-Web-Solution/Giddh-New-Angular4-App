@@ -33,12 +33,14 @@ class FormatPdf implements IFormatable {
   }
 
   public setHeader(selectedCompany: CompanyResponse) {
-    console.log(selectedCompany.address);
+    // console.log(selectedCompany.address);
     this.pdf.setFontSize(16);
     this.pdf.text(10, this.colY, selectedCompany.name);
     this.pdf.setFontSize(10);
-    selectedCompany.address.split('\n')
-      .forEach(p => this.pdf.text(10, this.colY += 5, p));
+    if (selectedCompany.address) {
+      selectedCompany.address.split('\n')
+        .forEach(p => this.pdf.text(10, this.colY += 5, p));
+    }
 
     this.pdf.text(10, this.colY += 5, selectedCompany.city + '-' + selectedCompany.pincode);
     this.pdf.text(10, this.colY += 5, `Trial Balance: ${this.request.from} to ${this.request.to}`);
@@ -189,7 +191,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     pdf.autoTable(columns, rows, {
       theme: 'plain',
       margin: {
-        top: 110 + (this.selectedCompany.address.split('\n').length * 15)
+        top: this.selectedCompany.address ? 110 + (this.selectedCompany.address.split('\n').length * 15) : 110 + 15
 
       },
       drawCell: (cell, data) => {
@@ -201,8 +203,10 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         pdf.setFontSize(16);
         pdf.text(40, colY, this.selectedCompany.name);
         pdf.setFontSize(10);
-        this.selectedCompany.address.split('\n')
-          .forEach(p => pdf.text(40, colY += 15, p));
+        if (this.selectedCompany.address) {
+          this.selectedCompany.address.split('\n')
+            .forEach(p => pdf.text(40, colY += 15, p));
+        }
         pdf.text(40, colY += 15, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
         pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
       }

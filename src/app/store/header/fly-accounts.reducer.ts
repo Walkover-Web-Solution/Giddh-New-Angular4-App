@@ -1,4 +1,3 @@
-import { Action } from '@ngrx/store';
 import { AccountFlat, SearchResponse } from '../../models/api-models/Search';
 import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -26,7 +25,7 @@ export function FlyAccountsReducer(state = initialState, action: CustomActions):
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST:
       return Object.assign({}, state, { isFlyAccountInProcess: true });
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE:
-      return Object.assign({}, state, { isFlyAccountInProcess: false, flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
+      return Object.assign({}, state, {isFlyAccountInProcess: false, flattenGroupsAccounts: prepare(action.payload ? action.payload.results : [])});
     case FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP:
       return Object.assign({}, state, { flattenGroupsAccounts: prepare([]) });
     default: {
@@ -36,16 +35,18 @@ export function FlyAccountsReducer(state = initialState, action: CustomActions):
 }
 
 const prepare = (data: IFlattenGroupsAccountsDetail[]) => {
-  return data.map(p => {
-    return {
-      accountDetails: p.accountDetails,
-      groupName: p.groupName,
-      applicableTaxes: p.applicableTaxes,
-      groupSynonyms: p.groupSynonyms,
-      isOpen: false,
-      groupUniqueName: p.groupUniqueName
-    };
-  });
+  if (data) {
+    return data.map(p => {
+      return {
+        accountDetails: p.accountDetails,
+        groupName: p.groupName,
+        applicableTaxes: p.applicableTaxes,
+        groupSynonyms: p.groupSynonyms,
+        isOpen: false,
+        groupUniqueName: p.groupUniqueName
+      };
+    });
+  }
 };
 const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
   let listofUN;

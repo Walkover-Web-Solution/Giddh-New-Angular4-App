@@ -69,7 +69,8 @@ module.exports = function (options) {
     errlyticsNeeded: false,
     errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
-    ApiUrl: ApiUrl
+    ApiUrl: ApiUrl,
+    APP_FOLDER: ''
   });
   return webpackMerge(commonConfig({
     env: ENV,
@@ -167,6 +168,7 @@ module.exports = function (options) {
         'errlyticsKey': ERRLYTICS_KEY_DEV,
         'AppUrl': JSON.stringify(METADATA.AppUrl),
         'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+        'APP_FOLDER': JSON.stringify(METADATA.APP_FOLDER),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),

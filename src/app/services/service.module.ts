@@ -1,5 +1,5 @@
 import { MagicLinkService } from './magic-link.service';
-import { PermissionDataService } from './../permissions/permission-data.service';
+import { PermissionDataService } from '../permissions/permission-data.service';
 import { LogsService } from './logs.service';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -39,9 +39,12 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { SettingsBranchService } from './settings.branch.service';
 import { SettingsTagService } from './settings.tag.service';
+import { ContactService } from './contact.service';
+import { SettingsTriggersService } from './settings.triggers.service';
+import { RecurringVoucherService } from './recurring-voucher.service';
+import { ImportExcelService } from './import-excel.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -90,7 +93,11 @@ export class ServiceModule {
         SettingsPermissionService,
         DaybookService,
         SettingsBranchService,
-        SettingsTagService
+        SettingsTagService,
+        ContactService,
+        SettingsTriggersService,
+        RecurringVoucherService,
+        ImportExcelService
       ]
     };
   }
