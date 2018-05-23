@@ -425,7 +425,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // o.templateDetails.other.shippingDate = date;
     forEach(o.entries, (entry: SalesEntryClass) => {
       forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-        txn.date = date;
+        // txn.date = date;
+        entry.entryDate = date;
       });
     });
     return Object.assign(this.invFormData, o);
@@ -575,7 +576,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       _.forEach(data.entries, (entry) => {
         _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
           // convert date object
-          txn.date = this.convertDateForAPI(txn.date);
+          // txn.date = this.convertDateForAPI(txn.date);
+          entry.entryDate = this.convertDateForAPI(entry.entryDate);
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -951,7 +953,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       // set default date
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
-          t.date = this.universalDate || new Date();
+          // t.date = this.universalDate || new Date();
+          e.entryDate = this.universalDate || new Date();
         });
       });
     } else {
@@ -966,7 +969,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       // set default date
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
-          t.date = this.universalDate || new Date();
+          // t.date = this.universalDate || new Date();
+          e.entryDate = this.universalDate || new Date();
         });
       });
 
@@ -991,7 +995,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
     }, 1500);
-    entry.taxSum = _.sumBy(entry.taxes, function (o) {
+    entry.taxSum = _.sumBy(entry.taxes, function(o) {
       return o.amount;
     });
   }
@@ -1033,7 +1037,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function (o) {
+    entry.discountSum = _.sumBy(entry.discounts, function(o) {
       return o.amount;
     });
   }
@@ -1106,6 +1110,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (!event.target.value) {
       this.forceClear$ = Observable.of({status: true});
       this.isCustomerSelected = false;
+      this.invFormData.accountDetails = new AccountDetailsClass();
+      this.invFormData.accountDetails.uniqueName = 'cash';
     }
   }
 

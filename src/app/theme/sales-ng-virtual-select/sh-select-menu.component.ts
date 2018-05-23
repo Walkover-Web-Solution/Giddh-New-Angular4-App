@@ -20,6 +20,7 @@ export class SalesShSelectMenuComponent implements OnChanges {
   @Input() public NoFoundLinkHeight: number;
   @Input() public dropdownMinHeight: number;
   @Input() public showLabelOnly: boolean = false;
+  @Input() public salesShSelectPading: number = 0;
 
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
   @Output() public noResultClicked = new EventEmitter<null>();
