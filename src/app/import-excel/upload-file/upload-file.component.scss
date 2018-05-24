@@ -10,15 +10,6 @@
     max-width: 500px;
 }
 
-.uploader_label {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    cursor: pointer;
-}
-
 .upload_icon {
     font-size: 62px;
     float: none;
@@ -72,4 +63,26 @@
 
 .has-error .form-control {
     border-color: red !important;
+}
+
+#csvUploadInput {
+    width: calc(100% - 95px);
+    visibility: hidden;
+}
+
+.custom-file-label {
+    left: 0px;
+    top: 0;
+    bottom: 0;
+    z-index: 9;
+    background: #fff;
+    text-align: left;
+    position: absolute;
+    border: 1px solid #d6d6d6;
+    border-radius: 2px !important;
+    padding: 6px 12px !important;
+    outline: 0;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    width: calc(100% - 95px);
 }
