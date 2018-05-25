@@ -2,7 +2,7 @@
  * Created by kunalsaxena on 6/29/17.
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -20,7 +20,7 @@ import { ToasterService } from '../../../services/toaster.service';
   styleUrls: ['edit-template.component.css']
 })
 
-export class EditInvoiceComponent implements OnInit {
+export class EditInvoiceComponent implements OnInit, OnDestroy {
 
   @ViewChild('templateModal') public templateModal: ModalDirective;
   @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
@@ -237,5 +237,10 @@ export class EditInvoiceComponent implements OnInit {
    */
   public onClosePreviewModal() {
     this.invoiceTemplatePreviewModal.hide();
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
