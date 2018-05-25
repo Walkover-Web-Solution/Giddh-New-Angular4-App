@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { Router } from '@angular/router';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   styles: [`
@@ -35,8 +36,10 @@ import { Router } from '@angular/router';
   `],
   templateUrl: './invoice.component.html'
 })
-export class InvoiceComponent implements OnInit {
+export class InvoiceComponent implements OnInit, OnDestroy {
   public isRecurringSelected: boolean = false;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>,
               private companyActions: CompanyActions,
               private router: Router
@@ -62,5 +65,10 @@ export class InvoiceComponent implements OnInit {
     if (this.router.routerState.snapshot.url.includes('recurring')) {
       this.isRecurringSelected = true;
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
