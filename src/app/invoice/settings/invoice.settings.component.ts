@@ -1,5 +1,5 @@
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
@@ -22,7 +22,7 @@ const PaymentGateway = [
   templateUrl: './invoice.settings.component.html',
   styleUrls: ['./invoice.setting.component.css']
 })
-export class InvoiceSettingComponent implements OnInit {
+export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
   public invoiceSetting: InvoiceISetting = new InvoiceISetting();
   public invoiceWebhook: InvoiceWebhooks[];
@@ -117,7 +117,6 @@ export class InvoiceSettingComponent implements OnInit {
         if (this.invoiceSetting.lockDate) {
           this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
         }
-        debugger;
         this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
 
       } else if (!setting || !setting.webhooks) {
@@ -365,5 +364,10 @@ export class InvoiceSettingComponent implements OnInit {
   public setInvoiceLockDate(date) {
     this.showDatePicker = !this.showDatePicker;
     this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

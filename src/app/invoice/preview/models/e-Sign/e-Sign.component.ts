@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Esignature, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -14,7 +14,7 @@ import { forIn } from 'app/lodash-optimized';
   templateUrl: './e-Sign.component.html'
 })
 
-export class EsignModalComponent implements OnInit {
+export class EsignModalComponent implements OnInit, OnDestroy {
   @Input() public base64Data: string;
   @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -76,6 +76,11 @@ export class EsignModalComponent implements OnInit {
       }
     });
     return eSignForm;
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
