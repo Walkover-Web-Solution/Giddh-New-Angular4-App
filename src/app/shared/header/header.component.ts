@@ -56,8 +56,8 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
   { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
   { label: 'Contact', value: '/pages/contact' },
-  { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
-  { label: 'Import', value: '/pages/import' },
+  // { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
+  // { label: 'Import', value: '/pages/import' },
 ];
 
 @Component({
@@ -519,14 +519,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   // CMD + K functionality
-  @HostListener('document:keydown', ['$event'])
-  public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.showNavigationModal();
-    }
-  }
+  // @HostListener('document:keydown', ['$event'])
+  // public handleKeyboardUpEvent(event: KeyboardEvent) {
+  //   if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //     this.showNavigationModal();
+  //   }
+  // }
 
   public onNavigationSelected(ev: IOption) {
     this.hideNavigationModal();

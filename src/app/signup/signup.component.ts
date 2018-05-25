@@ -371,8 +371,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     if (pattern.test(value)) {
       // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
       this.showPwdHint = false;
-    } else {
+    } else if (value) {
       return this.showPwdHint = true;
+    } else {
+      this.showPwdHint = false;
     }
   }
 }
