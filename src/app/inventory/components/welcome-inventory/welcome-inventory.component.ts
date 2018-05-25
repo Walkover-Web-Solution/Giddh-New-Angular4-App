@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'welcome-inventory',  // <home></home>
@@ -6,9 +7,8 @@ import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/cor
 })
 export class InventoryWelcomeComponent implements OnInit, OnDestroy {
 
-  /**
-   * TypeScript public modifiers
-   */
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor() {
     //
   }
@@ -18,7 +18,7 @@ export class InventoryWelcomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    //
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
-
 }
