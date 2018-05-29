@@ -40,6 +40,7 @@ export class SalesComponent implements OnInit, OnDestroy {
       this.isPurchaseInvoice = true;
     } else {
       this.isPurchaseInvoice = false;
+      // console.log('isPurchaseInvoice', this.isPurchaseInvoice);
     }
   }
 
