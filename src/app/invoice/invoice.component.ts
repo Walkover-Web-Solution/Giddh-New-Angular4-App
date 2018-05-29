@@ -55,7 +55,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'invoice';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    this.router.events.subscribe((event: any) => {
+    this.router.events.takeUntil(this.destroyed$).subscribe((event: any) => {
+      // console.log('router.event');
       if (event && event.url && event.url.includes('recurring')) {
         this.isRecurringSelected = true;
       } else {
