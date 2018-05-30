@@ -114,7 +114,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
-        if (o) {
+        if (o && o.invoiceDetails) {
           this.invFormData = _.cloneDeep(o);
           if (o.invoiceDetails.invoiceDate) {
             let d = o.invoiceDetails.invoiceDate.split('-');
