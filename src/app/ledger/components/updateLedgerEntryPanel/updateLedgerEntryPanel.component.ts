@@ -248,7 +248,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
             }
           });
-          this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
+          this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));

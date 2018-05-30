@@ -215,13 +215,15 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onPerformAction(item, ele: ShSelectComponent) {
-    let actionToPerform = ele._selectedValues[0].value;
-    if (actionToPerform === 'paid') {
-      this.selectedInvoice = item;
-      this.performActionOnInvoiceModel.show();
-    } else {
-      this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+  public onPerformAction(item, ev: IOption) {
+    if (ev && ev.value) {
+      let actionToPerform = ev.value;
+      if (actionToPerform === 'paid') {
+        this.selectedInvoice = item;
+        this.performActionOnInvoiceModel.show();
+      } else {
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+      }
     }
   }
 
