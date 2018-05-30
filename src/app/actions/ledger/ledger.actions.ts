@@ -200,7 +200,7 @@ export class LedgerActions {
         return {type: 'EmptyAction'};
       } else {
         this._toasty.successToast('entry updated successfully');
-        if (response.request.generateInvoice && !response.body.invoiceGenerated) {
+        if (response.request.generateInvoice && !response.body.voucherGenerated) {
           let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
           // accountUniqueName, entryUniqueName
           invoiceGenModel.push({
