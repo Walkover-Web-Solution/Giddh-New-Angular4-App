@@ -88,7 +88,7 @@
             <td>{{item.grandTotal}}</td>
             <td>{{item.balanceDue}}</td>
             <td>
-                <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, invoiceAction)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
+                <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
             </td>
             <td>{{item.balanceStatus}}</td>
             <td class="text-center">
