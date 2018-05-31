@@ -37,15 +37,14 @@
                         <input class="form-control mrB1" type="text" formControlName="email" placeholder="Email Id" />
                         <input class="form-control" type="password" (ngModelChange)="validatePwd($event)" formControlName="password" name="password" placeholder="Password" [minlength]="8" [maxlength]="20" autocomplete="false" />
                         <div class="hint" [hidden]="!showPwdHint">
-                            <!--  -->
                             <ul>
                                 <li>Provide minimum 8 and maximum 20 characters.</li>
-                                <li>1 uppercase letter.</li>
-                                <li>1 lowercase letter.</li>
                                 <li>1 number and 1 special character (@$!%*?&_).</li>
+                                <!-- <li>1 uppercase letter.</li>
+                                <li>1 lowercase letter.</li> -->
                             </ul>
                         </div>
-                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!signUpWithPasswdForm.controls['email'].valid">Signup</button>
+                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">Signup</button>
                     </div>
                 </form>
                 <!-- form end/ -->

@@ -22,5 +22,7 @@ export const LOGIN_API = {
   GET_SESSION: 'users/:userEmail/sessions',
   DELETE_SESSION: 'users/:userEmail/destroy-session',
   UPDATE_SESSION: 'users/:userEmail/increment-session',
-  DELETE_ALL_SESSION: 'users/:userEmail/sessions'
+  DELETE_ALL_SESSION: 'users/:userEmail/sessions',
+  FORGOT_PASSWORD: 'users/:userEmail/forgot-password',
+  RESET_PASSWORD: 'users/:userEmail/sessions'
 };
