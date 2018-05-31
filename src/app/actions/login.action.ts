@@ -78,6 +78,12 @@ export class LoginActions {
   public static LoginWithPasswdRequest = 'LoginWithPasswdRequest';
   public static LoginWithPasswdResponse = 'LoginWithPasswdResponse';
 
+  public static forgotPasswordRequest = 'forgotPasswordRequest';
+  public static forgotPasswordResponse = 'forgotPasswordResponse';
+
+  public static resetPasswordRequest = 'resetPasswordRequest';
+  public static resetPasswordResponse = 'resetPasswordResponse';
+
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST)
@@ -510,6 +516,44 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public forgotPasswordRequest$: Observable<Action> = this.actions$
+    .ofType(LoginActions.forgotPasswordRequest)
+    .switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload))
+    .map(response => this.forgotPasswordResponse(response));
+
+  @Effect()
+  public forgotPasswordResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.forgotPasswordResponse)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        // return this.LoginSuccess();
+        this._toaster.successToast(action.payload.body);
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public resetPasswordRequest$: Observable<Action> = this.actions$
+    .ofType(LoginActions.resetPasswordRequest)
+    .switchMap((action: CustomActions) => this.auth.resetPassword(action.payload))
+    .map(response => this.resetPasswordResponse(response));
+
+  @Effect()
+  public resetPasswordResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.resetPasswordResponse)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        // return this.LoginSuccess();
+        this._toaster.successToast(action.payload.body);
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -820,6 +864,34 @@ export class LoginActions {
     return {
       type: LoginActions.LoginWithPasswdResponse,
       payload: value
+    };
+  }
+
+  public forgotPasswordRequest(userId): CustomActions {
+    return {
+      type: LoginActions.forgotPasswordRequest,
+      payload: userId
+    };
+  }
+
+  public forgotPasswordResponse(response): CustomActions {
+    return {
+      type: LoginActions.forgotPasswordResponse,
+      payload: response
+    };
+  }
+
+  public resetPasswordRequest(model): CustomActions {
+    return {
+      type: LoginActions.resetPasswordRequest,
+      payload: model
+    };
+  }
+
+  public resetPasswordResponse(response): CustomActions {
+    return {
+      type: LoginActions.resetPasswordResponse,
+      payload: response
     };
   }
 

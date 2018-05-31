@@ -137,6 +137,7 @@
                         <input class="form-control" type="password" formControlName="password" placeholder="Password" />
                         <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!loginWithPasswdForm.controls['uniqueKey'].value || !loginWithPasswdForm.controls['password'].value">Login</button>
                     </div>
+                    <!-- <a href="javascript:void(0)" class="pull-right btn-link" (click)="showForgotPasswordModal()">Forgot password?</a> -->
                 </form>
                 <!-- form end/ -->
 
@@ -315,3 +316,39 @@
     </div>
 </div>
 <!-- two way auth popup -->
+
+<!--mobile varify form  -->
+<div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="noBrdRdsModal">
+                <div class="modal-header">
+                    <h3>Sign Up with Giddh</h3>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideForgotPasswordModal()">×</span>
+                </div>
+                <div class="modal-body clearfix">
+                    <form class="col-xs-12" id="forgotPassword" name="forgotPassword" novalidate [formGroup]="forgotPasswordForm">
+                        <div class="clearfix form-group">
+                            <input class="form-control" formControlName="userId" type="text" placeholder="Email Id" required />
+                        </div>
+                        <button class="btn btn-sm btn-success pull-right" type="submit" (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)">Reset Password</button>
+                    </form>
+                    <form class="col-xs-12" id="resetPassword" name="resetPassword" novalidate [formGroup]="resetPasswordForm">
+                        <div class="row">
+                            <div class="clearfix form-group">
+                                <div class="col-xs-6">
+                                    <input class="form-control" formControlName="verificationCode" type="text" placeholder="Verification Code" required />
+                                </div>
+                                <div class="col-xs-6">
+                                    <input class="form-control" formControlName="newPassword" type="password" placeholder="New Password" required />
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-success  pull-right" type="submit" (click)="resetPassword(resetPasswordForm)">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--mobile verify form  -->
