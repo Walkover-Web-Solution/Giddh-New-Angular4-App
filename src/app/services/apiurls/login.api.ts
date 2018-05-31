@@ -24,5 +24,5 @@ export const LOGIN_API = {
   UPDATE_SESSION: 'users/:userEmail/increment-session',
   DELETE_ALL_SESSION: 'users/:userEmail/sessions',
   FORGOT_PASSWORD: 'users/:userEmail/forgot-password',
-  RESET_PASSWORD: 'users/:userEmail/sessions'
+  RESET_PASSWORD: 'reset-password'
 };
