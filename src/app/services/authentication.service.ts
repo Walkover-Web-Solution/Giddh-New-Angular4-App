@@ -298,4 +298,21 @@ export class AuthenticationService {
       }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args));
   }
 
+  public forgotPassword(userId): Observable<BaseResponse<string, any>> {
+    let userName = userId;
+    return this._http.put(this.config.apiUrl + LOGIN_API.FORGOT_PASSWORD.replace(':userEmail', userName), {}).map((res) => {
+      let data: BaseResponse<string, any> = res;
+      data.request = userId;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+  }
+
+  public resetPassword(model): Observable<BaseResponse<string, any>> {
+    let objToSend = model;
+    return this._http.put(this.config.apiUrl + LOGIN_API.RESET_PASSWORD, objToSend).map((res) => {
+      let data: BaseResponse<string, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+  }
 }
