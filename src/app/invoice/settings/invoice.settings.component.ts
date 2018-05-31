@@ -362,8 +362,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * setInvoiceLockDate
    */
   public setInvoiceLockDate(date) {
-    this.showDatePicker = !this.showDatePicker;
     this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
+    this.showDatePicker = !this.showDatePicker;
   }
 
   public ngOnDestroy() {
