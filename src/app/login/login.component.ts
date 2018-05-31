@@ -335,11 +335,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public loginWithPasswd(model: FormGroup) {
     let ObjToSend = model.value;
-    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-    if (pattern.test(ObjToSend.password)) {
+    if (ObjToSend) {
       this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
-    } else {
-      return this._toaster.errorToast('Password is weak');
     }
+    // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    // if (pattern.test(ObjToSend.password)) {
+    // } else {
+    //   return this._toaster.errorToast('Password is weak');
+    // }
   }
 }
