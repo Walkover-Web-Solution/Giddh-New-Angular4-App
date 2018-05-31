@@ -135,7 +135,7 @@
                     <div class="clearfix form-group">
                         <input class="form-control mrB1" formControlName="uniqueKey" type="text" placeholder="Username" />
                         <input class="form-control" type="password" formControlName="password" placeholder="Password" />
-                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit">Login</button>
+                        <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!loginWithPasswdForm.controls['uniqueKey'].value || !loginWithPasswdForm.controls['password'].value">Login</button>
                     </div>
                 </form>
                 <!-- form end/ -->
