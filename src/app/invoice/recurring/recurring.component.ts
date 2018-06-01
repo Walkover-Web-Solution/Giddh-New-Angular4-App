@@ -54,6 +54,7 @@ export class RecurringComponent implements OnInit {
 
     this.intervalOptions = [
       {label: 'Weekly', value: 'weekly'},
+      {label: 'Monthly', value: 'monthly'},
       {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
       {label: 'Yearly', value: 'yearly'}
