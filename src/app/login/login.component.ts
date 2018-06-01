@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
+  @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -49,6 +50,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   public urlPath: string = '';
   public loginWithPasswdForm: FormGroup;
   public isLoginWithPasswordInProcess$: Observable<boolean>;
+  public forgotPasswordForm: FormGroup;
+  public resetPasswordForm: FormGroup;
+  public isForgotPasswordInProgress$: Observable<boolean>;
+  public isForgotPasswordInSuccess$: Observable<boolean>;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -132,6 +137,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginWithPasswdForm = this._fb.group({
       uniqueKey: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$')]]
+    });
+
+    this.forgotPasswordForm = this._fb.group({
+      userId: ['', [Validators.required]],
+    });
+    this.resetPasswordForm = this._fb.group({
+      verificationCode: ['', [Validators.required]],
+      uniqueKey: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]]
     });
     this.setCountryCode({ value: 'India', label: 'India' });
 
@@ -335,11 +349,32 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public loginWithPasswd(model: FormGroup) {
     let ObjToSend = model.value;
-    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-    if (pattern.test(ObjToSend.password)) {
+    if (ObjToSend) {
       this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
-    } else {
-      return this._toaster.errorToast('Password is weak');
     }
+    // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    // if (pattern.test(ObjToSend.password)) {
+    // } else {
+    //   return this._toaster.errorToast('Password is weak');
+    // }
+  }
+
+  public showForgotPasswordModal() {
+    this.forgotPasswordModal.show();
+  }
+
+  public hideForgotPasswordModal() {
+    this.forgotPasswordModal.hide();
+    // this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
+    this.forgotPasswordForm.get('userId').reset();
+  }
+
+  public forgotPassword(userId) {
+    this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
+  }
+
+  public resetPassword(form) {
+    let ObjToSend = form.value;
+    this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
   }
 }
