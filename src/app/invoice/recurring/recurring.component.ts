@@ -1,4 +1,4 @@
-import { animate, ChangeDetectorRef, Component, OnInit, state, style, transition, trigger } from '@angular/core';
+import { animate, ChangeDetectorRef, Component, OnInit, state, style, transition, trigger, OnDestroy } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { NgForm } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -7,6 +7,7 @@ import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'app-recurring',
@@ -25,7 +26,7 @@ import * as moment from 'moment';
   ]
 })
 
-export class RecurringComponent implements OnInit {
+export class RecurringComponent implements OnInit, OnDestroy {
   public currentPage = 1;
   public asideMenuStateForRecurringEntry: string = 'out';
   public invoiceTypeOptions: IOption[];
@@ -38,6 +39,8 @@ export class RecurringComponent implements OnInit {
     duration: '',
     lastInvoiceDate: ''
   };
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
               private cdr: ChangeDetectorRef,
@@ -100,5 +103,10 @@ export class RecurringComponent implements OnInit {
     } else {
       this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
