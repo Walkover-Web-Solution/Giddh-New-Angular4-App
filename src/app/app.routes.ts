@@ -12,7 +12,7 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: '**', pathMatch: 'full' },
   { path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
   { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
