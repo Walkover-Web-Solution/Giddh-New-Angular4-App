@@ -10,13 +10,12 @@ import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { SignupComponent } from './signup/signup.component';
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: '**', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated] },
-  { path: 'signup', component: SignupComponent },
+  { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
   { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
   {path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full'},
   // { path: 'success', component: SuccessComponent },
@@ -73,5 +72,5 @@ export const ROUTES: Routes = [
     ]
   },
   // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
-  // { path: '**', pathMatch: 'full', component: PublicPageHandlerComponent },
+  { path: '**', pathMatch: 'full', component: PublicPageHandlerComponent },
 ];
