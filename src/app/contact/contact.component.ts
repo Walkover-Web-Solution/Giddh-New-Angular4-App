@@ -14,6 +14,7 @@ import { BsDropdownDirective, ModalDirective } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { createSelector } from 'reselect';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -90,7 +91,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _companyActions: CompanyActions) {
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
-    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
+      // console.log('flattenAccountsStream$');
+      return s;
+    })).takeUntil(this.destroyed$);
+    // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+
   }
 
   public ngOnInit() {
@@ -117,6 +123,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.getCashFreeBalance();
 
     this.flattenAccountsStream$.subscribe(data => {
+      // console.log('flattenAccountsStream', data);
       if (data) {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
