@@ -40,6 +40,10 @@ export function VerifyMobileReducer(state: VerifyMobileState = initialState, act
       return Object.assign({}, state, {
         isMobileVerified: true
       });
+    case VerifyMobileActions.HIDE_VERIFICATION_BOX:
+      return Object.assign({}, state, {
+        showVerificationBox: action.payload
+      });
     default:
       return state;
   }

@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   template: '<router-outlet></router-outlet>'
 })
 
-export class ManufacturingComponent implements OnInit {
+export class ManufacturingComponent implements OnInit, OnDestroy {
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
     //
   }
@@ -22,4 +26,8 @@ export class ManufacturingComponent implements OnInit {
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 }
