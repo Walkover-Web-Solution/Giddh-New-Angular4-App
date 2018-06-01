@@ -1,5 +1,5 @@
 .ul_0 {
-    height: 550px;
+    height: calc(100vh - 69px);
     overflow: scroll;
 }
 
