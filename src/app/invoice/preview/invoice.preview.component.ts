@@ -59,6 +59,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
@@ -70,7 +71,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
-  public bsConfig: Partial<BsDatepickerConfig>;
   public modalConfig = {
     animated: true,
     keyboard: false,
