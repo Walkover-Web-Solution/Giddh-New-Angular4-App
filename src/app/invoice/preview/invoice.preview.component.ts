@@ -71,7 +71,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
-  public bsConfig: Partial<BsDatepickerConfig>;
   public modalConfig = {
     animated: true,
     keyboard: false,
