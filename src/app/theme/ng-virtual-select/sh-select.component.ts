@@ -159,10 +159,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       return array.filter((item) => {
         let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
         let stockName = '';
+        let stockUnqName = '';
         if (item.additional.stock && item.additional.stock.name) {
           stockName = _.cloneDeep(item.additional.stock.name);
+          stockUnqName = _.cloneDeep(item.additional.stock.uniqueName);
         }
-        return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term);
+        return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
       });
     }else {
       return array.filter((item: IOption) => {
