@@ -135,11 +135,11 @@
                         <div class="form-group m-r-15">
                             <!--col-xs-2-->
                             <label>Invoice Date</label>
-                            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control dateinvoice" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" />
+                            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" />
                         </div>
                         <div class="form-group m-r-15">
                             <label>Due Date</label>
-                            <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control dateinvoice" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" />
+                            <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" />
                         </div>
                         <!-- <div class="form-group col-xs-2">
                     <label>Country</label>
