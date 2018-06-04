@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.4.0",
+  "version": "5.6.9",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -68,6 +68,7 @@
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
     "package:windows": "rimraf packages/win/* && npm run build:aot:prod:renderer  && npm run build:main:prod && electron-builder build  --win --x64",
+    "pw": "npm run build:main:prod && electron-builder build  --win --x64",
     "postinstall": "node ./config/install-app-deps",
     "postversion": "git push && git push --tags",
     "preclean:install": "npm run clean",
@@ -113,9 +114,12 @@
     "electron-is-dev": "0.3.0",
     "electron-log": "2.2.14",
     "electron-oauth": "2.4.3",
-    "jquery": "3.2.1"
+    "jquery": "3.2.1",
+    "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
+    "electron-updater": "2.21.10"
   },
   "devDependencies": {
+    "electron-builder-squirrel-windows": "^20.15.0",
     "jspdf": "1.3.3",
     "jspdf-autotable": "2.3.2",
     "razorpay": "1.4.0",
@@ -124,9 +128,9 @@
     "tsickle": "0.26.0",
     "typedoc": "0.9.0",
     "moment": "2.22.0",
-    "builder-util": "3.4.4",
-    "electron-publisher-s3": "20.7.0",
-    "electron-updater": "2.21.3",
+    "builder-util": "^5.11.4",
+    "electron-publisher-s3": "20.15.0",
+
     "ng-contenteditable": "1.0.5",
     "ng4-social-login": "1.3.3",
     "angular2-ui-switch": "git+https://github.com/daominhsangvn/angular2-ui-switch",
@@ -161,7 +165,6 @@
     "@types/webpack": "3.0.10",
     "@types/webpack-env": "1.13.1",
     "add-asset-html-webpack-plugin": "2.0.1",
-    "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
     "angular2-ladda": "1.2.1",
     "angular2-text-mask": "8.0.2",
     "assets-webpack-plugin": "3.5.1",
@@ -174,7 +177,7 @@
     "css-loader": "0.28.4",
     "devtron": "1.4.0",
     "electron": "1.8.4",
-    "electron-builder": "19.49.2",
+    "electron-builder": "20.15.1",
     "electron-connect": "0.6.2",
     "electron-connect-webpack-plugin": "0.1.1",
     "electron-devtools-installer": "2.2.3",
@@ -281,11 +284,7 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "nsis-web",
-        "squirrel",
-        "zip",
-        "appx"
+        "nsis"
       ]
     },
     "nsis": {
