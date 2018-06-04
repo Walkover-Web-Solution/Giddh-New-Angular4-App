@@ -238,7 +238,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: null,
+            label: 'description',
             field: 'description',
             width: '10'
           },
