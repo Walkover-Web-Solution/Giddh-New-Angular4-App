@@ -232,7 +232,13 @@ export const initialState: CustomTemplateState = {
           // },
           {
             display: true,
-            label: null,
+            label: 'Qty.',
+            field: 'quantity',
+            width: '10'
+          },
+          {
+            display: true,
+            label: 'description',
             field: 'description',
             width: '10'
           },
@@ -257,19 +263,13 @@ export const initialState: CustomTemplateState = {
           {
             display: true,
             label: 'Tax',
-            field: 'tax',
+            field: 'taxes',
             width: '10'
           },
           {
             display: true,
             label: 'Total',
             field: 'total',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Qty.',
-            field: 'quantity',
             width: '10'
           }
         ]
