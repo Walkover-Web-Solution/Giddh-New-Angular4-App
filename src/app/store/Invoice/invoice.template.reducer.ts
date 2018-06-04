@@ -263,7 +263,7 @@ export const initialState: CustomTemplateState = {
           {
             display: true,
             label: 'Tax',
-            field: 'tax',
+            field: 'taxes',
             width: '10'
           },
           {
