@@ -1,4 +1,4 @@
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
@@ -9,16 +9,16 @@ import { LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AuthKeyResponse, LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
-import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 
 @Injectable()
 export class AuthenticationService {
 
   constructor(private errorHandler: ErrorHandler,
-    public _Http: HttpClient,
+    public _httpClient: HttpClient,
     public _http: HttpWrapperService,
     public _router: Router,
     private _generalService: GeneralService,
@@ -113,7 +113,7 @@ export class AuthenticationService {
     args.headers['Accept'] = 'application/json';
     args.headers['Access-Token'] = token;
     args.headers = new HttpHeaders(args.headers);
-    return this._Http.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE, {
+    return this._httpClient.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE, {
       headers: args.headers,
       responseType: 'json'
     }).map((res) => {
@@ -132,7 +132,7 @@ export class AuthenticationService {
     args.headers['User-Email'] = model.email;
     args.headers = new HttpHeaders(args.headers);
 
-    return this._Http.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_LINKEDIN, {
+    return this._httpClient.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_LINKEDIN, {
       headers: args.headers,
       responseType: 'json'
     }).map((res) => {
@@ -226,11 +226,11 @@ export class AuthenticationService {
     model.environment = this.config.apiUrl;
     model.userUniqueName = this._generalService.user.uniqueName;
     return this._http.post(this.config.apiUrl + 'exception/invalid-json', model).map((res) => {
-        let data: BaseResponse<AuthKeyResponse, string> = res;
-        data.request = '';
-        data.queryString = {};
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+      let data: BaseResponse<AuthKeyResponse, string> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
 
   // fetch user profile picture using emailId
@@ -282,4 +282,37 @@ export class AuthenticationService {
       }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
   }
 
+  // Get Electron App Version
+  public GetElectronAppVersion() {
+      let args: any = { headers: {} };
+      args.headers['cache-control'] = 'no-cache';
+      args.headers['Content-Type'] = 'application/xml';
+      // args.headers['Accept'] = 'application/xml';
+      args.headers = new HttpHeaders(args.headers);
+      return this._httpClient.get('https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/latest.yml', {
+        headers: args.headers,
+        responseType: 'text'
+      }).map((res) => {
+        // let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<any, any>;
+        return res;
+      }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args));
+  }
+
+  public forgotPassword(userId): Observable<BaseResponse<string, any>> {
+    let userName = userId;
+    return this._http.put(this.config.apiUrl + LOGIN_API.FORGOT_PASSWORD.replace(':userEmail', userName), {}).map((res) => {
+      let data: BaseResponse<string, any> = res;
+      data.request = userId;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+  }
+
+  public resetPassword(model): Observable<BaseResponse<string, any>> {
+    let objToSend = model;
+    return this._http.put(this.config.apiUrl + LOGIN_API.RESET_PASSWORD, objToSend).map((res) => {
+      let data: BaseResponse<string, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+  }
 }

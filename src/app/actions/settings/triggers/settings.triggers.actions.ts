@@ -32,7 +32,7 @@ export class SettingsTriggersActions {
         this.toasty.successToast('Trigger Created Successfully.');
         return this.GetTriggers();
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -54,7 +54,7 @@ export class SettingsTriggersActions {
         this.toasty.successToast('Trigger Updated Successfully.');
         return this.GetTriggers();
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -76,22 +76,22 @@ export class SettingsTriggersActions {
         this.toasty.successToast('Trigger Deleted Successfully.');
         return this.GetTriggers();
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
-    @Effect()
-    public GetTrigger$: Observable<Action> = this.action$
-      .ofType(SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS)
-      .switchMap((action: CustomActions) => {
-        return this.settingsTriggersService.GetTriggers()
-          .map(response => this.GetTriggerResponse(response));
-      });
+  @Effect()
+  public GetTrigger$: Observable<Action> = this.action$
+    .ofType(SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS)
+    .switchMap((action: CustomActions) => {
+      return this.settingsTriggersService.GetTriggers()
+        .map(response => this.GetTriggerResponse(response));
+    });
 
   constructor(private action$: Actions,
-    private toasty: ToasterService,
-    private router: Router,
-    private store: Store<AppState>,
-    private settingsTriggersService: SettingsTriggersService) {
+              private toasty: ToasterService,
+              private router: Router,
+              private store: Store<AppState>,
+              private settingsTriggersService: SettingsTriggersService) {
   }
 
   public GetTriggers() {
@@ -149,7 +149,7 @@ export class SettingsTriggersActions {
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
@@ -81,7 +81,7 @@ const THEAD = [
   templateUrl: './invoice.create.component.html'
 })
 
-export class InvoiceCreateComponent implements OnInit {
+export class InvoiceCreateComponent implements OnInit, OnDestroy {
   @Input() public showCloseButton: boolean;
   @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
   public invFormData: PreviewInvoiceResponseClass;
@@ -114,7 +114,7 @@ export class InvoiceCreateComponent implements OnInit {
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
-        if (o) {
+        if (o && o.invoiceDetails) {
           this.invFormData = _.cloneDeep(o);
           if (o.invoiceDetails.invoiceDate) {
             let d = o.invoiceDetails.invoiceDate.split('-');
@@ -353,4 +353,8 @@ export class InvoiceCreateComponent implements OnInit {
     return entryIndex + 1 + transIndex;
   }
 
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 }

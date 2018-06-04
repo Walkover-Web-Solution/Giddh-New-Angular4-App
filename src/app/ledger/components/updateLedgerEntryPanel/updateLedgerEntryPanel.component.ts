@@ -12,7 +12,7 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { filter, last, orderBy, some } from '../../../lodash-optimized';
+import { filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
@@ -248,7 +248,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
             }
           });
-          this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
+          this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
@@ -472,7 +472,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-    /**
+  /**
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {

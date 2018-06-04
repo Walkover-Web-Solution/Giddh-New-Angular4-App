@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   styles: [`
@@ -14,12 +15,18 @@ import { CompanyActions } from '../actions/company.actions';
   `],
   templateUrl: './sales.component.html'
 })
-export class SalesComponent implements OnInit {
+export class SalesComponent implements OnInit, OnDestroy {
+  public isPurchaseInvoice: boolean = false;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private router: Router,
     private store: Store<AppState>,
-    private companyActions: CompanyActions
-  ) {}
+    private companyActions: CompanyActions,
+    public route: ActivatedRoute
+  ) {
+  }
 
   public ngOnInit() {
     let companyUniqueName = null;
@@ -28,5 +35,17 @@ export class SalesComponent implements OnInit {
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'sales';
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+
+    if (this.router.routerState.snapshot.url.includes('purchase')) {
+      this.isPurchaseInvoice = true;
+    } else {
+      this.isPurchaseInvoice = false;
+      // console.log('isPurchaseInvoice', this.isPurchaseInvoice);
+    }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
