@@ -232,6 +232,12 @@ export const initialState: CustomTemplateState = {
           // },
           {
             display: true,
+            label: 'Qty.',
+            field: 'quantity',
+            width: '10'
+          },
+          {
+            display: true,
             label: null,
             field: 'description',
             width: '10'
@@ -264,12 +270,6 @@ export const initialState: CustomTemplateState = {
             display: true,
             label: 'Total',
             field: 'total',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Qty.',
-            field: 'quantity',
             width: '10'
           }
         ]
