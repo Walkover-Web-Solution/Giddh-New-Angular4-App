@@ -66,7 +66,7 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'tax'
+    field: 'taxes'
   },
   {
     display: false,
