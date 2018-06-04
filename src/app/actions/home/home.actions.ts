@@ -375,9 +375,9 @@ export class HomeActions {
       type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
       payload: res
     }, true, {
-        type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
-        payload: res
-      }));
+      type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public GetTotalOverdues$: Observable<Action> = this.action$
@@ -397,7 +397,7 @@ export class HomeActions {
           payload: obj
         };
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
@@ -480,6 +480,7 @@ export class HomeActions {
       payload: date
     };
   }
+
   public getRatioAnalysisResponse(res) {
     return {
       type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
@@ -487,12 +488,13 @@ export class HomeActions {
     };
   }
 
-  public getTotalOverdues(fromDate: string, toDate: string) {
+  public getTotalOverdues(fromDate: string, toDate: string, refresh: boolean) {
     return {
       type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES,
-      payload: fromDate, toDate
+      payload: {fromDate, toDate, refresh}
     };
   }
+
   public getTotalOverduesResponse(res) {
     return {
       type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES_RESPONSE,

@@ -1,11 +1,11 @@
 import { ICurrencyResponse } from './../models/api-models/Company';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { CompanyActions } from './company.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
@@ -22,6 +22,7 @@ import { sortBy } from 'app/lodash-optimized';
 import { AccountService } from 'app/services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
+import { GeneralActions } from './general/general.actions';
 
 @Injectable()
 export class LoginActions {
@@ -76,6 +77,12 @@ export class LoginActions {
 
   public static LoginWithPasswdRequest = 'LoginWithPasswdRequest';
   public static LoginWithPasswdResponse = 'LoginWithPasswdResponse';
+
+  public static forgotPasswordRequest = 'forgotPasswordRequest';
+  public static forgotPasswordResponse = 'forgotPasswordResponse';
+
+  public static resetPasswordRequest = 'resetPasswordRequest';
+  public static resetPasswordResponse = 'resetPasswordResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -374,6 +381,18 @@ export class LoginActions {
     });
 
   @Effect()
+  public ChangeCompanyResponse$: Observable<Action> = this.actions$
+    .ofType(CompanyActions.CHANGE_COMPANY_RESPONSE)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        // get groups with accounts for general use
+        this.store.dispatch(this._generalAction.getGroupWithAccounts());
+        this.store.dispatch(this._generalAction.getFlattenAccount());
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
   public addNewMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddNewMobileNo)
     .switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload))
@@ -455,9 +474,10 @@ export class LoginActions {
     .ofType('REPORT_INVALID_JSON')
     .switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload))
     .map((res) => {
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
+  @Effect()
   public SignupWithPasswdRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithPasswdRequest)
     .switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload))
@@ -496,6 +516,44 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public forgotPasswordRequest$: Observable<Action> = this.actions$
+    .ofType(LoginActions.forgotPasswordRequest)
+    .switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload))
+    .map(response => this.forgotPasswordResponse(response));
+
+  @Effect()
+  public forgotPasswordResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.forgotPasswordResponse)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        // return this.LoginSuccess();
+        this._toaster.successToast(action.payload.body);
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  @Effect()
+  public resetPasswordRequest$: Observable<Action> = this.actions$
+    .ofType(LoginActions.resetPasswordRequest)
+    .switchMap((action: CustomActions) => this.auth.resetPassword(action.payload))
+    .map(response => this.resetPasswordResponse(response));
+
+  @Effect()
+  public resetPasswordResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.resetPasswordResponse)
+    .map((action: CustomActions) => {
+      if (action.payload.status === 'success') {
+        // return this.LoginSuccess();
+        this._toaster.successToast(action.payload.body);
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: 'EmptyAction' };
+    });
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -509,7 +567,8 @@ export class LoginActions {
     private http: HttpClient,
     private _generalService: GeneralService,
     private _accountService: AccountService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private _generalAction: GeneralActions
   ) {
   }
 
@@ -805,6 +864,34 @@ export class LoginActions {
     return {
       type: LoginActions.LoginWithPasswdResponse,
       payload: value
+    };
+  }
+
+  public forgotPasswordRequest(userId): CustomActions {
+    return {
+      type: LoginActions.forgotPasswordRequest,
+      payload: userId
+    };
+  }
+
+  public forgotPasswordResponse(response): CustomActions {
+    return {
+      type: LoginActions.forgotPasswordResponse,
+      payload: response
+    };
+  }
+
+  public resetPasswordRequest(model): CustomActions {
+    return {
+      type: LoginActions.resetPasswordRequest,
+      payload: model
+    };
+  }
+
+  public resetPasswordResponse(response): CustomActions {
+    return {
+      type: LoginActions.resetPasswordResponse,
+      payload: response
     };
   }
 

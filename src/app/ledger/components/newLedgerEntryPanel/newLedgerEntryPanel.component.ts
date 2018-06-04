@@ -16,7 +16,7 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { LedgerService } from '../../../services/ledger.service';
-import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -476,7 +476,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       let rates = res.body;
       if (rates) {
         _.forEach(rates, (value, key) => {
-          if (key === convertTo) { return obj.convertedAmount = amount * rates[key]; }
+          if (key === convertTo) {
+            return obj.convertedAmount = amount * rates[key];
+          }
         });
       }
     });

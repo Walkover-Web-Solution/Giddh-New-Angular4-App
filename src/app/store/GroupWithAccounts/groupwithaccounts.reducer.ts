@@ -6,10 +6,10 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountMergeRequest } from '../../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CustomActions } from '../customActions';
 
 /**

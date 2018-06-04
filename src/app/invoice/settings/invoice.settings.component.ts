@@ -1,8 +1,8 @@
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks, CashFreeSetting } from '../../models/interfaces/invoice.setting.interface';
+import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -22,7 +22,7 @@ const PaymentGateway = [
   templateUrl: './invoice.settings.component.html',
   styleUrls: ['./invoice.setting.component.css']
 })
-export class InvoiceSettingComponent implements OnInit {
+export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
   public invoiceSetting: InvoiceISetting = new InvoiceISetting();
   public invoiceWebhook: InvoiceWebhooks[];
@@ -50,7 +50,7 @@ export class InvoiceSettingComponent implements OnInit {
   public showDatePicker: boolean = false;
   public moment = moment;
   public isAutoPaidOn: boolean;
-  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting() ;
+  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting();
   public paymentGatewayList: IOption[] = PaymentGateway;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -183,12 +183,12 @@ export class InvoiceSettingComponent implements OnInit {
           this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
-        if (this.isAutoPaidOn) {
-          this.formToSave.invoiceSettings.autoPaid = 'runtime';
-        } else {
-          this.formToSave.invoiceSettings.autoPaid = 'never';
-        }
-        this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
+    if (this.isAutoPaidOn) {
+      this.formToSave.invoiceSettings.autoPaid = 'runtime';
+    } else {
+      this.formToSave.invoiceSettings.autoPaid = 'never';
+    }
+    this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
       // }
 
@@ -362,7 +362,12 @@ export class InvoiceSettingComponent implements OnInit {
    * setInvoiceLockDate
    */
   public setInvoiceLockDate(date) {
-    this.showDatePicker = !this.showDatePicker;
     this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
+    this.showDatePicker = !this.showDatePicker;
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
