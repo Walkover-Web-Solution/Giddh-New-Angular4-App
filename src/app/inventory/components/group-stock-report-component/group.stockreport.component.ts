@@ -4,7 +4,7 @@ import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
@@ -56,6 +56,8 @@ const VALUE_FILTER = [
   `]
 })
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+
   public today: Date = new Date();
   public activeGroup$: Observable<StockGroupResponse>;
   public groupStockReport$: Observable<GroupStockReportResponse>;
@@ -147,9 +149,13 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
           this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
           this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
           this.GroupStockReportRequest.page = 1;
-          this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName;
+          this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
+          this.GroupStockReportRequest.stockUniqueName = '';
           this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
           this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+        }
+        if (this.dateRangePickerCmp) {
+          this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
         }
       }
     });
@@ -164,6 +170,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.to = this.toDate || null;
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
+    }
+    if (!this.GroupStockReportRequest.stockUniqueName) {
+      this.GroupStockReportRequest.stockUniqueName = '';
     }
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }

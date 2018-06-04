@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -43,7 +43,7 @@ import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
   `],
   templateUrl: './aside-custom-stock.component.html'
 })
-export class AsideCustomStockComponent implements OnInit {
+export class AsideCustomStockComponent implements OnInit, OnDestroy {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
@@ -71,6 +71,11 @@ export class AsideCustomStockComponent implements OnInit {
     this.closeAsideEvent.emit();
     this.asideClose = true;
     setTimeout(() => {this.asideClose = false; }, 500);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

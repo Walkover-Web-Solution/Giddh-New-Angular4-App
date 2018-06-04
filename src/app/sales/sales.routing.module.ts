@@ -7,7 +7,10 @@ import { SalesComponent } from './sales.component';
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: SalesComponent, canActivate: [NeedsAuthentication]
+        path: '', component: SalesComponent, canActivate: [NeedsAuthentication],
+        children: [
+          {path: 'purchase', component: SalesComponent, canActivate: [NeedsAuthentication]},
+        ]
       }
     ])
   ],

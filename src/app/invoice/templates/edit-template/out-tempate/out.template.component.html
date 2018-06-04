@@ -528,16 +528,16 @@
                 <table class="item" cellpadding="0" cellspacing="0">
                     <thead>
                         <tr>
-                            <th *ngIf="inputTemplate.sections[1].content[0].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[0].label.length > 0) ? inputTemplate.sections[1].content[0].label : 'S No'}}</th>
-                            <th *ngIf="inputTemplate.sections[1].content[1].display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[1].label.length > 0) ? inputTemplate.sections[1].content[1].label : 'Date'}}</th>
-                            <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[2].label.length > 0) ? inputTemplate.sections[1].content[2].label : 'Item'}}</th>
-                            <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[3].label.length > 0) ? inputTemplate.sections[1].content[3].label : 'HSN/SAC'}}</th>
-                            <th *ngIf="inputTemplate.sections[1].content[10].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[10].label.length > 0) ? inputTemplate.sections[1].content[10].label : 'Qty.'}}</th>
-                            <th *ngIf="inputTemplate.sections[1].content[5].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[5].label.length > 0) ? inputTemplate.sections[1].content[5].label : 'Rate'}} (₹)</th>
-                            <th *ngIf="inputTemplate.sections[1].content[6].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[6].label.length > 0) ? inputTemplate.sections[1].content[6].label : 'Disc.'}} (₹)</th>
-                            <th *ngIf="inputTemplate.sections[1].content[7].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[7].label.length > 0) ? inputTemplate.sections[1].content[7].label : 'Taxable Value'}}</th>
-                            <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[8].label.length > 0) ? inputTemplate.sections[1].content[8].label : 'Tax'}}(₹)</th>
-                            <th colspan="2" *ngIf="inputTemplate.sections[1].content[9].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[9].label.length > 0) ? inputTemplate.sections[1].content[9].label : 'Total'}} (₹)</th>
+                            <th *ngIf="inputTemplate.sections[1].content[0].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[0].label?.length > 0) ? inputTemplate.sections[1].content[0].label : 'S No'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[1].display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[1].label?.length > 0) ? inputTemplate.sections[1].content[1].label : 'Date'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[2].label?.length > 0) ? inputTemplate.sections[1].content[2].label : 'Item'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[3].label?.length > 0) ? inputTemplate.sections[1].content[3].label : 'HSN/SAC'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[4].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[4]?.label?.length > 0) ? inputTemplate.sections[1].content[4]?.label : 'Qty.'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[6].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[6].label?.length > 0) ? inputTemplate.sections[1].content[6].label : 'Rate'}} (₹)</th>
+                            <th *ngIf="inputTemplate.sections[1].content[7].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[7].label?.length > 0) ? inputTemplate.sections[1].content[7].label : 'Disc.'}} (₹)</th>
+                            <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[8].label?.length > 0) ? inputTemplate.sections[1].content[8].label : 'Taxable Value'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[9].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[9].label?.length > 0) ? inputTemplate.sections[1].content[9].label : 'Tax'}}(₹)</th>
+                            <th colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(inputTemplate.sections[1].content[10].label?.length > 0) ? inputTemplate.sections[1].content[10].label : 'Total'}} (₹)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -546,28 +546,28 @@
                             <td *ngIf="inputTemplate.sections[1].content[1].display" class="text-left">23/07/17</td>
                             <td colspan="2" *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Dummy Product Edition 2</td>
                             <td *ngIf="inputTemplate.sections[1].content[3].display" class="text-right">123456</td>
-                            <td *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">10 m</td>
-                            <td *ngIf="inputTemplate.sections[1].content[5].display" class="text-right">1000.00</td>
-                            <td *ngIf="inputTemplate.sections[1].content[6].display" class="text-right">300.00</td>
-                            <td *ngIf="inputTemplate.sections[1].content[7].display" class="text-right">9700.00</td>
-                            <td *ngIf="inputTemplate.sections[1].content[8].display" class="text-right">970.00
+                            <td *ngIf="inputTemplate.sections[1].content[4].display" class="text-right">10 m</td>
+                            <td *ngIf="inputTemplate.sections[1].content[6].display" class="text-right">1000.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[7].display" class="text-right">300.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[8].display" class="text-right">9700.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[9].display" class="text-right">970.00
                                 <p>@10%</p>
                             </td>
-                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[9].display" class="text-right">10670.00</td>
+                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">10670.00</td>
                         </tr>
                         <tr>
                             <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-right">2</td>
                             <td *ngIf="inputTemplate.sections[1].content[1].display" class="text-left">23/07/17</td>
                             <td colspan="2" *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Dummy Product Edition 2</td>
                             <td *ngIf="inputTemplate.sections[1].content[3].display" class="text-right">123456</td>
-                            <td *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">20 m</td>
-                            <td *ngIf="inputTemplate.sections[1].content[5].display" class="text-right">2000.00</td>
-                            <td *ngIf="inputTemplate.sections[1].content[6].display" class="text-right">400.00</td>
-                            <td *ngIf="inputTemplate.sections[1].content[7].display" class="text-right">39600.00</td>
-                            <td *ngIf="inputTemplate.sections[1].content[8].display" class="text-right">3960.00
+                            <td *ngIf="inputTemplate.sections[1].content[4].display" class="text-right">20 m</td>
+                            <td *ngIf="inputTemplate.sections[1].content[6].display" class="text-right">2000.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[7].display" class="text-right">400.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[8].display" class="text-right">39600.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[9].display" class="text-right">3960.00
                                 <p>@10%</p>
                             </td>
-                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[9].display" class="text-right">43560.00</td>
+                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">43560.00</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -576,12 +576,12 @@
                             <th *ngIf="inputTemplate.sections[1].content[1].display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
                             <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
                             <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
-                            <th *ngIf="inputTemplate.sections[1].content[10].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
+                            <th *ngIf="inputTemplate.sections[1].content[4].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
                             <th *ngIf="inputTemplate.sections[1].content[5].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">3000.00</th>
                             <th *ngIf="inputTemplate.sections[1].content[6].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">700.00</th>
                             <th *ngIf="inputTemplate.sections[1].content[7].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">49300.00</th>
                             <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">4930.00</th>
-                            <th *ngIf="inputTemplate.sections[1].content[9].display" colspan="2" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">54230.00</th>
+                            <th *ngIf="inputTemplate.sections[1].content[10].display" colspan="2" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">54230.00</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -593,7 +593,7 @@
                 <table class="balance">
                     <tr *ngIf="inputTemplate.sections[2].content[0].display">
                         <th><strong>{{inputTemplate.sections[2].content[0].label}}</strong></th>
-                        <td><span>₹49300.00.00</span></td>
+                        <td><span>₹49300.00</span></td>
                     </tr>
                     <tr *ngIf="inputTemplate.sections[2].content[1].display">
                         <th><strong>{{inputTemplate.sections[2].content[1].label}}</strong></th>

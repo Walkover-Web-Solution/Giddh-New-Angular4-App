@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 
 @Component({

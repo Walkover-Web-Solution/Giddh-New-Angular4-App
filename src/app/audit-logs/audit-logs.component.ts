@@ -3,16 +3,19 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import {
   Component,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'audit-logs',
   templateUrl: './audit-logs.component.html'
 })
-export class AuditLogsComponent implements OnInit {
+export class AuditLogsComponent implements OnInit, OnDestroy {
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
   }
 
@@ -24,5 +27,10 @@ export class AuditLogsComponent implements OnInit {
     stateDetailsRequest.lastState = 'audit-logs';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

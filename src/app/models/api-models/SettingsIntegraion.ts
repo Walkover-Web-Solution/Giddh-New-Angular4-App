@@ -4,7 +4,7 @@
  * API:: /company/:companyUniqueName/sms-key
  */
 
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from './Inventory';
 
 export interface IntegrationPage {
   smsForm: any;
