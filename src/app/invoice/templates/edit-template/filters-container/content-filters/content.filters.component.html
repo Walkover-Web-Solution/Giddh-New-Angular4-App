@@ -125,6 +125,10 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="customTemplate.sections[1]">
+                    <!-- <tr *ngFor="let item of customTemplate.sections[1].content; let i = index">
+                        <td><label><input type="checkbox" name="sN" [(ngModel)]="item.display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> {{ item.field }}</label></td>
+                        <td><input type="text" [maxlength]="10" class="form-control" name="ss" [(ngModel)]='item.label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!item.display" /></td>
+                    </tr> -->
                     <tr>
                         <td><label><input type="checkbox" name="sN" [(ngModel)]="customTemplate.sections[1].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Number</label></td>
                         <td><input type="text" [maxlength]="10" class="form-control" name="ss" [(ngModel)]='customTemplate.sections[1].content[0].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[0].display"
@@ -150,38 +154,44 @@
 
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox" name="qt" [(ngModel)]="customTemplate.sections[1].content[10].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Quantity</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="qt1" [(ngModel)]='customTemplate.sections[1].content[10].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[10].display"
+                        <td><label><input type="checkbox" name="qt" [(ngModel)]="customTemplate.sections[1].content[4].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Quantity</label></td>
+                        <td><input type="text" [maxlength]="10" class="form-control" name="qt1" [(ngModel)]='customTemplate.sections[1].content[4].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[4].display"
                             /></td>
 
                     </tr>
-                    <tr>
-                        <td><label><input type="checkbox" name="rt" [(ngModel)]="customTemplate.sections[1].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Rate/Item</label></td>
+                    <tr [hidden]="true">
+                        <td><label><input type="checkbox" name="rt" [(ngModel)]="customTemplate.sections[1].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/>Description</label></td>
                         <td><input type="text" [maxlength]="10" class="form-control" name="rt1" [(ngModel)]='customTemplate.sections[1].content[5].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[5].display"
                             /></td>
 
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox"  name="ds" [(ngModel)]="customTemplate.sections[1].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Discount/Item</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="ds1" [(ngModel)]='customTemplate.sections[1].content[6].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[6].display"
+                        <td><label><input type="checkbox" name="rt" [(ngModel)]="customTemplate.sections[1].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Rate/Item</label></td>
+                        <td><input type="text" [maxlength]="10" class="form-control" name="rt1" [(ngModel)]='customTemplate.sections[1].content[6].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[6].display"
                             /></td>
 
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox"  name="tv" [(ngModel)]="customTemplate.sections[1].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Taxable Value</label></td>
-                        <td><input type="text" [maxlength]="13" class="form-control" name="tv1" [(ngModel)]='customTemplate.sections[1].content[7].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[7].display"
+                        <td><label><input type="checkbox"  name="ds" [(ngModel)]="customTemplate.sections[1].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Discount/Item</label></td>
+                        <td><input type="text" [maxlength]="10" class="form-control" name="ds1" [(ngModel)]='customTemplate.sections[1].content[7].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[7].display"
                             /></td>
 
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox" name="ta"  [(ngModel)]="customTemplate.sections[1].content[8].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Tax</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="t1" [(ngModel)]='customTemplate.sections[1].content[8].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[8].display"
+                        <td><label><input type="checkbox"  name="tv" [(ngModel)]="customTemplate.sections[1].content[8].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Taxable Value</label></td>
+                        <td><input type="text" [maxlength]="13" class="form-control" name="tv1" [(ngModel)]='customTemplate.sections[1].content[8].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[8].display"
                             /></td>
 
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox"  name="tot" [(ngModel)]="customTemplate.sections[1].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Total</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="tot1" [(ngModel)]='customTemplate.sections[1].content[9].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[9].display"
+                        <td><label><input type="checkbox" name="ta"  [(ngModel)]="customTemplate.sections[1].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Tax</label></td>
+                        <td><input type="text" [maxlength]="10" class="form-control" name="t1" [(ngModel)]='customTemplate.sections[1].content[9].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[9].display"
+                            /></td>
+
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox"  name="tot" [(ngModel)]="customTemplate.sections[1].content[10].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Total</label></td>
+                        <td><input type="text" [maxlength]="10" class="form-control" name="tot1" [(ngModel)]='customTemplate.sections[1].content[10].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[10].display"
                             /></td>
 
                     </tr>
