@@ -36,12 +36,12 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'itemCode'
+    field: 'quantity'
   },
   {
     display: false,
     label: '',
-    field: 'quantity'
+    field: 'description'
   },
   {
     display: false,
