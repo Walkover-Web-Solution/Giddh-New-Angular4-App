@@ -43,7 +43,7 @@ export default class WindowManager {
                 }
             } else {
                 if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
-                    setTimeout(autoUpdater.quitAndInstall(), 120000);
+                    setTimeout(autoUpdater.quitAndInstall(), 60000);
                 } else {
                     app.quit();
                 }
