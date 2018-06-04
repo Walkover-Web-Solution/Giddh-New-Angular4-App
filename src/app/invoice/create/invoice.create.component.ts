@@ -53,11 +53,11 @@ const THEAD = [
     label: '',
     field: 'discount'
   },
-  {
-    display: false,
-    label: '',
-    field: 'taxableAmount'
-  },
+  // {
+  //   display: false,
+  //   label: '',
+  //   field: 'taxableAmount'
+  // },
   {
     display: false,
     label: '',
@@ -66,7 +66,7 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'taxes'
+    field: 'tax'
   },
   {
     display: false,
