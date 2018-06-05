@@ -1,162 +1,165 @@
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2" *ngIf="invoiceDataFound">
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2" *ngIf="invoiceDataFound" autocomplete="off">
 
-  <div class="bdrB clearfix">
-    <div class="col-xs-6">
-      <div class="form-group size_380" *ngIf="templateHeader.customerName.display">
-        <label>Customer Name</label>
-        <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.customerName" />
-      </div>
+    <div class="bdrB clearfix">
+        <div class="col-xs-6">
+            <div class="form-group size_380" *ngIf="templateHeader.customerName.display">
+                <label>Customer Name</label>
+                <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.customerName" />
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <label>&nbsp;</label>
+            <p class="lead b">Balance Due: {{ invFormData.grandTotal }}</p>
+        </div>
     </div>
-    <div class="col-xs-6 text-right">
-      <label>&nbsp;</label>
-      <p class="lead b">Balance Due: {{ invFormData.grandTotal }}</p>
-    </div>
-  </div>
 
-  <section class="clearfix mrB4">
-    <section class="form-inline col-xs-12">
-      <div class="pdT2 clearfix">
-        <div class="form-group size_340">
-          <label>Attention to</label>
-          <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
-        </div>
-        <div class="form-group" *ngIf="templateHeader.invoiceDate.display">
-          <label>{{templateHeader.invoiceDate.label}}</label>
-          <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.invoiceDetails.invoiceDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}" />
-        </div>
-        <div class="form-group" *ngIf="templateHeader.invoiceNumber.display">
-          <label>{{templateHeader.invoiceNumber.label}}</label>
-          <input [disabled]="updateMode" type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
-        </div>
-        <div class="form-group" *ngIf="templateHeader.dueDate.display">
-          <label>{{templateHeader.dueDate.label}}</label>
-          <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.invoiceDetails.dueDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
-        </div>
-      </div>
+    <section class="clearfix mrB4">
+        <section class="form-inline col-xs-12">
+            <div class="pdT2 clearfix">
+                <div class="form-group size_340">
+                    <label>Attention to</label>
+                    <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
+                </div>
+                <div class="form-group" *ngIf="templateHeader.invoiceDate.display">
+                    <label>{{templateHeader.invoiceDate.label}}</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.invoiceDetails.invoiceDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}" />
+                </div>
+                <div class="form-group" *ngIf="templateHeader.invoiceNumber.display" [hidden]="!updateMode">
+                    <label>{{templateHeader.invoiceNumber.label}}</label>
+                    <input [disabled]="updateMode" type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
+                </div>
+                <div class="form-group" *ngIf="templateHeader.dueDate.display">
+                    <label>{{templateHeader.dueDate.label}}</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.invoiceDetails.dueDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
+                </div>
+            </div>
 
-      <div class="pdT2 clearfix flex-row">
-        <div class="flex-row-child">
-          <div class="form-group size_340" *ngIf="templateHeader.billingAddress.display">
-            <label>{{templateHeader.billingAddress.label}}</label>
-            <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.addressStr"></textarea>
-          </div>
-          <div class="form-group">
-            <div class="mrB2" *ngIf="templateHeader.billingState.display">
-              <label>{{templateHeader.billingState.label}}</label>
-              <input type="text" name="billingDetails.stateName" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateName" />
+            <div class="pdT2 clearfix flex-row">
+                <div class="flex-row-child">
+                    <div class="form-group size_340" *ngIf="templateHeader.billingAddress.display">
+                        <label>{{templateHeader.billingAddress.label}}</label>
+                        <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.addressStr"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="mrB2" [hidden]="!templateHeader.billingState.display">
+                            <label>{{templateHeader.billingState.label}}</label>
+                            <sh-select [placeholder]="'State'" [options]="statesSource$ | async" #statesBilling name="billingDetails.stateCode" [(ngModel)]="invFormData.account.billingDetails.stateCode"></sh-select>
+                            <!-- <input type="text" name="billingDetails.stateName" class="form-control" [(ngModel)]="invFormData.account.billingDetails.stateName" /> -->
+                        </div>
+                        <div class="" *ngIf="templateHeader.billingGstin.display">
+                            <label>{{templateHeader.billingGstin.label}}</label>
+                            <input type="text" name="billingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.account.billingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row-child">
+                    <div class="form-group size_340" *ngIf="templateHeader.shippingAddress.display">
+                        <label>{{templateHeader.shippingAddress.label}}</label>
+                        <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.addressStr"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="mrB2" [hidden]="!templateHeader.shippingState.display">
+                            <label>{{templateHeader.shippingState.label}}</label>
+                            <sh-select [disabled]="autoFillShipping" #statesShipping [placeholder]="'State'" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.account.shippingDetails.stateCode"></sh-select>
+                            <!-- <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateName" /> -->
+                        </div>
+                        <div class="" *ngIf="templateHeader.shippingGstin.display">
+                            <label>{{templateHeader.shippingGstin.label}}</label>
+                            <input type="text" name="shippingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.account.shippingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="" *ngIf="templateHeader.billingGstin.display">
-              <label>{{templateHeader.billingGstin.label}}</label>
-              <input type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" />
-            </div>
-          </div>
-        </div>
-        <div class="flex-row-child">
-          <div class="form-group size_340" *ngIf="templateHeader.shippingAddress.display">
-            <label>{{templateHeader.shippingAddress.label}}</label>
-            <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.addressStr"></textarea>
-          </div>
-          <div class="form-group">
-            <div class="mrB2" *ngIf="templateHeader.shippingState.display">
-              <label>{{templateHeader.shippingState.label}}</label>
-              <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateName" />
-            </div>
-            <div class="" *ngIf="templateHeader.shippingGstin.display">
-              <label>{{templateHeader.shippingGstin.label}}</label>
-              <input type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" />
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="pdT2 clearfix">
-        <div class="form-group size_175" *ngIf="templateHeader.shippingDate.display">
-          <label>{{templateHeader.shippingDate.label}}</label>
-          <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.other.shippingDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.shippingDate | date: giddhDateFormatUI }}" />
-        </div>
-        <div class="form-group size_175" *ngIf="templateHeader.shippedVia.display">
-          <label>{{templateHeader.shippedVia.label}}</label>
-          <input type="text" name="shippedVia" class="form-control" [(ngModel)]="invFormData.other.shippedVia" />
-        </div>
-        <div class="form-group size_175">
-          <label>Tracking No.</label>
-          <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.other.trackingNumber" />
-        </div>
-        <div class="form-group size_175">
-          <label>{{templateHeader.customField1.label || 'Custom Field 1'}}</label>
-          <input type="text" name="customField1" class="form-control" [(ngModel)]="invFormData.other.customField1" />
-        </div>
-        <div class="form-group size_175">
-          <label>{{templateHeader.customField2.label || 'Custom Field 2' }}</label>
-          <input type="text" name="customField2" class="form-control" [(ngModel)]="invFormData.other.customField2" />
-        </div>
-        <div class="form-group size_175">
-          <label>{{templateHeader.customField3.label || 'Custom Field 3' }}</label>
-          <input type="text" name="customField3" class="form-control" [(ngModel)]="invFormData.other.customField3" />
-        </div>
-      </div>
+            <div class="pdT2 clearfix">
+                <div class="form-group size_175" *ngIf="templateHeader.shippingDate.display">
+                    <label>{{templateHeader.shippingDate.label}}</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.other.shippingDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.shippingDate | date: giddhDateFormatUI }}" />
+                </div>
+                <div class="form-group size_175" *ngIf="templateHeader.shippedVia.display">
+                    <label>{{templateHeader.shippedVia.label}}</label>
+                    <input type="text" name="shippedVia" class="form-control" [(ngModel)]="invFormData.other.shippedVia" />
+                </div>
+                <div class="form-group size_175">
+                    <label>Tracking No.</label>
+                    <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.other.trackingNumber" />
+                </div>
+                <div class="form-group size_175">
+                    <label>{{templateHeader.customField1.label || 'Custom Field 1'}}</label>
+                    <input type="text" name="customField1" class="form-control" [(ngModel)]="invFormData.other.customField1" />
+                </div>
+                <div class="form-group size_175">
+                    <label>{{templateHeader.customField2.label || 'Custom Field 2' }}</label>
+                    <input type="text" name="customField2" class="form-control" [(ngModel)]="invFormData.other.customField2" />
+                </div>
+                <div class="form-group size_175">
+                    <label>{{templateHeader.customField3.label || 'Custom Field 3' }}</label>
+                    <input type="text" name="customField3" class="form-control" [(ngModel)]="invFormData.other.customField3" />
+                </div>
+            </div>
+        </section>
     </section>
-  </section>
 
-  <section class="clearfix mrB2 whiteBg">
-    <table class="table">
-      <thead class="t-h-bg1">
-        <tr *ngIf="customThead">
-          <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.label}}</th>
-        </tr>
-      </thead>
-      <tbody *ngFor="let entry of invFormData.entries; let entryIndex = index">
-        <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
-          <td *ngIf="customThead[0].display">{{ getSerialNos(entryIndex, transIndex) }}</td>
-          <td *ngIf="customThead[1].display">{{ entry.entryDate }}</td>
-          <td *ngIf="customThead[2].display">
-            {{ transaction.accountName }}<br>
-            <input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" />
-          </td>
-          <td *ngIf="customThead[3].display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-          <td *ngIf="customThead[5].display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-          <td *ngIf="customThead[4].display">{{ transaction.stockUnit }}</td>
-          <td *ngIf="customThead[6].display">{{ transaction.rate}}</td>
-          <td *ngIf="customThead[7].display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}</td>
-          <td *ngIf="customThead[8].display || customThead[9].display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}</td>
-          <td *ngIf="customThead[10].display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}</td>
-          <td *ngIf="customThead[11].display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}</td>
+    <section class="clearfix mrB2 whiteBg">
+        <table class="table">
+            <thead class="t-h-bg1">
+                <tr *ngIf="customThead">
+                    <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.label}}</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let entry of invFormData.entries; let entryIndex = index">
+                <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
+                    <td *ngIf="customThead[0].display">{{ getSerialNos(entryIndex, transIndex) }}</td>
+                    <td *ngIf="customThead[1].display">{{ entry.entryDate }}</td>
+                    <td *ngIf="customThead[2].display">
+                        {{ transaction.accountName }}
+                    </td>
+                    <td *ngIf="customThead[3].display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
+                    <td *ngIf="customThead[4].display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
+                    <td *ngIf="customThead[5].display"> <input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
+                    <td *ngIf="customThead[6].display">{{ transaction.rate}}</td>
+                    <td *ngIf="customThead[7].display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}</td>
+                    <td *ngIf="customThead[8].display || customThead[9].display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}</td>
+                    <td *ngIf="customThead[9].display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}</td>
+                    <td *ngIf="customThead[10].display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}</td>
 
-          <!-- empty tds -->
-          <td *ngIf="customThead[7].display && transaction.category !== 'income'">&nbsp;</td>
-          <td *ngIf="customThead[8].display || customThead[9].display && transaction.category !== 'income'">&nbsp;</td>
-          <td *ngIf="customThead[10].display && transaction.category !== 'income'">&nbsp;</td>
-          <td *ngIf="customThead[11].display && transaction.category !== 'income'">{{ transaction.amount }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- sub total and total calc -->
-    <table class="table">
-      <tbody>
-        <tr>
-          <td width="50%">
-            <div class="col-xs-8 pdT1">
-              <label class="mrB1">Message</label>
-              <textarea style="height:140px" class="form-control" name="message2" [(ngModel)]="invFormData.other.message2"></textarea>
-            </div>
-          </td>
-          <td width="50%">&nbsp;</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+                    <!-- empty tds -->
+                    <td *ngIf="customThead[6].display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[7].display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[8].display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[9].display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[10].display && transaction.category !== 'income'">{{ transaction.amount }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- sub total and total calc -->
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td width="50%">
+                        <div class="col-xs-8 pdT1">
+                            <label class="mrB1">Message</label>
+                            <textarea style="height:140px" class="form-control" name="message2" [(ngModel)]="invFormData.other.message2"></textarea>
+                        </div>
+                    </td>
+                    <td width="50%">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
-  <section class="row">
-    <section id="actionPane" class="text-center">
-      <div class="col-xs-12">
-        <div class="pull-right">
-          <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close</button>
-          <button type="submit" class="btn btn-default">
+    <section class="row">
+        <section id="actionPane" class="text-center">
+            <div class="col-xs-12">
+                <div class="pull-right">
+                    <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close</button>
+                    <button type="submit" class="btn btn-default">
             <span *ngIf="updateMode">Update Invoice</span>
             <span *ngIf="!updateMode">Generate Invoice</span>
           </button>
-        </div>
-      </div>
+                </div>
+            </div>
+        </section>
     </section>
-  </section>
 </form>

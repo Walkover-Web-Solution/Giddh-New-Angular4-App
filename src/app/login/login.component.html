@@ -23,15 +23,19 @@
         <div class="app_ico">
             <ul>
                 <li class="mrR2"><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank"><i class="fa fa-android"></i></a></li>
-                <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank"><i class="fa fa-apple"></i></a></li>
+                <li>
+                    <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" class="img_hover">
+                        <i class="">
+                    <img src="./assets/images/new/ios.svg" />
+                    <img src="./assets/images/new/ios_hover.svg" [style.display]="'none'"/>                    
+                </i>
+                    </a>
+                </li>
                 <h1>Mobile App</h1>
             </ul>
             <ul>
                 <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe" target="_blank"><i class="fa fa-windows"></i></a></li>
-                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank" class="img_hover"><i class="">
-                    <img src="./assets/images/new/ios.svg" />
-                    <img src="./assets/images/new/ios_hover.svg" [style.display]="'none'"/>                    
-                    </i></a>
+                <li class="mrR2"><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg" target="_blank"><i class="fa fa-apple"></i></a>
                 </li>
                 <li><a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz" target="_blank"><i class="fa fa-linux"></i></a></li>
                 <h1>Desktop App</h1>
@@ -137,9 +141,31 @@
                         <input class="form-control" type="password" formControlName="password" placeholder="Password" />
                         <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!loginWithPasswdForm.controls['uniqueKey'].value || !loginWithPasswdForm.controls['password'].value">Login</button>
                     </div>
-                    <!-- <a href="javascript:void(0)" class="pull-right btn-link" (click)="showForgotPasswordModal()">Forgot password?</a> -->
+                    <a href="javascript:void(0)" class="pull-right btn-link fs14" (click)="showForgotPasswordModal()">Forgot password?</a>
                 </form>
                 <!-- form end/ -->
+
+                <div class="" *ngIf="loginUsing === 'forgot'">
+                    <form class="" id="forgotPassword" name="forgotPassword" novalidate [formGroup]="forgotPasswordForm" *ngIf="forgotStep === 1" [hidden]="!showForgotPassword">
+                        <div class="clearfix form-group">
+                            <input class="form-control" formControlName="userId" type="text" placeholder="Email Id" required />
+                        </div>
+                        <button class="btn btn-block btn-success btn-lg mrT1" type="submit" (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)" [disabled]="!forgotPasswordForm.controls['userId'].value">Reset Password</button>
+                    </form>
+                    <form class="" id="resetPassword" name="resetPassword" novalidate [formGroup]="resetPasswordForm" *ngIf="forgotStep === 2" [hidden]="!showForgotPassword">
+                        <div class="row">
+                            <div class="clearfix form-group">
+                                <div class="col-xs-12">
+                                    <input class="form-control" formControlName="verificationCode" type="text" placeholder="Verification Code" required />
+                                    <input class="form-control mrT1" formControlName="newPassword" type="password" placeholder="New Password" required />
+                                </div>
+                                <div class="col-xs-12">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-block btn-success btn-lg mrT1" type="submit" (click)="resetPassword(resetPasswordForm)" [disabled]="!resetPasswordForm.controls['verificationCode'].value || !resetPasswordForm.controls['newPassword'].value">Submit</button>
+                    </form>
+                </div>
 
             </div>
 
@@ -154,7 +180,8 @@
             </ul>
             <div class="login_option">
                 <!--  -->
-                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> or <a href="javascript:void(0);" (click)="loginUsing = 'mobile'">Mobile</a>
+                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName';resetForgotPasswordProcess()">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email';resetForgotPasswordProcess()">Email</a> or <a href="javascript:void(0);"
+                    (click)="loginUsing = 'mobile';resetForgotPasswordProcess()">Mobile</a>
             </div>
 
             <div class="mrT4">
@@ -318,22 +345,22 @@
 <!-- two way auth popup -->
 
 <!--mobile varify form  -->
-<div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
+<!-- <div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="noBrdRdsModal">
                 <div class="modal-header">
-                    <h3>Sign Up with Giddh</h3>
+                    <h3>Forgot Password</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideForgotPasswordModal()">×</span>
                 </div>
                 <div class="modal-body clearfix">
-                    <form class="col-xs-12" id="forgotPassword" name="forgotPassword" novalidate [formGroup]="forgotPasswordForm">
+                    <form class="col-xs-12" id="forgotPassword" name="forgotPassword" novalidate [formGroup]="forgotPasswordForm" *ngIf="!(isForgotPasswordInProgress$ | async)">
                         <div class="clearfix form-group">
                             <input class="form-control" formControlName="userId" type="text" placeholder="Email Id" required />
                         </div>
                         <button class="btn btn-sm btn-success pull-right" type="submit" (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)">Reset Password</button>
                     </form>
-                    <form class="col-xs-12" id="resetPassword" name="resetPassword" novalidate [formGroup]="resetPasswordForm">
+                    <form class="col-xs-12" id="resetPassword" name="resetPassword" novalidate [formGroup]="resetPasswordForm" *ngIf="isForgotPasswordInProgress$ | async">
                         <div class="row">
                             <div class="clearfix form-group">
                                 <div class="col-xs-6">
@@ -350,5 +377,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!--mobile verify form  -->

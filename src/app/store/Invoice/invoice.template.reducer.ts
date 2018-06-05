@@ -125,7 +125,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'billingState',
+            label: 'Billing State',
             field: 'billingState',
             width: null
           },
