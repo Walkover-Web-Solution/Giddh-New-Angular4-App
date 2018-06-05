@@ -2,7 +2,7 @@ import { AccountService } from 'app/services/account.service';
 import { TallyModuleService } from './tally-service';
 import { KeyboardService } from 'app/accounting/keyboard.service';
 import { Router } from '@angular/router';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
@@ -86,7 +86,7 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
   styleUrls: ['./accounting.component.css']
 })
 
-export class AccountingComponent implements OnInit {
+export class AccountingComponent implements OnInit, OnDestroy {
 
   public gridType: string = 'voucher';
   public selectedPage: string = 'journal';
@@ -191,5 +191,10 @@ export class AccountingComponent implements OnInit {
    */
   public setStock(stockObj) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
