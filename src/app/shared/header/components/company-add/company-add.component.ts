@@ -218,6 +218,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   }
 
   public logoutUser() {
+    this.store.dispatch(this.verifyActions.hideVerifyBox());
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
     if (isElectron) {

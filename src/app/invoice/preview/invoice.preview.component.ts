@@ -59,6 +59,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
@@ -70,7 +71,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
-  public bsConfig: Partial<BsDatepickerConfig>;
   public modalConfig = {
     animated: true,
     keyboard: false,
@@ -215,13 +215,15 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onPerformAction(item, ele: ShSelectComponent) {
-    let actionToPerform = ele._selectedValues[0].value;
-    if (actionToPerform === 'paid') {
-      this.selectedInvoice = item;
-      this.performActionOnInvoiceModel.show();
-    } else {
-      this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+  public onPerformAction(item, ev: IOption) {
+    if (ev && ev.value) {
+      let actionToPerform = ev.value;
+      if (actionToPerform === 'paid') {
+        this.selectedInvoice = item;
+        this.performActionOnInvoiceModel.show();
+      } else {
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+      }
     }
   }
 
