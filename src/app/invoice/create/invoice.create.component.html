@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group" *ngIf="templateHeader.dueDate.display">
                     <label>{{templateHeader.dueDate.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.invoiceDetails.dueDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
+                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.invoiceDetails.dueDate" [maxDate]="maxDueDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
                 </div>
             </div>
 
