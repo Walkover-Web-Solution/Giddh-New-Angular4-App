@@ -110,26 +110,26 @@
             </thead>
             <tbody *ngFor="let entry of invFormData.entries; let entryIndex = index">
                 <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
-                    <td *ngIf="customThead[0].display">{{ getSerialNos(entryIndex, transIndex) }}</td>
-                    <td *ngIf="customThead[1].display">{{ entry.entryDate }}</td>
-                    <td *ngIf="customThead[2].display">
+                    <td *ngIf="customThead[0]?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
+                    <td *ngIf="customThead[1]?.display">{{ entry.entryDate }}</td>
+                    <td *ngIf="customThead[2]?.display">
                         {{ transaction.accountName }}
                     </td>
-                    <td *ngIf="customThead[3].display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-                    <td *ngIf="customThead[4].display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-                    <td *ngIf="customThead[5].display"> <input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
-                    <td *ngIf="customThead[6].display">{{ transaction.rate}}</td>
-                    <td *ngIf="customThead[7].display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}</td>
-                    <td *ngIf="customThead[8].display || customThead[9].display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}</td>
-                    <td *ngIf="customThead[9].display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}</td>
-                    <td *ngIf="customThead[10].display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}</td>
+                    <td *ngIf="customThead[3]?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
+                    <td *ngIf="customThead[4]?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
+                    <td *ngIf="customThead[5]?.display"> <input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
+                    <td *ngIf="customThead[6]?.display">{{ transaction.rate}}</td>
+                    <td *ngIf="customThead[7]?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}</td>
+                    <td *ngIf="customThead[8]?.display || customThead[9]?.display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}</td>
+                    <td *ngIf="customThead[9]?.display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}</td>
+                    <td *ngIf="customThead[10]?.display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}</td>
 
                     <!-- empty tds -->
-                    <td *ngIf="customThead[6].display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[7].display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[8].display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[9].display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[10].display && transaction.category !== 'income'">{{ transaction.amount }}</td>
+                    <td *ngIf="customThead[6]?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[7]?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[8]?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[9]?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead[10]?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
                 </tr>
             </tbody>
         </table>
