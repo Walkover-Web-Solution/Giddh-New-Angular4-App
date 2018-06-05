@@ -54,10 +54,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   public resetPasswordForm: FormGroup;
   public isForgotPasswordInProgress$: Observable<boolean>;
   public isForgotPasswordInSuccess$: Observable<boolean>;
+  public isResetPasswordInSuccess$: Observable<boolean>;
+  public showForgotPassword: boolean = false;
+  public forgotStep: number = 0;
   private imageURL: string;
   private email: string;
   private name: string;
   private token: string;
+  private userUniqueKey: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
@@ -105,6 +109,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     this.isLoginWithPasswordInProcess$ = store.select(state => {
       return state.login.isLoginWithPasswordInProcess;
+    }).takeUntil(this.destroyed$);
+    this.isForgotPasswordInProgress$ = store.select(state => {
+      return state.login.isForgotPasswordInProcess;
+    }).takeUntil(this.destroyed$);
+    this.isResetPasswordInSuccess$ = store.select(state => {
+      return state.login.isResetPasswordInSuccess;
     }).takeUntil(this.destroyed$);
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
@@ -187,6 +197,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (a) {
         this.hideTowWayAuthModal();
         this.store.dispatch(this.loginAction.resetTwoWayAuthModal());
+      }
+    });
+
+    this.isResetPasswordInSuccess$.subscribe(s => {
+      if (s) {
+        this.resetForgotPasswordProcess();
+        this.loginUsing = 'userName';
+      }
+    });
+    this.isForgotPasswordInProgress$.subscribe (a => {
+      if (!a) {
+        this.forgotStep = 1;
+      } else {
+        this.forgotStep = 2;
       }
     });
   }
@@ -360,21 +384,27 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public showForgotPasswordModal() {
-    this.forgotPasswordModal.show();
-  }
-
-  public hideForgotPasswordModal() {
-    this.forgotPasswordModal.hide();
-    // this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
-    this.forgotPasswordForm.get('userId').reset();
+    this.showForgotPassword = true;
+    this.loginUsing = 'forgot';
+    this.forgotStep = 1;
   }
 
   public forgotPassword(userId) {
+    this.resetPasswordForm.patchValue({uniqueKey: userId});
+    this.userUniqueKey = userId;
     this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
   }
 
   public resetPassword(form) {
     let ObjToSend = form.value;
+    ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
     this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
+  }
+
+  public resetForgotPasswordProcess() {
+    this.forgotPasswordForm.reset();
+    this.resetPasswordForm.reset();
+    this.forgotStep = 1;
+    this.userUniqueKey = null;
   }
 }
