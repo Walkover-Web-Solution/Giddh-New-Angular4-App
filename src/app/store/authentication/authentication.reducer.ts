@@ -40,6 +40,7 @@ export interface AuthenticationState {
   isSignupWithPasswordSuccess: boolean;
   signupVerifyEmail: string;
   isForgotPasswordInProcess: boolean;
+  isResetPasswordInSuccess: boolean;
 }
 
 export enum userLoginStateEnum {
@@ -92,7 +93,8 @@ const initialState = {
   isSignupWithPasswordInProcess: false,
   isSignupWithPasswordSuccess: false,
   signupVerifyEmail: null,
-  isForgotPasswordInProcess: false
+  isForgotPasswordInProcess: false,
+  isResetPasswordInSuccess: false
 };
 
 const sessionInitialState: SessionState = {
@@ -348,14 +350,28 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
       return state;
     }
     case LoginActions.forgotPasswordRequest:
-      return Object.assign({}, state, {
-        isForgotPasswordInProcess: true,
-      });
+    return Object.assign({}, state, {
+      isForgotPasswordInProcess: false
+    });
     case LoginActions.forgotPasswordResponse: {
       let res: BaseResponse<any, any> = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {
-          isForgotPasswordInProcess: false,
+          isForgotPasswordInProcess: true,
+        });
+    }
+      return state;
+    }
+    case LoginActions.resetPasswordRequest:
+    return Object.assign({}, state, {
+      isResetPasswordInSuccess: false
+    });
+    case LoginActions.resetPasswordResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          isResetPasswordInSuccess: true,
+          isForgotPasswordInProcess: false
         });
     }
       return state;
