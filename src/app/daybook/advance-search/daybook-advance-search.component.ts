@@ -1,7 +1,7 @@
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
@@ -28,7 +28,7 @@ const COMPARISON_FILTER = [
   templateUrl: './daybook-advance-search.component.html'
 })
 
-export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
+export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public startDate: any;
   @Input() public endDate: any;
@@ -410,5 +410,10 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges {
     if (!val) {
       this.advanceSearchForm.get('description').patchValue(null);
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
