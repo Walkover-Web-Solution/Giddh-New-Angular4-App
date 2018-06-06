@@ -9,6 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 
 export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isLoading: boolean;
+  @Input() public entity: string;
   @Output() public onFileUpload = new EventEmitter();
   public file: File = null;
   public selectedFileName: string = '';
@@ -38,4 +39,5 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedFileName = '';
     }
   }
+
 }

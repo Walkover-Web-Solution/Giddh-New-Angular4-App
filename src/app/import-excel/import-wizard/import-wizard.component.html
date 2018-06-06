@@ -26,7 +26,7 @@
         <div class="clearfix mrT2">
             <div [ngSwitch]="step">
                 <ng-container *ngSwitchCase="1">
-                    <upload-file [isLoading]="isUploadInProgress" (onFileUpload)="onFileUpload($event)"></upload-file>
+                    <upload-file [isLoading]="isUploadInProgress" [entity]="entity" (onFileUpload)="onFileUpload($event)"></upload-file>
                 </ng-container>
                 <!-- <ng-container *ngSwitchCase="2">
                     <map-excel-data [importData]="excelState?.importExcelData" (onNext)="onNext(excelState?.importExcelData)" (onBack)="onBack()"></map-excel-data>
