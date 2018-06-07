@@ -11,6 +11,7 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [

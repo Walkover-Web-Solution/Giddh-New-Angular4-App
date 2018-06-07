@@ -65,8 +65,10 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public columnSelected(val: IOption, data: DataModel, idx) {
-    this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
-    this.dataModel[idx].field = val.label;
+    if (val && val.label) {
+      this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
+      this.dataModel[idx].field = val.label;
+    }
     this.editHeaderIdx = null;
   }
 
@@ -81,7 +83,7 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
     this.dataModel = Object.keys(value.mappings.mappingInfo)
       .map(field => ({
-        field,
+        field: value.mappings.mappingInfo[field][0].columnHeader,
         options,
         selected: value.mappings.mappingInfo[field][0].columnNumber.toString(),
         columnNumber: value.mappings.mappingInfo[field].find(p => p.isSelected).columnNumber
