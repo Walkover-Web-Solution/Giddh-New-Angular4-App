@@ -100,8 +100,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // SuccessComponent,
     NewUserComponent,
     LoaderComponent,
-    SocialLoginCallbackComponent,
-    SignupComponent
+    SocialLoginCallbackComponent
+    // SignupComponent
   ],
   /**
    * Import Angular's modules.
