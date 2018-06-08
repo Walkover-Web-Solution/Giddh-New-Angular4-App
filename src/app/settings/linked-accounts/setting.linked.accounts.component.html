@@ -1,8 +1,18 @@
 <div class="box clearfix mrT2">
     <h1 class="section_head pdT0">Add Bank Account</h1>
-    <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
+    <button (click)="yodleeBank()" class="btn btn-primary">Connect Bank</button>
     <div class="mrT1">
         <p> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again after some time.</p>
+    </div>
+    <div [hidden]="true">
+        <form action='https://node.developer.yodlee.com/authenticate/restserver/' #yodleeFormHTML method='post' id='rsessionPost' target="yodlee_fastlink" [formGroup]="yodleeForm">
+            <input type='text' name='rsession' placeholder='rsession' formControlName="rsession" id='rsession' />
+            <input type='text' name='app' placeholder='FinappId' formControlName="app" id='finappId' />
+            <input type='text' name='redirectReq' placeholder='true/false' formControlName="redirectReq" />
+            <input type='text' name='token' placeholder='token' id='token' formControlName="token" />
+            <input type='text' name="extraParams" formControlName="extraParams" placeholer='Extra Params' id='extraParams' />
+            <button type="submit">Submit</button>
+        </form>
     </div>
 </div>
 
@@ -62,11 +72,12 @@
 </div>
 <!-- Connect-Bank-Modal -->
 <div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <iframe id='yodlee_fastlink' name='yodlee_fastlink' frameBorder='0' width="100%" height="400px"></iframe>
+            <!-- <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal> -->
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Confirmation Modal -->
