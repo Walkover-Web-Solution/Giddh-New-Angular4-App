@@ -17,8 +17,8 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public GetEbankAccounts$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS)
-    .switchMap((action: CustomActions) => this._settingsLinkedAccountsService.GetAllEbankAccounts())
-    .map(res => this.validateResponse<IGetAllEbankAccountResponse[], string>(res, {
+    .switchMap((action: CustomActions) => this._settingsLinkedAccountsService.GetYodleeAccounts())
+    .map(res => this.validateResponse<any[], string>(res, {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE,
       payload: res
     }, true, {
@@ -30,7 +30,7 @@ export class SettingsLinkedAccountsActions {
   public RefreshEbankAccounts$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS)
     .switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshAllEbankAccounts())
-    .map(res => this.validateResponse<IGetAllEbankAccountResponse[], string>(res, {
+    .map(res => this.validateResponse<any[], string>(res, {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE,
       payload: res
     }, true, {

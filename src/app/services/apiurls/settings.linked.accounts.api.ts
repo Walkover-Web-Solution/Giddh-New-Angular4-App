@@ -13,3 +13,8 @@ export const EBANKS = {
   REMOVE_GIDDH_ACCOUNT: COMMON_URL + 'ebanks/:ItemAccountId/unlink', // DELETE
   UPDATE_DATE: COMMON_URL + 'ebanks/:accountId/eledgers?from=:date', // PUT
 };
+
+export const YODLEE_FASTLINK = {
+  ACCESS_TOKEN: COMMON_URL + 'yodlee/access-token',
+  GET_ACCOUNTS: COMMON_URL + 'yodlee/yodlee-accounts',
+};

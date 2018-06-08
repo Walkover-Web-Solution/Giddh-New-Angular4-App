@@ -15,6 +15,7 @@ import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'setting-linked-accounts',
@@ -24,13 +25,15 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   @ViewChild('connectBankModel') public connectBankModel: ModalDirective;
   @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+  @ViewChild('yodleeFormHTML') public yodleeFormHTML: HTMLFormElement;
 
-  public iframeSource: string;
+  public iframeSource: string = 'https://developer.yodlee.com/sites/all/modules/action_yodleeregister/fastlink-util.php?sample_username=sbMemdd7073f144b18baa5c77e405dde56e0dea2';
   public ebankAccounts: BankAccountsResponse[] = [];
   public accounts$: IOption[];
   public confirmationMessage: string;
   public dateToUpdate: string;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public yodleeForm: FormGroup;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -42,12 +45,22 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
     private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
     private _accountService: AccountService,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private _fb: FormBuilder
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+
+    this.yodleeForm = this._fb.group({
+      rsession: ['08062013_0:31aa4019f7b470cabe8127690a70a3b92d69b285da63791cbae703666c588a0ed96f0f9b8190599c0c731e4a481c299c235a039f9ebc00280b2a53321059dae2', [Validators.required]],
+      app: ['10003600', [Validators.required]],
+      redirectReq: [true, [Validators.required]],
+      token: ['90ecde3a0d88222ca29b3c86a6df7fbffaad8c62482aada50e8d7a5accd59148', Validators.required],
+      extraParams: ['', Validators.required]
+    });
+
     this.store.select(p => p.settings).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
         // console.log('Found');
@@ -105,6 +118,29 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
     this.connectBankModel.show();
     this.connectBankModel.config.ignoreBackdropClick = true;
+  }
+
+  /**
+   * yodleeBank
+   */
+  public yodleeBank() {
+    this._settingsLinkedAccountsService.GetYodleeToken().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        if (data.body.user) {
+          let token = _.cloneDeep(data.body.user.accessTokens[0]);
+          this.yodleeForm.patchValue({
+              rsession: data.body.rsession,
+              app: token.appId,
+              // redirectReq: token.url,
+              token: token.value,
+              extraParams: ['', Validators.required]
+          });
+          this.yodleeFormHTML.nativeElement.submit();
+          this.connectBankModel.show();
+        }
+      }
+    });
+
   }
 
   public closeModal() {
