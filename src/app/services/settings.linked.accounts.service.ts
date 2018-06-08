@@ -4,8 +4,8 @@ import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { EBANKS } from './apiurls/settings.linked.accounts.api';
-import { IGetAllEbankAccountResponse, IGetEbankTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
+import { EBANKS, YODLEE_FASTLINK } from './apiurls/settings.linked.accounts.api';
+import { IGetAllEbankAccountResponse, IGetEbankTokenResponse, IAccessTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
@@ -131,4 +131,29 @@ export class SettingsLinkedAccountsService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
+
+  /**
+   * Get yodlee token
+   */
+  public GetYodleeToken(): Observable<BaseResponse<IAccessTokenResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.ACCESS_TOKEN.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<IAccessTokenResponse, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<IAccessTokenResponse, string>(e));
+  }
+
+  /**
+   * Get yodlee accounts
+   */
+  public GetYodleeAccounts(): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
 }

@@ -23,3 +23,17 @@ export interface IEbankAccount {
   isDatePickerOpen?: boolean;
   showAccList?: boolean;
 }
+
+export interface IAccessTokenResponse {
+    user: IAccessToken;
+    rsession: string;
+}
+
+export interface IAccessToken {
+  accessTokens: IAccessTokenObj[];
+}
+export interface IAccessTokenObj {
+    appId: string;
+    value: string;
+    url: string;
+}
