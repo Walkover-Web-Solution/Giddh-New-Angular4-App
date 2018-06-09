@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
@@ -92,7 +92,7 @@ export class TransferNoteComponent implements OnChanges, OnInit {
 
   public save() {
     if (this.form.valid) {
-      const inventoryEntryDate = moment(this.form.value.inventoryEntryDate).format('DD-MM-YYYY');
+      const inventoryEntryDate = moment(this.form.value.transferDate).format('DD-MM-YYYY');
       this.onSave.emit({ entry: { ...this.form.value, inventoryEntryDate }, user: { uniqueName: this.recieverUniqueName } });
     }
   }

@@ -63,6 +63,8 @@ export class InventoryActionsConst {
   public static GetStockWithUniqueNameResponse = 'GetStockWithUniqueNameResponse';
 
   public static ManageInventoryAside = 'ManageInventoryAside';
+
+  public static ShowWareHouseScreen = 'ShowWareHouseScreen';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
