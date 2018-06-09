@@ -1,10 +1,13 @@
 <section id="inventory-sidebar" class="sidebar pull-left" #sidebar>
-    <div class="h100 clearfix">
-        <div class="width100 pd1 pdT0">
-            <input class="form-control" type="search" placeholder="Search Stock" #search>
-        </div>
-        <stockgrp-list class="parent-Group" [Groups]='groupsWithStocks$ | async'>
-
-        </stockgrp-list>
+  <div class="h100 clearfix">
+    <div class="width100 pd1 pdT0">
+      <input class="form-control" type="search" placeholder="Search Stock" #search>
     </div>
+    <div class="pd1">
+      <button class="btn isActive btn-sm" id="warehouseBtn" type="button" (click)="showWareHouseScreen()">Manage Groups &amp; Warehouses</button>
+    </div>
+    <stockgrp-list class="parent-Group" [Groups]='groupsWithStocks$ | async'>
+
+    </stockgrp-list>
+  </div>
 </section>
