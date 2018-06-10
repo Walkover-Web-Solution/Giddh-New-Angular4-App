@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -8,10 +8,11 @@ import { AppState } from '../../../../store';
 import * as _ from '../../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsBranchActions } from '../../../../actions/settings/branch/settings.branch.action';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'warehouse-destination',
-  templateUrl: './warehouse.destination.component.html',
+  templateUrl: './warehouse.transfer.component.html',
   styles: [`
     :host {
       position: fixed;
@@ -76,18 +77,31 @@ import { SettingsBranchActions } from '../../../../actions/settings/branch/setti
     }
   `],
 })
-export class WarehouseDestinationComponent implements OnInit, OnDestroy {
+export class WarehouseTransferComponent implements OnInit, OnDestroy {
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-
+  @ViewChild('sourceSelect') public sourceSelect: ShSelectComponent;
   public form: FormGroup;
-  public mode: 'sender' | 'product' = 'sender';
+  public mode: 'destination' | 'product' = 'destination';
   public today = new Date();
   public stockListOptions: IOption[];
   public branches: IOption[];
+  public otherBranches: IOption[];
   public asideClose: boolean;
 
   public get transferDate(): FormControl {
     return this.form.get('transferDate') as FormControl;
+  }
+
+  public get source(): FormControl {
+    return this.form.get('source') as FormControl;
+  }
+
+  public get productName(): FormControl {
+    return this.form.get('productName') as FormControl;
+  }
+
+  public get destination(): FormControl {
+    return this.form.get('destination') as FormControl;
   }
 
   public get transfers(): FormArray {
@@ -96,13 +110,14 @@ export class WarehouseDestinationComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private settingsBranchActions: SettingsBranchActions,) {
+  constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private settingsBranchActions: SettingsBranchActions) {
     this._store.dispatch(this.settingsBranchActions.GetALLBranches());
     this._store.dispatch(this._inventoryAction.GetStock());
     this.form = this._fb.group({
       transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
       source: ['', Validators.required],
       productName: ['', Validators.required],
+      destination: [''],
       transfers: this._fb.array([], Validators.required),
       description: ['']
     });
@@ -116,6 +131,7 @@ export class WarehouseDestinationComponent implements OnInit, OnDestroy {
             }
           });
           this.branches = branches.results.map(b => ({label: b.name, value: b.uniqueName}));
+          this.otherBranches = _.cloneDeep(this.branches);
         }
       }
     });
@@ -132,21 +148,52 @@ export class WarehouseDestinationComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addEntry() {
+  public modeChanged(mode: 'destination' | 'product') {
+    this.mode = mode;
+    if (mode === 'destination') {
+      this.destination.setValidators(null);
+      this.productName.setValidators(Validators.required);
+    } else {
+      this.productName.setValidators(null);
+      this.destination.setValidators(Validators.required);
+    }
+    this.transfers.controls.map((t, i) => {
+      if (i === 0) {
+        this.transfers.controls[0].reset();
+      } else {
+        this.transfers.removeAt(i);
+      }
+    });
+    this.form.reset();
+    this.sourceSelect.clear();
+  }
+
+  public addEntry(control?: FormGroup) {
+    if (control) {
+      if (!control.valid) {
+        return;
+      } else if (!(control.get('entityDetails').value)) {
+        return;
+      }
+    }
     const items = this.form.get('transfers') as FormArray;
-    const value = items.length > 0 ? items.at(0).value : {
-      entityDetails: '',
-      quantity: '',
-      stockUnit: '',
-      rate: '',
-    };
+    // let value: WarehouseTransfersArray = new WarehouseTransfersArray(
+    //   new WarehouseTransferEntity('', this.mode === 'destination' ? 'warehouse' : 'stock'),
+    //   0,
+    //   0,
+    //   ''
+    // );
     const transfer = this._fb.group({
       entityDetails: [''],
       quantity: ['', Validators.required],
       rate: ['', Validators.required],
-      stockUnit: [value.stockUnit, Validators.required]
+      stockUnit: ['', Validators.required]
     });
     items.push(transfer);
+  }
+
+  public sourceChanged(option: IOption) {
+    this.otherBranches = this.branches.filter(oth => oth.value !== option.value);
   }
 
   public deleteEntry(index: number) {
