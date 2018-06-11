@@ -8,6 +8,7 @@ import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryEntry, InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
 import { GeneralService } from '../../../services/general.service';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'aside-menu',
@@ -69,6 +70,8 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   @Input() public selectedAsideView: string;
   public view = '';
   public isLoading: boolean;
+  public createStockSuccess$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>,
               private _inventoryAction: InventoryAction,
@@ -78,6 +81,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   ) {
     this._store.dispatch(this._inventoryAction.GetStock());
     this._store.dispatch(this._inventoryUserAction.getAllUsers());
+    this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -102,6 +106,14 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     this._store
       .select(p => p.inventoryInOutState.userSuccess)
       .subscribe(p => p && this.closeAsidePane(p));
+
+    this.createStockSuccess$.subscribe(s => {
+      if (s) {
+        this.closeAsidePane(s);
+        let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
+        this._store.dispatch(this._inventoryAction.ManageInventoryAside( objToSend ));
+      }
+    });
   }
 
   public onCancel() {
