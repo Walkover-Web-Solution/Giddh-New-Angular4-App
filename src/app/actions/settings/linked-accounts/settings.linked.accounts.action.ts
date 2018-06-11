@@ -89,7 +89,7 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public UnlinkAccount$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT)
-    .switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload))
+    .switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload.loginId, action.payload.accountUniqueName))
     .map(res => this.validateResponse<any, string>(res, {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE,
       payload: res
@@ -157,7 +157,7 @@ export class SettingsLinkedAccountsActions {
     };
   }
 
-  public DeleteBankAccount(loginId: string) {
+  public DeleteBankAccount(loginId: number) {
     return {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT,
       payload: loginId
@@ -199,10 +199,10 @@ export class SettingsLinkedAccountsActions {
     };
   }
 
-  public UnlinkBankAccount(loginId: number) {
+  public UnlinkBankAccount(loginId: number, accountUniqueName: string) {
     return {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT,
-      payload: loginId
+      payload: { loginId, accountUniqueName }
     };
   }
 
