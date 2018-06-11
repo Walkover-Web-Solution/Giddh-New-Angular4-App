@@ -254,7 +254,7 @@ export class LedgerActions {
         this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        this._toasty.successToast('Data filtered successfully');
+        // this._toasty.successToast('Data filtered successfully');
       }
       return {type: 'EmptyAction'};
     });
