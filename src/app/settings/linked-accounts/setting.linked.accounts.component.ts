@@ -54,10 +54,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     this.yodleeForm = this._fb.group({
-      rsession: ['08062013_0:31aa4019f7b470cabe8127690a70a3b92d69b285da63791cbae703666c588a0ed96f0f9b8190599c0c731e4a481c299c235a039f9ebc00280b2a53321059dae2', [Validators.required]],
-      app: ['10003600', [Validators.required]],
+      rsession: ['', [Validators.required]],
+      app: ['', [Validators.required]],
       redirectReq: [true, [Validators.required]],
-      token: ['90ecde3a0d88222ca29b3c86a6df7fbffaad8c62482aada50e8d7a5accd59148', Validators.required],
+      token: ['', Validators.required],
       extraParams: ['', Validators.required]
     });
 
@@ -131,7 +131,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
           this.yodleeForm.patchValue({
               rsession: data.body.rsession,
               app: token.appId,
-              // redirectReq: token.url,
+              redirectReq: true,
               token: token.value,
               extraParams: ['', Validators.required]
           });
@@ -151,10 +151,14 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public closeConfirmationModal(isUserAgree: boolean) {
     if (isUserAgree) {
-      let accountId = this.selectedAccount.accountId;
+      let accountId = this.selectedAccount.itemAccountId;
+      let accountUniqueName = '';
+      if (this.selectedAccount.giddhAccount && this.selectedAccount.giddhAccount.uniqueName) {
+        accountUniqueName = this.selectedAccount.giddhAccount.uniqueName;
+      }
       switch (this.actionToPerform) {
         case 'DeleteAddedBank':
-          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(this.selectedAccount.loginId));
+          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId));
           break;
         case 'UpdateDate':
           this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(this.dateToUpdate, accountId));
@@ -163,7 +167,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
           this.store.dispatch(this.settingsLinkedAccountsActions.LinkBankAccount(this.dataToUpdate, accountId));
           break;
         case 'UnlinkAccount':
-          this.store.dispatch(this.settingsLinkedAccountsActions.UnlinkBankAccount(accountId));
+          this.store.dispatch(this.settingsLinkedAccountsActions.UnlinkBankAccount(accountId, accountUniqueName));
           break;
       }
     }
@@ -182,7 +186,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteAddedBank(bankName, account) {
-    if (bankName && account && account.loginId) {
+    if (bankName && account) {
       this.selectedAccount = _.cloneDeep(account);
       this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
       this.actionToPerform = 'DeleteAddedBank';
@@ -201,7 +205,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     if (data && data.value) {
       // Link bank account
       this.dataToUpdate = {
-        itemAccountId: account.accountId,
+        itemAccountId: account.itemAccountId,
         uniqueName: data.value
       };
 
@@ -214,7 +218,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public onUnlinkBankAccount(account) {
     this.selectedAccount = _.cloneDeep(account);
-    this.confirmationMessage = `Are you sure you want to unlink ${account.linkedAccount.name} ?`;
+    this.confirmationMessage = `Are you sure you want to unlink ${account.giddhAccount.name} ?`;
     this.actionToPerform = 'UnlinkAccount';
     this.confirmationModal.show();
   }

@@ -22,6 +22,8 @@ export interface IEbankAccount {
   name: string;
   isDatePickerOpen?: boolean;
   showAccList?: boolean;
+  itemAccountId?: number;
+  giddhAccount?: any;
 }
 
 export interface IAccessTokenResponse {

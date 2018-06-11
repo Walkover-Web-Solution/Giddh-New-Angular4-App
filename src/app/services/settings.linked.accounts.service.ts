@@ -73,7 +73,7 @@ export class SettingsLinkedAccountsService {
   public DeleteBankAccount(loginId: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
+    return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', loginId)).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {loginId};
       return data;
@@ -109,10 +109,10 @@ export class SettingsLinkedAccountsService {
   /**
    * Unlink bank account
    */
-  public UnlinkBankAccount(accountId: string): Observable<BaseResponse<any, string>> {
+  public UnlinkBankAccount(accountId: string, accountUniqueName): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId)).map((res) => {
+    return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':accountUniqueName', accountUniqueName)).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {accountId};
       return data;
