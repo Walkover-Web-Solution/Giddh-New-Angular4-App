@@ -2,7 +2,7 @@ import { AppState } from '../store/roots';
 import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
 
 @Component({
-  selector: 'warehouse-header',
+  selector: 'branch-header',
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -19,16 +19,16 @@ import { animate, Component, OnDestroy, OnInit, state, style, transition, trigge
     <div class="stock-bar inline pull-right">
       <div class="">
         <div class="pull-right">
-          <button type="button" class="btn btn-link" (click)="toggleWarehouseAsidePane($event)">New</button>
+          <button type="button" class="btn btn-link" (click)="toggleBranchAsidePane($event)">New</button>
         </div>
       </div>
     </div>
-    <div class="aside-overlay" *ngIf="warehouseAsideMenuState === 'in'"></div>
-    <warehouse-destination [class]="warehouseAsideMenuState" [@slideInOut]="warehouseAsideMenuState" (closeAsideEvent)="toggleWarehouseAsidePane($event)"></warehouse-destination>
+    <div class="aside-overlay" *ngIf="branchAsideMenuState === 'in'"></div>
+    <branch-destination [class]="branchAsideMenuState" [@slideInOut]="branchAsideMenuState" (closeAsideEvent)="toggleBranchAsidePane($event)"></branch-destination>
   `
 })
-export class WarehouseHeaderComponent implements OnInit, OnDestroy {
-  public warehouseAsideMenuState: string = 'out';
+export class BranchHeaderComponent implements OnInit, OnDestroy {
+  public branchAsideMenuState: string = 'out';
   constructor() {
     //
   }
@@ -38,18 +38,18 @@ export class WarehouseHeaderComponent implements OnInit, OnDestroy {
   }
 
   public toggleBodyClass() {
-    if (this.warehouseAsideMenuState === 'in' || this.warehouseAsideMenuState === 'in') {
+    if (this.branchAsideMenuState === 'in' || this.branchAsideMenuState === 'in') {
       document.querySelector('body').classList.add('fixed');
     }else {
       document.querySelector('body').classList.remove('fixed');
     }
   }
 
-  public toggleWarehouseAsidePane(event?): void {
+  public toggleBranchAsidePane(event?): void {
     if (event) {
       event.preventDefault();
     }
-    this.warehouseAsideMenuState = this.warehouseAsideMenuState === 'out' ? 'in' : 'out';
+    this.branchAsideMenuState = this.branchAsideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
 
