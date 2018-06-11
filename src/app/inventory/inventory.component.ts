@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   templateUrl: './inventory.component.html'
 })
 export class InventoryComponent implements OnInit, OnDestroy {
-  public isWareHouseVisible$: Observable<boolean>;
+  public isBranchVisible$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions) {
@@ -20,7 +20,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     let companyUniqueName = null;
-    this.isWareHouseVisible$ = this.store.select(s => s.inventory.showWarehouseScreen).takeUntil(this.destroyed$);
+    this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).takeUntil(this.destroyed$);
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;

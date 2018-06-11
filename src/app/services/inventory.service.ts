@@ -590,4 +590,7 @@ export class InventoryService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
   }
+
+// region warehouse
+//  endregion
 }

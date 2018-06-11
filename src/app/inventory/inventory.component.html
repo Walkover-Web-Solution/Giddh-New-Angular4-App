@@ -6,7 +6,7 @@
   <!--/sidebar-->
   <section class="rightBar ng-scope">
 
-    <section class="container-fluid clearfix bdrB" *ngIf="!(isWareHouseVisible$ | async)">
+    <section class="container-fluid clearfix bdrB" *ngIf="!(isBranchVisible$ | async)">
       <div class="top_bar clearfix">
         <h1 class="section_title inline"><strong>Inventory</strong></h1>
         <!-- top row-->
@@ -16,12 +16,12 @@
       </div>
     </section>
 
-    <section class="container-fluid clearfix bdrB" *ngIf="isWareHouseVisible$ | async">
+    <section class="container-fluid clearfix bdrB" *ngIf="isBranchVisible$ | async">
       <div class="top_bar clearfix">
-        <h1 class="section_title inline"><strong>Warehouse</strong></h1>
+        <h1 class="section_title inline"><strong>Branches</strong></h1>
         <!-- top row-->
-        <warehouse-header>
-        </warehouse-header>
+        <branch-header>
+        </branch-header>
         <!-- /top row-->
       </div>
     </section>
