@@ -63,8 +63,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
       });
   }
 
-  public showWareHouseScreen() {
-    this.store.dispatch(this.sidebarAction.ShowWareHouseScreen(true));
+  public showBranchScreen() {
+    this.store.dispatch(this.sidebarAction.ShowBranchScreen(true));
   }
 
   public ngOnDestroy() {

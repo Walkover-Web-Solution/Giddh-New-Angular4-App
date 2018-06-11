@@ -26,8 +26,8 @@ import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.m
 import { TextCaseChangeModule } from 'app/shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { InventoryGroupStockReportComponent } from './components/group-stock-report-component/group.stockreport.component';
 import { InventoryWelcomeComponent } from './components/welcome-inventory/welcome-inventory.component';
-import { WarehouseTransferComponent } from './components/warehouse/warehouseTransfer/warehouse.transfer.component';
-import { WarehouseHeaderComponent } from './components/warehouse/warehouseHeader/warehouse.header.component';
+import { BranchTransferComponent } from './components/branch/branchTransfer/branch.transfer.component';
+import { BranchHeaderComponent } from './components/branch/branchHeader/branch.header.component';
 
 @NgModule({
   declarations: [
@@ -46,8 +46,8 @@ import { WarehouseHeaderComponent } from './components/warehouse/warehouseHeader
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
     InventoryWelcomeComponent,
-    WarehouseTransferComponent,
-    WarehouseHeaderComponent
+    BranchTransferComponent,
+    BranchHeaderComponent
   ],
   exports: [
     InventoryComponent,
@@ -64,7 +64,7 @@ import { WarehouseHeaderComponent } from './components/warehouse/warehouseHeader
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
     InventoryWelcomeComponent,
-    WarehouseTransferComponent
+    BranchTransferComponent
   ],
   providers: [],
   imports: [

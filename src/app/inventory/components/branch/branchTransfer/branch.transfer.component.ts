@@ -11,8 +11,8 @@ import { SettingsBranchActions } from '../../../../actions/settings/branch/setti
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
-  selector: 'warehouse-destination',
-  templateUrl: './warehouse.transfer.component.html',
+  selector: 'branch-destination',
+  templateUrl: './branch.transfer.component.html',
   styles: [`
     :host {
       position: fixed;
@@ -77,7 +77,7 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
     }
   `],
 })
-export class WarehouseTransferComponent implements OnInit, OnDestroy {
+export class BranchTransferComponent implements OnInit, OnDestroy {
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @ViewChild('sourceSelect') public sourceSelect: ShSelectComponent;
   public form: FormGroup;
@@ -187,7 +187,8 @@ export class WarehouseTransferComponent implements OnInit, OnDestroy {
       entityDetails: [''],
       quantity: ['', Validators.required],
       rate: ['', Validators.required],
-      stockUnit: ['', Validators.required]
+      stockUnit: ['', Validators.required],
+      value: ['']
     });
     items.push(transfer);
   }

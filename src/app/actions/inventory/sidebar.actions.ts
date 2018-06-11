@@ -222,9 +222,9 @@ export class SidebarAction {
     };
   }
 
-  public ShowWareHouseScreen(bool: boolean) {
+  public ShowBranchScreen(bool: boolean) {
     return {
-      type: InventoryActionsConst.ShowWareHouseScreen,
+      type: InventoryActionsConst.ShowBranchScreen,
       payload: bool
     };
   }
