@@ -1,6 +1,6 @@
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, Optional, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -15,22 +15,34 @@ import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
   selector: 'setting-linked-accounts',
-  templateUrl: './setting.linked.accounts.component.html'
+  templateUrl: './setting.linked.accounts.component.html',
+  styles: [`
+    .bank_delete {
+      right:0;
+      bottom:0;
+    }
+  `]
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   @ViewChild('connectBankModel') public connectBankModel: ModalDirective;
   @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+  @ViewChild('yodleeFormHTML') public yodleeFormHTML: HTMLFormElement;
 
-  public iframeSource: string;
+  public iframeSource: string = null;
   public ebankAccounts: BankAccountsResponse[] = [];
   public accounts$: IOption[];
   public confirmationMessage: string;
   public dateToUpdate: string;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public yodleeForm: FormGroup;
+  public companyUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -42,12 +54,25 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
     private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
     private _accountService: AccountService,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private _fb: FormBuilder,
+    @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
+    private _generalService: GeneralService
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
   public ngOnInit() {
+
+    this.yodleeForm = this._fb.group({
+      rsession: ['', [Validators.required]],
+      app: ['', [Validators.required]],
+      redirectReq: [true, [Validators.required]],
+      token: ['', Validators.required],
+      extraParams: ['', Validators.required]
+    });
+
     this.store.select(p => p.settings).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
         // console.log('Found');
@@ -63,7 +88,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     this.store.select(p => p.settings.linkedAccounts.iframeSource).takeUntil(this.destroyed$).subscribe((source) => {
       if (source) {
-        this.iframeSource = _.clone(source);
+        // this.iframeSource = _.clone(source);
         this.connectBankModel.show();
         this.connectBankModel.config.ignoreBackdropClick = true;
       }
@@ -99,12 +124,36 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         if (data.body.connectUrl) {
-          this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
+          // this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
         }
       }
     });
     this.connectBankModel.show();
     this.connectBankModel.config.ignoreBackdropClick = true;
+  }
+
+  /**
+   * yodleeBank
+   */
+  public yodleeBank() {
+    this._settingsLinkedAccountsService.GetYodleeToken().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        if (data.body.user) {
+          let token = _.cloneDeep(data.body.user.accessTokens[0]);
+          this.yodleeForm.patchValue({
+              rsession: data.body.rsession,
+              app: token.appId,
+              redirectReq: true,
+              token: token.value,
+              extraParams: ['callback=' + this.config.apiUrl + 'company/' + this.companyUniqueName + '/yodlee/call-back']
+              // extraParams: ['callback=http://localapp.giddh.com:3000/success.html']
+          });
+          this.yodleeFormHTML.nativeElement.submit();
+          this.connectBankModel.show();
+        }
+      }
+    });
+
   }
 
   public closeModal() {
@@ -115,10 +164,14 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public closeConfirmationModal(isUserAgree: boolean) {
     if (isUserAgree) {
-      let accountId = this.selectedAccount.accountId;
+      let accountId = this.selectedAccount.itemAccountId;
+      let accountUniqueName = '';
+      if (this.selectedAccount.giddhAccount && this.selectedAccount.giddhAccount.uniqueName) {
+        accountUniqueName = this.selectedAccount.giddhAccount.uniqueName;
+      }
       switch (this.actionToPerform) {
         case 'DeleteAddedBank':
-          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(this.selectedAccount.loginId));
+          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId));
           break;
         case 'UpdateDate':
           this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(this.dateToUpdate, accountId));
@@ -127,7 +180,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
           this.store.dispatch(this.settingsLinkedAccountsActions.LinkBankAccount(this.dataToUpdate, accountId));
           break;
         case 'UnlinkAccount':
-          this.store.dispatch(this.settingsLinkedAccountsActions.UnlinkBankAccount(accountId));
+          this.store.dispatch(this.settingsLinkedAccountsActions.UnlinkBankAccount(accountId, accountUniqueName));
           break;
       }
     }
@@ -146,7 +199,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteAddedBank(bankName, account) {
-    if (bankName && account && account.loginId) {
+    if (bankName && account) {
       this.selectedAccount = _.cloneDeep(account);
       this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
       this.actionToPerform = 'DeleteAddedBank';
@@ -165,7 +218,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     if (data && data.value) {
       // Link bank account
       this.dataToUpdate = {
-        itemAccountId: account.accountId,
+        itemAccountId: account.itemAccountId,
         uniqueName: data.value
       };
 
@@ -178,7 +231,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public onUnlinkBankAccount(account) {
     this.selectedAccount = _.cloneDeep(account);
-    this.confirmationMessage = `Are you sure you want to unlink ${account.linkedAccount.name} ?`;
+    this.confirmationMessage = `Are you sure you want to unlink ${account.giddhAccount.name} ?`;
     this.actionToPerform = 'UnlinkAccount';
     this.confirmationModal.show();
   }
