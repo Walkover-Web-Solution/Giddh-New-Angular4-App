@@ -261,6 +261,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public ngOnInit() {
+    this.getAllFlattenAc();
     // get selected company for autofill country
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
       this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
@@ -994,10 +995,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     setTimeout(() => {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
+      entry.taxSum = _.sumBy(entry.taxes, function(o) {
+        return o.amount;
+      });
     }, 1500);
-    entry.taxSum = _.sumBy(entry.taxes, function(o) {
-      return o.amount;
-    });
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
