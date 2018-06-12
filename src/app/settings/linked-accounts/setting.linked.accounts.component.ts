@@ -34,6 +34,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   @ViewChild('connectBankModel') public connectBankModel: ModalDirective;
   @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
   @ViewChild('yodleeFormHTML') public yodleeFormHTML: HTMLFormElement;
+  @ViewChild('yodleeIframe') public yodleeIframe: HTMLIFrameElement;
 
   public iframeSource: string = null;
   public ebankAccounts: BankAccountsResponse[] = [];
@@ -145,8 +146,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
               app: token.appId,
               redirectReq: true,
               token: token.value,
-              extraParams: ['callback=' + this.config.apiUrl + 'company/' + this.companyUniqueName + '/yodlee/call-back']
-              // extraParams: ['callback=http://localapp.giddh.com:3000/success.html']
+              // extraParams: ['callback=' + this.config.appUrl + 'company/' + this.companyUniqueName + '/yodlee/call-back']
+              extraParams: ['callback=http://localapp.giddh.com:3000/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
           });
           this.yodleeFormHTML.nativeElement.submit();
           this.connectBankModel.show();
@@ -155,7 +156,6 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
 
   }
-
   public closeModal() {
     this.connectBankModel.hide();
     this.iframeSource = undefined;

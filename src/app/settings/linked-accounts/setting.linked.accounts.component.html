@@ -126,7 +126,7 @@
 <div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <iframe id='yodlee_fastlink' name='yodlee_fastlink' frameBorder='0' width="100%" height="400px" (modalCloseEvent)="closeModal()"></iframe>
+            <iframe id='yodlee_fastlink' #yodleeIframe name='yodlee_fastlink' frameBorder='0' width="100%" height="400px" (modalCloseEvent)="closeModal()"></iframe>
             <!-- <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal> -->
         </div>
     </div>
