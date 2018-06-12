@@ -441,10 +441,12 @@
                   <span *ngIf="disIndx != (entry.discounts?.length -1)"> +</span>
                 </span>
               </span> -->
-                                {{ transaction.discountSum }}
+                                <!-- {{ transaction.discountSum }} -->
+                                {{ entry.discountSum }}
                             </td>
                             <!-- <td>{{transaction.taxableValue}}</td> -->
-                            <td class="text-right">{{transaction.taxSum}}</td>
+                            <!-- <td class="text-right">{{transaction.taxSum}}</td> -->
+                            <td class="text-right">{{entry.taxSum}}%</td>
                             <td class="text-right">{{transaction.total}}</td>
                             <td class="text-center">
                                 <span class="cp" (click)="removeTransaction(entryIdx)">
