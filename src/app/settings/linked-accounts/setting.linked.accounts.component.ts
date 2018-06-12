@@ -1,6 +1,6 @@
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, Optional, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -16,10 +16,18 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
   selector: 'setting-linked-accounts',
-  templateUrl: './setting.linked.accounts.component.html'
+  templateUrl: './setting.linked.accounts.component.html',
+  styles: [`
+    .bank_delete {
+      right:0;
+      bottom:0;
+    }
+  `]
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
@@ -27,13 +35,14 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
   @ViewChild('yodleeFormHTML') public yodleeFormHTML: HTMLFormElement;
 
-  public iframeSource: string = 'https://developer.yodlee.com/sites/all/modules/action_yodleeregister/fastlink-util.php?sample_username=sbMemdd7073f144b18baa5c77e405dde56e0dea2';
+  public iframeSource: string = null;
   public ebankAccounts: BankAccountsResponse[] = [];
   public accounts$: IOption[];
   public confirmationMessage: string;
   public dateToUpdate: string;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public yodleeForm: FormGroup;
+  public companyUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -46,9 +55,12 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
     private _accountService: AccountService,
     private _sanitizer: DomSanitizer,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
+    private _generalService: GeneralService
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
   public ngOnInit() {
@@ -76,7 +88,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     this.store.select(p => p.settings.linkedAccounts.iframeSource).takeUntil(this.destroyed$).subscribe((source) => {
       if (source) {
-        this.iframeSource = _.clone(source);
+        // this.iframeSource = _.clone(source);
         this.connectBankModel.show();
         this.connectBankModel.config.ignoreBackdropClick = true;
       }
@@ -112,7 +124,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         if (data.body.connectUrl) {
-          this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
+          // this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
         }
       }
     });
@@ -133,7 +145,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
               app: token.appId,
               redirectReq: true,
               token: token.value,
-              extraParams: ['', Validators.required]
+              extraParams: ['callback=' + this.config.apiUrl + 'company/' + this.companyUniqueName + '/yodlee/call-back']
+              // extraParams: ['callback=http://localapp.giddh.com:3000/success.html']
           });
           this.yodleeFormHTML.nativeElement.submit();
           this.connectBankModel.show();
