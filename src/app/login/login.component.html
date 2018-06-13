@@ -137,7 +137,7 @@
                 <!-- login with userName form -->
                 <form class="pos-rel" id="loginWithPwd" [formGroup]="loginWithPasswdForm" (ngSubmit)="loginWithPasswd(loginWithPasswdForm)" *ngIf="loginUsing === 'userName'">
                     <div class="clearfix form-group">
-                        <input class="form-control mrB1" formControlName="uniqueKey" type="text" placeholder="Username" />
+                        <input class="form-control mrB1" formControlName="uniqueKey" type="text" placeholder="Email Id" />
                         <input class="form-control" type="password" formControlName="password" placeholder="Password" />
                         <button class="btn btn-success btn-lg btn-block mrT1" type="submit" [disabled]="!loginWithPasswdForm.controls['uniqueKey'].value || !loginWithPasswdForm.controls['password'].value">Login</button>
                     </div>
@@ -180,8 +180,9 @@
             </ul>
             <div class="login_option">
                 <!--  -->
-                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName';resetForgotPasswordProcess()">Username</a>, <a href="javascript:void(0);" (click)="loginUsing = 'email';resetForgotPasswordProcess()">Email</a> or <a href="javascript:void(0);"
-                    (click)="loginUsing = 'mobile';resetForgotPasswordProcess()">Mobile</a>
+                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName';resetForgotPasswordProcess()">Email</a>
+                <!-- , <a href="javascript:void(0);" (click)="loginUsing = 'email';resetForgotPasswordProcess()">Email</a>  -->
+                or <a href="javascript:void(0);" (click)="loginUsing = 'mobile';resetForgotPasswordProcess()">Mobile</a>
             </div>
 
             <div class="mrT4">
