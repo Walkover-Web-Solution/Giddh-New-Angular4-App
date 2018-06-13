@@ -7,9 +7,10 @@ import { InventoryService } from '../../services/inventory.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
-import { InventoryActionsConst } from './inventory.const';
+import { INVENTORY_BRANCH_TRANSFER, InventoryActionsConst } from './inventory.const';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
+import { BranchTransferResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
 
 @Injectable()
 export class InventoryAction {
@@ -213,6 +214,20 @@ export class InventoryAction {
       return {type: 'EmptyAction'};
     });
 
+  @Effect()
+  public CreateBranchTransfer$: Observable<Action> = this.action$
+    .ofType(INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER)
+    .switchMap((action: CustomActions) => this._inventoryService.BranchTransfer(action.payload))
+    .map((res: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>) => {
+      if (res.status === 'error') {
+        this._toasty.errorToast(res.message);
+      }
+      return {
+        type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE,
+        payload: res.status === 'success' ? res.body : null
+      } as CustomActions;
+    });
+
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {
 
@@ -389,14 +404,14 @@ export class InventoryAction {
 
   public OpenInventoryAsidePane(value: boolean) {
     return {
-      type : InventoryActionsConst.NewGroupAsidePane,
+      type: InventoryActionsConst.NewGroupAsidePane,
       payload: value
     };
   }
 
   public OpenCustomUnitPane(value: boolean) {
     return {
-      type : InventoryActionsConst.NewCustomUnitAsidePane,
+      type: InventoryActionsConst.NewCustomUnitAsidePane,
       payload: value
     };
   }
@@ -417,9 +432,15 @@ export class InventoryAction {
 
   public ManageInventoryAside(value: object) {
     return {
-      type : InventoryActionsConst.ManageInventoryAside,
+      type: InventoryActionsConst.ManageInventoryAside,
       payload: value
     };
   }
 
+  public CreateBranchTransfer(modal: TransferDestinationRequest | TransferProductsRequest): CustomActions {
+    return {
+      type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER,
+      payload: modal
+    };
+  }
 }
