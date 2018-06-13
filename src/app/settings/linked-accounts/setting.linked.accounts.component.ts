@@ -137,6 +137,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
    * yodleeBank
    */
   public yodleeBank() {
+    alert();
     this._settingsLinkedAccountsService.GetYodleeToken().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         if (data.body.user) {
@@ -147,7 +148,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
               redirectReq: true,
               token: token.value,
               // extraParams: ['callback=' + this.config.appUrl + 'company/' + this.companyUniqueName + '/yodlee/call-back']
-              extraParams: ['callback=http://localapp.giddh.com:3000/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
+              extraParams: ['callback=' + this.config.appUrl + 'yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
           });
           this.yodleeFormHTML.nativeElement.submit();
           this.connectBankModel.show();
