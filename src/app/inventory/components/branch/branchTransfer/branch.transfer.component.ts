@@ -9,6 +9,7 @@ import * as _ from '../../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsBranchActions } from '../../../../actions/settings/branch/settings.branch.action';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 
 @Component({
   selector: 'branch-destination',
@@ -83,9 +84,11 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public mode: 'destination' | 'product' = 'destination';
   public today = new Date();
+  public stockListBackUp: IStocksItem[] = [];
   public stockListOptions: IOption[];
   public branches: IOption[];
   public otherBranches: IOption[];
+  public selectedProduct: IStocksItem = null;
   public asideClose: boolean;
 
   public get transferDate(): FormControl {
@@ -143,6 +146,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     this._store
       .select(p => p.inventory.stocksList && p.inventory.stocksList.results).subscribe(s => {
       if (s) {
+        this.stockListBackUp = s;
         this.stockListOptions = s.map(p => ({label: p.name, value: p.uniqueName}));
       }
     });
@@ -164,6 +168,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
         this.transfers.removeAt(i);
       }
     });
+    this.selectedProduct = null;
     this.form.reset();
     this.sourceSelect.clear();
   }
@@ -177,8 +182,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       }
     }
     const items = this.form.get('transfers') as FormArray;
-    // let value: WarehouseTransfersArray = new WarehouseTransfersArray(
-    //   new WarehouseTransferEntity('', this.mode === 'destination' ? 'warehouse' : 'stock'),
+    // let value: BranchTransfersArray = new BranchTransfersArray(
+    //   new BranchTransferEntity('', this.mode === 'destination' ? 'warehouse' : 'stock'),
     //   0,
     //   0,
     //   ''
@@ -188,13 +193,20 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       quantity: ['', Validators.required],
       rate: ['', Validators.required],
       stockUnit: ['', Validators.required],
-      value: ['']
+      value: [''],
+      product: [this.mode === 'destination' ? this.selectedProduct : null]
     });
     items.push(transfer);
   }
 
   public sourceChanged(option: IOption) {
     this.otherBranches = this.branches.filter(oth => oth.value !== option.value);
+  }
+
+  public productChanged(option: IOption) {
+    this.selectedProduct = this.stockListBackUp.find(slb => {
+      return slb.uniqueName === option.value;
+    });
   }
 
   public deleteEntry(index: number) {
@@ -212,8 +224,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
   public save() {
     if (this.form.valid) {
-      // const inventoryEntryDate = moment(this.form.value.inventoryEntryDate).format('DD-MM-YYYY');
-      // this.onSave.emit({ ...this.form.value, inventoryEntryDate });
+      // this._store.dispatch(INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER(this.form.value as ));
     }
   }
 

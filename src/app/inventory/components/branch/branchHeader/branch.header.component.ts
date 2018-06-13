@@ -19,7 +19,7 @@ import { animate, Component, OnDestroy, OnInit, state, style, transition, trigge
     <div class="stock-bar inline pull-right">
       <div class="">
         <div class="pull-right">
-          <button type="button" class="btn btn-link" (click)="toggleBranchAsidePane($event)">New</button>
+          <button type="button" class="btn btn-primary" (click)="toggleBranchAsidePane($event)">New</button>
         </div>
       </div>
     </div>
