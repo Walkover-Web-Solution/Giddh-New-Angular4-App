@@ -14,6 +14,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { InventoryEntry, InventoryFilter, InventoryReport, InventoryUser } from '../models/api-models/Inventory-in-out';
 import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
+import { BranchTransferResponse, TransferDestinationRequest, TransferProductsRequest } from '../models/api-models/BranchTransfer';
 
 declare var _: any;
 
@@ -591,6 +592,15 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
   }
 
-// region warehouse
-//  endregion
+  // region branch
+  public BranchTransfer(modal: TransferDestinationRequest | TransferProductsRequest) {
+    return this._http
+      .post(this.config.apiUrl + INVENTORY_API.BRANCH_TRANSFER.TRANSFER, modal)
+      .mapTo((res) => {
+        let data: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest> = res;
+        data.request = modal;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>(e, modal, ''));
+  }
+  //  endregion
 }
