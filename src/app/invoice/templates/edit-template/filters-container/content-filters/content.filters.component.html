@@ -4,17 +4,17 @@
         <h2>Header</h2>
 
         <div class="clearfix">
-            <div class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name</div>
-            <div class="form-group">
+            <div *ngIf="fieldsAndVisibility.header.companyName" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name</div>
+            <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[4].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Date
                 <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceDate" [(ngModel)]='customTemplate.sections[0].content[4].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[4].display" /></div>
             </div>
 
-            <div class="form-group">
+            <div *ngIf="fieldsAndVisibility.header.invoiceNumber" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Number
                 <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceNo" [(ngModel)]='customTemplate.sections[0].content[5].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[5].display" /></div>
             </div>
-            <div class="form-group">
+            <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[12].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Due Date
                 <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="dueDate1" [(ngModel)]='customTemplate.sections[0].content[12].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[12].display" /></div>
             </div>
@@ -22,15 +22,15 @@
         <div class="clearfix">
             <h3> <i class="fa cp" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'fa-minus-square-o': showTransportField, 'fa-plus-square-o': !showTransportField}"></i> Transport Details</h3>
             <div class="clearfix" [collapse]="!showTransportField">
-                <div class="form-group">
+                <div class="form-group" *ngIf="fieldsAndVisibility.header.shippingDate">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Ship Date
                     <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="shp" [(ngModel)]='customTemplate.sections[0].content[6].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[6].display" /></div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" *ngIf="fieldsAndVisibility.header.shippedVia">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Ship Via
                     <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="shpvi" [(ngModel)]='customTemplate.sections[0].content[7].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[7].display" /></div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" *ngIf="fieldsAndVisibility.header.trackingNumber">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[8].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Tracking No.
                     <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="tra" [(ngModel)]='customTemplate.sections[0].content[8].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[8].display" /></div>
                 </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="clearfix">
             <h3>Form</h3>
-            <div class="form-group" *ngIf="customTemplate.sections[0].content[23]">
+            <div class="form-group" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[23].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Document Title
                 <div class="mrL3 mrT1">Invoice <input type="text" [maxlength]="15" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[22].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display"/></div>
                 <div class="mrL3">Tax Invoice <input type="text" [maxlength]="15" class="form-control" name="title" [(ngModel)]='customTemplate.sections[0].content[23].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display" /></div>
@@ -47,11 +47,11 @@
 
         <div class="clearfix">
             <h3>Customer Details</h3>
-            <div class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Customer Name</div>
-            <div class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[24].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Attention To</div>
+            <div *ngIf="fieldsAndVisibility.header.customerName" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Customer Name</div>
+            <div *ngIf="fieldsAndVisibility.header.attentionTo" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[24].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Attention To</div>
             
-            <div class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[10].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Email ID</div>
-            <div class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[11].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Mobile Number</div>
+            <div *ngIf="fieldsAndVisibility.header.customerEmail" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[10].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Email ID</div>
+            <div *ngIf="fieldsAndVisibility.header.customerMobileNumber" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[11].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Mobile Number</div>
         </div>
 
         <div class="clearfix">
