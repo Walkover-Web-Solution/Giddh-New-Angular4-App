@@ -57,6 +57,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public isFileUploadInProgress: boolean = false;
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
+  private sampleTemplates: CustomTemplateResponse[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -77,6 +78,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
+
+    this.store.select(s => s.invoiceTemplate.sampleTemplates).take(2).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
+      this.sampleTemplates = _.cloneDeep(sampleTemplates);
+    });
+
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 
     this.files = []; // local uploading files array
@@ -90,6 +96,32 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
+      let op = {
+        header: {},
+        table: {},
+        footer: {}
+      };
+
+      if (this.customTemplate && this.customTemplate.sections) {
+        this.customTemplate.sections.forEach((section, ind) => {
+
+          let out = section.content;
+          for (let o of section.content) {
+            if (ind === 0) {
+              op.header[o.field] = o.display ? 'y' : 'n';
+            }
+            if (ind === 1) {
+              op.table[o.field] = o.display ? 'y' : 'n';
+            }
+            if (ind === 2) {
+              op.footer[o.field] = o.display ? 'y' : 'n';
+            }
+          }
+
+        });
+
+        this._invoiceUiDataService.setFieldsAndVisibility(op);
+      }
     });
   }
 
@@ -118,8 +150,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    * onDesignChange
    */
   public onDesignChange(fieldName, value) {
-    let template = _.cloneDeep(this.customTemplate);
-    template[fieldName] = value;
+    let template;
+    if (fieldName === 'uniqueName') { // change whole template
+      const allSampleTemplates = _.cloneDeep(this.sampleTemplates);
+      const selectedTemplate = this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value);
+      template = selectedTemplate ? selectedTemplate : _.cloneDeep(this.customTemplate);
+    } else { // change specific field
+      template = _.cloneDeep(this.customTemplate);
+      template[fieldName] = value;
+    }
+
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 

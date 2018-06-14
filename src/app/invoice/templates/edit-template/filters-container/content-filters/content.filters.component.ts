@@ -20,6 +20,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public showTransportField: boolean = true;
   public showCustomField: boolean = true;
   public showCompanyName: boolean;
+  public fieldsAndVisibility: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService) {
@@ -49,6 +50,11 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
 
     this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
       this.showCompanyName = _.cloneDeep(yesOrNo);
+    });
+
+    this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
+      console.log('obj iss : ', obj);
+      this.fieldsAndVisibility = _.cloneDeep(obj);
     });
   }
 
