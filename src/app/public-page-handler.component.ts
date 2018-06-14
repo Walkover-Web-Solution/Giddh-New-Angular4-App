@@ -17,10 +17,10 @@ export class PublicPageHandlerComponent {
       this.router.navigate(['/create-invoice']);
     } else if (this.router.routerState.snapshot.url.includes('signup')) {
       // this.router.navigate(['signup']);
-      this.router.navigateByUrl('signup');
+      this.router.navigateByUrl('/signup');
     } else {
       // this.router.navigate(['login']);
-      this.router.navigateByUrl('login');
+      this.router.navigateByUrl('/login');
     }
   }
 }
