@@ -24,7 +24,7 @@ import { animate, Component, OnDestroy, OnInit, state, style, transition, trigge
       </div>
     </div>
     <div class="aside-overlay" *ngIf="branchAsideMenuState === 'in'"></div>
-    <branch-destination [class]="branchAsideMenuState" [@slideInOut]="branchAsideMenuState" (closeAsideEvent)="toggleBranchAsidePane($event)"></branch-destination>
+    <branch-destination *ngIf="branchAsideMenuState === 'in'" [class]="branchAsideMenuState" [@slideInOut]="branchAsideMenuState" (closeAsideEvent)="toggleBranchAsidePane($event)"></branch-destination>
   `
 })
 export class BranchHeaderComponent implements OnInit, OnDestroy {

@@ -112,7 +112,7 @@
 
               <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
                 <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                           [ItemHeight]="'33'" formControlName="entityDetails"
+                           [ItemHeight]="'33'" formControlName="entityDetails" (selected)="productChanged($event, item)"
                            [disabled]="!(source.value) || !(destination.value)"></sh-select>
                 <span [hidden]="(item.get('entityDetails')?.value)"
                       class="text-danger">Please select Product.</span>
@@ -122,24 +122,24 @@
                 <!-- <label class="mrB1">Quantity</label> -->
                 <!--<div>-->
                 <div class="form-group" style="margin-right: 2%;">
-                  <input name="" type="text" formControlName="quantity" class="form-control">
+                  <input name="" type="text" formControlName="quantity" (change)="valueChanged(item)" class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
-                  <input name="" type="text" formControlName="stockUnit" value="{{selectedProduct?.stockUnit?.code}}" class="form-control">
+                  <input name="" type="text" formControlName="stockUnit" class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
-                  <input name="" type="text" formControlName="stockUnit" value="{{item.get('product').value?.stockUnit?.code}}" class="form-control">
+                  <input name="" type="text" formControlName="stockUnit" class="form-control">
                 </div>
 
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
-                  <input name="" type="text" formControlName="rate" value="{{selectedProduct?.stockUnit?.code}}" class="form-control">
+                  <input name="" type="text" formControlName="rate" (change)="valueChanged(item)" class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
-                  <input name="" type="text" formControlName="rate" value="{{item.get('product').value?.stockUnit?.code}}" class="form-control">
+                  <input name="" type="text" formControlName="rate"  (change)="valueChanged(item)" class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;">
