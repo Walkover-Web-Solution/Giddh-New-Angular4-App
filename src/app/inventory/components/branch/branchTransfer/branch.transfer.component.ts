@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
@@ -89,7 +89,6 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   public branches: IOption[];
   public otherBranches: IOption[];
   public selectedProduct: IStocksItem = null;
-  public asideClose: boolean;
 
   public get transferDate(): FormControl {
     return this.form.get('transferDate') as FormControl;
@@ -116,14 +115,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private settingsBranchActions: SettingsBranchActions) {
     this._store.dispatch(this.settingsBranchActions.GetALLBranches());
     this._store.dispatch(this._inventoryAction.GetStock());
-    this.form = this._fb.group({
-      transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
-      source: ['', Validators.required],
-      productName: ['', Validators.required],
-      destination: [''],
-      transfers: this._fb.array([], Validators.required),
-      description: ['']
-    });
+    this.initializeForm();
 
     this._store.select(state => state.settings.branches).takeUntil(this.destroyed$).subscribe(branches => {
       if (branches) {
@@ -138,8 +130,6 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
         }
       }
     });
-
-    this.addEntry();
   }
 
   public ngOnInit() {
@@ -154,26 +144,34 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
   public modeChanged(mode: 'destination' | 'product') {
     this.mode = mode;
+    this.selectedProduct = null;
+    this.transferDate.reset();
+    this.initializeForm();
+    this.sourceSelect.clear();
+
     if (mode === 'destination') {
-      this.destination.setValidators(null);
+      this.destination.clearValidators();
       this.productName.setValidators(Validators.required);
     } else {
-      this.productName.setValidators(null);
+      this.productName.clearValidators();
       this.destination.setValidators(Validators.required);
     }
-    this.transfers.controls.map((t, i) => {
-      if (i === 0) {
-        this.transfers.controls[0].reset();
-      } else {
-        this.transfers.removeAt(i);
-      }
-    });
-    this.selectedProduct = null;
-    this.form.reset();
-    this.sourceSelect.clear();
   }
 
-  public addEntry(control?: FormGroup) {
+  public initializeForm() {
+    this.form = this._fb.group({
+      transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
+      source: ['', Validators.required],
+      productName: ['', Validators.required],
+      destination: [''],
+      transfers: this._fb.array([], Validators.required),
+      description: ['']
+    });
+
+    this.addEntry();
+  }
+
+  public addEntry(control?: AbstractControl) {
     if (control) {
       if (!control.valid) {
         return;
@@ -182,18 +180,20 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       }
     }
     const items = this.form.get('transfers') as FormArray;
-    // let value: BranchTransfersArray = new BranchTransfersArray(
-    //   new BranchTransferEntity('', this.mode === 'destination' ? 'warehouse' : 'stock'),
-    //   0,
-    //   0,
-    //   ''
-    // );
+    let rate = 0;
+    let stockUnit = '';
+
+    if (this.mode === 'destination' && this.selectedProduct) {
+      rate = this.selectedProduct.rate;
+      stockUnit = this.selectedProduct.stockUnit.code;
+    }
+
     const transfer = this._fb.group({
       entityDetails: [''],
-      quantity: ['', Validators.required],
-      rate: ['', Validators.required],
-      stockUnit: ['', Validators.required],
-      value: [''],
+      quantity: [0, Validators.required],
+      rate: [rate, Validators.required],
+      stockUnit: [stockUnit, Validators.required],
+      value: [0],
       product: [this.mode === 'destination' ? this.selectedProduct : null]
     });
     items.push(transfer);
@@ -203,10 +203,36 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     this.otherBranches = this.branches.filter(oth => oth.value !== option.value);
   }
 
-  public productChanged(option: IOption) {
-    this.selectedProduct = this.stockListBackUp.find(slb => {
-      return slb.uniqueName === option.value;
-    });
+  public productChanged(option: IOption, item?: AbstractControl) {
+    if (this.mode === 'destination') {
+      this.selectedProduct = this.stockListBackUp.find(slb => {
+        return slb.uniqueName === option.value;
+      });
+
+      this.transfers.controls.map((trn: AbstractControl) => {
+        trn.get('stockUnit').patchValue(_.get(this.selectedProduct, 'stockUnit.code'));
+        trn.get('rate').patchValue(_.get(this.selectedProduct, 'rate', 0));
+        this.valueChanged(trn);
+      });
+    } else {
+      this.selectedProduct = null;
+      let selectedProduct = this.stockListBackUp.find(slb => {
+        return slb.uniqueName === option.value;
+      });
+      const stockUnit = item.get('stockUnit');
+      const rate = item.get('rate');
+
+      stockUnit.patchValue(_.get(selectedProduct, 'stockUnit.code'));
+      rate.patchValue(_.get(selectedProduct, 'rate', 0));
+    }
+  }
+
+  public valueChanged(item: AbstractControl) {
+    const quantity = item.get('quantity');
+    const rate = item.get('rate');
+    const value = item.get('value');
+
+    value.patchValue(parseFloat(quantity.value) * parseFloat(rate.value));
   }
 
   public deleteEntry(index: number) {
@@ -216,10 +242,6 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
   public closeAsidePane(event?) {
     this.closeAsideEvent.emit();
-    this.asideClose = true;
-    setTimeout(() => {
-      this.asideClose = false;
-    }, 500);
   }
 
   public save() {
