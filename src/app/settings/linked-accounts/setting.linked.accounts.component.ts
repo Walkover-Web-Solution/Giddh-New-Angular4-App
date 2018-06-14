@@ -137,7 +137,6 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
    * yodleeBank
    */
   public yodleeBank() {
-    alert();
     this._settingsLinkedAccountsService.GetYodleeToken().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         if (data.body.user) {
