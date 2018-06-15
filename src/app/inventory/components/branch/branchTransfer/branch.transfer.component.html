@@ -1,5 +1,5 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
   <div class="aside-body row">
 
     <div class="form_header">
@@ -169,7 +169,7 @@
 
           <div class="row">
             <div class="col-xs-12 text-left mrT1">
-              <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
+              <button class="btn btn-default" (click)="closeAsidePane()">Cancel</button>
               <button class="btn btn-success" [disabled]="form.invalid" (click)="save()">Save</button>
             </div>
           </div>
