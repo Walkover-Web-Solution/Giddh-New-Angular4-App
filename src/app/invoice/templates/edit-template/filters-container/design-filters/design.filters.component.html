@@ -17,11 +17,10 @@
   </button> {{imagePreview}} -->
     <div class="clearfix">
         <ul class="designTool">
-            <!--<li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
+            <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
-            </li>-->
-            <!-- [hidden]="!templateUISectionVisibility.templates" -->
-            <li>
+            </li>
+            <li [hidden]="!templateUISectionVisibility.templates">
                 <i class="ico-template"></i> <label>Change up to template</label>
                 <div class="clearfix">
                     <ul class="templateView">

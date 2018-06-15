@@ -53,7 +53,6 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     });
 
     this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
-      console.log('obj iss : ', obj);
       this.fieldsAndVisibility = _.cloneDeep(obj);
     });
   }
