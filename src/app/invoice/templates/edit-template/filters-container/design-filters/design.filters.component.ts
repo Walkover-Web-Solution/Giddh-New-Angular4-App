@@ -104,20 +104,19 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
       if (this.customTemplate && this.customTemplate.sections) {
         this.customTemplate.sections.forEach((section, ind) => {
-
           let out = section.content;
           for (let o of section.content) {
             if (ind === 0) {
-              op.header[o.field] = o.display ? 'y' : 'n';
+              // op.header[o.field] = o.display ? 'y' : 'n';
+              op.header[o.field] = o;
             }
             if (ind === 1) {
-              op.table[o.field] = o.display ? 'y' : 'n';
+              op.table[o.field] = o;
             }
             if (ind === 2) {
-              op.footer[o.field] = o.display ? 'y' : 'n';
+              op.footer[o.field] = o;
             }
           }
-
         });
 
         this._invoiceUiDataService.setFieldsAndVisibility(op);

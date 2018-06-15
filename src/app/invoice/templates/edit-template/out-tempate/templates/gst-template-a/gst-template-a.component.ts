@@ -17,6 +17,7 @@ import { CustomTemplateResponse } from '../../../../../../models/api-models/Invo
 
 export class GstTemplateAComponent implements OnInit, OnDestroy {
 
+  @Input() public fieldsAndVisibility: any = null;
   @Input() public isPreviewMode: boolean = false;
   @Input() public showLogo: boolean = true;
   @Input() public showCompanyName: boolean;
