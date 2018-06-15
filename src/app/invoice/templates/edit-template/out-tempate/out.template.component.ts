@@ -26,6 +26,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   public showCompanyName: boolean;
   public companyGSTIN: string;
   public companyPAN: string;
+  public fieldsAndVisibility: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -49,6 +50,12 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
+      console.log('obj is :', obj);
+      this.fieldsAndVisibility = _.cloneDeep(obj);
+    });
+
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.inputTemplate = _.cloneDeep(template);
     });
