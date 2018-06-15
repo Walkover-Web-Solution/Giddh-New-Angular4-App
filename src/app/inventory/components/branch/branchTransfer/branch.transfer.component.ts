@@ -10,6 +10,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsBranchActions } from '../../../../actions/settings/branch/settings.branch.action';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
+import { BranchTransferEntity, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
 
 @Component({
   selector: 'branch-destination',
@@ -110,6 +111,10 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     return this.form.get('transfers') as FormArray;
   }
 
+  public get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private settingsBranchActions: SettingsBranchActions) {
@@ -146,8 +151,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     this.mode = mode;
     this.selectedProduct = null;
     this.transferDate.reset();
-    this.initializeForm();
     this.sourceSelect.clear();
+    this.initializeForm();
 
     if (mode === 'destination') {
       this.destination.clearValidators();
@@ -194,7 +199,6 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       rate: [rate, Validators.required],
       stockUnit: [stockUnit, Validators.required],
       value: [0],
-      product: [this.mode === 'destination' ? this.selectedProduct : null]
     });
     items.push(transfer);
   }
@@ -240,13 +244,49 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     items.removeAt(index);
   }
 
-  public closeAsidePane(event?) {
+  public closeAsidePane() {
+    this.modeChanged('destination');
     this.closeAsideEvent.emit();
   }
 
   public save() {
     if (this.form.valid) {
-      // this._store.dispatch(INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER(this.form.value as ));
+      let value: TransferDestinationRequest | TransferProductsRequest;
+
+      if (this.mode === 'destination') {
+        value = new TransferDestinationRequest();
+        value.source = new BranchTransferEntity(this.source.value, 'company');
+        value.description = this.description.value;
+        value.product = new BranchTransferEntity(this.productName.value, 'stock');
+        value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+
+        let rawValues = this.transfers.getRawValue();
+        rawValues.map(rv => {
+          delete rv['value'];
+          rv.entityDetails = {
+            uniqueName: rv.entityDetails,
+            entity: 'company'
+          };
+        });
+        value.transfers = rawValues;
+      } else {
+        value = new TransferProductsRequest();
+        value.source = new BranchTransferEntity(this.source.value, 'company');
+        value.description = this.description.value;
+        value.destination = new BranchTransferEntity(this.destination.value, 'company');
+        value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+
+        let rawValues = this.transfers.getRawValue();
+        rawValues.map(rv => {
+          delete rv['value'];
+          rv.entityDetails = {
+            uniqueName: rv.entityDetails,
+            entity: 'stock'
+          };
+        });
+        value.transfers = rawValues;
+      }
+      this._store.dispatch(this._inventoryAction.CreateBranchTransfer(value));
     }
   }
 

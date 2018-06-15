@@ -42,6 +42,6 @@ export const INVENTORY_API = {
   GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
 
   BRANCH_TRANSFER: {
-    TRANSFER: '/inventory-transfer/'
+    TRANSFER: 'inventory-transfer/'
   }
 };
