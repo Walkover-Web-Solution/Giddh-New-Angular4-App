@@ -7,7 +7,7 @@ export class BranchTransfersArray {
 }
 
 export class BranchTransferEntity {
-  constructor(public uniqueName: string, public entity: 'warehouse' | 'stock') {
+  constructor(public uniqueName: string, public entity: 'warehouse' | 'stock' | 'company') {
     //
   }
 }
