@@ -7,10 +7,10 @@ import { InventoryService } from '../../services/inventory.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
-import { INVENTORY_BRANCH_TRANSFER, InventoryActionsConst } from './inventory.const';
+import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS, InventoryActionsConst } from './inventory.const';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
-import { BranchTransferResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
+import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
 
 @Injectable()
 export class InventoryAction {
@@ -92,7 +92,7 @@ export class InventoryAction {
   @Effect()
   public GetStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetStock)
-    .switchMap((action: CustomActions) => this._inventoryService.GetStocks())
+    .switchMap((action: CustomActions) => this._inventoryService.GetStocks(action.payload))
     .map(response => {
       return this.GetStockResponse(response);
     });
@@ -221,11 +221,28 @@ export class InventoryAction {
     .map((res: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>) => {
       if (res.status === 'error') {
         this._toasty.errorToast(res.message);
+      } else {
+        this._toasty.successToast('Branch transferred successfully');
       }
       return {
         type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE,
         payload: res.status === 'success' ? res.body : null
       } as CustomActions;
+    });
+
+  @Effect()
+  public GetLinkedStocks$: Observable<Action> = this.action$
+    .ofType(INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS)
+    .switchMap(() => this._inventoryService.GetLinkedStocks())
+    .map((res: BaseResponse<LinkedStocksResponse, string>) => {
+      if (res.status === 'error') {
+        this._toasty.errorToast(res.message);
+      }
+
+      return {
+        type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS_RESPONSE,
+        payload: res.status === 'success' ? res.body : null
+      };
     });
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
@@ -337,9 +354,10 @@ export class InventoryAction {
     };
   }
 
-  public GetStock(): CustomActions {
+  public GetStock(companyUniqueName: string = ''): CustomActions {
     return {
-      type: InventoryActionsConst.GetStock
+      type: InventoryActionsConst.GetStock,
+      payload: companyUniqueName
     };
   }
 
@@ -441,6 +459,12 @@ export class InventoryAction {
     return {
       type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER,
       payload: modal
+    };
+  }
+
+  public GetAllLinkedStocks(): CustomActions {
+    return {
+      type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS
     };
   }
 }

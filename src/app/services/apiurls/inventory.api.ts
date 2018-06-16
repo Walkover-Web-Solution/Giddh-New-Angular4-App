@@ -43,5 +43,8 @@ export const INVENTORY_API = {
 
   BRANCH_TRANSFER: {
     TRANSFER: 'inventory-transfer/'
+  },
+  LINKED_STOCKS: {
+    LINKED_STOCKS: 'company/:companyUniqueName/linked-sources'
   }
 };
