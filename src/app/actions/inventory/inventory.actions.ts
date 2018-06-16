@@ -467,4 +467,10 @@ export class InventoryAction {
       type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS
     };
   }
+
+  public ResetBranchTransferState(): CustomActions {
+    return {
+      type: INVENTORY_BRANCH_TRANSFER.RESET_BRANCH_TRANSFER_STATE
+    };
+  }
 }
