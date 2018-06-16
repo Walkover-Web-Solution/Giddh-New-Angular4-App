@@ -10,7 +10,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsBranchActions } from '../../../../actions/settings/branch/settings.branch.action';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
-import { BranchTransferEntity, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
+import { BranchTransferEntity, ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'branch-destination',
@@ -90,6 +91,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   public branches: IOption[];
   public otherBranches: IOption[];
   public selectedProduct: IStocksItem = null;
+  public isBranchCreationInProcess$: Observable<boolean>;
+  public isBranchCreationSuccess$: Observable<boolean>;
 
   public get transferDate(): FormControl {
     return this.form.get('transferDate') as FormControl;
@@ -118,19 +121,15 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private settingsBranchActions: SettingsBranchActions) {
-    this._store.dispatch(this.settingsBranchActions.GetALLBranches());
-    this._store.dispatch(this._inventoryAction.GetStock());
+    this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
     this.initializeForm();
+    this.isBranchCreationInProcess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferInProcess).takeUntil(this.destroyed$);
+    this.isBranchCreationSuccess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferSuccess).takeUntil(this.destroyed$);
 
-    this._store.select(state => state.settings.branches).takeUntil(this.destroyed$).subscribe(branches => {
+    this._store.select(state => state.inventoryBranchTransfer.linkedStocks).takeUntil(this.destroyed$).subscribe((branches: LinkedStocksResponse) => {
       if (branches) {
         if (branches.results.length) {
-          _.each(branches.results, (branch) => {
-            if (branch.gstDetails && branch.gstDetails.length) {
-              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList && gst.addressList[0] && gst.addressList[0].isDefault)];
-            }
-          });
-          this.branches = branches.results.map(b => ({label: b.name, value: b.uniqueName}));
+          this.branches = this.linkedStocksVM(branches.results).map(b => ({label: b.name, value: b.uniqueName, additional: b}));
           this.otherBranches = _.cloneDeep(this.branches);
         }
       }
@@ -145,6 +144,26 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
         this.stockListOptions = s.map(p => ({label: p.name, value: p.uniqueName}));
       }
     });
+
+    this.isBranchCreationSuccess$.subscribe(s => {
+      if (s) {
+        this.closeAsidePane();
+      }
+    });
+  }
+
+  public linkedStocksVM(data: ILinkedStocksResult[]): LinkedStocksVM[] {
+    let finalArr: LinkedStocksVM[] = [];
+
+    data.forEach(d => {
+      finalArr.push(new LinkedStocksVM(d.name, d.uniqueName));
+
+      if (d.warehouses.length) {
+        finalArr.push.apply(finalArr, d.warehouses.map(w => new LinkedStocksVM(w.name, w.uniqueName, true)));
+      }
+    });
+
+    return finalArr;
   }
 
   public modeChanged(mode: 'destination' | 'product') {
@@ -205,6 +224,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
   public sourceChanged(option: IOption) {
     this.otherBranches = this.branches.filter(oth => oth.value !== option.value);
+    this._store.dispatch(this._inventoryAction.GetStock(option.value));
   }
 
   public productChanged(option: IOption, item?: AbstractControl) {
@@ -255,7 +275,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
       if (this.mode === 'destination') {
         value = new TransferDestinationRequest();
-        value.source = new BranchTransferEntity(this.source.value, 'company');
+        value.source = new BranchTransferEntity(this.source.value, this.getEntityType(this.source.value));
         value.description = this.description.value;
         value.product = new BranchTransferEntity(this.productName.value, 'stock');
         value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
@@ -265,15 +285,15 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
           delete rv['value'];
           rv.entityDetails = {
             uniqueName: rv.entityDetails,
-            entity: 'company'
+            entity: this.getEntityType(rv.entityDetails)
           };
         });
         value.transfers = rawValues;
       } else {
         value = new TransferProductsRequest();
-        value.source = new BranchTransferEntity(this.source.value, 'company');
+        value.source = new BranchTransferEntity(this.source.value, this.getEntityType(this.source.value));
         value.description = this.description.value;
-        value.destination = new BranchTransferEntity(this.destination.value, 'company');
+        value.destination = new BranchTransferEntity(this.destination.value, this.getEntityType(this.destination.value));
         value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
 
         let rawValues = this.transfers.getRawValue();
@@ -288,6 +308,11 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       }
       this._store.dispatch(this._inventoryAction.CreateBranchTransfer(value));
     }
+  }
+
+  public getEntityType(uniqueName: string): 'warehouse' | 'stock' | 'company' {
+    let result = this.branches.find(f => f.value === uniqueName);
+    return result.additional.isWareHouse ? 'warehouse' : 'company';
   }
 
   public ngOnDestroy() {

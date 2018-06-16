@@ -52,3 +52,20 @@ export class BranchTransferResponse {
     code: string
   };
 }
+
+export interface ILinkedStocksResult extends INameUniqueName {
+  warehouses: INameUniqueName[];
+}
+
+export class LinkedStocksResponse {
+  public page: number;
+  public count: number;
+  public totalPages: number;
+  public totalItems: number;
+  public results: ILinkedStocksResult[];
+}
+
+export class LinkedStocksVM implements INameUniqueName {
+  constructor(public name: string, public uniqueName: string, public isWareHouse: boolean = false) {
+  }
+}
