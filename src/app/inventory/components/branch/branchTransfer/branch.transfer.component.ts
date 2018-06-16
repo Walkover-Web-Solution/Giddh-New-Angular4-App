@@ -204,7 +204,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       }
     }
     const items = this.form.get('transfers') as FormArray;
-    let rate = 0;
+    let rate = 1;
     let stockUnit = '';
 
     if (this.mode === 'destination' && this.selectedProduct) {
@@ -214,15 +214,18 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
     const transfer = this._fb.group({
       entityDetails: [''],
-      quantity: [0, Validators.required],
+      quantity: [1, Validators.required],
       rate: [rate, Validators.required],
       stockUnit: [stockUnit, Validators.required],
-      value: [0],
+      value: [1],
     });
     items.push(transfer);
   }
 
   public sourceChanged(option: IOption) {
+    if (!option.value) {
+      return;
+    }
     this.otherBranches = this.branches.filter(oth => oth.value !== option.value);
     this._store.dispatch(this._inventoryAction.GetStock(option.value));
   }
@@ -235,7 +238,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
       this.transfers.controls.map((trn: AbstractControl) => {
         trn.get('stockUnit').patchValue(_.get(this.selectedProduct, 'stockUnit.code'));
-        trn.get('rate').patchValue(_.get(this.selectedProduct, 'rate', 0));
+        trn.get('rate').patchValue(_.get(this.selectedProduct, 'rate', 1));
         this.valueChanged(trn);
       });
     } else {
@@ -247,7 +250,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
       const rate = item.get('rate');
 
       stockUnit.patchValue(_.get(selectedProduct, 'stockUnit.code'));
-      rate.patchValue(_.get(selectedProduct, 'rate', 0));
+      rate.patchValue(_.get(selectedProduct, 'rate', 1));
     }
   }
 
@@ -265,6 +268,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   }
 
   public closeAsidePane() {
+    this._store.dispatch(this._inventoryAction.ResetBranchTransferState());
     this.modeChanged('destination');
     this.closeAsideEvent.emit();
   }
