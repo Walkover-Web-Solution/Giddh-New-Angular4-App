@@ -353,24 +353,24 @@ export class LedgerActions {
       };
     });
 
-  public GetCurrencyRate$: Observable<Action> = this.action$
-    .ofType(LEDGER.GET_CURRENCY_RATE)
-    .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
-    .map(response => {
-      return this.GetCurrencyRateResponse(response);
-    });
+  // public GetCurrencyRate$: Observable<Action> = this.action$
+  //   .ofType(LEDGER.GET_CURRENCY_RATE)
+  //   .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
+  //   .map(response => {
+  //     return this.GetCurrencyRateResponse(response);
+  //   });
 
-  @Effect()
-  public GetCurrencyRateResponse$: Observable<Action> = this.action$
-    .ofType(LEDGER.GET_CURRENCY_RATE_RESPONSE)
-    .map((action: CustomActions) => {
-      // if (action.payload.status === 'error') {
-      //   this._toasty.errorToast(action.payload.message, action.payload.code);
-      // }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+  // @Effect()
+  // public GetCurrencyRateResponse$: Observable<Action> = this.action$
+  //   .ofType(LEDGER.GET_CURRENCY_RATE_RESPONSE)
+  //   .map((action: CustomActions) => {
+  //     // if (action.payload.status === 'error') {
+  //     //   this._toasty.errorToast(action.payload.message, action.payload.code);
+  //     // }
+  //     return {
+  //       type: 'EmptyAction'
+  //     };
+  //   });
 
   constructor(private action$: Actions,
               private _toasty: ToasterService,
