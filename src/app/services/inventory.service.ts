@@ -131,7 +131,7 @@ export class InventoryService {
   /**
    * get Stocks
    */
-  public GetStocks(companyUniqueName: string): Observable<BaseResponse<StocksResponse, string>> {
+  public GetStocks(companyUniqueName: string = ''): Observable<BaseResponse<StocksResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
