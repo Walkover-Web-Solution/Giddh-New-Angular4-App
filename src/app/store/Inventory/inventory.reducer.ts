@@ -2,10 +2,9 @@ import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWith
 import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import * as _ from '../../lodash-optimized';
-import { CUSTOM_STOCK_UNIT_ACTIONS, INVENTORY_BRANCH_TRANSFER, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
+import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
-import { BranchTransferResponse } from '../../models/api-models/BranchTransfer';
 
 /**
  * Keeping Track of the CompanyState
@@ -51,9 +50,6 @@ export interface InventoryState {
   UpdateGroupSuccess: boolean;
   UpdateStockSuccess: boolean;
   showBranchScreen: boolean;
-  isBranchTransferInProcess: boolean;
-  isBranchTransferSuccess: boolean;
-  branchTransferResponse: BranchTransferResponse;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -112,10 +108,7 @@ const initialState: InventoryState = {
   deleteGroupSuccess: false,
   UpdateGroupSuccess: false,
   UpdateStockSuccess: false,
-  showBranchScreen: false,
-  isBranchTransferInProcess: false,
-  isBranchTransferSuccess: false,
-  branchTransferResponse: null
+  showBranchScreen: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -575,20 +568,6 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
     //  region branch
     case InventoryActionsConst.ShowBranchScreen:
       return Object.assign({}, state, { showBranchScreen: action.payload });
-    case INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER: {
-      return Object.assign({}, state, {
-        isBranchTransferInProcess: true,
-        isBranchTransferSuccess: false,
-        branchTransferResponse: null
-      });
-    }
-    case  INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE: {
-      return Object.assign({}, state, {
-        isBranchTransferInProcess: false,
-        isBranchTransferSuccess: action.payload === null,
-        branchTransferResponse: action.payload
-      });
-    }
     //  endregion
     default:
       return state;
