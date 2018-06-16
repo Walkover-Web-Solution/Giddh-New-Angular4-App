@@ -122,7 +122,7 @@
                 <!-- <label class="mrB1">Quantity</label> -->
                 <!--<div>-->
                 <div class="form-group" style="margin-right: 2%;">
-                  <input name="" type="text" formControlName="quantity" (change)="valueChanged(item)" class="form-control">
+                  <input name="" type="text" formControlName="quantity" decimalDigitsDirective [minValue]="1" (change)="valueChanged(item)" class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
@@ -135,15 +135,15 @@
 
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'destination'">
-                  <input name="" type="text" formControlName="rate" (change)="valueChanged(item)" class="form-control">
+                  <input name="" type="text" formControlName="rate" decimalDigitsDirective [minValue]="1" (change)="valueChanged(item)" class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;" *ngIf="mode === 'product'">
-                  <input name="" type="text" formControlName="rate"  (change)="valueChanged(item)" class="form-control">
+                  <input name="" type="text" formControlName="rate"  (change)="valueChanged(item)" decimalDigitsDirective [minValue]="1"  class="form-control">
                 </div>
 
                 <div class="form-group" style="margin-right: 2%;">
-                  <input name="" type="text" formControlName="value" class="form-control">
+                  <input name="" type="text" formControlName="value" [readonly]="true" class="form-control">
                 </div>
 
                 <div class="mrT" style="margin-right: 2%;">

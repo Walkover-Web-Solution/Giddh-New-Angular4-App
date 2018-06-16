@@ -52,6 +52,10 @@ export function InventoryBranchTransferReducer(state: InventoryBranchTransferSta
         linkedStocks: action.payload
       });
     }
+
+    case INVENTORY_BRANCH_TRANSFER.RESET_BRANCH_TRANSFER_STATE: {
+      return initialState;
+    }
     default:
       return state;
   }

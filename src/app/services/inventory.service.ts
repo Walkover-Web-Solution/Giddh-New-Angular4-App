@@ -600,10 +600,10 @@ export class InventoryService {
   }
 
   // region branch
-  public BranchTransfer(modal: TransferDestinationRequest | TransferProductsRequest) {
+  public BranchTransfer(modal: TransferDestinationRequest | TransferProductsRequest): Observable<BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>> {
     return this._http
       .post(this.config.apiUrl + INVENTORY_API.BRANCH_TRANSFER.TRANSFER, modal)
-      .mapTo((res) => {
+      .map((res) => {
         let data: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest> = res;
         data.request = modal;
         return data;
