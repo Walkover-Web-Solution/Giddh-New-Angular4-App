@@ -25,7 +25,7 @@
 
                         <li *ngIf="item.isGroup" class="mainLiAclist parent-Group">
                             <div class="title  LIB{{item.UniqueName}}" (click)="toggleGroup(item,i + _startIndex,$event)" [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
-                                <a class="ellp max250">{{item.Name}}</a>
+                                <a class="ellp max250">{{item.Name}} ({{item.UniqueName}})</a>
                             </div>
                         </li>
                         <li *ngIf="!item.isGroup" class="inrPrnt cp accountli">
