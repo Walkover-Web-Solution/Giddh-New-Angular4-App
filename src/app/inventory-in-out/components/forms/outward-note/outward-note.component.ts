@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -101,7 +101,7 @@ export class OutwardNoteComponent implements OnChanges {
 
   public save() {
     if (this.form.valid) {
-      const inventoryEntryDate = moment(this.form.value.inventoryEntryDate).format('DD-MM-YYYY');
+      const inventoryEntryDate = moment(this.form.value.transferDate).format('DD-MM-YYYY');
       this.onSave.emit({ ...this.form.value, inventoryEntryDate });
     }
   }
