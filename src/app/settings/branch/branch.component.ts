@@ -74,7 +74,7 @@ export class BranchComponent implements OnInit, OnDestroy {
         if (branches.results.length) {
           _.each(branches.results, (branch) => {
             if (branch.gstDetails && branch.gstDetails.length) {
-              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList[0].isDefault)];
+              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList && gst.addressList[0] && gst.addressList[0].isDefault)];
             }
           });
           this.branches$ =  Observable.of(_.orderBy(branches.results, 'name'));

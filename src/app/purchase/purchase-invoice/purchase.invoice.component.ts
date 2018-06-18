@@ -162,7 +162,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
           if (activeCompany && activeCompany.gstDetails[0]) {
             this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
           } else {
-            this.toasty.errorToast('GST number not found.');
+            // this.toasty.errorToast('GST number not found.');
           }
         }
       } else {
