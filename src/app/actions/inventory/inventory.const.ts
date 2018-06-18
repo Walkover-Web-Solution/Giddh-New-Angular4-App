@@ -63,6 +63,8 @@ export class InventoryActionsConst {
   public static GetStockWithUniqueNameResponse = 'GetStockWithUniqueNameResponse';
 
   public static ManageInventoryAside = 'ManageInventoryAside';
+
+  public static ShowBranchScreen = 'ShowBranchScreen';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
@@ -112,4 +114,15 @@ export const INVENTORY_REPORT_ACTIONS = {
   GENERATE_REPORT_RESPONSE: 'GENERATE_REPORT_RESPONSE',
   GET_IN_OUT_REPORT: 'GET_IN_OUT_REPORT',
   GET_IN_OUT_REPORT_RESPONSE: 'GET_IN_OUT_REPORT_RESPONSE'
+};
+
+export const INVENTORY_BRANCH_TRANSFER = {
+  CREATE_TRANSFER: 'CREATE_TRANSFER',
+  CREATE_TRANSFER_RESPONSE: 'CREATE_TRANSFER_RESPONSE',
+  RESET_BRANCH_TRANSFER_STATE: 'RESET_BRANCH_TRANSFER_STATE'
+};
+
+export const INVENTORY_LINKED_STOCKS = {
+  GET_LINKED_STOCKS: 'GET_LINKED_STOCKS',
+  GET_LINKED_STOCKS_RESPONSE: 'GET_LINKED_STOCKS_RESPONSE'
 };
