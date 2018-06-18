@@ -182,7 +182,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         return {
           closingBalance: `${p.closingBalance.amount} ${this.recType.transform(p.closingBalance)}`,
           openingBalance: `${p.forwardedBalance.amount} ${this.recType.transform(p.forwardedBalance)}`,
-          name: p.groupName,
+          name: p.groupName + ' (' + p.uniqueName + ')',
           credit: p.creditTotal,
           debit: p.debitTotal
         } as GroupViewModel;
