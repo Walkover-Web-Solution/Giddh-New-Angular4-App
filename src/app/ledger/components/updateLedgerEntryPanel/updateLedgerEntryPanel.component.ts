@@ -331,7 +331,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else if (output.type === 'done') {
       this._loaderService.hide();
       if (output.file.response.status === 'success') {
-        console.log('Hello output.file.response is :', output.file.response);
         // this.isFileUploading = false;
         this.vm.selectedLedger.attachedFile = output.file.response.body.uniqueName;
         this.vm.selectedLedger.attachedFileName = output.file.response.body.name;
@@ -459,6 +458,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public onTxnAmountChange(txn) {
+    if (!txn.selectedAccount) {
+      this.vm.flatternAccountList4Select.take(1).subscribe((accounts) => {
+        if (accounts && accounts.length) {
+          let selectedAcc  = accounts.find(acc => acc.value === txn.particular.uniqueName);
+          if (selectedAcc) {
+            txn.selectedAccount = selectedAcc.additional;
+          }
+        }
+      });
+    }
+
+    txn.isUpdated = true;
     let currencyFound: boolean = false;
     let ref = this.activeAccount$.subscribe((acc) => {
       if (acc && acc.currency && !currencyFound) {
@@ -476,16 +487,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
-    this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
-      let rates = res.body;
-      if (rates) {
-        _.forEach(rates, (value, key) => {
-          if (key === convertTo) {
-            obj.convertedAmount = amount * rates[key];
-            obj.convertedAmountCurrency = convertTo;
-            return obj;
-          }
-        });
+    this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
+      let rate = res.body;
+      if (rate) {
+        obj.convertedAmount = amount * rate;
+        obj.convertedAmountCurrency = convertTo;
+        return obj;
       }
     });
   }
@@ -542,7 +549,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
     let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
     // if their's any changes
-    if (isThereUpdatedEntry) {
+    if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {
       this.showUpdateTaxModal();
     } else {
       // if their's no change fire action straightaway

@@ -290,9 +290,9 @@ export class LedgerService {
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray}));
   }
 
-  public GetCurrencyRate(baseCurrency): Observable<BaseResponse<any, any>> {
+  public GetCurrencyRate(fromCurrency: string, toCurrency: string): Observable<BaseResponse<any, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + 'company/' + this.companyUniqueName + '/curreny-converter/' + baseCurrency).map((res) => {
+    return this._http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).map((res) => {
       let data: any = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
