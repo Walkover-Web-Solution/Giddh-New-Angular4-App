@@ -477,18 +477,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
-    if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
-      return obj.convertedAmount = amount * this.fetchedConvertedRate;
-    } else {
-      this.fetchedBaseCurrency = baseCurr;
-      this.fetchedConvertToCurrency = convertTo;
-      this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
-        let rate = res.body;
-        if (rate) {
-          this.fetchedConvertedRate = rate;
-          return obj.convertedAmount = amount * rate;
-        }
-      });
+    if (baseCurr && convertTo) {
+      if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
+        return obj.convertedAmount = amount * this.fetchedConvertedRate;
+      } else {
+        this.fetchedBaseCurrency = baseCurr;
+        this.fetchedConvertToCurrency = convertTo;
+        this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
+          let rate = res.body;
+          if (rate) {
+            this.fetchedConvertedRate = rate;
+            return obj.convertedAmount = amount * rate;
+          }
+        });
+      }
     }
   }
 }
