@@ -22,4 +22,20 @@ export interface IEbankAccount {
   name: string;
   isDatePickerOpen?: boolean;
   showAccList?: boolean;
+  itemAccountId?: number;
+  giddhAccount?: any;
+}
+
+export interface IAccessTokenResponse {
+    user: IAccessToken;
+    rsession: string;
+}
+
+export interface IAccessToken {
+  accessTokens: IAccessTokenObj[];
+}
+export interface IAccessTokenObj {
+    appId: string;
+    value: string;
+    url: string;
 }

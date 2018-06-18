@@ -1,10 +1,17 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ImportExcelRequestData } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 interface DataModel {
   field: string;
-  columnNumber: number;
+  options: IOption[];
+  selected: string;
 }
+
+// interface DataModel {
+//   field: string;
+//   columnNumber: number;
+// }
 
 @Component({
   selector: 'import-process',  // <home></home>
@@ -17,6 +24,7 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   @Output() public onBack = new EventEmitter();
   @Input() public isLoading: boolean;
   @Input() public entity: string;
+  public editHeaderIdx: number = null;
   public dataModel: DataModel[];
   private _importData: ImportExcelRequestData;
 
@@ -26,7 +34,8 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
 
   @Input()
   public set importData(value: ImportExcelRequestData) {
-    this.prepareData(value);
+    this.prepareDataModel(value);
+    // this.prepareData(value);
     this._importData = value;
   }
 
@@ -55,11 +64,37 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     this.onSubmit.emit({...this.importData, data});
   }
 
-  private prepareData(value: ImportExcelRequestData) {
+  public columnSelected(val: IOption, data: DataModel, idx) {
+    if (val && val.label) {
+      this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
+      this.dataModel[idx].field = val.label;
+    }
+    this.editHeaderIdx = null;
+  }
+
+  /**
+   * editColumn  */
+  public editColumn(obj, idx) {
+    this.editHeaderIdx = idx;
+  }
+
+  private prepareDataModel(value: ImportExcelResponseData) {
+    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+    Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
     this.dataModel = Object.keys(value.mappings.mappingInfo)
       .map(field => ({
-        field,
+        field: value.mappings.mappingInfo[field][0].columnHeader,
+        options,
+        selected: value.mappings.mappingInfo[field][0].columnNumber.toString(),
         columnNumber: value.mappings.mappingInfo[field].find(p => p.isSelected).columnNumber
       })).sort((a, b) => +a.columnNumber - +b.columnNumber);
   }
+
+  // private prepareData(value: ImportExcelRequestData) {
+  //   this.dataModel = Object.keys(value.mappings.mappingInfo)
+  //     .map(field => ({
+  //       field,
+  //       columnNumber: value.mappings.mappingInfo[field].find(p => p.isSelected).columnNumber
+  //     })).sort((a, b) => {console.log(a, b); return +a.columnNumber - +b.columnNumber; });
+  // }
 }

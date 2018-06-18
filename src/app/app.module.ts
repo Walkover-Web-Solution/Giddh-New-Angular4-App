@@ -50,6 +50,7 @@ import { Configuration } from 'app/app.constant';
 import { ServiceConfig } from 'app/services/service.config';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
+import { SignupComponent } from './signup/signup.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -100,6 +101,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NewUserComponent,
     LoaderComponent,
     SocialLoginCallbackComponent
+    // SignupComponent
   ],
   /**
    * Import Angular's modules.
