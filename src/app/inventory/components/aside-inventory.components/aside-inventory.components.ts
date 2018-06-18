@@ -107,6 +107,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     this.manageInProcess$.subscribe(s => {
       if (s.isOpen && s.isGroup) {
         this.isAddGroupOpen = true;
+        this.isAddStockOpen = false;
         if (s.isUpdate) {
           this.addGroup = false;
         } else {
@@ -114,6 +115,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
         }
       } else if (s.isOpen && !s.isGroup) {
         this.isAddGroupOpen = false;
+        this.isAddStockOpen = true;
         if (s.isUpdate) {
           this.addStock = false;
         } else {
@@ -129,7 +131,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.createStockSuccess$.subscribe(d => {
-      if (d) {
+      if (d && this.isAddStockOpen) {
         this.closeAsidePane();
       }
     });
