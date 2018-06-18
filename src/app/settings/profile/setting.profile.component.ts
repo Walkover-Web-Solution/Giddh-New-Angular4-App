@@ -275,7 +275,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       let profileObj = this.companyProfileObj;
       let defaultGstObjIndx;
       profileObj.gstDetails.forEach((obj, indx) => {
-        if (profileObj.gstDetails[indx].addressList[0].isDefault) {
+        if (profileObj.gstDetails[indx] && profileObj.gstDetails[indx].addressList[0] && profileObj.gstDetails[indx].addressList[0].isDefault) {
           defaultGstObjIndx = indx;
         }
       });
