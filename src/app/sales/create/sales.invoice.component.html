@@ -539,11 +539,41 @@
                                     </div>
                                 </div>
                                 <div class="tableRow" *ngIf="toggleFieldForSales">
-                                    <div class="tableCell">Deposit</div>
+                                    <div class="tableCell">
+                                        <div class="btn-group" dropdown [autoClose]="false">
+                                            <button id="button-dropup" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown">
+                                            Deposit
+                                        </button>
+                                            <ul id="deposit-dropdown" *dropdownMenu class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+                                                <span class="caret"></span>
+                                                <li role="menuitem">
+                                                    <div class="">
+                                                        <label>Amount</label>
+                                                        <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
+                                                    </div>
+                                                </li>
+                                                <li role="menuitem" class="mrT1">
+                                                    <div class="">
+                                                        <label>Payment Mode</label>
+                                                        <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                                                            [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                            <ng-template #optionTemplate1 let-option="option">
+                                                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                                    <div class="item">{{ option.label }}</div>
+                                                                    <div class="item_unq">{{ option.value }}</div>
+                                                                </a>
+                                                            </ng-template>
+                                                        </sh-select>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <div class="tableCell figureCell">
-                                        <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount" />
+                                        {{dueAmount}}
                                     </div>
                                 </div>
+
                                 <div class="tableRow" *ngIf="toggleFieldForSales">
                                     <div class="tableCell">
                                         <strong>Balance Due</strong>
