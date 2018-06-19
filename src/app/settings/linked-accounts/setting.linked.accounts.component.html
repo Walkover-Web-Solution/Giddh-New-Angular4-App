@@ -87,7 +87,7 @@
                             <b>Account</b>: {{card.accountNumber}}
                         </div>
                         <div class="account-date clearfix">
-                            <b>Entries From</b>: <label for="date_{{accIdx}}_{{i}}" class="cp">{{card.transactionDate | date}}</label>
+                            <b>Entries From</b>: <label for="date_{{accIdx}}_{{i}}" class="cp">{{card.transactionDate}}</label>
                             <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
                                 <input [(ngModel)]="card.transactionDate" name="transactionDate_{{accIdx}}_{{i}}" id="date_{{accIdx}}_{{i}}" />
                             </a>
@@ -109,7 +109,7 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <button class="btn btn-default pull-right" *ngIf="card.showAccList" (click)="card.showAccList = false">Not Now</button>
+                            <button class="btn btn-default" *ngIf="card.showAccList" (click)="card.showAccList = false">Not Now</button>
                             <button class="btn btn-primary" *ngIf="card.giddhAccount == null && !card.showAccList" (click)="card.showAccList = true;">Link Account</button>
                             <button class="btn btn-danger mrT1" *ngIf="card.giddhAccount && card.giddhAccount.name.length > 0" (click)="onUnlinkBankAccount(card)">Unlink Account</button>
                             <!-- <button class="btn btn-danger mrT1" (click)="onDeleteAddedBank(acc.siteName, card)">Delete Account</button> -->
