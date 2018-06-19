@@ -539,12 +539,16 @@
                                     </div>
                                 </div>
                                 <div class="tableRow" *ngIf="toggleFieldForSales">
+                                    <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                                     <div class="tableCell">
-                                        <div class="btn-group" dropdown [autoClose]="false">
-                                            <button id="button-dropup" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown">
+                                        <!-- 
+                                        <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">                                            
+                                         -->
+                                        <div class="btn-group">
+                                            <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
                                             Deposit
                                         </button>
-                                            <ul id="deposit-dropdown" *dropdownMenu class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+                                            <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen" class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
                                                 <span class="caret"></span>
                                                 <li role="menuitem">
                                                     <div class="">
@@ -552,7 +556,7 @@
                                                         <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
                                                     </div>
                                                 </li>
-                                                <li role="menuitem" class="mrT1">
+                                                <li role="menuitem" class="mrT1" *ngIf="isCustomerSelected">
                                                     <div class="">
                                                         <label>Payment Mode</label>
                                                         <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
@@ -570,7 +574,7 @@
                                         </div>
                                     </div>
                                     <div class="tableCell figureCell">
-                                        {{dueAmount}}
+                                        {{dueAmount | number:'1.2-2'}}
                                     </div>
                                 </div>
 

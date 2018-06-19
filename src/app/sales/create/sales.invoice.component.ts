@@ -1,4 +1,4 @@
-import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild, HostListener } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep, forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -171,7 +171,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = false;
   public toggleFieldForSales: boolean = true;
-  public dueAmount: number;
+  public dueAmount: number = 0;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -195,7 +195,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isCustomerSelected = false;
   public voucherNumber: string;
   public depositAccountUniqueName: string;
-
+  public dropdownisOpen: boolean = false;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -378,8 +378,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
       this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
-        if (acc && acc.length > 0) {
-          this.invFormData.accountDetails.uniqueName = 'cash';
+        if (acc) {
+          if (acc.length > 0) {
+            this.invFormData.accountDetails.uniqueName = 'cash';
+          } else if (acc.length === 1) {
+            this.depositAccountUniqueName = 'cash';
+          }
         }
       });
 
@@ -617,7 +621,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         action: 'paid',
         amount: this.dueAmount
       };
-      obj.depositAccountUniqueName = this.depositAccountUniqueName;
+      if (this.isCustomerSelected) {
+        obj.depositAccountUniqueName = this.depositAccountUniqueName;
+      } else {
+        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
+      }
+    } else {
+      obj.depositAccountUniqueName = '';
     }
 
     this.salesService.generateGenericItem(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
@@ -637,6 +647,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             this._toasty.successToast('Voucher Generated Successfully');
           }
         }
+        this.depositAccountUniqueName = '';
+        this.dueAmount = 0;
       } else {
         this._toasty.errorToast(response.message, response.code);
       }
@@ -1129,6 +1141,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
+    }
+  }
+
+  public clickedInside($event: Event) {
+    $event.preventDefault();
+    $event.stopPropagation();  // <- that will stop propagation on lower layers
+  }
+
+  @HostListener('document:click', ['$event'])
+  public clickedOutside(event) {
+    if (event.target.id === 'depositBoxTrigger') {
+      this.dropdownisOpen = !this.dropdownisOpen;
+    } else {
+      this.dropdownisOpen = false;
     }
   }
 
