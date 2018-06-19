@@ -123,11 +123,19 @@
     </div>
 </div>
 <!-- Connect-Bank-Modal -->
-<div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
+<!-- <div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <iframe id='yodlee_fastlink' #yodleeIframe name='yodlee_fastlink' frameBorder='0' width="100%" height="400px" (modalCloseEvent)="closeModal()"></iframe>
-            <!-- <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal> -->
+            <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal>
+        </div>
+    </div>
+</div> -->
+
+<div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <connect-bank-modal (modalCloseEvent)="closeModal()"></connect-bank-modal>
         </div>
     </div>
 </div>
