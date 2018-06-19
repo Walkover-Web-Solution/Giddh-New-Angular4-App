@@ -32,7 +32,7 @@
                             <a>
                                 <div class="clearfix" tooltip="{{item.UniqueName}}" container="body">
                                     <strong>
-                    <span class="ellp max250" (click)="flyAccounts = false" *ngIf="isRouter" [routerLink]="['/ledger',item.UniqueName]">{{item.Name}}</span>
+                    <span class="ellp max250" (click)="flyAccounts = false" *ngIf="isRouter" [routerLink]="['/ledger',item.UniqueName]">{{item.Name}} ({{item.UniqueName}})</span>
                     <span class="ellp max250" (mousedown)="flyAccounts = true;onSelectItem.emit(item)" *ngIf="!isRouter" [innerHTML]="item.Name+' ' + '(' + item.UniqueName + ')'"></span>
                   </strong>
                                 </div>
