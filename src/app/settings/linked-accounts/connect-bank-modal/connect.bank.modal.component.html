@@ -4,8 +4,32 @@
     <h3 class="">Connect Banks</h3>
 </div>
 <div id="myFrame" class="modal-body clearfix">
-    <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
+    <div class="" *ngIf="step === 1">
+        <div class="form-group">
+            <label>Search Provider</label>
+            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Search Provider"
+                pattern="^[^\s]+(\s+[^\s]+)*$">
+
+            <ng-template #rt let-r="result" let-t="term">
+                <span (keyup.enter)="typeaheadOnSelect(r)">{{ r.name }}</span>
+            </ng-template>
+        </div>
+        <button class="btn btn-success btn-sm" (click)="onSelectProvider()" [disabled]="!selectedProvider.name">Next</button>
+    </div>
+
+    <div class="" *ngIf="step === 2">
+        <div class="form-group">
+            <label>Search Provider</label>
+            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Search Provider"
+                pattern="^[^\s]+(\s+[^\s]+)*$">
+
+            <ng-template #rt let-r="result" let-t="term">
+                <span (keyup.enter)="typeaheadOnSelect(r)">{{ r.name }}</span>
+            </ng-template>
+        </div>
+    </div>
+    <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
     <ng-template #frame>
         <iframe id="player" *ngIf="url" class="embed-responsive-item" [src]="url" frameborder="0"></iframe>
-    </ng-template>
+    </ng-template> -->
 </div>

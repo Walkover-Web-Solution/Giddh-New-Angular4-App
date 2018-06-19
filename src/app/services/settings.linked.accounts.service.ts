@@ -156,4 +156,40 @@ export class SettingsLinkedAccountsService {
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 
+  /**
+   * Search Bank Accounts
+   */
+  public SearchBank(value): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.SEARCH_BANKS.replace(':companyUniqueName', this.companyUniqueName).replace(':queryString', value)).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
+  }
+
+  /**
+   * Provider login Form
+   */
+  public GetLoginForm(value): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_LOGIN_FORM.replace(':companyUniqueName', this.companyUniqueName).replace(':queryString', value)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /**
+   * Add Provider
+   */
+  public AddProvider(objToSend, providerId): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + YODLEE_FASTLINK.ADD_PROVIDER.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', providerId), objToSend).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
 }
