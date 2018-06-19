@@ -351,6 +351,7 @@ export interface GenericRequestForGenerateSCD {
   voucher: VoucherClass;
   updateAccountDetails?: boolean;
   paymentAction?: IPaymentAction;
+  depositAccountUniqueName?: string;
 }
 
 class VoucherDetailsClass {
@@ -391,6 +392,7 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
+  public depositAccountUniqueName: string;
   constructor() {
     this.accountDetails = new AccountDetailsClass();
     this.entries = [new SalesEntryClass()];
