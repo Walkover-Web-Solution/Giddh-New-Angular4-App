@@ -19,4 +19,7 @@ export const EBANKS = {
 export const YODLEE_FASTLINK = {
   ACCESS_TOKEN: COMMON_URL + 'yodlee/access-token',
   GET_ACCOUNTS: COMMON_URL + 'yodlee/yodlee-accounts',
+  SEARCH_BANKS: COMMON_URL + 'yodlee/search?name=:queryString',
+  GET_LOGIN_FORM: COMMON_URL + 'yodlee/login-form/:providerId',
+  ADD_PROVIDER: COMMON_URL + 'yodlee/add-provider-account/:providerId',
 };
