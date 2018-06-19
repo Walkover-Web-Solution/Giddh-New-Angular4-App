@@ -194,6 +194,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedPageLabel: string = VOUCHER_TYPE_LIST[0].additional.label;
   public isCustomerSelected = false;
   public voucherNumber: string;
+  public depositAccountUniqueName: string;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -616,6 +617,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         action: 'paid',
         amount: this.dueAmount
       };
+      obj.depositAccountUniqueName = this.depositAccountUniqueName;
     }
 
     this.salesService.generateGenericItem(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
@@ -1121,4 +1123,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.pageChanged('Purchase', 'Purchase');
     }
   }
+
+  public onSelectPaymentMode(event) {
+    if (event && event.value) {
+      this.depositAccountUniqueName = event.value;
+    } else {
+      this.depositAccountUniqueName = '';
+    }
+  }
+
 }
