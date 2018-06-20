@@ -388,7 +388,7 @@
                             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
                         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
                             <td style="width: 120px;">
