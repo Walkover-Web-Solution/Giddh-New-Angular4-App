@@ -30,7 +30,7 @@
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last" [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input type="text" class="form-control txtCpc" [disabled]="i === 0" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i);hideListItems()" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                         value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
-                                <td><input id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value);" (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
+                                <td><input onReturn id="first_element_{{i}}" type="text" class="form-control" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value);" (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
                                         (blur)="onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)" (keydown.Tab)="validateAccount(transaction, $event, i)">
                                     <!-- *ngIf="transaction.inventory" -->
                                     <!-- [hidden]="!transaction.stocks" Alok Sir -->
@@ -38,21 +38,21 @@
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
-                                                    <td colspan="" [style.width.px]="250"><input type="text" placeholder="Type to search stock" class="form-control" #Item [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus(idx, i);"
+                                                    <td colspan="" [style.width.px]="250"><input onReturn type="text" placeholder="Type to search stock" class="form-control" #Item [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus(idx, i);"
                                                             (blur)="onStockBlur(qty);" (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="searchStock($event?.target?.value);" /></td>
                                                     <td>
-                                                        <input type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" decimalDigitsDirective
+                                                        <input onReturn type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" decimalDigitsDirective
                                                             [DecimalPlaces]="2" [disabled]="!inventory.stock.name" (focus)="selectedIdx = i" />
                                                     </td>
                                                     <td>
-                                                        <input type="text" placeholder="Rate" class="form-control text-right" [(ngModel)]="inventory.unit.rate" (ngModelChange)="changePrice(idx, inventory.unit.rate)" (focus)="selectedStockIdx = idx;selectedIdx = i;" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
+                                                        <input onReturn type="text" placeholder="Rate" class="form-control text-right" [(ngModel)]="inventory.unit.rate" (ngModelChange)="changePrice(idx, inventory.unit.rate)" (focus)="selectedStockIdx = idx;selectedIdx = i;" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
                                                             decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!inventory.stock.name" />
                                                     </td>
                                                     <td>
-                                                        <input type="text" placeholder="Unit" class="form-control text-left" [(ngModel)]="inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectedStockIdx = idx; selectedIdx = i;" [disabled]="!inventory.stock.name" />
+                                                        <input onReturn type="text" placeholder="Unit" class="form-control text-left" [(ngModel)]="inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectedStockIdx = idx; selectedIdx = i;" [disabled]="!inventory.stock.name" />
                                                     </td>
                                                     <td>
-                                                        <input type="text" placeholder="Total" class="form-control text-right" #toAmountField [(ngModel)]="inventory.amount" (focus)="selectedStockIdx = idx; selectedIdx = i;" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (ngModelChange)="amountChanged(idx)"
+                                                        <input onReturn type="text" placeholder="Total" class="form-control text-right" #toAmountField [(ngModel)]="inventory.amount" (focus)="selectedStockIdx = idx; selectedIdx = i;" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (ngModelChange)="amountChanged(idx)"
                                                             (keydown.Tab)="validateAndAddNewStock(idx)" (keyup.Enter)="validateAndAddNewStock(idx)" decimalDigitsDirective [DecimalPlaces]="2" [disabled]="!inventory.stock.name" />
                                                     </td>
                                                 </tr>
@@ -62,12 +62,12 @@
                                 </td>
                                 <!-- (blur)="onAccountBlur();selectRow(false,null)"  -->
                                 <td>
-                                    <input [hidden]="transaction.type !== 'by'" type="text" class="form-control text-right" #byAmountField decimalDigitsDirective #amountField1 [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
+                                    <input onReturn [hidden]="transaction.type !== 'by'" type="text" class="form-control text-right" #byAmountField decimalDigitsDirective #amountField1 [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
                                         (blur)="addNewEntry(transaction.amount,transaction, i);" [disabled]="!transaction.selectedAccount.name" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
                                     />
                                 </td>
                                 <td>
-                                    <input [hidden]="transaction.type !== 'to'" type="text" class="form-control text-right" #toAmountField decimalDigitsDirective #amountField2 [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
+                                    <input onReturn [hidden]="transaction.type !== 'to'" type="text" class="form-control text-right" #toAmountField decimalDigitsDirective #amountField2 [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
                                         (blur)="addNewEntry(transaction.amount,transaction, i);" [disabled]="!transaction.selectedAccount.name" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount"
                                     />
                                 </td>
