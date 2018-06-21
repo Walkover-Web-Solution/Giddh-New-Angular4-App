@@ -454,3 +454,24 @@ ng-select.splSales {
     left: 15px;
     position: relative;
 }
+
+#deposit-dropdown {
+    right: 98px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: inherit;
+    width: 282px;
+    background: #f4f5f8;
+    display: block;
+}
+
+#deposit-dropdown .caret {
+    border-top: 7px dashed #d0d0d3;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    right: -15px;
+    position: absolute;
+    top: 47%;
+    background: #f4f5f8;
+    transform: rotate(-90deg) translateY(-50%);
+}
