@@ -487,14 +487,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
-    this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
-      let rate = res.body;
-      if (rate) {
-        obj.convertedAmount = amount * rate;
-        obj.convertedAmountCurrency = convertTo;
-        return obj;
-      }
-    });
+    if (baseCurr && convertTo) {
+      this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
+        let rate = res.body;
+        if (rate) {
+          obj.convertedAmount = amount * rate;
+          obj.convertedAmountCurrency = convertTo;
+          return obj;
+        }
+      });
+    }
   }
 
   public showDeleteAttachedFileModal() {
