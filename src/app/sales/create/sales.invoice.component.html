@@ -538,7 +538,7 @@
                                         <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                                     </div>
                                 </div>
-                                <div class="tableRow" *ngIf="toggleFieldForSales">
+                                <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected">
                                     <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                                     <div class="tableCell">
                                         <!-- 
@@ -556,7 +556,7 @@
                                                         <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
                                                     </div>
                                                 </li>
-                                                <li role="menuitem" class="mrT1" *ngIf="isCustomerSelected">
+                                                <li role="menuitem" class="mrT1">
                                                     <div class="">
                                                         <label>Payment Mode</label>
                                                         <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
