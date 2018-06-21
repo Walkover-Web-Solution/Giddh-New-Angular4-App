@@ -25,11 +25,9 @@ export class OnReturnDirective {
 
     if ((e.which === 13 || e.keyCode === 13) || (e.which === 8 || e.keyCode === 8)) {
       const selectedEle = e.target;
-      const allElements: any = window.document.querySelectorAll('input');
+      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
       const nodeList = Array.from(allElements);
       const indx = nodeList.findIndex((ele) => ele === selectedEle);
-      console.log('the indx is :', indx);
-      console.log('the nodeList is :', nodeList);
       // nodeList[indx + 1].focus();
       if (e.which === 13 || e.keyCode === 13) {
         const target = allElements[indx + 1];
