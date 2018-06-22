@@ -997,7 +997,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public removeTransaction(entryIdx: number) {
     if (this.invFormData.entries.length > 1) {
-      this.invFormData.entries = _.remove(this.invFormData.entries, (entry, index) => {
+      (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
         return index !== entryIdx;
       });
     } else {

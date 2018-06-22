@@ -14,6 +14,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { InventoryEntry, InventoryFilter, InventoryReport, InventoryUser } from '../models/api-models/Inventory-in-out';
 import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
+import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../models/api-models/BranchTransfer';
 
 declare var _: any;
 
@@ -130,10 +131,17 @@ export class InventoryService {
   /**
    * get Stocks
    */
-  public GetStocks(): Observable<BaseResponse<StocksResponse, string>> {
+  public GetStocks(companyUniqueName: string = ''): Observable<BaseResponse<StocksResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+
+    let cmpUniqueName: string = this.companyUniqueName;
+
+    if (companyUniqueName) {
+      cmpUniqueName = companyUniqueName;
+    }
+
+    return this._http.get(this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))).map((res) => {
       let data: BaseResponse<StocksResponse, string> = res;
       data.request = '';
       data.queryString = {};
@@ -590,4 +598,31 @@ export class InventoryService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
   }
+
+  // region branch
+  public BranchTransfer(modal: TransferDestinationRequest | TransferProductsRequest): Observable<BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>> {
+    return this._http
+      .post(this.config.apiUrl + INVENTORY_API.BRANCH_TRANSFER.TRANSFER, modal)
+      .map((res) => {
+        let data: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest> = res;
+        data.request = modal;
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>(e, modal, ''));
+  }
+
+  //  endregion
+
+  // region linked Stocks
+  public GetLinkedStocks(): Observable<BaseResponse<LinkedStocksResponse, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http
+      .get(this.config.apiUrl + INVENTORY_API.LINKED_STOCKS.LINKED_STOCKS
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      ).map((res) => {
+        let data: BaseResponse<LinkedStocksResponse, string> = res;
+        data.request = '';
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<LinkedStocksResponse, string>(e, '', {}));
+  }
+  // endregion
 }
