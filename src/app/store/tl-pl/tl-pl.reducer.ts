@@ -59,7 +59,8 @@ export const initialState: TBPlBsState = {
 
 export function tbPlBsReducer(state = initialState, action: CustomActions): TBPlBsState {
   switch (action.type) {
-    case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE: {
+    case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:
+    case TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE: {
       // no payload means error from server
       if (action.payload) {
         let data: AccountDetails = _.cloneDeep(action.payload) as AccountDetails;
@@ -77,7 +78,8 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         return { ...state, tb: { ...state.tb, showLoader: false, exportData: [], data: null, noData: true } };
       }
     }
-    case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST: {
+    case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST:
+    case TBPlBsActions.GET_V2_TRIAL_BALANCE_REQUEST: {
       return { ...state, tb: { ...state.tb, showLoader: true } };
     }
 
