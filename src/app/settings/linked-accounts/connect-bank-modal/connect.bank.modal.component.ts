@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { decimalDigits } from '../../../shared/helpers';
 
 @Component({
   selector: 'connect-bank-modal',
@@ -30,8 +32,10 @@ export class ConnectBankModalComponent implements OnChanges {
   public dataSourceBackup: any;
   public selectedProvider: any = {};
   public step: number = 1;
+  public loginForm: FormGroup;
   constructor(public sanitizer: DomSanitizer,
   private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
+  private _fb: FormBuilder
   ) {
     this.dataSource = (text$: Observable<any>): Observable<any> => {
       return text$
@@ -54,6 +58,16 @@ export class ConnectBankModalComponent implements OnChanges {
           }
         });
     };
+
+    this.loginForm = this._fb.group({
+      id: ['', Validators.required],
+      forgotPasswordUrL: [''],
+      loginHelp: [''],
+      formType: ['', Validators.required],
+      row: this._fb.array([
+        this.rowArray()
+      ]),
+    });
   }
 
   public ngOnChanges(changes) {
@@ -83,8 +97,50 @@ export class ConnectBankModalComponent implements OnChanges {
     }, 400);
   }
 
+  // initial unitandRates controls
+  public rowArray() {
+    // initialize our controls
+    return this._fb.group({
+      id: [''],
+      label: [''],
+      form: [''],
+      fieldRowChoice: [''],
+      field: this._fb.array([
+        this.fieldArray()
+      ]),
+    });
+  }
+
+  public fieldArray() {
+    // initialize our controls
+    return this._fb.group({
+      id: [''],
+      name: [''],
+      maxLength: [''],
+      type: [''],
+      value: [''],
+      isOptional: [false],
+      valueEditable: [true]
+    });
+  }
+
   public onSelectProvider() {
     console.log(this.selectedProvider);
     this.step = 2;
+    this.getProviderLoginForm();
+  }
+
+  /**
+   * getProviderLoginForm
+   */
+  public getProviderLoginForm() {
+    this._settingsLinkedAccountsService.GetLoginForm(1).subscribe(a => {
+      if (a && a.status === 'success') {
+        console.log(a);
+        // this.loginFormObj = _.cloneDeep(a);
+        this.loginForm.patchValue(a.body.loginForm[0]);
+        console.log(this.loginForm.value);
+      }
+    });
   }
 }

@@ -18,15 +18,24 @@
     </div>
 
     <div class="" *ngIf="step === 2">
-        <div class="form-group">
-            <label>Search Provider</label>
-            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Search Provider"
-                pattern="^[^\s]+(\s+[^\s]+)*$">
-
-            <ng-template #rt let-r="result" let-t="term">
-                <span (keyup.enter)="typeaheadOnSelect(r)">{{ r.name }}</span>
-            </ng-template>
-        </div>
+        <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off">
+            <ng-container formArrayName="row">
+                <div *ngFor="let item of loginForm.get('row').value;let i = index; let l = last" class="form-group">
+                    <div [formGroupName]="i">
+                        <label>{{ item.label }}</label>
+                    </div>
+                </div>
+            </ng-container>
+            <div formGroupName="row">
+                <ng-container formArrayName="field">
+                    <div *ngFor="let inputItem of loginForm.get('row')['controls']['field'].controls;let i = index; let l = last" [formGroupName]="i" class="form-group">
+                        <div>
+                            <input type="text" class="form-control" [formControlName]="inputItem.name" />
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </form>
     </div>
     <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
     <ng-template #frame>
