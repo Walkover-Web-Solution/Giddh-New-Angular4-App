@@ -1,12 +1,11 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
-import { startsWith, concat, includes } from 'app/lodash-optimized';
-import { Observable } from 'rxjs/Observable';
+import { concat, includes, startsWith } from 'app/lodash-optimized';
 import { IForceClear } from 'app/models/api-models/Sales';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
@@ -160,10 +159,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       return array.filter((item) => {
         let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
         let stockName = '';
+        let stockUnqName = '';
         if (item.additional.stock && item.additional.stock.name) {
           stockName = _.cloneDeep(item.additional.stock.name);
+          stockUnqName = _.cloneDeep(item.additional.stock.uniqueName);
         }
-        return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term);
+        return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
       });
     }else {
       return array.filter((item: IOption) => {
@@ -399,6 +400,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   //////// ControlValueAccessor imp //////////
 
   public writeValue(value: any) {
+    // console.log(value);
     this.selectedValues = value;
     if (!this.cdRef['destroyed']) {
       this.cdRef.detectChanges();

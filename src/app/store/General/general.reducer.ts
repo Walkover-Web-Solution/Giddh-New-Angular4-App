@@ -1,15 +1,13 @@
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
-import { Action, ActionReducer } from '@ngrx/store';
 import { GENERAL_ACTIONS } from '../../actions/general/general.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AccountMoveRequest, AccountRequestV2, AccountResponse, AccountResponseV2, FlattenAccountsResponse, AccountMergeRequest } from '../../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponse, AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { States } from '../../models/api-models/Company';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
 import * as _ from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';

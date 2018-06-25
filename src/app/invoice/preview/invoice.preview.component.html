@@ -35,7 +35,7 @@
     <div class="form-group mrR1">
         <label class="d-block">From - To</label>
         <div class="input-group">
-            <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required>
+            <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required>
         </div>
     </div>
     <div class="form-group mrR1">
@@ -88,7 +88,7 @@
             <td>{{item.grandTotal}}</td>
             <td>{{item.balanceDue}}</td>
             <td>
-                <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, invoiceAction)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
+                <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
             </td>
             <td>{{item.balanceStatus}}</td>
             <td class="text-center">
