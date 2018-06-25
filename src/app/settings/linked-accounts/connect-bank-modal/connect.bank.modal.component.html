@@ -19,22 +19,23 @@
 
     <div class="" *ngIf="step === 2">
         <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off">
-            <ng-container formArrayName="row">
-                <div *ngFor="let item of loginForm.get('row').value;let i = index; let l = last" class="form-group">
-                    <div [formGroupName]="i">
-                        <label>{{ item.label }}</label>
+            <div formArrayName="row">
+                <div *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
+                    <div [formGroupName]="i" class="form-group">
+                        <label> {{item.get('label').value}}</label>
+                        <ng-container formArrayName="field">
+                            <ng-container *ngFor="let field of item.get('field').controls; let idx=index;">
+                                <ng-container [formGroupName]="idx">
+                                    <input type="text" class="form-control" formControlName="value" />
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
                     </div>
                 </div>
-            </ng-container>
-            <div formGroupName="row">
-                <ng-container formArrayName="field">
-                    <div *ngFor="let inputItem of loginForm.get('row')['controls']['field'].controls;let i = index; let l = last" [formGroupName]="i" class="form-group">
-                        <div>
-                            <input type="text" class="form-control" [formControlName]="inputItem.name" />
-                        </div>
-                    </div>
-                </ng-container>
             </div>
+
+
+
         </form>
     </div>
     <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
