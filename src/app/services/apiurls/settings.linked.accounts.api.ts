@@ -6,7 +6,7 @@ export const EBANKS = {
   LINK_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:accountId', // PUT
   // UNLINK_ACCOUNT: COMMON_URL + 'ebanks/:accountId/unlink',
   UNLINK_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:accountId?accountUniqueName=:accountUniqueName',
-  REFRESH_ACCOUNTS:  COMMON_URL + 'ebanks/refresh', // GET
+  REFRESH_ACCOUNTS: COMMON_URL + 'ebanks/refresh', // GET
   RECONNECT_ACCOUNT: COMMON_URL + 'login/:loginId/token/reconnect', // GET
   // DELETE_BANK_ACCOUNT: COMMON_URL + 'login/:loginId', // DELETE
   DELETE_BANK_ACCOUNT: COMMON_URL + 'yodlee/yodlee-accounts?accountId=:accountId',
@@ -21,5 +21,5 @@ export const YODLEE_FASTLINK = {
   GET_ACCOUNTS: COMMON_URL + 'yodlee/yodlee-accounts',
   SEARCH_BANKS: COMMON_URL + 'yodlee/search?name=:queryString',
   GET_LOGIN_FORM: COMMON_URL + 'yodlee/login-form/:providerId',
-  ADD_PROVIDER: COMMON_URL + 'yodlee/add-provider-account/:providerId',
+  ADD_PROVIDER: COMMON_URL + 'yodlee/add-provider-account?providerId=:providerId',
 };

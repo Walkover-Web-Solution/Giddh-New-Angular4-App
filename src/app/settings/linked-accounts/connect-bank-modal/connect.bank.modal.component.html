@@ -7,7 +7,8 @@
     <div class="" *ngIf="step === 1">
         <div class="form-group">
             <label>Search Provider</label>
-            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Search Provider"
+            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers" [resultTemplate]="rt"
+                (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Search Provider"
                 pattern="^[^\s]+(\s+[^\s]+)*$">
 
             <ng-template #rt let-r="result" let-t="term">
@@ -18,15 +19,16 @@
     </div>
 
     <div class="" *ngIf="step === 2">
-        <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off">
-            <div formArrayName="row">
-                <div *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
+        <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off" (ngSubmit)="onSubmitLoginForm()">
+            <div formArrayName="row" class="row">
+                <div class="col-xs-6" *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
                     <div [formGroupName]="i" class="form-group">
-                        <label> {{item.get('label').value}}</label>
                         <ng-container formArrayName="field">
                             <ng-container *ngFor="let field of item.get('field').controls; let idx=index;">
                                 <ng-container [formGroupName]="idx">
-                                    <input type="text" class="form-control" formControlName="value" />
+                                    <label> {{field.get('name').value}}</label>
+                                    <input [type]="field.get('type').value" [required]="field.get('isOptional').value" [readonly]="!field.get('valueEditable').value"
+                                        class="form-control" formControlName="value" />
                                 </ng-container>
                             </ng-container>
                         </ng-container>
@@ -35,7 +37,7 @@
             </div>
 
 
-
+            <button class="btn btn-success btn-sm" type="submit">Submit</button>
         </form>
     </div>
     <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
