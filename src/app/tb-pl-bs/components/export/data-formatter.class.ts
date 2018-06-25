@@ -41,7 +41,7 @@ export class DataFormatter {
 
     this.exportData.forEach(obj => {
       // if (obj.isVisible) {
-      row += `${obj.groupName},${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
+      row += `${obj.groupName} (${obj.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
       total = this.calculateTotal(obj, total);
       // }
     });

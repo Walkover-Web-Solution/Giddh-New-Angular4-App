@@ -1,5 +1,5 @@
 import { ITax, ITaxDetail } from '../interfaces/tax.interface';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from './Inventory';
 
 export class CompanyRequest {
   public name: string;

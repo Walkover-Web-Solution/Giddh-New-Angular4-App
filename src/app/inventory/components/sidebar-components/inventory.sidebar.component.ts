@@ -3,22 +3,23 @@ import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
-  selector: 'invetory-sidebar',  // <home></home>
+  selector: 'inventory-sidebar',  // <home></home>
   templateUrl: './inventory.sidebar.component.html',
   styles: [`
-  .parent-Group>ul>li ul li div {
-    color:#8a8a8a;
-  }
-  #inventory-sidebar {
-    background: #fff;
-    min-height: 100vh;
-  }
+    .parent-Group > ul > li ul li div {
+      color: #8a8a8a;
+    }
+
+    #inventory-sidebar {
+      background: #fff;
+      min-height: 100vh;
+    }
   `]
 })
 export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -54,13 +55,14 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
       .distinctUntilChanged()
       .map((e: any) => e.target.value)
       .subscribe((val: string) => {
-          if (val) {
-            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
-          } else {
-            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
-          }
+        if (val) {
+          this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
+        } else {
+          this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
+        }
       });
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

@@ -18,7 +18,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   public set searchRequest(search: SearchRequest) {
     this.searchRequestEmitter.emit(search);
     this._searchRequest = search;
-    console.log(search);
+    // console.log(search);
   }
 
   public get searchRequest(): SearchRequest {

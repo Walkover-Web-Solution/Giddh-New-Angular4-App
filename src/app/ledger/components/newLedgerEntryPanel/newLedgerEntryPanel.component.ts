@@ -16,7 +16,7 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { LedgerService } from '../../../services/ledger.service';
-import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -85,6 +85,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   private currentBaseCurrency: string;
   private currencyRateResponse: any;
+  private fetchedBaseCurrency: string = null;
+  private fetchedConvertToCurrency: string = null;
+  private fetchedConvertedRate: number = null;
 
   constructor(private store: Store<AppState>,
     private _ledgerService: LedgerService,
@@ -276,8 +279,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateCompoundTotal() {
-    let debitTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'DEBIT'), 'total')) || 0;
-    let creditTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'CREDIT'), 'total')) || 0;
+    // let debitTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'DEBIT'), 'total')) || 0;
+    let debitTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'DEBIT'), (trxn) => Number(trxn.total))) || 0;
+    // let creditTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'CREDIT'), 'total')) || 0;
+    let creditTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'CREDIT'), (trxn) => Number(trxn.total))) || 0;
 
     if (debitTotal > creditTotal) {
       this.blankLedger.compoundTotal = Number((debitTotal - creditTotal).toFixed(2));
@@ -472,13 +477,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    * calculateConversionRate
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
-    this._ledgerService.GetCurrencyRate(baseCurr).subscribe((res: any) => {
-      let rates = res.body;
-      if (rates) {
-        _.forEach(rates, (value, key) => {
-          if (key === convertTo) { return obj.convertedAmount = amount * rates[key]; }
+    if (baseCurr && convertTo) {
+      if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
+        return obj.convertedAmount = amount * this.fetchedConvertedRate;
+      } else {
+        this.fetchedBaseCurrency = baseCurr;
+        this.fetchedConvertToCurrency = convertTo;
+        this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
+          let rate = res.body;
+          if (rate) {
+            this.fetchedConvertedRate = rate;
+            return obj.convertedAmount = amount * rate;
+          }
         });
       }
-    });
+    }
   }
 }

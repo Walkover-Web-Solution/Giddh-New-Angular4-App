@@ -162,7 +162,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
           if (activeCompany && activeCompany.gstDetails[0]) {
             this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
           } else {
-            this.toasty.errorToast('GST number not found.');
+            // this.toasty.errorToast('GST number not found.');
           }
         }
       } else {
@@ -634,5 +634,18 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet,  this.userEmail));
       this.userEmail = '';
     }
+  }
+
+  /**
+   * fileJioGstReturn
+   */
+  public fileJioGstReturn() {
+    let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
+    let monthToSend = check.format('MM') + '-' + check.format('YYYY');
+      if (this.activeCompanyGstNumber) {
+        this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber));
+      } else {
+        this.toasty.errorToast('GST number not found.');
+      }
   }
 }
