@@ -119,7 +119,7 @@
 	</style>
 </head>
 <body>
-<div id="template-header" (click)="onClickSection('header')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]">
+<div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
 	<header>
 		<figure class="col-xs-6">
 			<h1 *ngIf="fieldsAndVisibility.header.companyName?.display">Walkover Web Solutions Private Limited</h1>
@@ -247,7 +247,7 @@
 		</table>
 </div>
 	<a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table"><i class="fa fa-pencil"></i></a>
-	<div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]">
+	<div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
 		<article>
 			<table class="item" cellpadding="0" cellspacing="0">
 				<thead>
@@ -386,7 +386,7 @@
 
 		</article>
 		</div>
-		<div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]">
+		<div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
 		<aside>
 		<table cellpadding="0" cellspacing="0" class="subfooter">
 			<tbody>

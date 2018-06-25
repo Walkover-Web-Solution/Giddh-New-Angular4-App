@@ -83,6 +83,7 @@
                             <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet</li>
                             <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet</li>
                             <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet</li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn();">File GSTR1</li>
                             <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet</li>
                             <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With Detail Sheet</li>
                             <!-- <li class="cp dd-options">Use JIOGST API</li> -->
@@ -92,12 +93,12 @@
                     <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading... </small>
                 </div>
             </div>
-            <!-- hide due to unused 
-                <div class="col-xs-2 form-group pull-right">
-                    <label class="d-block">&nbsp;</label>
-                    <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
-                </div>
-                -->
+            <!-- hide due to unused -->
+            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+                <label class="d-block">&nbsp;</label>
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Jio GST</button>
+            </div>
+
         </div>
     </form>
     <!-- Top filter end  -->
@@ -293,7 +294,7 @@
         </div>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+    <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>

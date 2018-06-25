@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../actions/permission/permission.action';
-import { NewRoleClass, NewRoleFormClass, IPageStr, IPage, INewRoleFormObj } from '../../permission.utility';
-import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
+import { INameUniqueName } from '../../../models/api-models/Inventory';
 import * as _ from '../../../lodash-optimized';
 import { PermissionState } from 'app/store/Permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'app/models/api-models/Permission';

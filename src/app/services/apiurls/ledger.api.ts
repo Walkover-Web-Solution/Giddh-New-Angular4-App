@@ -18,6 +18,7 @@ export const LEDGER_API = {
   MAGIC_LINK: 'company/:companyUniqueName/accounts/:accountUniqueName/magic-link?from=:from&to=:to',
   // EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
   EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
+  EXPORT_LEDGER_WITH_INVOICE_NUMBER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger-with-invoice/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
   GET_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers?from=:from',
   // put call to map transaction
   MAP_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId',
@@ -27,5 +28,6 @@ export const LEDGER_API = {
   MAGIC_LINK_DOWNLOAD_FILE: 'magic-link/:id/download-invoice/:invoiceNum', // Method: GET
   ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=asc&page=:page&count=:count&q=:q',
   GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type',
-  MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2'
+  MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
+  CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency'
 };

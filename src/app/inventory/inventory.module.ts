@@ -60,7 +60,6 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
     AsideInventoryComponent,
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
-    InventoryAddStockComponent,
     InventoryWelcomeComponent
   ],
   providers: [],

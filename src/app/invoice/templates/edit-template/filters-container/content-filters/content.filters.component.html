@@ -7,16 +7,19 @@
             <div *ngIf="fieldsAndVisibility.header.companyName" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name</div>
             <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[4].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Date
-                <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceDate" [(ngModel)]='customTemplate.sections[0].content[4].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[4].display" /></div>
+                <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceDate" [(ngModel)]='customTemplate.sections[0].content[4].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[4].display"
+                    /></div>
             </div>
 
             <div *ngIf="fieldsAndVisibility.header.invoiceNumber" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Number
-                <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceNo" [(ngModel)]='customTemplate.sections[0].content[5].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[5].display" /></div>
+                <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceNo" [(ngModel)]='customTemplate.sections[0].content[5].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[5].display"
+                    /></div>
             </div>
             <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[12].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Due Date
-                <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="dueDate1" [(ngModel)]='customTemplate.sections[0].content[12].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[12].display" /></div>
+                <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="dueDate1" [(ngModel)]='customTemplate.sections[0].content[12].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[12].display"
+                    /></div>
             </div>
         </div>
         <div class="clearfix">
@@ -114,23 +117,27 @@
                 <tbody *ngIf="customTemplate.sections[1]">
                     <tr *ngIf="fieldsAndVisibility.table.sNo">
                         <td><label><input type="checkbox" name="sN" [(ngModel)]="customTemplate.sections[1].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Number</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="ss" [(ngModel)]='customTemplate.sections[1].content[0].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[0].display" /></td>
-                        
+                        <td><input type="text" [maxlength]="10" class="form-control" name="ss" [(ngModel)]='customTemplate.sections[1].content[0].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[0].display"
+                            /></td>
+
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.date">
                         <td><label><input type="checkbox" name="dt"[(ngModel)]="customTemplate.sections[1].content[1].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/>Date</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="dt1" [(ngModel)]='customTemplate.sections[1].content[1].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[1].display" /></td>
-                        
+                        <td><input type="text" [maxlength]="10" class="form-control" name="dt1" [(ngModel)]='customTemplate.sections[1].content[1].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[1].display"
+                            /></td>
+
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.item">
                         <td><label><input type="checkbox" name="it" [(ngModel)]="customTemplate.sections[1].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Item</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="it1" [(ngModel)]='customTemplate.sections[1].content[2].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[2].display" /></td>
-                        
+                        <td><input type="text" [maxlength]="10" class="form-control" name="it1" [(ngModel)]='customTemplate.sections[1].content[2].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[2].display"
+                            /></td>
+
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.hsnSac">
                         <td><label><input type="checkbox"  name="hsn" [(ngModel)]="customTemplate.sections[1].content[3].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> HSN/SAC</label></td>
-                        <td><input type="text" [maxlength]="10" class="form-control" name="hsn1" [(ngModel)]='customTemplate.sections[1].content[3].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[3].display" /></td>
-                      
+                        <td><input type="text" [maxlength]="10" class="form-control" name="hsn1" [(ngModel)]='customTemplate.sections[1].content[3].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[3].display"
+                            /></td>
+
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.quantity">
                         <td><label><input type="checkbox" name="qt" [(ngModel)]="customTemplate.sections[1].content[10].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Quantity</label></td>

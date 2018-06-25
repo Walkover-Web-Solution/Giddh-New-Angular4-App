@@ -11,7 +11,7 @@ import * as _ from '../../../lodash-optimized';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { CHART_CALLED_FROM, API_TO_CALL } from '../../../actions/home/home.const';
+import { API_TO_CALL, CHART_CALLED_FROM } from '../../../actions/home/home.const';
 
 @Component({
   selector: 'compare-chart',
@@ -247,7 +247,7 @@ export class ComparisionChartComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' },
+        itemStyle: {color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold'},
         enabled: false
       },
       credits: {
