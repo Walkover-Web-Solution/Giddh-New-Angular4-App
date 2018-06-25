@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -8,9 +8,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../actions/home/home.actions';
 import * as moment from 'moment/moment';
 import * as _ from 'lodash';
-import { ICbAccount, IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
+import { IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
-import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../../models/api-models/Inventory';
 
 @Component({
   selector: 'expenses-chart',
@@ -163,8 +163,6 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       xAxis: {
         categories: this.accountStrings.map(p => p.name),
         crosshair: true,
-        min: 0,
-        max: 2,
       },
       yAxis: {
         min: 0,

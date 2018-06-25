@@ -27,7 +27,7 @@ import { LedgerVM, BlankLedgerVM } from 'app/ledger/ledger.vm';
   styleUrls: ['./accounting-sidebar.component.css']
 })
 
-export class AccountingSidebarComponent implements OnInit, OnChanges {
+export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public AccountListOpen: boolean;
 
@@ -38,6 +38,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
   public showAccountList: boolean = true;
   public selectedVoucher: string = null;
   public selectedGrid: string = null;
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _tallyModuleService: TallyModuleService) {
     //
@@ -81,6 +82,11 @@ export class AccountingSidebarComponent implements OnInit, OnChanges {
     });
     this.selectedVoucher = pageName;
     this.selectedGrid = grid;
+  }
+
+  public ngOnDestroy() {
+      this.destroyed$.next(true);
+      this.destroyed$.complete();
   }
 
 }

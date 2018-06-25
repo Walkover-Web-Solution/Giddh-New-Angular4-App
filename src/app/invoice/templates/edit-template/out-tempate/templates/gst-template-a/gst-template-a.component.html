@@ -9,7 +9,7 @@
 <body *ngIf="inputTemplate.sections && inputTemplate.sections.length" [ngStyle]="{ 'font-family': inputTemplate.font, 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
-        <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]" (click)="onClickSection('header')">
+        <div id="Template-header" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }" (click)="onClickSection('header')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header"><i class="fa fa-pencil"></i></a>
             <header>
                 <figure class="col-xs-12"><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></figure>
@@ -153,7 +153,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="Template-table" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]" (click)="onClickSection('table')">
+        <div id="Template-table" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }" (click)="onClickSection('table')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table"><i class="fa fa-pencil"></i></a>
             <article>
                 <table class="item" cellpadding="0" cellspacing="0">
@@ -218,7 +218,7 @@
                 </table>
             </article>
         </div>
-        <div id="Template-footer" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]" (click)="onClickSection('footer')">
+        <div id="Template-footer" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer"><i class="fa fa-pencil"></i></a>
             <aside>
                 <table class="balance">

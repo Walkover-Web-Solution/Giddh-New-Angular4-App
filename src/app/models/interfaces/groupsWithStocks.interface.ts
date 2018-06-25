@@ -1,4 +1,4 @@
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 
 /*
  * Interface for groups-with-stocks-flatten api response result item

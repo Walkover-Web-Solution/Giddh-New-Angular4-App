@@ -1,4 +1,4 @@
-<div class="middleBody bdrR bdrL row" auto-height>
+<div class="" auto-height>
   <!--loader-->
   <div class="loader mrT4" *ngIf="searchLoader$ | async">
     <span></span>
@@ -10,93 +10,99 @@
   <!--end loader-->
 
   <!-- result -->
-  <section class="pd2" *ngIf="!(searchLoader$ | async) && (search$ | async)">
-    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()"
-      (openSmsDialog)="openSmsDialog()"></search-filter>
-    <table class="table table-bordered table-striped">
+  <section class="" *ngIf="!(searchLoader$ | async) && (search$ | async)">
+    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)"
+                   (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()"></search-filter>
+    <table class="table table-bordered basic mrT1">
       <thead>
-        <tr>
-          <th>#</th>
-          <th class="col-xs-2">
-            <div>
-                <input type="checkbox" (change)="toggleSelectAll(isAllChecked)" [(ngModel)]="isAllChecked"> Select
-            </div>
-          </th>
-          <th class="col-xs-2">
-            <div (click)="sortType = 'name'; sortReverse = !sortReverse">
-              Name
-              <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-          <th class="col-xs-2">
-            <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
-              UniqueName
-              <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-          <th class="col-xs-2">
-            <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
-              Opening Bal.
-              <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-          <th class="col-xs-1">
-            <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
-              DR Total
-              <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-          <th class="col-xs-1">
-            <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
-              CR Total
-              <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-          <th class="col-xs-2">
-            <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
-              Closing Bal.
-              <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-          <th class="col-xs-2">
-            <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
-              Parent
-              <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-              <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-            </div>
-          </th>
-        </tr>
+      <tr>
+        <th [style.width.px]="25">
+          <div>
+            <input type="checkbox" (change)="toggleSelectAll(isAllChecked)" [(ngModel)]="isAllChecked">
+          </div>
+        </th>
+        <th>#</th>
+        <th>
+          <div (click)="sortType = 'name'; sortReverse = !sortReverse">
+            Name
+            <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+        <th>
+          <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
+            UniqueName
+            <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+        <th>
+          <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
+            Parent
+            <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+        <th class="text-right">
+          <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
+            Opening Bal.
+            <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+        <th class="text-right">
+          <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
+            DR Total
+            <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+        <th class="text-right">
+          <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
+            CR Total
+            <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+        <th class="text-right">
+          <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
+            Closing Bal.
+            <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+            <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+          </div>
+        </th>
+
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-          <td>{{i+1}}</td>
-          <td><input type="checkbox" (change)="toggleSelection(item)" [(ngModel)]="item.isSelected"></td>
-          <td>{{item.name}}</td>
-          <td>{{item.uniqueName}}</td>
-          <td class="alR">
-            <span *ngIf="item.openingBalance > 0">
-              <span class="text-success pull-left" *ngIf="item.openBalanceType === 'DEBIT'">DR</span>
-              <span class="text-danger pull-left" *ngIf="item.openBalanceType === 'CREDIT'">CR</span> &nbsp;
-            </span>
-            {{item.openingBalance.toFixed(2) }}
-          </td>
-          <td class="alR">{{item.debitTotal.toFixed(2) }}</td>
-          <td class="alR">{{item.creditTotal.toFixed(2)}}</td>
-          <td class="alR">
-            <span *ngIf="item.closingBalance > 0">
-              <span class="text-success pull-left" *ngIf="item.closeBalanceType === 'DEBIT'">DR</span>
-              <span class="text-danger pull-left" *ngIf="item.closeBalanceType === 'CREDIT'">CR</span> &nbsp;
-            </span>
-            {{item.closingBalance.toFixed(2) }}
-          </td>
-          <td>{{item.parent}}</td>
-        </tr>
+      <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
+        <td><input type="checkbox" (change)="toggleSelection(item)" [(ngModel)]="item.isSelected"></td>
+        <td>{{i+1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.uniqueName}}</td>
+        <td>{{item.parent}}</td>
+        <td class="alR">
+          {{item.openingBalance.toFixed(2) }}
+          <span *ngIf="item.openingBalance > 0">
+                          <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
+                        <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
+                        </span>
+        </td>
+        <td class="alR">{{item.debitTotal.toFixed(2) }}</td>
+        <td class="alR">{{item.creditTotal.toFixed(2)}}</td>
+        <td class="alR">
+          {{item.closingBalance.toFixed(2) }}
+          <span *ngIf="item.closingBalance > 0">
+                          <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
+                        <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span>
+                        </span>
+        </td>
+      </tr>
+      <tr *ngIf="!(searchResponseFiltered$ | async).length">
+        <td colspan="9" class="text-center empty_table">
+          <h1>No Record Found !!</h1>
+        </td>
+      </tr>
       </tbody>
     </table>
   </section>
@@ -109,28 +115,28 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="noBrdRdsModal">
-        <div class="modal-header">
-          <label class="form-label mrT1">
-            <h3 class="modal-title">{{messageBody.header.set}}</h3>
-          </label>
-          <button type="button" class="close" (click)="mailModal.hide()" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-header themeBg pdL2 pdR2 clearfix">
+          <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
+          <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
+                (click)="mailModal.hide()">×</span>
+          <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
         </div>
-        <div class="modal-body" style="height:400px">
+        <div class="modal-body pdL2 pdR2 clearfix">
           <!-- 		<h1 class="mrB1" ng-if="messageBody.type == 'Email'">Enter Subject:</h1>
-                  <input ng-if="messageBody.type == 'Email'" class="form-control mrB1" type="text" ng-model="messageBody.subject" placeholder="Enter subject here"/> -->
+        <input ng-if="messageBody.type == 'Email'" class="form-control mrB1" type="text" ng-model="messageBody.subject" placeholder="Enter subject here"/> -->
           <h1 class="mrB1">Type message body:</h1>
-          <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-          <p class="mrT mrB">Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position
-            where actual data will be placed.</p>
+          <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
+                    placeholder="start typing your message here"></textarea>
+          <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body. Anything
+            followed by '%s_' represents the position where actual data will be placed.
+          </small>
 
-          <div class="row">
+          <div class="row mrT2">
             <ul class="list-inline pills">
               <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
             </ul>
           </div>
-          <div class="row pdR2 mrT1">
+          <div class="mrT4">
             <button class="btn btn-sm btn-success pull-right mrL1" (click)="send()">{{messageBody.btn.set}}</button>
           </div>
         </div>

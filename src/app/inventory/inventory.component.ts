@@ -4,12 +4,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InventoryAction } from '../actions/inventory/inventory.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'inventory',
   templateUrl: './inventory.component.html'
 })
 export class InventoryComponent implements OnInit, OnDestroy {
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions) {
   }
 
@@ -23,7 +27,9 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
   }
 
-  public ngOnDestroy(): void {
+  public ngOnDestroy() {
     this.store.dispatch(this._inventoryAction.ResetInventoryState());
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

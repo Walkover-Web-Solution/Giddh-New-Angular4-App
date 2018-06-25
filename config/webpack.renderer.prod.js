@@ -121,7 +121,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '[file].map',
+      // sourceMapFilename: '[file].map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -178,12 +178,12 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      new SourceMapDevToolPlugin({
-        filename: '[file].map[query]',
-        moduleFilenameTemplate: '[resource-path]',
-        fallbackModuleFilenameTemplate: '[resource-path]?[hash]',
-        sourceRoot: 'webpack:///'
-      }),
+      // new SourceMapDevToolPlugin({
+      //   filename: '[file].map[query]',
+      //   moduleFilenameTemplate: '[resource-path]',
+      //   fallbackModuleFilenameTemplate: '[resource-path]?[hash]',
+      //   sourceRoot: 'webpack:///'
+      // }),
 
       /**
        * Plugin: ExtractTextPlugin

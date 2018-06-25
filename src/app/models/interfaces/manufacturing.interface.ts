@@ -1,5 +1,4 @@
-import { INameUniqueName } from './nameUniqueName.interface';
-import { IPagination } from './paginatedResponse.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 
 // some common interface used in module everywhere
 export interface IOnlyUniqueName {

@@ -114,7 +114,7 @@
                             <label>Invoice lock date</label>
                         </div>
                         <div class="col-xs-7 form-group">
-                            <input type="text" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" />
+                            <input type="text" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" (clickOutside)="showDatePicker=false;" />
                             <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                                 <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
                             </div>
@@ -163,7 +163,7 @@
                     <div class="row">
                         <div class="col-xs-5"><label>Create Virtual Accounts For Customers</label></div>
                         <div class="col-xs-7">
-                            <div class="form-group clearfix">
+                            <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
                                 <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" class="pull-left" name="autoCreateVirtualAccountsForDebtors" />
                             </div>
                         </div>

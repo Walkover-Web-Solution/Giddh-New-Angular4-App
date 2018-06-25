@@ -6,7 +6,7 @@
         </small>
         <button class="btn pull-left isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
     </div>
-    <div class="template-grid" *ngFor="let template of customCreatedTemplates; let i = index">
+    <div class="template-grid" *ngFor="let template of customCreatedTemplates; let i = index" [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e' || template.uniqueName === 'gst_template_f' || template.uniqueName === 'gst_template_g'">
         <div class="template_info text-center">
             <h3 class="primary_clr ellp">{{template.name}}</h3>
 
@@ -46,9 +46,11 @@
     </div>
     <div class="sticky-footer pd2">
         <!--<button class="btn btn-default">Preview</button>-->
-        <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate()">Save</button>
-        <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate()">Update</button>
-        <button class="btn btn-danger" (click)="onCloseTemplateModal()">Close</button>
+        <div class="pull-right mrR4">
+            <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate()">Save</button>
+            <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate()">Update</button>
+            <button class="btn btn-danger mrR4" (click)="onCloseTemplateModal()">Close</button>
+        </div>
     </div>
 </div>
 
