@@ -8,7 +8,7 @@
 
 <body>
     <div class="">
-        <div id="template-header" (click)="onClickSection('header')" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]">
+        <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
             <header>
                 <table class="mrB1 pdRL3">
                     <tbody>
@@ -73,7 +73,7 @@
         </div>
         <br />
         <br />
-        <div id="Template-table" class="pos-rel" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]" (click)="onClickSection('table')">
+        <div id="Template-table" class="pos-rel" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }" (click)="onClickSection('table')">
             <span class="arrow-down"></span>
             <table class="item product-table pdRL3" cellspacing="0" cellpadding="0">
                 <thead>
@@ -172,7 +172,7 @@
             </table>
         </div>
 
-        <div id="Template-footer" class="pdRL3" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]" (click)="onClickSection('footer')">
+        <div id="Template-footer" class="pdRL3" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
             <table class="subfooter">
                 <tbody>
                     <tr>
