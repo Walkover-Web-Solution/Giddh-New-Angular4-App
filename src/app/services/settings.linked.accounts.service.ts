@@ -17,7 +17,7 @@ export class SettingsLinkedAccountsService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /**
@@ -76,7 +76,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', loginId)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {loginId};
+      data.queryString = { loginId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -89,7 +89,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {loginId};
+      data.queryString = { loginId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -102,7 +102,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + EBANKS.LINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId), dataToSend).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {accountId};
+      data.queryString = { accountId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -115,7 +115,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':accountUniqueName', accountUniqueName)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {accountId};
+      data.queryString = { accountId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -128,7 +128,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + EBANKS.UPDATE_DATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':date', date), {}).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {accountId};
+      data.queryString = { accountId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -191,14 +191,5 @@ export class SettingsLinkedAccountsService {
       let data: BaseResponse<any, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
-  }
-
-  public toFormGroup(response) {
-    let group: any = {};
-
-    response.row.forEach(row => {
-      group[row.field] = row.isOptional ? new FormControl(row.value || '', Validators.required) : new FormControl(row.value || '');
-    });
-    return new FormGroup(group);
   }
 }
