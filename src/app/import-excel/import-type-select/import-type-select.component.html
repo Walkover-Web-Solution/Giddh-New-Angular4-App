@@ -1,3 +1,10 @@
+<div class="container-fluid clearfix">
+    <div class="top_bar bdrB">
+        <h2 class="section_title">Import Data</h2>
+    </div>
+</div>
+
+
 <div class="col-xs-12">
     <div class="pd2 mrT2">
         <div class="text-center mrT2 mrB2">
@@ -5,26 +12,26 @@
             <h4>It’s easy to import from your computer</h4>
         </div>
         <!--Buttons-->
-        <ul class="import_type row mrB2 mrT4">
+        <ul class="import_type row mrB2 mrT4 pdT4">
             <a [routerLink]="['/pages','import','account']">
                 <li>
                     <img src="assets/images/new/acc-import.svg" />
-                    <h2 class="primary_clr">Accounts</h2>
-                    <h4>Import your accounts.</h4>
+                    <h2>Accounts</h2>
+                    <h4 class="grey_clr">Import your accounts.</h4>
                 </li>
             </a>
             <a [routerLink]="['/pages','import','group']">
                 <li>
                     <img src="assets/images/new/group-import.svg" />
-                    <h2 class="primary_clr">Groups</h2>
-                    <h4>Import your groups.</h4>
+                    <h2>Groups</h2>
+                    <h4 class="grey_clr">Import your groups.</h4>
                 </li>
             </a>
             <a [routerLink]="['/pages','import','entries']">
                 <li>
                     <img src="assets/images/new/tb-import.svg" />
-                    <h2 class="primary_clr">Trial Balance</h2>
-                    <h4>Import information about your trial balances such as account name, type, and credit or debit.</h4>
+                    <h2>Trial Balance</h2>
+                    <h4 class="grey_clr">Import information about your trial balances such as account name, type, and credit or debit.</h4>
                 </li>
             </a>
         </ul>
