@@ -127,7 +127,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     let o: TaxResponse = find(this.taxes, (item: TaxResponse) => item.uniqueName === tax );
     if (o) {
       return this.isTaxApplicable(o);
-    }else {
+    } else {
       return false;
     }
   }

@@ -97,6 +97,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
           result.push({ label: grp.name, value: grp.uniqueName });
         });
       }
+      console.log(result);
       this.flatAccountWGroupsList$ = Observable.of(result);
     });
 

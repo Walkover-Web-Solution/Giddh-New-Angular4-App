@@ -6,7 +6,7 @@
  * used to create new role
  */
 
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from './Inventory';
 import { ICommonItem } from './Company';
 
 export interface Permission {

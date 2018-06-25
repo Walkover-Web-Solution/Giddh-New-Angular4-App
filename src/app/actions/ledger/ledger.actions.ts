@@ -200,7 +200,7 @@ export class LedgerActions {
         return {type: 'EmptyAction'};
       } else {
         this._toasty.successToast('entry updated successfully');
-        if (response.request.generateInvoice && !response.body.invoiceGenerated) {
+        if (response.request.generateInvoice && !response.body.voucherGenerated) {
           let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
           // accountUniqueName, entryUniqueName
           invoiceGenModel.push({
@@ -254,7 +254,7 @@ export class LedgerActions {
         this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        this._toasty.successToast('Data filtered successfully');
+        // this._toasty.successToast('Data filtered successfully');
       }
       return {type: 'EmptyAction'};
     });
@@ -310,8 +310,8 @@ export class LedgerActions {
       };
     });
 
-    @Effect()
-    public ExportGroupLedger$: Observable<Action> = this.action$
+  @Effect()
+  public ExportGroupLedger$: Observable<Action> = this.action$
     .ofType(LEDGER.GROUP_EXPORT_LEDGER)
     .switchMap((action: CustomActions) => {
       return this._ledgerService.GroupExportLedger(action.payload.groupUniqueName, action.payload.queryRequest)
@@ -323,7 +323,7 @@ export class LedgerActions {
             this._toasty.clearAllToaster();
             this._toasty.errorToast(res.message, res.code);
           }
-          return { type: 'EmptyAction' };
+          return {type: 'EmptyAction'};
         });
     });
 
@@ -353,24 +353,24 @@ export class LedgerActions {
       };
     });
 
-  public GetCurrencyRate$: Observable<Action> = this.action$
-    .ofType(LEDGER.GET_CURRENCY_RATE)
-    .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
-    .map(response => {
-      return this.GetCurrencyRateResponse(response);
-    });
+  // public GetCurrencyRate$: Observable<Action> = this.action$
+  //   .ofType(LEDGER.GET_CURRENCY_RATE)
+  //   .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
+  //   .map(response => {
+  //     return this.GetCurrencyRateResponse(response);
+  //   });
 
-  @Effect()
-  public GetCurrencyRateResponse$: Observable<Action> = this.action$
-    .ofType(LEDGER.GET_CURRENCY_RATE_RESPONSE)
-    .map((action: CustomActions) => {
-      // if (action.payload.status === 'error') {
-      //   this._toasty.errorToast(action.payload.message, action.payload.code);
-      // }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+  // @Effect()
+  // public GetCurrencyRateResponse$: Observable<Action> = this.action$
+  //   .ofType(LEDGER.GET_CURRENCY_RATE_RESPONSE)
+  //   .map((action: CustomActions) => {
+  //     // if (action.payload.status === 'error') {
+  //     //   this._toasty.errorToast(action.payload.message, action.payload.code);
+  //     // }
+  //     return {
+  //       type: 'EmptyAction'
+  //     };
+  //   });
 
   constructor(private action$: Actions,
               private _toasty: ToasterService,
@@ -595,14 +595,14 @@ export class LedgerActions {
   public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: LEDGER.GROUP_EXPORT_LEDGER,
-      payload: { groupUniqueName, queryRequest }
+      payload: {groupUniqueName, queryRequest}
     };
   }
 
   public DeleteMultipleLedgerEntries(accountUniqueName: string, entryUniqueNames: string[]): CustomActions {
     return {
       type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES,
-      payload: { accountUniqueName, entryUniqueNames }
+      payload: {accountUniqueName, entryUniqueNames}
     };
   }
 

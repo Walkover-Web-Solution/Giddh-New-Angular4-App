@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -66,7 +66,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
   `],
   templateUrl: './aside-inventory.components.html'
 })
-export class AsideInventoryComponent implements OnInit, OnChanges {
+export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public animatePaneAside: EventEmitter<any> = new EventEmitter();
@@ -107,6 +107,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
     this.manageInProcess$.subscribe(s => {
       if (s.isOpen && s.isGroup) {
         this.isAddGroupOpen = true;
+        this.isAddStockOpen = false;
         if (s.isUpdate) {
           this.addGroup = false;
         } else {
@@ -114,6 +115,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
         }
       } else if (s.isOpen && !s.isGroup) {
         this.isAddGroupOpen = false;
+        this.isAddStockOpen = true;
         if (s.isUpdate) {
           this.addStock = false;
         } else {
@@ -129,7 +131,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
     });
 
     this.createStockSuccess$.subscribe(d => {
-      if (d) {
+      if (d && this.isAddStockOpen) {
         this.closeAsidePane();
       }
     });
@@ -193,6 +195,11 @@ export class AsideInventoryComponent implements OnInit, OnChanges {
 
   public ngOnChanges(c) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

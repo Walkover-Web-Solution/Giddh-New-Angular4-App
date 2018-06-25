@@ -11,7 +11,8 @@
             <!-- invoice num -->
             <div class="clearfix form-inline mrB">
                 <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
-                    <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no." [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" decimalDigitsDirective style="max-width:200px" />
+                    <!-- decimalDigitsDirective -->
+                    <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no." [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" style="max-width:200px" />
                 </div>
 
                 <!-- key not available in request 

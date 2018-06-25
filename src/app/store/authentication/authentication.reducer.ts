@@ -39,6 +39,8 @@ export interface AuthenticationState {
   isSignupWithPasswordInProcess: boolean;
   isSignupWithPasswordSuccess: boolean;
   signupVerifyEmail: string;
+  isForgotPasswordInProcess: boolean;
+  isResetPasswordInSuccess: boolean;
 }
 
 export enum userLoginStateEnum {
@@ -90,7 +92,9 @@ const initialState = {
   isLoginWithPasswordInProcess: false,
   isSignupWithPasswordInProcess: false,
   isSignupWithPasswordSuccess: false,
-  signupVerifyEmail: null
+  signupVerifyEmail: null,
+  isForgotPasswordInProcess: false,
+  isResetPasswordInSuccess: false
 };
 
 const sessionInitialState: SessionState = {
@@ -345,6 +349,33 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
     }
       return state;
     }
+    case LoginActions.forgotPasswordRequest:
+    return Object.assign({}, state, {
+      isForgotPasswordInProcess: false
+    });
+    case LoginActions.forgotPasswordResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          isForgotPasswordInProcess: true,
+        });
+    }
+      return state;
+    }
+    case LoginActions.resetPasswordRequest:
+    return Object.assign({}, state, {
+      isResetPasswordInSuccess: false
+    });
+    case LoginActions.resetPasswordResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          isResetPasswordInSuccess: true,
+          isForgotPasswordInProcess: false
+        });
+    }
+      return state;
+    }
     default:
       return state;
   }
@@ -490,6 +521,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
+        isCompanyCreated: false
         // isCompanyCreated: state.isCompanyCreated
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
