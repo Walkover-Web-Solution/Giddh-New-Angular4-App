@@ -8,6 +8,7 @@ import { EBANKS, YODLEE_FASTLINK } from './apiurls/settings.linked.accounts.api'
 import { IGetAllEbankAccountResponse, IGetEbankTokenResponse, IAccessTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Injectable()
 export class SettingsLinkedAccountsService {
@@ -174,7 +175,7 @@ export class SettingsLinkedAccountsService {
   public GetLoginForm(value): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_LOGIN_FORM.replace(':companyUniqueName', this.companyUniqueName).replace(':queryString', value)).map((res) => {
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_LOGIN_FORM.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', value)).map((res) => {
       let data: BaseResponse<any, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
@@ -192,4 +193,12 @@ export class SettingsLinkedAccountsService {
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 
+  public toFormGroup(response) {
+    let group: any = {};
+
+    response.row.forEach(row => {
+      group[row.field] = row.isOptional ? new FormControl(row.value || '', Validators.required) : new FormControl(row.value || '');
+    });
+    return new FormGroup(group);
+  }
 }
