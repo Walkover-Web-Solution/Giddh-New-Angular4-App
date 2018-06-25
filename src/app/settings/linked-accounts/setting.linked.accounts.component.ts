@@ -99,10 +99,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       if (data) {
         let accounts: IOption[] = [];
         data.map(d => {
-          accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
+          accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
         });
         this.accounts$ = accounts;
-    }});
+      }
+    });
 
     // get flatternaccounts
     // this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -122,13 +123,13 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public connectBank() {
     // get token info
-    this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        if (data.body.connectUrl) {
-          // this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
-        }
-      }
-    });
+    // this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
+    //   if (data.status === 'success') {
+    //     if (data.body.connectUrl) {
+    //       this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
+    //     }
+    //   }
+    // });
     this.connectBankModel.show();
     this.connectBankModel.config.ignoreBackdropClick = true;
   }
@@ -142,20 +143,19 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         if (data.body.user) {
           let token = _.cloneDeep(data.body.user.accessTokens[0]);
           this.yodleeForm.patchValue({
-              rsession: data.body.rsession,
-              app: token.appId,
-              redirectReq: true,
-              token: token.value,
-              // extraParams: ['callback=' + this.config.appUrl + 'company/' + this.companyUniqueName + '/yodlee/call-back']
-              extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
+            rsession: data.body.rsession,
+            app: token.appId,
+            redirectReq: true,
+            token: token.value,
+            extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
           });
           this.yodleeFormHTML.nativeElement.submit();
           this.connectBankModel.show();
         }
       }
     });
-
   }
+
   public closeModal() {
     this.connectBankModel.hide();
     this.iframeSource = undefined;
