@@ -9,8 +9,11 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 
 export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isLoading: boolean;
+  @Input() public entity: string;
   @Output() public onFileUpload = new EventEmitter();
   public file: File = null;
+  public selectedFileName: string = '';
+  public selectedType: string = '';
 
   constructor() {
     //
@@ -25,10 +28,16 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    // console.log(changes);
   }
 
   public onFileChange(file: FileList) {
     this.file = file.item(0);
+    if (this.file) {
+      this.selectedFileName = this.file.name;
+    } else {
+      this.selectedFileName = '';
+    }
   }
+
 }
