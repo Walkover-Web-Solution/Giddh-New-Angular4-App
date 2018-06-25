@@ -1,25 +1,29 @@
 <div id="exportModal" class="">
   <div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportGroupLedgerModal.emit('close')" aria-label="Close">×</span>
+    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportGroupLedgerModal.emit('close')"
+          aria-label="Close">×</span>
     <h3>Export Group Ledger</h3>
   </div>
   <div class="modal-body mrB4" id="export-body">
     <form name="addShareEmailForm" novalidate class="" autocomplete="off">
       <div class="pdB1 clearfix">
-          <div class="form-inline">
-        <div class="form-group">
+        <div class="form-inline">
+          <div class="form-group">
             <label class="w100">Date range: </label>
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="onSelectDateRange($event)" class="form-control" />
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                   (applyDaterangepicker)="onSelectDateRange($event)" class="form-control"/>
+          </div>
         </div>
-    </div>
       </div>
       <div class="pdB1 clearfix">
         <label class="w100">Type: </label>
         <label class="radio-inline pd0 w100">
-          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini" class="radio_theme cp">Mini
+          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
+                 class="radio_theme cp">Mini
         </label>
         <label class="radio-inline pd0 mrL2">
-          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail" class="radio_theme cp">Detailed
+          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail"
+                 class="radio_theme cp">Detailed
         </label>
       </div>
       <div class="pdB1 clearfix">

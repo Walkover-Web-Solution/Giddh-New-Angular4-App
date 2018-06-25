@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -43,12 +43,16 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
     :host .aside-pane {
       width: 480px;
     }
+    .aside-body {
+      margin-bottom: 80px;
+    }
   `],
   templateUrl: './aside.menu.account.component.html'
 })
-export class AsideMenuAccountComponent implements OnInit, OnDestroy {
+export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Input() public isPurchaseInvoice: boolean = false;
   public flatAccountWGroupsList$: Observable<IOption[]>;
   public select2Options: Select2Options = {
     multiple: false,
@@ -78,20 +82,11 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     // get groups list and refine list
-    this.groupService.GetGroupSubgroups('currentassets').subscribe(res => {
-      let result: IOption[] = [];
-      if (res.status === 'success' && res.body.length > 0) {
-        let sundryGrp = _.find(res.body, { uniqueName: 'sundrydebtors'});
-        if (sundryGrp) {
-          let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
-          _.forEach(flatGrps, (grp: GroupResponse) => {
-            result.push({ label: grp.name, value: grp.uniqueName });
-          });
-        }
-      }
-      this.flatAccountWGroupsList$ = Observable.of(result);
-      this.activeGroupUniqueName = 'sundrydebtors';
-    });
+    if (!this.isPurchaseInvoice) {
+      this.getGroups('currentassets', 'sundrydebtors');
+    } else {
+      this.getGroups('currentliabilities', 'sundrycreditors');
+    }
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
@@ -100,6 +95,31 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy {
 
   public closeAsidePane(event) {
     this.closeAsideEvent.emit(event);
+  }
+
+  public getGroups(parentGrp, findItem) {
+    this.groupService.GetGroupSubgroups(parentGrp).subscribe(res => {
+      let result: IOption[] = [];
+      if (res.status === 'success' && res.body.length > 0) {
+        let sundryGrp = _.find(res.body, {uniqueName: findItem});
+        if (sundryGrp) {
+          let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
+          _.forEach(flatGrps, (grp: GroupResponse) => {
+            result.push({ label: grp.name, value: grp.uniqueName });
+          });
+        }
+      }
+      this.flatAccountWGroupsList$ = Observable.of(result);
+      this.activeGroupUniqueName = 'sundrycreditors';
+    });
+  }
+
+  public ngOnChanges(s: SimpleChanges) {
+    if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
+      this.getGroups('currentliabilities', 'sundrycreditors');
+    } else if (s && s['isPurchaseInvoice'] && !s['isPurchaseInvoice'].currentValue) {
+      this.getGroups('currentassets', 'sundrydebtors');
+    }
   }
 
   public ngOnDestroy() {

@@ -1,25 +1,23 @@
-import { from } from 'rxjs/observable/from';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
+import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { orderBy } from '../../lodash-optimized';
+
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   { label: '12', value: '12' },
@@ -181,11 +179,13 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     } else {
       this.allItemsSelected = false;
     }
-    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      item.isSelected = this.allItemsSelected ? true : false;
-      return item;
-    });
-    this.insertItemsIntoArr();
+    if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length) {
+      this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+        item.isSelected = this.allItemsSelected ? true : false;
+        return item;
+      });
+      this.insertItemsIntoArr();
+    }
   }
 
   public toggleItem(item: any, action: boolean) {

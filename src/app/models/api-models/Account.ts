@@ -1,7 +1,7 @@
-import { IAccountCreate, IAccount, ICountryClass } from '../interfaces/accountCreate.interface';
+import { IAccount, IAccountCreate, ICountryClass } from '../interfaces/accountCreate.interface';
 import { IGstDetailListItem } from '../interfaces/gstDetailListItem.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from './Inventory';
 import { IFlattenAccountsResultItem } from '../interfaces/flattenAccountsResultItem.interface';
 import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
@@ -219,6 +219,9 @@ export class AccountResponseV2 {
   public addresses: IAccountAddress[];
   public accountBankDetails: AccountBankDetails[];
   public cashFreeVirtualAccountData: CashFreeVirtualAccount;
+  public closingBalanceTriggerAmount: number;
+  public closingBalanceTriggerAmountType: string;
+
 }
 
 /*
