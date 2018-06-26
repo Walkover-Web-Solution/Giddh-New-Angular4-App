@@ -2,12 +2,10 @@
     <h1 class="section_head pdT0">Add Bank Account</h1>
     <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
     <div class="mrT1">
-        <p> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check
-            again after some time.</p>
+        <p> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again after some time.</p>
     </div>
     <div [hidden]="true">
-        <form action='https://node.developer.yodlee.com/authenticate/restserver' #yodleeFormHTML method='post' id='rsessionPost'
-            target="yodlee_fastlink" [formGroup]="yodleeForm">
+        <form action='https://node.developer.yodlee.com/authenticate/restserver' #yodleeFormHTML method='post' id='rsessionPost' target="yodlee_fastlink" [formGroup]="yodleeForm">
             <input type='text' name='rsession' placeholder='rsession' formControlName="rsession" id='rsession' />
             <input type='text' name='app' placeholder='FinappId' formControlName="app" id='finappId' />
             <input type='text' name='redirectReq' placeholder='true/false' formControlName="redirectReq" />
@@ -91,13 +89,12 @@
                         </div>
                         <div class="account-date clearfix">
                             <b>Entries From</b>:
-                            <label for="date_{{accIdx}}_{{i}}" class="cp">{{card.transactionDate}}</label>
+                            <label for="date_{{accIdx}}_{{i}}" class="cp">{{card.transactionDate | date}}</label>
                             <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
                                 <input [(ngModel)]="card.transactionDate" name="transactionDate_{{accIdx}}_{{i}}" id="date_{{accIdx}}_{{i}}" />
                             </a>
                             <div style="position: absolute; z-index:10; min-height:290px;">
-                                <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (selectionDone)="onUpdateDate($event, card)"
-                                    [showWeeks]="true">
+                                <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (selectionDone)="onUpdateDate($event, card)" [showWeeks]="true">
                                 </datepicker>
                             </div>
                         </div>
