@@ -17,19 +17,14 @@
   </button> {{imagePreview}} -->
     <div class="clearfix">
         <ul class="designTool">
-            <!--<li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
+            <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
-            </li>-->
-            <!--<li [hidden]="!templateUISectionVisibility.templates">
+            </li>
+            <li [hidden]="!templateUISectionVisibility.templates">
                 <i class="ico-template"></i> <label>Change up to template</label>
-
                 <div class="clearfix">
                     <ul class="templateView">
-
                         <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
-                            <img src="./assets/images/template1.jpg" alt="" />
-                        </li>
-                        <li (click)="onDesignChange('uniqueName', 'common_template_a')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="onDesignChange('uniqueName', 'gst_template_b')">
@@ -44,10 +39,22 @@
                         <li (click)="onDesignChange('uniqueName', 'gst_template_e')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_f')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_g')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_h')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_i')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
                     </ul>
                 </div>
 
-            </li>-->
+            </li>
             <li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
@@ -57,7 +64,7 @@
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
-                                <input type="file" id="logo-edit" [options]="fileUploadOptions" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
+                                <input type="file" accept="image/png, image/jpeg" id="logo-edit" [options]="fileUploadOptions" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
                             </label>
                             <label for="logo-edit">

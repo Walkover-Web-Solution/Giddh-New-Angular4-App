@@ -4,6 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OutTemplateComponent } from './edit-template/out-tempate/out.template.component';
 import { ContentFilterComponent } from './edit-template/filters-container/content-filters/content.filters.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { GstTemplateAComponent } from './edit-template/out-tempate/templates/gst-template-a/gst-template-a.component';
+import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst-template-b/gst-template-b.component';
+import { GstTemplateCComponent } from './edit-template/out-tempate/templates/gst-template-c/gst-template-c.component';
+import { GstTemplateDComponent } from './edit-template/out-tempate/templates/gst-template-d/gst-template-d.component';
+import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
 
 @NgModule({
   imports: [
@@ -12,7 +17,15 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     ReactiveFormsModule,
     CollapseModule,
   ],
-  declarations: [ OutTemplateComponent, ContentFilterComponent ],
+  declarations: [
+    OutTemplateComponent,
+    ContentFilterComponent,
+    GstTemplateAComponent,
+    GstTemplateBComponent,
+    GstTemplateCComponent,
+    GstTemplateDComponent,
+    GstTemplateEComponent
+  ],
   exports: [
     OutTemplateComponent,
     ContentFilterComponent,
