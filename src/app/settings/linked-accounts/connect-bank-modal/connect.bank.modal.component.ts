@@ -54,7 +54,6 @@ export class ConnectBankModalComponent implements OnChanges {
         })
         .map((res) => {
           if (res.status === 'success') {
-            // console.log(res);
             let data = res.body.provider;
             this.dataSourceBackup = res;
             return data;
@@ -89,6 +88,9 @@ export class ConnectBankModalComponent implements OnChanges {
   public onCancel() {
     this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
+    this.loginForm.reset();
+    this.step = 1;
+    this.selectedProvider = {};
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -96,7 +98,6 @@ export class ConnectBankModalComponent implements OnChanges {
       if (e.item) {
         this.selectedProvider = e.item;
       }
-      // console.log(e);
     }, 400);
   }
 
@@ -150,7 +151,6 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public onSelectProvider() {
-    // console.log(this.selectedProvider);
     this.getProviderLoginForm(this.selectedProvider.id);
   }
 
@@ -160,7 +160,6 @@ export class ConnectBankModalComponent implements OnChanges {
   public getProviderLoginForm(providerId) {
     this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
       if (a && a.status === 'success') {
-        // console.log(a);
         let response = _.cloneDeep(a.body.loginForm[0]);
         this.loginForm.patchValue({
           id: response.id,
@@ -171,7 +170,6 @@ export class ConnectBankModalComponent implements OnChanges {
         response.row.map((item, i) => {
           this.addInputRow(i, item);
         });
-        // console.log(this.loginForm.value);
         this.step = 2;
       }
     });
@@ -181,12 +179,17 @@ export class ConnectBankModalComponent implements OnChanges {
    * onSubmitLoginForm
    */
   public onSubmitLoginForm() {
-    console.log(this.loginForm.value);
-    this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(this.loginForm.value), this.selectedProvider.id).subscribe(res => {
+    let objToSend = {
+      loginForm: []
+    };
+    objToSend.loginForm.push(this.loginForm.value);
+    this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).subscribe(res => {
       if (res.status === 'success') {
-        console.log('res', res);
         this._toaster.successToast(res.body);
-        this.modalCloseEvent.emit(true);
+        this.onCancel();
+      } else {
+        this._toaster.errorToast(res.message);
+        this.onCancel();
       }
     });
   }
