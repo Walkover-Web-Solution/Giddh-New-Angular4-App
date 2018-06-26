@@ -4,8 +4,42 @@
     <h3 class="">Connect Banks</h3>
 </div>
 <div id="myFrame" class="modal-body clearfix">
-    <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
+    <div class="" *ngIf="step === 1">
+        <div class="form-group">
+            <label>Search Provider <sup>*</sup></label>
+            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required maxlength="50" placeholder="Search Provider"
+                pattern="^[^\s]+(\s+[^\s]+)*$">
+
+            <ng-template #rt let-r="result" let-t="term">
+                <span (keyup.enter)="typeaheadOnSelect(r)">{{ r.name }}</span>
+            </ng-template>
+        </div>
+        <button class="btn btn-success btn-sm" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">Next</button>
+    </div>
+
+    <div class="" *ngIf="step === 2">
+        <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off" (ngSubmit)="onSubmitLoginForm()">
+            <div formArrayName="row" class="row">
+                <div class="col-xs-6" *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
+                    <div [formGroupName]="i" class="form-group">
+                        <ng-container formArrayName="field">
+                            <ng-container *ngFor="let field of item.get('field').controls; let idx=index;">
+                                <ng-container [formGroupName]="idx">
+                                    <label> {{field.get('name').value}}</label>
+                                    <input [type]="field.get('type').value" [required]="field.get('isOptional').value" [readonly]="!field.get('valueEditable').value" class="form-control" formControlName="value" />
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="btn btn-success btn-sm" type="submit">Submit</button>
+        </form>
+    </div>
+    <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
     <ng-template #frame>
         <iframe id="player" *ngIf="url" class="embed-responsive-item" [src]="url" frameborder="0"></iframe>
-    </ng-template>
+    </ng-template> -->
 </div>
