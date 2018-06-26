@@ -377,8 +377,8 @@
                         </td>
                             -->
                             <td style="width: 110px;">
-                                <input type="number" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
-                                />
+                                <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
+                                    decimalDigitsDirective [DecimalPlaces]="2" />
                                 <!-- <input type="number"  name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" /> -->
                             </td>
                             <td style="width: 100px">
@@ -388,11 +388,12 @@
                             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
                         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)"
+                                    (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
                             <td style="width: 120px;">
-                                <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total" />
+                                <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" (keyup)="calculateAmount(transaction, entry)" decimalDigitsDirective [DecimalPlaces]="2" />
                             </td>
                             <td class="action-panel-td text-center">
                                 <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">

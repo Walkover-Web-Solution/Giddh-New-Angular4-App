@@ -1174,6 +1174,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     $event.stopPropagation();  // <- that will stop propagation on lower layers
   }
 
+  public calculateAmount(txn, entry) {
+    let total = ((txn.total * 100) + (100 + entry.taxSum)
+      * entry.discountSum);
+    txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
+
+    if (txn.accountUniqueName) {
+      if (txn.stockDetails) {
+        txn.rate = Number((txn.amount / txn.quantity).toFixed(2));
+      }
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   public clickedOutside(event) {
     if (event.target.id === 'depositBoxTrigger') {
