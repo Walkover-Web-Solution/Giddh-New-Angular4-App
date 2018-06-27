@@ -10,7 +10,6 @@ import { IPagination } from '../interfaces/paginatedResponse.interface';
 import { OtherSalesItemClass, SalesEntryClass } from './Sales';
 import { INameUniqueName } from './Inventory';
 
-
 export interface IInvoiceResult {
   companyName: string;
   uniqueName: string;
@@ -456,6 +455,7 @@ export class CustomTemplateResponse {
   public copyFrom?: string; // done
   public logoUniqueName?: string;
   public templateType?: string;
+  public type?: string;
 }
 
 export class Esignature {
