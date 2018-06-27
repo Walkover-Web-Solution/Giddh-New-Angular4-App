@@ -11,7 +11,7 @@
                 pattern="^[^\s]+(\s+[^\s]+)*$">
 
             <ng-template #rt let-r="result" let-t="term">
-                <span (keyup.enter)="typeaheadOnSelect(r)">{{ r.name }}</span>
+                <span (keyup.enter)="typeaheadOnSelect(r)"><img src="{{r.favicon}}" class="provider_ico" /> {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
             </ng-template>
         </div>
         <button class="btn btn-success btn-sm" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">Next</button>
@@ -36,6 +36,7 @@
 
 
             <button class="btn btn-success btn-sm" type="submit">Submit</button>
+            <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span class="primary_clr">In Process</span><p>You can wait or check again in 15-20 min</p></small>
         </form>
     </div>
     <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>

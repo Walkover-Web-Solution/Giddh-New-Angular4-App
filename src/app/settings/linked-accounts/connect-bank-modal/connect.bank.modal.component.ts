@@ -17,6 +17,9 @@ import { ToasterService } from '../../../services/toaster.service';
           }
           .connect-page .page-title {
                 margin-top: 0;
+          }
+          .provider_ico {
+            margin-right: 10px;
           }`]
 })
 
@@ -34,6 +37,8 @@ export class ConnectBankModalComponent implements OnChanges {
   public selectedProvider: any = {};
   public step: number = 1;
   public loginForm: FormGroup;
+  public bankSyncInProgress: boolean;
+  public apiInInterval: any;
 
   constructor(public sanitizer: DomSanitizer,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
@@ -91,6 +96,8 @@ export class ConnectBankModalComponent implements OnChanges {
     this.loginForm.reset();
     this.step = 1;
     this.selectedProvider = {};
+    this.bankSyncInProgress = false;
+    clearInterval(this.apiInInterval);
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -186,11 +193,57 @@ export class ConnectBankModalComponent implements OnChanges {
     this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).subscribe(res => {
       if (res.status === 'success') {
         this._toaster.successToast(res.body);
-        this.onCancel();
+        let providerId = res.body.replace(/[^0-9]+/ig, '');
+        if (providerId) {
+          this.getBankSyncStatus(providerId);
+        } else {
+          this.onCancel();
+        }
       } else {
         this._toaster.errorToast(res.message);
         this.onCancel();
       }
     });
+  }
+
+  /**
+   * getBankSyncStatus
+   */
+  public getBankSyncStatus(providerId) {
+    console.log(providerId);
+    this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
+      if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
+        this.bankSyncInProgress = true;
+        let validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
+        if (!validateProvider) {
+          this.recursiveBankSyncStatus(providerId);
+        } else {
+          clearInterval(this.apiInInterval);
+          this.onCancel();
+        }
+      }
+    });
+  }
+
+  /**
+   * validateProviderResponse
+   */
+  public validateProviderResponse(provider) {
+    let status = provider.status.toLocaleLowerCase();
+      if (status === 'success' || status === 'failed') {
+        this.bankSyncInProgress = false;
+        return true;
+      } else {
+        return false;
+      }
+  }
+
+  /**
+   * recursiveBankSyncStatus
+   */
+  public recursiveBankSyncStatus(providerId) {
+    this.apiInInterval = setInterval(() => {
+      this.getBankSyncStatus(providerId);
+    }, 10000);
   }
 }
