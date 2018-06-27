@@ -22,4 +22,5 @@ export const YODLEE_FASTLINK = {
   SEARCH_BANKS: COMMON_URL + 'yodlee/search?name=:queryString',
   GET_LOGIN_FORM: COMMON_URL + 'yodlee/login-form/:providerId',
   ADD_PROVIDER: COMMON_URL + 'yodlee/add-provider-account?providerId=:providerId',
+  GET_BANK_SYNC_STATUS: COMMON_URL + 'yodlee/status/:providerId',
 };
