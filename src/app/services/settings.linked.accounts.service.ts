@@ -192,4 +192,16 @@ export class SettingsLinkedAccountsService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
+
+  /**
+   * Bank Sync
+   */
+  public GetBankSyncStatus(value): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_BANK_SYNC_STATUS.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', value)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
 }
