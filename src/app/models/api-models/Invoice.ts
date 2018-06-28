@@ -455,6 +455,7 @@ export class CustomTemplateResponse {
   public name: string;
   public copyFrom?: string; // done
   public logoUniqueName?: string;
+  public templateType?: string;
 }
 
 export class Esignature {
