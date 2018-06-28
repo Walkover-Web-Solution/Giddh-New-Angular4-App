@@ -11,7 +11,7 @@
                 pattern="^[^\s]+(\s+[^\s]+)*$">
 
             <ng-template #rt let-r="result" let-t="term">
-                <span (keyup.enter)="typeaheadOnSelect(r)"><img src="{{r.favicon}}" class="provider_ico" /> {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
+                <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img src="{{r.favicon}}" /></span> {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
             </ng-template>
         </div>
         <button class="btn btn-success btn-sm" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">Next</button>
