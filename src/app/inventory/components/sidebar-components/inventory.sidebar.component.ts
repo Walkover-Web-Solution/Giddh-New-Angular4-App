@@ -7,6 +7,8 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, 
 import { Observable } from 'rxjs/Observable';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'inventory-sidebar',  // <home></home>
@@ -32,7 +34,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private sidebarAction: SidebarAction) {
+  constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router) {
     this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).takeUntil(this.destroyed$);
     this.sidebarRect = window.screen.height;
     // console.log(this.sidebarRect);
@@ -61,6 +63,12 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
           this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
         }
       });
+  }
+
+  public showBranchScreen() {
+    // this.store.dispatch(this.inventoryAction.ResetInventoryState());
+    this.store.dispatch(this.sidebarAction.ShowBranchScreen(true));
+    // this.router.navigate(['inventory']);
   }
 
   public ngOnDestroy() {
