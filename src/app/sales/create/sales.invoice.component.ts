@@ -626,6 +626,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
+      } else {
+        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
       }
     } else {
       obj.depositAccountUniqueName = '';
