@@ -1,6 +1,7 @@
 
 export const TB_PL_BS_API = {
   GET_TRIAL_BALANCE: 'company/:companyUniqueName/trial-balance', // get call
+  GET_V2_TRIAL_BALANCE: 'v2/company/:companyUniqueName/trial-balance', // get call
   GET_BALANCE_SHEET: 'company/:companyUniqueName/v2/balance-sheet',
   // GET_PROFIT_LOSS: 'company/:companyUniqueName/v2/profit-loss',
   GET_PROFIT_LOSS: 'company/:companyUniqueName/v3/profit-loss?tax=30', // shubhendra sir

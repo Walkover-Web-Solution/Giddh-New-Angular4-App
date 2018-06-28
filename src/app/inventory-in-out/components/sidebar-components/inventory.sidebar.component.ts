@@ -9,6 +9,7 @@ import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 
 @Component({
   selector: 'invetory-sidebar',  // <home></home>
@@ -42,12 +43,17 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterV
    */
   constructor(private store: Store<AppState>,
               private _router: ActivatedRoute,
-              private _inventoryAction: InventoryAction) {
+              private _inventoryAction: InventoryAction,
+              private sideBarAction: SidebarAction) {
     this.store.dispatch(this._inventoryAction.GetStock());
     this.stocksList$ = this.store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).takeUntil(this.destroyed$);
     this.inventoryUsers$ = this.store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).takeUntil(this.destroyed$);
     this.sidebarRect = window.screen.height;
-
+    this.store.take(1).subscribe(state => {
+      if (state.inventory.groupsWithStocks === null) {
+        this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
+      }
+    });
     // console.log(this.sidebarRect);
   }
 

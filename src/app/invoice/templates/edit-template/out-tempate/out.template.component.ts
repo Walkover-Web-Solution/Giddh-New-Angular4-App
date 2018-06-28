@@ -26,9 +26,14 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   public showCompanyName: boolean;
   public companyGSTIN: string;
   public companyPAN: string;
+  public fieldsAndVisibility: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(
+    private store: Store<AppState>,
+    private invoiceAction: InvoiceActions,
+    private invoiceTemplatesService: InvoiceTemplatesService,
+    private _invoiceUiDataService: InvoiceUiDataService) {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
@@ -45,8 +50,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
-      this.inputTemplate = _.cloneDeep(template);
+
+    this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
+      this.fieldsAndVisibility = _.cloneDeep(obj);
     });
 
     this._invoiceUiDataService.logoPath.subscribe((path: string) => {
@@ -55,6 +61,14 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
 
     this._invoiceUiDataService.isLogoVisible.subscribe((yesOrNo: boolean) => {
       this.showLogo = _.cloneDeep(yesOrNo);
+    });
+
+    this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+      if (template && template.logoUniqueName) {
+        this.showLogo = true;
+        this.logoSrc = 'http://apitest.giddh.com/company/abcdeindore152990675954306wuxc/image/' + template.logoUniqueName;
+      }
+      this.inputTemplate = _.cloneDeep(template);
     });
 
     this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
