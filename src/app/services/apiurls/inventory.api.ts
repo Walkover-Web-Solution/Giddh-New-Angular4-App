@@ -39,5 +39,12 @@ export const INVENTORY_API = {
   UPDATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
   UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // PUT call
   GET_RATE_FOR_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock', // Get call
-  GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName' // GET call
+  GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
+
+  BRANCH_TRANSFER: {
+    TRANSFER: 'inventory-transfer/'
+  },
+  LINKED_STOCKS: {
+    LINKED_STOCKS: 'company/:companyUniqueName/linked-sources'
+  }
 };

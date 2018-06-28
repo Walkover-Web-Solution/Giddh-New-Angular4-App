@@ -196,6 +196,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public voucherNumber: string;
   public depositAccountUniqueName: string;
   public dropdownisOpen: boolean = false;
+
+  public stockTaxList = []; // New
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -863,6 +866,30 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           }
         });
       });
+
+      if (selectedAcc.additional.stock) {
+        if (selectedAcc.additional.stock.stockTaxes && selectedAcc.additional.stock.stockTaxes.length) {
+          this.stockTaxList = selectedAcc.additional.stock.stockTaxes;
+        } else {
+          this.stockTaxList = [];
+        }
+      } else if (selectedAcc.additional.parentGroups && selectedAcc.additional.parentGroups.length) {
+        let parentAcc = selectedAcc.additional.parentGroups[0].uniqueName;
+        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+          let appTaxes = [];
+          this.activeAccount$.take(1).subscribe(acc => {
+            if (acc && acc.applicableTaxes) {
+              acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+              this.stockTaxList = appTaxes;
+            }
+          });
+        }
+      } else {
+        this.stockTaxList = [];
+      }
     } else {
       txn.isStockTxn = false;
       this.toggleStockFields(txn);
@@ -997,7 +1024,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public removeTransaction(entryIdx: number) {
     if (this.invFormData.entries.length > 1) {
-      this.invFormData.entries = _.remove(this.invFormData.entries, (entry, index) => {
+      (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
         return index !== entryIdx;
       });
     } else {
@@ -1147,6 +1174,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public clickedInside($event: Event) {
     $event.preventDefault();
     $event.stopPropagation();  // <- that will stop propagation on lower layers
+  }
+
+  public calculateAmount(txn, entry) {
+    let total = ((txn.total * 100) + (100 + entry.taxSum)
+      * entry.discountSum);
+    txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
+
+    if (txn.accountUniqueName) {
+      if (txn.stockDetails) {
+        txn.rate = Number((txn.amount / txn.quantity).toFixed(2));
+      }
+    }
   }
 
   @HostListener('document:click', ['$event'])
