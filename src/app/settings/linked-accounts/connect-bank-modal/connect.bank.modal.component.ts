@@ -20,7 +20,16 @@ import { ToasterService } from '../../../services/toaster.service';
           }
           .provider_ico {
             margin-right: 10px;
-          }`]
+            max-width: 16px;
+            max-height: 16px;
+            float: left;
+            object-fit: contain;
+          }
+          .provider_ico img {
+            width: 100%;
+            height: auto;
+          }
+          `]
 })
 
 export class ConnectBankModalComponent implements OnChanges {
@@ -97,7 +106,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this.step = 1;
     this.selectedProvider = {};
     this.bankSyncInProgress = false;
-    clearInterval(this.apiInInterval);
+    // clearInterval(this.apiInInterval);
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -210,15 +219,16 @@ export class ConnectBankModalComponent implements OnChanges {
    * getBankSyncStatus
    */
   public getBankSyncStatus(providerId) {
-    console.log(providerId);
+    let validateProvider;
     this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
-        let validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
+        validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
         if (!validateProvider) {
-          this.recursiveBankSyncStatus(providerId);
+            setTimeout(() => {
+              this.getBankSyncStatus(providerId);
+            }, 10000);
         } else {
-          clearInterval(this.apiInInterval);
           this.onCancel();
         }
       }
@@ -229,7 +239,7 @@ export class ConnectBankModalComponent implements OnChanges {
    * validateProviderResponse
    */
   public validateProviderResponse(provider) {
-    let status = provider.status.toLocaleLowerCase();
+    let status = provider.status.toLowerCase();
       if (status === 'success' || status === 'failed') {
         this.bankSyncInProgress = false;
         return true;
@@ -238,12 +248,4 @@ export class ConnectBankModalComponent implements OnChanges {
       }
   }
 
-  /**
-   * recursiveBankSyncStatus
-   */
-  public recursiveBankSyncStatus(providerId) {
-    this.apiInInterval = setInterval(() => {
-      this.getBankSyncStatus(providerId);
-    }, 10000);
-  }
 }
