@@ -28,6 +28,7 @@ export class SettingsComponent implements OnInit {
   @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
   @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
   @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
+  @ViewChild('bunchComp') public bunchComp: SettingsTagsComponent;
 
   public isUserSuperAdmin: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
