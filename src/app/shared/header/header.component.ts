@@ -56,7 +56,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
   { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
   { label: 'Contact', value: '/pages/contact' },
-  { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
+  // { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
   { label: 'Import', value: '/pages/import' },
 ];
 
