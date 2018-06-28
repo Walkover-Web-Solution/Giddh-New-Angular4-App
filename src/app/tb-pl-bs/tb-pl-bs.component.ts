@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
@@ -16,8 +16,10 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
 
   public selectedCompany: CompanyResponse;
   public CanTBLoad: boolean = true;
+  public CanNewTBLoad: boolean = false;
   public CanPLLoad: boolean = false;
   public CanBSLoad: boolean = false;
+  public CanNewTBLoadOnThisEnv: boolean = false;
 
   @ViewChild('staticTabsTBPL') public staticTabs: TabsetComponent;
 
@@ -30,6 +32,13 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
+
+    if (AppUrl && AppUrl.indexOf('test.giddh.com') > -1) {
+      this.CanNewTBLoadOnThisEnv = true;
+    } else {
+      this.CanNewTBLoadOnThisEnv = false;
+    }
+
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();

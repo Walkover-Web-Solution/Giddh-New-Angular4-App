@@ -12,6 +12,8 @@ import { INVOICE_API } from '../../../../../services/apiurls/invoice';
 import { Observable } from 'rxjs/Observable';
 import { UploaderOptions } from 'ngx-uploader/index';
 import { Configuration } from './../../../../../app.constant';
+import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
+import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -47,7 +49,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public formData: FormData;
   public files: UploadFile[] = [];
   public uploadInput: EventEmitter<UploadInput>;
-  public fileUploadOptions: UploaderOptions;
+  public fileUploadOptions: UploaderOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
   public humanizeBytes: any;
   public dragOver: boolean;
   public imagePreview: any;
@@ -55,9 +57,15 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public isFileUploadInProgress: boolean = false;
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
+  private sampleTemplates: CustomTemplateResponse[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _invoiceUiDataService: InvoiceUiDataService, private _toasty: ToasterService, private store: Store<AppState>) {
+  constructor(
+    private _invoiceUiDataService: InvoiceUiDataService,
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _invoiceTemplatesService: InvoiceTemplatesService,
+    private invoiceActions: InvoiceActions) {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
@@ -70,11 +78,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
+
+    this.store.select(s => s.invoiceTemplate.sampleTemplates).take(2).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
+      this.sampleTemplates = _.cloneDeep(sampleTemplates);
+    });
+
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
-    this.fileUploadOptions = { concurrency: 1 };
+    // this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
     this.humanizeBytes = humanizeBytes;
     this.sessionId$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
@@ -83,6 +96,31 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
+      let op = {
+        header: {},
+        table: {},
+        footer: {}
+      };
+
+      if (this.customTemplate && this.customTemplate.sections) {
+        this.customTemplate.sections.forEach((section, ind) => {
+          let out = section.content;
+          for (let o of section.content) {
+            if (ind === 0) {
+              // op.header[o.field] = o.display ? 'y' : 'n';
+              op.header[o.field] = o;
+            }
+            if (ind === 1) {
+              op.table[o.field] = o;
+            }
+            if (ind === 2) {
+              op.footer[o.field] = o;
+            }
+          }
+        });
+
+        this._invoiceUiDataService.setFieldsAndVisibility(op);
+      }
     });
   }
 
@@ -111,8 +149,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    * onDesignChange
    */
   public onDesignChange(fieldName, value) {
-    let template = _.cloneDeep(this.customTemplate);
-    template[fieldName] = value;
+    let template;
+    if (fieldName === 'uniqueName') { // change whole template
+      const allSampleTemplates = _.cloneDeep(this.sampleTemplates);
+      const selectedTemplate = this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value);
+      template = selectedTemplate ? selectedTemplate : _.cloneDeep(this.customTemplate);
+    } else { // change specific field
+      template = _.cloneDeep(this.customTemplate);
+      template[fieldName] = value;
+    }
+
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 
@@ -155,13 +201,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
   public onUploadMyFileOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
+      this.logoAttached = true;
       this.previewFile(output.file);
+      this.toogleLogoVisibility(true);
     } else if (output.type === 'start') {
       this.isFileUploadInProgress = true;
       this.removeAllFiles();
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
+        this.updateTemplate(output.file.response.body.uniqueName);
         this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
         this.isFileUploaded = true;
         this._toasty.successToast('file uploaded successfully.');
@@ -169,6 +218,43 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this._toasty.errorToast(output.file.response.message, output.file.response.code);
       }
     }
+  }
+
+  public updateTemplate(logoUniqueName: string) {
+    let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    if (data.name) {
+      data.logoUniqueName = logoUniqueName;
+      data.updatedAt = null;
+      data.updatedBy = null;
+      data.copyFrom = 'gst_template_a';
+      data.sections[0].content[3].label = '';
+      data.sections[0].content[0].label = '';
+      data.sections[1].content[8].field = 'taxes';
+      data.sections[2].content[3].field = 'grandTotal';
+      if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
+        data.sections[1].content[8].field = 'taxableValue';
+      }
+
+      data = this.newLineToBR(data);
+
+      this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
+        if (res.status === 'success') {
+          this._toasty.successToast('Template Updated Successfully.');
+          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+        } else {
+          this._toasty.errorToast(res.message, res.code);
+        }
+      });
+    } else {
+      this._toasty.errorToast('Please enter template name.');
+    }
+  }
+
+  public newLineToBR(template) {
+    template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    return template;
   }
 
   public startUpload(): void {
@@ -218,8 +304,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.uploadInput.emit({ type: 'removeAll' });
   }
 
-  public toogleLogoVisibility(): void {
-    this.showLogo = !this.showLogo;
+  public toogleLogoVisibility(show?: boolean): void {
+    this.showLogo = show ? show : !this.showLogo;
     this._invoiceUiDataService.setLogoVisibility(this.showLogo);
   }
 
@@ -242,13 +328,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    * validatePrintSetting
    */
   public validatePrintSetting(val, idx, marginPosition) {
-    let paddingCordinatesValue = [200,50,100,50];
+    let paddingCordinatesValue = [200, 50, 100, 50];
     let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
     if (val > paddingCordinatesValue[idx]) {
       let maxVal = paddingCordinatesValue[idx];
       this.customTemplate[marginPosition] = maxVal;
       this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
-      this._toasty.errorToast(paddingCordinates[idx] + ' margin cannot be more than ' + paddingCordinatesValue[idx]);      
+      this._toasty.errorToast(paddingCordinates[idx] + ' margin cannot be more than ' + paddingCordinatesValue[idx]);
     }
   }
 
