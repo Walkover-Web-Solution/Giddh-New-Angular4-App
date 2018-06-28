@@ -223,8 +223,9 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- <div class="clearfix">
+        <!-- <div class="clearfix">
                 <div>
                     <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections[2].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Note 2
                 </div>
@@ -236,18 +237,17 @@
                     </div>
                 </div>
             </div> -->
-            <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mrT1">
-                <div class="form-group"> <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections[2].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Thank you for your business</div>
+        <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mrT1">
+            <div class="form-group"> <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections[2].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Thank you for your business</div>
+        </div>
+        <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
+            <div>
+                <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections[2].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Slogan
             </div>
-            <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
-                <div>
-                    <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections[2].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Slogan
-                </div>
-                <div class="form-group mrL3 clearfix">
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <textarea class="form-control" name="mdg22" [(ngModel)]='customTemplate.sections[2].content[9].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[9].display">Note:Contact us for queries on these questions</textarea>
-                        </div>
+            <div class="form-group mrL3 clearfix">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <textarea class="form-control" name="mdg22" [(ngModel)]='customTemplate.sections[2].content[9].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[9].display">Note:Contact us for queries on these questions</textarea>
                     </div>
                 </div>
             </div>
