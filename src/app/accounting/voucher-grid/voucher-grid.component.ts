@@ -151,6 +151,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.dateField.nativeElement.focus();
       }
     });
+
     this.refreshEntry();
 
     // this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
@@ -257,9 +258,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountFocus() to show accountList
    */
   public onAccountFocus(elem, trxnType, indx) {
+    this.selectedField = 'account';
     this.showConfirmationBox = false;
     this.inputForList = _.cloneDeep(this.flattenAccounts);
-    this.selectedField = 'account';
     this.selectedParticular = elem;
     this.selectRow(true, indx);
     this.filterAccount(trxnType);
@@ -301,6 +302,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
+    if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts')) {
+      console.log('show check details box');
+    }
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
     if (acc) {
@@ -315,7 +319,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       transaction.selectedAccount = accModel;
       transaction.stocks = acc.stocks;
 
-      // tally differnce amount
+      // tally difference amount
       transaction.amount = this.calculateDiffAmount(transaction.type);
       transaction.amount = transaction.amount ? transaction.amount : null;
 
@@ -406,12 +410,26 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public saveEntry() {
     let idx = 0;
     let data = _.cloneDeep(this.requestObj);
+    const voucherType = _.clone(data.voucherType);
+    data.entryDate = this.journalDate;
     // data.transactions = this.removeBlankTransaction(data.transactions);
     data.transactions = this.validateTransaction(data.transactions);
 
     if (!data.transactions) {
       return;
     }
+
+    const foundContraEntry: boolean = this.validateForContraEntry(data);
+
+    if (foundContraEntry && data.voucherType !== 'Contra') {
+      this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
+      return;
+    }
+    if (!foundContraEntry && data.voucherType === 'Contra') {
+      this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
+      return;
+    }
+
     if (this.totalCreditAmount === this.totalDebitAmount) {
       if (this.validatePaymentAndReceipt(data)) {
         _.forEach(data.transactions, (element: any) => {
@@ -428,6 +446,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+    }
+  }
+
+  public validateForContraEntry(data) {
+    const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+    const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+
+    if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -563,21 +592,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public prepareEntry(item, idx) {
     let i = this.selectedStockIdx;
-    let defaultUnit = {
-      stockUnitCode: item.stockUnit.name,
-      code: item.stockUnit.code,
-      rate: 0
-    };
+    if (item && item.stockUnit) {
+      let defaultUnit = {
+        stockUnitCode: item.stockUnit.name,
+        code: item.stockUnit.code,
+        rate: 0
+      };
 
-    // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
-    this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
-    this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
-    this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+      // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
+      this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
+      this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
+      this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
 
-    // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-    this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
-    // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
-    this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
+      // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+      this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
+      // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+      this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
+    }
+
   }
 
     /**
