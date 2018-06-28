@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+
 @Component({
   selector: 'stockgrp-list',
   styles: [`
@@ -84,6 +85,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
 
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
     e.stopPropagation();
+    this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
     if (grp.isOpen) {
       this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
     } else {

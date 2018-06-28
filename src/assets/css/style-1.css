@@ -2428,7 +2428,7 @@ padding: 0;
 
 .account-card {
     width: 300px;
-    min-height: 226px;
+    min-height: 240px;
     float: left;
     display: inline-block;
     position: relative;
@@ -2737,6 +2737,7 @@ background: #ff5e01;
 
 /*search query*/
 
+
 /* #searchQueryForm span,
 #searchQueryForm label {
     float: left;
@@ -2760,6 +2761,7 @@ background: #ff5e01;
     text-indent: 0.01px;
     text-overflow: '';
 } */
+
 
 /* #searchQueryForm span {
     border-bottom: 2px dashed #ddd;
@@ -3028,15 +3030,15 @@ ul.pills li {
     border-radius: 5px;
     overflow: hidden;
     margin-right: 5px;
-  padding: 5px 10px;
+    padding: 5px 10px;
     cursor: pointer;
-  background-color: rgb(244, 245, 248);
-  color: #333;
-  border: 1px solid #ddd;
+    background-color: rgb(244, 245, 248);
+    color: #333;
+    border: 1px solid #ddd;
 }
 
 ul.pills li:hover {
-  color: #ff5f00;
+    color: #ff5f00;
 }
 
 .load-more {
@@ -5136,15 +5138,15 @@ bs-datepicker-container {
 }
 
 .mt10 {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .mt20 {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .p0 {
-  padding: 0;
+    padding: 0;
 }
 
 .input-group {
@@ -5156,5 +5158,5 @@ bs-datepicker-container {
 }
 
 .daterangepicker.show-calendar {
-  min-width: 666px;
+    min-width: 666px;
 }

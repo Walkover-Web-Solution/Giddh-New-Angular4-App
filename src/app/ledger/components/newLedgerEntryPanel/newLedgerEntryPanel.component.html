@@ -54,7 +54,9 @@
                         </td>
                         <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length" class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
                             <!--tax control component-->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes"
+                            <!-- Login Changes by Sagar  -->
+                            <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
+                            <tax-control #tax [taxes]="companyTaxesList$ | async"  [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes" [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                                 (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
                             </tax-control>
                         </td>
