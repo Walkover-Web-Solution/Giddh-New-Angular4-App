@@ -39,7 +39,7 @@
                                   <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                   <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                                <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
+                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
                             </li>
                         </ul>
                     </div>
@@ -79,11 +79,12 @@
                     <i class="fa fa-caret-down"></i>
                   </span>
                             </button>
-                        <ul *dropdownMenu class="dropdown-menu pd" role="menu">
+                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
                             <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet</li>
                             <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet</li>
                             <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn();">File GSTR1</li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST</li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro</li>
                             <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet</li>
                             <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With Detail Sheet</li>
                             <!-- <li class="cp dd-options">Use JIOGST API</li> -->
@@ -96,7 +97,9 @@
             <!-- hide due to unused -->
             <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
                 <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Jio GST</button>
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i> Jio GST</button> 
+                <span style="margin: 5px 10px;" class="pull-right">OR</span>
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax Pro</button>
             </div>
 
         </div>
@@ -294,7 +297,7 @@
         </div>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+    <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
