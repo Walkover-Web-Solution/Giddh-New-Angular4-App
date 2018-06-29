@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SettingsBunchService } from '../../../../services/settings.bunch.service';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
+import { BsDropdownDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'add-bunch-company',
@@ -11,15 +12,19 @@ import { Observable } from 'rxjs';
   styleUrls: ['./bunch-add-company.component.css']
 })
 
-export class BunchAddCompanyModalComponent implements OnChanges {
+export class BunchAddCompanyModalComponent implements OnChanges, OnDestroy {
 
-  @Input() public activeBunch: string = null;
+  @Input() public activeBunch: any = {};
   @Input() public companiesList: any[] = [];
 
   @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter(false);
   @Output() public saveDataEvent: EventEmitter<any> = new EventEmitter(null);
 
+  @ViewChild('companyListDropdown') public companyListDropdown: BsDropdownDirective;
+
   public isAllCompanySelected: boolean = false;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder,
   private _toaster: ToasterService,
@@ -56,17 +61,10 @@ export class BunchAddCompanyModalComponent implements OnChanges {
   }
 
   /**
-   * showDropdown
-  //  */
-  public showDropdown() {
-    //
-  }
-
-  /**
    * hideDropdown
    */
-  public hideDropdown() {
-    //
+  public hideListItems() {
+    this.companyListDropdown.hide();
   }
 
   /**
@@ -74,5 +72,10 @@ export class BunchAddCompanyModalComponent implements OnChanges {
    */
   public ngOnChanges(s) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

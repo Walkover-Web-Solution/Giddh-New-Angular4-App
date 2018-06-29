@@ -12,7 +12,7 @@ import { SettingsBunchService } from '../../../../services/settings.bunch.servic
 
 export class GetBunchModalComponent implements OnChanges {
 
-  @Input() public activeBunch: string = null;
+  @Input() public activeBunch: any = {};
   @Input() public selectedBunch: any = {};
 
   @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter(false);

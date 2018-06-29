@@ -105,7 +105,7 @@ export class BunchComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('bunch component');
+    // console.log('bunch component');
   }
 
   public openAddCompanyModal(grp) {
@@ -137,7 +137,7 @@ export class BunchComponent implements OnInit, OnDestroy {
   }
 
   public onHide() {
-    console.log('creat company modal is closed.');
+    // console.log('creat company modal is closed.');
   }
 
   /**
@@ -160,7 +160,7 @@ export class BunchComponent implements OnInit, OnDestroy {
       if (res && res.status === 'success') {
         this.allBunches.push(res.body);
         this.hideBunchModal();
-        console.log(res);
+        // console.log(res);
       }
     });
   }
