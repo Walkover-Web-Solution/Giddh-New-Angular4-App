@@ -132,6 +132,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public editMode: boolean = false;
   public pageChnageState: boolean = false;
   public userEmail: string = '';
+  public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO';
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -444,10 +445,11 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * toggleSettingAsidePane
    */
-  public toggleSettingAsidePane(event): void {
+  public toggleSettingAsidePane(event, selectedService: 'JIO_GST' | 'TAX_PRO'): void {
     if (event) {
       event.preventDefault();
     }
+    this.selectedServiceForGSTR1 = selectedService;
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
 
@@ -639,11 +641,11 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * fileJioGstReturn
    */
-  public fileJioGstReturn() {
+  public fileJioGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
     let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
       if (this.activeCompanyGstNumber) {
-        this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber));
+        this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber, Via));
       } else {
         this.toasty.errorToast('GST number not found.');
       }
