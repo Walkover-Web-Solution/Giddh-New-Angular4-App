@@ -68,6 +68,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   public showBranchScreen() {
     // this.store.dispatch(this.inventoryAction.ResetInventoryState());
     this.store.dispatch(this.sidebarAction.ShowBranchScreen(true));
+    this.store.dispatch(this.sidebarAction.ShowBranchScreenSideBar(true));
     // this.router.navigate(['inventory']);
   }
 
