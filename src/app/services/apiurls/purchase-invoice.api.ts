@@ -17,5 +17,8 @@ export const PURCHASE_INVOICE_API = {
 
 export const GST_RETURN_API = {
   SAVE_JIO_GST: GSTRETURN + 'settings',
-  FILE_JIO_GST_RETURN: GSTRETURN + 'post-data-to-jiogst?monthYear=:month&gstin=:company_gstin'
+  SAVE_TAX_PRO: GSTRETURN + 'taxpro/get-otp?gstin=:GSTIN&username=:USERNAME',
+  SAVE_TAX_PRO_WITH_OTP: GSTRETURN + 'taxpro/get-auth-token?gstin=:GSTIN&username=:USERNAME&otp=:OTP"',
+  FILE_JIO_GST_RETURN: GSTRETURN + 'post-data-to-jiogst?monthYear=:month&gstin=:company_gstin',
+  FILE_TAX_PRO_RETURN: GSTRETURN + 'taxpro/post-data-to-taxpro?gstin=:company_gstin&monthYear=:month',
 };
