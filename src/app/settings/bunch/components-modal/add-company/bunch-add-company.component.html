@@ -4,28 +4,47 @@
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
     </div>
     <div class="modal-body clearfix" id="export-body">
-        <div class="form-group" *ngIf="companiesList && companiesList.length">
-            <div class="btn-group btn-block" dropdown>
-                <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" (onShown)="showDropdown()" (onHidden)="hideDropdown()">
-                Chosse company to add in group <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-    </button>
-                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" [scrollIndicators]="true">
 
-                    <ul id="pageListDD" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu">
-                        <li>
-                            <label>
+
+
+        <div class="form-group" *ngIf="companiesList && companiesList.length">
+
+            <div class="btn-group btn-block" dropdown #companyListDropdown="bs-dropdown" [autoClose]="false" (clickOutside)="hideListItems()">
+                <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+    Chosse company to add in group <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+  </button>
+                <ul id="" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu" aria-labelledby="button-triggers-manual">
+                    <li>
+                        <label>
             <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllPages($event)" [(ngModel)]="isAllCompanySelected"> Select all
         </label>
-                        </li>
-                        <li *ngFor="let item of companiesList; let i = index">
-                            <label>
+                    </li>
+                    <li *ngFor="let item of companiesList; let i = index">
+                        <label>
             <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.isSelected"> {{ item.name }}
         </label>
-                        </li>
-                    </ul>
-                </perfect-scrollbar>
-
+                    </li>
+                </ul>
             </div>
+            <!-- <div class="btn-group btn-block" dropdown #companyListDropdown="bs-dropdown" [autoClose]="false" (clickOutside)="hideListItems()">
+                <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                Chosse company to add in group <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+    </button>
+                <ul id="pageListDD" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu">
+                    <li>
+                        <label>
+            <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllPages($event)" [(ngModel)]="isAllCompanySelected"> Select all
+        </label>
+                    </li>
+                    <li *ngFor="let item of companiesList; let i = index">
+                        <label>
+            <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.isSelected"> {{ item.name }}
+        </label>
+                    </li>
+
+                </ul>
+
+            </div> -->
         </div>
     </div>
     <div class="modal-footer">
