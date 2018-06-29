@@ -70,4 +70,8 @@ export class CompanyAddNewUiComponent implements OnInit {
       });
     }
   }
+
+  public submit() {
+    this._route.navigate(['/welcome']);
+  }
 }

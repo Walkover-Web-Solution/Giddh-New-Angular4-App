@@ -5,20 +5,20 @@
   </div>
   <div class="modal-body" id="SharePop">
     <div class="form-group">
-      <h3 class="pdB1">Share with</h3>
+      <!--<h3 class="pdB1">Share with</h3>-->
       <div class="add_mailer">
 
-        <!--share account from-->
-        <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
+        <!--create company from-->
+        <form name="form" #companyForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
           <div class="input-group form-group col-xs-12">
-            <input name="userEmail" type="email" required placeholder="Email ID"
-                   class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            <input name="name" type="text" required placeholder="Customer Name"
+                   class="form-control">
             <div class="input-group-btn">
-              <select name="selectedPermission" class="form-control"  required>
-                <option value="">-Select permission-</option>
+              <select name="selectCountry" class="form-control"  required>
+                <option value="">-Select Contry-</option>
                 <!--<option [value]="permission.uniqueName" *ngFor="let permission of allPermissions$ | async">{{permission.name}}</option>-->
               </select>
-              <button class="btn btn-success mrL1" type="submit" [disabled]="shareAccountForm.invalid">Share</button>
+              <button class="btn btn-success mrL1" type="button" (click)="submit()" [disabled]="companyForm.invalid">Next</button>
             </div>
             <!-- /btn-account -->
           </div>
@@ -27,9 +27,6 @@
       </div>
       <!-- add mailer -->
     </div>
-  </div>
-  <div class="modal-footer">
-    <a [routerLink]="['/welcome']" href="javascript:void(0)" class="btn btn-share">Next</a>
   </div>
 </div>
 
