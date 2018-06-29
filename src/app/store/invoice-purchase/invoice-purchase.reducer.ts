@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { IInvoicePurchaseResponse, ITaxResponse, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
-import { PURCHASE_INVOICE_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
+import { PURCHASE_INVOICE_ACTIONS, GST_RETURN_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
 import { CustomActions } from '../customActions';
 
 export interface InvoicePurchaseState {
@@ -10,13 +10,15 @@ export interface InvoicePurchaseState {
     taxes: ITaxResponse[];
     isDownloadingFile: boolean;
     invoiceGenerateSuccess: boolean;
+    isTaxProOTPSentSuccessfully: boolean;
 }
 
 export const initialState: InvoicePurchaseState = {
     purchaseInvoices: new IInvoicePurchaseResponse(),
     taxes: [],
     isDownloadingFile: false,
-    invoiceGenerateSuccess: false
+    invoiceGenerateSuccess: false,
+    isTaxProOTPSentSuccessfully: false
 };
 
 export function InvoicePurchaseReducer(state = initialState, action: CustomActions): InvoicePurchaseState {
@@ -94,6 +96,21 @@ export function InvoicePurchaseReducer(state = initialState, action: CustomActio
                         newState.purchaseInvoices.items[indx].availItc = response.body.availItc;
                     }
                     console.log(response.body);
+                    return Object.assign({}, state, newState);
+                }
+                return state;
+            }
+        case GST_RETURN_ACTIONS.SAVE_TAX_PRO: {
+            let newState = _.cloneDeep(state);
+            newState.isTaxProOTPSentSuccessfully = false;
+            return Object.assign({}, state, newState);
+        }
+        case GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE:
+            {
+                let response: BaseResponse<any, string> = action.payload;
+                if (response.status === 'success') {
+                    let newState = _.cloneDeep(state);
+                    newState.isTaxProOTPSentSuccessfully = true;
                     return Object.assign({}, state, newState);
                 }
                 return state;
