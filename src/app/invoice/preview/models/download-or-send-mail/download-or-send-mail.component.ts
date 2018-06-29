@@ -44,6 +44,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public invoiceType: string[] = [];
   public showMore: boolean = false;
   public emailTabActive: boolean = true;
+  public downloadTabActive: boolean = false;
+  public smsTabActive: boolean = false;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
