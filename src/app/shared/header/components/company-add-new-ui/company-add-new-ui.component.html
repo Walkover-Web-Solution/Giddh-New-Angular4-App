@@ -1,0 +1,46 @@
+<div id="shareModal" class="pdB4 shareGrp">
+  <div class="modal-header">
+    <h3>Create New Company</h3>
+    <span aria-hidden="true" class="close" data-dismiss="modal">×</span>
+  </div>
+  <div class="modal-body" id="SharePop">
+    <div class="form-group">
+      <h3 class="pdB1">Share with</h3>
+      <div class="add_mailer">
+
+        <!--share account from-->
+        <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
+          <div class="input-group form-group col-xs-12">
+            <input name="userEmail" type="email" required placeholder="Email ID"
+                   class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            <div class="input-group-btn">
+              <select name="selectedPermission" class="form-control"  required>
+                <option value="">-Select permission-</option>
+                <!--<option [value]="permission.uniqueName" *ngFor="let permission of allPermissions$ | async">{{permission.name}}</option>-->
+              </select>
+              <button class="btn btn-success mrL1" type="submit" [disabled]="shareAccountForm.invalid">Share</button>
+            </div>
+            <!-- /btn-account -->
+          </div>
+        </form>
+
+      </div>
+      <!-- add mailer -->
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a [routerLink]="['/welcome']" href="javascript:void(0)" class="btn btn-share">Next</a>
+  </div>
+</div>
+
+<!--logout modal-->
+<div bsModal #logoutModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Log Out'"
+                     [body]="'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'"
+                     (successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
+      </confirm-modal>
+    </div>
+  </div>
+</div>
