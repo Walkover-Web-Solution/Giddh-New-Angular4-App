@@ -12,6 +12,7 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { BranchTransferEntity, ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
 import { Observable } from 'rxjs';
+import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 
 @Component({
   selector: 'branch-destination',
@@ -81,7 +82,7 @@ import { Observable } from 'rxjs';
   `],
 })
 export class BranchTransferComponent implements OnInit, OnDestroy {
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  // @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @ViewChild('sourceSelect') public sourceSelect: ShSelectComponent;
   public form: FormGroup;
   public mode: 'destination' | 'product' = 'destination';
@@ -120,7 +121,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private settingsBranchActions: SettingsBranchActions) {
+  constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private sidebarAction: SidebarAction) {
     this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
     this.initializeForm();
     this.isBranchCreationInProcess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferInProcess).takeUntil(this.destroyed$);
@@ -270,7 +271,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   public closeAsidePane() {
     this._store.dispatch(this._inventoryAction.ResetBranchTransferState());
     this.modeChanged('destination');
-    this.closeAsideEvent.emit();
+    this._store.dispatch(this.sidebarAction.ShowBranchScreenSideBar(false));
+    // this.closeAsideEvent.emit();
   }
 
   public save() {

@@ -50,6 +50,7 @@ export interface InventoryState {
   UpdateGroupSuccess: boolean;
   UpdateStockSuccess: boolean;
   showBranchScreen: boolean;
+  showBranchScreenSidebar: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -108,7 +109,8 @@ const initialState: InventoryState = {
   deleteGroupSuccess: false,
   UpdateGroupSuccess: false,
   UpdateStockSuccess: false,
-  showBranchScreen: false
+  showBranchScreen: false,
+  showBranchScreenSidebar: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -568,6 +570,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
     //  region branch
     case InventoryActionsConst.ShowBranchScreen:
       return Object.assign({}, state, { showBranchScreen: action.payload });
+    case InventoryActionsConst.ShowBranchScreenSideBar:
+      return Object.assign({}, state, { showBranchScreenSidebar: action.payload });
     //  endregion
     default:
       return state;

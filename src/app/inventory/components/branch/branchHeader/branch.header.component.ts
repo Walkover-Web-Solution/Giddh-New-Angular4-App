@@ -1,5 +1,6 @@
-import { AppState } from '../store/roots';
 import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../store';
 
 @Component({
   selector: 'branch-header',
@@ -16,21 +17,17 @@ import { animate, Component, OnDestroy, OnInit, state, style, transition, trigge
     ]),
   ],
   template: `
-    <div class="stock-bar inline pull-right">
-      <div class="">
-        <div class="pull-right">
-          <button type="button" class="btn btn-primary" (click)="toggleBranchAsidePane($event)">New</button>
-        </div>
-      </div>
-    </div>
     <div class="aside-overlay" *ngIf="branchAsideMenuState === 'in'"></div>
-    <branch-destination *ngIf="branchAsideMenuState === 'in'" [class]="branchAsideMenuState" [@slideInOut]="branchAsideMenuState" (closeAsideEvent)="toggleBranchAsidePane($event)"></branch-destination>
+    <branch-destination *ngIf="branchAsideMenuState === 'in'" [class]="branchAsideMenuState"
+                        [@slideInOut]="branchAsideMenuState"></branch-destination>
   `
 })
 export class BranchHeaderComponent implements OnInit, OnDestroy {
   public branchAsideMenuState: string = 'out';
-  constructor() {
-    //
+  constructor(private _store: Store<AppState>) {
+    this._store.select(s => s.inventory.showBranchScreenSidebar).subscribe(bool => {
+      this.toggleBranchAsidePane();
+    });
   }
 
   public ngOnInit() {
@@ -38,7 +35,7 @@ export class BranchHeaderComponent implements OnInit, OnDestroy {
   }
 
   public toggleBodyClass() {
-    if (this.branchAsideMenuState === 'in' || this.branchAsideMenuState === 'in') {
+    if (this.branchAsideMenuState === 'in') {
       document.querySelector('body').classList.add('fixed');
     }else {
       document.querySelector('body').classList.remove('fixed');
