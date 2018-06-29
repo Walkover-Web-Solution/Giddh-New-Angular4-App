@@ -65,6 +65,7 @@ export class InventoryActionsConst {
   public static ManageInventoryAside = 'ManageInventoryAside';
 
   public static ShowBranchScreen = 'ShowBranchScreen';
+  public static ShowBranchScreenSideBar = 'ShowBranchScreenSideBar';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
