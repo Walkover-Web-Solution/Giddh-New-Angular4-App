@@ -28,6 +28,11 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { BunchComponent } from './bunch/bunch.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
+import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
+import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,11 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
     SettingPermissionFormComponent,
     BranchComponent,
     SettingsTagsComponent,
-    SettingTriggerComponent
+    SettingTriggerComponent,
+    BunchComponent,
+    CreateBunchModalComponent,
+    BunchAddCompanyModalComponent,
+    GetBunchModalComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +73,8 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
     OmitByKeyPipeModule,
     NgbTypeaheadModule,
     BsDropdownModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    PerfectScrollbarModule
   ]
 })
 
