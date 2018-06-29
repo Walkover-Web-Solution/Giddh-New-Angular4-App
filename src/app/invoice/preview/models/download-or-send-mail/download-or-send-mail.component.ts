@@ -46,6 +46,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public emailTabActive: boolean = true;
   public downloadTabActive: boolean = false;
   public smsTabActive: boolean = false;
+  public isSendSmsEnabled: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -66,6 +67,13 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
       }else {
         this.showPdfWrap = false;
+      }
+    });
+    this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (o && o.invoiceSettings) {
+        this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
+      } else {
+        this.store.dispatch(this._invoiceActions.getInvoiceSetting());
       }
     });
   }
@@ -102,6 +110,21 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
       this.showEmailTextarea = false;
     } else {
       this._toasty.errorToast('Invalid email(s).');
+    }
+  }
+
+  /**
+   * onSendInvoiceOnSms
+   */
+  public onSendInvoiceOnSms(numbers: string) {
+    if (_.isEmpty(numbers)) {
+      this._toasty.warningToast('Enter some valid number\'s');
+      return;
+    }
+    let numberList = numbers.split(',');
+    if (Array.isArray(numberList)) {
+      this.downloadOrSendMailEvent.emit({ action: 'send_sms', numbers: numberList });
+      this.showEmailTextarea = false;
     }
   }
 
