@@ -59,7 +59,8 @@ const PERMISSION_ROUTES: Routes = [
     BsDropdownModule
   ],
   exports: [
-    RouterModule
+    RouterModule,
+    CapitalizePipe
   ],
   providers: []
 })
