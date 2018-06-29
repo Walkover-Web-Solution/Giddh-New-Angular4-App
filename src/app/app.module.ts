@@ -50,11 +50,11 @@ import { Configuration } from 'app/app.constant';
 import { ServiceConfig } from 'app/services/service.config';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { SignupComponent } from './signup/signup.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: isElectron ? './' : AppUrl + APP_FOLDER }
+  {provide: APP_BASE_HREF, useValue: isElectron ? './' : AppUrl + APP_FOLDER}
   // { provide: APP_BASE_HREF, useValue: './' }
 ];
 
@@ -73,7 +73,7 @@ interface StoreType {
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({ keys: ['session', 'permission'], rehydrate: true })(reducer);
+  return localStorageSync({keys: ['session', 'permission'], rehydrate: true})(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
@@ -99,6 +99,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DummyComponent,
     // SuccessComponent,
     NewUserComponent,
+    WelcomeComponent,
     LoaderComponent,
     SocialLoginCallbackComponent
     // SignupComponent
@@ -133,8 +134,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ActionModule.forRoot(),
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
-    StoreModule.forRoot(reducers, { metaReducers }),
+    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
+    StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, {useHash: isElectron, preloadingStrategy: PreloadAllModules}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
@@ -164,7 +165,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
     {
       provide: ServiceConfig,
-      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+      useValue: {apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _}
     },
     {
       provide: HTTP_INTERCEPTORS,
@@ -173,4 +174,5 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,6 +1,6 @@
 import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
-import { CompanyAddComponent, ManageGroupsAccountsComponent } from './components';
+import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -75,11 +75,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
   public moment = moment;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+  @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
   @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+  @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
@@ -350,8 +352,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public showAddCompanyModal() {
-    this.loadAddCompanyComponent();
-    this.addCompanyModal.show();
+    this.loadAddCompanyNewUiComponent();
+    this.addCompanyNewModal.show();
   }
 
   public hideAddCompanyModal() {
@@ -435,6 +437,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.hideAddCompanyModal();
     });
     (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
+  }
+
+  public loadAddCompanyNewUiComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
+    let viewContainerRef = this.companynewadd.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
       this.hideCompanyModalAndShowAddAndManage();
     });
   }
