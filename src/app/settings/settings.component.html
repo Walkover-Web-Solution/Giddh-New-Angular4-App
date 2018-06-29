@@ -31,7 +31,7 @@
                 <tab heading="Trigger">
                     <setting-trigger></setting-trigger>
                 </tab>
-                <tab heading="Group">
+                <tab heading="Group" (select)="tagsTabSelected($event)">
                     <setting-bunch #bunchComp></setting-bunch>
                 </tab>
             </tabset>
