@@ -10,18 +10,25 @@
 
         <!--create company from-->
         <form name="form" #companyForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
-          <div class="input-group form-group col-xs-12">
-            <input name="name" type="text" required placeholder="Customer Name"
-                   class="form-control">
-            <div class="input-group-btn">
-              <select name="selectCountry" class="form-control"  required>
-                <option value="">-Select Contry-</option>
-                <!--<option [value]="permission.uniqueName" *ngFor="let permission of allPermissions$ | async">{{permission.name}}</option>-->
-              </select>
-              <button class="btn btn-success mrL1" type="button" (click)="submit()" [disabled]="companyForm.invalid">Next</button>
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="">Company Name</label>
+              <input name="name" type="text" required placeholder="Name"
+                     class="form-control">
+              <!-- /btn-account -->
             </div>
-            <!-- /btn-account -->
           </div>
+
+         <div class="col-xs-12">
+           <div class="input-group-btn">
+             <div class="form-group ">
+               <label for="">Country</label>
+               <sh-select [options]="countrySource" [isFilterEnabled]="true" style="width:100%"></sh-select>
+             </div>
+             <button class="btn btn-success mrL1" style="margin-top: 21px;margin-left: 10px;
+" type="button" (click)="submit()" [disabled]="companyForm.invalid">Next</button>
+           </div>
+         </div>
         </form>
 
       </div>

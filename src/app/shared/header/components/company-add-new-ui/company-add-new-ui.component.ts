@@ -14,6 +14,8 @@ import { AppState } from '../../../../store';
 import { CompanyRequest, CompanyResponse } from '../../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -25,6 +27,7 @@ export class CompanyAddNewUiComponent implements OnInit {
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
 
+  public countrySource: IOption[] = [];
   public company: CompanyRequest = new CompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -34,7 +37,9 @@ export class CompanyAddNewUiComponent implements OnInit {
               private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
               private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
               private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
-    //
+    contriesWithCodes.map(c => {
+      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
+    });
   }
 
   public ngOnInit() {
