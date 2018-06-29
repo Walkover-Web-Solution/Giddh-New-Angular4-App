@@ -445,11 +445,13 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * toggleSettingAsidePane
    */
-  public toggleSettingAsidePane(event, selectedService: 'JIO_GST' | 'TAX_PRO'): void {
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO'): void {
     if (event) {
       event.preventDefault();
     }
-    this.selectedServiceForGSTR1 = selectedService;
+    if (selectedService) {
+      this.selectedServiceForGSTR1 = selectedService;
+    }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
 
