@@ -259,10 +259,36 @@ export class PurchaseInvoiceService {
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 
+  public SaveTaxPro(model: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  public SaveTaxProWithOTP(model: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO_WITH_OTP.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName).replace(':OTP', model.otp)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
   public FileJioGstReturn(reqObj): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+    let url;
+    if (reqObj.via && reqObj.via === 'JIO_GST') {
+      url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber);
+    } else if (reqObj.via === 'TAX_PRO') {
+      url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber);
+    }
+    return this._http.get(this.config.apiUrl + url).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
