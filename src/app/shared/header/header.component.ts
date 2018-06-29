@@ -357,7 +357,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public hideAddCompanyModal() {
-    this.addCompanyModal.hide();
+    this.addCompanyNewModal.hide();
   }
 
   public hideCompanyModalAndShowAddAndManage() {
