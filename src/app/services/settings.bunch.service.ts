@@ -35,7 +35,7 @@ export class SettingsBunchService {
   /*
   * Get bunch
   */
-  public GetBunche(bunchUniqueName: string): Observable<BaseResponse<any, any>> {
+  public GetBunch(bunchUniqueName: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_BUNCH_API.GET_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bunchUniqueName', encodeURIComponent(bunchUniqueName))).map((res) => {
@@ -74,10 +74,10 @@ export class SettingsBunchService {
 /*
   * Update bunch
   */
- public UpdateBunch(model): Observable<BaseResponse<any, any>> {
+ public UpdateBunch(model, bunchUniqueName): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(this.config.apiUrl + SETTINGS_BUNCH_API.UPDATE_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.patch(this.config.apiUrl + SETTINGS_BUNCH_API.UPDATE_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bunchUniqueName', encodeURIComponent(bunchUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
@@ -87,10 +87,14 @@ export class SettingsBunchService {
 /*
   * Add Companies to bunch
   */
- public AddCompanies(model): Observable<BaseResponse<any, any>> {
+ public AddCompanies(model, bunchUniqueName): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SETTINGS_BUNCH_API.ADD_COMPANIES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    let dataToSend: any = {};
+    dataToSend.companyUniqueNames = _.cloneDeep(model);
+    dataToSend.bunchUniqueName = _.cloneDeep(bunchUniqueName);
+    bunchUniqueName = _.cloneDeep(model);
+    return this._http.post(this.config.apiUrl + SETTINGS_BUNCH_API.ADD_COMPANIES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dataToSend).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
@@ -100,10 +104,13 @@ export class SettingsBunchService {
 /*
   * Remove Companies from bunch
   */
- public RemoveCompanies(model): Observable<BaseResponse<any, any>> {
+ public RemoveCompanies(model, bunchUniqueName): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(this.config.apiUrl + SETTINGS_BUNCH_API.DELETE_COMPANIES_FROM_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    let dataToSend: any = {};
+    dataToSend.companyUniqueNames = _.cloneDeep(model);
+    dataToSend.bunchUniqueName = _.cloneDeep(bunchUniqueName);
+    return this._http.patch(this.config.apiUrl + SETTINGS_BUNCH_API.DELETE_COMPANIES_FROM_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dataToSend).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
@@ -113,10 +120,10 @@ export class SettingsBunchService {
 /*
   * Get Companies from bunch
   */
- public GetCompanies(): Observable<BaseResponse<any, any>> {
+ public GetCompanies(bunchUniqueName): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + SETTINGS_BUNCH_API.GET_COMPANIES_FROM_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + SETTINGS_BUNCH_API.GET_COMPANIES_FROM_BUNCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bunchUniqueName', encodeURIComponent(bunchUniqueName))).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;

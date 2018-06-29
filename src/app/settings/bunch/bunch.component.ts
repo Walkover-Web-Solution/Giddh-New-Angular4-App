@@ -17,6 +17,7 @@ import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Co
 import { Observable } from 'rxjs/Observable';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SettingsBunchService } from '../../services/settings.bunch.service';
 
 export const IsyncData = [
   { label: 'Debtors', value: 'debtors' },
@@ -34,9 +35,9 @@ export const IsyncData = [
 })
 
 export class BunchComponent implements OnInit, OnDestroy {
-  @ViewChild('branchModal') public branchModal: ModalDirective;
+  @ViewChild('bunchModal') public bunchModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-  @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+  @ViewChild('getBunchCompanyModal') public getBunchCompanyModal: ModalDirective;
   @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
 
   public dataSyncOption = IsyncData;
@@ -48,6 +49,13 @@ export class BunchComponent implements OnInit, OnDestroy {
   public confirmationMessage: string = '';
   public parentCompanyName: string = null;
   public selectedBranch: string = null;
+
+  public allBunches: any = [];
+  public selectedBunch: any = {};
+  public selectedBunchCompany: any = [];
+  public mode: string = 'create';
+  public activeBunchCompanies: any = {};
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -55,7 +63,9 @@ export class BunchComponent implements OnInit, OnDestroy {
     private settingsBranchActions: SettingsBranchActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private companyActions: CompanyActions,
-    private settingsProfileActions: SettingsProfileActions
+    private settingsProfileActions: SettingsProfileActions,
+    private _settingsBunchService: SettingsBunchService,
+    private _toasterService: ToasterService
   ) {
 
     this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
@@ -65,23 +75,13 @@ export class BunchComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.getAllBunch();
+
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     this.store.dispatch(this.settingsBranchActions.GetALLBranches());
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
-      if (branches) {
-        if (branches.results.length) {
-          _.each(branches.results, (branch) => {
-            if (branch.gstDetails && branch.gstDetails.length) {
-              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList && gst.addressList[0] && gst.addressList[0].isDefault)];
-            }
-          });
-          this.branches$ =  Observable.of(_.orderBy(branches.results, 'name'));
-        } else if (branches.results.length === 0) {
-          this.branches$ =  Observable.of(null);
-        }
-      }
       if (companies && companies.length && branches) {
         let companiesWithSuperAdminRole = [];
         _.each(companies, (cmp) => {
@@ -100,21 +100,16 @@ export class BunchComponent implements OnInit, OnDestroy {
         });
         this.companies$ = Observable.of(_.orderBy(companiesWithSuperAdminRole, 'name'));
       }
-      if (parentCompany) {
-        setTimeout(() => { this.parentCompanyName = parentCompany.name; }, 10);
-      } else {
-        setTimeout(() => { this.parentCompanyName = null; }, 10);
-      }
     })).takeUntil(this.destroyed$).subscribe();
 
   }
 
   public ngOnInit() {
-    console.log('branch component');
+    console.log('bunch component');
   }
 
-  public openCreateCompanyModal() {
-    this.loadAddCompanyComponent();
+  public openAddCompanyModal(grp) {
+    this.selectedBunch = _.cloneDeep(grp);
     this.addCompanyModal.show();
   }
 
@@ -122,87 +117,152 @@ export class BunchComponent implements OnInit, OnDestroy {
     this.addCompanyModal.hide();
   }
 
-  public hideCompanyModalAndShowAddAndManage() {
-    this.addCompanyModal.hide();
+  public openGetBunchCompanyModal() {
+    this.getBunchCompanyModal.show();
   }
 
-  public loadAddCompanyComponent() {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-    let viewContainerRef = this.companyadd.viewContainerRef;
-    viewContainerRef.clear();
-    let componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance as CompanyAddComponent).createBranch = true;
-    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
-      this.hideAddCompanyModal();
-    });
-    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
-      this.hideCompanyModalAndShowAddAndManage();
-    });
+  public hideGetBunchCompanyModal() {
+    this.getBunchCompanyModal.hide();
   }
 
-  public openAddBranchModal() {
-    this.branchModal.show();
+  public openAddBunchModal() {
+    this.bunchModal.show();
+  }
+
+  public hideBunchModal() {
+    this.isAllSelected$ = Observable.of(false);
+    this.selectedBunch = {};
+    this.bunchModal.hide();
+    this.mode = 'create';
   }
 
   public onHide() {
     console.log('creat company modal is closed.');
-    // let companyUniqueName = null;
-    // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-    // let stateDetailsRequest = new StateDetailsRequest();
-    // stateDetailsRequest.companyUniqueName = companyUniqueName;
-    // stateDetailsRequest.lastState = 'settings';
-    // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
-  public hideAddBranchModal() {
-    this.isAllSelected$ = Observable.of(false);
-    this.selectedCompanies = [];
-    this.branchModal.hide();
-  }
-
-  public selectAllCompanies(ev) {
-    this.selectedCompanies = [];
-    if (ev.target.checked) {
-      this.companies$.take(1).subscribe((companies) => {
-        _.each(companies, (company) => {
-          this.selectedCompanies.push(company.uniqueName);
-        });
-      });
-    }
-    this.isAllCompaniesSelected();
-  }
-
-  public checkUncheckMe(compUniqueName, ev) {
-    if (ev.target.checked) {
-      if (this.selectedCompanies.indexOf(compUniqueName) === -1) {
-        this.selectedCompanies.push(compUniqueName);
+  /**
+   * getAllBunch
+   */
+  public getAllBunch() {
+    this._settingsBunchService.GetAllBunches().subscribe(res => {
+      if (res && res.status === 'success') {
+        this.allBunches = _.cloneDeep(res.body.bunchResources);
+        // console.log(res);
       }
+    });
+  }
+
+  /**
+   * createBunch
+   */
+  public createBunch(data) {
+    this._settingsBunchService.CreateBunch(data).subscribe(res => {
+      if (res && res.status === 'success') {
+        this.allBunches.push(res.body);
+        this.hideBunchModal();
+        console.log(res);
+      }
+    });
+  }
+
+  /**
+   * save Bunch
+   */
+  public saveBunch(data) {
+    let dataToSend = _.cloneDeep(data);
+    if (this.mode === 'create' || !this.mode) {
+        this.createBunch(dataToSend);
     } else {
-      let indx = this.selectedCompanies.indexOf(compUniqueName);
-      this.selectedCompanies.splice(indx, 1);
+      this.updateBunch(dataToSend);
     }
-    this.isAllCompaniesSelected();
   }
 
-  public createBranches() {
-    let dataToSend = { childCompanyUniqueNames: this.selectedCompanies };
-    this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
-    this.hideAddBranchModal();
+  /**
+   * update
+   */
+  public update(bunch: any) {
+    this.mode = 'update';
+    this.selectedBunch = bunch;
+    this.openAddBunchModal();
   }
 
-  public removeBranch(branchUniqueName, companyName) {
-    this.selectedBranch = branchUniqueName;
-    this.confirmationMessage = `Are you sure want to remove <b>${companyName}</b>?`;
-    this.confirmationModal.show();
+  /**
+   * updateBunch
+   */
+  public updateBunch(data) {
+    this._settingsBunchService.UpdateBunch(data, data.uniqueName).subscribe(res => {
+      if (res && res.status === 'success') {
+        this._toasterService.successToast(res.status);
+        this.getAllBunch();
+        this.hideBunchModal();
+        // console.log(res);
+      }
+    });
   }
 
-  public onUserConfirmation(yesOrNo) {
-    if (yesOrNo && this.selectedBranch) {
-      this.store.dispatch(this.settingsBranchActions.RemoveBranch(this.selectedBranch));
+  /**
+   * delete bunch
+   */
+  public deleteBunch(bunchUniqueName) {
+    let uniqueName = _.cloneDeep(bunchUniqueName);
+    this._settingsBunchService.RemoveBunch(uniqueName).subscribe(res => {
+      if (res && res.status === 'success') {
+        this._toasterService.successToast(res.body);
+        this.getAllBunch();
+        // console.log(res);
+      } else {
+        this._toasterService.errorToast(res.message);
+      }
+    });
+  }
+
+  /**
+   * getBunch
+   */
+  public getBunchCompany(bunch) {
+    this.selectedBunch = bunch;
+    this._settingsBunchService.GetCompanies(_.cloneDeep(bunch.uniqueName)).subscribe(res => {
+      if (res && res.status === 'success') {
+        if (res.body.companies && res.body.companies.length) {
+          this.selectedBunchCompany = res.body;
+          this.getBunchCompanyModal.show();
+        } else {
+          this._toasterService.errorToast('No company added');
+        }
+      }
+    });
+  }
+
+  /**
+   * save company
+   */
+  public AddBunchCompany(data) {
+    if (data.length) {
+      this._settingsBunchService.AddCompanies(data, this.selectedBunch.uniqueName).subscribe(res => {
+        if (res && res.status === 'success') {
+          this._toasterService.successToast(res.body);
+          this.hideAddCompanyModal();
+        }
+      });
     } else {
-      this.selectedBranch = null;
+      this.hideAddCompanyModal();
     }
-    this.confirmationModal.hide();
+  }
+
+  /**
+   * save company
+   */
+  public RemoveCompany(data) {
+    if (data.length) {
+      this._settingsBunchService.RemoveCompanies(data, this.selectedBunch.uniqueName).subscribe(res => {
+        if (res && res.status === 'success') {
+          this._toasterService.successToast(res.body);
+          this.hideGetBunchCompanyModal();
+        }
+      });
+    } else {
+      this.hideGetBunchCompanyModal();
+    }
   }
 
   public ngOnDestroy() {
@@ -219,4 +279,5 @@ export class BunchComponent implements OnInit, OnDestroy {
       }
     });
   }
+
 }
