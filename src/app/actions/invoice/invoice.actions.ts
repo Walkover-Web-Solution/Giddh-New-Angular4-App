@@ -394,6 +394,27 @@ export class InvoiceActions {
       }
       return {type: 'EmptyAction'};
     });
+
+  @Effect()
+  public SendInvoiceOnSms$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.SEND_SMS)
+    .switchMap((action: CustomActions) => {
+      return this._invoiceService.SendInvoiceOnSms(action.payload.accountUniqueName, action.payload.dataToSend, action.payload.voucherNumber)
+        .map(response => this.SendInvoiceOnSmsResponse(response));
+    });
+
+  @Effect()
+  public SendInvoiceOnSmsResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.SEND_SMS_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body);
+      }
+      return {type: 'EmptyAction'};
+    });
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -1281,6 +1302,20 @@ export class InvoiceActions {
     return {
       type: INVOICE.RECURRING.DELETE_RECURRING_INVOICE_RESPONSE,
       payload: res
+    };
+  }
+
+  public SendInvoiceOnSms(accountUniqueName: string, dataToSend: { numbers: string[] }, voucherNumber): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.SEND_SMS,
+      payload: {accountUniqueName, dataToSend, voucherNumber}
+    };
+  }
+
+  public SendInvoiceOnSmsResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.SEND_SMS_RESPONSE,
+      payload: model
     };
   }
 
