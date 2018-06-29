@@ -1,15 +1,5 @@
-.form-horizontal .control-label {
-    text-align: left;
-}
-
-.dropdown-menu {
-    padding: 10px;
-    max-height: 200px;
-    overflow-y: scroll;
-}
-
-.dropdown-menu li {
-    margin-bottom: 5px;
+.modal-body {
+    padding: 15px 0;
 }
 
 .bunch_list li {
@@ -26,14 +16,12 @@
 .company_action {
     right: 15px;
     top: 50%;
-    opacity: 0;
-    z-index: -1;
     transform: translateY(-50%);
 }
 
-.bunch_parent .panel-body {
-    /* height: 245px;
-    max-height: 245px; */
+.bunch_list {
+    height: 245px;
+    max-height: 245px;
     overflow: auto;
     padding: 0;
     padding-bottom: 52px;
@@ -56,8 +44,4 @@
 .bunch_list li:hover .company_action {
     z-index: 1;
     opacity: 1;
-}
-
-.btn-link {
-    padding-left: 0;
 }
