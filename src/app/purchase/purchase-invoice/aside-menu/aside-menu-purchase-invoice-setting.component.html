@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
-                            <label for="jio_user_name">Username</label>
+                            <label for="jio_user_name">Username:</label>
                             <input autocomplete="off" type="email" name="username" class="form-control" id="jio_user_name" [(ngModel)]="jioGstForm.uid">
                         </div>
                     </div>
@@ -38,19 +38,19 @@
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
-                            <label for="tax_pro_username">Username</label>
+                            <label for="tax_pro_username">Username:</label>
                             <input autocomplete="off" type="text" name="username" class="form-control" id="tax_pro_username" [(ngModel)]="taxProForm.uid">
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group">
-                            <label for="tax_pro_gst_number">GSTIN</label>
+                            <label for="tax_pro_gst_number">GSTIN:</label>
                             <input autocomplete="off" type="text" name="gstin" class="form-control" id="tax_pro_gst_number" [(ngModel)]="taxProForm.gstin">
                         </div>
                     </div>
                     <div class="col-xs-6" *ngIf="otpSentSuccessFully">
                         <div class="form-group">
-                            <label for="tax_pro_otp">OTP</label>
+                            <label for="tax_pro_otp">OTP:</label>
                             <input autocomplete="off" type="text" name="otp" class="form-control" id="tax_pro_otp" [(ngModel)]="taxProForm.otp">
                         </div>
                     </div>
