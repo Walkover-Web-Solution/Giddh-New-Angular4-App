@@ -228,4 +228,11 @@ export class SidebarAction {
       payload: bool
     };
   }
+
+  public ShowBranchScreenSideBar(bool: boolean) {
+    return {
+      type: InventoryActionsConst.ShowBranchScreenSideBar,
+      payload: bool
+    };
+  }
 }
