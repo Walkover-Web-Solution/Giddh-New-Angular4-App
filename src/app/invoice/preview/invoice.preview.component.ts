@@ -308,11 +308,13 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   /**
   * onDownloadOrSendMailEvent
   */
-  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], typeOfInvoice: string[] }) {
+  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
     if (userResponse.action === 'download') {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice }));
+    } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.invoiceNumber));
     }
   }
 
