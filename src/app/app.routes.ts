@@ -11,6 +11,7 @@ import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { OnboardingComponent } from './onboarding/onboarding.component';
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -33,6 +34,7 @@ export const ROUTES: Routes = [
   {path: 'dummy', component: DummyComponent},
   {path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard]},
   {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
+  {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
   {path: 'social-login-callback', component: SocialLoginCallbackComponent},
   {path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full'},
   {path: 'sales', redirectTo: 'pages/sales', pathMatch: 'full'},
