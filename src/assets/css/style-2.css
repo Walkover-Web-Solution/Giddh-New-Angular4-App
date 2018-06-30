@@ -4486,7 +4486,7 @@ table td[class*=col-]:last-child {
     margin-bottom: 7px;
 }
 
-.app_list>ul li {
+.modal-mdst>ul li {
     list-style: none;
     float: left;
     width: 50%;
