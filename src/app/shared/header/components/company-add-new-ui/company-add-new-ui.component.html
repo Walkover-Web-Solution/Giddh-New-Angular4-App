@@ -12,23 +12,25 @@
         <form name="form" #companyForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
           <div class="col-xs-12">
             <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
-              <label for="">Company Name</label>
-              <input name="name" type="text" required placeholder="Name"
+              <label for="name">Company Name</label>
+              <input name="name" id="name" type="text" required placeholder="Name" [(ngModel)]="company.name"
                      class="form-control">
               <!-- /btn-account -->
             </div>
           </div>
 
-         <div class="col-xs-12">
-           <div class="input-group-btn">
-             <div class="form-group ">
-               <label for="">Country</label>
-               <sh-select [options]="countrySource" [isFilterEnabled]="true" style="width:100%"></sh-select>
-             </div>
-             <button class="btn btn-success mrL1" style="margin-top: 21px;margin-left: 10px;
-" type="button" (click)="submit()" [disabled]="companyForm.invalid">Next</button>
-           </div>
-         </div>
+          <div class="col-xs-12">
+            <div class="input-group-btn">
+              <div class="form-group">
+                <label for="country">Country</label>
+                <sh-select id="country" [options]="countrySource" [isFilterEnabled]="true" style="width:100%"
+                           name="country" [(ngModel)]="company.country"></sh-select>
+              </div>
+              <button class="btn btn-success mrL1" style="margin-top: 21px;margin-left: 10px;"
+                      type="submit" (click)="createCompany()" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="companyForm.invalid">Next
+              </button>
+            </div>
+          </div>
         </form>
 
       </div>
