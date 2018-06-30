@@ -1,19 +1,19 @@
-<div id="main">
+<div id="main" class="welcome_outer">
   <app-header></app-header>
   <layout-main>
 
     <div class="welcome-header">
-      <h2>Welcome To Giddh!</h2>
+      <h2>Welcome To Giddh! </h2>
     </div>
     <hr/>
 
-    <div class="welcome-container">
+    <div class="welcome-container width350">
 
       <form name="form" #welcomeForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
-        <div class="form-group bg-blue">
+        <div class="form-group box">
 
           <div class="col-xs-12">
-            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+            <div class="input-group form-group form-custom">
               <label for="state_dd">State</label>
               <sh-select placeholder="Select state" name="state_dd" id="state_dd"
                          [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia"
@@ -24,15 +24,15 @@
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+            <div class="input-group form-group form-custom">
               <label for="city">City</label>
               <input type="text" class="form-control" [(ngModel)]="companyProfileObj.city" name="city"
-                     id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+                     id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$" autocomplete="off" />
             </div>
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+            <div class="input-group form-group form-custom">
               <label for="mobile">Mobile Number</label>
               <div style="display: flex;justify-content: space-between">
                 <sh-select [options]="countryCodeList" name="country" [placeholder]="'CC'"
@@ -44,7 +44,7 @@
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+            <div class="input-group form-group form-custom">
               <label for="industry">Industry</label>
               <sh-select [options]="industrialList" name="industry" id="industry" [placeholder]="'Industry'"
                          [(ngModel)]="companyProfileObj.industry"></sh-select>
@@ -52,18 +52,25 @@
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+            <div class="input-group form-group form-custom">
               <label for="mobile">Prev. Software</label>
               <input type="text" class="form-control" [(ngModel)]="companyProfileObj.prevSoft" name="contactNo"
                      id="prev" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
             </div>
           </div>
+          <div class="col-xs-12 m-t-20">
+            <button type="submit" class="btn btn-default" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
+              Save
+            </button>
+            <!-- <button type="button" class="btn btn-primary btn-skip">Skip</button> -->
+            <a href="" class="skip">Skip</a>
+          </div>
         </div>
 
-        <div class="clearfix">
+        <!-- <div class="clearfix">
           <button type="submit" class="btn btn-success" (click)="submit()">Save</button>
           <button type="button" class="btn btn-primary">Skip</button>
-        </div>
+        </div> -->
 
       </form>
 
