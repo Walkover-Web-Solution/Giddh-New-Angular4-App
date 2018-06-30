@@ -1,0 +1,15 @@
+.welcome-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}
+
+.welcome-container{
+  display: flex;
+  justify-content: center;
+}
+
+.welcome-container form{
+  flex: 0;
+}
