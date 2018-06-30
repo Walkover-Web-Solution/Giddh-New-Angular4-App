@@ -19,7 +19,8 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 
 @Component({
   selector: 'company-add-new-ui-component',
-  templateUrl: './company-add-new-ui.component.html'
+  templateUrl: './company-add-new-ui.component.html',
+  styleUrls:['./company-add-new-ui.component.css']
 })
 
 export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
