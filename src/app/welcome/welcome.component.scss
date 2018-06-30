@@ -31,11 +31,11 @@
 
 .box{
   background: rgba(255,255,255,0.5);
-  margin-top:22px;
+  padding: 30px 40px;
 }
 .form-custom{
-  margin-bottom: 7px !important;
-  margin-top:23px !important;
+  margin-bottom: 20px !important;
+  // margin-top:23px !important;
 }
 .width350{
   width:350px;
@@ -54,7 +54,11 @@
 .btn-default:hover{
   background: #E6E6E6;
 }
-
+::ng-deep sh-select .header.open > input[type="text"], ::ng-deep sh-select .header.open > input[type="text"]:focus {
+  width: 100%;
+}
+.box {
+}
 
 
 

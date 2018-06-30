@@ -9,11 +9,11 @@
 
     <div class="welcome-container width350">
 
-      <form name="form" #welcomeForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
-        <div class="form-group box">
+      <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix horizontal-form" autocomplete="off">
+        <div class="box clearfix mrT3">
 
           <div class="col-xs-12">
-            <div class="input-group form-group form-custom">
+            <div class="form-group form-custom">
               <label for="state_dd">State</label>
               <sh-select placeholder="Select state" name="state_dd" id="state_dd"
                          [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia"
@@ -24,7 +24,7 @@
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group form-custom">
+            <div class="form-group form-custom">
               <label for="city">City</label>
               <input type="text" class="form-control" [(ngModel)]="companyProfileObj.city" name="city"
                      id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$" autocomplete="off" />
@@ -32,38 +32,37 @@
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group form-custom">
+            <div class="form-group form-custom">
               <label for="mobile">Mobile Number</label>
               <div style="display: flex;justify-content: space-between">
                 <sh-select [options]="countryCodeList" name="country" [placeholder]="'CC'"
-                           [(ngModel)]="companyProfileObj.country"></sh-select>
-                <input type="text" class="form-control" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
+                           [(ngModel)]="companyProfileObj.country" [width]="'65px'" id="" [ItemHeight]="33"></sh-select>
+                <input type="text" class="form-control mrL2" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
                        id="mobile" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
               </div>
             </div>
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group form-custom">
+            <div class="form-group form-custom">
               <label for="industry">Industry</label>
               <sh-select [options]="industrialList" name="industry" id="industry" [placeholder]="'Industry'"
-                         [(ngModel)]="companyProfileObj.industry"></sh-select>
+                         [(ngModel)]="companyProfileObj.industry" [ItemHeight]="33"></sh-select>
             </div>
           </div>
 
           <div class="col-xs-12">
-            <div class="input-group form-group form-custom">
+            <div class="form-group form-custom">
               <label for="mobile">Prev. Software</label>
               <input type="text" class="form-control" [(ngModel)]="companyProfileObj.prevSoft" name="contactNo"
                      id="prev" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
             </div>
           </div>
-          <div class="col-xs-12 m-t-20">
+          <div class="col-xs-12 mrT">
             <button type="submit" class="btn btn-default" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
               Save
             </button>
-            <!-- <button type="button" class="btn btn-primary btn-skip">Skip</button> -->
-            <a href="" class="skip">Skip</a>
+            <button type="button" class="btn btn-link btn-skip">Skip</button>
           </div>
         </div>
 
