@@ -44,6 +44,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+.icon-Create-Invoice:before {
+    content: "\e901";
+  }
+  .icon-Add-customer:before {
+    content: "\e900";
+  }
+  .icon-Invite-Accountant:before {
+    content: "\e906";
+  }
+
 
 .icon-add:before {
     content: "\e900";
@@ -3909,6 +3919,11 @@ input[type='checkbox'][disabled]:after {
     font-family: 'LatoWebSemibold';
     text-transform: uppercase;
 }
+.welcome-header h2{
+  font-size:26px;
+  font-family: 'LatoWebSemibold';
+  color:#535353;
+}
 
 .table-container section div:last-child {
     border-right: 0;
@@ -4132,6 +4147,9 @@ typeahead-container .dropdown-menu li.active>a>a {
 .m-t-50{
     margin-top:50px;
 }
+.m-t-41{
+    margin-top:41px;
+}
 .m-b-20{
     margin-bottom:20px !important;
 
@@ -4139,17 +4157,48 @@ typeahead-container .dropdown-menu li.active>a>a {
 .m-t-20{
     margin-top:20px !important;
 }
+.m-t-10{
+    margin-top:10px !important;
+}
 .m-t-30{
     margin-top:30px !important;
+}
+.m-t-40{
+    margin-top:40px !important;
 }
 .p-lr-15{
     padding-left:15px;
     padding-right:15px;
 }
+.m-t-37{
+    margin-top:37px !important;
+}
 .company-form-body{
     width:  422px;
     margin: auto;
 }
+.welcome-header h2{
+    font-size:26px;
+    font-family: 'LatoWebSemibold';
+    color:#535353;
+    position:relative;
+  }
+  .welcome-header h2:after{
+      position: absolute;
+      top:0;
+      right:-32px;
+      content:"";
+      background: url("../images/hand_icon.svg") no-repeat 0 0;
+      width:23px;
+      height:24px;
+  }
+  .height550{
+      height:550px;
+  }
+  .right_section{
+    background: url("../images/Schedule.png") right 100px no-repeat;
+  }
+
 
 /**end new modal design**/
 .col_wrapper .btn-link {
