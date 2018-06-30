@@ -270,8 +270,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockFocus(stockIndx: number, indx: number) {
-    this.showConfirmationBox = false;
     this.selectedField = 'stock';
+    this.showConfirmationBox = false;
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
     // this.getStock(this.groupUniqueName);
@@ -326,7 +326,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (acc) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
-        this.requestObj.transactions[idx].inventory.push(this.initInventory());
+
+        let len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
+        if (!len || this.requestObj.transactions[idx].inventory && this.requestObj.transactions[idx].inventory[len - 1].stock.uniqueName) {
+          this.requestObj.transactions[idx].inventory.push(this.initInventory());
+        }
       }
 
       // Alok Sir

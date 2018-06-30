@@ -41,12 +41,17 @@ export class OnReturnDirective {
         // } else {
         //   alert('ele without directive');
         // }
-        target.focus();
+        // setTimeout(() => {
+        //   // target.focus();
+        // }, 500);
+
       } else if (e.which === 8 || e.keyCode === 8) {
         const target = allElements[indx - 1];
         if (selectedEle.value === '') {
           e.preventDefault();
-          target.focus();
+          if (target) {
+            target.focus();
+          }
         }
       }
 
