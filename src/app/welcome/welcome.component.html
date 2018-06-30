@@ -1,10 +1,85 @@
 <div id="main">
   <app-header></app-header>
   <layout-main>
-    <p>
-      In Welcome
-    </p>
-    <a class="btn btn-share" [routerLink]="['/onboarding']">Next</a>
+
+    <div class="welcome-header">
+      <h2>Welcome To Giddh!</h2>
+    </div>
+    <hr/>
+
+    <div class="welcome-container">
+
+      <form name="form" #welcomeForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
+        <div class="form-group">
+
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="state_dd">State</label>
+              <sh-select [disabled]="true" placeholder="Select state" name="state_dd" id="state_dd"
+                         [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia"
+                         [ItemHeight]="33"></sh-select>
+              <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state"
+                     *ngIf="!countryIsIndia" name="state"/>
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="city">City</label>
+              <input type="text" class="form-control" [(ngModel)]="companyProfileObj.city" name="city"
+                     id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="mobile">Mobile Number</label>
+              <div style="display: flex;justify-content: space-between">
+                <sh-select [options]="countryCodeList" name="country" [placeholder]="'CC'"
+                           [(ngModel)]="companyProfileObj.country"></sh-select>
+                <input type="text" class="form-control" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
+                       id="mobile" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="mobile">Financial Year</label>
+              <input type="text" class="form-control" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
+                     id="fn" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="mobile">Industry</label>
+              <input type="text" class="form-control" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
+                     id="in" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="input-group form-group " style="width:  254px;margin-bottom: 7px;">
+              <label for="mobile">Prev. Software</label>
+              <input type="text" class="form-control" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
+                     id="prev" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix">
+          <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
+            Update
+          </button>
+          <button type="button" class="btn btn-primary">Cancel</button>
+        </div>
+
+      </form>
+
+
+    </div>
+
   </layout-main>
   <app-footer></app-footer>
 </div>
