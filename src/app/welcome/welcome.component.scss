@@ -13,3 +13,15 @@
 .welcome-container form{
   flex: 0;
 }
+
+.form-group{
+  z-index: unset !important;
+}
+::ng-deep.input-group .form-control {
+
+  z-index: unset;
+}
+.z-index-2{
+  position: relative;
+  z-index: 2;
+}
