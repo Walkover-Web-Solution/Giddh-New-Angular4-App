@@ -15,12 +15,11 @@
         </div>
 
         <div class="template_action">
-            <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-            <button class="btn btn-default" (click)="onPreview(template)">
+            <button [hidden]="template.templateType === 'gst_template_b' || template.templateType === 'gst_template_c' || template.templateType === 'gst_template_d' || template.templateType === 'gst_template_e' || template.templateType === 'gst_template_f' || template.templateType === 'gst_template_g'" class="btn btn-default" (click)="onPreview(template)">
                         <i class="glyphicon glyphicon-eye-open" tooltip="Preview" aria-hidden="true"></i>
             </button>
-            <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-            <button class="btn btn-default" (click)="onUpdateTemplate(template)">
+
+            <button [hidden]="template.templateType === 'gst_template_b' || template.templateType === 'gst_template_c' || template.templateType === 'gst_template_d' || template.templateType === 'gst_template_e' || template.templateType === 'gst_template_f' || template.templateType === 'gst_template_g'" class="btn btn-default" (click)="onUpdateTemplate(template)">
                             <i class="glyphicon glyphicon-cog" tooltip="Edit template" aria-hidden="true"></i>
             </button>
             <button [disabled]="template.isDefault" class="btn btn-default" (click)="onDeleteTemplate(template)">
