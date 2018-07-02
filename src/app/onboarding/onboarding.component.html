@@ -6,40 +6,45 @@
     </div>
     <hr/>
     <div class="container">
-        <div class="row m-t-35">
-              <div class="col-xs-4 col-xs-offset-2">
-                  <h1 class="borderbtm">Try things out</h1>
-                  <ul class="manage_invoice">
-                    <li>
-                      <a href=""><i class="icon-Create-Invoice"></i>Create and send an Invoice</a>
-                    </li>
-                    <li>
-                      <a href=""><i class="icon-Add-customer"></i>Add a customer or vendor</a>
-                    </li>
-                    <li>
-                      <a href=""><i class="icon-Invite-Accountant"></i>Invite your accountant</a>
-                    </li>
-                  </ul>
-                  <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
-                  <p>
-                      Dont worry!<br>
-                      Get easily your accounting data on Giddh.
-                  </p>
-                  <button class="btn btn-sync">Sync with Tally</button>
-                </div>  
-                <div class="col-sm-4 col-xs-offset-1">
-                  <div class="right_section">
-                    <h1 class="borderbtm">Become an expert in 15 mins.</h1>
-                    <span>request a demo:</span>
-                    <button class="btn btn-default m-t-10">Schedule Now</button><br>
-                    <span class="m-t-41">or call:</span>
-                    <p class="text-dark">1800-2121-322</p>
-                    <span class="m-t-41 m-b-10">or visit:</span> 
-                    <a href="#" class="text-dark">faq.giddh.com</a>
-                  </div>
-                </div>
+      <div class="row m-t-35">
+        <div class="col-xs-4 col-xs-offset-2">
+          <h1 class="borderbtm">Try things out</h1>
+          <ul class="manage_invoice">
+            <li>
+              <a href="" [routerLink]="['/sales']"><i class="icon-Create-Invoice"></i>Create and send an Invoice</a>
+            </li>
+            <li>
+              <a href="" [routerLink]="['/contact']"><i class="icon-Add-customer"></i>Add a customer or vendor</a>
+            </li>
+            <li>
+              <a href="javascript:void 0" (click)="goTo('/settings')"><i
+                class="icon-Invite-Accountant"></i>Invite your accountant</a>
+            </li>
+          </ul>
+          <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
+          <p>
+            Dont worry!<br>
+            Get easily your accounting data on Giddh.
+          </p>
+          <!--<button class="btn btn-sync">Sync with Tally</button>-->
+          <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
+            Sync With Tally
+          </a>
         </div>
-       
+        <div class="col-sm-4 col-xs-offset-1">
+          <div class="right_section">
+            <h1 class="borderbtm">Become an expert in 15 mins.</h1>
+            <span>request a demo:</span>
+            <button class="btn btn-default m-t-10">Schedule Now</button>
+            <br>
+            <span class="m-t-41">or call:</span>
+            <p class="text-dark">1800-2121-322</p>
+            <span class="m-t-41 m-b-10">or visit:</span>
+            <a href="faq.giddh.com" class="text-dark">faq.giddh.com</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </layout-main>
   <app-footer></app-footer>

@@ -59,10 +59,10 @@
             </div>
           </div>
           <div class="col-xs-12 mrT">
-            <button type="submit" class="btn btn-default" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
+            <button type="submit" class="btn btn-default" (click)="submit()">
               Save
             </button>
-            <button type="button" class="btn btn-link btn-skip">Skip</button>
+            <button type="button" class="btn btn-link btn-skip" (click)="skip()">Skip</button>
           </div>
         </div>
 
