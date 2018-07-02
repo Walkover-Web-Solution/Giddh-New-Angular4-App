@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'welcome-component',
@@ -92,7 +93,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   ];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions) {
+  constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
+              private _router: Router) {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
@@ -124,6 +126,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     //
+  }
+
+  public skip() {
+    this._router.navigate(['/onboarding']);
   }
 
   public submit() {
