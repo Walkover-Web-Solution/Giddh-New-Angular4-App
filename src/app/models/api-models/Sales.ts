@@ -1,7 +1,6 @@
 import * as _ from '../../lodash-optimized';
-import { IInvoiceTax } from './Invoice';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isNull, pick } from '../../lodash-optimized';
+import { IInvoiceTax } from './Invoice';
 
 /**
  * IMP by dude
@@ -28,6 +27,13 @@ export const VOUCHER_TYPE_LIST: any[] = [
     label: 'Debit Note',
     additional: {
     label: 'Debit Note'
+    }
+  },
+  {
+    value: 'Purchase',
+    label: 'Purchase',
+    additional: {
+      label: 'Purchase'
     }
   }
 ];
@@ -345,6 +351,7 @@ export interface GenericRequestForGenerateSCD {
   voucher: VoucherClass;
   updateAccountDetails?: boolean;
   paymentAction?: IPaymentAction;
+  depositAccountUniqueName?: string;
 }
 
 class VoucherDetailsClass {
@@ -385,6 +392,7 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
+  public depositAccountUniqueName: string;
   constructor() {
     this.accountDetails = new AccountDetailsClass();
     this.entries = [new SalesEntryClass()];

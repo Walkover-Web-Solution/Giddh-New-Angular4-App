@@ -1,28 +1,24 @@
-import { Component, OnDestroy, OnInit, trigger, state, style, animate, transition, ViewChild } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
-import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
-import { LoginActions } from '../actions/login.action';
-import { AuthenticationService } from '../services/authentication.service';
-import { CompanyService } from '../services/companyService.service';
-import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
-import { cloneDeep } from '../lodash-optimized';
+import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { ModalDirective, BsDropdownDirective } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { createSelector } from 'reselect';
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -94,9 +90,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _companyActions: CompanyActions) {
-      this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
-      this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
-    }
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
+      // console.log('flattenAccountsStream$');
+      return s;
+    })).takeUntil(this.destroyed$);
+    // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+
+  }
 
   public ngOnInit() {
 
@@ -110,26 +111,27 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.getAccounts('sundrydebtors');
+    this.getAccounts('sundrydebtors', null, null, 'true');
 
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
       if (yes) {
         this.toggleAccountAsidePane();
-        this.getAccounts('sundrydebtors');
+        this.getAccounts('sundrydebtors', null, null, 'true');
       }
     });
 
     this.getCashFreeBalance();
 
     this.flattenAccountsStream$.subscribe(data => {
+      // console.log('flattenAccountsStream', data);
       if (data) {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = Observable.of(accounts);
@@ -142,7 +144,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   public search(ev: any) {
-    let searchStr =  ev.target.value;
+    let searchStr = ev.target.value;
     if (this.activeTab === 'customer') {
       this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
     } else {
@@ -228,15 +230,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.filterDropDownList.hide();
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string) {
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
     pageNumber = pageNumber ? pageNumber : 1;
-    this._contactService.GetContacts(groupUniqueName, pageNumber).subscribe((res) => {
+    refresh = refresh ? refresh : 'false';
+    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = res.body;
           this.sundryDebtorsAccounts$ = Observable.of(res.body.results);
           if (requestedFrom !== 'pagination') {
-            this.getAccounts('sundrycreditors', pageNumber);
+            this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           }
         } else {
           this.sundryCreditorsAccountsBackup = res.body;

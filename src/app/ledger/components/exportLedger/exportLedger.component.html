@@ -33,11 +33,11 @@
         </label>
       </div>
       <div class="pdB1 clearfix" [hidden]="emailTypeSelected === 'admin-condensed'">
-          <label class="w100">Invoice no.:</label>
-          <label class="radio-inline pd0" style="margin-left: 6px;">
-            <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
-          </label>
-        </div>
+        <label class="w100">Invoice no.:</label>
+        <label class="radio-inline pd0" style="margin-left: 6px;">
+          <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
+        </label>
+      </div>
       <button class="btn-success btn" (click)="exportLedger()">Download</button>
       <div class="modal_wrap">
         <div class="clearfix"></div>

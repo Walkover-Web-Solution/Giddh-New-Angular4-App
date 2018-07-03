@@ -42,6 +42,26 @@ export class TlPlService {
   }
 
   /**
+   * Get V2 Trial Balance
+   */
+  public GetV2TrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let params: any = { from: request.from, to: request.to, refresh: request.refresh };
+    if (request.tagName) {
+      params.tagName = request.tagName;
+    }
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params)
+      .map((res) => {
+        let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
+        data.request = request;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<AccountDetails, TrialBalanceRequest>(e, request));
+  }
+
+  /**
    * get Profit/Loss
    */
   public GetProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {

@@ -1,19 +1,11 @@
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import {
-  IAccountDetails,
-  IManufacturingDetails,
-  Istock,
-  IStockDetail,
-  IStockItem,
-  IStockReport,
-  IStockReportItem,
-  IStocksItem,
-  IStockTransaction,
-  IStockUnit,
-  IStockUnitItem,
-  IStockUnitResponse
-} from '../interfaces/stocksItem.interface';
+import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
+
+export interface INameUniqueName {
+  uniqueName: string;
+  name: string;
+  isActive?: boolean;
+}
 
 /*
  * Model for Create Stock Group api request
@@ -41,6 +33,7 @@ export class StockGroupResponse {
   public stocks: INameUniqueName[];
   public uniqueName: string;
 }
+
 
 /**
  * Model for Stocks api response
@@ -216,3 +209,4 @@ interface IGroupStockReport {
   stockUniqueName: string;
   stockName: string;
 }
+

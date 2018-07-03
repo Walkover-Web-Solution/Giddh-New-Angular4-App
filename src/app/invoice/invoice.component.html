@@ -1,26 +1,26 @@
 <section class="invoice-bg col-xs-12">
-    <nav class="navbar">
-        <div class="container-fluid pdL0">
-            <div class="">
-                <invoice-page-dd></invoice-page-dd>
+  <nav class="navbar">
+    <div class="container-fluid pdL0">
+      <div class="">
+        <invoice-page-dd></invoice-page-dd>
 
-                <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="!isRecurringSelected">
-                    <li>
-                        <a [routerLink]="['preview']" routerLinkActive="active">Preview</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['generate']" routerLinkActive="active">Generate</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['templates']" routerLinkActive="active">Templates</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['settings']" routerLinkActive="active">Settings</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="!isRecurringSelected">
+          <li>
+            <a [routerLink]="['preview']" routerLinkActive="active">Preview</a>
+          </li>
+          <li>
+            <a [routerLink]="['generate']" routerLinkActive="active">Generate</a>
+          </li>
+          <li>
+            <a [routerLink]="['templates']" routerLinkActive="active">Templates</a>
+          </li>
+          <li>
+            <a [routerLink]="['settings']" routerLinkActive="active">Settings</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </section>

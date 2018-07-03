@@ -1,4 +1,4 @@
-import { IOption } from './../../theme/ng-select/option.interface';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
@@ -275,7 +275,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       let profileObj = this.companyProfileObj;
       let defaultGstObjIndx;
       profileObj.gstDetails.forEach((obj, indx) => {
-        if (profileObj.gstDetails[indx].addressList[0].isDefault) {
+        if (profileObj.gstDetails[indx] && profileObj.gstDetails[indx].addressList[0] && profileObj.gstDetails[indx].addressList[0].isDefault) {
           defaultGstObjIndx = indx;
         }
       });

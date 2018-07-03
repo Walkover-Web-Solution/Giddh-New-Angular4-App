@@ -10,8 +10,10 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { LaddaModule } from 'angular2-ladda';
-import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { BsDropdownModule } from 'ngx-bootstrap';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,10 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     TypeaheadModule,
     ModalModule,
     LaddaModule,
-    DecimalDigitsModule
+    DecimalDigitsModule,
+    Daterangepicker,
+    BsDropdownModule,
+    ClickOutsideModule
   ],
 })
 export class SearchModule {

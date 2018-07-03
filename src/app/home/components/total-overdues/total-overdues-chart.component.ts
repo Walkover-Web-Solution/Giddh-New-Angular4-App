@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -8,10 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
-import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { CHART_CALLED_FROM, API_TO_CALL } from '../../../actions/home/home.const';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 
@@ -50,9 +47,9 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public sundryCreditorResponse: any = {};
   public totalRecievable: number = 0;
   public totalPayable: number = 0;
-  public overDueObj: any = {} ;
-  public ReceivableDurationAmt: number = 0 ;
-  public PaybaleDurationAmt: number = 0 ;
+  public overDueObj: any = {};
+  public ReceivableDurationAmt: number = 0;
+  public PaybaleDurationAmt: number = 0;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -72,7 +69,9 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
-          if (activeCompany) { this.activeFinancialYear = activeCompany.activeFinancialYear; }
+          if (activeCompany) {
+            this.activeFinancialYear = activeCompany.activeFinancialYear;
+          }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {
@@ -99,7 +98,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false));
+    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), false));
 
     this.totalOverDuesResponse$
       .skipWhile(p => (isNullOrUndefined(p)))
@@ -113,9 +112,9 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
               this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
             } else {
               this.sundryCreditorResponse = grp;
-                this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-                this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-                // this.totalPayable = this.calculateTotalRecievable(this.sundryCreditorResponse);
+              this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
+              this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
+              // this.totalPayable = this.calculateTotalRecievable(this.sundryCreditorResponse);
             }
           });
 
@@ -127,25 +126,27 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       });
 
   }
+
   public hardRefresh() {
     this.refresh = true;
     this.fetchChartData();
   }
+
   public fetchChartData() {
     this.requestInFlight = true;
     // this.ApiToCALL = [];
-    this.store.dispatch(this._homeActions.getTotalOverdues(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, true));
+    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), true));
   }
 
   public generateCharts() {
     this.totaloverDueChart = {
       colors: ['#005b77', '#d37c59'],
       chart: {
-          type: 'pie',
-          polar: false,
-          className: 'overdue_chart',
-          width: 300,
-          height: '180px'
+        type: 'pie',
+        polar: false,
+        className: 'overdue_chart',
+        width: 300,
+        height: '180px'
       },
       title: {
         text: '',
@@ -167,29 +168,37 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         enabled: false
       },
       plotOptions: {
-          pie: {
-            showInLegend: true,
-            innerSize: '70%',
-            allowPointSelect: true,
-            dataLabels: {
-                enabled: false,
-                crop: true,
-                defer: true
-            },
-            shadow: false,
-            // center: [
-            //     '50%',
-            //     '50%'
-            // ],
+        pie: {
+          showInLegend: true,
+          innerSize: '70%',
+          allowPointSelect: true,
+          dataLabels: {
+            enabled: false,
+            crop: true,
+            defer: true
           },
+          shadow: false,
+          // center: [
+          //     '50%',
+          //     '50%'
+          // ],
+        },
         series: {
-            animation: false,
-            dataLabels: {}
+          animation: false,
+          dataLabels: {}
         }
       },
+      tooltip: {
+        headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.percentage:.1f} %</b> </td>' +
+        '</tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
       series: [{
-          name: 'Total Overdues',
-          data: [['Total Recievable', this.totalRecievable * 100 / (this.totalRecievable + this.totalPayable)], ['Total Payable', this.totalPayable * 100 / (this.totalPayable + this.totalRecievable)]],
+        name: 'Total Overdues',
+        data: [['Total Recievable', this.totalRecievable * 100 / (this.totalRecievable + this.totalPayable)], ['Total Payable', this.totalPayable * 100 / (this.totalPayable + this.totalRecievable)]],
       }],
     };
   }

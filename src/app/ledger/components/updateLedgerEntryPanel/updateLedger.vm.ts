@@ -1,15 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, findIndex, sumBy, uniq } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
-import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
-import { LedgerService } from '../../../services/ledger.service';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];

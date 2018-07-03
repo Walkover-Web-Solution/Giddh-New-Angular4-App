@@ -16,7 +16,8 @@
             </div>
         </div>
 
-        <account-add-new *ngIf="activeGroupUniqueName" [activeGroupUniqueName]="activeGroupUniqueName" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+        <account-add-new *ngIf="activeGroupUniqueName" [activeGroupUniqueName]="activeGroupUniqueName" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)"
+            [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
         </account-add-new>
     </div>
 </div>

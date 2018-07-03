@@ -23,6 +23,9 @@ export class TBPlBsActions {
   public static readonly GET_TRIAL_BALANCE_REQUEST = 'GET_TRIAL_BALANCE_REQUEST';
   public static readonly GET_TRIAL_BALANCE_RESPONSE = 'GET_TRIAL_BALANCE_RESPONSE';
 
+  public static readonly GET_V2_TRIAL_BALANCE_REQUEST = 'GET_V2_TRIAL_BALANCE_REQUEST';
+  public static readonly GET_V2_TRIAL_BALANCE_RESPONSE = 'GET_V2_TRIAL_BALANCE_RESPONSE';
+
   public static readonly GET_PROFIT_LOSS_REQUEST = 'GET_PROFIT_LOSS_REQUEST';
   public static readonly GET_PROFIT_LOSS_RESPONSE = 'GET_PROFIT_LOSS_RESPONSE';
 
@@ -44,6 +47,19 @@ export class TBPlBsActions {
           payload: r.body
         }, true, {
             type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
+            payload: null
+          }));
+    });
+
+    @Effect() private GetV2TrialBalance$: Observable<Action> = this.action$
+    .ofType(TBPlBsActions.GET_V2_TRIAL_BALANCE_REQUEST)
+    .switchMap((action: CustomActions) => {
+      return this._tlPlService.GetV2TrailBalance(action.payload)
+        .map((r) => this.validateResponse<AccountDetails, TrialBalanceRequest>(r, {
+          type: TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE,
+          payload: r.body
+        }, true, {
+            type: TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE,
             payload: null
           }));
     });
@@ -103,6 +119,13 @@ export class TBPlBsActions {
   public GetTrialBalance(request: TrialBalanceRequest): CustomActions {
     return {
       type: TBPlBsActions.GET_TRIAL_BALANCE_REQUEST,
+      payload: request
+    };
+  }
+
+  public GetV2TrialBalance(request: TrialBalanceRequest): CustomActions {
+    return {
+      type: TBPlBsActions.GET_V2_TRIAL_BALANCE_REQUEST,
       payload: request
     };
   }
