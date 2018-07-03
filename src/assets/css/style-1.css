@@ -2428,7 +2428,7 @@ padding: 0;
 
 .account-card {
     width: 300px;
-    min-height: 226px;
+    min-height: 240px;
     float: left;
     display: inline-block;
     position: relative;
@@ -2737,7 +2737,8 @@ background: #ff5e01;
 
 /*search query*/
 
-#searchQueryForm span,
+
+/* #searchQueryForm span,
 #searchQueryForm label {
     float: left;
     display: inline-block;
@@ -2759,12 +2760,13 @@ background: #ff5e01;
     -webkit-appearance: none;
     text-indent: 0.01px;
     text-overflow: '';
-}
+} */
 
-#searchQueryForm span {
+
+/* #searchQueryForm span {
     border-bottom: 2px dashed #ddd;
     margin: 0 10px;
-}
+} */
 
 
 /*div table*/
@@ -3024,13 +3026,19 @@ ul.pills {
 ul.pills li {
     line-height: 16px;
     font-size: 12px;
-    color: #fff;
     background: #444;
     border-radius: 5px;
     overflow: hidden;
     margin-right: 5px;
-    padding: 5px;
+    padding: 5px 10px;
     cursor: pointer;
+    background-color: rgb(244, 245, 248);
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+ul.pills li:hover {
+    color: #ff5f00;
 }
 
 .load-more {
@@ -5128,21 +5136,27 @@ bs-datepicker-container {
 .stock-grp-list li div:focus {
     outline: 0;
 }
-.mt10{
-    margin-top:10px;
+
+.mt10 {
+    margin-top: 10px;
 }
-.mt20{
-    margin-top:20px;
+
+.mt20 {
+    margin-top: 20px;
 }
-.p0{
-    padding:0;
+
+.p0 {
+    padding: 0;
 }
+
 .input-group {
     z-index: 1;
 }
+
 .daterangepicker.dropdown-menu {
     z-index: 1 !important;
 }
+
 .daterangepicker.show-calendar {
-min-width: 666px;
+    min-width: 666px;
 }

@@ -4,10 +4,11 @@ import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { EBANKS } from './apiurls/settings.linked.accounts.api';
-import { IGetAllEbankAccountResponse, IGetEbankTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
+import { EBANKS, YODLEE_FASTLINK } from './apiurls/settings.linked.accounts.api';
+import { IGetAllEbankAccountResponse, IGetEbankTokenResponse, IAccessTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Injectable()
 export class SettingsLinkedAccountsService {
@@ -16,7 +17,7 @@ export class SettingsLinkedAccountsService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /**
@@ -73,9 +74,9 @@ export class SettingsLinkedAccountsService {
   public DeleteBankAccount(loginId: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
+    return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', loginId)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {loginId};
+      data.queryString = { loginId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -88,7 +89,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {loginId};
+      data.queryString = { loginId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -101,7 +102,7 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + EBANKS.LINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId), dataToSend).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {accountId};
+      data.queryString = { accountId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -109,12 +110,12 @@ export class SettingsLinkedAccountsService {
   /**
    * Unlink bank account
    */
-  public UnlinkBankAccount(accountId: string): Observable<BaseResponse<any, string>> {
+  public UnlinkBankAccount(accountId: string, accountUniqueName): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId)).map((res) => {
+    return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':accountUniqueName', accountUniqueName)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {accountId};
+      data.queryString = { accountId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -127,7 +128,79 @@ export class SettingsLinkedAccountsService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + EBANKS.UPDATE_DATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':date', date), {}).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {accountId};
+      data.queryString = { accountId };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /**
+   * Get yodlee token
+   */
+  public GetYodleeToken(): Observable<BaseResponse<IAccessTokenResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.ACCESS_TOKEN.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<IAccessTokenResponse, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<IAccessTokenResponse, string>(e));
+  }
+
+  /**
+   * Get yodlee accounts
+   */
+  public GetYodleeAccounts(): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /**
+   * Search Bank Accounts
+   */
+  public SearchBank(value): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.SEARCH_BANKS.replace(':companyUniqueName', this.companyUniqueName).replace(':queryString', value)).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
+  }
+
+  /**
+   * Provider login Form
+   */
+  public GetLoginForm(value): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_LOGIN_FORM.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', value)).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /**
+   * Add Provider
+   */
+  public AddProvider(objToSend, providerId): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + YODLEE_FASTLINK.ADD_PROVIDER.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', providerId), objToSend).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+  }
+
+  /**
+   * Bank Sync
+   */
+  public GetBankSyncStatus(value): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_BANK_SYNC_STATUS.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', value)).map((res) => {
+      let data: BaseResponse<any, string> = res;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }

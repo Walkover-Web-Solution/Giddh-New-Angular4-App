@@ -271,16 +271,16 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return state;
     }
     case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES: {
-      return Object.assign({}, state, { ledgerBulkActionSuccess: false });
+      return Object.assign({}, state, {ledgerBulkActionSuccess: false});
     }
     case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE: {
-      return Object.assign({}, state, { ledgerBulkActionSuccess: true });
+      return Object.assign({}, state, {ledgerBulkActionSuccess: true});
     }
     case INVOICE_ACTIONS.GENERATE_BULK_INVOICE: {
-      return Object.assign({}, state, { ledgerBulkActionSuccess: false });
+      return Object.assign({}, state, {ledgerBulkActionSuccess: false});
     }
     case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
-      return Object.assign({}, state, { ledgerBulkActionSuccess: true });
+      return Object.assign({}, state, {ledgerBulkActionSuccess: true});
     }
     case  LEDGER.GET_CURRENCY_RATE_RESPONSE: {
       let res = action.payload;

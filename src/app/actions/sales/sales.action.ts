@@ -14,11 +14,10 @@ import { SALES_ACTIONS } from './sales.const';
 import { Router } from '@angular/router';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../../services/group.service';
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
 import { InventoryService } from '../../services/inventory.service';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CustomActions } from '../../store/customActions';
 

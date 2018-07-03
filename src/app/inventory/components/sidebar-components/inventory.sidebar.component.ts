@@ -3,22 +3,25 @@ import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'invetory-sidebar',  // <home></home>
+  selector: 'inventory-sidebar',  // <home></home>
   templateUrl: './inventory.sidebar.component.html',
   styles: [`
-  .parent-Group>ul>li ul li div {
-    color:#8a8a8a;
-  }
-  #inventory-sidebar {
-    background: #fff;
-    min-height: 100vh;
-  }
+    .parent-Group > ul > li ul li div {
+      color: #8a8a8a;
+    }
+
+    #inventory-sidebar {
+      background: #fff;
+      min-height: 100vh;
+    }
   `]
 })
 export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -31,7 +34,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private sidebarAction: SidebarAction) {
+  constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router) {
     this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).takeUntil(this.destroyed$);
     this.sidebarRect = window.screen.height;
     // console.log(this.sidebarRect);
@@ -54,13 +57,21 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
       .distinctUntilChanged()
       .map((e: any) => e.target.value)
       .subscribe((val: string) => {
-          if (val) {
-            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
-          } else {
-            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
-          }
+        if (val) {
+          this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
+        } else {
+          this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin(val));
+        }
       });
   }
+
+  public showBranchScreen() {
+    // this.store.dispatch(this.inventoryAction.ResetInventoryState());
+    this.store.dispatch(this.sidebarAction.ShowBranchScreen(true));
+    this.store.dispatch(this.sidebarAction.ShowBranchScreenSideBar(true));
+    // this.router.navigate(['inventory']);
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
