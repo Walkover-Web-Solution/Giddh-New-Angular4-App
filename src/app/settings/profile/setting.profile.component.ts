@@ -1,4 +1,4 @@
-import { IOption } from './../../theme/ng-select/option.interface';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
