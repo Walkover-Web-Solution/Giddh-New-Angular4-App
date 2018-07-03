@@ -45,17 +45,25 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+
+    this.isDiscountCreateSuccess$.subscribe(s => {
+      this.createRequest = new CreateDiscountRequest();
+    });
   }
 
   public submit() {
     this.store.dispatch(this._settingsDiscountAction.CreateDiscount(this.createRequest));
   }
 
-  public edit(data) {
-    //
+  public edit(data: IDiscountList) {
+    this.createRequest.type = data.discountType;
+    this.createRequest.name = data.name;
+    this.createRequest.discountValue = data.discountValue;
+    this.createRequest.accountUniqueName = data.linkAccount.uniqueName;
   }
 
   public delete(uniqueName: string) {
+    this.createRequest = new CreateDiscountRequest();
     this.store.dispatch(this._settingsDiscountAction.DeleteDiscount(uniqueName));
   }
 

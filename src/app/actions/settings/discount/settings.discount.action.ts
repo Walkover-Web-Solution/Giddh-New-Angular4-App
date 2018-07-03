@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 import { CustomActions } from '../../../store/customActions';
 import { SETTINGS_DISCOUNT_ACTIONS } from './settings.discount.const';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
-import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { CreateDiscountRequest, IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { AccountResponse } from '../../../models/api-models/Account';
 
 @Injectable()
 export class SettingsDiscountActions {
@@ -44,7 +45,7 @@ export class SettingsDiscountActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast('Tax Created Successfully.');
+        this.toasty.successToast('Discount Created Successfully.');
       }
       return {type: 'EmptyAction'};
     });
@@ -65,7 +66,7 @@ export class SettingsDiscountActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast('Tax Updated Successfully.');
+        this.toasty.successToast('Discount Updated Successfully.');
       }
       return {type: 'EmptyAction'};
     });
@@ -86,7 +87,7 @@ export class SettingsDiscountActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast('Tax Deleted Successfully.');
+        this.toasty.successToast('Discount Deleted Successfully.');
       }
       return {type: 'EmptyAction'};
     });
@@ -104,14 +105,14 @@ export class SettingsDiscountActions {
     };
   }
 
-  public CreateDiscount(value): CustomActions {
+  public CreateDiscount(value: CreateDiscountRequest): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT,
       payload: value
     };
   }
 
-  public CreateDiscountResponse(value): CustomActions {
+  public CreateDiscountResponse(value: BaseResponse<AccountResponse, CreateDiscountRequest>): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE,
       payload: value
@@ -139,10 +140,10 @@ export class SettingsDiscountActions {
     };
   }
 
-  public DeleteDiscountResponse(value): CustomActions {
+  public DeleteDiscountResponse(value: BaseResponse<string, string>): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE,
-      payload: value
+      payload: value.status === 'success' ? value.request : ''
     };
   }
 
