@@ -8,11 +8,11 @@
     </ul>
 </span> -->
 <div class="btn-group" dropdown>
-    <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
-{{selectedPage}}
-<span class="caret"></span>
-</button>
-    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+  <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
+    {{selectedPage}}
+    <span class="caret"></span>
+  </button>
+  <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
         <li role="menuitem" *ngFor="let pg of dropDownPages" (click)="changePage(pg)"><a class="dropdown-item cp">{{ pg.name }}</a></li>
-    </ul>
+  </ul>
 </div>

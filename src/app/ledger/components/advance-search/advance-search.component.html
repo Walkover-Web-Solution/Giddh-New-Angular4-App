@@ -14,8 +14,10 @@
             </div>
             <div class="col-xs-7">
               <div class="form-group input-group">
-                <input  autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control"
-                  (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required formControlName="bsRangeValue" [bsConfig]="bsConfig">
+                <input autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text"
+                       class="form-control"
+                       (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required
+                       formControlName="bsRangeValue" [bsConfig]="bsConfig">
                 <span class="input-group-addon cursor-pointer" (click)="dp.toggle()">
                   <i class="fa fa-calendar" aria-hidden="true"></i>
                 </span>
@@ -44,8 +46,9 @@
             </div>
             <div class="col-xs-7">
               <div class="form-group">
-                <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear('groupUniqueNames')" (selected)="onDDElementSelect('groupUniqueNames', $event)"
-                  [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Groups'"></sh-select>
+                <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear('groupUniqueNames')"
+                           (selected)="onDDElementSelect('groupUniqueNames', $event)"
+                           [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Groups'"></sh-select>
               </div>
             </div>
           </div>

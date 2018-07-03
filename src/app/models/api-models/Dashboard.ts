@@ -59,7 +59,7 @@ export class ClosingBalanceResponse implements IDashboardCbMainItem, IChildGroup
 }
 
 export class BankAccountsResponse {
-  public accounts: IBankAccount[];
+  public yodleeAccounts: IBankAccount[];
   public siteName: string;
   public siteId: number;
 }

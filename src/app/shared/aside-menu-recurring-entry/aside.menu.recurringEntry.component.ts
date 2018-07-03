@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -7,6 +7,7 @@ import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'app-aside-recurring-entry',
@@ -47,9 +48,8 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
   `],
 })
 
-export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
+export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDestroy {
   public IsNotExpirable: boolean;
-
   public today: Date = new Date();
   public maxEndDate: Date = new Date();
   public intervalOptions: IOption[];
@@ -61,7 +61,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   @Input() public voucherNumber: string;
   @Input() public mode: 'create' | 'update' = 'create';
   @Input() public invoice: RecurringInvoice;
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeAsideEvent: EventEmitter<RecurringInvoice> = new EventEmitter(true);
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>,
               private _fb: FormBuilder,
@@ -85,7 +87,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    // console.log(changes);
     if (changes.voucherNumber) {
       this.form.controls.voucherNumber.patchValue(this.voucherNumber);
     }
@@ -104,7 +106,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.intervalOptions = [
-      {label: 'Weekly', value: 'weekly'},
+      {label: 'Weekly', value: 'weeeekly'},
       {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
       {label: 'Yearly', value: 'yearly'},
@@ -128,8 +130,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
       });
   }
 
-  public closeAsidePane(event) {
+  public closeAsidePane(event: RecurringInvoice) {
     this.closeAsideEvent.emit(event);
+    this.ngOnDestroy();
   }
 
   public deleteInvoice() {
@@ -148,21 +151,26 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges {
   }
 
   public saveRecurringInvoice() {
-    console.log(this.form.value);
+    // console.log(this.form.value);
     if (this.form.valid && !this.isLoading) {
       this.isLoading = true;
       const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
       const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
       const invoiceModel: RecurringInvoice = {...this.invoice, ...this.form.value, cronEndDate, nextCronDate};
-      if (this.mode === 'create') {
-        this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
-      } else {
+      if (this.mode === 'update') {
         this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
+      } else {
+        this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
       }
     }
   }
 
   public getFormattedDate(date): string {
     return moment(date, date instanceof Date ? null : 'DD-MM-YYYY').format('DD-MM-YYYY');
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
