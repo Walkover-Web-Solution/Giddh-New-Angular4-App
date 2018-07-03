@@ -49,5 +49,5 @@
 
     <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
     <sh-select-menu #menuEle [showLabelOnly]="showLabelOnly" [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
-        [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"></sh-select-menu>
+        [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight" [salesShSelectPading]="salesShSelectPading"></sh-select-menu>
 </div>

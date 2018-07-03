@@ -6,14 +6,13 @@ import { Observable } from 'rxjs/Observable';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../actions/login.action';
 import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
-import * as _ from '../../../../lodash-optimized';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -116,6 +115,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
         this._route.navigate(['sales']);
         this.closeModal();
       }
@@ -123,13 +123,16 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
-    this.company.city = e.item;
-    this.isCitySelectedByDropdown = true;
-    this.dataSourceBackup.forEach(item => {
-      if (item.city === e.item) {
-        this.company.country = item.country;
-      }
-    });
+    setTimeout(() => {
+      this.company.city = e.item;
+      this.isCitySelectedByDropdown = true;
+      this.dataSourceBackup.forEach(item => {
+        if (item.city === e.item) {
+          this.company.country = item.country;
+        }
+      });
+    }, 400);
+
     // this.dataSourceBackup.forEach(item => {
     //   if (item.address_components[0].long_name === e.item) {
     //     // set country and state values
@@ -215,6 +218,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   }
 
   public logoutUser() {
+    this.store.dispatch(this.verifyActions.hideVerifyBox());
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
     if (isElectron) {

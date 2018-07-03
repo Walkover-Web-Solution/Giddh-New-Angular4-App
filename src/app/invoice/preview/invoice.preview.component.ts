@@ -1,19 +1,16 @@
-import { from } from 'rxjs/observable/from';
 import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
+import { find, orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass, CustomTemplateResponse } from '../../models/api-models/Invoice';
+import { CustomTemplateResponse, GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
-import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { InvoiceService } from '../../services/invoice.service';
@@ -24,9 +21,9 @@ import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { orderBy, find } from '../../lodash-optimized';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
+
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   { label: '12', value: '12' },
@@ -62,6 +59,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
@@ -73,7 +71,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
-  public bsConfig: Partial<BsDatepickerConfig>;
   public modalConfig = {
     animated: true,
     keyboard: false,
@@ -218,13 +215,15 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onPerformAction(item, ele: ShSelectComponent) {
-    let actionToPerform = ele._selectedValues[0].value;
-    if (actionToPerform === 'paid') {
-      this.selectedInvoice = item;
-      this.performActionOnInvoiceModel.show();
-    } else {
-      this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+  public onPerformAction(item, ev: IOption) {
+    if (ev && ev.value) {
+      let actionToPerform = ev.value;
+      if (actionToPerform === 'paid') {
+        this.selectedInvoice = item;
+        this.performActionOnInvoiceModel.show();
+      } else {
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+      }
     }
   }
 
@@ -309,11 +308,13 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   /**
   * onDownloadOrSendMailEvent
   */
-  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], typeOfInvoice: string[] }) {
+  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
     if (userResponse.action === 'download') {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice }));
+    } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.invoiceNumber));
     }
   }
 

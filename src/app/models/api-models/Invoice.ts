@@ -5,10 +5,11 @@
  * used to draw ui on invoice page
  */
 
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass, SalesEntryClass, GstDetailsClass } from './Sales';
+import { OtherSalesItemClass, SalesEntryClass } from './Sales';
+import { INameUniqueName } from './Inventory';
+
 
 export interface IInvoiceResult {
   companyName: string;
@@ -454,6 +455,7 @@ export class CustomTemplateResponse {
   public name: string;
   public copyFrom?: string; // done
   public logoUniqueName?: string;
+  public templateType?: string;
 }
 
 export class Esignature {
