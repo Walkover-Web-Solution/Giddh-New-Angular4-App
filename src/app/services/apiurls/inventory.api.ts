@@ -1,5 +1,23 @@
+const COMMON_USER = 'company/:companyUniqueName/inventory-users';
+const COMMON_ENTRY = COMMON_USER + '/:inventoryUserUniqueName/inventory-entries';
 
 export const INVENTORY_API = {
+  USER: {
+    CREATE: COMMON_USER,
+    UPDATE: COMMON_USER + '/:inventoryUserUniqueName',
+    GET: COMMON_USER + '/:inventoryUserUniqueName',
+    DELETE: COMMON_USER + '/:inventoryUserUniqueName',
+    GET_ALL: COMMON_USER + '?q=:q&refresh=:refresh&page=:page&count=:count'
+  },
+  ENTRY: {
+    CREATE: COMMON_ENTRY,
+    UPDATE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
+    GET: COMMON_ENTRY + '/:inventoryEntryUniqueName',
+    DELETE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
+  },
+  REPORT: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
+  REPORT_ALL: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
+
   CREATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group', // post call
   UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
   DELETE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
@@ -21,5 +39,12 @@ export const INVENTORY_API = {
   UPDATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
   UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // PUT call
   GET_RATE_FOR_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock', // Get call
-  GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName' // GET call
+  GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
+
+  BRANCH_TRANSFER: {
+    TRANSFER: 'inventory-transfer/'
+  },
+  LINKED_STOCKS: {
+    LINKED_STOCKS: 'company/:companyUniqueName/linked-sources'
+  }
 };

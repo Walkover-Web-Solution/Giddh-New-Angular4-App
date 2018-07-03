@@ -26,6 +26,7 @@ export class InvoiceUiDataService {
   // Current company real values
   public companyGSTIN: BehaviorSubject<string> = new BehaviorSubject(null);
   public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
+  public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
 
   private companyName: string;
   private companyAddress: string;
@@ -126,6 +127,13 @@ export class InvoiceUiDataService {
     template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
     return template;
+  }
+
+  /**
+   * set fields and their visibility
+   */
+  public setFieldsAndVisibility(statusObj: any) {
+    this.fieldsAndVisibility.next(statusObj);
   }
 
   /**

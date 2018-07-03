@@ -13,20 +13,21 @@ import { StockgrpListComponent } from './components/sidebar-components/stockgrpl
 import { StockListComponent } from './components/sidebar-components/stockList.component';
 import { InventoryUpdateGroupComponent } from './components/update-group-component/inventory.updategroup.component';
 
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
-import { ModalModule, BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
 import { AsideCustomStockComponent } from 'app/inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from 'app/inventory/components/aside-inventory.components/aside-inventory.components';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from 'app/shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { InventoryGroupStockReportComponent } from './components/group-stock-report-component/group.stockreport.component';
 import { InventoryWelcomeComponent } from './components/welcome-inventory/welcome-inventory.component';
+import { BranchTransferComponent } from './components/branch/branchTransfer/branch.transfer.component';
+import { BranchHeaderComponent } from './components/branch/branchHeader/branch.header.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,9 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
     AsideInventoryComponent,
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
-    InventoryWelcomeComponent
+    InventoryWelcomeComponent,
+    BranchTransferComponent,
+    BranchHeaderComponent
   ],
   exports: [
     InventoryComponent,
@@ -60,8 +63,8 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
     AsideInventoryComponent,
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
-    InventoryAddStockComponent,
-    InventoryWelcomeComponent
+    InventoryWelcomeComponent,
+    BranchTransferComponent
   ],
   providers: [],
   imports: [
@@ -78,7 +81,8 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
     ModalModule,
     Daterangepicker,
     TextCaseChangeModule,
-    BsDropdownModule
+    BsDropdownModule,
+    BsDatepickerModule.forRoot()
   ],
 })
 export class InventoryModule {

@@ -12,8 +12,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
+import { BunchComponent } from './bunch/bunch.component';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -28,6 +29,7 @@ export class SettingsComponent implements OnInit {
   @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
   @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
   @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
+  @ViewChild('bunchComp') public bunchComp: BunchComponent;
 
   public isUserSuperAdmin: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -90,6 +92,12 @@ export class SettingsComponent implements OnInit {
   public tagsTabSelected(e) {
     if (e.heading === 'Tags') {
       this.tagComp.getTags();
+    }
+  }
+
+  public bunchTabSelected(e) {
+    if (e.heading === 'bunch') {
+      this.bunchComp.getAllBunch();
     }
   }
 }

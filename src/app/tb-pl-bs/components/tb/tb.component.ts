@@ -75,6 +75,8 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     }
   }
 
+  @Input() public isV2: boolean = false;
+
   private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -122,9 +124,20 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
     //   this.cd.detectChanges();
     // }
+    if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
+      if (changes['isV2'].currentValue) {
+        this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
+      } else {
+        this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
+      }
+    }
   }
   public filterData(request: TrialBalanceRequest) {
-    this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
+    if (this.isV2) {
+      this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
+    } else {
+      this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
+    }
   }
 
   public ngOnDestroy(): void {
