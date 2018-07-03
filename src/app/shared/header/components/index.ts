@@ -6,3 +6,4 @@ export * from './account-operations/account-operations.component';
 // export * from './account-update/account-update.component';
 export * from './account-add-new/account-add-new.component';
 export * from './account-update-new/account-update-new.component';
+export * from './company-add-new-ui/company-add-new-ui.component';
