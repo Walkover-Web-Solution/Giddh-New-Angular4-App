@@ -98,7 +98,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.value, label: c.value});
+      this.countryCodeList.push({value: c.countryName, label: c.value});
     });
 
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
