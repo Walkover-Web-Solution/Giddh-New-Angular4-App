@@ -20,6 +20,7 @@ export class VerifyMobileActions {
   public static SET_VERIFIACATION_MOBILENO = 'SER_VARIFICATION_MOBILENO';
   public static VERIFY_MOBILE_CODE_REQUEST = 'VERIFY_MOBILE_CODE_REQUEST';
   public static VERIFY_MOBILE_CODE_RESPONSE = 'VERIFY_MOBILE_CODE_RESPONSE';
+  public static HIDE_VERIFICATION_BOX = 'HIDE_VERIFICATION_BOX';
 
   @Effect() private verifyNumber$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST)
@@ -65,6 +66,13 @@ export class VerifyMobileActions {
   public verifyNumberRequest = (model: SignupWithMobile): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_REQUEST, model);
 
   public verifyNumberCodeRequest = (verifyMobileModel: VerifyMobileModel): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST, verifyMobileModel);
+
+  public hideVerifyBox() {
+    return {
+      type: VerifyMobileActions.HIDE_VERIFICATION_BOX,
+      payload: false
+    };
+  }
 
   private action = (type, payload) => ({ type, payload });
 }

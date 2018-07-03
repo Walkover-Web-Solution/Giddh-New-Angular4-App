@@ -1,6 +1,6 @@
 import { IAccountsInfo } from './accountInfo.interface';
 import { IUserInfo } from './userInfo.interface';
-import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from '../api-models/Inventory';
 import { IGstDetailListItem } from './gstDetailListItem.interface';
 
 export interface ICountryClass {

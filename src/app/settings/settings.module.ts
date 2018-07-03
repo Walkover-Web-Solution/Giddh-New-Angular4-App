@@ -14,14 +14,13 @@ import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { BranchComponent } from './branch/branch.component';
@@ -29,6 +28,11 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { BunchComponent } from './bunch/bunch.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
+import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
+import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +51,11 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
     SettingPermissionFormComponent,
     BranchComponent,
     SettingsTagsComponent,
-    SettingTriggerComponent
+    SettingTriggerComponent,
+    BunchComponent,
+    CreateBunchModalComponent,
+    BunchAddCompanyModalComponent,
+    GetBunchModalComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +73,8 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
     OmitByKeyPipeModule,
     NgbTypeaheadModule,
     BsDropdownModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    PerfectScrollbarModule
   ]
 })
 

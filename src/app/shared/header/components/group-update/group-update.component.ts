@@ -18,6 +18,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { createSelector } from 'reselect';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { GeneralActions } from '../../../../actions/general/general.actions';
+import { digitsOnly } from '../../../helpers';
 
 @Component({
   selector: 'group-update',
@@ -128,7 +129,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
-      description: ['']
+      description: [''],
+      closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+      closingBalanceTriggerAmountType: ['CREDIT']
     });
     this.moveGroupForm = this._fb.group({
       moveto: ['', Validators.required]
@@ -139,7 +142,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
+        this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description, closingBalanceTriggerAmount: a.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: a.closingBalanceTriggerAmountType });
         if (a.fixed) {
           this.groupDetailForm.get('name').disable();
           this.groupDetailForm.get('uniqueName').disable();
@@ -342,6 +345,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     return result;
+  }
+
+  public closingBalanceTypeChanged(type: string) {
+    if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
+      this.groupDetailForm.get('closingBalanceTriggerAmountType').patchValue(type);
+    }
   }
 
   public ngOnDestroy(): void {

@@ -191,6 +191,24 @@
                 </div>
             </div>
 
+
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label for="">Closing Balance</label>
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
+                        <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
+                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
+                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">DR.
+                        </div>
+                        <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
+                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
+                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">CR.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- mobile no and email -->
             <div class="row" *ngIf="isGstEnabledAcc">
                 <div class="form-group col-xs-6">

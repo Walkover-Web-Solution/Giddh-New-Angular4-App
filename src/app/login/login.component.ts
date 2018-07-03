@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
+  @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -49,10 +50,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   public urlPath: string = '';
   public loginWithPasswdForm: FormGroup;
   public isLoginWithPasswordInProcess$: Observable<boolean>;
+  public forgotPasswordForm: FormGroup;
+  public resetPasswordForm: FormGroup;
+  public isForgotPasswordInProgress$: Observable<boolean>;
+  public isForgotPasswordInSuccess$: Observable<boolean>;
+  public isResetPasswordInSuccess$: Observable<boolean>;
+  public showForgotPassword: boolean = false;
+  public forgotStep: number = 0;
   private imageURL: string;
   private email: string;
   private name: string;
   private token: string;
+  private userUniqueKey: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
@@ -101,6 +110,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoginWithPasswordInProcess$ = store.select(state => {
       return state.login.isLoginWithPasswordInProcess;
     }).takeUntil(this.destroyed$);
+    this.isForgotPasswordInProgress$ = store.select(state => {
+      return state.login.isForgotPasswordInProcess;
+    }).takeUntil(this.destroyed$);
+    this.isResetPasswordInSuccess$ = store.select(state => {
+      return state.login.isResetPasswordInSuccess;
+    }).takeUntil(this.destroyed$);
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
@@ -132,6 +147,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginWithPasswdForm = this._fb.group({
       uniqueKey: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$')]]
+    });
+
+    this.forgotPasswordForm = this._fb.group({
+      userId: ['', [Validators.required]],
+    });
+    this.resetPasswordForm = this._fb.group({
+      verificationCode: ['', [Validators.required]],
+      uniqueKey: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]]
     });
     this.setCountryCode({ value: 'India', label: 'India' });
 
@@ -173,6 +197,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (a) {
         this.hideTowWayAuthModal();
         this.store.dispatch(this.loginAction.resetTwoWayAuthModal());
+      }
+    });
+
+    this.isResetPasswordInSuccess$.subscribe(s => {
+      if (s) {
+        this.resetForgotPasswordProcess();
+        this.loginUsing = 'userName';
+      }
+    });
+    this.isForgotPasswordInProgress$.subscribe (a => {
+      if (!a) {
+        this.forgotStep = 1;
+      } else {
+        this.forgotStep = 2;
       }
     });
   }
@@ -335,11 +373,38 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public loginWithPasswd(model: FormGroup) {
     let ObjToSend = model.value;
-    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-    if (pattern.test(ObjToSend.password)) {
+    if (ObjToSend) {
       this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
-    } else {
-      return this._toaster.errorToast('Password is weak');
     }
+    // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    // if (pattern.test(ObjToSend.password)) {
+    // } else {
+    //   return this._toaster.errorToast('Password is weak');
+    // }
+  }
+
+  public showForgotPasswordModal() {
+    this.showForgotPassword = true;
+    this.loginUsing = 'forgot';
+    this.forgotStep = 1;
+  }
+
+  public forgotPassword(userId) {
+    this.resetPasswordForm.patchValue({uniqueKey: userId});
+    this.userUniqueKey = userId;
+    this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
+  }
+
+  public resetPassword(form) {
+    let ObjToSend = form.value;
+    ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
+    this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
+  }
+
+  public resetForgotPasswordProcess() {
+    this.forgotPasswordForm.reset();
+    this.resetPasswordForm.reset();
+    this.forgotStep = 1;
+    this.userUniqueKey = null;
   }
 }

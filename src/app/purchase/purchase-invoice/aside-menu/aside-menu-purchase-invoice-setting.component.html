@@ -1,54 +1,62 @@
-<div class="aside-pane aside-height">
-  <div class="aside-header">
-    <h1>Settings</h1>
-    <hr>
-  </div>
-  <div class="aside-body">
-    <h2 class="pdT2">File GST via-</h2>
-      <form>
-        <div class="row pdT2">
-          <div class="col-xs-12">
-            <input type="checkbox"> Jio GST
-          </div>
-          <div class="col-xs-6">
-            <div class="form-group">
-              <label for="jio_user_name">User Name</label>
-              <input type="email" name="username" class="form-control" id="jio_user_name">
-            </div>
-          </div>
-          <div class="col-xs-6">
-            <div class="form-group">
-              <label for="jio_password">Password:</label>
-              <input type="password" name="pwd" class="form-control" id="jio_password">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12">
-            <input type="checkbox"> Legal Raasta
-          </div>
-          <div class="col-xs-6">
-            <div class="form-group">
-              <label for="jio_user_name1">User Name</label>
-              <input type="email" name="username" class="form-control" id="jio_user_name1">
-            </div>
-          </div>
-          <div class="col-xs-6">
-            <div class="form-group">
-              <label for="jio_password1">Password:</label>
-              <input type="password" name="pwd" class="form-control" id="jio_password1">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-6 pull-right">
-            <button class="btn btn-success">Save</button>
-            <button class="btn btn-default">Cancel</button>
-          </div>
-        </div>
-      </form>
-    <div class="pdT2">
-      <button class="btn btn-default btn-block" (click)="closeAsidePane($event)">Close</button>
+<div class="aside-pane">
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+    <div class="form_header">
+        <!-- <h2>File GST via-</h2> -->
+        <h2>Jio GST</h2>
     </div>
-  </div>
+    <div class="form_body witBg clearfix mrBChldLbl">
+        <div class="form_bg clearfix">
+
+            <!-- <h2 class="pdT2"></h2> -->
+            <form class="form-group">
+                <div class="row">
+                    <!-- <div class="col-xs-12 mrB1">
+                        <input type="checkbox"> Jio GST
+                    </div> -->
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="jio_user_name">User Name</label>
+                            <input type="email" name="username" class="form-control" id="jio_user_name" [(ngModel)]="jioGstForm.uid">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="jio_password">Password:</label>
+                            <input type="password" name="pwd" class="form-control" id="jio_password" [(ngModel)]="jioGstForm.pwd">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- hidden due to no use 
+                <div class="row">
+                    <div class="col-xs-12 mrB1">
+                        <input type="checkbox"> Legal Raasta
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="jio_user_name1">User Name</label>
+                            <input type="email" name="username" class="form-control" id="jio_user_name1">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="jio_password1">Password:</label>
+                            <input type="password" name="pwd" class="form-control" id="jio_password1">
+                        </div>
+                    </div>
+                </div>
+                 -->
+                <div class="row">
+                    <div class="col-xs-12 mrT1">
+                        <button class="btn btn-success" (click)="save(jioGstForm)">Save</button>
+                        <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- <div class="pdT2">
+      <button class="btn btn-default btn-block" (click)="closeAsidePane($event)">Close</button>
+    </div> -->
+    </div>
 </div>

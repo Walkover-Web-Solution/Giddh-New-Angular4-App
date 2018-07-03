@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
@@ -11,6 +11,8 @@ import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
 import { OtherSalesItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { SelectComponent } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 const THEAD = [
   {
@@ -36,12 +38,12 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'itemCode'
+    field: 'quantity'
   },
   {
     display: false,
     label: '',
-    field: 'quantity'
+    field: 'description'
   },
   {
     display: false,
@@ -53,11 +55,11 @@ const THEAD = [
     label: '',
     field: 'discount'
   },
-  {
-    display: false,
-    label: '',
-    field: 'taxableAmount'
-  },
+  // {
+  //   display: false,
+  //   label: '',
+  //   field: 'taxableAmount'
+  // },
   {
     display: false,
     label: '',
@@ -81,7 +83,7 @@ const THEAD = [
   templateUrl: './invoice.create.component.html'
 })
 
-export class InvoiceCreateComponent implements OnInit {
+export class InvoiceCreateComponent implements OnInit, OnDestroy {
   @Input() public showCloseButton: boolean;
   @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
   public invFormData: PreviewInvoiceResponseClass;
@@ -97,6 +99,9 @@ export class InvoiceCreateComponent implements OnInit {
   public updateMode: boolean;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
+  public autoFillShipping: boolean = false;
+  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public maxDueDate: Date;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -114,7 +119,7 @@ export class InvoiceCreateComponent implements OnInit {
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
-        if (o) {
+        if (o && o.invoiceDetails) {
           this.invFormData = _.cloneDeep(o);
           if (o.invoiceDetails.invoiceDate) {
             let d = o.invoiceDetails.invoiceDate.split('-');
@@ -146,7 +151,7 @@ export class InvoiceCreateComponent implements OnInit {
           if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
             this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
           }
-
+          this.setMaxDueDate(this.invFormData.entries);
           this.invoiceDataFound = true;
         }else {
           this.invoiceDataFound = false;
@@ -183,6 +188,17 @@ export class InvoiceCreateComponent implements OnInit {
         this.updateMode = val;
       }
     );
+
+    // bind state sources
+    this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
+      let arr: IOption[] = [];
+      if (states) {
+        states.map(d => {
+          arr.push({label: `${d.name}`, value: d.code});
+        });
+      }
+      this.statesSource$ = Observable.of(arr);
+    });
   }
 
   public getArrayFromString(str) {
@@ -353,4 +369,44 @@ export class InvoiceCreateComponent implements OnInit {
     return entryIndex + 1 + transIndex;
   }
 
+  public autoFillShippingDetails() {
+    // auto fill shipping address
+    if (this.autoFillShipping) {
+      this.invFormData.account.shippingDetails = _.cloneDeep(this.invFormData.account.billingDetails);
+    }
+  }
+
+  public getStateCode(type: string, statesEle: SelectComponent) {
+    let gstVal = _.cloneDeep(this.invFormData.account[type].gstNumber);
+    if (gstVal && gstVal.length >= 2) {
+      this.statesSource$.take(1).subscribe(st => {
+        let s = st.find(item => item.value === gstVal.substr(0, 2));
+        if (s) {
+          this.invFormData.account[type].stateCode = s.value;
+        } else {
+          this.invFormData.account[type].stateCode = null;
+          this._toasty.clearAllToaster();
+          this._toasty.warningToast('Invalid GSTIN.');
+        }
+        statesEle.disabled = true;
+      });
+    } else {
+      statesEle.disabled = false;
+      this.invFormData.account[type].stateCode = null;
+    }
+  }
+
+  /**
+   * setMaxDueDate
+   */
+  public setMaxDueDate(entries) {
+    let maxDateEnrty = _.maxBy(entries, function(o) { return o.entryDate; });
+    // console.log(maxDateEnrty);
+    this.maxDueDate = maxDateEnrty.entryDate;
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 }

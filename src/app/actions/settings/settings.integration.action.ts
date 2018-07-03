@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
@@ -9,7 +8,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { SmsKeyClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, CashfreeClass } from '../../models/api-models/SettingsIntegraion';
+import { CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/customActions';
 
 @Injectable()
@@ -128,7 +127,7 @@ export class SettingsIntegrationActions {
       } else {
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -147,7 +146,7 @@ export class SettingsIntegrationActions {
       } else {
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -167,7 +166,7 @@ export class SettingsIntegrationActions {
       } else {
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -187,7 +186,7 @@ export class SettingsIntegrationActions {
       } else {
         this.toasty.successToast(data.message, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -201,7 +200,7 @@ export class SettingsIntegrationActions {
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -215,7 +214,7 @@ export class SettingsIntegrationActions {
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -236,7 +235,7 @@ export class SettingsIntegrationActions {
         // console.log(data);
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -250,7 +249,7 @@ export class SettingsIntegrationActions {
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -269,7 +268,7 @@ export class SettingsIntegrationActions {
       } else {
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -289,7 +288,7 @@ export class SettingsIntegrationActions {
         // console.log(data);
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -309,7 +308,7 @@ export class SettingsIntegrationActions {
         // console.log(data);
         this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -329,7 +328,7 @@ export class SettingsIntegrationActions {
         // console.log(data);
         // this.toasty.successToast(data.body, '');
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   constructor(private action$: Actions,
