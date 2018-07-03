@@ -4,7 +4,7 @@
     <h6>(Dummy Text Dummy Text Dummy Text Dummy Text)</h6>
   </div>
 
-  <form>
+  <form #discountForm="ngForm" novalidate (submit)="submit()">
     <div style="display: flex;align-items: center">
       <div class="form-group col-xs-2">
         <label>Select Tax</label><br>
@@ -30,13 +30,15 @@
         <div class="form-group col-xs-2">
           <label>Linked Accounts</label><br>
           <sh-select [isFilterEnabled]="false"
-                     name="type" [(ngModel)]="createRequest.accountUniqueName"
+                     name="account" [(ngModel)]="createRequest.accountUniqueName"
                      [placeholder]="'Select Discount'" [options]="accounts$"
                      [ItemHeight]="33"></sh-select>
         </div>
 
         <div class="col-xs-2 form-group">
-          <button type="submit" class="btn btn-success">Add</button>
+          <button type="submit" class="btn btn-success" style="margin-top: 16px;height: 34px;"
+                  [ladda]="isDiscountCreateInProcess$ | async">Add
+          </button>
         </div>
       </ng-container>
 
@@ -63,10 +65,10 @@
             <td>{{ i + 1 }}</td>
             <td>{{ discount.name }}</td>
             <td>
-                <span (click)="edit(discount)">
+                <span (click)="edit(discount)" class="btn btn-xs">
                   <i class="fa fa-pencil"></i>
                 </span>
-              <span (click)="delete(discount.uniqueName)">
+              <span (click)="delete(discount.uniqueName)" class="btn btn-xs">
                   <i class="fa fa-trash"></i>
                 </span>
             </td>
