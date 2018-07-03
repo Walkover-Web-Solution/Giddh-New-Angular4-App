@@ -12,12 +12,12 @@
                         <div class="form-group col-xs-6">
                             <label>Unit Name<sup>*</sup></label>
                             <sh-select [options]="stockUnitsList" name="name" [(ngModel)]="customUnitObj.name" *ngIf="country == 'india'" [placeholder]="'Select unit'" (selected)="setUnitName($event?.label)" [ItemHeight]="33" (onClear)="clearUnit()" [forceClearReactive]="forceClear$ | async"></sh-select>
-                            <input placeholder="Unit name" type="text" class="form-control" name="name" [(ngModel)]="customUnitObj.name" required *ngIf="country != 'india'">
+                            <input placeholder="Unit name" type="text" class="form-control" name="name" [(ngModel)]="customUnitObj.name" required *ngIf="country != 'india'" (change)="checkIfUnitIsExist()">
                         </div>
 
                         <div class="form-group col-xs-6">
                             <label>Unit Code<sup>*</sup></label>
-                            <input placeholder="Unique name" type="text" name="code" [(ngModel)]="customUnitObj.code" class="form-control" required [disabled]="country == 'india'">
+                            <input placeholder="Unique name" type="text" name="code" [(ngModel)]="customUnitObj.code" class="form-control" required [disabled]="country === 'india' || (isStockUnitCodeAvailable$ | async)">
                         </div>
 
                         <div class="form-group col-xs-6">
