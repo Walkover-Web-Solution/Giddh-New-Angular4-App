@@ -33,6 +33,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
 import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
 import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
+import { DiscountComponent } from './discount/discount.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
     SettingPermissionComponent,
     SettingPermissionFormComponent,
     BranchComponent,
+    DiscountComponent,
     SettingsTagsComponent,
     SettingTriggerComponent,
     BunchComponent,
@@ -78,4 +80,5 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
   ]
 })
 
-export class SettingsModule { }
+export class SettingsModule {
+}

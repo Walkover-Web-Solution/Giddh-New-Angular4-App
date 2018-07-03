@@ -14,6 +14,8 @@ import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
 import { SETTINGS_TRIGGERS_ACTIONS } from '../../actions/settings/triggers/settings.triggers.const';
+import { IDiscountList } from '../../models/api-models/SettingsDiscount';
+import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -22,6 +24,25 @@ export interface LinkedAccountsState {
   needReloadingLinkedAccounts?: boolean;
   iframeSource?: string;
 }
+
+export interface DiscountState {
+  isDiscountListInProcess: boolean;
+  discountList: IDiscountList[];
+  isDiscountCreateInProcess: boolean;
+  isDiscountCreateSuccess: boolean;
+  isDeleteDiscountInProcess: boolean;
+  isDeleteDiscountSuccess: boolean;
+}
+
+const discountInitialState: DiscountState = {
+  discountList: [],
+  isDeleteDiscountInProcess: false,
+  isDeleteDiscountSuccess: false,
+  isDiscountCreateInProcess: false,
+  isDiscountCreateSuccess: false,
+  isDiscountListInProcess: false
+};
+
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
@@ -32,6 +53,7 @@ export interface SettingsState {
   tags: any;
   parentCompany: CompanyResponse;
   triggers: any;
+  discount: DiscountState;
 }
 
 export const initialState: SettingsState = {
@@ -43,7 +65,8 @@ export const initialState: SettingsState = {
   branches: null,
   tags: null,
   parentCompany: null,
-  triggers: null
+  triggers: null,
+  discount: discountInitialState
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -208,18 +231,15 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
-    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE:
-    {
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE: {
       newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
       return Object.assign({}, state, newState);
     }
-    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE:
-    {
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE: {
       newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
       return Object.assign({}, state, newState);
     }
-    case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE:
-    {
+    case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
         newState.branches = response.body;
@@ -236,8 +256,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return Object.assign({}, state, newState);
     }
-    case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE:
-    {
+    case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
         newState.tags = response.body;
@@ -324,6 +343,56 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
+
+    //  region discount reducer
+    case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {isDiscountListInProcess: true})
+      });
+    }
+    case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountListInProcess: false,
+          discountList: action.payload
+        })
+      });
+    }
+
+    case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountCreateInProcess: true,
+          isDiscountCreateSuccess: false
+        })
+      });
+    }
+    case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountCreateInProcess: false,
+          isDiscountCreateSuccess: true
+        })
+      });
+    }
+
+    case SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDeleteDiscountInProcess: true,
+          isDeleteDiscountSuccess: false
+        })
+      });
+    }
+    case SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDeleteDiscountInProcess: false,
+          isDeleteDiscountSuccess: true
+        })
+      });
+    }
+    //  endregion discount reducer
     default: {
       return state;
     }
