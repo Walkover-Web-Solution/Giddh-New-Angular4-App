@@ -61,7 +61,7 @@ export class SettingsDiscountService {
   /**
    * Delete Discount
    */
-  public DeleteDiscount(uniqueName: string): Observable<BaseResponse<any, any>> {
+  public DeleteDiscount(uniqueName: string): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + uniqueName).map((res) => {

@@ -14,8 +14,9 @@ import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
 import { SETTINGS_TRIGGERS_ACTIONS } from '../../actions/settings/triggers/settings.triggers.const';
-import { IDiscountList } from '../../models/api-models/SettingsDiscount';
+import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
+import { AccountResponse } from '../../models/api-models/Account';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -368,10 +369,24 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       });
     }
     case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE: {
+      let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
+
+      if (response.status === 'error') {
+        return Object.assign({}, state, {
+          discount: Object.assign({}, state.discount, {
+            isDiscountCreateInProcess: false,
+            isDiscountCreateSuccess: false,
+          })
+        });
+      }
+
+      let discountList = _.cloneDeep(state.discount.discountList);
+      discountList.push(response.body);
       return Object.assign({}, state, {
         discount: Object.assign({}, state.discount, {
           isDiscountCreateInProcess: false,
-          isDiscountCreateSuccess: true
+          isDiscountCreateSuccess: true,
+          discountList
         })
       });
     }
@@ -388,7 +403,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return Object.assign({}, state, {
         discount: Object.assign({}, state.discount, {
           isDeleteDiscountInProcess: false,
-          isDeleteDiscountSuccess: true
+          isDeleteDiscountSuccess: true,
+          discountList: state.discount.discountList.filter(d => d.uniqueName !== action.payload)
         })
       });
     }
