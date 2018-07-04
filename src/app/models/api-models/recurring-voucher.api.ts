@@ -1,4 +1,4 @@
-const COMMON_VOUCHER_API = '/company/{{companyname}}/recurring-voucher/';
+const COMMON_VOUCHER_API = 'company/{{companyname}}/recurring-voucher/';
 export const RECURRING_VOUCHER_API = {
   GET: COMMON_VOUCHER_API + 'get-all/?count=:count&page=:page',
   CREATE: COMMON_VOUCHER_API,
