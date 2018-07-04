@@ -74,8 +74,9 @@
             [formGroup]="moveAccountForm">
         <label class="d-block">Move to group</label>
         <span>
-          <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [customFilter]="customMoveGroupFilter"
-            class="pull-left" style="width: calc(100% - 93px);">
+          <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
+                     [customFilter]="customMoveGroupFilter"
+                     class="pull-left" style="width: calc(100% - 93px);">
             <!--template for move group typeahead-->
             <ng-template #optionTemplate let-model="option">
               <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #ccc;">
@@ -95,7 +96,7 @@
   </div>
   <!--account operation  -->
 
-  <!--merge and taxes-->
+  <!--merge and taxes and discount-->
   <div class="clearfix horizontal-form" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
     <!--merge and taxes-->
 
@@ -133,8 +134,9 @@
     <div class="col-xs-12 form-group" *ngIf="showDeleteMove">
       <label class="d-block">Move to other A/c</label>
       <span>
-        <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false" [(ngModel)]="selectedAccountForMove"
-          [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
+        <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()"
+                   [multiple]="false" [(ngModel)]="selectedAccountForMove"
+                   [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
       </span>
       <span class="pull-right">
         <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
@@ -147,7 +149,8 @@
       <div class="col-xs-12">
         <div class="form-group toggle-btn mrB">
           <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
-            <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
+            <i class="fa cp" aria-hidden="true"
+               [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
           </label>
         </div>
       </div>
@@ -192,6 +195,42 @@
         </div>
       </ng-container>
       <!-- taxes container -->
+    </div>
+
+    <!--discount-->
+    <!-- Discount collapse -->
+    <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
+
+      <div class="col-xs-12">
+        <div class="form-group toggle-btn mrB">
+          <label class="cp" (click)="showDiscount = !showDiscount;">
+            <i class="fa cp" aria-hidden="true"
+               [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
+          </label>
+        </div>
+      </div>
+
+      <!-- discount container -->
+      <ng-container *ngIf="showDiscount">
+        <div class="col-xs-12">
+          <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
+            <div class="tax-label">
+              <label>All Applied Discounts</label>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Discount'" [multiple]="true"
+                           formControlName="discounts" style="width: calc(100% - 13px);">
+                </sh-select>
+                <span class="input-group-btn pdL2">
+                  <button type="submit" class="btn btn-success">Save</button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+
     </div>
 
   </div>
