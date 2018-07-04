@@ -108,7 +108,7 @@ export class AccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {type: 'EmptyAction'};
       }
-      this._toasty.successToast(action.payload.body, action.payload.status);
+      this._toasty.successToast('Discount Linked Successfully', action.payload.status);
       let accName = null;
       this.store.take(1).subscribe((s) => {
         if (s.groupwithaccounts.activeGroup) {
