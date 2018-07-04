@@ -67,7 +67,7 @@
                                         </sh-select>
                                     </td>
                                     <td class="col-xs-2">
-                                        <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (change)="onTxnAmountChange(txn)">
+                                        <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)" (ngModelChange)="onTxnAmountChange(txn)">
                                         <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
