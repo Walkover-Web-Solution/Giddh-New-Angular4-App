@@ -222,6 +222,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       if (a && this.breadcrumbUniquePath[1]) {
         this.isDiscountableAccount$ = Observable.of(this.breadcrumbUniquePath[1] === 'sundrydebtors');
       }
+      // TODO use a.discount proeprty for filling the discount form
+      this.discountAccountForm.patchValue({discountUniqueName: ''});
     });
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
@@ -235,7 +237,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.discountAccountForm = this._fb.group({
       discountUniqueName: ['', Validators.required],
-      accountUniqueNames: ['', Validators.required]
     });
 
     this.moveAccountForm = this._fb.group({
@@ -588,18 +589,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let data: ApplyDiscountRequest = this.discountAccountForm.value;
       data.accountUniqueNames = [activeAccount.uniqueName];
       this.store.dispatch(this.accountsAction.applyAccountDiscount(data));
-    }
-  }
-
-  public removeDiscount() {
-    let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(s => {
-      if (s) {
-        activeAccount = s;
-      }
-    });
-    if (activeAccount) {
-      this.store.dispatch(this.accountsAction.removeAccountDiscount(this.discountAccountForm.value, activeAccount.uniqueName));
     }
   }
 
