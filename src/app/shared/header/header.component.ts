@@ -1,6 +1,6 @@
 import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
-import { CompanyAddComponent, ManageGroupsAccountsComponent } from './components';
+import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -28,7 +28,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
-  { label: 'Dashboard', value: '/pages/home' },
+  {label: 'Dashboard', value: '/pages/home'},
   {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
   { label: 'Sales', value: '/pages/sales' },
   { label: 'Invoice', value: '/pages/invoice/preview' },
@@ -59,7 +59,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
   { label: 'Import', value: '/pages/import' },
   { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 9 } },
-
+  { label: 'Onboarding', value: '/onboarding' },
 ];
 
 @Component({
@@ -75,11 +75,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
   public moment = moment;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+  @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
   @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+  @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
@@ -90,8 +92,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
   public datePickerOptions: any = {
     opens: 'left',
@@ -129,9 +131,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public userMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public userMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -162,18 +164,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-    private socialAuthService: AuthService,
-    private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router,
-    private flyAccountActions: FlyAccountsActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef,
-    private zone: NgZone,
-    private route: ActivatedRoute,
-    private _generalActions: GeneralActions,
-    private authService: AuthenticationService) {
+              private socialAuthService: AuthService,
+              private store: Store<AppState>,
+              private companyActions: CompanyActions,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private router: Router,
+              private flyAccountActions: FlyAccountsActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cdRef: ChangeDetectorRef,
+              private zone: NgZone,
+              private route: ActivatedRoute,
+              private _generalActions: GeneralActions,
+              private authService: AuthenticationService) {
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -268,9 +270,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
     this.isCompanyCreationSuccess$.subscribe(created => {
-      if (created) {
-        this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-      }
+      // TODO see create company response action effect
+
+      // if (created) {
+      //   this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+      // }
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
@@ -350,12 +354,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public showAddCompanyModal() {
-    this.loadAddCompanyComponent();
-    this.addCompanyModal.show();
+    this.loadAddCompanyNewUiComponent();
+    this.addCompanyNewModal.show();
   }
 
   public hideAddCompanyModal() {
-    this.addCompanyModal.hide();
+    this.addCompanyNewModal.hide();
   }
 
   public hideCompanyModalAndShowAddAndManage() {
@@ -439,6 +443,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
   }
 
+  public loadAddCompanyNewUiComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
+    let viewContainerRef = this.companynewadd.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
+  }
+
   public loadAddManageComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
     let viewContainerRef = this.addmanage.viewContainerRef;
@@ -463,7 +480,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public forceCloseSidebar(event) {
-    if (event.target.parentElement.classList.contains('wrapAcList') ) {
+    if (event.target.parentElement.classList.contains('wrapAcList')) {
       return;
     }
     this.flyAccounts.next(false);
