@@ -28,7 +28,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
-  { label: 'Dashboard', value: '/pages/home' },
+  {label: 'Dashboard', value: '/pages/home'},
   {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
   { label: 'Sales', value: '/pages/sales' },
   { label: 'Invoice', value: '/pages/invoice/preview' },
@@ -60,7 +60,6 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Import', value: '/pages/import' },
   { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 9 } },
   { label: 'Onboarding', value: '/onboarding' },
-
 ];
 
 @Component({
@@ -93,8 +92,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
   public datePickerOptions: any = {
     opens: 'left',
@@ -132,9 +131,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public userMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public userMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -165,18 +164,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-    private socialAuthService: AuthService,
-    private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router,
-    private flyAccountActions: FlyAccountsActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef,
-    private zone: NgZone,
-    private route: ActivatedRoute,
-    private _generalActions: GeneralActions,
-    private authService: AuthenticationService) {
+              private socialAuthService: AuthService,
+              private store: Store<AppState>,
+              private companyActions: CompanyActions,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private router: Router,
+              private flyAccountActions: FlyAccountsActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cdRef: ChangeDetectorRef,
+              private zone: NgZone,
+              private route: ActivatedRoute,
+              private _generalActions: GeneralActions,
+              private authService: AuthenticationService) {
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -271,9 +270,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
     this.isCompanyCreationSuccess$.subscribe(created => {
-      if (created) {
-        this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-      }
+      // TODO see create company response action effect
+
+      // if (created) {
+      //   this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+      // }
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
@@ -479,7 +480,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public forceCloseSidebar(event) {
-    if (event.target.parentElement.classList.contains('wrapAcList') ) {
+    if (event.target.parentElement.classList.contains('wrapAcList')) {
       return;
     }
     this.flyAccounts.next(false);
