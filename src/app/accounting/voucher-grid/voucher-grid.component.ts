@@ -424,6 +424,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     const foundContraEntry: boolean = this.validateForContraEntry(data);
+    const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
 
     if (foundContraEntry && data.voucherType !== 'Contra') {
       this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
@@ -431,6 +432,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if (!foundContraEntry && data.voucherType === 'Contra') {
       this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
+      return;
+    }
+
+    // This suggestion was given by Sandeep
+    if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
+      this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
       return;
     }
 
@@ -456,6 +463,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public validateForContraEntry(data) {
     const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
     const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+
+    if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public validateForSalesAndPurchaseEntry(data) {
+    const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
+    const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
 
     if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
       return true;
