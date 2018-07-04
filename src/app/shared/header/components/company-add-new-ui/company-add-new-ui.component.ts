@@ -16,11 +16,12 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
+import { userLoginStateEnum } from '../../../../store/authentication/authentication.reducer';
 
 @Component({
   selector: 'company-add-new-ui-component',
   templateUrl: './company-add-new-ui.component.html',
-  styleUrls:['./company-add-new-ui.component.css']
+  styleUrls: ['./company-add-new-ui.component.css']
 })
 
 export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
@@ -52,13 +53,19 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
     this.isCompanyCreated$.subscribe(s => {
       if (s && !this.createBranch) {
+        let isNewUSer = false;
+        this.store.select(state => state.session.userLoginState).take(1).subscribe(st => {
+          isNewUSer = st === userLoginStateEnum.newUserLoggedIn;
+        });
+
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = 'welcome';
+        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-        this._route.navigate(['welcome']);
+
+        this._route.navigate([isNewUSer ? 'welcome' : 'sales']);
         this.closeModal();
       }
     });
