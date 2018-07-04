@@ -202,8 +202,7 @@
             </div>
             <div class="form-group">
               <div class="input-group">
-                <input type="hidden" value="" formControlName="accountUniqueNames" />
-                <sh-select [options]="companyDiscountDropDown | async" [placeholder]="'Select Discount'" [multiple]="false" formControlName="discountUniqueName"
+                <sh-select [options]="companyDiscountDropDown" [placeholder]="'Select Discount'" [multiple]="false" formControlName="discountUniqueName"
                   style="width: calc(100% - 13px);">
                 </sh-select>
                 <span class="input-group-btn pdL2">
