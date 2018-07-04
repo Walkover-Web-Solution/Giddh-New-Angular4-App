@@ -123,9 +123,7 @@ export class AccountService implements OnInit {
   public ApplyDiscount(model: ApplyDiscountRequest): Observable<BaseResponse<string, ApplyDiscountRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    let mod = [];
-    mod.push(model);
-    return this._http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), mod)
+    return this._http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, ApplyDiscountRequest> = res;
         data.request = model;
