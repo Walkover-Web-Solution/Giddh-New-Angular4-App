@@ -64,7 +64,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private groups = [
     {label: 'Sundry Debtors', value: 'sundrydebtors'},
-    {label: 'Sundry Creditors', value: 'sundrycreditors'}
+    {label: 'Sundry Creditors', value: 'sundrycreditors'},
+    {label: 'Discount', value: 'discount'},
   ];
 
   constructor(
@@ -79,6 +80,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.isGstEnabledAcc = this.activeGroupUniqueName !== 'discount';
+    this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
     this.flatAccountWGroupsList$ = Observable.of(this.groups);
   }
 

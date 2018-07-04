@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -8,26 +8,43 @@ import { SettingsDiscountActions } from '../../actions/settings/discount/setting
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'setting-discount',
-  templateUrl: './discount.component.html'
+  templateUrl: './discount.component.html',
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {
+  @ViewChild('discountConfirmationModel') public discountConfirmationModel: ModalDirective;
   public discountTypeList: IOption[] = [
     {label: 'as per value', value: 'FIX_AMOUNT'},
     {label: 'as per percent', value: 'PERCENTAGE'}
   ];
   public accounts$: IOption[];
   public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
+  public deleteRequest: string = null;
   public discountList$: Observable<IDiscountList[]>;
   public isDiscountListInProcess$: Observable<boolean>;
   public isDiscountCreateInProcess$: Observable<boolean>;
   public isDiscountCreateSuccess$: Observable<boolean>;
   public isDeleteDiscountInProcess$: Observable<boolean>;
   public isDeleteDiscountSuccess$: Observable<boolean>;
+  public accountAsideMenuState: string = 'out';
 
+  private createAccountIsSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _settingsDiscountAction: SettingsDiscountActions,
@@ -40,6 +57,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     this.isDiscountCreateSuccess$ = this.store.select(s => s.settings.discount.isDiscountCreateSuccess).takeUntil(this.destroyed$);
     this.isDeleteDiscountInProcess$ = this.store.select(s => s.settings.discount.isDeleteDiscountInProcess).takeUntil(this.destroyed$);
     this.isDeleteDiscountSuccess$ = this.store.select(s => s.settings.discount.isDeleteDiscountSuccess).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
 
   }
 
@@ -49,6 +67,34 @@ export class DiscountComponent implements OnInit, OnDestroy {
     this.isDiscountCreateSuccess$.subscribe(s => {
       this.createRequest = new CreateDiscountRequest();
     });
+
+    this.isDeleteDiscountSuccess$.subscribe(d => {
+      this.createRequest = new CreateDiscountRequest();
+      this.deleteRequest = null;
+    });
+
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
+      if (yes) {
+        this.toggleAccountAsidePane();
+        this.getFlattenAccounts();
+      }
+    });
+  }
+
+  public toggleAccountAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  public toggleBodyClass() {
+    if (this.accountAsideMenuState === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
   }
 
   public submit() {
@@ -62,9 +108,19 @@ export class DiscountComponent implements OnInit, OnDestroy {
     this.createRequest.accountUniqueName = data.linkAccount.uniqueName;
   }
 
-  public delete(uniqueName: string) {
-    this.createRequest = new CreateDiscountRequest();
-    this.store.dispatch(this._settingsDiscountAction.DeleteDiscount(uniqueName));
+  public showDeleteDiscountModal(uniqueName: string) {
+    this.deleteRequest = uniqueName;
+    this.discountConfirmationModel.show();
+  }
+
+  public hideDeleteDiscountModal() {
+    this.deleteRequest = null;
+    this.discountConfirmationModel.hide();
+  }
+
+  public delete() {
+    this.hideDeleteDiscountModal();
+    this.store.dispatch(this._settingsDiscountAction.DeleteDiscount(this.deleteRequest));
   }
 
   /**

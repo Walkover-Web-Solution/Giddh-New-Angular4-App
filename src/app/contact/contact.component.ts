@@ -31,9 +31,9 @@ export interface PayNowRequest {
   selector: 'contact-detail',
   templateUrl: './contact.component.html',
   styles: [`
-  .dropdown-menu>li>a{
-    padding: 2px 10px;
-  }
+    .dropdown-menu > li > a {
+      padding: 2px 10px;
+    }
   `],
   animations: [
     trigger('slideInOut', [
