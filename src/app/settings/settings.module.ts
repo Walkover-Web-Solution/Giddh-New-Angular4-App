@@ -1,4 +1,4 @@
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +34,8 @@ import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch
 import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
 import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 import { DiscountComponent } from './discount/discount.component';
+import { ContactModule } from '../contact/contact.module';
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,9 @@ import { DiscountComponent } from './discount/discount.component';
     NgbTypeaheadModule,
     BsDropdownModule,
     ElementViewChildModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    ContactModule,
+    ConfirmModalModule
   ]
 })
 
