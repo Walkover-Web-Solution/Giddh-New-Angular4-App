@@ -108,7 +108,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
   public saveUnit(): any {
     if (!this.editMode) {
-      if (this.isIndia) {
+      if (this.isIndia && this.selectedUnitName) {
         this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
       }
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
@@ -209,6 +209,20 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
       });
     } else {
       this.customUnitObj.code = '';
+    }
+  }
+
+  /**
+   * noUnitFound
+   */
+  public noUnitFound(selectElem) {
+    if (selectElem) {
+      let val: string = selectElem.filter;
+      this.customUnitObj.name = _.cloneDeep(val);
+      if (!this.editMode && val) {
+        val = uniqueNameInvalidStringReplace(val);
+        this.customUnitObj.code = _.cloneDeep(val);
+      }
     }
   }
 }
