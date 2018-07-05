@@ -745,7 +745,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    */
   public generateGrandTotal(txns: SalesTransactionItemClass[]) {
     return txns.reduce((pv, cv) => {
-      return cv.total ? pv + cv.total : pv;
+        return cv.total ? pv + cv.total : pv;
     }, 0);
   }
 
@@ -758,31 +758,31 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     setTimeout(() => {
       _.forEach(this.invFormData.entries, (entry) => {
         // get discount
-        DISCOUNT += this.generateTotalDiscount(entry.discounts);
+        DISCOUNT += Number(this.generateTotalDiscount(entry.discounts));
 
         // get total amount of entries
-        AMOUNT += this.generateTotalAmount(entry.transactions);
+        AMOUNT += Number(this.generateTotalAmount(entry.transactions));
 
         // get taxable value
-        TAXABLE_VALUE += this.generateTotalTaxableValue(entry.transactions);
+        TAXABLE_VALUE += Number(this.generateTotalTaxableValue(entry.transactions));
 
         // generate total tax amount
-        TAX += this.generateTotalTaxAmount(entry.transactions);
+        TAX += Number(this.generateTotalTaxAmount(entry.transactions));
 
         // generate Grand Total
-        GRAND_TOTAL += this.generateGrandTotal(entry.transactions);
+        GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
       });
 
-      this.invFormData.voucherDetails.subTotal = AMOUNT;
-      this.invFormData.voucherDetails.totalDiscount = DISCOUNT;
-      this.invFormData.voucherDetails.totalTaxableValue = TAXABLE_VALUE;
-      this.invFormData.voucherDetails.gstTaxesTotal = TAX;
-      this.invFormData.voucherDetails.grandTotal = GRAND_TOTAL;
+      this.invFormData.voucherDetails.subTotal = Number(AMOUNT);
+      this.invFormData.voucherDetails.totalDiscount = Number(DISCOUNT);
+      this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
+      this.invFormData.voucherDetails.gstTaxesTotal = Number(TAX);
+      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = GRAND_TOTAL;
+      this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
       if (this.dueAmount) {
-        this.invFormData.voucherDetails.balanceDue = GRAND_TOTAL - this.dueAmount;
+        this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
       }
 
     }, 700);
@@ -1024,9 +1024,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public removeTransaction(entryIdx: number) {
     if (this.invFormData.entries.length > 1) {
-      (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
-        return index !== entryIdx;
-      });
+      // (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
+      //   return index !== entryIdx;
+      // });
+      (this.invFormData as any).entries.splice(entryIdx, 1);
     } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
@@ -1186,6 +1187,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         txn.rate = Number((txn.amount / txn.quantity).toFixed(2));
       }
     }
+    this.txnChangeOccurred();
   }
 
   @HostListener('document:click', ['$event'])
