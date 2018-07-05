@@ -54,16 +54,18 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="brdB left">Talk to Sales</h3>
+                <h3 class="left">Talk to Sales</h3>
                 <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body custom-body">
                 <div class="" id="settingTab">
                     <tabset #supportTab>
                         <tab heading="Arrange a Demo">
-                            <p>Choose your preferred time to schedule a demo with an expert. </p>
-                            <button class="btn btn-primary" (click)="scheduleNow()">Click Here</button>
+                            <div class="argdemo">
+                                <p>Choose your preferred time to schedule a demo with an expert. </p>
+                                <button class="btn btn-primary" (click)="scheduleNow()">Click Here</button>
+                            </div>
                         </tab>
                         <tab heading="Drop us Mail">
                             <div id="Jkvq" class="talktosale-superform"></div>
