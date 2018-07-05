@@ -1,3 +1,5 @@
+import { Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { setTimeout } from 'timers';
@@ -47,6 +49,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
+  @ViewChild('chequeEntryModal') public chequeEntryModal: ModalDirective;
+
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
@@ -87,6 +91,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public inputForList: IOption[];
   public selectedField: 'account' | 'stock';
 
+  public chequeDetailForm: FormGroup;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
 
@@ -99,7 +105,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private _toaster: ToasterService, private _router: Router,
     private _tallyModuleService: TallyModuleService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private inventoryService: InventoryService) {
+    private inventoryService: InventoryService,
+    private fb: FormBuilder) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -127,6 +134,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public ngOnInit() {
+
+    this.chequeDetailForm = this.fb.group({
+      chequeClearanceDate: ['', [Validators.required]],
+      chequeNumber: ['', [Validators.required]]
+    }),
 
     this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
       if (p && q) {
@@ -298,12 +310,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     //
   }
 
+  public onSubmitChequeDetail() {
+    const chequeDetails = this.chequeDetailForm.value;
+    this.requestObj.chequeNumber = chequeDetails.chequeNumber;
+    this.requestObj.chequeClearanceDate = chequeDetails.chequeClearanceDate;
+    this.closeChequeDetailForm();
+    setTimeout(() => {
+      this.selectedParticular.focus();
+    }, 10);
+  }
+
+  public closeChequeDetailForm() {
+    this.chequeEntryModal.hide();
+  }
+
+  public openChequeDetailForm(account) {
+    this.chequeEntryModal.show();
+  }
+
   /**
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
-    if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts')) {
-      console.log('show check details box');
+    if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
+      this.openChequeDetailForm(acc);
     }
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
