@@ -248,7 +248,7 @@ export class InventoryAction {
   @Effect()
   public MoveStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.MoveStock)
-    .switchMap((action: CustomActions) => this._inventoryService.MoveStock(action.payload.stockUniqueName, action.payload.groupUniqueName))
+    .switchMap((action: CustomActions) => this._inventoryService.MoveStock(action.payload.activeGroup, action.payload.stockUniqueName, action.payload.groupUniqueName))
     .map(response => {
       return this.MoveStockResponse(response);
     });
@@ -257,7 +257,7 @@ export class InventoryAction {
   public MoveStockResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.MoveStockResponse)
     .map((response: CustomActions) => {
-      let data: BaseResponse<string, string> = response.payload;
+      let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
@@ -265,6 +265,8 @@ export class InventoryAction {
         this.OpenInventoryAsidePane(false);
       let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
       this.store.dispatch(this.ManageInventoryAside( objToSend ));
+      this.router.navigate(['/pages', 'inventory', 'group', data.queryString.activeGroup.uniqueName, 'stock-report']);
+        return this.resetActiveStock();
       }
       return {type: 'EmptyAction'};
     });
@@ -498,10 +500,10 @@ export class InventoryAction {
     };
   }
 
-  public MoveStock(stockUniqueName, groupUniqueName): CustomActions {
+  public MoveStock(activeGroup, stockUniqueName, groupUniqueName): CustomActions {
     return {
       type: InventoryActionsConst.MoveStock,
-      payload: { stockUniqueName, groupUniqueName }
+      payload: { activeGroup, stockUniqueName, groupUniqueName }
     };
   }
 

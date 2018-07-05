@@ -520,7 +520,15 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
     case InventoryActionsConst.MoveStock:
       return Object.assign({}, state, {moveStockSuccess: false});
     case InventoryActionsConst.MoveStockResponse:
-      return Object.assign({}, state, {moveStockSuccess: true});
+      let moveStockResp: BaseResponse<string, string> = action.payload;
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup.uniqueName, moveStockResp.queryString.stockUniqueName, null);
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStock: null,
+          activeStockUniqueName: null,
+          moveStockSuccess: true
+        });
     /*
      *Custom Stock Units...
      * */

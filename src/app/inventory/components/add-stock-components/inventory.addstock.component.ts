@@ -956,7 +956,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    */
   public moveStock() {
     if (this.addStockForm.get('parentGroup').value !== this.activeGroup.uniqueName) {
-      this.store.dispatch(this.inventoryAction.MoveStock(this.stockUniqueName, this.addStockForm.get('parentGroup').value));
+      this.store.dispatch(this.inventoryAction.MoveStock(this.activeGroup, this.stockUniqueName, this.addStockForm.get('parentGroup').value));
     }
   }
 }
