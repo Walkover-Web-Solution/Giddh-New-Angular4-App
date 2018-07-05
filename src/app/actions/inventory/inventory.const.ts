@@ -66,6 +66,9 @@ export class InventoryActionsConst {
 
   public static ShowBranchScreen = 'ShowBranchScreen';
   public static ShowBranchScreenSideBar = 'ShowBranchScreenSideBar';
+
+  public static MoveStock = 'MoveStock';
+  public static MoveStockResponse = 'MoveStockResponse';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
