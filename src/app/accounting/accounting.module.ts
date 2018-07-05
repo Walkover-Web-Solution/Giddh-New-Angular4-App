@@ -22,13 +22,15 @@ import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
+import { OnReturnDirective } from './keyboard.directive';
 
 @NgModule({
   declarations: [
     AccountingComponent,
     AccountAsInvoiceComponent,
     AccountingSidebarComponent,
-    AccountAsVoucherComponent
+    AccountAsVoucherComponent,
+    OnReturnDirective
   ],
   exports: [RouterModule, AccountingSidebarComponent],
   providers: [KeyboardService, TallyModuleService],
