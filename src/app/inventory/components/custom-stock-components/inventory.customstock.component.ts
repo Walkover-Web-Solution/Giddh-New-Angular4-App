@@ -14,6 +14,7 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from 'app/models/api-models/Sales';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
@@ -38,12 +39,14 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public selectedUnitName: string;
   public isIndia: boolean;
   public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public isStockUnitCodeAvailable$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
     private sidebarAction: SidebarAction, private settingsProfileActions: SettingsProfileActions) {
     this.customUnitObj = new StockUnitRequest();
     this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).takeUntil(this.destroyed$);
+    this.isStockUnitCodeAvailable$ = this.store.select(state => state.inventory.isStockUnitCodeAvailable).takeUntil(this.destroyed$);
 
     this.store.select(state => state.inventory.stockUnits).takeUntil(this.destroyed$).subscribe( p  => {
       if (p && p.length) {
@@ -105,7 +108,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
   public saveUnit(): any {
     if (!this.editMode) {
-      if (this.isIndia) {
+      if (this.isIndia && this.selectedUnitName) {
         this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
       }
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
@@ -159,6 +162,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
       this.customUnitObj.code = unit[0].value;
       this.customUnitObj.name = unit[0].value;
       this.selectedUnitName = unit[0].label;
+      this.checkIfUnitIsExist();
     }
   }
 
@@ -175,5 +179,50 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     setTimeout(() => {
       this.customUnitObj.code = '';
     }, 100);
+  }
+
+  /**
+   * checkIfUnitIsExist
+   */
+  public checkIfUnitIsExist() {
+    if (this.editMode) {
+      return true;
+    }
+    let groupName = null;
+    let val: string = this.customUnitObj.code;
+    if (val) {
+      val = uniqueNameInvalidStringReplace(val);
+    }
+
+    if (val) {
+      this.store.dispatch(this.customStockActions.GetStockUnitByName(val));
+
+      this.isStockUnitCodeAvailable$.takeUntil(this.destroyed$).subscribe(a => {
+        if (a !== null && a !== undefined) {
+          if (a) {
+            this.customUnitObj.code = val;
+          } else {
+            let num = 1;
+            this.customUnitObj.code = val + num;
+          }
+        }
+      });
+    } else {
+      this.customUnitObj.code = '';
+    }
+  }
+
+  /**
+   * noUnitFound
+   */
+  public noUnitFound(selectElem) {
+    if (selectElem) {
+      let val: string = selectElem.filter;
+      this.customUnitObj.name = _.cloneDeep(val);
+      if (!this.editMode && val) {
+        val = uniqueNameInvalidStringReplace(val);
+        this.customUnitObj.code = _.cloneDeep(val);
+      }
+    }
   }
 }
