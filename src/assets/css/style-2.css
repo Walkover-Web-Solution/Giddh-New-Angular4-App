@@ -4760,3 +4760,6 @@ table td[class*=col-]:last-child {
 .text-link:focus {
     text-decoration: underline;
 }
+panel.sFthanks.fieldset{
+    display:none !important;
+}
