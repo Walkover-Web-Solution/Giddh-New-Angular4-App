@@ -1,7 +1,7 @@
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { animate, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, state, style, transition, trigger, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -48,7 +48,19 @@ import { LoaderService } from '../loader/loader.service';
 @Component({
   selector: 'ledger',
   templateUrl: './ledger.component.html',
-  styleUrls: ['./ledger.component.scss']
+  styleUrls: ['./ledger.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
@@ -125,8 +137,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isFileUploading: boolean = false;
   public closingBalanceBeforeReconcile: { amount: number, type: string };
   public reconcileClosingBalanceForBank: { amount: number, type: string };
-  // public accountBaseCurrency: string;
-  // public showMultiCurrency: boolean;
+  // aside menu properties
+  public asideMenuState: string = 'out';
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private entryUniqueNamesForBulkAction: string[] = [];
 
@@ -428,13 +441,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             accountDetails.stocks.map(as => {
               // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, { stock: as })
+                additional: Object.assign({}, acc, {stock: as})
               });
             });
           });
@@ -443,18 +456,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, { stock: as })
+                  additional: Object.assign({}, acc, {stock: as})
                 });
               });
             } else {
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             }
           });
         }
@@ -510,7 +523,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.select(createSelector([(state: AppState) => state.general.addAndManageClosed], (yesOrNo: boolean) => {
+    this.store.select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
       if (yesOrNo) {
         this.getTransactionData();
       }
@@ -773,7 +786,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    this.store.select(createSelector([(state: AppState) => state.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
+    this.store.select(createSelector([(st: AppState) => st.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
       // if (yesOrNo) {
       // this.advanceSearchComp.onSearch();
       // } else {
@@ -1008,4 +1021,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     fileInput.click();
   }
+
+  // region asidemenu toggle
+  public toggleBodyClass() {
+    if (this.asideMenuState === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
+
+  public toggleAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  // endregion
 }
