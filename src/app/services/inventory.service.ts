@@ -643,16 +643,21 @@ export class InventoryService {
   /**
    * Move Stock
    */
-  public MoveStock(stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<StockUnitResponse[], string>> {
+  public MoveStock(activeGroup, stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<StockUnitResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let objToSend = {
       uniqueName: stockGroupUniqueName
     };
+    let requestObj = {
+      activeGroup,
+      stockUniqueName,
+      stockGroupUniqueName
+    };
     return this._http.put(this.config.apiUrl + INVENTORY_API.MOVE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), objToSend).map((res) => {
-      let data: BaseResponse<any, string> = res;
+      let data: BaseResponse<any, any> = res;
       data.request = '';
-      data.queryString = {};
+      data.queryString = requestObj;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, '', {}));
   }
