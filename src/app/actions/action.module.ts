@@ -41,6 +41,7 @@ import { InventoryEntryActions } from './inventory/inventory.entry.actions';
 import { InventoryUsersActions } from './inventory/inventory.users.actions';
 import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
+import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -85,7 +86,8 @@ import { ImportExcelActions } from './import-excel/import-excel.actions';
       SettingsPermissionActions,
       SessionActions,
       SettingsTriggersActions,
-      ImportExcelActions
+      ImportExcelActions,
+      SettingsDiscountActions
     ])
   ],
   exports: [EffectsModule]
