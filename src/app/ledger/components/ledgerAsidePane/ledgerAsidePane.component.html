@@ -14,8 +14,7 @@
 
   <div class="aside-body flexy-child-1" *ngIf="isAddAccountOpen">
     <p>Add Account</p>
-    <!--<sales-create-stock (closeAsideEvent)="closeAsidePane($event)"-->
-    <!--(animateAside)="animateAside($event)"></sales-create-stock>-->
+    <ledger-aside-pane-account></ledger-aside-pane-account>
   </div>
   <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
     <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
