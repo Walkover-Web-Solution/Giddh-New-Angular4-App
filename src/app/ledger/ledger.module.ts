@@ -36,6 +36,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
 import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
 import { InventoryModule } from '../inventory/inventory.module';
+import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
+import { SharedModule } from '../shared/shared.module';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,8 @@ import { InventoryModule } from '../inventory/inventory.module';
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
     AdvanceSearchModelComponent,
-    LedgerAsidePaneComponent
+    LedgerAsidePaneComponent,
+    LedgerAsidePaneAccountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -82,7 +86,9 @@ import { InventoryModule } from '../inventory/inventory.module';
     TextCaseChangeModule,
     ClickOutsideModule,
     QuickAccountModule.forRoot(),
-    InventoryModule
+    InventoryModule,
+    SharedModule,
+    SelectModule.forRoot()
   ],
 })
 export class LedgerModule {
