@@ -218,6 +218,60 @@ export class InvoicePurchaseActions {
     });
 
   /**
+   * Save Tax Pro Details
+   */
+  @Effect()
+  private SaveTaxPro$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO)
+    .switchMap((action: CustomActions) => {
+      return this.purchaseInvoiceService.SaveTaxPro(action.payload)
+        .map(response => this.SaveTaxProResponse(response));
+    });
+
+  /**
+   * Save Tax Pro RESPONSE
+   */
+  @Effect()
+  private SaveTaxProResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body);
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  /**
+   * Save Tax Pro With OTP Details
+   */
+  @Effect()
+  private SaveTaxProWithOTP$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP)
+    .switchMap((action: CustomActions) => {
+      return this.purchaseInvoiceService.SaveTaxProWithOTP(action.payload)
+        .map(response => this.SaveTaxProWithOTPResponse(response));
+    });
+
+  /**
+   * Save Tax Pro With OTP Details RESPONSE
+   */
+  @Effect()
+  private SaveTaxProWithOTPResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body);
+      }
+      return { type: 'EmptyAction' };
+    });
+
+  /**
    * File Jio GSTR1
    */
   @Effect()
@@ -395,10 +449,38 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public FileJioGstReturn(month, gstNumber): CustomActions {
+  public SaveTaxPro(model): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_TAX_PRO,
+      payload: model
+    };
+  }
+
+  public SaveTaxProResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE,
+      payload: response
+    };
+  }
+
+  public SaveTaxProWithOTP(model): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP,
+      payload: model
+    };
+  }
+
+  public SaveTaxProWithOTPResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE,
+      payload: response
+    };
+  }
+
+  public FileJioGstReturn(month, gstNumber, via): CustomActions {
     return {
       type: GST_RETURN_ACTIONS.FILE_JIO_GST,
-      payload: {month, gstNumber}
+      payload: {month, gstNumber, via}
     };
   }
 
