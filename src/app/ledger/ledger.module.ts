@@ -34,6 +34,8 @@ import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
+import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
+import { InventoryModule } from '../inventory/inventory.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccou
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
-    AdvanceSearchModelComponent
+    AdvanceSearchModelComponent,
+    LedgerAsidePaneComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -78,7 +81,8 @@ import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccou
     BsDropdownModule,
     TextCaseChangeModule,
     ClickOutsideModule,
-    QuickAccountModule.forRoot()
+    QuickAccountModule.forRoot(),
+    InventoryModule
   ],
 })
 export class LedgerModule {
