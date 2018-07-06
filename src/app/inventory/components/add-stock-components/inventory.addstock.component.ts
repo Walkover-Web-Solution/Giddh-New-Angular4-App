@@ -306,7 +306,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
-        this.addStockForm.controls['parentGroup'].disable();
+        // this.addStockForm.controls['parentGroup'].disable();
       } else {
         this.isUpdatingStockForm = false;
       }
@@ -949,5 +949,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     taxToMap.map((tax, i) => {
       this.selectTax(e, tax);
     });
+  }
+
+  /**
+   * moveStock
+   */
+  public moveStock() {
+    if (this.addStockForm.get('parentGroup').value !== this.activeGroup.uniqueName) {
+      this.store.dispatch(this.inventoryAction.MoveStock(this.activeGroup, this.stockUniqueName, this.addStockForm.get('parentGroup').value));
+    }
   }
 }

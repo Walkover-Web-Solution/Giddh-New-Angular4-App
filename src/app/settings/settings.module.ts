@@ -1,4 +1,4 @@
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +33,9 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
 import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
 import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
+import { DiscountComponent } from './discount/discount.component';
+import { ContactModule } from '../contact/contact.module';
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +53,7 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
     SettingPermissionComponent,
     SettingPermissionFormComponent,
     BranchComponent,
+    DiscountComponent,
     SettingsTagsComponent,
     SettingTriggerComponent,
     BunchComponent,
@@ -74,8 +78,11 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
     NgbTypeaheadModule,
     BsDropdownModule,
     ElementViewChildModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    ContactModule,
+    ConfirmModalModule
   ]
 })
 
-export class SettingsModule { }
+export class SettingsModule {
+}
