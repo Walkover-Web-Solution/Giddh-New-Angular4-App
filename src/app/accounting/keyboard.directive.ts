@@ -41,7 +41,9 @@ export class OnReturnDirective {
         // } else {
         //   alert('ele without directive');
         // }
-        target.focus();
+        if (target) {
+          target.focus();
+        }
 
       } else if (e.which === 8 || e.keyCode === 8) {
         const target = allElements[indx - 1];
