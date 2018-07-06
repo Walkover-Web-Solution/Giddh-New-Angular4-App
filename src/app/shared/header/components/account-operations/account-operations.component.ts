@@ -32,6 +32,7 @@ import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { ApplyDiscountRequest } from '../../../../models/api-models/ApplyDiscount';
 import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'account-operations',
@@ -120,6 +121,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showBankDetail: boolean = false;
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
+  @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -221,9 +223,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
       if (a && this.breadcrumbUniquePath[1]) {
         this.isDiscountableAccount$ = Observable.of(this.breadcrumbUniquePath[1] === 'sundrydebtors');
+        this.discountAccountForm.patchValue({discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined});
       }
-      // TODO use a.discount proeprty for filling the discount form
-      this.discountAccountForm.patchValue({discountUniqueName: ''});
     });
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
@@ -350,6 +351,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       } else {
         this.companyDiscountDropDown = [];
       }
+    });
+
+    this.accountsAction.RemoveAccountDiscountResponse$.subscribe(res => {
+      this.discountShSelect.clear();
     });
   }
 
@@ -589,6 +594,19 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let data: ApplyDiscountRequest = this.discountAccountForm.value;
       data.accountUniqueNames = [activeAccount.uniqueName];
       this.store.dispatch(this.accountsAction.applyAccountDiscount(data));
+    }
+  }
+
+  public removeDiscount() {
+    let activeAccount: AccountResponseV2 = null;
+    this.activeAccount$.take(1).subscribe(s => {
+      if (s) {
+        activeAccount = s;
+      }
+    });
+    if (activeAccount) {
+      this.store.dispatch(
+        this.accountsAction.removeAccountDiscount(activeAccount.discounts[0].uniqueName, activeAccount.uniqueName));
     }
   }
 

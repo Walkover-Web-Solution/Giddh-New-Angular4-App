@@ -35,10 +35,12 @@ export class SettingsDiscountService {
   /**
    * Create Discount
    */
-  public CreateDiscount(model): Observable<BaseResponse<AccountResponse, CreateDiscountRequest>> {
+  public CreateDiscount(model: CreateDiscountRequest): Observable<BaseResponse<AccountResponse, CreateDiscountRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+      model).map((res) => {
       let data: BaseResponse<AccountResponse, CreateDiscountRequest> = res;
       data.request = model;
       return data;
@@ -48,14 +50,17 @@ export class SettingsDiscountService {
   /**
    * Update Discount
    */
-  public UpdateDiscount(model, uniqueName: string): Observable<BaseResponse<any, any>> {
+  public UpdateDiscount(model: CreateDiscountRequest, uniqueName: string): Observable<BaseResponse<AccountResponse, CreateDiscountRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + uniqueName, model).map((res) => {
-      let data: BaseResponse<any, any> = res;
+    return this._http.put(this.config.apiUrl + SETTINGS_DISCOUNT_API.PUT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':discountUniqueName', encodeURIComponent(uniqueName)), model).map((res) => {
+      let data: BaseResponse<AccountResponse, CreateDiscountRequest> = res;
       data.request = model;
+      data.queryString = uniqueName;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model));
   }
 
   /**
