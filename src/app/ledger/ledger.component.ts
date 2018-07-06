@@ -431,8 +431,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
-      if (data[0] && data[1]) {
-        let accountDetails: AccountResponse = data[0];
+      if (data[0] && data[1]) {let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
