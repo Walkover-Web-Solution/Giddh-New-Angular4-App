@@ -5,7 +5,8 @@ export interface IDiscountList {
   uniqueName: string;
   discountType: 'FIX_AMOUNT' | 'PERCENTAGE';
   discountValue: number;
-  linkAccount: AccountResponse;
+  linkAccount?: AccountResponse;
+  isActive?: boolean;
 }
 
 export class CreateDiscountRequest {
@@ -13,4 +14,5 @@ export class CreateDiscountRequest {
   public type: 'FIX_AMOUNT' | 'PERCENTAGE';
   public discountValue: number;
   public accountUniqueName: string;
+  public discountUniqueName?: string;
 }
