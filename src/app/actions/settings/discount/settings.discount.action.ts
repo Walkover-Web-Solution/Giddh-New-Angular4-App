@@ -54,7 +54,7 @@ export class SettingsDiscountActions {
   public UpdateDiscount$: Observable<Action> = this.action$
     .ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT)
     .switchMap((action: CustomActions) => {
-      return this.settingsDiscountService.UpdateDiscount(action.payload, action.payload.uniqueName)
+      return this.settingsDiscountService.UpdateDiscount(action.payload.modal, action.payload.uniqueName)
         .map(response => this.UpdateDiscountResponse(response));
     });
 
@@ -119,14 +119,14 @@ export class SettingsDiscountActions {
     };
   }
 
-  public UpdateDiscount(value): CustomActions {
+  public UpdateDiscount(modal: CreateDiscountRequest, uniqueName: string): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT,
-      payload: value
+      payload: {modal, uniqueName}
     };
   }
 
-  public UpdateDiscountResponse(value): CustomActions {
+  public UpdateDiscountResponse(value: BaseResponse<AccountResponse, CreateDiscountRequest>): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE,
       payload: value
