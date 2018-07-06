@@ -37,7 +37,12 @@
 
         <div class="col-xs-2 form-group">
           <button type="submit" class="btn btn-success" style="margin-top: 16px;height: 34px;"
+                  *ngIf="!(createRequest.discountUniqueName)"
                   [ladda]="isDiscountCreateInProcess$ | async">Add
+          </button>
+          <button type="submit" class="btn btn-success" style="margin-top: 16px;height: 34px;"
+                  *ngIf="createRequest.discountUniqueName"
+                  [ladda]="isDiscountUpdateInProcess$ | async">Update
           </button>
         </div>
       </ng-container>

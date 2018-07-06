@@ -31,6 +31,8 @@ export interface DiscountState {
   discountList: IDiscountList[];
   isDiscountCreateInProcess: boolean;
   isDiscountCreateSuccess: boolean;
+  isDiscountUpdateInProcess: boolean;
+  isDiscountUpdateSuccess: boolean;
   isDeleteDiscountInProcess: boolean;
   isDeleteDiscountSuccess: boolean;
 }
@@ -41,7 +43,9 @@ const discountInitialState: DiscountState = {
   isDeleteDiscountSuccess: false,
   isDiscountCreateInProcess: false,
   isDiscountCreateSuccess: false,
-  isDiscountListInProcess: false
+  isDiscountListInProcess: false,
+  isDiscountUpdateInProcess: false,
+  isDiscountUpdateSuccess: false
 };
 
 export interface SettingsState {
@@ -386,6 +390,42 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         discount: Object.assign({}, state.discount, {
           isDiscountCreateInProcess: false,
           isDiscountCreateSuccess: true,
+          discountList
+        })
+      });
+    }
+
+    case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountUpdateInProcess: true,
+          isDiscountUpdateSuccess: false
+        })
+      });
+    }
+    case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE: {
+      let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
+
+      if (response.status === 'error') {
+        return Object.assign({}, state, {
+          discount: Object.assign({}, state.discount, {
+            isDiscountUpdateInProcess: false,
+            isDiscountUpdateSuccess: false,
+          })
+        });
+      }
+
+      let discountList = _.cloneDeep(state.discount.discountList);
+      discountList = discountList.map(dis => {
+        if (dis.uniqueName === response.queryString) {
+          dis = response.body;
+        }
+        return dis;
+      });
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountUpdateInProcess: false,
+          isDiscountUpdateSuccess: true,
           discountList
         })
       });
