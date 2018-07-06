@@ -52,6 +52,7 @@ export interface InventoryState {
   showBranchScreen: boolean;
   showBranchScreenSidebar: boolean;
   isStockUnitCodeAvailable: boolean;
+  moveStockSuccess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -112,7 +113,8 @@ const initialState: InventoryState = {
   UpdateStockSuccess: false,
   showBranchScreen: false,
   showBranchScreenSidebar: false,
-  isStockUnitCodeAvailable: false
+  isStockUnitCodeAvailable: false,
+  moveStockSuccess: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -515,6 +517,18 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       return Object.assign({}, state, {activeStock: null, activeStockUniqueName: null});
     case InventoryActionsConst.ResetInventoryState:
       return Object.assign({}, state, initialState);
+    case InventoryActionsConst.MoveStock:
+      return Object.assign({}, state, {moveStockSuccess: false});
+    case InventoryActionsConst.MoveStockResponse:
+      let moveStockResp: BaseResponse<string, string> = action.payload;
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup.uniqueName, moveStockResp.queryString.stockUniqueName, null);
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStock: null,
+          activeStockUniqueName: null,
+          moveStockSuccess: true
+        });
     /*
      *Custom Stock Units...
      * */

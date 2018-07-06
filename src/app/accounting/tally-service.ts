@@ -169,6 +169,7 @@ export class TallyModuleService {
         salesAccounts.push(acc);
       }
     });
+
     this.cashAccounts.next(cashAccounts);
     this.purchaseAccounts.next(purchaseAccounts);
     this.bankAccounts.next(bankAccounts);
@@ -185,10 +186,12 @@ export class TallyModuleService {
       // console.log('this.selectedPageInfo.value inside service is :', this.selectedPageInfo.value);
       switch (this.selectedPageInfo.value.page) {
         case 'Journal':
-          accounts = this.flattenAccounts.value;
+          // accounts = this.flattenAccounts.value;
+          // As discussed with Manish, Cash and Bank account should not come in Journal entry
+          accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
           break;
         case 'Purchase':
-          accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.bankAccounts.value).concat(this.taxAccounts.value);
+          accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
           break;
         case 'Sales':
           accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);

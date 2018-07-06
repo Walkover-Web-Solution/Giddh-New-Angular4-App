@@ -96,12 +96,14 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     this.createCustomStockSuccess$.subscribe((a) => {
       if (a) {
         this.clearFields();
+        this.selectedUnitName = null;
       }
     });
 
     this.updateCustomStockInProcess$.subscribe((a) => {
       if (!a) {
         this.clearFields();
+        this.selectedUnitName = null;
       }
     });
   }
