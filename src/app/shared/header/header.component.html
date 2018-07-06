@@ -410,8 +410,12 @@
                             </ul>
                         </li>
                         <li role="separator" class="divider" style="width:100%"></li>
-                        <li>
-                            <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
+                        <li class="app_list">
+                            <ul>
+
+                                <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                                <li class="text-right bdrL"><a [routerLink]="['/onboarding']">Get Started</a></li>
+                            </ul>
                         </li>
                         <!-- <li role="separator" class="divider" style="width:100%"></li>
                         <li>
@@ -446,12 +450,12 @@
 
 <!--add company new modal  -->
 <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
-      </ng-template>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
+            </ng-template>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--delete company modal  -->
