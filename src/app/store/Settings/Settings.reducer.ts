@@ -22,9 +22,11 @@ export interface LinkedAccountsState {
   needReloadingLinkedAccounts?: boolean;
   iframeSource?: string;
 }
+
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
+  updateProfileSuccess: boolean;
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
   usersWithCompanyPermissions: any;
@@ -37,6 +39,7 @@ export interface SettingsState {
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
+  updateProfileSuccess: false,
   linkedAccounts: {},
   financialYears: null,
   usersWithCompanyPermissions: null,
@@ -111,9 +114,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
+        newState.updateProfileSuccess = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return Object.assign({}, state, {
+        updateProfileSuccess: true
+      });
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS: {
       newState.linkedAccounts.isBankAccountsInProcess = true;
@@ -208,18 +214,15 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
-    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE:
-    {
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE: {
       newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
       return Object.assign({}, state, newState);
     }
-    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE:
-    {
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE: {
       newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
       return Object.assign({}, state, newState);
     }
-    case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE:
-    {
+    case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
         newState.branches = response.body;
@@ -236,8 +239,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return Object.assign({}, state, newState);
     }
-    case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE:
-    {
+    case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
         newState.tags = response.body;
