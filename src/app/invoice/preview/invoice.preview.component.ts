@@ -114,7 +114,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.store.select(p => p.invoice.invoices).takeUntil(this.destroyed$).subscribe((o: GetAllInvoicesPaginatedResponse) => {
       if (o) {
         this.invoiceData = _.cloneDeep(o);
-        _.map(this.invoiceData.results, (item: IInvoiceResult) => {
+        _.map(this.invoiceData.items, (item: IInvoiceResult) => {
           item.isSelected = false;
           return o;
         });
@@ -228,14 +228,14 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteBtnClick(uniqueName) {
-    let allInvoices = _.cloneDeep(this.invoiceData.results);
+    let allInvoices = _.cloneDeep(this.invoiceData.items);
     this.selectedInvoice = allInvoices.find((o) => o.uniqueName === uniqueName);
     this.invoiceConfirmationModel.show();
   }
 
   public deleteConfirmedInvoice() {
     this.invoiceConfirmationModel.hide();
-    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoice.invoiceNumber));
+    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoice.voucherNumber));
   }
 
   public closeConfirmationPopup() {
@@ -252,7 +252,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
    */
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
-    this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
+    this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
     this.loadDownloadOrSendMailComponent();
     this.downloadOrSendMailModel.show();
   }
@@ -312,9 +312,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (userResponse.action === 'download') {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice }));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.voucherNumber], typeOfInvoice: userResponse.typeOfInvoice }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.invoiceNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
     }
   }
 
@@ -387,7 +387,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.invoiceNumber],
+      invoiceNumber: [this.selectedInvoice.voucherNumber],
       typeOfInvoice: invoiceCopy
     };
     this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));

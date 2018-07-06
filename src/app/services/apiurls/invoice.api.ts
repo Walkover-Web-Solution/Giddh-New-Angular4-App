@@ -30,5 +30,9 @@ export const INVOICE_API_2 = {
   DOWNLOAD_INVOICE: URI_ONLY_FOR_INVOICE + 'download',
   GENERATED_INVOICE_PREVIEW: PART_A + 'accounts/:accountUniqueName/invoice/preview',
   GET_INVOICE_TEMPLATE_DETAILS: PART_A + 'templates/:templateUniqueName',
-  SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1'
+  SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1',
+};
+
+export const VOUCHER_API = {
+  GET_ALL_VOUCHER_WITH_FILTER: COMMON_URL + 'vouchers/get-all?' // POST
 };

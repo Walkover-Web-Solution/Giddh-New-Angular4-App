@@ -4,7 +4,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
+import { INVOICE_API, INVOICE_API_2, VOUCHER_API } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
@@ -32,7 +32,7 @@ export class InvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     // create url conditionally
-    let url = this.createQueryString(this.config.apiUrl + INVOICE_API.GET_ALL_INVOICES, model);
+    let url = this.createQueryString(this.config.apiUrl + VOUCHER_API.GET_ALL_VOUCHER_WITH_FILTER, model);
 
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), body)
       .map((res) => {
@@ -81,6 +81,9 @@ export class InvoiceService {
     }
     if ((model.count)) {
       url = url + 'count=' + model.count;
+    }
+    if ((model.type)) {
+      url = url + 'type=' + model.type;
     }
     return url;
   }

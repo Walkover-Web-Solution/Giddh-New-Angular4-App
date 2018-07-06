@@ -10,18 +10,21 @@ import { IPagination } from '../interfaces/paginatedResponse.interface';
 import { OtherSalesItemClass, SalesEntryClass } from './Sales';
 import { INameUniqueName } from './Inventory';
 
-
 export interface IInvoiceResult {
   companyName: string;
   uniqueName: string;
   balanceStatus: string;
-  invoiceNumber: string;
-  invoiceDate: string;
+  invoiceNumber?: string;
+  invoiceDate?: string;
   sealPath?: any;
   grandTotal: number;
   account: INameUniqueName;
   balanceDue: number;
   isSelected?: boolean;
+  //
+  voucherNumber: string;
+  voucherDate: string;
+
 }
 
 export interface IGetAllInvoicesResponse extends IPagination {
@@ -33,7 +36,7 @@ export class GetAllInvoicesPaginatedResponse {
   public count: number;
   public page: number;
   // public results: ILedgersInvoiceResult[];
-  public results: IInvoiceResult[];
+  public items: IInvoiceResult[];
   public size: number;
   public totalItems: number;
   public totalPages: number;
@@ -45,6 +48,7 @@ export class CommonPaginatedRequest {
   public count?: number;
   public page?: number;
   public dateRange?: Date[];
+  public type?: string;
 }
 
 export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest {

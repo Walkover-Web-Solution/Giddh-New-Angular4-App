@@ -49,12 +49,12 @@
     <h1>Have to do some sales before creating invoice</h1>
 </div>
 
-<div class="no-data" *ngIf="invoiceData && invoiceData.results.length === 0">
+<div class="no-data" *ngIf="invoiceData && invoiceData.items.length === 0">
     <h1>No entries found within given criteria.</h1>
     <h1>Do search with some other dates</h1>
 </div>
 
-<table class="table basic table-bordered mrT2" *ngIf="invoiceData && invoiceData.results.length > 0">
+<table class="table basic table-bordered mrT2" *ngIf="invoiceData && invoiceData.items.length > 0">
     <thead class="t-h-bg1">
         <tr>
             <th>#</th>
@@ -78,13 +78,13 @@
         </tr>
     </tfoot>
     <tbody>
-        <tr *ngFor="let item of invoiceData.results; let i = index">
+        <tr *ngFor="let item of invoiceData.items; let i = index">
             <td>{{ i + 1}}</td>
             <td>
-                <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.invoiceNumber}}</a>
+                <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
             </td>
             <td>{{item.account.name}}</td>
-            <td>{{item.invoiceDate}}</td>
+            <td>{{item.voucherDate}}</td>
             <td>{{item.grandTotal}}</td>
             <td>{{item.balanceDue}}</td>
             <td>
