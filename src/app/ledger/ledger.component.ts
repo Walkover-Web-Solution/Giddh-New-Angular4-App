@@ -541,9 +541,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     this.createStockSuccess$.subscribe(s => {
-      // if (s) {
-      //   this.store.dispatch(this._generalActions.getFlattenAccount());
-      // }
+      if (s) {
+        this.store.dispatch(this._generalActions.getFlattenAccount());
+      }
     });
 
   }
