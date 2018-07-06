@@ -1,31 +1,32 @@
 /**new modal design**/
-.modal-body label{
-  color:#707070;
+
+.modal-body label {
+    color: #707070;
 }
-label .required{
+
+label .required {
     position: relative;
     top: 0px;
     color: #CF0606;
 }
-.form-control{
-  color:#707070;
+
+.form-control {
+    color: #707070;
 }
-.modal-body p{
-  font-size:14px;
-  color:#B3B3B3;
-  text-align:center;
-  margin-left:-28px;
-  margin-right:-28px;
+
+.modal-body p {
+    font-size: 14px;
+    color: #B3B3B3;
+    text-align: center;
+    margin-left: -28px;
+    margin-right: -28px;
 }
-.btn-success{
-  margin-top: 41px !important;
-  margin-left: 10px !important; 
-  margin-top:41px !important;
-}
-@media (min-width: 768px){
-.form-inline .input-group>.form-control {
+
+@media (min-width: 768px) {
+    /* .form-inline .input-group>.form-control {
     width: 86%;
+} */
 }
-}
+
 
 /**end new modal design**/
