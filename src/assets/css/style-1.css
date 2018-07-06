@@ -5160,3 +5160,14 @@ bs-datepicker-container {
 .daterangepicker.show-calendar {
     min-width: 666px;
 }
+.panel.sFthanks.fieldset{
+    display:none !important;
+}
+.panel.sFformfield.fieldset{
+box-shadow: none !important;
+}
+#sFSection-Jkvq .sFsubmit.btn-primary{
+    font-size: 14px !important;
+    background: #e5e5e5 !important;
+    color: #28ab00 !important;
+}
