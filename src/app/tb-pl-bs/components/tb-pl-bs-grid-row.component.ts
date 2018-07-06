@@ -16,7 +16,7 @@ import { ChildGroup, Account } from '../../models/api-models/Search';
 <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
   <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
   <section class="row row-2 account " *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible">
-    <div class="row" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0)">
+    <div class="row" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
       <div class="col-xs-4 account" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase | highlight:search"></div>
       <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | number:'1.2-2' }} {{account.openingBalance | recType }}
       </div>
