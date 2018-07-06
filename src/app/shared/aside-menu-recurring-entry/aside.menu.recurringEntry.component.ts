@@ -106,7 +106,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
   public ngOnInit() {
     this.intervalOptions = [
-      {label: 'Weekly', value: 'weeeekly'},
+      {label: 'Weekly', value: 'weekly'},
       {label: 'Quarterly', value: 'quarterly'},
       {label: 'Halfyearly', value: 'halfyearly'},
       {label: 'Yearly', value: 'yearly'},
