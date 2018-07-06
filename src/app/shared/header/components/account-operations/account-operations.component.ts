@@ -29,6 +29,9 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { createSelector } from 'reselect';
 import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
+import { ApplyDiscountRequest } from '../../../../models/api-models/ApplyDiscount';
+import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
+import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 
 @Component({
   selector: 'account-operations',
@@ -44,11 +47,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @Input() public height: number;
   public activeAccount$: Observable<AccountResponseV2>;
   public isTaxableAccount$: Observable<boolean>;
+  public isDiscountableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
   @ViewChild('shareAccountModalComp') public shareAccountModalComp: ShareAccountModalComponent;
@@ -72,6 +76,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showNewForm$: Observable<boolean>;
   public groupDetailForm: FormGroup;
   public taxGroupForm: FormGroup;
+  public discountAccountForm: FormGroup;
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
   public activeGroupUniqueName$: Observable<string>;
@@ -81,6 +86,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isRootLevelGroup: boolean = false;
   public companyTaxes$: Observable<TaxResponse[]>;
   public companyTaxDropDown: Observable<IOption[]>;
+  public companyDiscountDropDown: IOption[] = [];
   public groupsList: IOption[];
   public accounts$: Observable<IOption[]>;
   public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
@@ -94,6 +100,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public createAccountIsSuccess$: Observable<boolean>;
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
+  public discountList$: Observable<IDiscountList[]>;
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -107,6 +114,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isGstEnabledAcc: boolean = false;
   public isHsnSacEnabledAcc: boolean = false;
   public showTaxes: boolean = false;
+  public showDiscount: boolean = false;
   public isUserSuperAdmin: boolean = false;
   public showGroupLedgerExportButton$: Observable<boolean>;
   public showBankDetail: boolean = false;
@@ -117,7 +125,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-              private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
+              private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
+              private _settingsDiscountAction: SettingsDiscountActions) {
     this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
@@ -130,12 +139,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).takeUntil(this.destroyed$);
+    this.discountList$ = this.store.select(s => s.settings.discount.discountList).takeUntil(this.destroyed$);
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
-      (state: AppState) => state.groupwithaccounts.activeAccount,
-      (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-      (state: AppState) => state.company.taxes],
+        (state: AppState) => state.groupwithaccounts.activeAccount,
+        (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+        (state: AppState) => state.company.taxes],
       (activeAccount, activeAccountTaxHierarchy, taxes) => {
         let arr: IOption[] = [];
         // debugger;
@@ -156,22 +166,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let inheritedTaxes = _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                 // set value in tax group form
-                this.taxGroupForm.setValue({ taxes: allTaxes });
+                this.taxGroupForm.setValue({taxes: allTaxes});
               } else {
-                this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                this.taxGroupForm.setValue({taxes: applicableTaxes});
               }
               return _.differenceBy(taxes.map(p => {
-                return { label: p.name, value: p.uniqueName };
+                return {label: p.name, value: p.uniqueName};
               }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                return { label: p.name, value: p.uniqueName };
+                return {label: p.name, value: p.uniqueName};
               }), 'value');
 
             } else {
               // set value in tax group form
-              this.taxGroupForm.setValue({ taxes: applicableTaxes });
+              this.taxGroupForm.setValue({taxes: applicableTaxes});
 
               return taxes.map(p => {
-                return { label: p.name, value: p.uniqueName };
+                return {label: p.name, value: p.uniqueName};
               });
 
             }
@@ -198,6 +208,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
   }
 
   public ngOnInit() {
@@ -207,6 +218,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
         this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
       }
+
+      if (a && this.breadcrumbUniquePath[1]) {
+        this.isDiscountableAccount$ = Observable.of(this.breadcrumbUniquePath[1] === 'sundrydebtors');
+      }
+      // TODO use a.discount proeprty for filling the discount form
+      this.discountAccountForm.patchValue({discountUniqueName: ''});
     });
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
@@ -216,6 +233,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.taxGroupForm = this._fb.group({
       taxes: ['']
+    });
+
+    this.discountAccountForm = this._fb.group({
+      discountUniqueName: ['', Validators.required],
     });
 
     this.moveAccountForm = this._fb.group({
@@ -233,7 +254,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let flattenGroupsList: IOption[] = [];
 
         grpsList.forEach(grp => {
-          flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
+          flattenGroupsList.push({label: grp.name, value: grp.uniqueName});
         });
         this.groupsList = flattenGroupsList;
         this.groupsListBackUp = flattenGroupsList;
@@ -321,13 +342,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
+    this.discountList$.subscribe(discount => {
+      if (discount) {
+        this.companyDiscountDropDown = discount.map(dis => {
+          return {label: dis.name, value: dis.uniqueName};
+        });
+      } else {
+        this.companyDiscountDropDown = [];
+      }
+    });
   }
 
   public ngAfterViewInit() {
 
     this.isTaxableAccount$ = this.store.select(createSelector([
-      (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-      (state: AppState) => state.groupwithaccounts.activeAccount],
+        (state: AppState) => state.groupwithaccounts.groupswithaccounts,
+        (state: AppState) => state.groupwithaccounts.activeAccount],
       (groupswithaccounts, activeAccount) => {
         let result: boolean = false;
         let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
@@ -348,7 +378,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let accounts: IOption[] = [];
       if (a.status === 'success') {
         a.body.results.map(acc => {
-          accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
+          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
         });
         let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
         if (accountIndex > -1) {
@@ -371,7 +401,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
+    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
   }
 
   public moveAccount() {
@@ -410,7 +440,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -545,6 +575,21 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       // this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     }
 
+  }
+
+  public applyDiscount() {
+    //
+    let activeAccount: AccountResponseV2 = null;
+    this.activeAccount$.take(1).subscribe(s => {
+      if (s) {
+        activeAccount = s;
+      }
+    });
+    if (activeAccount) {
+      let data: ApplyDiscountRequest = this.discountAccountForm.value;
+      data.accountUniqueNames = [activeAccount.uniqueName];
+      this.store.dispatch(this.accountsAction.applyAccountDiscount(data));
+    }
   }
 
   public showShareGroupModal() {
