@@ -139,6 +139,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public reconcileClosingBalanceForBank: { amount: number, type: string };
   // aside menu properties
   public asideMenuState: string = 'out';
+  public createStockSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private entryUniqueNamesForBulkAction: string[] = [];
@@ -167,6 +168,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._loginActions.ResetRedirectToledger());
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -536,6 +538,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
           moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
           this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
       }
+    });
+
+    this.createStockSuccess$.subscribe(s => {
+      // if (s) {
+      //   this.store.dispatch(this._generalActions.getFlattenAccount());
+      // }
     });
 
   }
