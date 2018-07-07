@@ -15,21 +15,19 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 @Component({
   selector: 'ledger-aside-pane-account',
   styles: [`
-    :host {
+    :host{
       position: fixed;
       left: auto;
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      width: 580px;
       z-index: 1045;
     }
-
-    #close {
+    #close{
       display: none;
     }
-
-    :host.in #close {
+    :host.in  #close{
       display: block;
       position: fixed;
       left: -41px;
@@ -38,14 +36,36 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       border: 0;
       border-radius: 0;
     }
-
-    :host .container-fluid {
+    :host .container-fluid{
       padding-left: 0;
       padding-right: 0;
     }
-
     :host .aside-pane {
-      width: 480px;
+      width: 580px;
+    }
+    .aside-pane{
+      width: 100%;
+    }
+    .flexy-child{
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .flexy-child-1{
+      flex-grow: 1;
+    }
+    .vmiddle {
+      position: absolute;
+      top: 50%;
+      bottom: 0;
+      left: 0;
+      display: table;
+      width: 100%;
+      right: 0;
+      transform: translateY(-50%);
+      text-align: center;
+      margin: 0 auto;
     }
   `],
   templateUrl: './ledger-aside.pane.account.component.html'

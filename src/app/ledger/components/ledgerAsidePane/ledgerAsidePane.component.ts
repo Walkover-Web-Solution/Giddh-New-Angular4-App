@@ -9,25 +9,19 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   selector: 'ledger-aside-pane',
   templateUrl: './ledgerAsidePane.component.html',
   styles: [`
-    :host {
+    :host{
       position: fixed;
       left: auto;
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      width: 580px;
       z-index: 1045;
     }
-
-    :host.shifted {
-      right: 300px;
-    }
-
-    #close {
+    #close{
       display: none;
     }
-
-    :host.in #close {
+    :host.in  #close{
       display: block;
       position: fixed;
       left: -41px;
@@ -35,6 +29,38 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       z-index: 5;
       border: 0;
       border-radius: 0;
+    }
+    :host .container-fluid{
+      padding-left: 0;
+      padding-right: 0;
+    }
+    :host .aside-pane {
+      width: 580px;
+      background: #fff;
+    }
+    .aside-pane{
+      width: 100%;
+    }
+    .flexy-child{
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .flexy-child-1{
+      flex-grow: 1;
+    }
+    .vmiddle {
+      position: absolute;
+      top: 50%;
+      bottom: 0;
+      left: 0;
+      display: table;
+      width: 100%;
+      right: 0;
+      transform: translateY(-50%);
+      text-align: center;
+      margin: 0 auto;
     }
 
     #back {
@@ -50,25 +76,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       border: 0;
       border-radius: 0;
     }
-
-    .aside-pane {
-      display: flex;
-      width: 100%;
-    }
-
-    .flexy-child {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .flexy-child-1 {
-      flex-grow: 1;
-    }
-
-    :host .aside-pane {
-      width: 480px;
+    .btn-lg {
+      min-width: 130px;
     }
   `]
 })
