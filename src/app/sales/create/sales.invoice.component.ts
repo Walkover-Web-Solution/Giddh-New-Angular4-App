@@ -996,7 +996,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
           // t.date = this.universalDate || new Date();
-          // e.entryDate = this.universalDate || new Date();
+          e.entryDate = this.universalDate || new Date();
         });
       });
     } else {
