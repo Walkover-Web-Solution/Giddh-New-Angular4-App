@@ -45,6 +45,18 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-Create-Invoice:before {
+    content: "\e901";
+}
+
+.icon-Add-customer:before {
+    content: "\e900";
+}
+
+.icon-Invite-Accountant:before {
+    content: "\e906";
+}
+
 .icon-add:before {
     content: "\e900";
 }
@@ -1992,7 +2004,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: #525252;
+    background: #727272;
 }
 
 .close_modal {
@@ -3910,6 +3922,12 @@ input[type='checkbox'][disabled]:after {
     text-transform: uppercase;
 }
 
+.welcome-header h2 {
+    font-size: 26px;
+    font-family: 'LatoWebSemibold';
+    color: #535353;
+}
+
 .table-container section div:last-child {
     border-right: 0;
 }
@@ -4092,12 +4110,117 @@ typeahead-container .dropdown-menu li.active>a>a {
     right: 20px;
     top: 2px;
     line-height: 48px;
-    color: #db7f53;
+    color: #333333;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
     font-size: 25px;
 }
+
+
+/**new modal design**/
+
+.welcome_header {
+    background: #fff url("../images/Welcome.png") no-repeat center center;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+}
+
+.welcome_header h1 {
+    font-size: 60px;
+    font-family: 'LatoWebSemibold';
+    color: #535353;
+}
+
+.welcome_header:after {
+    position: absolute !important;
+    width: 98%;
+    background: #B3B3B3;
+    height: 1px;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    bottom: -11px;
+    left: 50%;
+    content: " ";
+    transform: translateX(-50%);
+}
+
+.dblock {
+    display: block !important;
+    margin: auto;
+}
+
+.m-t-50 {
+    margin-top: 50px;
+}
+
+.m-t-41 {
+    margin-top: 41px;
+}
+
+.m-b-20 {
+    margin-bottom: 20px !important;
+}
+
+.m-t-20 {
+    margin-top: 20px !important;
+}
+
+.m-t-10 {
+    margin-top: 10px !important;
+}
+
+.m-t-30 {
+    margin-top: 30px !important;
+}
+
+.m-t-40 {
+    margin-top: 40px !important;
+}
+
+.p-lr-15 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.m-t-37 {
+    margin-top: 37px !important;
+}
+
+.company-form-body {
+    width: 422px;
+    margin: auto;
+}
+
+.welcome-header h2 {
+    font-size: 26px;
+    font-family: 'LatoWebSemibold';
+    color: #535353;
+    position: relative;
+}
+
+.welcome-header h2:after {
+    position: absolute;
+    top: 0;
+    right: -32px;
+    content: "";
+    background: url("../images/hand_icon.svg") no-repeat 0 0;
+    width: 23px;
+    height: 24px;
+}
+
+.height550 {
+    height: 550px;
+}
+
+.right_section {
+    background: url("../images/Schedule.png") right 100px no-repeat;
+}
+
+
+/**end new modal design**/
 
 .col_wrapper .btn-link {
     color: #10aae0 !important;
@@ -4656,4 +4779,8 @@ table td[class*=col-]:last-child {
 .text-link,
 .text-link:focus {
     text-decoration: underline;
+}
+
+panel.sFthanks.fieldset {
+    display: none !important;
 }
