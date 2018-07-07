@@ -314,7 +314,7 @@
                         </tr>
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
                           <td class="col-xs-1 text-center"><input type="checkbox"
-                                                                  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
+                                                                  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)" [checked]="entryUniqueNamesForBulkAction.indexOf(txn.entryUniqueName) > -1"/>
                           </td>
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
