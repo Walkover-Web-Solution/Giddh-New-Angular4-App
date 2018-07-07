@@ -92,7 +92,7 @@
                     <div class="col-xs-6">
                         <div class="form-group select2-parent">
                             <label>State</label><br>
-                            <sh-select [disabled]="true" placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia" [ItemHeight]="33"></sh-select>
+                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" [hidden]="!countryIsIndia" [ItemHeight]="33"></sh-select>
                             <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
                         </div>
                     </div>
