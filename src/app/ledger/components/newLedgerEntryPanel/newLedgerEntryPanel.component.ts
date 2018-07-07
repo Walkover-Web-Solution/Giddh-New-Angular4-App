@@ -30,6 +30,7 @@ import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.a
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
+import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -98,7 +99,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private cdRef: ChangeDetectorRef,
     private _toasty: ToasterService,
     private _loaderService: LoaderService,
-    private _settingsTagActions: SettingsTagActions) {
+    private _settingsTagActions: SettingsTagActions,
+    private _settingsProfileActions: SettingsProfileActions) {
     this.store.dispatch(this._settingsTagActions.GetALLTags());
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
@@ -152,6 +154,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (acc.currency) {
           this.accountBaseCurrency = acc.currency;
+        } else {
+          this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+            if (!_.isEmpty(o)) {
+              let companyProfile = _.cloneDeep(o);
+              if (companyProfile.isMultipleCurrency) {
+                this.accountBaseCurrency = companyProfile.baseCurrency || 'INR';
+              }
+            } else {
+              this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
+            }
+          });
         }
       }
     });
