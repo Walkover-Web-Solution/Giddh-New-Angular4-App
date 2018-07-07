@@ -70,6 +70,25 @@
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
+                            <label>Country</label><br>
+                            <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country" [options]="countrySource" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
+                            <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group select2-parent">
+                            <label>State</label><br>
+                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" [hidden]="!countryIsIndia" [ItemHeight]="33"></sh-select>
+                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
                             <label>City</label><br>
                             <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$">
 
@@ -83,23 +102,6 @@
                         <div class="form-group">
                             <label>Pincode</label><br>
                             <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode" name="pincode" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group select2-parent">
-                            <label>State</label><br>
-                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" [hidden]="!countryIsIndia" [ItemHeight]="33"></sh-select>
-                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Country</label><br>
-                            <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" />
                         </div>
                     </div>
                 </div>
