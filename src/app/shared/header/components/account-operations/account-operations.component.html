@@ -204,7 +204,7 @@
 
     <!--discount-->
     <!-- Discount collapse -->
-    <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
+    <!-- <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
 
       <div class="col-xs-12">
         <div class="form-group toggle-btn mrB">
@@ -213,10 +213,10 @@
                [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
           </label>
         </div>
-      </div>
+      </div> -->
 
       <!-- discount container -->
-      <ng-container *ngIf="showDiscount">
+      <!-- <ng-container *ngIf="showDiscount">
         <div class="col-xs-12">
           <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
             <div class="tax-label">
@@ -242,7 +242,7 @@
         </div>
       </ng-container>
 
-    </div>
+    </div> -->
 
   </div>
   <!--merge and taxes-->
