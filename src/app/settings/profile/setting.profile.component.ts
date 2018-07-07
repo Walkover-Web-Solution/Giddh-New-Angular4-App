@@ -243,9 +243,9 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
     }
 
-    if (this.countryIsIndia) {
-      dataToSave.state = null;
-    }
+    // if (this.countryIsIndia) {
+    //   dataToSave.state = null;
+    // }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
   }

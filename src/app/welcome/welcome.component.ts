@@ -107,7 +107,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
-          this.states.push({label: `${d.name}`, value: `${d.code}`});
+          this.states.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
       this.statesSource$ = Observable.of(this.states);
