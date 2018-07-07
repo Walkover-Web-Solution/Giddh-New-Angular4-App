@@ -60,6 +60,19 @@ export class CustomStockUnitAction {
         }));
     });
 
+  @Effect() private GetStockUnitByName$: Observable<Action> = this.action$
+    .ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME)
+    .switchMap((action: CustomActions) => this._inventoryService.GetStockUnitByName(action.payload))
+      .map(response => {
+        return this.GetStockUnitByNameResponse(response);
+      });
+
+  @Effect()
+  private GetStockUnitByNameResponse$: Observable<Action> = this.action$
+    .ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE)
+    .map((action: CustomActions) => {
+      return {type: 'EmptyAction'};
+    });
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -90,6 +103,20 @@ export class CustomStockUnitAction {
   public GetStockUnit(): CustomActions {
     return {
       type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT,
+    };
+  }
+
+  public GetStockUnitByName(unitName): CustomActions {
+    return {
+      type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME,
+      payload: unitName
+    };
+  }
+
+  public GetStockUnitByNameResponse(res): CustomActions {
+    return {
+      type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE,
+      payload: res
     };
   }
 

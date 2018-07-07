@@ -5,6 +5,7 @@ import { INameUniqueName } from './Inventory';
 import { IFlattenAccountsResultItem } from '../interfaces/flattenAccountsResultItem.interface';
 import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
+import { IDiscountList } from './SettingsDiscount';
 
 /**
  * Model for create account api response
@@ -160,6 +161,7 @@ export class AccountsTaxHierarchyResponse {
   public applicableTaxes: INameUniqueName[];
   public inheritedTaxes: IInheritedTaxes[];
 }
+
 export class IAccountAddress {
   public gstNumber: string;
   public address: string;
@@ -188,6 +190,7 @@ export class AccountRequestV2 {
   public mobileCode?: string;
   public accountBankDetails?: AccountBankDetails[];
 }
+
 export class AccountResponseV2 {
   public name: string;
   public country: { countryCode: string, countryName: string };
@@ -221,6 +224,7 @@ export class AccountResponseV2 {
   public cashFreeVirtualAccountData: CashFreeVirtualAccount;
   public closingBalanceTriggerAmount: number;
   public closingBalanceTriggerAmountType: string;
+  public discounts?: IDiscountList[];
 
 }
 
