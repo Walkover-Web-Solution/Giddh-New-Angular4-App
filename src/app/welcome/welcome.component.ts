@@ -92,6 +92,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     value: 'Wholesalers Distributors'
   }
   ];
+  public updateProfileSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
@@ -128,10 +129,15 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         }
       });
     }).takeUntil(this.destroyed$).subscribe();
+    this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
-    //
+    this.updateProfileSuccess$.subscribe(s => {
+      if (s) {
+        this._router.navigate(['/onboarding']);
+      }
+    });
   }
 
   public skip() {

@@ -51,6 +51,7 @@ const discountInitialState: DiscountState = {
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
+  updateProfileSuccess: boolean;
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
   usersWithCompanyPermissions: any;
@@ -64,6 +65,7 @@ export interface SettingsState {
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
+  updateProfileSuccess: false,
   linkedAccounts: {},
   financialYears: null,
   usersWithCompanyPermissions: null,
@@ -139,9 +141,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
+        newState.updateProfileSuccess = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return Object.assign({}, state, {
+        updateProfileSuccess: true
+      });
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS: {
       newState.linkedAccounts.isBankAccountsInProcess = true;
