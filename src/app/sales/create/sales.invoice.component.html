@@ -4,10 +4,10 @@
             <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
         {{selectedPageLabel}}
               <span class="caret" *ngIf="!isPurchaseInvoice"></span>
-      </button>
+           </button>
             <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                 <ng-container *ngFor="let item of pageList">
-                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" [hidden]="!isPurchaseInvoice && item.value === 'Purchase'">
+                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)">
                         <a class="dropdown-item cp">{{ item.additional?.label }}</a>
                     </li>
                 </ng-container>

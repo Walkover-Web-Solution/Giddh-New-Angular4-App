@@ -66,6 +66,9 @@ export class InventoryActionsConst {
 
   public static ShowBranchScreen = 'ShowBranchScreen';
   public static ShowBranchScreenSideBar = 'ShowBranchScreenSideBar';
+
+  public static MoveStock = 'MoveStock';
+  public static MoveStockResponse = 'MoveStockResponse';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
@@ -77,6 +80,9 @@ export const CUSTOM_STOCK_UNIT_ACTIONS = {
   DELETE_STOCK_UNIT_RESPONSE: 'DELETE_STOCK_UNIT_RESPONSE',
   CREATE_STOCK_UNIT_RESPONSE: 'CREATE_STOCK_UNIT_RESPONSE',
   GET_STOCK_UNIT_RESPONSE: 'GET_STOCK_UNIT_RESPONSE',
+  GET_STOCK_UNIT_NAME: 'GET_STOCK_UNIT_NAME',
+  GET_STOCK_UNIT_NAME_RESPONSE: 'GET_STOCK_UNIT_NAME_RESPONSE',
+
 };
 
 export const STOCKS_REPORT_ACTIONS = {

@@ -145,7 +145,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+        let assetsAccArray = ['assets'];        
+        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
           let appTaxes = [];
           acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));

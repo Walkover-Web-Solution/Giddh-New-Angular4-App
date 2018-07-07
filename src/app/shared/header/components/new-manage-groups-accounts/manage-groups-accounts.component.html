@@ -41,7 +41,8 @@
             <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
               <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
                 [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))" [groups]="(groupList$ | async)"
-                (breadcrumbPathChanged)="breadcrumbPathChanged($event)" (resetSearchString)="resetGroupSearchString(false)" (ScrollToRight)="ScrollToRight()" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
+                (breadcrumbPathChanged)="breadcrumbPathChanged($event)" (resetSearchString)="resetGroupSearchString(false)"
+                (ScrollToRight)="ScrollToRight()" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
             </div>
           </perfect-scrollbar>
           <!-- end ngIf: showListGroupsNow -->
