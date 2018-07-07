@@ -125,10 +125,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isFileUploading: boolean = false;
   public closingBalanceBeforeReconcile: { amount: number, type: string };
   public reconcileClosingBalanceForBank: { amount: number, type: string };
+  public entryUniqueNamesForBulkAction: string[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private entryUniqueNamesForBulkAction: string[] = [];
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
