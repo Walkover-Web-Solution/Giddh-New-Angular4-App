@@ -1,4 +1,4 @@
-import { IOption } from './../../theme/ng-select/option.interface';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { States } from '../../models/api-models/Company';
 import { setTimeout } from 'timers';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
+import { contriesWithCodes } from "app/shared/helpers/countryWithCodes";
 
 export interface IGstObj {
   newGstNumber: string;
@@ -55,6 +56,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   public countryIsIndia: boolean = false;
   public dataSource: any;
   public dataSourceBackup: any;
+  public countrySource: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -67,6 +69,9 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     private _location: LocationService
   ) {
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    contriesWithCodes.map(c => {
+          this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+        });
     this.stateStream$.subscribe((data) => {
       if (data) {
         this.stateResponse = _.cloneDeep(data);
@@ -243,9 +248,9 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
     }
 
-    if (this.countryIsIndia) {
-      dataToSave.state = null;
-    }
+    // if (this.countryIsIndia) {
+    //   dataToSave.state = null;
+    // }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
   }
@@ -379,7 +384,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     if (event) {
       let country: any = _.cloneDeep(this.companyProfileObj.country || '');
       country = country.toLocaleLowerCase();
-      if (country === 'india') {
+      if (event.value === 'India') {
         this.countryIsIndia = true;
         this.companyProfileObj.state = '';
       } else {

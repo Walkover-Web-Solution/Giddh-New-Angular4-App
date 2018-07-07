@@ -245,6 +245,32 @@ export class InventoryAction {
       };
     });
 
+  @Effect()
+  public MoveStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.MoveStock)
+    .switchMap((action: CustomActions) => this._inventoryService.MoveStock(action.payload.activeGroup, action.payload.stockUniqueName, action.payload.groupUniqueName))
+    .map(response => {
+      return this.MoveStockResponse(response);
+    });
+
+  @Effect()
+  public MoveStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.MoveStockResponse)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body, '');
+        this.OpenInventoryAsidePane(false);
+      let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
+      this.store.dispatch(this.ManageInventoryAside( objToSend ));
+      this.router.navigate(['/pages', 'inventory', 'group', data.queryString.activeGroup.uniqueName, 'stock-report']);
+        return this.resetActiveStock();
+      }
+      return {type: 'EmptyAction'};
+    });
+
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {
 
@@ -471,6 +497,20 @@ export class InventoryAction {
   public ResetBranchTransferState(): CustomActions {
     return {
       type: INVENTORY_BRANCH_TRANSFER.RESET_BRANCH_TRANSFER_STATE
+    };
+  }
+
+  public MoveStock(activeGroup, stockUniqueName, groupUniqueName): CustomActions {
+    return {
+      type: InventoryActionsConst.MoveStock,
+      payload: { activeGroup, stockUniqueName, groupUniqueName }
+    };
+  }
+
+  public MoveStockResponse(response): CustomActions {
+    return {
+      type: InventoryActionsConst.MoveStockResponse,
+      payload: response
     };
   }
 }

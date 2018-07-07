@@ -9,6 +9,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'app/services/general.service';
+import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
@@ -59,6 +60,20 @@ export class CompanyActions {
       }
       this._toasty.successToast('Company created successfully', 'Success');
       // set newly created company as active company
+
+      // check if new uer has created first company then set newUserLoggedIn false
+      let isNewUser = false;
+      this.store.select(s => s.session.userLoginState).take(1).subscribe(s => {
+        isNewUser = s === 2;
+      });
+      //
+      if (isNewUser) {
+        this.store.dispatch({
+          type: 'SetLoginStatus',
+          payload: 1
+        });
+      }
+
       let stateDetailsObj = new StateDetailsRequest();
       stateDetailsObj.companyUniqueName = response.request.uniqueName;
       if (!response.request.isBranch) {
@@ -66,7 +81,8 @@ export class CompanyActions {
          * if user is signed up on their own take him to sales module
          */
         if (this._generalService.user.isNewUser) {
-          stateDetailsObj.lastState = 'sales';
+          // stateDetailsObj.lastState = 'sales';
+          stateDetailsObj.lastState = isNewUser ? 'welcome' : 'sales';
         } else {
           stateDetailsObj.lastState = 'home';
         }
@@ -152,31 +168,31 @@ export class CompanyActions {
       return this.SetStateDetailsResponse(response);
     });
 
-    @Effect()
-    public GetApplicationDate$: Observable<Action> = this.action$
-      .ofType(CompanyActions.GET_APPLICATION_DATE)
-      .switchMap((action: CustomActions) => this._companyService.getApplicationDate())
-      .map(response => {
-        if (response.status === 'error') {
-          this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
-        }
-        return this.SeApplicationDateResponse(response);
-      });
+  @Effect()
+  public GetApplicationDate$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_APPLICATION_DATE)
+    .switchMap((action: CustomActions) => this._companyService.getApplicationDate())
+    .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return {type: 'EmptyAction'};
+      }
+      return this.SeApplicationDateResponse(response);
+    });
 
-    @Effect()
-    public SetApplicationDate$: Observable<Action> = this.action$
-      .ofType(CompanyActions.SET_APPLICATION_DATE)
-      .switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload))
-      .map(response => {
-        if (response.status === 'error') {
-          this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
-        } else if (response.status === 'success') {
-          this._toasty.successToast('Application date updated successfully.', 'Success');
-          return this.SeApplicationDateResponse(response);
-        }
-      });
+  @Effect()
+  public SetApplicationDate$: Observable<Action> = this.action$
+    .ofType(CompanyActions.SET_APPLICATION_DATE)
+    .switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload))
+    .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return {type: 'EmptyAction'};
+      } else if (response.status === 'success') {
+        this._toasty.successToast('Application date updated successfully.', 'Success');
+        return this.SeApplicationDateResponse(response);
+      }
+    });
 
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
@@ -224,7 +240,8 @@ export class CompanyActions {
     private _toasty: ToasterService,
     private store: Store<AppState>,
     private _generalService: GeneralService
-  ) {}
+  ) {
+  }
 
   public CreateCompany(value: CompanyRequest): CustomActions {
     return {
@@ -287,6 +304,7 @@ export class CompanyActions {
       payload: null
     };
   }
+
   public SetApplicationDate(value: any): CustomActions {
     return {
       type: CompanyActions.SET_APPLICATION_DATE,

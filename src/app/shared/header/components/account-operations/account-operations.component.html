@@ -1,5 +1,6 @@
 <div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config"
-     [ngStyle]="{'min-height':height+'px'}" *ngIf="!(showNewForm$ | async)">
+     [ngStyle]="{'min-height':height+'px'}"
+     *ngIf="!(showNewForm$ | async)">
   <!--breadcrumbs-->
   <div class="breadcrumbs container-fluid top_bar bdrB" *ngIf="breadcrumbPath?.length > 0">
     <div class="col-xs-8">
@@ -52,8 +53,9 @@
                      [fetchingAccUniqueName$]="fetchingAccUniqueName$"
                      [isAccountNameAvailable$]="isAccountNameAvailable$"
                      [createAccountInProcess$]="createAccountInProcess$"
-                     [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc"
-                     [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
+                     [createAccountIsSuccess$]="createAccountIsSuccess$"
+                     [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                     (submitClicked)="addNewAccount($event)"
                      [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount">
     </account-add-new>
 
@@ -62,10 +64,12 @@
     <!-- <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-update> -->
 
     <account-update-new *ngIf="(activeAccount$ | async)" [activeAccount$]="activeAccount$"
-                        [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc"
-                        [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
+                        [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+                        [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                        [updateAccountInProcess$]="updateAccountInProcess$"
                         [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()"
-                        (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail"
+                        (submitClicked)="updateAccount($event)"
+                        [showBankDetail]="showBankDetail"
                         [showVirtualAccount]="showVirtualAccount"></account-update-new>
 
     <!--move account-->
@@ -74,8 +78,9 @@
             [formGroup]="moveAccountForm">
         <label class="d-block">Move to group</label>
         <span>
-          <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [customFilter]="customMoveGroupFilter"
-            class="pull-left" style="width: calc(100% - 93px);">
+          <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
+                     [customFilter]="customMoveGroupFilter"
+                     class="pull-left" style="width: calc(100% - 93px);">
             <!--template for move group typeahead-->
             <ng-template #optionTemplate let-model="option">
               <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #ccc;">
@@ -95,7 +100,7 @@
   </div>
   <!--account operation  -->
 
-  <!--merge and taxes-->
+  <!--merge and taxes and discount-->
   <div class="clearfix horizontal-form" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
     <!--merge and taxes-->
 
@@ -107,8 +112,8 @@
       </label>
       <div class="input-group" #accountSelect2>
         <sh-select [options]="accounts$ | async" [isFilterEnabled]="true" (viewInitEvent)="loadAccountData()"
-                   [multiple]="true" [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"
-                   style="width: calc(100% - 22px);"></sh-select>
+                   [multiple]="true" [(ngModel)]="selectedaccountForMerge"
+                   [placeholder]="'Select Accounts'" style="width: calc(100% - 22px);"></sh-select>
         <span class="input-group-btn">
           <button type="submit" class="btn btn-primary" (click)="mergeAccounts()">Merge</button>
         </span>
@@ -133,8 +138,9 @@
     <div class="col-xs-12 form-group" *ngIf="showDeleteMove">
       <label class="d-block">Move to other A/c</label>
       <span>
-        <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false" [(ngModel)]="selectedAccountForMove"
-          [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
+        <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()"
+                   [multiple]="false" [(ngModel)]="selectedAccountForMove"
+                   [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
       </span>
       <span class="pull-right">
         <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
@@ -147,7 +153,8 @@
       <div class="col-xs-12">
         <div class="form-group toggle-btn mrB">
           <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
-            <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
+            <i class="fa cp" aria-hidden="true"
+               [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
           </label>
         </div>
       </div>
@@ -162,7 +169,8 @@
             <div class="form-group">
               <div class="input-group">
                 <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true"
-                           formControlName="taxes" style="width: calc(100% - 13px);">
+                           formControlName="taxes"
+                           style="width: calc(100% - 13px);">
                 </sh-select>
                 <span class="input-group-btn pdL2">
                   <button type="submit" class="btn btn-success">Save</button>
@@ -193,6 +201,48 @@
       </ng-container>
       <!-- taxes container -->
     </div>
+
+    <!--discount-->
+    <!-- Discount collapse -->
+    <!-- <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
+
+      <div class="col-xs-12">
+        <div class="form-group toggle-btn mrB">
+          <label class="cp" (click)="showDiscount = !showDiscount;">
+            <i class="fa cp" aria-hidden="true"
+               [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
+          </label>
+        </div>
+      </div> -->
+
+      <!-- discount container -->
+      <!-- <ng-container *ngIf="showDiscount">
+        <div class="col-xs-12">
+          <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
+            <div class="tax-label">
+              <label>All Applied Discounts</label>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <sh-select [options]="companyDiscountDropDown" #discountShSelect
+                           [placeholder]="'Select Discount'" [multiple]="false"
+                           formControlName="discountUniqueName" [showClear]="false"
+                           style="width: calc(100% - 13px);">
+                </sh-select>
+                <span class="input-group-btn pdL2">
+                  <button type="submit" class="btn btn-success"
+                          >Save</button>
+                  <button type="button" class="btn btn-danger" style="margin-left: 5px;"
+                          *ngIf="(activeAccount$ | async)?.discounts.length"
+                          (click)="removeDiscount()" >Delete</button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+
+    </div> -->
 
   </div>
   <!--merge and taxes-->
@@ -260,7 +310,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody'
-                     (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
+                     (cancelCallBack)="hideDeleteMergedAccountModal()"
+                     (successCallBack)="deleteMergedAccount()">
       </confirm-modal>
     </div>
   </div>
@@ -270,7 +321,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <confirm-modal [title]="'Move Merged Account'" [body]='moveMergedAccountModalBody'
-                     (cancelCallBack)="hideMoveMergedAccountModal()" (successCallBack)="moveMergeAccountTo()">
+                     (cancelCallBack)="hideMoveMergedAccountModal()"
+                     (successCallBack)="moveMergeAccountTo()">
       </confirm-modal>
     </div>
   </div>
@@ -281,7 +333,8 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
-                     (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+                     (cancelCallBack)="hideDeleteAccountModal()"
+                     (successCallBack)="deleteAccount()">
       </confirm-modal>
     </div>
   </div>
