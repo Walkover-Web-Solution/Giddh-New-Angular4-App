@@ -237,8 +237,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
           this.userIsCompanyUser = false;
         }
+        let name = u.name;
         if (u.name.match(/\s/g)) {
-          let name = u.name;
           this.userFullName = name;
           let tmpName = name.split(' ');
           this.userName = tmpName[0][0] + tmpName[1][0];
