@@ -359,6 +359,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public prepareQueryParamsForInvoiceApi() {
+    // type = purchase, payment, receipt, credit note, debit note, invoice
     let o = _.cloneDeep(this.invoiceSearchRequest);
     let fromDate = null;
     let toDate = null;
@@ -373,7 +374,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       from: this.isUniversalDateApplicable ? fromDate : o.from,
       to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
-      page: o.page
+      page: o.page,
+      type: 'invoice'
     };
   }
 
