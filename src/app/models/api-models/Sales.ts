@@ -35,6 +35,20 @@ export const VOUCHER_TYPE_LIST: any[] = [
     additional: {
       label: 'Purchase'
     }
+  },
+  {
+    value: 'Receipt',
+    label: 'Receipt',
+    additional: {
+      label: 'Receipt'
+    }
+  },
+  {
+    value: 'Payment',
+    label: 'Payment',
+    additional: {
+      label: 'Payment'
+    }
   }
 ];
 /*
