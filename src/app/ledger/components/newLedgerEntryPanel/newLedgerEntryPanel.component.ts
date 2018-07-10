@@ -145,7 +145,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-        let assetsAccArray = ['assets'];        
+        let assetsAccArray = ['assets'];
         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
           let appTaxes = [];
@@ -255,12 +255,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
     }
     this.calculateCompoundTotal();
-    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
-      this.isMulticurrency = true;
-      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total, this.currentTxn);
-    } else {
-      this.isMulticurrency = false;
-    }
   }
 
   public amountChanged() {
@@ -325,6 +319,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.blankLedger.compoundTotal = Number((debitTotal - creditTotal).toFixed(2));
     } else {
       this.blankLedger.compoundTotal = Number((creditTotal - debitTotal).toFixed(2));
+    }
+
+    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+      this.isMulticurrency = true;
+      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total, this.currentTxn);
+    } else {
+      this.isMulticurrency = false;
     }
   }
 
