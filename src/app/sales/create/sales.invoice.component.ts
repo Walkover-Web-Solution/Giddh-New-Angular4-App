@@ -381,11 +381,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
       this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
-        if (acc) {
-          if (acc.length > 0) {
-            this.invFormData.accountDetails.uniqueName = 'cash';
-          } else if (acc.length === 1) {
-            this.depositAccountUniqueName = 'cash';
+        if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
+          if (acc) {
+            if (acc.length > 0) {
+              this.invFormData.accountDetails.uniqueName = 'cash';
+            } else if (acc.length === 1) {
+              this.depositAccountUniqueName = 'cash';
+            }
           }
         }
       });
