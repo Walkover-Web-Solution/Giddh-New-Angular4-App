@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ComponentFactoryResolver, trigger, state, style, animate } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -28,6 +28,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InventoryService } from '../../services/inventory.service';
+import { InventoryAction } from '../../actions/inventory/inventory.actions';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
@@ -41,7 +42,19 @@ const CustomShortcode = [
 @Component({
   selector: 'account-as-invoice',
   templateUrl: './invoice-grid.component.html',
-  styleUrls: ['./invoice-grid.component.css', '../accounting.component.css']
+  styleUrls: ['./invoice-grid.component.css', '../accounting.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ],
 })
 
 export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -104,6 +117,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public currentSelectedValue: string = '';
   public invoiceNoHeading: string = 'Supplier Invoice No';
   public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
+  public asideMenuStateForProductService: string = 'out';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
@@ -119,7 +133,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _salesActions: SalesActions,
     private _tallyModuleService: TallyModuleService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    private inventoryAction: InventoryAction
   ) {
     // this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
@@ -180,6 +195,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnInit() {
 
+    // dispatch stocklist request
+    this.store.dispatch(this.inventoryAction.GetStock());
+
     this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
@@ -214,9 +232,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
       if (c.openCreateAccountPopup.currentValue) {
-        this.showQuickAccountModal();
-      } else {
-        this.hideQuickAccountModal();
+        this.asideMenuStateForProductService = 'in';
+        // if () {
+        //   this.showQuickAccountModal();
+        // } else {
+        //   this.asideMenuStateForProductService = 'in';
+        // }
       }
     }
   }
@@ -878,6 +899,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.currentSelectedValue = '';
       this.showLedgerAccountList = false;
     }, 200);
+  }
+
+  public closeCreateStock() {
+    this.asideMenuStateForProductService = 'out';
   }
 
   private deleteRow(idx: number) {
