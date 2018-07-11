@@ -80,6 +80,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public currentAccountApplicableTaxes: string[] = [];
   public isMulticurrency: boolean;
   public accountBaseCurrency: string;
+  public companyCurrency: string;
 
   public taxListForStock = []; // New
 
@@ -154,18 +155,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (acc.currency) {
           this.accountBaseCurrency = acc.currency;
-        } else {
-          this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
-            if (!_.isEmpty(o)) {
-              let companyProfile = _.cloneDeep(o);
-              if (companyProfile.isMultipleCurrency) {
-                this.accountBaseCurrency = companyProfile.baseCurrency || 'INR';
-              }
-            } else {
-              this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
-            }
-          });
         }
+        this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+          if (!_.isEmpty(o)) {
+            let companyProfile = _.cloneDeep(o);
+            if (companyProfile.isMultipleCurrency && !acc.currency) {
+              this.accountBaseCurrency = companyProfile.baseCurrency || 'INR';
+            }
+            this.companyCurrency = companyProfile.baseCurrency || 'INR';
+          } else {
+            this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
+          }
+        });
       }
     });
 
@@ -215,6 +216,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     //     this.taxControll.date = changes['blankLedger'].currentValue.entryDate;
     //   }
     // }
+    if (this.currentTxn && this.currentTxn.selectedAccount) {
+      this.checkForMulitCurrency();
+    }
   }
 
   public ngAfterViewInit(): void {
@@ -320,12 +324,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.blankLedger.compoundTotal = Number((creditTotal - debitTotal).toFixed(2));
     }
-
-    if (this.currentTxn && this.currentTxn.amount && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.currency && (this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
-      this.isMulticurrency = true;
-      this.calculateConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total, this.currentTxn);
-    } else {
-      this.isMulticurrency = false;
+    if (this.currentTxn && this.currentTxn.selectedAccount) {
+      this.checkForMulitCurrency();
     }
   }
 
@@ -530,5 +530,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
       }
     }
+  }
+
+  /**
+   * checkForCurrency
+   */
+  public checkForCurrency(currency) {
+    if (!currency && this.companyCurrency) {
+      return this.companyCurrency;
+    } else {
+      return currency;
+    }
+  }
+
+  public checkForMulitCurrency() {
+    let selectedAccountCurrency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
+    this.currentTxn.selectedAccount.currency = _.cloneDeep(selectedAccountCurrency);
+      if (this.currentTxn && this.currentTxn.selectedAccount && selectedAccountCurrency && (this.accountBaseCurrency !== selectedAccountCurrency)) {
+        setTimeout(() => {
+        this.isMulticurrency = true;
+        }, 400);
+        this.calculateConversionRate(this.accountBaseCurrency, selectedAccountCurrency, this.currentTxn.total, this.currentTxn);
+      } else {
+        this.isMulticurrency = false;
+        this.currentTxn.convertedAmount = 0;
+      }
   }
 }
