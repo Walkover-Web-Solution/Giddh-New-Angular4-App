@@ -65,6 +65,10 @@ export class ExportGroupLedgerComponent implements OnInit {
   }
 
   public ngOnInit() {
+    // Set a default date
+    this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
+    this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
+
     this._permissionDataService.getData.forEach(f => {
       if (f.name === 'LEDGER') {
         let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
@@ -76,6 +80,8 @@ export class ExportGroupLedgerComponent implements OnInit {
   }
 
   public exportLedger() {
+    console.log('this.dateRange is :', this.dateRange);
+    debugger;
     this.closeExportGroupLedgerModal.emit({from: this.dateRange.from, to: this.dateRange.to, type: this.emailTypeSelected, fileType: this.fileType, order: this.order});
   }
 
