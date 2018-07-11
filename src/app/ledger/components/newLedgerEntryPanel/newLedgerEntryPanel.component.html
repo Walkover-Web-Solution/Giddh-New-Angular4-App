@@ -163,8 +163,8 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12 pdT1 form-inline text-right" [hidden]="!isMulticurrency">
-                <input type="text" class="form-control max100 text-right" [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" /> <label>
+            <div class="col-xs-12 pdT1 form-inline text-right" [hidden]="!currentTxn.convertedAmount">
+                <input type="text" class="form-control max100 text-right" name="multicurrency" [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" /> <label>
             ({{currentTxn.selectedAccount?.currency}})</label>
             </div>
             <div class="col-xs-12 clearfix mrT1">
