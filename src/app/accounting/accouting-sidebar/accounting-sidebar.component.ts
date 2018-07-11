@@ -45,9 +45,8 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   public ngOnInit() {
-    this._tallyModuleService.flattenAccounts.take(1).subscribe((accounts) => {
+    this._tallyModuleService.flattenAccounts.take(2).subscribe((accounts) => {
       if (accounts) {
-        alert('After');
         this.setSelectedPage('Journal', 'voucher', 'purchases');
       }
     });
