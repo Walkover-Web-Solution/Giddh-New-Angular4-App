@@ -144,11 +144,11 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   public search(ev: any) {
-    let searchStr = ev.target.value;
+    let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
     if (this.activeTab === 'customer') {
-      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
+      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
     } else {
-      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
+      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
     }
   }
 
