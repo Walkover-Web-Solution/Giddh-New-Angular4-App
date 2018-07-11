@@ -33,6 +33,10 @@
         <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.balanceDue" placeholder="By amount">
     </div>
     <div class="form-group mrR1">
+        <label class="d-block">Invoice No.</label>
+        <input type="text" class="form-control col-xs-2" name="invoiceNum" [(ngModel)]="invoiceSearchRequest.voucherNumber" placeholder="By Inovice no.">
+    </div>
+    <div class="form-group mrR1">
         <label class="d-block">From - To</label>
         <div class="input-group">
             <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required>

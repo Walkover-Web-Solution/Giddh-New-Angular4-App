@@ -59,6 +59,18 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public accountUniqueName?: string;
   public balanceDue?: string;
   public entryTotalBy?: string;
+  public voucherNumber?: string;
+  public proformaNumber?: string;
+  public companyName?: string;
+  public dueDate?: string;
+  public dueDateBefore?: string;
+  public dueDateAfter?: string;
+  public dueDateEqual?: string;
+  public groupUniqueName?: string;
+  public totalMoreThan?: string;
+  public totalLessThan?: string;
+  public totalEqual?: string;
+  public total?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

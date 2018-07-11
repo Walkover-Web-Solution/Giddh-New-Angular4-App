@@ -342,6 +342,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (o.description) {
       model.description = o.description;
     }
+    if (o.voucherNumber) {
+      model.voucherNumber = o.voucherNumber;
+    }
     if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
       model.balanceMoreThan = true;
     } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
