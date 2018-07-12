@@ -7,7 +7,7 @@
                         <div class="form-group mrR1" *ngIf="showLabels">
                             <label class="d-block">Filter Type</label>
                             <div class="form-group">
-                                <sh-select [options]="dateOptions" formControlName="selectedDateOption" [isFilterEnabled]="true" [placeholder]="'Select Option'" [ItemHeight]="33"></sh-select>
+                                <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)" formControlName="selectedDateOption" [isFilterEnabled]="true" [placeholder]="'Select Option'" [ItemHeight]="33"></sh-select>
                                 <!--<select2 [data]="dateOptions" [options]="options" [value]="selectedDateOption" (valueChanged)="selectDateOption($event)" class="select2-parent"></select2>-->
                             </div>
                         </div>
