@@ -41,6 +41,7 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
+import { ConfirmModalModule } from '../theme/confirm-modal';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -105,7 +106,8 @@ const INVOICE_ROUTES: Routes = [
     DatepickerModule,
     BsDropdownModule,
     AsideMenuRecurringEntryModule,
-    SalesShSelectModule
+    SalesShSelectModule,
+    ConfirmModalModule
   ],
   exports: [
     RouterModule,

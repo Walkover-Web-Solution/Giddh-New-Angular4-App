@@ -1,4 +1,3 @@
-
 let COMMON_URL = 'company/:companyUniqueName/';
 let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';
@@ -34,5 +33,6 @@ export const INVOICE_API_2 = {
 };
 
 export const VOUCHER_API = {
-  GET_ALL_VOUCHER_WITH_FILTER: COMMON_URL + 'vouchers/get-all?' // POST
+  GET_ALL_VOUCHER_WITH_FILTER: COMMON_URL + 'vouchers/get-all?', // POST
+  DELETE_MULTIPLE_VOUCHERS: COMMON_URL + 'vouchers'
 };

@@ -26,6 +26,8 @@ export interface InvoiceState {
     isRequestInFlight?: boolean
     isDeleteRequestInFlight?: boolean
   };
+  deleteVouchersInProcess: boolean;
+  deleteVouchersIsSuccess: boolean;
 }
 
 export const initialState: InvoiceState = {
@@ -43,7 +45,9 @@ export const initialState: InvoiceState = {
   isBulkInvoiceGeneratedWithoutErrors: false,
   recurringInvoiceData: {
     recurringInvoices: null,
-  }
+  },
+  deleteVouchersInProcess: false,
+  deleteVouchersIsSuccess: false
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -57,6 +61,30 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       }
       return Object.assign({}, state, newState);
     }
+
+    case INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS: {
+      return Object.assign({}, state, {
+        deleteVouchersInProcess: true,
+        deleteVouchersIsSuccess: false
+      });
+    }
+
+    case INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS_RESPONSE: {
+      let res = action.payload as BaseResponse<string, number[]>;
+
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          deleteVouchersInProcess: false,
+          deleteVouchersIsSuccess: true
+        });
+      } else {
+        return Object.assign({}, state, {
+          deleteVouchersInProcess: false,
+          deleteVouchersIsSuccess: false
+        });
+      }
+    }
+
     case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, string> = action.payload;

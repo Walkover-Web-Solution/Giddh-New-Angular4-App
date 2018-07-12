@@ -35,6 +35,27 @@ export class InvoiceActions {
       return {type: 'EmptyAction'};
     });
 
+  // GET All Invoices
+  @Effect()
+  public DeleteVouchers$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS)
+    .switchMap((action: CustomActions) => this._invoiceService.DeleteVouchers(action.payload.model))
+    .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message);
+      } else {
+        this._toasty.successToast(response.body);
+      }
+      return this.DeleteVouchersResponse(response);
+    });
+
+  @Effect()
+  public DeleteVouchersResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS_RESPONSE)
+    .map(response => {
+      return {type: 'EmptyAction'};
+    });
+
   // get all ledgers for invoice
   @Effect()
   public GetAllLedgersForInvoice$: Observable<Action> = this.action$
@@ -597,6 +618,20 @@ export class InvoiceActions {
   public GetAllInvoicesResponse(model: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest>): CustomActions {
     return {
       type: INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE,
+      payload: model
+    };
+  }
+
+  public DeleteVouchers(model: number[]): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS,
+      payload: {model}
+    };
+  }
+
+  public DeleteVouchersResponse(model: BaseResponse<string, number[]>): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS_RESPONSE,
       payload: model
     };
   }
