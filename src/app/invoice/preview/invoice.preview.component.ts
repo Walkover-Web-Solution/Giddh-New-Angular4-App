@@ -79,7 +79,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
-  public deleteVouchersList: number[] = [];
+  public deleteVouchersList: string[] = [];
   public deleteVouchersInProcess$: Observable<boolean>;
   public deleteVouchersIsSuccess$: Observable<boolean>;
 
@@ -428,6 +428,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public deleteVouchers() {
     this.store.dispatch(this.invoiceActions.DeleteVouchers(this.deleteVouchersList));
+    this.deleteVouchersList = [];
   }
 
   public clearDeleteVouchersListAndNavigate() {

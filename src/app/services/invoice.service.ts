@@ -51,7 +51,7 @@ export class InvoiceService {
    * Delete Vouchers
    * URL:: company/:companyUniqueName/vouchers
    */
-  public DeleteVouchers(list: number[]): Observable<BaseResponse<string, number[]>> {
+  public DeleteVouchers(list: string[]): Observable<BaseResponse<string, string[]>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
@@ -75,7 +75,7 @@ export class InvoiceService {
         data.queryString = {list};
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, number[]>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<string, string[]>(e, ''));
   }
 
   /*

@@ -105,7 +105,7 @@
   <tr *ngFor="let item of invoiceData.items; let i = index">
     <td>
       <input type="checkbox" name="delId" value="item.uniqueName"
-             (change)="selectForDelete(item.uniqueName, $event.target.checked)"/>
+             (change)="selectForDelete(item.voucherNumber, $event.target.checked)"/>
       {{ i + 1}}
     </td>
     <td>

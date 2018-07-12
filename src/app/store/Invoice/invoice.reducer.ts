@@ -70,12 +70,15 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
     }
 
     case INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS_RESPONSE: {
-      let res = action.payload as BaseResponse<string, number[]>;
+      let res = action.payload as BaseResponse<string, string[]>;
 
       if (res.status === 'success') {
         return Object.assign({}, state, {
           deleteVouchersInProcess: false,
-          deleteVouchersIsSuccess: true
+          deleteVouchersIsSuccess: true,
+          invoices: Object.assign({}, state.invoices, {
+            items: state.invoices.items.filter(f => !(res.request.indexOf(f.voucherNumber) > -1))
+          })
         });
       } else {
         return Object.assign({}, state, {

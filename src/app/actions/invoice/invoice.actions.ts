@@ -622,14 +622,14 @@ export class InvoiceActions {
     };
   }
 
-  public DeleteVouchers(model: number[]): CustomActions {
+  public DeleteVouchers(model: string[]): CustomActions {
     return {
       type: INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS,
       payload: {model}
     };
   }
 
-  public DeleteVouchersResponse(model: BaseResponse<string, number[]>): CustomActions {
+  public DeleteVouchersResponse(model: BaseResponse<string, string[]>): CustomActions {
     return {
       type: INVOICE_ACTIONS.DELETE_MULTIPLE_VOUCHERS_RESPONSE,
       payload: model
