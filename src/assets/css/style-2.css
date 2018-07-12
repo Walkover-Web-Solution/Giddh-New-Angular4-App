@@ -4784,3 +4784,30 @@ table td[class*=col-]:last-child {
 panel.sFthanks.fieldset {
     display: none !important;
 }
+
+.tbpl-dropdown {
+    margin-top: 12px;
+}
+
+.tbpl-dropdown>li {
+    border-bottom: 1px solid #ccc;
+}
+
+.tbpl-dropdown>li:last-child {
+    border-bottom: 0;
+}
+
+.tbpl-dropdown>li:hover a {
+    color: #ff5e01;
+    background: #f4f5f8;
+}
+
+.tbpl-dropdown .caret {
+    transform: rotate(180deg);
+    border-top: 7px dashed #bbb;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    position: absolute;
+    right: 5px;
+    top: -8px;
+}

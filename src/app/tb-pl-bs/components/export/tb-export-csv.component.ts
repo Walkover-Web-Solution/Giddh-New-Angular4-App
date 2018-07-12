@@ -47,13 +47,11 @@ class FormatCsv implements IFormatable {
 @Component({
   selector: 'tb-export-csv',  // <home></home>
   template: `
-    <div class="form-group export" (clickOutside)="showCsvDownloadOptions=false;">
-      <a title="" download="" (click)="showCsvDownloadOptions = !showCsvDownloadOptions" *ngIf="enableDownload"><img
-        src="{{ imgPath }}" class="csv"/></a>
-      <div class="export-options" *ngIf="showCsvDownloadOptions">
-        <span class="arrow"></span>
-        <ul class="list-unstyled">
-          <li><a (click)="downloadCSV('group-wise')" data-report="group-wise">Group Wise
+        <div class="btn-group" dropdown>
+        <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
+        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right cp tbpl-dropdown" role="menu" aria-labelledby="button-basic">
+            <span class="caret"></span>
+           <li><a (click)="downloadCSV('group-wise')" data-report="group-wise">Group Wise
             Report</a></li>
           <li><a (click)="downloadCSV('condensed')" data-report="condensed">Condensed
             Report</a></li>
@@ -62,11 +60,11 @@ class FormatCsv implements IFormatable {
             Report</a></li>
         </ul>
       </div>
-    </div>
     <!-- end form-group -->
   `,
   providers: [RecTypePipe]
 })
+
 export class TbExportCsvComponent implements OnInit, OnDestroy {
   @Input() public trialBalanceRequest: TrialBalanceRequest;
   @Input() public selectedCompany: CompanyResponse;
