@@ -52,6 +52,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public isAutoPaidOn: boolean;
   public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting();
   public paymentGatewayList: IOption[] = PaymentGateway;
+  public isLockDateSet: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -115,7 +116,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
 
         if (this.invoiceSetting.lockDate) {
+          this.isLockDateSet = true;
           this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
+        } else {
+          this.isLockDateSet = false;
         }
         this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
 
@@ -163,6 +167,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * Update Form
    */
   public UpdateForm(form) {
+
     let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
     // if (!_.isEqual(form, this.invoiceLastState)) {
@@ -179,8 +184,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
         delete this.formToSave.razorPayform; // delete razorPay before sending form
 
-        if (this.formToSave.invoiceSettings.lockDate) {
+        if (this.formToSave.invoiceSettings.lockDate && this.isLockDateSet) {
           this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+        } else {
+          this.formToSave.invoiceSettings.lockDate = null;
         }
 
     if (this.isAutoPaidOn) {
@@ -364,6 +371,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public setInvoiceLockDate(date) {
     this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
     this.showDatePicker = !this.showDatePicker;
+  }
+
+  public onLockDateBlur(ev) {
+    if (ev.target.value) {
+      this.isLockDateSet = true;
+    } else {
+      this.isLockDateSet = false;
+    }
   }
 
   public ngOnDestroy() {
