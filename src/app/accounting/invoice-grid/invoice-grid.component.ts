@@ -114,9 +114,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public stockList: IOption[];
   public showLedgerAccountList: boolean = false;
   public selectedField: 'account' | 'stock' | 'partyAcc';
+  public focusedField: 'partyAcc' | 'ledgerName';
   public currentSelectedValue: string = '';
   public invoiceNoHeading: string = 'Supplier Invoice No';
   public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
+  public isPurchaseInvoiceSelected: boolean = false; // need to show `Ledger name` field in purchase
   public asideMenuStateForProductService: string = 'out';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -167,6 +169,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
           this.isSalesInvoiceSelected = false;
         }
+
+        if (d.page === 'Purchase') {
+          this.isPurchaseInvoiceSelected = true;
+        } else {
+          this.isPurchaseInvoiceSelected = false;
+        }
+
       } else if (d && this.data.transactions) {
         this.gridType = d.gridType;
         this.data.transactions = this.prepareDataForVoucher();
@@ -232,12 +241,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
       if (c.openCreateAccountPopup.currentValue) {
-        this.asideMenuStateForProductService = 'in';
-        // if () {
-        //   this.showQuickAccountModal();
-        // } else {
-        //   this.asideMenuStateForProductService = 'in';
-        // }
+        if (this.focusedField) {
+          this.showQuickAccountModal();
+        } else {
+          this.asideMenuStateForProductService = 'in';
+        }
       }
     }
   }
@@ -372,7 +380,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     if (acc) {
       if (this.accountType === 'creditor') {
         setTimeout(() => {
-          this.creditorAcc = acc;
+          if (this.focusedField === 'ledgerName') {
+            this.debtorAcc = acc;
+          } else if (this.focusedField === 'partyAcc') {
+            this.creditorAcc = acc;
+          } else {
+            console.log('No condition passed.');
+          }
         }, 200);
         return this.accountType = null;
       } else if (this.accountType === 'debitor') {
@@ -894,7 +908,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public onPartyAccBlur() {
     // this.showAccountList.emit(false);
     // selectedInput=creditor;
-    // isPartyACFocused = false;
+    // this.isPartyACFocused = false;
     setTimeout(() => {
       this.currentSelectedValue = '';
       this.showLedgerAccountList = false;
