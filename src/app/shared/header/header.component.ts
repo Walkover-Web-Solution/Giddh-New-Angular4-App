@@ -58,7 +58,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Contact', value: '/pages/contact' },
   // { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
   { label: 'Import', value: '/pages/import' },
-  { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 9 } },
+  { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
   { label: 'Onboarding', value: '/onboarding' },
 ];
 
