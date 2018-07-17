@@ -400,9 +400,13 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
    * setMaxDueDate
    */
   public setMaxDueDate(entries) {
-    let maxDateEnrty = _.maxBy(entries, function(o) { return o.entryDate; });
+    let maxDateEnrty = _.maxBy(entries, function(o) { if (o.entryDate) {
+      return o.entryDate;
+    }});
     // console.log(maxDateEnrty);
-    this.maxDueDate = maxDateEnrty.entryDate;
+    if (maxDateEnrty) {
+      this.maxDueDate = maxDateEnrty.entryDate;
+    }
   }
 
   public ngOnDestroy() {
