@@ -12,8 +12,8 @@
         <!--share group/account-->
         <div>
             <!--group-->
-            <div class="pull-right col-xs-4 pdR0">
-                <button class="btn btn-share" *ngIf="(showEditGroup$ | async) && (showGroupLedgerExportButton$ | async)" (click)="exportGroupLedger()">
+            <div class="pull-right col-xs-4 pdR0 text-right">
+                <button class="btn btn-share mrR1" *ngIf="(showEditGroup$ | async)" (click)="exportGroupLedger()">
           Export
         </button>
                 <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
@@ -179,7 +179,7 @@
 
         <!--discount-->
         <!-- Discount collapse -->
-        <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
+        <!-- <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
 
             <div class="col-xs-12">
                 <div class="form-group toggle-btn mrB">
@@ -187,16 +187,16 @@
             <i class="fa cp" aria-hidden="true"
                [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
           </label>
-                </div>
-            </div>
+        </div>
+      </div> -->
 
-            <!-- discount container -->
-            <ng-container *ngIf="showDiscount">
-                <div class="col-xs-12">
-                    <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
-                        <div class="tax-label">
-                            <label>All Applied Discounts</label>
-                        </div>
+        <!-- discount container -->
+    <!-- <ng-container *ngIf="showDiscount">
+        <div class="col-xs-12">
+          <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
+            <div class="tax-label">
+              <label>All Applied Discounts</label>
+            </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <sh-select [options]="companyDiscountDropDown" #discountShSelect [placeholder]="'Select Discount'" [multiple]="false" formControlName="discountUniqueName" [showClear]="false" style="width: calc(100% - 13px);">
@@ -214,11 +214,7 @@
                 </div>
             </ng-container>
 
-        </div>
-
-    </div>
-    <!--merge and taxes-->
-</div>
+</div> -->
 
 <!-- modals -->
 

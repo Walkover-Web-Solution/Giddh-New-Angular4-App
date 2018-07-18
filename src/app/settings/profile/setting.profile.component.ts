@@ -14,7 +14,7 @@ import { States } from '../../models/api-models/Company';
 import { setTimeout } from 'timers';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
-import { contriesWithCodes } from "app/shared/helpers/countryWithCodes";
+import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -57,6 +57,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   public dataSource: any;
   public dataSourceBackup: any;
   public countrySource: IOption[] = [];
+  public statesSourceCompany: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -76,8 +77,9 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       if (data) {
         this.stateResponse = _.cloneDeep(data);
         data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: `${d.code}` });
-          this.statesInBackground.push({ label: `${d.name}`, value: `${d.code}` });
+          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          this.statesInBackground.push({ label: `${d.name}`, value: d.code });
+          this.statesSourceCompany.push({ label: `${d.name}`, value: `${d.name}` });
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -158,19 +160,18 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
           };
           profileObj.gstDetails.push(newGstObj);
         }
-
-        if (this.statesInBackground && this.statesInBackground.length) {
-          let selectedState;
-          if (profileObj.state) {
-            selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
-          }
-          if (selectedState) {
-            profileObj.state = selectedState.value;
-          }
-          this.companyProfileObj = profileObj;
-        } else {
-          this.companyProfileObj = profileObj;
-        }
+        this.companyProfileObj = profileObj;
+        // if (this.statesInBackground && this.statesInBackground.length) {
+        //   let selectedState;
+        //   if (profileObj.state) {
+        //     selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
+        //   }
+        //   if (selectedState) {
+        //     profileObj.state = selectedState.value;
+        //   }
+        // } else {
+        //   this.companyProfileObj = profileObj;
+        // }
 
         if (profileObj && profileObj.country) {
           let countryName = profileObj.country.toLocaleLowerCase();
@@ -179,6 +180,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
           }
         }
         this.checkCountry(false);
+        // this.selectState(false);
       }
     });
     this.store.take(1).subscribe(s => {
@@ -224,7 +226,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     let selectedStateCode = v.value;
     let selectedState = this.states.find((state) => state.value === selectedStateCode);
     if (selectedState && selectedState.value) {
-      profileObj.gstDetails[indx].addressList[0].stateName = selectedState.value;
+      profileObj.gstDetails[indx].addressList[0].stateName = '';
       this.companyProfileObj = profileObj;
     }
   }
@@ -391,6 +393,12 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
+    }
+  }
+
+  public selectState(event) {
+    if (event) {
+      //
     }
   }
 

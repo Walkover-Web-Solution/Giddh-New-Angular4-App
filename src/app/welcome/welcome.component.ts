@@ -151,6 +151,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       object.country = this.selectedCountry;
     } else {
       object.country = this.selectedCountry;
+      object.contactNo = null;
     }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(object));
   }

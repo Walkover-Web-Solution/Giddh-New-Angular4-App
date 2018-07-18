@@ -388,7 +388,7 @@
                             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
                         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)"
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, invFormData.entries[activeIndx])"
                                     (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
@@ -435,7 +435,7 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td class="text-right" style="width: 110px;">{{transaction.amount}}</td>
+                            <td class="text-right" style="width: 110px;">{{transaction.amount | number:'1.2-2'}}</td>
                             <td class="text-right" style="width: 120px;">
                                 <!-- <span *ngFor="let discount of entry.discounts; let disIndx = index">
                 <span *ngIf="discount.amount">{{discount.amount}}
@@ -448,7 +448,7 @@
                             <!-- <td>{{transaction.taxableValue}}</td> -->
                             <!-- <td class="text-right">{{transaction.taxSum}}</td> -->
                             <td class="text-right">{{entry.taxSum}}%</td>
-                            <td class="text-right">{{transaction.total}}</td>
+                            <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
                             <td class="text-center">
                                 <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
