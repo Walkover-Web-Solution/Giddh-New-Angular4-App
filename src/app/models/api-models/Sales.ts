@@ -29,13 +29,13 @@ export const VOUCHER_TYPE_LIST: any[] = [
     label: 'Debit Note'
     }
   },
-  {
-    value: 'Purchase',
-    label: 'Purchase',
-    additional: {
-      label: 'Purchase'
-    }
-  }
+  // {
+  //   value: 'Purchase',
+  //   label: 'Purchase',
+  //   additional: {
+  //     label: 'Purchase'
+  //   }
+  // }
 ];
 /*
 RECEIPT("receipt"),
