@@ -1036,16 +1036,17 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-    setTimeout(() => {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
       entry.taxSum = _.sumBy(entry.taxes, function(o) {
         return o.amount;
       });
-    }, 1500);
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
+    if (!entry) {
+      return;
+    }
     this.selectedTaxes = arr;
     entry.taxList = arr;
     entry.taxes = [];
@@ -1060,7 +1061,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               amount: item.taxDetail[0].taxValue
             };
             entry.taxes.push(o);
-            entry.taxSum += o.amount;
+            // entry.taxSum += o.amount;
           }
         });
       });
