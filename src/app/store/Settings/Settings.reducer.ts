@@ -170,6 +170,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE: {
+      newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
+    }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT: {
       newState.linkedAccounts.isDeleteBankAccountIsInProcess = true;
       return Object.assign({}, state, newState);
