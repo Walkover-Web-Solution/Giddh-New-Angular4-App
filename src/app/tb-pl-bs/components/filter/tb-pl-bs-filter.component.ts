@@ -229,4 +229,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.filterForm.get('refresh').patchValue(true);
     this.onPropertyChanged.emit(this.filterForm.value);
   }
+
+  public dateOptionIsSelected(ev) {
+    if (ev && ev.value === '0') {
+      this.selectFinancialYearOption(this.financialOptions[0]);
+    }
+  }
 }

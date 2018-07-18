@@ -89,15 +89,15 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
     });
 
     // get groups list
-    this._groupService.GetGroupSubgroups('revenuefromoperations').subscribe((res: any) => {
+    this._groupService.GetGroupsWithAccounts('').subscribe((res: any) => {
       let result: IOption[] = [];
       if (res.status === 'success' && res.body.length > 0) {
-        let flatGrps = this._groupService.flattenGroup(res.body, []);
+        let revenueGrp = _.find(res.body, {uniqueName: 'revenuefromoperations'});
+        let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
         _.forEach(flatGrps, (grp: GroupResponse) => {
           result.push({ label: grp.name, value: grp.uniqueName });
         });
       }
-      console.log(result);
       this.flatAccountWGroupsList$ = Observable.of(result);
     });
 
