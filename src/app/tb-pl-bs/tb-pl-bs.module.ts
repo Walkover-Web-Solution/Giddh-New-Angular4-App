@@ -28,6 +28,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { ClickOutsideModule } from '../../../node_modules/ng-click-outside';
+import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     LaddaModule,
     HighlightModule,
     RecTypeModule,
-    ShSelectModule
+    ShSelectModule,
+    ClickOutsideModule,
+    BsDropdownModule
   ],
 })
 export class TBPlBsModule {
