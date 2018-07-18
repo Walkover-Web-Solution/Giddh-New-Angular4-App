@@ -28,7 +28,7 @@ const actionType = [
 
 const filterType = [
   {label: 'Amount Greater Than', value: 'amountGreaterThan'},
-  {label: 'Amount Less Than', value: 'amountLessThan'},
+  {label: 'Amount Less Than', value: 'amountSmallerThan'},
   {label: 'Amount Equals', value: 'amountEquals'},
   {label: 'Description Equals', value: 'descriptionEquals'},
   {label: 'Add', value: 'add'},
