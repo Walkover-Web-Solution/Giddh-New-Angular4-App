@@ -20,6 +20,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   public CanPLLoad: boolean = false;
   public CanBSLoad: boolean = false;
   public CanNewTBLoadOnThisEnv: boolean = false;
+  public isWalkoverCompany: boolean = false;
 
   @ViewChild('staticTabsTBPL') public staticTabs: TabsetComponent;
 
@@ -42,6 +43,8 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
+    // Sagar: show new trial balance for Walkover company only
+    this.isWalkoverCompany = (companyUniqueName === 'walkpvindore14504197149880siqli') ? true : false;
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'trial-balance-and-profit-loss';
 
