@@ -47,7 +47,7 @@
                             <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                             <!--  -->
                             <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
-                                (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
                                 [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'" (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -529,7 +529,7 @@
                             </div>
                             <div class="pdT1 pl0 max-600">
                                 <label class="mrB1">Message</label>
-                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message1"></textarea>
                             </div>
                         </td>
                         <td width="50%">
