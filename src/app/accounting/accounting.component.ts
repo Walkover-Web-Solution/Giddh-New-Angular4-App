@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AccountResponse } from '../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { SidebarAction } from '../actions/inventory/sidebar.actions';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
@@ -102,7 +103,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
     // private _router: Router,
     // private _keyboardService: KeyboardService,
     private _tallyModuleService: TallyModuleService,
-    private _accountService: AccountService) {
+    private _accountService: AccountService,
+    private sidebarAction: SidebarAction) {
       this._tallyModuleService.selectedPageInfo.subscribe((d) => {
         if (d) {
           this.gridType = d.gridType;
@@ -188,6 +190,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
       });
       }
     });
+
+    this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
   }
 
   /**
