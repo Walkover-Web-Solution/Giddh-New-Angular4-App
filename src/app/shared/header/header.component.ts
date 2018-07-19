@@ -60,6 +60,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Import', value: '/pages/import' },
   { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
   { label: 'Onboarding', value: '/onboarding' },
+  { label: 'Purchase Invoice ', value: '/pages/purchase/create' },
 ];
 
 @Component({
