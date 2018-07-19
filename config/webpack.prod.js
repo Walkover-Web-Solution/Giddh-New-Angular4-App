@@ -74,7 +74,8 @@ module.exports = function (env) {
   const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
   const AppUrl = 'https://giddh.com/';
-  const ApiUrl = 'https://api.giddh.com/';
+  // const ApiUrl = 'https://api.giddh.com/';
+  const ApiUrl = 'http://giddh-api-prod.eu-west-1.elasticbeanstalk.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'giddh.com',
     port: process.env.PORT || 80,
