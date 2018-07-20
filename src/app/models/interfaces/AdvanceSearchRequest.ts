@@ -51,7 +51,7 @@ export class AdvanceSearchRequest {
 }
 
 export class AdvanceSearchModel {
-  public bsRangeValue: Date[] = [moment().subtract(30, 'days').toDate(), moment().toDate()];
+  public bsRangeValue: any[] = [moment().subtract(30, 'days').toDate(), moment().toDate()];
   public uniqueNames: string[] = [];
   public isInvoiceGenerated: null;
   public accountUniqueNames: string[];
