@@ -98,10 +98,14 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public getGroups(parentGrp, findItem) {
-    this.groupService.GetGroupSubgroups(parentGrp).subscribe(res => {
+    this.groupService.GetGroupsWithAccounts('').subscribe(res => {
       let result: IOption[] = [];
       if (res.status === 'success' && res.body.length > 0) {
-        let sundryGrp = _.find(res.body, {uniqueName: findItem});
+        let currentassets = _.find(res.body, {uniqueName: parentGrp});
+        let sundryGrp;
+        if (currentassets) {
+           sundryGrp = _.find(currentassets.groups, {uniqueName: findItem});
+        }
         if (sundryGrp) {
           let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
           _.forEach(flatGrps, (grp: GroupResponse) => {

@@ -99,6 +99,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
         this.initUnitAndRates()
       ]),
       manufacturingDetails: null,
+      hsnNumber: [''],
       isFsStock: false
     });
 
