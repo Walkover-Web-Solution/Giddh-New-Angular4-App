@@ -47,6 +47,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnDestroy() {
+    this.sum = 0;
     this.taxAmountSumEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
     this.destroyed$.next(true);

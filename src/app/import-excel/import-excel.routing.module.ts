@@ -14,6 +14,7 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
           {path: 'group', component: ImportWizardComponent},
           {path: 'account', component: ImportWizardComponent},
           {path: 'entries', component: ImportWizardComponent},
+          {path: 'trial-balance', component: ImportWizardComponent},
         ]
       }
     ])

@@ -111,7 +111,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.getAccounts('sundrydebtors', null, null, 'true');
+    this.getAccounts('sundrydebtors', null, null, 'false');
 
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
       if (yes) {
@@ -139,8 +139,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setActiveTab(tabName: 'customer' | 'vendor') {
+  public setActiveTab(tabName: 'customer' | 'vendor', type: string) {
     this.activeTab = tabName;
+    this.getAccounts(type, null, null, 'true');
   }
 
   public search(ev: any) {
@@ -238,9 +239,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = res.body;
           this.sundryDebtorsAccounts$ = Observable.of(res.body.results);
-          if (requestedFrom !== 'pagination') {
-            this.getAccounts('sundrycreditors', pageNumber, null, 'true');
-          }
+          // if (requestedFrom !== 'pagination') {
+          //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
+          // }
         } else {
           this.sundryCreditorsAccountsBackup = res.body;
           this.sundryCreditorsAccounts$ = Observable.of(res.body.results);
