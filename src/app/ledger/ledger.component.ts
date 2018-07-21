@@ -332,7 +332,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
           dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-            bsRangeValue: [null, null]
+            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
           })
         });
         // this.advanceSearchRequest.to = universalDate[1];
@@ -557,13 +557,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     // this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
-    this.advanceSearchRequest.dataToSend.bsRangeValue = [null, null];
     this.getTransactionData();
   }
 
   public getBankTransactions() {
     // && this.advanceSearchRequest.from
     if (this.advanceSearchRequest.accountUniqueName) {
+      console.log('this.advanceSearchRequest is :', this.advanceSearchRequest);
       this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
@@ -613,19 +613,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
     this.closingBalanceBeforeReconcile = null;
-    let from: any;
-    let to: any;
-    if (!this.advanceSearchRequest.dataToSend.bsRangeValue[0] && !this.advanceSearchRequest.dataToSend.bsRangeValue[1]) {
-      this.advanceSearchRequest.dataToSend.bsRangeValue[0] = '';
-      this.advanceSearchRequest.dataToSend.bsRangeValue[1] = '';
-    } else {
-      this.advanceSearchRequest.dataToSend.bsRangeValue[0] = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY');
-      this.advanceSearchRequest.dataToSend.bsRangeValue[1] = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY');
-    }
-
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.dataToSend.bsRangeValue[0], this.advanceSearchRequest.dataToSend.bsRangeValue[1],
-      this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
-    // this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.advanceSearchRequest)));
+    this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
+    moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+    this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
   }
 
   public toggleTransactionType(event: string) {
