@@ -3,12 +3,13 @@
     <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
         <div class="row">
-            <div class="form-group" [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}">
+            <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
+            <div class="form-group col-xs-6">
                 <label for="">Account Name</label>
                 <input type="text" class="form-control" formControlName="name" name="accountName" />
             </div>
-
-            <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
+            <!-- *ngIf="isGstEnabledAcc" card 1104 -->
+            <div class="form-group col-xs-6" formGroupName="country">
                 <label for="">Country</label>
                 <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode" style="width:100%"></sh-select>
             </div>
