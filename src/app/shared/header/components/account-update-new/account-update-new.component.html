@@ -167,8 +167,8 @@
                 </div>
 
             </div>
-
-            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== 'IN'">
+            <!-- addAccountForm.get('country').value.countryCode !== 'IN'  #1103 -->
+            <div class="row" *ngIf="isMultipleCurrency">
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
