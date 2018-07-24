@@ -9,6 +9,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { PayNowRequest } from '../contact/contact.component';
+import { CONTACT_API } from './apiurls/contact.api';
 
 @Injectable()
 export class ContactService {
@@ -39,6 +40,25 @@ export class ContactService {
   public GetCashFreeBalance(): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + 'company/:companyUniqueName/cashfree/balance'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.request = '';
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''));
+  }
+
+  public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let description = comment;
+    return this._http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName), {description}).map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.request = '';
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''));
+  }
+
+  public deleteComment(accountUniqueName): Observable<BaseResponse<any, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName)).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
