@@ -563,6 +563,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     // && this.advanceSearchRequest.from
     if (this.advanceSearchRequest.accountUniqueName) {
+      console.log('this.advanceSearchRequest is :', this.advanceSearchRequest);
       this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
@@ -613,9 +614,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchRequest = null;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-      moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
-      this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
-    // this.store.dispatch(this._ledgerActions.GetTransactions(cloneDeep(this.advanceSearchRequest)));
+    moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+    this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
   }
 
   public toggleTransactionType(event: string) {

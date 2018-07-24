@@ -213,11 +213,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-      if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
-        this.userIsSuperUser = true;
-      } else {
+
+      // Sagar told to change the logic
+      // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
+      //   console.log('selectedCmp is :', selectedCmp);
+      //   this.userIsSuperUser = true;
+      // } else {
+      //   this.userIsSuperUser = false;
+      // }
+      // new logic
+      if (selectedCmp.userEntityRoles && selectedCmp.userEntityRoles.length && (selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin') === -1)) {
         this.userIsSuperUser = false;
+      } else {
+        this.userIsSuperUser = true;
       }
+
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).takeUntil(this.destroyed$);
