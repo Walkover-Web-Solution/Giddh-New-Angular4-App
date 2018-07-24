@@ -154,7 +154,8 @@
                             /></td>
 
                     </tr>
-                    <tr [hidden]="true">
+                    <!-- [hidden]="true" -->
+                    <tr>
                         <td><label><input type="checkbox" name="dsc" [(ngModel)]="customTemplate.sections[1].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Description</label></td>
                         <td><input type="text" [maxlength]="10" class="form-control" name="dsc1" [(ngModel)]='customTemplate.sections[1].content[5].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[5].display"
                             /></td>
