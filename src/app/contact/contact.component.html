@@ -54,6 +54,10 @@
                             <a class="dropdown-item">
                                 <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
                         </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
+                        </li>
                         <!-- <li role="menuitem">
                 <a class="dropdown-item">
                   <input type="checkbox" /> Total amt of transactions</a>
@@ -82,43 +86,63 @@
     <table class="table basic table-bordered">
         <thead>
             <tr>
-                <th>Name</th>
+                <th [style.width.%]="20">Name</th>
                 <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
-                <th *ngIf="showFieldFilter.email">Email Id</th>
-                <th *ngIf="showFieldFilter.state">State</th>
-                <th *ngIf="showFieldFilter.gstin">GSTIN</th>
+                <th *ngIf="showFieldFilter.email" [style.width.%]="14">Email Id</th>
+                <th *ngIf="showFieldFilter.state" [style.width.%]="10">State</th>
+                <th *ngIf="showFieldFilter.gstin" [style.width.%]="10">GSTIN</th>
                 <th *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
+                <th *ngIf="showFieldFilter.comment" [style.width.%]="25">Comment</th>
                 <th *ngIf="activeTab === 'vendor'">Action</th>
             </tr>
         </thead>
         <tbody>
             <ng-container *ngIf="activeTab === 'customer'">
-                <tr *ngFor="let account of sundryDebtorsAccounts$ | async">
+                <tr *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index">
                     <td>{{account.name}}</td>
                     <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
                     <td *ngIf="showFieldFilter.email">{{account.email}}</td>
                     <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
                     <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
                     <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+                    <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
+                        <ng-container *ngIf="updateCommentIdx !== idx">
+                            {{account.comment}}
+                        </ng-container>
+                        <ng-container *ngIf="updateCommentIdx === idx">
+                            <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment" (blur)="updateComment(account)"></textarea>
+                        </ng-container>
+
+                    </td>
                     <!-- <td>
             <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
           </td> -->
                 </tr>
                 <tr *ngIf="!(sundryDebtorsAccounts$ | async)?.length">
-                    <td colspan="7" class="text-center empty_table">
+                    <td colspan="8" class="text-center empty_table">
                         <h1>No Record Found !!</h1>
                     </td>
                 </tr>
             </ng-container>
 
             <ng-container *ngIf="activeTab === 'vendor'">
-                <tr *ngFor="let account of sundryCreditorsAccounts$ | async">
+                <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index">
                     <td>{{account.name}}</td>
                     <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
                     <td *ngIf="showFieldFilter.email">{{account.email}}</td>
                     <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
                     <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
                     <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+                    <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
+                        <ng-container *ngIf="updateCommentIdx !== idx">
+                            {{account.comment}}
+                        </ng-container>
+                        <ng-container *ngIf="updateCommentIdx === idx">
+                            <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment" (blur)="updateComment(account)"></textarea>
+                        </ng-container>
+
+                    </td>
+
                     <td>
                         <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay
             </button>
@@ -128,7 +152,7 @@
                     </td>
                 </tr>
                 <tr *ngIf="!(sundryCreditorsAccounts$ | async)?.length">
-                    <td colspan="7" class="text-center empty_table">
+                    <td colspan="8" class="text-center empty_table">
                         <h1>No Record Found !!</h1>
                     </td>
                 </tr>
