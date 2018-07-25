@@ -1,3 +1,4 @@
+import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
 import { AccountAsVoucherComponent } from './voucher-grid/voucher-grid.component';
 import { VsForDirective } from './../theme/ng2-vs-for/ng2-vs-for';
@@ -23,6 +24,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { OnReturnDirective } from './keyboard.directive';
+import { InventoryAddStockComponent } from '../inventory/components/add-stock-components/inventory.addstock.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { OnReturnDirective } from './keyboard.directive';
     TextMaskModule,
     VirtualScrollModule,
     ElementViewChildModule,
-    QuickAccountModule.forRoot()
+    QuickAccountModule.forRoot(),
+    InventoryModule
   ],
 })
 export class AccountingModule {

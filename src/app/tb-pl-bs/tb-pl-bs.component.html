@@ -9,8 +9,8 @@
         <tab heading="Balance Sheet" (select)="CanBSLoad = true">
             <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
         </tab>
-        <tab heading="Trial Balance New" *ngIf="CanNewTBLoadOnThisEnv" (select)="CanNewTBLoad = true; CanTBLoad = false">
-            <tb [isV2]="true" [selectedCompany]="selectedCompany" *ngIf="CanNewTBLoad"></tb>
+        <tab *ngIf="CanNewTBLoadOnThisEnv || isWalkoverCompany" heading="Trial Balance New" (select)="CanNewTBLoad = true; CanTBLoad = false">
+            <tb *ngIf="CanNewTBLoad" [isV2]="true" [selectedCompany]="selectedCompany"></tb>
         </tab>
     </tabset>
 </div>

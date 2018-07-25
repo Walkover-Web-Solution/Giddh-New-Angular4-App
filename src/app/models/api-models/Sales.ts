@@ -29,13 +29,13 @@ export const VOUCHER_TYPE_LIST: any[] = [
     label: 'Debit Note'
     }
   },
-  {
-    value: 'Purchase',
-    label: 'Purchase',
-    additional: {
-      label: 'Purchase'
-    }
-  }
+  // {
+  //   value: 'Purchase',
+  //   label: 'Purchase',
+  //   additional: {
+  //     label: 'Purchase'
+  //   }
+  // }
 ];
 /*
 RECEIPT("receipt"),
@@ -317,7 +317,7 @@ export class OtherSalesItemClass {
   public customField2: string;
   public customField3: string;
   public message1: string;
-  public message2: string;
+  // public message2: string;
   public slogan?: any;
   constructor() {
     this.shippingDate = null;
@@ -326,7 +326,7 @@ export class OtherSalesItemClass {
     this.customField1 = null;
     this.customField2 = null;
     this.customField3 = null;
-    this.message2 = null;
+    // this.message2 = null;
   }
 }
 

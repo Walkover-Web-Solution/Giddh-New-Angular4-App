@@ -23,6 +23,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
   public countryIsIndia: boolean = false;
+  public selectedCountry = '';
   public industrialList: IOption[] = [{
     label: 'Agriculture',
     value: 'Agriculture'
@@ -91,6 +92,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     value: 'Wholesalers Distributors'
   }
   ];
+  public updateProfileSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
@@ -98,14 +100,14 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.countryName, label: c.value});
+      this.countryCodeList.push({value: c.value, label: c.value, additional: c.countryName});
     });
 
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
-          this.states.push({label: `${d.code} - ${d.name}`, value: `${d.code}`});
+          this.states.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -119,13 +121,23 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       state.session.companies.forEach(cmp => {
         if (cmp.uniqueName === state.session.companyUniqueName) {
           this.countryIsIndia = cmp.country.toLocaleLowerCase() === 'india';
+
+          if (cmp.country && this.companyProfileObj && !this.companyProfileObj.country) {
+            this.selectedCountry = cmp.country;
+            this.autoSelectCountryCode(cmp.country);
+          }
         }
       });
     }).takeUntil(this.destroyed$).subscribe();
+    this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
-    //
+    this.updateProfileSuccess$.subscribe(s => {
+      if (s) {
+        this._router.navigate(['/onboarding']);
+      }
+    });
   }
 
   public skip() {
@@ -134,8 +146,29 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   public submit() {
     let object = _.cloneDeep(this.companyProfileObj);
-    object.contactNo = `${object.country}${object.contactNo}`;
+    if (object.country && object.contactNo) {
+      object.contactNo = _.cloneDeep(`${object.country}${object.contactNo}`);
+      object.country = this.selectedCountry;
+    } else {
+      object.country = this.selectedCountry;
+      object.contactNo = null;
+    }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(object));
+  }
+
+  /**
+   * autoSelectCountryCode
+   */
+  public autoSelectCountryCode(country) {
+    if (this.countryCodeList) {
+      let selectedCountry = _.find(this.countryCodeList, function(o) {
+       return o.additional === country;
+      });
+      if (selectedCountry && selectedCountry.value) {
+        this.companyProfileObj.country = selectedCountry.value;
+      }
+    }
+
   }
 
   public ngOnDestroy() {

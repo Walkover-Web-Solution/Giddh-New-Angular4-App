@@ -40,6 +40,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
   public isDiscountListInProcess$: Observable<boolean>;
   public isDiscountCreateInProcess$: Observable<boolean>;
   public isDiscountCreateSuccess$: Observable<boolean>;
+  public isDiscountUpdateInProcess$: Observable<boolean>;
+  public isDiscountUpdateSuccess$: Observable<boolean>;
   public isDeleteDiscountInProcess$: Observable<boolean>;
   public isDeleteDiscountSuccess$: Observable<boolean>;
   public accountAsideMenuState: string = 'out';
@@ -55,6 +57,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
     this.isDiscountListInProcess$ = this.store.select(s => s.settings.discount.isDiscountListInProcess).takeUntil(this.destroyed$);
     this.isDiscountCreateInProcess$ = this.store.select(s => s.settings.discount.isDiscountCreateInProcess).takeUntil(this.destroyed$);
     this.isDiscountCreateSuccess$ = this.store.select(s => s.settings.discount.isDiscountCreateSuccess).takeUntil(this.destroyed$);
+    this.isDiscountUpdateInProcess$ = this.store.select(s => s.settings.discount.isDiscountUpdateInProcess).takeUntil(this.destroyed$);
+    this.isDiscountUpdateSuccess$ = this.store.select(s => s.settings.discount.isDiscountUpdateSuccess).takeUntil(this.destroyed$);
     this.isDeleteDiscountInProcess$ = this.store.select(s => s.settings.discount.isDeleteDiscountInProcess).takeUntil(this.destroyed$);
     this.isDeleteDiscountSuccess$ = this.store.select(s => s.settings.discount.isDeleteDiscountSuccess).takeUntil(this.destroyed$);
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
@@ -65,6 +69,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
 
     this.isDiscountCreateSuccess$.subscribe(s => {
+      this.createRequest = new CreateDiscountRequest();
+    });
+
+    this.isDiscountUpdateSuccess$.subscribe(s => {
       this.createRequest = new CreateDiscountRequest();
     });
 
@@ -98,7 +106,11 @@ export class DiscountComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    this.store.dispatch(this._settingsDiscountAction.CreateDiscount(this.createRequest));
+    if (this.createRequest.discountUniqueName) {
+      this.store.dispatch(this._settingsDiscountAction.UpdateDiscount(this.createRequest, this.createRequest.discountUniqueName));
+    } else {
+      this.store.dispatch(this._settingsDiscountAction.CreateDiscount(this.createRequest));
+    }
   }
 
   public edit(data: IDiscountList) {
@@ -106,6 +118,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     this.createRequest.name = data.name;
     this.createRequest.discountValue = data.discountValue;
     this.createRequest.accountUniqueName = data.linkAccount.uniqueName;
+    this.createRequest.discountUniqueName = data.uniqueName;
   }
 
   public showDeleteDiscountModal(uniqueName: string) {
@@ -119,8 +132,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
   }
 
   public delete() {
-    this.hideDeleteDiscountModal();
     this.store.dispatch(this._settingsDiscountAction.DeleteDiscount(this.deleteRequest));
+    this.hideDeleteDiscountModal();
   }
 
   /**
