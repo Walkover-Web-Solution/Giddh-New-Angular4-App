@@ -5154,7 +5154,7 @@ bs-datepicker-container {
 }
 
 .daterangepicker.dropdown-menu {
-    z-index: 1 !important;
+    /* z-index: 1 !important; */
 }
 
 .daterangepicker.show-calendar {

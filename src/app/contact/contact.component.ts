@@ -15,6 +15,7 @@ import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { createSelector } from 'reselect';
+import * as _ from 'lodash';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -74,7 +75,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     closingBalance: true,
     state: true,
     gstin: true,
+    comment: true
   };
+  public updateCommentIdx: number = null;
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
@@ -139,16 +142,17 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setActiveTab(tabName: 'customer' | 'vendor') {
+  public setActiveTab(tabName: 'customer' | 'vendor', type: string) {
     this.activeTab = tabName;
+    this.getAccounts(type, null, null, 'true');
   }
 
   public search(ev: any) {
-    let searchStr = ev.target.value;
+    let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
     if (this.activeTab === 'customer') {
-      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
+      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
     } else {
-      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.includes(searchStr)));
+      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
     }
   }
 
@@ -230,20 +234,112 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.filterDropDownList.hide();
   }
 
+  /**
+   * updateComment
+   */
+  public updateComment(account) {
+    if (account.comment) {
+      let canUpdate = this.canUpdateComment(account.uniqueName, account.comment);
+      if (canUpdate) {
+        this.addComment(account);
+      } else {
+        this.updateCommentIdx = null;
+      }
+    } else {
+      let canDelete  = this.canDeleteComment(account.uniqueName);
+      if (canDelete) {
+        this.deleteComment(account.uniqueName);
+      } else {
+        this.updateCommentIdx = null;
+      }
+    }
+
+  }
+
+  /**
+   * deleteComment
+   */
+  public deleteComment(accountUniqueName) {
+    setTimeout(() => {
+      this._contactService.deleteComment(accountUniqueName).subscribe(res => {
+        if (res.status === 'success') {
+          this.updateCommentIdx = null;
+        }
+      });
+    }, 500);
+  }
+
+  /**
+   * canDeleteComment
+   */
+  public canDeleteComment(accountUniqueName) {
+    let account;
+    if (this.activeTab === 'customer') {
+      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
+    } else {
+      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
+    }
+    if (account.comment) {
+      account.comment = '';
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * canDeleteComment
+   */
+  public canUpdateComment(accountUniqueName, comment) {
+    let account;
+    if (this.activeTab === 'customer') {
+      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
+    } else {
+      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
+    }
+    if (account.comment !== comment) {
+      account.comment = comment;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public addComment(account) {
+    setTimeout(() => {
+      this._contactService.addComment(account.comment, account.uniqueName).subscribe(res => {
+        if (res.status === 'success') {
+          this.updateCommentIdx = null;
+          account.comment = _.cloneDeep(res.body.description);
+          this.updateInList(account.uniqueName, account.comment);
+        }
+      });
+    }, 500);
+  }
+
+  /**
+   * updateInList
+   */
+  public updateInList(accountUniqueName, comment) {
+    if (this.activeTab === 'customer'){
+      //
+    }
+  }
+
   private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
-          this.sundryDebtorsAccountsBackup = res.body;
-          this.sundryDebtorsAccounts$ = Observable.of(res.body.results);
-          if (requestedFrom !== 'pagination') {
-            this.getAccounts('sundrycreditors', pageNumber, null, 'true');
-          }
+          this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
+          this.sundryDebtorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
+          // if (requestedFrom !== 'pagination') {
+          //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
+          // }
         } else {
-          this.sundryCreditorsAccountsBackup = res.body;
-          this.sundryCreditorsAccounts$ = Observable.of(res.body.results);
+          this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
+          this.sundryCreditorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
         }
       }
     });
@@ -256,4 +352,5 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     });
   }
+
 }
