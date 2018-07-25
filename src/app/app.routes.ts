@@ -12,7 +12,7 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
-import { NotFoundComponent } from './404-component';
+import { NotFoundComponent } from './404/404-component';
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
