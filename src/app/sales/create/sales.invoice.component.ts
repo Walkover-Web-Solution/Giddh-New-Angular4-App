@@ -381,11 +381,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
       this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
-        if (acc) {
-          if (acc.length > 0) {
-            this.invFormData.accountDetails.uniqueName = 'cash';
-          } else if (acc.length === 1) {
-            this.depositAccountUniqueName = 'cash';
+        if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
+          if (acc) {
+            if (acc.length > 0) {
+              this.invFormData.accountDetails.uniqueName = 'cash';
+            } else if (acc.length === 1) {
+              this.depositAccountUniqueName = 'cash';
+            }
           }
         }
       });
@@ -563,9 +565,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
 
     // replace /n to br in case of message
-    if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
-      data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
-    }
+    // if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
+    //   data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
+    // }
 
     // replace /n to br for (shipping and billing)
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
@@ -996,7 +998,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
           // t.date = this.universalDate || new Date();
-          // e.entryDate = this.universalDate || new Date();
+          e.entryDate = this.universalDate || new Date();
         });
       });
     } else {
@@ -1034,16 +1036,17 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-    setTimeout(() => {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
       entry.taxSum = _.sumBy(entry.taxes, function(o) {
         return o.amount;
       });
-    }, 1500);
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
+    if (!entry) {
+      return;
+    }
     this.selectedTaxes = arr;
     entry.taxList = arr;
     entry.taxes = [];
@@ -1058,7 +1061,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               amount: item.taxDetail[0].taxValue
             };
             entry.taxes.push(o);
-            entry.taxSum += o.amount;
+            // entry.taxSum += o.amount;
           }
         });
       });
@@ -1109,7 +1112,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.toLocaleLowerCase().indexOf(term) > -1);
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public closeCreateAcModal() {

@@ -157,8 +157,8 @@
                                                 </table>
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
-                                                    <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                                                        (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                                                    <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
+                                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -176,8 +176,7 @@
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
                                                             <td class="col-xs-1 text-center">
-                                                              <input type="checkbox"
-                                                                     (click)="selectEntryForBulkAction($event, item)"/>
+                                                                <input type="checkbox" (click)="selectEntryForBulkAction($event, item)" />
                                                             </td>
                                                             <td class="col-xs-2">
                                                                 <input class="form-control" type="text" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
@@ -215,8 +214,8 @@
                                                 </table>
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
-                                                    <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                                                        (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                                                    <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
+                                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -258,11 +257,8 @@
         <section class="ico-btn text-right mrT1">
             <button class="btn btn-xs" (click)="performBulkAction('delete')" container="body" tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i></button>
             <button class="btn btn-xs" (click)="performBulkAction('generate')" container="body" tooltip="Generate Invoice" [placement]="'top'"><i class="fa fa-file-text-o"></i></button>
-          <button class="btn btn-xs" (click)="openSelectFilePopup(BulkUploadfileInput);" container="body"
-                  tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>
-          <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
-                 id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
-                 (uploadOutput)="onUploadOutput($event)">
+            <button class="btn btn-xs" (click)="openSelectFilePopup(BulkUploadfileInput);" container="body" tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>
+            <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
         </section>
 
         <!--account table-->
@@ -300,7 +296,7 @@
                 <table class="width100">
                     <tbody>
                         <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">
-                          <th class="col-xs-1"></th>
+                            <th class="col-xs-1"></th>
                             <td class="col-xs-2"></td>
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
@@ -313,9 +309,8 @@
                             <td colspan="4" class="col-xs-12">&nbsp;</td>
                         </tr>
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
-                          <td class="col-xs-1 text-center"><input type="checkbox"
-                                                                  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
-                          </td>
+                            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)" [checked]="entryUniqueNamesForBulkAction.indexOf(txn.entryUniqueName) > -1" />
+                            </td>
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
                                 <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
@@ -341,13 +336,13 @@
                                 <table class="width100">
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row">
-                                            <td class="col-xs-1 text-center"><input type="checkbox"  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)" /></td>
+                                            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)" /></td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
-                                                <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
+                                                <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -430,9 +425,8 @@
                         </tr>
 
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
-                          <td class="col-xs-1 text-center"><input type="checkbox"
-                                                                  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
-                          </td>
+                            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)" />
+                            </td>
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
                                 <div class="ellp">{{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}</div>
@@ -460,14 +454,14 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row">
                                             <td class="col-xs-1 text-center">
-                                                <input type="checkbox"  (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
+                                                <input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)" />
                                             </td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
-                                                <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
+                                                <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -526,7 +520,7 @@
 
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'" class="">
+                                <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'" class="">
                   C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2' }}
                 </span>
                             </td>
@@ -544,7 +538,7 @@
 
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" tooltip="" [placement]="'top'">
+                                <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
                   C/F: Dr
                   <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2'}}
                   </span>
@@ -639,6 +633,10 @@
 
 <!-- modal sections -->
 
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<ledger-aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></ledger-aside-pane>
+<!-- aside menu section -->
 
 <!-- update ladger entry popup -->
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
@@ -653,23 +651,21 @@
 
 <!-- export ladger popup -->
 <div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
-      <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq"
-                     (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
+            <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq" (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+        </div>
     </div>
-</div>
 </div>
 
 <!-- share ladger popup -->
 <div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
-      <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest"
-        (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
-    </div>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
+            <share-ledger #sharLedger [accountUniqueName]="lc.accountUnq" [advanceSearchRequest]="advanceSearchRequest" (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
+        </div>
     </div>
 </div>
 

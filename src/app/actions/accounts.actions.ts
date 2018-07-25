@@ -119,6 +119,33 @@ export class AccountsAction {
     });
 
   @Effect()
+  public RemoveAccountDiscount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.DELETE_ACCOUNT_DISCOUNT)
+    .switchMap((action: CustomActions) => this._accountService.DeleteDiscount(action.payload.discountUniqueName, action.payload.accountUniqueName))
+    .map(response => {
+      return this.removeAccountDiscountResponse(response);
+    });
+
+  @Effect()
+  public RemoveAccountDiscountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.DELETE_ACCOUNT_DISCOUNT_RESPONSE)
+    .map((action: CustomActions) => {
+      let data: BaseResponse<string, string> = action.payload;
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {type: 'EmptyAction'};
+      }
+      this._toasty.successToast('Discount Removed Successfully', action.payload.status);
+      let accName = null;
+      this.store.take(1).subscribe((s) => {
+        if (s.groupwithaccounts.activeGroup) {
+          accName = s.groupwithaccounts.activeAccount.uniqueName;
+        }
+      });
+      return this.getAccountDetails(accName);
+    });
+
+  @Effect()
   public CreateAccount$: Observable<Action> = this.action$
     .ofType(AccountsAction.CREATE_ACCOUNT)
     .switchMap((action: CustomActions) => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName))
@@ -825,7 +852,7 @@ export class AccountsAction {
     };
   }
 
-  public removeAccountDiscountResponse(value: BaseResponse<string, { discountUniqueName: string, accountUniqueName: string }>): CustomActions {
+  public removeAccountDiscountResponse(value: BaseResponse<string, string>): CustomActions {
     return {
       type: AccountsAction.DELETE_ACCOUNT_DISCOUNT_RESPONSE,
       payload: value

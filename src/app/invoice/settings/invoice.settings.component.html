@@ -1,6 +1,6 @@
 <section id="invoice-setting">
     <div class="box clearfix">
-        <form class="col-xs-12">
+        <form class="col-xs-12" autocomplete="off">
             <div class="row">
                 <div class="clearfix bdrB">
                     <div class="row">
@@ -114,7 +114,7 @@
                             <label>Invoice lock date</label>
                         </div>
                         <div class="col-xs-7 form-group">
-                            <input type="text" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" (clickOutside)="showDatePicker=false;" />
+                            <input type="text" (blur)="onLockDateBlur($event)" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" (clickOutside)="showDatePicker=false;" />
                             <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                                 <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
                             </div>
