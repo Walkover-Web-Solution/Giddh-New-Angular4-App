@@ -4,6 +4,7 @@ import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/a
 import * as _ from '../../lodash-optimized';
 import { ChildGroup } from '../../models/api-models/Search';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 interface TbState {
   data?: AccountDetails;
@@ -59,6 +60,9 @@ export const initialState: TBPlBsState = {
 
 export function tbPlBsReducer(state = initialState, action: CustomActions): TBPlBsState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:
     case TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE: {
       // no payload means error from server
