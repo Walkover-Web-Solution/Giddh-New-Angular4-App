@@ -12,9 +12,11 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
+import { NotFoundComponent } from './404-component';
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: '404', component: NotFoundComponent },
   {path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
   {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated]},
   {path: 'signup', loadChildren: './signup/signup.module#SignupModule'},
@@ -72,7 +74,9 @@ export const ROUTES: Routes = [
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
-      {path: '**', redirectTo: 'home', pathMatch: 'full'}
+      // {path: '**', redirectTo: 'home', pathMatch: 'full'}
+      {path: '**', pathMatch: 'full', component: NotFoundComponent},
+
     ]
   },
   // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
