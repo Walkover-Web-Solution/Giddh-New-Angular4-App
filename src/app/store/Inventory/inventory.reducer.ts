@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 /**
  * Keeping Track of the CompanyState
@@ -123,6 +124,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
   let group: StockGroupResponse = null;
   let activeGroupData: IGroupsWithStocksHierarchyMinItem;
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case InventoryActionsConst.SetActiveStock:
       return Object.assign({}, state, {activeStockUniqueName: action.payload});
     case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:

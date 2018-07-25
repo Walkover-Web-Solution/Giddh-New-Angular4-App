@@ -5,6 +5,7 @@ import { Action } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
 import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface AuditLogsState {
   logs: ILogsItem[];
@@ -32,7 +33,9 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
   let data: BaseResponse<LogsResponse, LogsRequest> = null;
   let newState: AuditLogsState = null;
   switch (action.type) {
-
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case AUDIT_LOGS_ACTIONS.GET_LOGS: {
       newState = _.cloneDeep(initialState);
       newState.getLogInProcess = true;
