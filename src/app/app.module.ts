@@ -52,7 +52,7 @@ import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.m
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
-import { NotFoundComponent } from './404-component';
+import { NotFoundComponent } from './404/404-component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
