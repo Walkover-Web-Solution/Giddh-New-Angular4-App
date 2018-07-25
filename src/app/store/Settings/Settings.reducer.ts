@@ -31,6 +31,8 @@ export interface DiscountState {
   discountList: IDiscountList[];
   isDiscountCreateInProcess: boolean;
   isDiscountCreateSuccess: boolean;
+  isDiscountUpdateInProcess: boolean;
+  isDiscountUpdateSuccess: boolean;
   isDeleteDiscountInProcess: boolean;
   isDeleteDiscountSuccess: boolean;
 }
@@ -41,12 +43,15 @@ const discountInitialState: DiscountState = {
   isDeleteDiscountSuccess: false,
   isDiscountCreateInProcess: false,
   isDiscountCreateSuccess: false,
-  isDiscountListInProcess: false
+  isDiscountListInProcess: false,
+  isDiscountUpdateInProcess: false,
+  isDiscountUpdateSuccess: false
 };
 
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
+  updateProfileSuccess: boolean;
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
   usersWithCompanyPermissions: any;
@@ -60,6 +65,7 @@ export interface SettingsState {
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
+  updateProfileSuccess: false,
   linkedAccounts: {},
   financialYears: null,
   usersWithCompanyPermissions: null,
@@ -135,9 +141,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
+        newState.updateProfileSuccess = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return Object.assign({}, state, {
+        updateProfileSuccess: true
+      });
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS: {
       newState.linkedAccounts.isBankAccountsInProcess = true;
@@ -160,6 +169,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE: {
+      newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT: {
       newState.linkedAccounts.isDeleteBankAccountIsInProcess = true;
@@ -386,6 +399,42 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         discount: Object.assign({}, state.discount, {
           isDiscountCreateInProcess: false,
           isDiscountCreateSuccess: true,
+          discountList
+        })
+      });
+    }
+
+    case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountUpdateInProcess: true,
+          isDiscountUpdateSuccess: false
+        })
+      });
+    }
+    case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE: {
+      let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
+
+      if (response.status === 'error') {
+        return Object.assign({}, state, {
+          discount: Object.assign({}, state.discount, {
+            isDiscountUpdateInProcess: false,
+            isDiscountUpdateSuccess: false,
+          })
+        });
+      }
+
+      let discountList = _.cloneDeep(state.discount.discountList);
+      discountList = discountList.map(dis => {
+        if (dis.uniqueName === response.queryString) {
+          dis = response.body;
+        }
+        return dis;
+      });
+      return Object.assign({}, state, {
+        discount: Object.assign({}, state.discount, {
+          isDiscountUpdateInProcess: false,
+          isDiscountUpdateSuccess: true,
           discountList
         })
       });

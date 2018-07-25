@@ -7,22 +7,21 @@ import { Store } from '@ngrx/store';
 @Component({
   selector: 'tb-export-xls',  // <home></home>
   template: `
-    <div class="form-group xls-export" (clickOutside)="showTbXls=false;">
-      <a (click)="showTbXls = !showTbXls" *ngIf="enableDownload"><img
-        src="{{ imgPath }}"/></a>
-      <div class="export-options" *ngIf="showTbXls">
-        <span class="arrow"></span>
-        <ul class="list-unstyled">
-          <li><a (click)="downloadTbXls('main-group')">Main Group Report</a></li>
-          <li><a (click)="downloadTbXls('group')">All Group Report</a></li>
-          <li><a (click)="downloadTbXls('account')">All Account Report</a></li>
-          <li><a (click)="downloadTbXls('all')">Complete Report</a></li>
-        </ul>
-      </div>
-    </div>
+
+<div class="btn-group" dropdown>
+   <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
+   <ul id="dropdown-xls" *dropdownMenu class="dropdown-menu dropdown-menu-right cp tbpl-dropdown" role="menu" aria-labelledby="button-basic">
+      <span class="caret"></span>
+      <li><a (click)="downloadTbXls('main-group')">Main Group Report</a></li>
+      <li><a (click)="downloadTbXls('group')">All Group Report</a></li>
+      <li><a (click)="downloadTbXls('account')">All Account Report</a></li>
+      <li><a (click)="downloadTbXls('all')">Complete Report</a></li>
+   </ul>
+</div>
     <!--end form-group -->
   `
 })
+
 export class TbExportXlsComponent implements OnInit, OnDestroy {
   @Input() public trialBalanceRequest: TrialBalanceRequest;
   public enableDownload: boolean = true;

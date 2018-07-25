@@ -84,12 +84,12 @@ export class SettingsLinkedAccountsService {
   /**
    * Refresh account
    */
-  public RefreshBankAccount(loginId: string): Observable<BaseResponse<any, string>> {
+  public RefreshBankAccount(ebankItemId: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
+    return this._http.get(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':ebankItemId', ebankItemId)).map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = { loginId };
+      data.queryString = { ebankItemId };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }

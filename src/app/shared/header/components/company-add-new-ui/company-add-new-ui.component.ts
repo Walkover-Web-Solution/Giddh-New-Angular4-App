@@ -44,6 +44,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
               private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
     contriesWithCodes.map(c => {
       this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
     });
   }
 
