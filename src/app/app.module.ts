@@ -52,6 +52,7 @@ import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.m
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
+import { NotFoundComponent } from './404/404-component';
 // import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // Application wide providers
 const APP_PROVIDERS = [
@@ -98,6 +99,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PageComponent,
     NoContentComponent,
     PublicPageHandlerComponent,
+    NotFoundComponent,
     DummyComponent,
     // SuccessComponent,
     NewUserComponent,
