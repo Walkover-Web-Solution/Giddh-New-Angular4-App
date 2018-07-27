@@ -20,7 +20,7 @@ export class PublicPageHandlerComponent {
       this.router.navigateByUrl('signup');
     } else {
       // this.router.navigate(['login']);
-      this.router.navigateByUrl('login');
+      this.router.navigateByUrl('404');
     }
   }
 }
