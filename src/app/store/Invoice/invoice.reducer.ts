@@ -6,6 +6,7 @@ import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interfac
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../customActions';
 import { RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface InvoiceState {
   invoices: GetAllInvoicesPaginatedResponse;
@@ -48,6 +49,9 @@ export const initialState: InvoiceState = {
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;

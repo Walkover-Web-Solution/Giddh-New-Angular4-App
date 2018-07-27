@@ -15,6 +15,7 @@ import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { createSelector } from 'reselect';
+import * as _ from 'lodash';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -274,9 +275,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   public canDeleteComment(accountUniqueName) {
     let account;
     if (this.activeTab === 'customer') {
-      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
     } else {
-      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
     }
     if (account.comment) {
       account.comment = '';
@@ -292,9 +293,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   public canUpdateComment(accountUniqueName, comment) {
     let account;
     if (this.activeTab === 'customer') {
-      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
     } else {
-      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
     }
     if (account.comment !== comment) {
       account.comment = comment;
@@ -338,7 +339,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           // }
         } else {
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
-          this.sundryCreditorsAccounts$ = Observable.of(_.clonDeep(res.body.results));
+          this.sundryCreditorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
         }
       }
     });
