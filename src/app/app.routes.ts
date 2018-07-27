@@ -74,8 +74,8 @@ export const ROUTES: Routes = [
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
-      // {path: '**', redirectTo: 'home', pathMatch: 'full'}
-      {path: '**', pathMatch: 'full', component: NotFoundComponent},
+      {path: '**', redirectTo: 'home', pathMatch: 'full'}
+      // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
     ]
   },
