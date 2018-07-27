@@ -26,7 +26,7 @@ import { ToasterService } from '../../../services/toaster.service';
       [tbExportXLS]="false"
       [plBsExportXLS]="true"
       (plBsExportXLSEvent)="exportXLS($event)"
-      [CanPLLoad]="true"
+      [showLabels]="true"
     ></tb-pl-bs-filter>
     <div *ngIf="(showLoader | async)">
          <div class="loader" >
