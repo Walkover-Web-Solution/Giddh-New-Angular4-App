@@ -23,6 +23,7 @@ import { AccountService } from 'app/services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
 import { GeneralActions } from './general/general.actions';
+import { COMMON_ACTIONS } from './common.const';
 
 @Injectable()
 export class LoginActions {
@@ -759,9 +760,16 @@ export class LoginActions {
   }
 
   public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): CustomActions {
+    this.store.dispatch(this.ResetApplicationData());
     return {
       type: CompanyActions.CHANGE_COMPANY_RESPONSE,
       payload: value
+    };
+  }
+
+  public ResetApplicationData(): CustomActions {
+    return {
+      type: COMMON_ACTIONS.RESET_APPLICATION_DATA
     };
   }
 
