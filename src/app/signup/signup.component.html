@@ -54,7 +54,7 @@
                         <input class="form-control mrB1" formControlName="verificationCode" type="text" placeholder="Enter verification code here" required>
                         <div class="clearfix mrB2">
                             <button [disabled]="!signupVerifyForm.controls['verificationCode'].valid" class="btn btn-success btn-block btn-lg" (click)="VerifyEmail(signupVerifyForm.controls['email'].value,signupVerifyForm.controls['verificationCode'].value)">Verify Email</button>
-                            <a class="btn btn-link cp pull-right" (click)="VerifyEmail(signupVerifyForm.controls['email'].value)">Resend code</a>
+                            <a class="btn btn-link cp pull-right" (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)">Resend code</a>
                         </div>
                     </div>
                 </form>
