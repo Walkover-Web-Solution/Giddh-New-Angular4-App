@@ -9,7 +9,13 @@ import { ChildGroup } from '../../../../models/api-models/Search';
       <div class="col-xs-3  bdrL group pull-right" *ngIf="!groupDetail.level1">
       <!-- {{groupDetail.closingBalance | recType}} -->
         <div class="row">
-          <span class="col-xs-6 text-right" [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">  {{groupDetail.closingBalance.amount | number:'1.2-2'}} </span>
+          <span class="col-xs-7 text-right" [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
+            <span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT'">-</span>
+            <!-- span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'CREDIT'">+</span -->
+            <span *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'CREDIT'">-</span>
+            <!-- span *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'DEBIT'">+</span -->
+            {{groupDetail.closingBalance.amount | number:'1.2-2'}}
+          </span>
           <span class="col-xs-6 invisible"> {{groupDetail.closingBalance.amount | number:'1.2-2'}} </span>
         </div>
       </div>
