@@ -74,7 +74,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     closingBalance: true,
     state: true,
     gstin: true,
+    comment: true
   };
+  public updateCommentIdx: number = null;
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
@@ -111,7 +113,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.getAccounts('sundrydebtors', null, null, 'false');
+    this.getAccounts('sundrydebtors', null, null, 'true');
 
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
       if (yes) {
@@ -224,11 +226,103 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-    this.getAccounts(selectedGrp, event.page, 'pagination');
+    this.getAccounts(selectedGrp, event.page, 'pagination', 'true');
   }
 
   public hideListItems() {
     this.filterDropDownList.hide();
+  }
+
+  /**
+   * updateComment
+   */
+  public updateComment(account) {
+    if (account.comment) {
+      let canUpdate = this.canUpdateComment(account.uniqueName, account.comment);
+      if (canUpdate) {
+        this.addComment(account);
+      } else {
+        this.updateCommentIdx = null;
+      }
+    } else {
+      let canDelete  = this.canDeleteComment(account.uniqueName);
+      if (canDelete) {
+        this.deleteComment(account.uniqueName);
+      } else {
+        this.updateCommentIdx = null;
+      }
+    }
+
+  }
+
+  /**
+   * deleteComment
+   */
+  public deleteComment(accountUniqueName) {
+    setTimeout(() => {
+      this._contactService.deleteComment(accountUniqueName).subscribe(res => {
+        if (res.status === 'success') {
+          this.updateCommentIdx = null;
+        }
+      });
+    }, 500);
+  }
+
+  /**
+   * canDeleteComment
+   */
+  public canDeleteComment(accountUniqueName) {
+    let account;
+    if (this.activeTab === 'customer') {
+      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+    } else {
+      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+    }
+    if (account.comment) {
+      account.comment = '';
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * canDeleteComment
+   */
+  public canUpdateComment(accountUniqueName, comment) {
+    let account;
+    if (this.activeTab === 'customer') {
+      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+    } else {
+      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o) { return o.uniqueName === accountUniqueName; });
+    }
+    if (account.comment !== comment) {
+      account.comment = comment;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public addComment(account) {
+    setTimeout(() => {
+      this._contactService.addComment(account.comment, account.uniqueName).subscribe(res => {
+        if (res.status === 'success') {
+          this.updateCommentIdx = null;
+          account.comment = _.cloneDeep(res.body.description);
+          this.updateInList(account.uniqueName, account.comment);
+        }
+      });
+    }, 500);
+  }
+
+  /**
+   * updateInList
+   */
+  public updateInList(accountUniqueName, comment) {
+    if (this.activeTab === 'customer'){
+      //
+    }
   }
 
   private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
@@ -237,14 +331,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
-          this.sundryDebtorsAccountsBackup = res.body;
-          this.sundryDebtorsAccounts$ = Observable.of(res.body.results);
+          this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
+          this.sundryDebtorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
           // if (requestedFrom !== 'pagination') {
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
-          this.sundryCreditorsAccountsBackup = res.body;
-          this.sundryCreditorsAccounts$ = Observable.of(res.body.results);
+          this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
+          this.sundryCreditorsAccounts$ = Observable.of(_.clonDeep(res.body.results));
         }
       }
     });
@@ -257,4 +351,5 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     });
   }
+
 }
