@@ -342,10 +342,9 @@
                                                                 <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
                                                             </td>
                                                             <td width="25%">
-                                                                <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
-                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
-                            </option>
-                          </select>
+                                                                <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                                                    <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}</option>
+                                                                </select>
                                                             </td>
                                                             <td width="25%" [style.padding.px]="0">
                                                                 <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" />
