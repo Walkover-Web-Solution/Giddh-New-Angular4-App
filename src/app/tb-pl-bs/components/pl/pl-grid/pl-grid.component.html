@@ -128,29 +128,34 @@
                     </div>
                 </div>
 
-                <div class="account clearfix">
+                <div class="account clearfix" [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? '1px solid #dbdde3' : 'none' }">
                     <div class="col-xs-4  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>
                     <div class="col-xs-3  group text-right pull-right bdrL pd1">
-                        <strong>{{ plData?.incomeStatment.incomeBeforeTaxes.amount | number:'1.2-2' }}</strong>
+                        <strong>
+                            <span *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT'">-</span>
+                            {{ plData?.incomeStatment.incomeBeforeTaxes.amount | number:'1.2-2' }}
+                        </strong>
                     </div>
                 </div>
-
-                <div class="group clearfix fs14">
-                    <div class="col-xs-4  group pd1">
-                        Taxes (30%)
+                <ng-template *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
+                    <div class="group clearfix fs14">
+                        <div class="col-xs-4  group pd1">
+                            Taxes (30%)
+                        </div>
+                        <div class="col-xs-3  group text-right pull-right bdrL pd1">
+                            {{ plData?.incomeStatment.appliedTax | number:'1.2-2' }}
+                        </div>
                     </div>
-                    <div class="col-xs-3  group text-right pull-right bdrL pd1">
-                        {{ plData?.incomeStatment.appliedTax | number:'1.2-2' }}
-                    </div>
-                </div>
+                </ng-template>
+                
                 <!-- end of expenses -->
             </div>
             <!-- end row -->
 
             <!-- bottom table start -->
-            <div class="table-responsive max-980">
+            <div *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'" class="table-responsive max-980">
                 <div class="">
                     <table class="table plBtTbl">
                         <thead>
