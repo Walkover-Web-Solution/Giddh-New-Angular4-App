@@ -90,6 +90,27 @@ export class SettingsFinancialYearActions {
       return { type: 'EmptyAction' };
     });
 
+    @Effect()
+    public UpdateFinancialYearPeriod$: Observable<Action> = this.action$
+      .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD)
+      .switchMap((action: CustomActions) => {
+        return this._settingsFinancialYearService.UpdateFinancialYearPeriod(action.payload)
+          .map(response => this.UpdateFinancialYearPeriodResponse(response));
+      });
+
+    @Effect()
+    public UpdateFinancialYearPeriodResponse$: Observable<Action> = this.action$
+      .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE)
+      .map((response: CustomActions) => {
+        let data: BaseResponse<ActiveFinancialYear, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, 'Error');
+        } else {
+          this.toasty.successToast('Financial Year Period Updated.');
+        }
+        return { type: 'EmptyAction' };
+      });
+
   @Effect()
   public AddFinancialYear$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR)
@@ -154,6 +175,20 @@ export class SettingsFinancialYearActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR,
       payload: uniqueName
+    };
+  }
+
+  public UpdateFinancialYearPeriod(period: string): CustomActions {
+    return {
+      type: SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD,
+      payload: period
+    };
+  }
+
+  public UpdateFinancialYearPeriodResponse(response: BaseResponse<IFinancialYearResponse, string>): CustomActions {
+    return {
+      type: SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE,
+      payload: response
     };
   }
 
