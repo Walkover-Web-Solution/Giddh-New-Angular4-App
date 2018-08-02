@@ -63,6 +63,18 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div class="form-group mrT1 mrB clearfix">
+                    <label>Financial Year Period</label>
+                    <div>
+                        <span class="pull-left">
+                            <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod" [style.width.px]="300" placeholder="Financial Year Period" (selected)="selectFYPeriod($event)"  [options]="FYPeriodOptions"></sh-select>                     
+                        </span>
+                        <div>
+                            <button class="btn btn-success btn-sm mrL1" (click)="updateFYPeriod()">Save</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
