@@ -12,7 +12,7 @@
 
                     <div class="input-group mrT3">
                         <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file" (change)="onFileChange($event.target.files)" droppable="true" class="form-control" />
-                        <label class="custom-file-label" for="csvUploadInput"> <span *ngIf="!selectedFileName">Browse file</span> <span *ngIf="selectedFileName" class="primary_clr">{{selectedFileName}}</span></label>
+                        <label class="custom-file-label" for="csvUploadInput"> <span *ngIf="!selectedFileName">Browse file</span> <span *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</span> <span class="pull-right mrT text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span></label>
                         <div class="input-group-btn">
                             <label class="btn btn-sm btn-default" for="csvUploadInput">Browse</label>
                         </div>
