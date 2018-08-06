@@ -113,12 +113,18 @@
                         <div class="col-xs-5">
                             <label>Invoice lock date</label>
                         </div>
-                        <div class="col-xs-7 form-group">
-                            <input type="text" (blur)="onLockDateBlur($event)" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" name="invoiceLockDate" (focus)="showDatePicker = true;" class="form-control w100" (clickOutside)="showDatePicker=false;" />
+                        <div class="form-group col-xs-2">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="invoiceLockDate" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" (focus)="showDatePicker = true;"/>
+                                <span class="input-group-btn">
+                                    <button [class.active]="showDatePicker" type="button" class="btn btn-default" (click)="showDatePicker = !showDatePicker">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
                             <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                                 <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
                             </div>
-                            <!-- <input type="text" class="form-control w100" [ngModel]="invoiceSetting.lockDate" name="invoiceLockDate" bsDatepicker autocomplete="off"/> -->
                         </div>
                     </div>
                 </div>
