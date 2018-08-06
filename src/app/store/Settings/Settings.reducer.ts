@@ -61,6 +61,7 @@ export interface SettingsState {
   parentCompany: CompanyResponse;
   triggers: any;
   discount: DiscountState;
+  refreshCompany: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -74,7 +75,8 @@ export const initialState: SettingsState = {
   tags: null,
   parentCompany: null,
   triggers: null,
-  discount: discountInitialState
+  discount: discountInitialState,
+  refreshCompany: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -82,6 +84,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
       return Object.assign({}, state, initialState);
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD: {
+      return Object.assign({}, state, { refreshCompany: false});
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE: {
+      return Object.assign({}, state, { refreshCompany: true});
     }
     case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:
       let gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
