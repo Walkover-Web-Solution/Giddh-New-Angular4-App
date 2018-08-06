@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -95,6 +95,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     {name: 'ENGLISH', value: 'en'},
     {name: 'DUTCH', value: 'nl'}
   ];
+  public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
     opens: 'left',
     locale: {
@@ -107,25 +108,38 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       customRangeLabel: 'Custom range'
     },
     ranges: {
-      'Last 1 Day': [
-        moment().subtract(1, 'days'),
+      'This Month to Date': [
+        moment().startOf('month'),
         moment()
       ],
-      'Last 7 Days': [
-        moment().subtract(6, 'days'),
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
         moment()
       ],
-      'Last 30 Days': [
-        moment().subtract(29, 'days'),
+      'This Financial Year to Date': [
+        // moment(this.activeFinancialYear.financialYearStarts).startOf('day'),
+        moment(),
         moment()
       ],
-      'Last 6 Months': [
-        moment().subtract(6, 'months'),
+      'This Year to Date': [
+        moment().startOf('year'),
         moment()
       ],
-      'Last 1 Year': [
-        moment().subtract(12, 'months'),
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Fiancial Year': [
+        moment(),
         moment()
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
       ]
     },
     startDate: moment().subtract(30, 'days'),
@@ -506,6 +520,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public setApplicationDate(ev) {
     let data = ev ? _.cloneDeep(ev) : null;
     if (data && data.picker) {
+
+      if (data.picker.chosenLabel === 'This Financial Year to Date') {
+        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('day');
+      }
+      if (data.picker.chosenLabel === 'Last Fiancial Year') {
+        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('year').subtract(1, 'year');
+        data.picker.endDate = moment(this.activeFinancialYear.financialYearStarts).endOf('year').subtract(1, 'year');
+      }
       this.isTodaysDateSelected = false;
       let dates = {
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
