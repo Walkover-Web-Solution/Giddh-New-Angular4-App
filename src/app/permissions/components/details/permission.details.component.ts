@@ -262,6 +262,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
       case 'SHRSM':
         result = 'Share Same';
         break;
+      case 'CMT':
+        result = 'Comment';
+        break;
       default:
         result = '';
     }
