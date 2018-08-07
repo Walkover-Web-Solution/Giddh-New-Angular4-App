@@ -255,7 +255,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
-    this.user$.subscribe((u) => {
+    this.user$.take(1).subscribe((u) => {
       if (u) {
         let userEmail = u.email;
         // this.getUserAvatar(userEmail);
@@ -274,6 +274,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.userName = u.name[0] + u.name[1];
           this.userFullName = name;
         }
+
+        this.store.dispatch(this.loginAction.renewSession());
       }
     });
 
