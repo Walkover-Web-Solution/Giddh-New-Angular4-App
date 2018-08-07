@@ -85,6 +85,9 @@ export class LoginActions {
   public static resetPasswordRequest = 'resetPasswordRequest';
   public static resetPasswordResponse = 'resetPasswordResponse';
 
+  public static renewSessionRequest = 'renewSessionRequest';
+  public static renewSessionResponse = 'renewSessionResponse';
+
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST)
@@ -555,6 +558,19 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public renewSession$: Observable<Action> = this.actions$
+    .ofType(LoginActions.renewSessionRequest)
+    .switchMap((action: CustomActions) => this.auth.renewSession())
+    .map(response => this.renewSessionResponse(response));
+
+  @Effect()
+  public renewSessionResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.renewSessionResponse)
+    .map((action: CustomActions) => {
+      return { type: 'EmptyAction' };
+    });
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -899,6 +915,19 @@ export class LoginActions {
   public resetPasswordResponse(response): CustomActions {
     return {
       type: LoginActions.resetPasswordResponse,
+      payload: response
+    };
+  }
+
+  public renewSession(): CustomActions {
+    return {
+      type: LoginActions.renewSessionRequest,
+    };
+  }
+
+  public renewSessionResponse(response): CustomActions {
+    return {
+      type: LoginActions.renewSessionResponse,
       payload: response
     };
   }
