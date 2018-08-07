@@ -7,6 +7,7 @@ import { StockDetailResponse, StocksResponse } from '../../models/api-models/Inv
 import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { IStocksItem } from '../../models/interfaces/stocksItem.interface';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface ManufacturingState {
     reportData: StocksResponse;
@@ -24,6 +25,9 @@ export const initialState: ManufacturingState = {
 
 export function ManufacturingReducer(state = initialState, action: CustomActions): ManufacturingState {
     switch (action.type) {
+        case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+            return Object.assign({}, state, initialState);
+        }
         case MANUFACTURING_ACTIONS.MF_REPORT: {
             let newState = _.cloneDeep(state);
             newState.isMFReportLoading = true;

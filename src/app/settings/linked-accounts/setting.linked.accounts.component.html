@@ -1,8 +1,14 @@
 <div class="box clearfix mrT2">
     <h1 class="section_head pdT0">Add Bank Account</h1>
-    <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
+    <div>
+        <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
+    </div>
     <div class="mrT1">
         <p> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again after some time.</p>
+        <div class="clearfix mrT2">
+            <small><i class="fa fa-lock"></i> At giddh, the privacy and security of your information are top priorites.</small>
+            <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113" height="59" style="border: 0px;" />
+        </div>
     </div>
     <div [hidden]="true">
         <form action='https://node.developer.yodlee.com/authenticate/restserver' #yodleeFormHTML method='post' id='rsessionPost' target="yodlee_fastlink" [formGroup]="yodleeForm">

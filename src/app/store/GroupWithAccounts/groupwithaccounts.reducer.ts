@@ -11,6 +11,7 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -111,6 +112,9 @@ const initialState: CurrentGroupAndAccountState = {
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
       return Object.assign({}, state, {
         showAddNew: true,

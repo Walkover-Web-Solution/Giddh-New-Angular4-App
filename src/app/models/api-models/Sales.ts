@@ -51,6 +51,7 @@ CREDIT_NOTE("credit note")
 export interface IStockUnit {
   text: string;
   id: string;
+  rate?: number;
 }
 
 export interface IForceClear {
