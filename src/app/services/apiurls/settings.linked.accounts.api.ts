@@ -14,7 +14,7 @@ export const EBANKS = {
   REFREST_ACCOUNT: COMMON_URL + 'yodlee/refresh/:ebankItemId', // GET (NEW)
   ADD_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:itemAccountId', // PUT
   REMOVE_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:ItemAccountId/unlink', // DELETE
-  UPDATE_DATE: COMMON_URL + 'yodlee/ebanks/:accountId/eledgers?from=:date', // PUT
+  UPDATE_DATE: COMMON_URL + 'yodlee/:accountId/eledgers?from=:date', // PUT
 };
 
 export const YODLEE_FASTLINK = {

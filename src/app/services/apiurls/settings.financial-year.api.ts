@@ -7,4 +7,5 @@ export const SETTINGS_FINANCIAL_YEAR_API = {
   UNLOCK_FINANCIAL_YEAR: COMMON + 'financial-year-unlock', // PATCH
   SWITCH_FINANCIAL_YEAR: COMMON + 'active-financial-year', // PATCH
   ADD_FINANCIAL_YEAR: COMMON + 'financial-year', // POST
+  UPDATE_FY_PERIOD: COMMON + 'financial-year', // PUT
 };
