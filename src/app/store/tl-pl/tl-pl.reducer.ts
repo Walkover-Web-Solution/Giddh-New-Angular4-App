@@ -4,6 +4,7 @@ import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/a
 import * as _ from '../../lodash-optimized';
 import { ChildGroup } from '../../models/api-models/Search';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 interface TbState {
   data?: AccountDetails;
@@ -59,6 +60,9 @@ export const initialState: TBPlBsState = {
 
 export function tbPlBsReducer(state = initialState, action: CustomActions): TBPlBsState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:
     case TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE: {
       // no payload means error from server
@@ -84,11 +88,16 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
+
       let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
-      data.dates = _.cloneDeep(state.pl.data.dates);
-      addVisibleFlag(data.incArr);
-      addVisibleFlag(data.expArr);
-      return { ...state, pl: { ...state.pl, showLoader: false, data: { ...state.pl.data, ...data } } };
+      if (data) {
+        data.dates = _.cloneDeep(state.pl.data.dates);
+        addVisibleFlag(data.incArr);
+        addVisibleFlag(data.expArr);
+        return { ...state, pl: { ...state.pl, showLoader: false, data: { ...state.pl.data, ...data } } };
+      }
+
+      return state;
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
@@ -258,34 +267,38 @@ const filterProfitLossData = (data, statement) => {
 
 const prepareProfitLossData = (data) => {
   // let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
-  let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
-  plData.expenseTotal = calculateTotalExpense(plData.expArr);
-  plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
-  plData.incomeTotal = calculateTotalIncome(plData.incArr);
-  plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
-  plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
-  plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
-  plData.incomeStatment = data.incomeStatment;
-  if (plData.incomeTotal >= plData.expenseTotal) {
-    plData.inProfit = true;
-    // plData.expenseTotal += plData.closingBalance;
+  if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatment) {
+    let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
+    plData.expenseTotal = calculateTotalExpense(plData.expArr);
+    plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
+    plData.incomeTotal = calculateTotalIncome(plData.incArr);
+    plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
+    plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
+    plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
+    plData.incomeStatment = data.incomeStatment;
+    if (plData.incomeTotal >= plData.expenseTotal) {
+      plData.inProfit = true;
+      // plData.expenseTotal += plData.closingBalance;
+    }
+    if (plData.incomeTotal < plData.expenseTotal) {
+      plData.inProfit = false;
+      // plData.incomeTotal += plData.closingBalance;
+    }
+    if (data.closingBalance.type === 'CREDIT' ) {
+      plData.closingBalanceClass = true;
+    } else {
+      plData.closingBalanceClass = false;
+    }
+    if (data.forwardedBalance.type === 'CREDIT' ) {
+      plData.frowardBalanceClass = true;
+    } else {
+      plData.frowardBalanceClass = false;
+    }
+    plData.message = data.message;
+    return plData;
   }
-  if (plData.incomeTotal < plData.expenseTotal) {
-    plData.inProfit = false;
-    // plData.incomeTotal += plData.closingBalance;
-  }
-  if (data.closingBalance.type === 'CREDIT' ) {
-    plData.closingBalanceClass = true;
-  } else {
-    plData.closingBalanceClass = false;
-  }
-  if (data.forwardedBalance.type === 'CREDIT' ) {
-    plData.frowardBalanceClass = true;
-  } else {
-    plData.frowardBalanceClass = false;
-  }
-  plData.message = data.message;
-  return plData;
+
+  return;
 };
 
 const calculateTotalIncome = data => {
