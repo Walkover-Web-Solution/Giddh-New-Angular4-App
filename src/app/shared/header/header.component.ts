@@ -240,6 +240,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         this.userIsSuperUser = true;
       }
+      if (selectedCmp) {
+        this.activeFinancialYear = selectedCmp.activeFinancialYear;
+      }
 
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
