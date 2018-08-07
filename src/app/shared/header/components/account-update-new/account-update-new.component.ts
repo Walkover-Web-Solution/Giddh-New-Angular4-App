@@ -93,6 +93,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
+  public companyCountry: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -290,6 +291,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
           } else {
             this.addAccountForm.get('currency').disable();
           }
+          this.companyCountry = currentCompany.country;
         }
       }
     });
@@ -455,10 +457,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (!this.showVirtualAccount) {
       delete accountRequest['cashFreeVirtualAccountData'];
     }
-    if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-      this._toaster.errorToast('Mobile no. & email Id is mandatory');
-      return;
-    }
+    // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+    //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
+    //   return;
+    // }
     if (this.showBankDetail) {
       if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
         accountRequest['accountBankDetails'] = [];
