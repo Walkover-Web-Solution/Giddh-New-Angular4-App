@@ -228,7 +228,7 @@
             <div *ngIf="fieldsAndVisibility.footer.message1">
                 <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections[2].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Note 1
             </div>
-            <div *ngIf="fieldsAndVisibility.footer.message2" class="form-group mrL3 clearfix">
+            <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group mrL3 clearfix">
                 <div class="col-xs-12">
                     <div class="row">
                         <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='customTemplate.sections[2].content[5].label' name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[5].display"></textarea>
