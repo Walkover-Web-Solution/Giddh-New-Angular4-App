@@ -5,6 +5,8 @@
 
         <div class="clearfix">
             <div *ngIf="fieldsAndVisibility.header.companyName" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name</div>
+            <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[1].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> GSTIN</div>
+            <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div>
             <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[4].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Date
                 <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceDate" [(ngModel)]='customTemplate.sections[0].content[4].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[4].display"
