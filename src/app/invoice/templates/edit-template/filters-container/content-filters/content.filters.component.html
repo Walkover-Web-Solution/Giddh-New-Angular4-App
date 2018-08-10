@@ -200,7 +200,12 @@
         <div class="clearfix">
             <h2>Footer</h2>
             <div class="clearfix bdrB">
-                <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group"> <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections[2].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Address</div>
+                <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group"> <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections[2].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Address
+                    <div class="mrL3">
+                        <textarea class="form-control" placeholder="Company Address" [(ngModel)]='customTemplate.sections[2].content[7].label' name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[7].display"></textarea>
+                    </div>
+                </div>
+
                 <div *ngIf="fieldsAndVisibility.footer.taxableAmount" class="form-group">
                     <input type="checkbox" name="tam" [(ngModel)]="customTemplate.sections[2].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Taxable Amount
                 </div>
