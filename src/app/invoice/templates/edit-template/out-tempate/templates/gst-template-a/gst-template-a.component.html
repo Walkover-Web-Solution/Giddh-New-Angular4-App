@@ -22,10 +22,10 @@
                             <td>
                                 <table class="numDetail">
                                     <tbody>
-                                        <tr>
+                                        <tr [hidden]="!fieldsAndVisibility.header.gstin?.display">
                                             <td><strong>{{fieldsAndVisibility.header.gstin?.label}}</strong> {{companyGSTIN}}</td>
                                         </tr>
-                                        <tr>
+                                        <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
                                             <td><strong>{{fieldsAndVisibility.header.pan?.label}}</strong> {{companyPAN}}</td>
                                         </tr>
                                     </tbody>
