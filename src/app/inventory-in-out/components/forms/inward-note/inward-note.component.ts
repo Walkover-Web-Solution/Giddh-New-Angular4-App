@@ -38,8 +38,20 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     return this.form.get('inventoryEntryDate') as FormControl;
   }
 
+  public get inventoryUser(): FormControl {
+    return this.form.get('inventoryUser') as FormControl;
+  }
+
+  public get stock(): FormControl {
+    return this.form.get('stock') as FormControl;
+  }
+
   public get transactions(): FormArray {
     return this.form.get('transactions') as FormArray;
+  }
+
+  public get description(): FormArray {
+    return this.form.get('description') as FormArray;
   }
 
   constructor(private _fb: FormBuilder) {
@@ -54,7 +66,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     this.form = this._fb.group({
       inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
       transactions: this._fb.array([], Validators.required),
-      description: ['']
+      description: [''],
+      inventoryUser: [''],
+      stock: ['', Validators.required]
     });
     if (initialRequest) {
       this.addTransactionItem();
@@ -63,8 +77,20 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   public modeChanged(mode: 'sender' | 'product') {
     this.mode = mode;
-    this.inventoryEntryDate.reset();
-    this.initializeForm();
+    this.form.reset();
+    this.inventoryEntryDate.patchValue(moment().format('DD-MM-YYYY'));
+    this.transactions.controls = this.transactions.controls.filter(trx => false);
+
+    if (this.mode === 'sender') {
+      this.stock.setValidators(Validators.required);
+      this.inventoryUser.clearValidators();
+      this.inventoryUser.updateValueAndValidity();
+    } else {
+      this.inventoryUser.setValidators(Validators.required);
+      this.stock.clearValidators();
+      this.stock.updateValueAndValidity();
+    }
+    this.addTransactionItem();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -81,7 +107,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   public addTransactionItem(control?: AbstractControl) {
 
-    if (control && control.invalid) {
+    if (control && (control.invalid || this.stock.invalid || this.inventoryUser.invalid)) {
       return;
     }
 
@@ -90,17 +116,17 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       type: '',
       quantity: '',
       inventoryUser: '',
-
       stock: '',
       stockUnit: '',
     };
     const transaction = this._fb.group({
       type: ['SENDER', Validators.required],
       quantity: ['', Validators.required],
-      inventoryUser: [value.inventoryUser, Validators.required],
-      stock: [value.stock, Validators.required],
+      inventoryUser: [this.mode === 'product' ? value.inventoryUser : '', this.mode === 'sender' ? [Validators.required] : []],
+      stock: [this.mode === 'sender' ? value.stock : '', this.mode === 'product' ? [Validators.required] : []],
       stockUnit: [this.mode === 'sender' ? value.stockUnit : '', Validators.required]
     });
+    transaction.updateValueAndValidity();
     items.push(transaction);
   }
 
@@ -119,11 +145,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       control.patchValue({
         ...control.value,
         inventoryUser
-
       });
     } else {
       items.controls.forEach(c => c.patchValue({...c.value, inventoryUser}));
-
     }
   }
 
@@ -142,8 +166,18 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   public save() {
     if (this.form.valid) {
-      const inventoryEntryDate = moment(this.form.value.transferDate).format('DD-MM-YYYY');
-      this.onSave.emit({...this.form.value, inventoryEntryDate});
+      let rawValues = this.transactions.getRawValue();
+
+      rawValues.map(rv => {
+        rv.stockUnit = {code: rv.stockUnit};
+        return rv;
+      });
+      let value: InventoryEntry = {
+        inventoryEntryDate: moment(this.inventoryEntryDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+        description: this.description.value,
+        transactions: rawValues
+      };
+      this.onSave.emit({...value});
     }
   }
 }
