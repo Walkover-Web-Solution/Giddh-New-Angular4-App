@@ -9,12 +9,20 @@
                    (onCancel)="onCancel()"></inward-note>
     </ng-container>
     <ng-container *ngSwitchCase="'outward'">
-      <outward-note [stockList]="stockList$ | async" [userList]="userList$ | async" [isLoading]="isLoading"
-                    (onSave)="onSave($event)" (onCancel)="onCancel()"></outward-note>
+      <outward-note [stockList]="stockList$ | async"
+                    [userList]="userList$ | async"
+                    [isLoading]="isLoading"
+                    [stockUnits]="stockUnits$ | async"
+                    (onSave)="onSave($event)"
+                    (onCancel)="onCancel()"></outward-note>
     </ng-container>
     <ng-container *ngSwitchCase="'transfer'">
-      <transfer-note [stockList]="stockList$ | async" [userList]="userList$ | async" [isLoading]="isLoading"
-                     (onSave)="onSave($event.entry,$event.user)" (onCancel)="onCancel()"></transfer-note>
+      <transfer-note [stockList]="stockList$ | async"
+                     [userList]="userList$ | async"
+                     [stockUnits]="stockUnits$ | async"
+                     [isLoading]="isLoading"
+                     (onSave)="onSave($event.entry,$event.user)"
+                     (onCancel)="onCancel()"></transfer-note>
     </ng-container>
     <ng-container *ngSwitchCase="'createStock'">
       <div class="pdT1">
