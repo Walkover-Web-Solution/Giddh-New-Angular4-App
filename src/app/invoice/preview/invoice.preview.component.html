@@ -58,6 +58,7 @@
     <thead class="t-h-bg1">
         <tr>
             <th>#</th>
+            <th>Due Date</th>
             <th>Invoice Number</th>
             <th>account</th>
             <th>Date</th>
@@ -80,6 +81,7 @@
     <tbody>
         <tr *ngFor="let item of invoiceData.results; let i = index">
             <td>{{ i + 1}}</td>
+            <td>{{item.dueDate ? item.dueDate : '-' }} </td>
             <td>
                 <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.invoiceNumber}}</a>
             </td>
