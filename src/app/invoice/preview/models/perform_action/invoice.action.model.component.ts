@@ -81,6 +81,11 @@ export class PerformActionOnInvoiceModelComponent implements OnInit {
     });
   }
   public onConfirmation(formObj) {
+    formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
+    if (this.isBankSelected) {
+      formObj.chequeClearanceDate = moment(formObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+    }
+    // console.log(formObj);
     this.closeModelEvent.emit(formObj);
     this.paymentActionFormObj = {};
     this.forceClear$ = Observable.of({status: true});

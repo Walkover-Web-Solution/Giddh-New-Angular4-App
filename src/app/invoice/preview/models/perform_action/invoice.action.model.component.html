@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-xs-6 form-group">
                     <label>Payment Date <sup>*</sup></label>
-                    <input type="text" (blur)="onPaymemtDateBlur($event)" (ngModel)="moment(paymentActionFormObj.paymentDate).format('DD-MM-YYYY')" name="paymentDate" (focus)="showDatePicker = true;" class="form-control" (clickOutside)="showDatePicker=false;" />
+                    <input type="text" (blur)="onPaymemtDateBlur($event)" [ngModel]="moment(paymentActionFormObj.paymentDate).format('DD-MM-YYYY')" name="paymentDate" (focus)="showDatePicker = true;" class="form-control" (clickOutside)="showDatePicker=false;" />
                     <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                         <datepicker [(ngModel)]="paymentActionFormObj.paymentDate" name="paydate" (selectionDone)="setPaymentDate($event)"></datepicker>
                     </div>
