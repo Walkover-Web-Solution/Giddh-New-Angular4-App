@@ -526,8 +526,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public updateItemInLinkedStocks(item: FormGroup, i: any) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    const linkedStokesControl = control;
-    linkedStokesControl.controls[i].patchValue(item);
+    control.controls[i].patchValue(item);
     this.editLinkedStockIdx = null;
     this.editModeForLinkedStokes = false;
     let last = control.controls.length;
@@ -542,8 +541,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    const linkedStokesControl = control;
-    linkedStokesControl.removeAt(i);
+    control.removeAt(i);
   }
 
   public checkIfLinkedStockIsUnique(v: IOption) {
@@ -871,11 +869,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * validateLinkedStock
    */
   public validateLinkedStock(item) {
-    if (!item.quantity || !item.stockUniqueName || !item.stockUnitCode) {
-      return false;
-    } else {
-      return true;
-    }
+    return !(!item.quantity || !item.stockUniqueName || !item.stockUnitCode);
   }
 
   public addNewGroupPane() {
