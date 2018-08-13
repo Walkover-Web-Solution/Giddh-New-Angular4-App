@@ -67,12 +67,19 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     return this.form.get('manufacturingDetails') as FormGroup;
   }
 
+  public get isManufactured(): FormControl {
+    return this.form.get('isManufactured') as FormControl;
+  }
+
   constructor(private _fb: FormBuilder, private _toasty: ToasterService) {
     this.initializeForm(true);
   }
 
   public ngOnInit() {
-    //
+    this.isManufactured.valueChanges.subscribe(val => {
+      this.manufacturingDetails.reset();
+      val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
+    });
   }
 
   public initializeForm(initialRequest: boolean = false) {
@@ -82,7 +89,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       description: [''],
       inventoryUser: [''],
       stock: ['', Validators.required],
-      isFsStock: [false],
+      isManufactured: [false],
       manufacturingDetails: this._fb.group({
         manufacturingQuantity: ['', [Validators.required, digitsOnly]],
         manufacturingUnitCode: ['', [Validators.required]],
@@ -189,6 +196,12 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     const stockItem = this.stockList.find(p => p.uniqueName === option.value);
     const stock = stockItem ? {uniqueName: stockItem.uniqueName} : null;
     const stockUnit = stockItem ? stockItem.stockUnit.code : null;
+
+    if (this.mode === 'sender') {
+      const manufacturingUnitCode = this.manufacturingDetails.get('manufacturingUnitCode');
+      manufacturingUnitCode.patchValue(stockUnit);
+    }
+
     if (index >= 0) {
       const control = items.at(index);
       control.patchValue({...control.value, stock, stockUnit});
@@ -215,6 +228,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       this.disableStockButton = true;
       return;
     } else {
+      const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
+      const stockUnit = stockItem ? stockItem.stockUnit.code : null;
+      control.at(i).get('stockUnitCode').patchValue(stockUnit);
       this.disableStockButton = false;
     }
   }
@@ -227,7 +243,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       if (item.controls) {
         let isValid = this.validateLinkedStock(item.value);
         if (isValid) {
-          control.controls[i] = item;
+          // control.controls[i] = item;
         } else {
           return this._toasty.errorToast('All fields are required.');
         }
@@ -275,8 +291,21 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       let value: InventoryEntry = {
         inventoryEntryDate: moment(this.inventoryEntryDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
         description: this.description.value,
-        transactions: rawValues
+        transactions: rawValues,
       };
+
+      if (this.mode === 'sender') {
+        value.transactions = value.transactions.map(trx => {
+          trx.manufacturingDetails = {
+            manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
+            manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
+            linkedStocks: this.manufacturingDetails.value.linkedStocks,
+          };
+          return trx;
+        });
+        value.isManufactured = this.isManufactured.value;
+      }
+
       this.onSave.emit({...value});
     }
   }
