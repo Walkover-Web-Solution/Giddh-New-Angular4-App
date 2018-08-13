@@ -22,10 +22,10 @@
                             <td>
                                 <table class="numDetail">
                                     <tbody>
-                                        <tr>
+                                        <tr [hidden]="!fieldsAndVisibility.header.gstin?.display">
                                             <td><strong>{{fieldsAndVisibility.header.gstin?.label}}</strong> {{companyGSTIN}}</td>
                                         </tr>
-                                        <tr>
+                                        <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
                                             <td><strong>{{fieldsAndVisibility.header.pan?.label}}</strong> {{companyPAN}}</td>
                                         </tr>
                                     </tbody>
@@ -271,7 +271,7 @@
             </aside>
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                 <span *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</span> <br>
-                <span *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label}}</span>
+                <span *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}</span>
             </footer>
         </div>
 
