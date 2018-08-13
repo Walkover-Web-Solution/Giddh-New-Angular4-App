@@ -10,7 +10,6 @@ import { IPagination } from '../interfaces/paginatedResponse.interface';
 import { OtherSalesItemClass, SalesEntryClass } from './Sales';
 import { INameUniqueName } from './Inventory';
 
-
 export interface IInvoiceResult {
   companyName: string;
   uniqueName: string;
@@ -22,6 +21,7 @@ export interface IInvoiceResult {
   account: INameUniqueName;
   balanceDue: number;
   isSelected?: boolean;
+  dueDate?: string;
 }
 
 export interface IGetAllInvoicesResponse extends IPagination {
