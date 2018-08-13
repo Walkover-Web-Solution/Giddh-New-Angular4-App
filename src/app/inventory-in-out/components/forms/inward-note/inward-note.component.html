@@ -120,6 +120,102 @@
       </div>
 
       <div class="row">
+
+        <div class="mrT1 pdL pdR">
+          <div class="col-xs-12">
+            <div class="checkbox">
+              <label class="" for="isFsStock">
+                <input type="checkbox" formControlName="isFsStock" id="isFsStock" name="isFsStock"> Is it
+                a
+                finished stock? (Manufacturing/Combo)</label>
+            </div>
+          </div>
+        </div>
+
+
+        <section class="col-xs-12" *ngIf="form.value.isFsStock">
+          <div class="">
+            <h1 class="section_head bdrB"><strong>{{form.controls['stock'].value}} (Made with)</strong></h1>
+
+            <div formGroupName="manufacturingDetails">
+
+              <div class="row" style="padding-top: 5px">
+                <div class="col-xs-4">
+                  <label class="fs14">Output Qty <sup>*</sup></label>
+                </div>
+                <div class="col-xs-5">
+                  <label class="fs14">Stock Unit <sup>*</sup></label>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-4 form-group">
+                  <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4"
+                         name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity"/>
+                </div>
+
+                <div class="col-xs-5 form-group">
+                  <sh-select [options]="stockUnitsOptions" formControlName="manufacturingUnitCode"
+                             [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33"
+                             [forceClearReactive]="forceClear$ | async"></sh-select>
+                </div>
+
+                <div class="col-xs-3" style="display: flex;align-items: center;height: 30px"
+                     *ngIf="manufacturingDetails.controls['manufacturingQuantity'].value">
+                  <label>&nbsp;</label>
+                  <span class="d-block"><strong>= ( {{manufacturingDetails.controls['manufacturingQuantity'].value}} {{manufacturingDetails.controls['manufacturingUnitCode'].value}} {{stock.value}} )</strong></span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-4">
+                  <strong>Input Stock Name</strong>
+                </div>
+                <div class="col-xs-3">
+                  <strong>Stock Qty</strong>
+                </div>
+                <div class="col-xs-4">
+                  <strong>Stock Unit</strong>
+                </div>
+              </div>
+
+              <ng-container formArrayName="linkedStocks">
+                <div class="row"
+                     *ngFor="let list of manufacturingDetails['controls']['linkedStocks'].controls;let i = index; let l = last"
+                     [formGroupName]="i"
+                >
+
+                  <div class="col-xs-4 form-group">
+                    <sh-select [options]="stockListOptions" formControlName="stockUniqueName" [multiple]="false"
+                               [placeholder]="'Select Stock Name'" [placeholder]="'Select Stock'" [ItemHeight]="33"
+                               (selected)="findAddedStock($event?.value, i)"></sh-select>
+                  </div>
+                  <div class="col-xs-3 form-group">
+                    <input type="text" formControlName="quantity" decimalDigitsDirective [DecimalPlaces]="4"
+                           name="quantity" placeholder="Enter Quantity" class="form-control"/>
+                  </div>
+                  <div class="col-xs-4 form-group">
+                    <sh-select [options]="stockUnitsOptions" formControlName="stockUnitCode" [multiple]="false"
+                               [placeholder]="'Select Unit'" [ItemHeight]="33"></sh-select>
+                  </div>
+                  <div class="pull-right mrT unit_add">
+                    <button class="btn-link" (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l"
+                            [disabled]="disableStockButton"><i class="fa fa-plus add_row"></i></button>
+                    <button class="btn-link" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i
+                      class="fa fa-times dlet"></i></button>
+                  </div>
+
+
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="row">
         <div class="col-lg-12 form-group">
           <label>Description</label>
           <textarea formControlName="description" type="text" class="form-control"></textarea>

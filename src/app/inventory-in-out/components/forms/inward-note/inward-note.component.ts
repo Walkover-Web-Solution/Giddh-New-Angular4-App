@@ -8,12 +8,17 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
+import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
+import { ToasterService } from '../../../../services/toaster.service';
+import { IForceClear } from '../../../../models/api-models/Sales';
 
 @Component({
   selector: 'inward-note',
   templateUrl: './inward-note.component.html',
   styles: [`
-
+    .pad-10-5 {
+      padding: 10px 5px;
+    }
   `],
 })
 
@@ -33,6 +38,10 @@ export class InwardNoteComponent implements OnInit, OnChanges {
   public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
   public mode: 'sender' | 'product' = 'sender';
   public today = new Date();
+  public editLinkedStockIdx: any = null;
+  public editModeForLinkedStokes: boolean = false;
+  public disableStockButton: boolean = false;
+  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
 
   public get inventoryEntryDate(): FormControl {
     return this.form.get('inventoryEntryDate') as FormControl;
@@ -50,11 +59,15 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     return this.form.get('transactions') as FormArray;
   }
 
-  public get description(): FormArray {
-    return this.form.get('description') as FormArray;
+  public get description(): FormControl {
+    return this.form.get('description') as FormControl;
   }
 
-  constructor(private _fb: FormBuilder) {
+  public get manufacturingDetails(): FormGroup {
+    return this.form.get('manufacturingDetails') as FormGroup;
+  }
+
+  constructor(private _fb: FormBuilder, private _toasty: ToasterService) {
     this.initializeForm(true);
   }
 
@@ -68,11 +81,31 @@ export class InwardNoteComponent implements OnInit, OnChanges {
       transactions: this._fb.array([], Validators.required),
       description: [''],
       inventoryUser: [''],
-      stock: ['', Validators.required]
+      stock: ['', Validators.required],
+      isFsStock: [false],
+      manufacturingDetails: this._fb.group({
+        manufacturingQuantity: ['', [Validators.required, digitsOnly]],
+        manufacturingUnitCode: ['', [Validators.required]],
+        linkedStocks: this._fb.array([
+          this.initialIManufacturingDetails()
+        ]),
+        linkedStockUniqueName: [''],
+        linkedQuantity: ['', digitsOnly],
+        linkedStockUnitCode: [''],
+      }, {validator: stockManufacturingDetailsValidator})
     });
     if (initialRequest) {
       this.addTransactionItem();
     }
+  }
+
+  public initialIManufacturingDetails() {
+    // initialize our controls
+    return this._fb.group({
+      stockUniqueName: [''],
+      stockUnitCode: [''],
+      quantity: ['', digitsOnly]
+    });
   }
 
   public modeChanged(mode: 'sender' | 'product') {
@@ -162,6 +195,73 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     } else {
       items.controls.forEach(c => c.patchValue({...c.value, stock, stockUnit}));
     }
+  }
+
+  /**
+   * findAddedStock
+   */
+  public findAddedStock(uniqueName, i) {
+    const manufacturingDetailsContorl = this.manufacturingDetails;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    let count = 0;
+    _.forEach(control.controls, (o) => {
+      if (o.value.stockUniqueName === uniqueName) {
+        count++;
+      }
+    });
+
+    if (count > 1) {
+      this._toasty.errorToast('Stock already added.');
+      this.disableStockButton = true;
+      return;
+    } else {
+      this.disableStockButton = false;
+    }
+  }
+
+  public addItemInLinkedStocks(item, i?: number, lastIdx?) {
+    const manufacturingDetailsContorl = this.manufacturingDetails;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    let frmgrp = this.initialIManufacturingDetails();
+    if (item) {
+      if (item.controls) {
+        let isValid = this.validateLinkedStock(item.value);
+        if (isValid) {
+          control.controls[i] = item;
+        } else {
+          return this._toasty.errorToast('All fields are required.');
+        }
+
+      } else {
+        let isValid = this.validateLinkedStock(item);
+        if (isValid) {
+          frmgrp.patchValue(item);
+          control.controls[i] = frmgrp;
+        } else {
+          return this._toasty.errorToast('All fields are required.');
+        }
+      }
+      if (i === lastIdx) {
+        control.controls.push(this.initialIManufacturingDetails());
+      }
+    }
+  }
+
+  public removeItemInLinkedStocks(i: number) {
+    if (this.editLinkedStockIdx === i) {
+      this.editModeForLinkedStokes = false;
+      this.editLinkedStockIdx = null;
+    }
+    const manufacturingDetailsContorl = this.manufacturingDetails;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    control.removeAt(i);
+  }
+
+  /**
+   * validateLinkedStock
+   */
+  public validateLinkedStock(item) {
+    return !(!item.quantity || !item.stockUniqueName || !item.stockUnitCode);
   }
 
   public save() {
