@@ -7,7 +7,7 @@
            </button>
             <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                 <ng-container *ngFor="let item of pageList">
-                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)">
+                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" *ngIf="item.label !== 'Purchase'">
                         <a class="dropdown-item cp">{{ item.additional?.label }}</a>
                     </li>
                 </ng-container>
