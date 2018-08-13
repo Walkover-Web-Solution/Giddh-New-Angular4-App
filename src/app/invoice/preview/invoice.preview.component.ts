@@ -244,7 +244,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public closePerformActionPopup(data) {
     this.performActionOnInvoiceModel.hide();
-    this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, { action: 'paid', amount: data }));
+    data.action = 'paid';
+    this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, data));
   }
 
   /**
