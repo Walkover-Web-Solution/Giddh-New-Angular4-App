@@ -82,6 +82,8 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
     formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
     if (this.isBankSelected) {
       formObj.chequeClearanceDate = moment(formObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+    } else {
+      delete formObj['chequeClearanceDate'];
     }
     this.closeModelEvent.emit(formObj);
     this.resetFrom();
@@ -130,6 +132,7 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
     this.forceClear$ = Observable.of({status: true});
     this.paymentActionFormObj.paymentDate = moment();
     this.paymentActionFormObj.chequeClearanceDate = moment();
+    this.isBankSelected = false;
     this.ngOnDestroy();
   }
 
