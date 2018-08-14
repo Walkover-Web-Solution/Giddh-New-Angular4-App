@@ -85,21 +85,21 @@ class FormatPdf implements IFormatable {
 @Component({
   selector: 'tb-export-pdf',  // <home></home>
   template: `
-    <div class="form-group pdf-export" (clickOutside)="showPdf=false;">
-      <a (click)="showPdf = !showPdf" *ngIf="enableDownload"><img
-        src="{{ imgPath }}"/></a>
-      <div class="export-options" *ngIf="showPdf">
-        <span class="arrow"></span>
-        <ul class="list-unstyled">
-          <li><a (click)="downloadPdf('group-wise')">Group Wise
-            Report</a></li>
-          <li><a (click)="downloadPdf('condensed')">Condensed
-            Report</a></li>
-          <li><a (click)="downloadPdf('account-wise')">Account Wise
-            Report</a></li>
+      <div class="btn-group" dropdown>
+        <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
+        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right tbpl-dropdown" role="menu" aria-labelledby="button-basic">
+            <span class="caret"></span>
+            <li><a (click)="downloadPdf('group-wise')" class="cp">Group Wise
+              Report</a>
+            </li>
+            <li><a (click)="downloadPdf('condensed')" class="cp">Condensed
+              Report</a>
+            </li>
+            <li><a (click)="downloadPdf('account-wise')" class="cp">Account Wise
+              Report</a>
+            </li>
         </ul>
       </div>
-    </div>
     <!-- end form-group -->
   `,
   providers: [RecTypePipe]

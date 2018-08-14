@@ -4,10 +4,10 @@
             <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
         {{selectedPageLabel}}
               <span class="caret" *ngIf="!isPurchaseInvoice"></span>
-      </button>
+           </button>
             <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                 <ng-container *ngFor="let item of pageList">
-                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" [hidden]="!isPurchaseInvoice && item.value === 'Purchase'">
+                    <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" *ngIf="item.label !== 'Purchase'">
                         <a class="dropdown-item cp">{{ item.additional?.label }}</a>
                     </li>
                 </ng-container>
@@ -23,7 +23,7 @@
         <div class="clearfix pdT2">
             <div class="col-xs-9">
                 <div class="flex-row">
-                    <div class="flex-row-child">
+                    <div class="flex-row-child" [hidden]="isPurchaseInvoice">
                         <div class="form-group noMarg">
                             <label>Customer Name</label>
                             <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
@@ -40,6 +40,26 @@
                             </sales-sh-select>
                         </div>
                     </div>
+
+                    <div class="flex-row-child" [hidden]="!isPurchaseInvoice">
+                        <div class="form-group noMarg">
+                            <label>Vendor Name</label>
+                            <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
+                            <!--  -->
+                            <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
+                                (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'" (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
+                                <ng-template #optionTemplate let-option="option">
+                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                        <div class="item">{{ option.label }}</div>
+                                        <div class="item_unq">{{ option.value }}</div>
+                                    </a>
+                                </ng-template>
+                            </sales-sh-select>
+                        </div>
+                    </div>
+
+
                     <!-- <div class="flex-row-child mrL1 mrT2">
             Or
           </div> -->
@@ -322,10 +342,9 @@
                                                                 <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
                                                             </td>
                                                             <td width="25%">
-                                                                <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
-                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
-                            </option>
-                          </select>
+                                                                <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                                                    <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}</option>
+                                                                </select>
                                                             </td>
                                                             <td width="25%" [style.padding.px]="0">
                                                                 <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" />
@@ -388,7 +407,7 @@
                             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
                         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, entry)"
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, invFormData.entries[activeIndx])"
                                     (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
@@ -435,7 +454,7 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td class="text-right" style="width: 110px;">{{transaction.amount}}</td>
+                            <td class="text-right" style="width: 110px;">{{transaction.amount | number:'1.2-2'}}</td>
                             <td class="text-right" style="width: 120px;">
                                 <!-- <span *ngFor="let discount of entry.discounts; let disIndx = index">
                 <span *ngIf="discount.amount">{{discount.amount}}
@@ -448,7 +467,7 @@
                             <!-- <td>{{transaction.taxableValue}}</td> -->
                             <!-- <td class="text-right">{{transaction.taxSum}}</td> -->
                             <td class="text-right">{{entry.taxSum}}%</td>
-                            <td class="text-right">{{transaction.total}}</td>
+                            <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
                             <td class="text-center">
                                 <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
@@ -509,7 +528,7 @@
                             </div>
                             <div class="pdT1 pl0 max-600">
                                 <label class="mrB1">Message</label>
-                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message1"></textarea>
                             </div>
                         </td>
                         <td width="50%">
@@ -547,7 +566,7 @@
                                          -->
                                         <div class="btn-group">
                                             <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
-                                            Deposit
+                                            {{ isPurchaseInvoice ? 'Payment' :  'Deposit' }}
                                         </button>
                                             <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen" class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
                                                 <span class="caret"></span>

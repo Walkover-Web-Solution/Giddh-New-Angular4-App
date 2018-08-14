@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'create-invoice-header',
@@ -12,7 +13,8 @@ export class CreateInvoiceHeaderComponent implements OnInit, OnDestroy {
   public imgPath: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor() {
+  constructor(private meta: Meta) {
+    this.meta.updateTag({ name: 'description', content: 'Forget about the painful and tedious ways to create custom invoice. Giddh offers the best accounting software to create your own invoice online easily for small businesses. You can create invoice bill online anytime and anywhere. 24/7 Customer Support! Start your free trial today!' });
     //
   }
 

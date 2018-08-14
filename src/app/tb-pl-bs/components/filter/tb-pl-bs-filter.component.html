@@ -7,7 +7,7 @@
                         <div class="form-group mrR1" *ngIf="showLabels">
                             <label class="d-block">Filter Type</label>
                             <div class="form-group">
-                                <sh-select [options]="dateOptions" formControlName="selectedDateOption" [isFilterEnabled]="true" [placeholder]="'Select Option'" [ItemHeight]="33"></sh-select>
+                                <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)" formControlName="selectedDateOption" [isFilterEnabled]="true" [placeholder]="'Select Option'" [ItemHeight]="33"></sh-select>
                                 <!--<select2 [data]="dateOptions" [options]="options" [value]="selectedDateOption" (valueChanged)="selectDateOption($event)" class="select2-parent"></select2>-->
                             </div>
                         </div>
@@ -42,8 +42,8 @@
         <!-- end of coloumn -->
         <div class="col-xs-3">
             <tb-export-csv *ngIf="tbExportCsv" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
-            <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right"></tb-export-xls>
-            <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
+            <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mrR1"></tb-export-xls>
+            <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right mrR1"></tb-export-pdf>
             <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
             <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
         </div>

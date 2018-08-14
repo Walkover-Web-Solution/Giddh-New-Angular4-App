@@ -55,7 +55,7 @@
                                 <strong>Gross Profit</strong>
                             </div>
                             <div class="col-xs-3  group text-right pull-right bdrL pd1">
-                                <strong>{{ plData?.incomeStatment.grossProfit | number:'1.2-2' }}</strong>
+                                <strong>{{ plData?.incomeStatment.grossProfit.amount | number:'1.2-2' }}</strong>
                             </div>
                             <!-- commented due to new response
                             <div class="col-xs-2  group text-right">
@@ -101,7 +101,7 @@
                                         <strong class="fs16">Operating Profit/Loss (EBIT)</strong>
                                     </div>
                                     <div class="col-xs-3  group text-right pull-right bdrL pd1">
-                                        <strong class="fs16">{{ plData?.incomeStatment.operatingProfit | number:'1.2-2' }}</strong>
+                                        <strong class="fs16">{{ plData?.incomeStatment.operatingProfit.amount | number:'1.2-2' }}</strong>
                                     </div>
                                 </div>
 
@@ -128,29 +128,33 @@
                     </div>
                 </div>
 
-                <div class="account clearfix">
+                <div class="account clearfix" [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? '1px solid #dbdde3' : 'none' }">
                     <div class="col-xs-4  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>
                     <div class="col-xs-3  group text-right pull-right bdrL pd1">
-                        <strong>{{ plData?.incomeStatment.incomeBeforeTaxes | number:'1.2-2' }}</strong>
+                        <strong>
+                            <span *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT'">-</span>
+                            {{ plData?.incomeStatment.incomeBeforeTaxes.amount | number:'1.2-2' }}
+                        </strong>
                     </div>
                 </div>
-
-                <div class="group clearfix fs14">
-                    <div class="col-xs-4  group pd1">
-                        Taxes (30%)
+                <ng-template *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
+                    <div class="group clearfix fs14">
+                        <div class="col-xs-4  group pd1">
+                            Taxes (30%)
+                        </div>
+                        <div class="col-xs-3  group text-right pull-right bdrL pd1">
+                            {{ plData?.incomeStatment.appliedTax | number:'1.2-2' }}
+                        </div>
                     </div>
-                    <div class="col-xs-3  group text-right pull-right bdrL pd1">
-                        {{ plData?.incomeStatment.appliedTax | number:'1.2-2' }}
-                    </div>
-                </div>
+                </ng-template>
                 <!-- end of expenses -->
             </div>
             <!-- end row -->
 
             <!-- bottom table start -->
-            <div class="table-responsive max-980">
+            <div *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'" class="table-responsive max-980">
                 <div class="">
                     <table class="table plBtTbl">
                         <thead>
@@ -162,8 +166,9 @@
                                 </th>
                                 <th class="col-xs-3">
                                     <strong class="pdL2 pdR1">
-                  <span class="pull-right" [ngClass]="{'success': (plData?.incomeStatment.netIncome > 0), 'danger':(plData?.incomeStatment.netIncome < 0)}">{{ plData?.incomeStatment.netIncome | number:'1.2-2' }}</span>
-                </strong>
+                                        <!-- <span class="pull-right" [ngClass]="{'success': (plData?.incomeStatment.netIncome.amount > 0), 'danger':(plData?.incomeStatment.netIncome.amount < 0)}">{{ plData?.incomeStatment.netIncome.amount | number:'1.2-2' }}</span> -->
+                                        <span class="pull-right" [ngClass]="{'success': (plData?.incomeStatment.netIncome.type === 'CREDIT'), 'danger':(plData?.incomeStatment.netIncome.type === 'DEBIT')}">{{ plData?.incomeStatment.netIncome.amount | number:'1.2-2' }}</span>
+                                    </strong>
                                 </th>
                                 <!-- commented due to new response
                                 <th class="col-xs-4">

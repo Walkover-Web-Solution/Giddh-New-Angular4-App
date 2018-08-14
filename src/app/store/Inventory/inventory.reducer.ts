@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 /**
  * Keeping Track of the CompanyState
@@ -50,6 +51,9 @@ export interface InventoryState {
   UpdateGroupSuccess: boolean;
   UpdateStockSuccess: boolean;
   showBranchScreen: boolean;
+  showBranchScreenSidebar: boolean;
+  isStockUnitCodeAvailable: boolean;
+  moveStockSuccess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -108,7 +112,10 @@ const initialState: InventoryState = {
   deleteGroupSuccess: false,
   UpdateGroupSuccess: false,
   UpdateStockSuccess: false,
-  showBranchScreen: false
+  showBranchScreen: false,
+  showBranchScreenSidebar: false,
+  isStockUnitCodeAvailable: false,
+  moveStockSuccess: false
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -117,6 +124,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
   let group: StockGroupResponse = null;
   let activeGroupData: IGroupsWithStocksHierarchyMinItem;
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case InventoryActionsConst.SetActiveStock:
       return Object.assign({}, state, {activeStockUniqueName: action.payload});
     case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:
@@ -511,6 +521,18 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       return Object.assign({}, state, {activeStock: null, activeStockUniqueName: null});
     case InventoryActionsConst.ResetInventoryState:
       return Object.assign({}, state, initialState);
+    case InventoryActionsConst.MoveStock:
+      return Object.assign({}, state, {moveStockSuccess: false});
+    case InventoryActionsConst.MoveStockResponse:
+      let moveStockResp: BaseResponse<string, string> = action.payload;
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup.uniqueName, moveStockResp.queryString.stockUniqueName, null);
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStock: null,
+          activeStockUniqueName: null,
+          moveStockSuccess: true
+        });
     /*
      *Custom Stock Units...
      * */
@@ -551,6 +573,18 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       return Object.assign({}, state, {
         deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
       });
+    case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME:
+      return Object.assign({}, state, {isStockUnitCodeAvailable: false});
+    case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE:
+      let resStockUnit: BaseResponse<StockDetailResponse, string> = action.payload;
+      if (resStockUnit.status === 'success') {
+        return Object.assign({}, state, { isStockNameAvailable: false});
+      } else {
+        if (resStockUnit.code === 'NOT_FOUND') {
+          return Object.assign({}, state, { isStockUnitCodeAvailable: true});
+        }
+        return state;
+      }
     /*
      * Inventory Stock Report
      * */
@@ -568,6 +602,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
     //  region branch
     case InventoryActionsConst.ShowBranchScreen:
       return Object.assign({}, state, { showBranchScreen: action.payload });
+    case InventoryActionsConst.ShowBranchScreenSideBar:
+      return Object.assign({}, state, { showBranchScreenSidebar: action.payload });
     //  endregion
     default:
       return state;

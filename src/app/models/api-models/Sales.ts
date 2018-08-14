@@ -51,6 +51,7 @@ CREDIT_NOTE("credit note")
 export interface IStockUnit {
   text: string;
   id: string;
+  rate?: number;
 }
 
 export interface IForceClear {
@@ -317,7 +318,7 @@ export class OtherSalesItemClass {
   public customField2: string;
   public customField3: string;
   public message1: string;
-  public message2: string;
+  // public message2: string;
   public slogan?: any;
   constructor() {
     this.shippingDate = null;
@@ -326,7 +327,7 @@ export class OtherSalesItemClass {
     this.customField1 = null;
     this.customField2 = null;
     this.customField3 = null;
-    this.message2 = null;
+    // this.message2 = null;
   }
 }
 

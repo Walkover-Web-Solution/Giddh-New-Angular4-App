@@ -104,4 +104,22 @@ export class SettingsFinancialYearService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e));
   }
+
+   /*
+  * Update Financial Year Period
+  * API: 'company/:companyUniqueName/financial-year'
+  * Method: PUT
+  */
+ public UpdateFinancialYearPeriod(period: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
+  const dataToSend = {
+    financialYearPeriod: period
+  };
+  this.user = this._generalService.user;
+  this.companyUniqueName = this._generalService.companyUniqueName;
+  return this._http.put(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.UPDATE_FY_PERIOD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dataToSend).map((res) => {
+    let data: BaseResponse<IFinancialYearResponse, string> = res;
+    data.queryString = {};
+    return data;
+  }).catch((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e));
+}
 }

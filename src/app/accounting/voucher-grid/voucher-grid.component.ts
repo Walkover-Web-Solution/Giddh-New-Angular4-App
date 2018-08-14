@@ -1,3 +1,5 @@
+import { Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { setTimeout } from 'timers';
@@ -47,6 +49,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
+  @ViewChild('chequeEntryModal') public chequeEntryModal: ModalDirective;
+
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
@@ -87,6 +91,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public inputForList: IOption[];
   public selectedField: 'account' | 'stock';
 
+  public chequeDetailForm: FormGroup;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
 
@@ -99,7 +105,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     private _toaster: ToasterService, private _router: Router,
     private _tallyModuleService: TallyModuleService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private inventoryService: InventoryService) {
+    private inventoryService: InventoryService,
+    private fb: FormBuilder) {
     this.requestObj.transactions = [];
     this._keyboardService.keyInformation.subscribe((key) => {
       this.watchKeyboardEvent(key);
@@ -128,6 +135,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnInit() {
 
+    this.chequeDetailForm = this.fb.group({
+      chequeClearanceDate: ['', [Validators.required]],
+      chequeNumber: ['', [Validators.required]]
+    }),
+
     this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
       if (p && q) {
         return (_.isEqual(p, q));
@@ -151,6 +163,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.dateField.nativeElement.focus();
       }
     });
+
     this.refreshEntry();
 
     // this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
@@ -185,9 +198,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
       if (c.openCreateAccountPopup.currentValue) {
         this.showQuickAccountModal();
-      } else {
-        this.hideQuickAccountModal();
       }
+      // else {
+      //   this.hideQuickAccountModal();
+      // }
     }
   }
 
@@ -257,9 +271,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountFocus() to show accountList
    */
   public onAccountFocus(elem, trxnType, indx) {
+    this.selectedField = 'account';
     this.showConfirmationBox = false;
     this.inputForList = _.cloneDeep(this.flattenAccounts);
-    this.selectedField = 'account';
     this.selectedParticular = elem;
     this.selectRow(true, indx);
     this.filterAccount(trxnType);
@@ -269,8 +283,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockFocus(stockIndx: number, indx: number) {
-    this.showConfirmationBox = false;
     this.selectedField = 'stock';
+    this.showConfirmationBox = false;
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
     // this.getStock(this.groupUniqueName);
@@ -297,10 +311,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     //
   }
 
+  public onSubmitChequeDetail() {
+    const chequeDetails = this.chequeDetailForm.value;
+    this.requestObj.chequeNumber = chequeDetails.chequeNumber;
+    this.requestObj.chequeClearanceDate = chequeDetails.chequeClearanceDate;
+    this.closeChequeDetailForm();
+    setTimeout(() => {
+      this.selectedParticular.focus();
+    }, 10);
+  }
+
+  public closeChequeDetailForm() {
+    this.chequeEntryModal.hide();
+  }
+
+  public openChequeDetailForm(account) {
+    this.chequeEntryModal.show();
+  }
+
   /**
    * setAccount` in particular, on accountList click
    */
   public setAccount(acc) {
+    if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
+      this.openChequeDetailForm(acc);
+    }
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
     if (acc) {
@@ -315,14 +350,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       transaction.selectedAccount = accModel;
       transaction.stocks = acc.stocks;
 
-      // tally differnce amount
+      // tally difference amount
       transaction.amount = this.calculateDiffAmount(transaction.type);
       transaction.amount = transaction.amount ? transaction.amount : null;
 
       if (acc) {
         this.groupUniqueName = accModel.groupUniqueName;
         this.selectAccUnqName = acc.uniqueName;
-        this.requestObj.transactions[idx].inventory.push(this.initInventory());
+
+        let len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
+        if (!len || this.requestObj.transactions[idx].inventory && this.requestObj.transactions[idx].inventory[len - 1].stock.uniqueName) {
+          this.requestObj.transactions[idx].inventory.push(this.initInventory());
+        }
       }
 
       // Alok Sir
@@ -406,12 +445,33 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public saveEntry() {
     let idx = 0;
     let data = _.cloneDeep(this.requestObj);
+    const voucherType = _.clone(data.voucherType);
+    data.entryDate = this.journalDate;
     // data.transactions = this.removeBlankTransaction(data.transactions);
     data.transactions = this.validateTransaction(data.transactions);
 
     if (!data.transactions) {
       return;
     }
+
+    const foundContraEntry: boolean = this.validateForContraEntry(data);
+    const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
+
+    if (foundContraEntry && data.voucherType !== 'Contra') {
+      this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
+      return;
+    }
+    if (!foundContraEntry && data.voucherType === 'Contra') {
+      this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
+      return;
+    }
+
+    // This suggestion was given by Sandeep
+    if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
+      this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
+      return;
+    }
+
     if (this.totalCreditAmount === this.totalDebitAmount) {
       if (this.validatePaymentAndReceipt(data)) {
         _.forEach(data.transactions, (element: any) => {
@@ -428,6 +488,28 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+    }
+  }
+
+  public validateForContraEntry(data) {
+    const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+    const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+
+    if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public validateForSalesAndPurchaseEntry(data) {
+    const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
+    const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
+
+    if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -563,21 +645,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public prepareEntry(item, idx) {
     let i = this.selectedStockIdx;
-    let defaultUnit = {
-      stockUnitCode: item.stockUnit.name,
-      code: item.stockUnit.code,
-      rate: 0
-    };
+    if (item && item.stockUnit) {
+      let defaultUnit = {
+        stockUnitCode: item.stockUnit.name,
+        code: item.stockUnit.code,
+        rate: 0
+      };
 
-    // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
-    this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
-    this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
-    this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+      // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
+      this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
+      this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
+      this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
 
-    // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-    this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
-    // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
-    this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
+      // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+      this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
+      // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+      this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
+    }
+
   }
 
     /**

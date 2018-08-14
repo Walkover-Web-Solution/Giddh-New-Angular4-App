@@ -19,7 +19,7 @@
                 </tab>
                 <!-- Arpit: Sagar told me to remove this condition from permission tab -->
                 <!-- *ngIf="isUserSuperAdmin" -->
-                <tab  (select)="permissionTabSelected($event)" heading="Permission">
+                <tab (select)="permissionTabSelected($event)" heading="Permission">
                     <setting-permission #permissionComp></setting-permission>
                 </tab>
                 <tab heading="Branch">
@@ -28,9 +28,15 @@
                 <tab heading="Tags" (select)="tagsTabSelected($event)">
                     <setting-tags #tagComp></setting-tags>
                 </tab>
-              <tab heading="Trigger">
-                <setting-trigger></setting-trigger>
-              </tab>
+                <tab heading="Trigger">
+                    <setting-trigger></setting-trigger>
+                </tab>
+                <tab heading="Discount">
+                    <setting-discount></setting-discount>
+                </tab>
+                <tab heading="" (select)="tagsTabSelected($event)">
+                    <setting-bunch #bunchComp></setting-bunch>
+                </tab>
             </tabset>
         </div>
     </div>

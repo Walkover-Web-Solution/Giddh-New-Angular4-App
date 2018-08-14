@@ -148,9 +148,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
           }
 
           // replace br to /n in case of message
-          if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
-            this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
-          }
+          // if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
+          //   this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
+          // }
           this.setMaxDueDate(this.invFormData.entries);
           this.invoiceDataFound = true;
         }else {
@@ -270,9 +270,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     let data: PreviewInvoiceResponseClass = _.cloneDeep(this.invFormData);
 
     // replace /n to br in case of message
-    if (data.other.message2 && data.other.message2.length > 0) {
-      data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
-    }
+    // if (data.other.message2 && data.other.message2.length > 0) {
+    //   data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
+    // }
 
     // convert address string to array
     data.account['billingDetails'].address = this.getArrayFromString(data.account['billingDetails'].addressStr);
@@ -400,9 +400,13 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
    * setMaxDueDate
    */
   public setMaxDueDate(entries) {
-    let maxDateEnrty = _.maxBy(entries, function(o) { return o.entryDate; });
-    console.log(maxDateEnrty);
-    this.maxDueDate = maxDateEnrty.entryDate;
+    let maxDateEnrty = _.maxBy(entries, function(o) { if (o.entryDate) {
+      return o.entryDate;
+    }});
+    // console.log(maxDateEnrty);
+    if (maxDateEnrty) {
+      this.maxDueDate = maxDateEnrty.entryDate;
+    }
   }
 
   public ngOnDestroy() {

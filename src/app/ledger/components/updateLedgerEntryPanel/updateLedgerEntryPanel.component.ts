@@ -473,7 +473,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let currencyFound: boolean = false;
     let ref = this.activeAccount$.subscribe((acc) => {
       if (acc && acc.currency && !currencyFound) {
-        this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
+        // Arpit: Sagar told to remove in update case
+        // this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
         this.vm.onTxnAmountChange(txn);
         currencyFound = true;
       }
