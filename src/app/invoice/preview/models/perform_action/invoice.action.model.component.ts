@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import * as moment from 'moment/moment';
@@ -19,7 +19,7 @@ import { SettingsTagActions } from '../../../../actions/settings/tag/settings.ta
   templateUrl: './invoice.action.model.component.html'
 })
 
-export class PerformActionOnInvoiceModelComponent implements OnInit {
+export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
 
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
@@ -50,7 +50,6 @@ export class PerformActionOnInvoiceModelComponent implements OnInit {
   }
 
   public ngOnInit() {
-
     this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {
@@ -75,8 +74,7 @@ export class PerformActionOnInvoiceModelComponent implements OnInit {
     });
     this.isActionSuccess$.subscribe(a => {
       if (a) {
-        this.paymentActionFormObj = {};
-        this.forceClear$ = Observable.of({status: true});
+        this.resetFrom();
       }
     });
   }
@@ -85,16 +83,13 @@ export class PerformActionOnInvoiceModelComponent implements OnInit {
     if (this.isBankSelected) {
       formObj.chequeClearanceDate = moment(formObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
     }
-    // console.log(formObj);
     this.closeModelEvent.emit(formObj);
-    this.paymentActionFormObj = {};
-    this.forceClear$ = Observable.of({status: true});
+    this.resetFrom();
   }
 
   public onCancel() {
     this.closeModelEvent.emit(0);
-    this.paymentActionFormObj = {};
-    this.forceClear$ = Observable.of({status: true});
+    this.resetFrom();
   }
 
   /**
@@ -107,10 +102,6 @@ export class PerformActionOnInvoiceModelComponent implements OnInit {
   public setClearanceDate(date) {
     this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
     this.showClearanceDatePicker = !this.showClearanceDatePicker;
-  }
-
-  public onPaymemtDateBlur(ev) {
-    //
   }
 
   public onSelectPaymentMode(event) {
@@ -129,5 +120,21 @@ export class PerformActionOnInvoiceModelComponent implements OnInit {
 
   public onTagSelected(ev) {
     //
+  }
+
+  /**
+   * resetFrom
+   */
+  public resetFrom() {
+    this.paymentActionFormObj = {};
+    this.forceClear$ = Observable.of({status: true});
+    this.paymentActionFormObj.paymentDate = moment();
+    this.paymentActionFormObj.chequeClearanceDate = moment();
+    this.ngOnDestroy();
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
