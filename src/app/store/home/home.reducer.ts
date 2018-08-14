@@ -5,6 +5,7 @@ import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
 import { BankAccountsResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface HomeState {
   value?: string;
@@ -191,6 +192,9 @@ export const initialState: HomeState = {
 
 export function homeReducer(state = initialState, action: CustomActions): HomeState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IExpensesChartClosingBalanceResponse;
       return Object.assign({}, state, {

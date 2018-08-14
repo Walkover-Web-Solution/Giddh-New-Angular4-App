@@ -625,4 +625,40 @@ export class InventoryService {
       }).catch((e) => this.errorHandler.HandleCatch<LinkedStocksResponse, string>(e, '', {}));
   }
   // endregion
+
+  /**
+   * get StockUnitsByName
+   */
+  public GetStockUnitByName(unitName: string): Observable<BaseResponse<StockUnitResponse[], string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_UNIT_WITH_NAME.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':uName', encodeURIComponent(unitName))).map((res) => {
+      let data: BaseResponse<StockUnitResponse[], string> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StockUnitResponse[], string>(e, '', {}));
+  }
+
+  /**
+   * Move Stock
+   */
+  public MoveStock(activeGroup, stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<StockUnitResponse[], string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let objToSend = {
+      uniqueName: stockGroupUniqueName
+    };
+    let requestObj = {
+      activeGroup,
+      stockUniqueName,
+      stockGroupUniqueName
+    };
+    return this._http.put(this.config.apiUrl + INVENTORY_API.MOVE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), objToSend).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = '';
+      data.queryString = requestObj;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, '', {}));
+  }
 }

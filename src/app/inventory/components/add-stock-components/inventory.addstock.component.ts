@@ -306,7 +306,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
-        this.addStockForm.controls['parentGroup'].disable();
+        // this.addStockForm.controls['parentGroup'].disable();
       } else {
         this.isUpdatingStockForm = false;
       }
@@ -526,8 +526,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public updateItemInLinkedStocks(item: FormGroup, i: any) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    const linkedStokesControl = control;
-    linkedStokesControl.controls[i].patchValue(item);
+    control.controls[i].patchValue(item);
     this.editLinkedStockIdx = null;
     this.editModeForLinkedStokes = false;
     let last = control.controls.length;
@@ -542,8 +541,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    const linkedStokesControl = control;
-    linkedStokesControl.removeAt(i);
+    control.removeAt(i);
   }
 
   public checkIfLinkedStockIsUnique(v: IOption) {
@@ -871,11 +869,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * validateLinkedStock
    */
   public validateLinkedStock(item) {
-    if (!item.quantity || !item.stockUniqueName || !item.stockUnitCode) {
-      return false;
-    } else {
-      return true;
-    }
+    return !(!item.quantity || !item.stockUniqueName || !item.stockUnitCode);
   }
 
   public addNewGroupPane() {
@@ -949,5 +943,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     taxToMap.map((tax, i) => {
       this.selectTax(e, tax);
     });
+  }
+
+  /**
+   * moveStock
+   */
+  public moveStock() {
+    if (this.addStockForm.get('parentGroup').value !== this.activeGroup.uniqueName) {
+      this.store.dispatch(this.inventoryAction.MoveStock(this.activeGroup, this.stockUniqueName, this.addStockForm.get('parentGroup').value));
+    }
   }
 }

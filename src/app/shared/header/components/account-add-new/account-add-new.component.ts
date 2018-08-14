@@ -84,6 +84,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
+  public companyCountry: string = '';  
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -229,8 +230,10 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
     if (result) {
       this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
+      this.companyCountry = result.countryflag;
     } else {
       this.addAccountForm.get('country').get('countryCode').patchValue('IN');
+      this.companyCountry = 'IN';
     }
   }
 
@@ -432,10 +435,10 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.showVirtualAccount) {
       delete accountRequest['cashFreeVirtualAccountData'];
     }
-    if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-      this._toaster.errorToast('Mobile no. & email Id is mandatory');
-      return;
-    }
+    // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
+    //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
+    //   return;
+    // }
 
     this.submitClicked.emit({
       activeGroupUniqueName: this.activeGroupUniqueName,
@@ -454,6 +457,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
    */
   public ngOnChanges(s) {
     if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
+      // console.log(s['showVirtualAccount'].currentValue);
       this.showOtherDetails = true;
     }
   }

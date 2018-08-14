@@ -4,6 +4,7 @@ import { SearchActions } from '../../actions/search.actions';
 import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface SearchState {
   value?: AccountFlat[];
@@ -28,7 +29,9 @@ export const initialState: SearchState = {
 
 export function searchReducer(state = initialState, action: CustomActions): SearchState {
   switch (action.type) {
-
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case SearchActions.SEARCH_RESPONSE: {
       let searchResp: BaseResponse<SearchResponse[], SearchRequest> = action.payload;
       if (searchResp.status === 'success') {

@@ -11,7 +11,7 @@
                     <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                         <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                             <li [checkPermission]="['MENU', 'DASHBOARD']">
-                                <a [routerLink]="['home']">
+                                <a [routerLink]="['/home']">
                                     <span class="navico-dashboard"></span>
                                     <span class="label">Dashboard</span>
                                 </a>
@@ -405,13 +405,17 @@
                                 <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i class="fa fa-android"></i> Android</a></li>
                                 <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i class="fa fa-apple"></i> ios</a></li>
                                 <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
-                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app+Setup+{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
                                 <!-- <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app-{{apkVersion}}.tar.gz" target="_blank" title="linux app"><i class="fa fa-linux"></i> Linux</a></li> -->
                             </ul>
                         </li>
                         <li role="separator" class="divider" style="width:100%"></li>
-                        <li>
-                            <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
+                        <li class="app_list">
+                            <ul>
+
+                                <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                                <li class="text-right bdrL"><a [routerLink]="['/onboarding']">Get Started</a></li>
+                            </ul>
                         </li>
                         <!-- <li role="separator" class="divider" style="width:100%"></li>
                         <li>
@@ -433,6 +437,7 @@
         </div>
     </div>
 </div>
+
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
@@ -442,6 +447,17 @@
         </div>
     </div>
 </div>
+
+<!--add company new modal  -->
+<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">

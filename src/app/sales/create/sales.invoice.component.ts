@@ -381,11 +381,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
 
       this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
-        if (acc) {
-          if (acc.length > 0) {
-            this.invFormData.accountDetails.uniqueName = 'cash';
-          } else if (acc.length === 1) {
-            this.depositAccountUniqueName = 'cash';
+        if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
+          if (acc) {
+            if (acc.length > 0) {
+              this.invFormData.accountDetails.uniqueName = 'cash';
+            } else if (acc.length === 1) {
+              this.depositAccountUniqueName = 'cash';
+            }
           }
         }
       });
@@ -563,9 +565,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
 
     // replace /n to br in case of message
-    if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
-      data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
-    }
+    // if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
+    //   data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
+    // }
 
     // replace /n to br for (shipping and billing)
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
@@ -626,6 +628,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
+      } else {
+        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
       }
     } else {
       obj.depositAccountUniqueName = '';
@@ -743,7 +747,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    */
   public generateGrandTotal(txns: SalesTransactionItemClass[]) {
     return txns.reduce((pv, cv) => {
-      return cv.total ? pv + cv.total : pv;
+        return cv.total ? pv + cv.total : pv;
     }, 0);
   }
 
@@ -756,31 +760,31 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     setTimeout(() => {
       _.forEach(this.invFormData.entries, (entry) => {
         // get discount
-        DISCOUNT += this.generateTotalDiscount(entry.discounts);
+        DISCOUNT += Number(this.generateTotalDiscount(entry.discounts));
 
         // get total amount of entries
-        AMOUNT += this.generateTotalAmount(entry.transactions);
+        AMOUNT += Number(this.generateTotalAmount(entry.transactions));
 
         // get taxable value
-        TAXABLE_VALUE += this.generateTotalTaxableValue(entry.transactions);
+        TAXABLE_VALUE += Number(this.generateTotalTaxableValue(entry.transactions));
 
         // generate total tax amount
-        TAX += this.generateTotalTaxAmount(entry.transactions);
+        TAX += Number(this.generateTotalTaxAmount(entry.transactions));
 
         // generate Grand Total
-        GRAND_TOTAL += this.generateGrandTotal(entry.transactions);
+        GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
       });
 
-      this.invFormData.voucherDetails.subTotal = AMOUNT;
-      this.invFormData.voucherDetails.totalDiscount = DISCOUNT;
-      this.invFormData.voucherDetails.totalTaxableValue = TAXABLE_VALUE;
-      this.invFormData.voucherDetails.gstTaxesTotal = TAX;
-      this.invFormData.voucherDetails.grandTotal = GRAND_TOTAL;
+      this.invFormData.voucherDetails.subTotal = Number(AMOUNT);
+      this.invFormData.voucherDetails.totalDiscount = Number(DISCOUNT);
+      this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
+      this.invFormData.voucherDetails.gstTaxesTotal = Number(TAX);
+      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = GRAND_TOTAL;
+      this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
       if (this.dueAmount) {
-        this.invFormData.voucherDetails.balanceDue = GRAND_TOTAL - this.dueAmount;
+        this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
       }
 
     }, 700);
@@ -815,18 +819,25 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 //   txn.sacNumber = null;
                 // }
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
-                  txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
                   txn.rate = null;
-                  if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
-                    txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
-                  }
                   let obj: IStockUnit = {
                     id: selectedAcc.additional.stock.stockUnit.code,
                     text: selectedAcc.additional.stock.stockUnit.name
                   };
                   txn.stockList = [];
-                  txn.stockList.push(obj);
+                  // debugger;
+                  if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
+                    txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
+                    txn.stockUnit = txn.stockList[0].id;
+                    txn.rate = txn.stockList[0].rate;
+                  } else {
+                    txn.stockList.push(obj);
+                    if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
+                      txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
+                    }
+                    txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+                  }
                   txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
                   txn.isStockTxn = true;
                 } else {
@@ -994,7 +1005,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
           // t.date = this.universalDate || new Date();
-          // e.entryDate = this.universalDate || new Date();
+          e.entryDate = this.universalDate || new Date();
         });
       });
     } else {
@@ -1022,25 +1033,27 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public removeTransaction(entryIdx: number) {
     if (this.invFormData.entries.length > 1) {
-      (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
-        return index !== entryIdx;
-      });
+      // (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
+      //   return index !== entryIdx;
+      // });
+      (this.invFormData as any).entries.splice(entryIdx, 1);
     } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
   }
 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-    setTimeout(() => {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
       this.txnChangeOccurred();
       entry.taxSum = _.sumBy(entry.taxes, function(o) {
         return o.amount;
       });
-    }, 1500);
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
+    if (!entry) {
+      return;
+    }
     this.selectedTaxes = arr;
     entry.taxList = arr;
     entry.taxes = [];
@@ -1055,7 +1068,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               amount: item.taxDetail[0].taxValue
             };
             entry.taxes.push(o);
-            entry.taxSum += o.amount;
+            // entry.taxSum += o.amount;
           }
         });
       });
@@ -1106,7 +1119,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.toLocaleLowerCase().indexOf(term) > -1);
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public closeCreateAcModal() {
@@ -1184,6 +1197,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         txn.rate = Number((txn.amount / txn.quantity).toFixed(2));
       }
     }
+    this.txnChangeOccurred();
   }
 
   @HostListener('document:click', ['$event'])
@@ -1195,4 +1209,28 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
+  /**
+   * prepareUnitArr
+   */
+  public prepareUnitArr(unitArr) {
+    let unitArray = [];
+      _.forEach(unitArr, (item) => {
+        unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+      });
+      return unitArray;
+  }
+
+  /**
+   * onChangeUnit
+   */
+  public onChangeUnit(txn, selectedUnit) {
+    if (!event) {
+      return;
+    }
+    _.find(txn.stockList, (o) => {
+      if (o.id === selectedUnit) {
+        return txn.rate = o.rate;
+      }
+    });
+  }
 }

@@ -45,6 +45,8 @@ import { ContactService } from './contact.service';
 import { SettingsTriggersService } from './settings.triggers.service';
 import { RecurringVoucherService } from './recurring-voucher.service';
 import { ImportExcelService } from './import-excel.service';
+import { SettingsBunchService } from './settings.bunch.service';
+import { SettingsDiscountService } from './settings.discount.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -97,7 +99,9 @@ export class ServiceModule {
         ContactService,
         SettingsTriggersService,
         RecurringVoucherService,
-        ImportExcelService
+        ImportExcelService,
+        SettingsBunchService,
+        SettingsDiscountService
       ]
     };
   }

@@ -21,6 +21,7 @@ export interface IInvoiceResult {
   account: INameUniqueName;
   balanceDue: number;
   isSelected?: boolean;
+  dueDate?: string;
 }
 
 export interface IGetAllInvoicesResponse extends IPagination {
