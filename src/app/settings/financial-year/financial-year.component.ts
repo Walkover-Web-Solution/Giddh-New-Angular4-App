@@ -1,3 +1,4 @@
+import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -32,6 +33,12 @@ export class FinancialYearComponent implements OnInit {
   public currentCompanyName: string;
   public financialOptions = [];
   public yearOptions = [];
+  public FYPeriodOptions: IOption[] = [
+    { label: 'JAN-DEC', value: 'JAN-DEC'},
+    { label: 'APR-MAR', value: 'APR-MAR'},
+    { label: 'JULY-JULY', value: 'JULY-JULY'}
+  ];
+  public selectedFYPeriod: string;
   public selectedFinancialYearOption: string;
   public selectedFinancialYearUN: string;
   public selectedYear: string;
@@ -52,6 +59,12 @@ export class FinancialYearComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+
+    this.store.select(createSelector([(state: AppState) => state.settings.refreshCompany], (o) => {
+      if (o) {
+        this.store.dispatch(this._companyActions.RefreshCompanies());
+      }
+    })).takeUntil(this.destroyed$).subscribe();
 
     this.store.takeUntil(this.destroyed$).subscribe(s => {
       if (s.session) {
@@ -124,6 +137,16 @@ export class FinancialYearComponent implements OnInit {
 
   public selectYear(data) {
     this.selectedYear = data.value;
+  }
+
+  public selectFYPeriod(ev) {
+    this.selectedFYPeriod = ev ? ev.value : null;
+  }
+
+  public updateFYPeriod() {
+    if (this.selectedFYPeriod) {
+      this.store.dispatch(this.settingsFinancialYearActions.UpdateFinancialYearPeriod(this.selectedFYPeriod));
+    }
   }
 
   public switchFY() {

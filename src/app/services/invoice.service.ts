@@ -430,4 +430,19 @@ export class InvoiceService {
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
+  /*
+  * Send Invoice On Sms
+  * API: 'accounts/:accountUniqueName/invoices/mail'
+  * Method: POST
+  */
+  public SendInvoiceOnSms(accountUniqueName: string, dataToSend: { numbers: string[] }, voucherNumber: string): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_SMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':voucherNumber', voucherNumber), dataToSend).map((res) => {
+      let data: BaseResponse<string, string> = res;
+      data.queryString = { accountUniqueName, dataToSend };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
+
 }

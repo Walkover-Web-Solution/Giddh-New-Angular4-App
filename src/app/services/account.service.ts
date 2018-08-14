@@ -11,6 +11,8 @@ import { APPLY_TAX_API } from './apiurls/applyTax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { ApplyDiscountRequest } from '../models/api-models/ApplyDiscount';
+import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
 
 @Injectable()
 export class AccountService implements OnInit {
@@ -19,7 +21,7 @@ export class AccountService implements OnInit {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-    private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
@@ -38,10 +40,10 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<AccountResponse, AccountRequest> = res;
         data.request = model;
-        data.queryString = { groupUniqueName };
+        data.queryString = {groupUniqueName};
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e, model, { groupUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e, model, {groupUniqueName}));
   }
 
   public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
@@ -51,7 +53,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<AccountResponse, AccountRequest> = res;
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = {accountUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e));
@@ -62,7 +64,7 @@ export class AccountService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + ACCOUNTS_API.DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountResponse, string> = res;
-      data.queryString = { accountUniqueName };
+      data.queryString = {accountUniqueName};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e));
   }
@@ -72,7 +74,7 @@ export class AccountService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + ACCOUNTS_API.DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountResponse, string> = res;
-      data.queryString = { accountUniqueName };
+      data.queryString = {accountUniqueName};
       data.request = accountUniqueName;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e));
@@ -85,7 +87,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, AccountMergeRequest[]> = res;
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = {accountUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, AccountMergeRequest[]>(e));
@@ -98,7 +100,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, AccountUnMergeRequest> = res;
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = {accountUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, AccountUnMergeRequest>(e));
@@ -118,6 +120,34 @@ export class AccountService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ApplyTaxRequest>(e));
   }
 
+  public ApplyDiscount(model: ApplyDiscountRequest): Observable<BaseResponse<string, ApplyDiscountRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model)
+      .map((res) => {
+        let data: BaseResponse<string, ApplyDiscountRequest> = res;
+        data.request = model;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, ApplyDiscountRequest>(e));
+  }
+
+  public DeleteDiscount(discountUniqueName: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + APPLY_DISCOUNT_API.DELETE_DISCOUNT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':discountUniqueName', encodeURIComponent(discountUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+    )
+      .map((res) => {
+        let data: BaseResponse<string, string> = res;
+        data.queryString = {discountUniqueName, accountUniqueName};
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
+
   public AccountMove(model: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -125,7 +155,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, AccountMoveRequest> = res;
         data.request = model;
-        data.queryString = { accountUniqueName, activeGroupUniqueName };
+        data.queryString = {accountUniqueName, activeGroupUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, AccountMoveRequest>(e));
@@ -138,7 +168,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, ShareAccountRequest> = res;
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = {accountUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareAccountRequest>(e));
@@ -151,7 +181,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res;
         data.request = model;
-        data.queryString = { roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName };
+        data.queryString = {roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
@@ -163,7 +193,7 @@ export class AccountService implements OnInit {
     return this._http.delete(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(entryUniqueName)))
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res;
-        data.queryString = { entryUniqueName, entityUniqueName, entity };
+        data.queryString = {entryUniqueName, entityUniqueName, entity};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
@@ -176,7 +206,7 @@ export class AccountService implements OnInit {
     return this._http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(model.uniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res;
-        data.queryString = { model, newRoleUniqueName, entity };
+        data.queryString = {model, newRoleUniqueName, entity};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
@@ -186,10 +216,10 @@ export class AccountService implements OnInit {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    return this._http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).map((res) => {
+    return this._http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), {user: userEmail}).map((res) => {
       let data: BaseResponse<string, string> = res;
       data.request = userEmail;
-      data.queryString = { accountUniqueName };
+      data.queryString = {accountUniqueName};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
@@ -201,7 +231,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<AccountSharedWithResponse[], string> = res;
         data.request = '';
-        data.queryString = { accountUniqueName };
+        data.queryString = {accountUniqueName};
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e));
@@ -212,10 +242,10 @@ export class AccountService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + ACCOUNTS_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<string, any> = res;
-      data.request = { accountUniqueName, groupUniqueName };
+      data.request = {accountUniqueName, groupUniqueName};
       data.queryString = accountUniqueName;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName}));
   }
 
   public GetFlattenAccounts(q?: string, page?: string, count?: string): Observable<BaseResponse<FlattenAccountsResponse, string>> {
@@ -239,7 +269,7 @@ export class AccountService implements OnInit {
     return this._http.post(this.config.apiUrl + ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':count', count || 0).replace(':q', encodeURIComponent(q || '')).replace(':page', encodeURIComponent(page || 1)), groupUniqueNames).map((res) => {
       let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = res;
       data.request = groupUniqueNames;
-      data.queryString = { count, q, page };
+      data.queryString = {count, q, page};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, { groupUniqueNames: string[] }>(e));
   }
@@ -250,7 +280,7 @@ export class AccountService implements OnInit {
     return this._http.get(this.config.apiUrl + ACCOUNTS_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountsTaxHierarchyResponse, string> = res;
       data.request = '';
-      data.queryString = { accountUniqueName };
+      data.queryString = {accountUniqueName};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountsTaxHierarchyResponse, string>(e));
   }
@@ -263,7 +293,7 @@ export class AccountService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountResponseV2, string> = res;
-      data.queryString = { accountUniqueName };
+      data.queryString = {accountUniqueName};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e));
   }
@@ -275,10 +305,10 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
         data.request = model;
-        data.queryString = { groupUniqueName };
+        data.queryString = {groupUniqueName};
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, {groupUniqueName}));
   }
 
   public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {

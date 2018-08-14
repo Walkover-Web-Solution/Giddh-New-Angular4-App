@@ -1,4 +1,4 @@
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,6 +28,14 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { BunchComponent } from './bunch/bunch.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
+import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
+import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
+import { DiscountComponent } from './discount/discount.component';
+import { ContactModule } from '../contact/contact.module';
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 
 @NgModule({
   declarations: [
@@ -45,8 +53,13 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
     SettingPermissionComponent,
     SettingPermissionFormComponent,
     BranchComponent,
+    DiscountComponent,
     SettingsTagsComponent,
-    SettingTriggerComponent
+    SettingTriggerComponent,
+    BunchComponent,
+    CreateBunchModalComponent,
+    BunchAddCompanyModalComponent,
+    GetBunchModalComponent
   ],
   imports: [
     CommonModule,
@@ -64,8 +77,12 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
     OmitByKeyPipeModule,
     NgbTypeaheadModule,
     BsDropdownModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    PerfectScrollbarModule,
+    ContactModule,
+    ConfirmModalModule
   ]
 })
 
-export class SettingsModule { }
+export class SettingsModule {
+}

@@ -10,10 +10,11 @@ export const EBANKS = {
   RECONNECT_ACCOUNT: COMMON_URL + 'login/:loginId/token/reconnect', // GET
   // DELETE_BANK_ACCOUNT: COMMON_URL + 'login/:loginId', // DELETE
   DELETE_BANK_ACCOUNT: COMMON_URL + 'yodlee/yodlee-accounts?accountId=:accountId',
-  REFREST_ACCOUNT: COMMON_URL + 'login/:loginId/token/refresh', // GET
+  // REFREST_ACCOUNT: COMMON_URL + 'login/:loginId/token/refresh', // GET (OLD)
+  REFREST_ACCOUNT: COMMON_URL + 'yodlee/refresh/:ebankItemId', // GET (NEW)
   ADD_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:itemAccountId', // PUT
   REMOVE_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:ItemAccountId/unlink', // DELETE
-  UPDATE_DATE: COMMON_URL + 'yodlee/ebanks/:accountId/eledgers?from=:date', // PUT
+  UPDATE_DATE: COMMON_URL + 'yodlee/:accountId/eledgers?from=:date', // PUT
 };
 
 export const YODLEE_FASTLINK = {
@@ -22,4 +23,5 @@ export const YODLEE_FASTLINK = {
   SEARCH_BANKS: COMMON_URL + 'yodlee/search?name=:queryString',
   GET_LOGIN_FORM: COMMON_URL + 'yodlee/login-form/:providerId',
   ADD_PROVIDER: COMMON_URL + 'yodlee/add-provider-account?providerId=:providerId',
+  GET_BANK_SYNC_STATUS: COMMON_URL + 'yodlee/status/:providerId',
 };

@@ -171,10 +171,10 @@ export class SettingsLinkedAccountsActions {
     };
   }
 
-  public RefreshBankAccount(loginId: string) {
+  public RefreshBankAccount(ebankItemId: string) {
     return {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT,
-      payload: loginId
+      payload: ebankItemId
     };
   }
 

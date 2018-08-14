@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../actions/invoice/invoice.const';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface CustomTemplateState {
   sampleTemplates: CustomTemplateResponse[];
@@ -353,6 +354,9 @@ export const initialState: CustomTemplateState = {
 
 export function InvoiceTemplateReducer(state = initialState, action: CustomActions): CustomTemplateState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
       let nextState = _.cloneDeep(state);
       let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;

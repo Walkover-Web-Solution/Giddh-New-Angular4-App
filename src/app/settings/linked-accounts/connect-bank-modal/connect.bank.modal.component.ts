@@ -17,7 +17,19 @@ import { ToasterService } from '../../../services/toaster.service';
           }
           .connect-page .page-title {
                 margin-top: 0;
-          }`]
+          }
+          .provider_ico {
+            margin-right: 10px;
+            max-width: 16px;
+            max-height: 16px;
+            float: left;
+            object-fit: contain;
+          }
+          .provider_ico img {
+            width: 100%;
+            height: auto;
+          }
+          `]
 })
 
 export class ConnectBankModalComponent implements OnChanges {
@@ -34,6 +46,9 @@ export class ConnectBankModalComponent implements OnChanges {
   public selectedProvider: any = {};
   public step: number = 1;
   public loginForm: FormGroup;
+  public bankSyncInProgress: boolean;
+  public apiInInterval: any;
+  public cancelRequest: boolean = false;
 
   constructor(public sanitizer: DomSanitizer,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
@@ -91,6 +106,8 @@ export class ConnectBankModalComponent implements OnChanges {
     this.loginForm.reset();
     this.step = 1;
     this.selectedProvider = {};
+    this.bankSyncInProgress = false;
+    this.cancelRequest = true;
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -98,7 +115,7 @@ export class ConnectBankModalComponent implements OnChanges {
       if (e.item) {
         this.selectedProvider = e.item;
       }
-    }, 400);
+    }, 20);
   }
 
   // initial rowArray controls
@@ -151,6 +168,10 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public onSelectProvider() {
+    const inputRowControls = this.loginForm.controls['row'] as FormArray;
+    if (inputRowControls.controls.length > 1) {
+      inputRowControls.controls = inputRowControls.controls.splice(1);
+    }
     this.getProviderLoginForm(this.selectedProvider.id);
   }
 
@@ -186,11 +207,57 @@ export class ConnectBankModalComponent implements OnChanges {
     this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).subscribe(res => {
       if (res.status === 'success') {
         this._toaster.successToast(res.body);
-        this.onCancel();
+        let providerId = res.body.replace(/[^0-9]+/ig, '');
+        if (providerId) {
+          this.cancelRequest = false;
+          this.getBankSyncStatus(providerId);
+        } else {
+          this.onCancel();
+        }
       } else {
         this._toaster.errorToast(res.message);
         this.onCancel();
       }
     });
   }
+
+  /**
+   * getBankSyncStatus
+   */
+  public getBankSyncStatus(providerId) {
+    let validateProvider;
+    this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
+      if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
+        this.bankSyncInProgress = true;
+        validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
+        if (!validateProvider && !this.cancelRequest) {
+            setTimeout(() => {
+              this.getBankSyncStatus(providerId);
+            }, 10000);
+        }
+      }
+    });
+  }
+
+  /**
+   * validateProviderResponse
+   */
+  public validateProviderResponse(provider) {
+    let status = provider.status.toLowerCase();
+      if (status === 'success' || status === 'failed') {
+        this.bankSyncInProgress = false;
+        return true;
+      } else {
+        return false;
+      }
+  }
+
+  /**
+   * resetBankForm
+   */
+  public resetBankForm() {
+    this.step = 1;
+    this.selectedProvider = {};
+  }
+
 }

@@ -3,12 +3,13 @@
     <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
         <div class="row">
-            <div class="form-group" [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}">
+            <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
+            <div class="form-group col-xs-6">
                 <label for="">Account Name</label>
                 <input type="text" class="form-control" formControlName="name" name="accountName" />
             </div>
-
-            <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
+            <!-- *ngIf="isGstEnabledAcc" card 1104 -->
+            <div class="form-group col-xs-6" formGroupName="country">
                 <label for="">Country</label>
                 <sh-select [options]="countrySource" (viewInitEvent)="onViewReady($event)" [isFilterEnabled]="true" formControlName="countryCode"></sh-select>
             </div>
@@ -112,6 +113,24 @@
             </div>
         </ng-container>
 
+        <!--  design change by meghna -->
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="">Balance for Trigger</label>
+                <div class="" [ngClass]="{'input-group': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">
+                    <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
+                    <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
+                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
+                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0">DR.
+                    </div>
+                    <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
+                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
+                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0">CR.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- other details -->
         <div class="row">
             <div class="col-xs-12">
@@ -143,15 +162,15 @@
                     <!-- [ngClass]="{'row':!isMultipleCurrency || addAccountForm.get('country').value.countryCode === 'IN'}" -->
                     <div class="">
                         <label for="">Opening Balance</label>
-                        <div class="input-group">
+                        <div class="" [ngClass]="{'input-group': addAccountForm.get('openingBalance').value > 0}">
                             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" min="0" (click)="openingBalanceClick()" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
                             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}">DR.
+                  'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
                             </div>
                             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}">CR.
+                  'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">CR.
                             </div>
                         </div>
                     </div>
@@ -166,19 +185,19 @@
                 </div>
 
             </div>
-
-            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== 'IN'">
+            <!-- addAccountForm.get('country').value.countryCode !== 'IN'  #1103 -->
+            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
-                    <div class="input-group">
+                    <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
                         <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" placeholder="00.00">
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}">DR.
+                  'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">DR.
                         </div>
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}">CR.
+                  'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">CR.
                         </div>
                     </div>
                 </div>
@@ -194,23 +213,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="row">
-                <div class="form-group col-xs-6">
-                    <label for="">Closing Balance</label>
-                    <div class="input-group">
-                        <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
-                        <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
-                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">DR.
-                        </div>
-                        <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
-                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">CR.
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- mobile no and email -->

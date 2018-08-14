@@ -1,6 +1,6 @@
 import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
-import { CompanyAddComponent, ManageGroupsAccountsComponent } from './components';
+import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +28,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
-  { label: 'Dashboard', value: '/pages/home' },
+  {label: 'Dashboard', value: '/pages/home'},
   {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
   { label: 'Sales', value: '/pages/sales' },
   { label: 'Invoice', value: '/pages/invoice/preview' },
@@ -58,6 +58,9 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   { label: 'Contact', value: '/pages/contact' },
   { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
   { label: 'Import', value: '/pages/import' },
+  { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
+  { label: 'Onboarding', value: '/onboarding' },
+  { label: 'Purchase Invoice ', value: '/pages/purchase/create' },
 ];
 
 @Component({
@@ -73,11 +76,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
   public moment = moment;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+  @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
   @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+  @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
@@ -88,9 +93,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
+  public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
     opens: 'left',
     locale: {
@@ -103,33 +109,46 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       customRangeLabel: 'Custom range'
     },
     ranges: {
-      'Last 1 Day': [
-        moment().subtract(1, 'days'),
+      'This Month to Date': [
+        moment().startOf('month'),
         moment()
       ],
-      'Last 7 Days': [
-        moment().subtract(6, 'days'),
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
         moment()
       ],
-      'Last 30 Days': [
-        moment().subtract(29, 'days'),
+      'This Financial Year to Date': [
+        // moment(this.activeFinancialYear.financialYearStarts).startOf('day'),
+        moment(),
         moment()
       ],
-      'Last 6 Months': [
-        moment().subtract(6, 'months'),
+      'This Year to Date': [
+        moment().startOf('year'),
         moment()
       ],
-      'Last 1 Year': [
-        moment().subtract(12, 'months'),
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Fiancial Year': [
+        moment(),
         moment()
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
       ]
     },
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public userMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public userMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -160,18 +179,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-    private socialAuthService: AuthService,
-    private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router,
-    private flyAccountActions: FlyAccountsActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef,
-    private zone: NgZone,
-    private route: ActivatedRoute,
-    private _generalActions: GeneralActions,
-    private authService: AuthenticationService) {
+              private socialAuthService: AuthService,
+              private store: Store<AppState>,
+              private companyActions: CompanyActions,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private router: Router,
+              private flyAccountActions: FlyAccountsActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cdRef: ChangeDetectorRef,
+              private zone: NgZone,
+              private route: ActivatedRoute,
+              private _generalActions: GeneralActions,
+              private authService: AuthenticationService) {
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -208,10 +227,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-      if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
-        this.userIsSuperUser = true;
-      } else {
+
+      // Sagar told to change the logic
+      // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
+      //   console.log('selectedCmp is :', selectedCmp);
+      //   this.userIsSuperUser = true;
+      // } else {
+      //   this.userIsSuperUser = false;
+      // }
+      // new logic
+      if (selectedCmp.userEntityRoles && selectedCmp.userEntityRoles.length && (selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin') === -1)) {
         this.userIsSuperUser = false;
+      } else {
+        this.userIsSuperUser = true;
+      }
+      if (selectedCmp) {
+        this.activeFinancialYear = selectedCmp.activeFinancialYear;
+      }
+
+      if (selectedCmp) {
+        this.activeFinancialYear = selectedCmp.activeFinancialYear;
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
@@ -223,7 +258,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
-    this.user$.subscribe((u) => {
+    this.user$.take(1).subscribe((u) => {
       if (u) {
         let userEmail = u.email;
         // this.getUserAvatar(userEmail);
@@ -233,8 +268,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
           this.userIsCompanyUser = false;
         }
+        let name = u.name;
         if (u.name.match(/\s/g)) {
-          let name = u.name;
           this.userFullName = name;
           let tmpName = name.split(' ');
           this.userName = tmpName[0][0] + tmpName[1][0];
@@ -242,6 +277,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.userName = u.name[0] + u.name[1];
           this.userFullName = name;
         }
+
+        this.store.dispatch(this.loginAction.renewSession());
       }
     });
 
@@ -266,9 +303,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
     this.isCompanyCreationSuccess$.subscribe(created => {
-      if (created) {
-        this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-      }
+      // TODO see create company response action effect
+
+      // if (created) {
+      //   this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+      // }
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
@@ -348,12 +387,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public showAddCompanyModal() {
-    this.loadAddCompanyComponent();
-    this.addCompanyModal.show();
+    this.loadAddCompanyNewUiComponent();
+    this.addCompanyNewModal.show();
   }
 
   public hideAddCompanyModal() {
-    this.addCompanyModal.hide();
+    this.addCompanyNewModal.hide();
   }
 
   public hideCompanyModalAndShowAddAndManage() {
@@ -437,6 +476,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
   }
 
+  public loadAddCompanyNewUiComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
+    let viewContainerRef = this.companynewadd.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
+  }
+
   public loadAddManageComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
     let viewContainerRef = this.addmanage.viewContainerRef;
@@ -461,7 +513,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public forceCloseSidebar(event) {
-    if (event.target.parentElement.classList.contains('wrapAcList') ) {
+    if (event.target.parentElement.classList.contains('wrapAcList')) {
       return;
     }
     this.flyAccounts.next(false);
@@ -477,6 +529,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public setApplicationDate(ev) {
     let data = ev ? _.cloneDeep(ev) : null;
     if (data && data.picker) {
+
+      if (data.picker.chosenLabel === 'This Financial Year to Date') {
+        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('day');
+      }
+      if (data.picker.chosenLabel === 'Last Fiancial Year') {
+        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('year').subtract(1, 'year');
+        data.picker.endDate = moment(this.activeFinancialYear.financialYearStarts).endOf('year').subtract(1, 'year');
+      }
       this.isTodaysDateSelected = false;
       let dates = {
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),

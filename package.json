@@ -1,6 +1,6 @@
 {
-  "name": "giddh-app",
-  "version": "5.6.10",
+  "name": "giddh",
+  "version": "6.5.12",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",

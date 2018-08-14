@@ -6,6 +6,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'app/lodash-optimized';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface PermissionState {
   roles: IRoleCommonResponseAndRequest[];
@@ -27,6 +28,9 @@ export const initialState: PermissionState = {
 
 export function PermissionReducer(state = initialState, action: CustomActions): PermissionState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case PERMISSION_ACTIONS.GET_ROLES:
       {
         return state;
