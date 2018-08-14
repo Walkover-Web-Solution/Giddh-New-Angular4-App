@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -12,6 +12,8 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+
+export declare const gapi: any;
 
 @Component({
   selector: 'setting-integration',
@@ -28,7 +30,9 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
     }
   `]
 })
-export class SettingIntegrationComponent implements OnInit {
+export class SettingIntegrationComponent implements OnInit, AfterViewInit {
+
+  public auth2: any;
 
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
@@ -44,6 +48,7 @@ export class SettingIntegrationComponent implements OnInit {
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public bankAccounts$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private isGmailInited: boolean = false;
 
   constructor(
     private router: Router,
@@ -266,4 +271,50 @@ export class SettingIntegrationComponent implements OnInit {
   public deletePaymentGateway() {
     this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
   }
+
+  public ngAfterViewInit() {
+    if (!this.isGmailInited) {
+      this.googleInit();
+      this.isGmailInited = true;
+    }
+  }
+
+  public googleInit() {
+    gapi.load('auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
+        // cookiepolicy: 'single_host_origin',
+        scope: 'https://www.googleapis.com/auth/gmail.send',
+        access_type: 'offline',
+        response_type: 'code',
+        auth_uri: 'https://accounts.google.com/o/oauth2/v2/auth',
+        prompt: 'select_account',
+        include_granted_scopes: true,
+        grant_type: 'authorization_code',
+        redirect_uri: 'http://localapp.giddh.com:3000/pages/home',
+        ux_mode: 'popup'
+      });
+      this.attachSignin(document.getElementById('googleBtn'));
+    });
+  }
+
+  public attachSignin(element) {
+    this.auth2.attachClickHandler(element, {},
+      (googleUser) => {
+
+        console.log('googleUser is :', googleUser.getAuthResponse());
+
+        let profile = googleUser.getBasicProfile();
+        console.log('Token || ' + googleUser.getAuthResponse(true).id_token);
+        console.log('ID: ' + profile.getId());
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+        // YOUR CODE HERE
+
+      }, (error) => {
+        alert(JSON.stringify(error, undefined, 2));
+      });
+  }
+
 }
