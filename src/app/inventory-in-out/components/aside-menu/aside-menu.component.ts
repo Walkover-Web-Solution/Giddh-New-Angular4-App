@@ -105,10 +105,6 @@ export class AsideMenuComponent implements OnInit, OnChanges {
       .select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
 
     this._store
-      .select(p => p.inventoryInOutState.entrySuccess)
-      .subscribe(p => p && this.closeAsidePane(p));
-
-    this._store
       .select(p => p.inventoryInOutState.entryInProcess)
       .subscribe(p => this.isLoading = p);
 

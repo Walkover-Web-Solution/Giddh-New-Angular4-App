@@ -76,6 +76,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
+    this.manufacturingDetails.disable();
     this.isManufactured.valueChanges.subscribe(val => {
       this.manufacturingDetails.reset();
       val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
