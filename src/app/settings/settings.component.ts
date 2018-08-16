@@ -12,9 +12,10 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { BunchComponent } from './bunch/bunch.component';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -40,6 +41,8 @@ export class SettingsComponent implements OnInit {
     private settingsProfileActions: SettingsProfileActions,
     private _permissionDataService: PermissionDataService,
     public _route: ActivatedRoute,
+    private router: Router,
+    private _authenticationService: AuthenticationService,
   ) {
       this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
     }
@@ -55,6 +58,9 @@ export class SettingsComponent implements OnInit {
     this._route.queryParams.takeUntil(this.destroyed$).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
         this.selectTab(val.tabIndex);
+      } else if (val.tab === 'integration' && val.code) {
+        this.saveGmailAuthCode(val.code);
+        // this.selectTab(1);
       }
     });
   }
@@ -100,4 +106,34 @@ export class SettingsComponent implements OnInit {
       this.bunchComp.getAllBunch();
     }
   }
+
+  private saveGmailAuthCode(authCode: string) {
+    const dataToSave = {
+      code: authCode,
+      client_secret: 'C97c9WiBRHL6GyOwj9GkY5He',
+      client_id: '578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com',
+      grant_type: 'authorization_code',
+      redirect_uri: this.getRedirectUrl(AppUrl)
+    };
+    this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+      this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
+
+      console.log('the response form saveGmailAuthCode is :', res);
+    });
+  }
+
+  private getRedirectUrl(baseHref: string) {
+    if (baseHref.indexOf('dev.giddh.com') > -1) {
+      return 'http://dev.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://test.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://stage.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
+      return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
+    } else {
+      return 'https://giddh.com/app/pages/settings?tab=integration';
+    }
+  }
+
 }
