@@ -1,6 +1,6 @@
 <h3 class="section_head mrT2">SMS Integration</h3>
 <div class="box clearfix">
-    <h3 class="fs18 mrB1">MSG91 <button class="btn btn-primary" id="googleBtn">Connect with Gmail</button></h3>
+    <h3 class="fs18 mrB1">MSG91</h3>
     <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="">
         <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
             <div class="form-group col-xs-4">
@@ -24,6 +24,11 @@
             </div>
         </section>
     </form>
+</div>
+
+<h3 class="section_head mrT2">Gmail Integration</h3>
+<div class="box clearfix">
+  <a class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">Connect with Gmail</a>
 </div>
 
 
