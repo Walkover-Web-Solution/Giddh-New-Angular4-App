@@ -1,3 +1,4 @@
+import { ToasterService } from 'app/services/toaster.service';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
@@ -43,6 +44,7 @@ export class SettingsComponent implements OnInit {
     public _route: ActivatedRoute,
     private router: Router,
     private _authenticationService: AuthenticationService,
+    private _toast: ToasterService
   ) {
       this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
     }
@@ -116,6 +118,13 @@ export class SettingsComponent implements OnInit {
       redirect_uri: this.getRedirectUrl(AppUrl)
     };
     this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+
+      if (res.status === 'success') {
+        this._toast.successToast('Gmail account added successfully.', 'Success');
+      } else {
+        this._toast.errorToast(res.message, res.code);
+      }
+
       this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
 
       console.log('the response form saveGmailAuthCode is :', res);

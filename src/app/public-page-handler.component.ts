@@ -18,10 +18,12 @@ export class PublicPageHandlerComponent {
     } else if (this.router.routerState.snapshot.url.includes('signup')) {
       // this.router.navigate(['signup']);
       this.router.navigateByUrl('signup');
-    } else {
+    } else if (this.router.routerState.snapshot.url.includes('app/pages/settings')) {
       console.log('this.router.routerState.snapshot.url is :', this.router.routerState.snapshot.url);
-      this.router.navigate(['login']);
+      this.router.navigateByUrl(this.router.routerState.snapshot.url);
       // this.router.navigateByUrl('404');
+    } else {
+      this.router.navigate(['login']);
     }
   }
 }
