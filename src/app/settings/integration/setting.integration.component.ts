@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -30,7 +30,7 @@ export declare const gapi: any;
     }
   `]
 })
-export class SettingIntegrationComponent implements OnInit, AfterViewInit {
+export class SettingIntegrationComponent implements OnInit {
 
   public auth2: any;
 
@@ -47,17 +47,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
   public payoutAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public bankAccounts$: Observable<IOption[]>;
+  public gmailAuthCodeUrl$: Observable<string> = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private isGmailInited: boolean = false;
+  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
 
   constructor(
     private router: Router,
     private store: Store<AppState>,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
-    private toasty: ToasterService,
+    private toasty: ToasterService
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl));
+    this.gmailAuthCodeUrl$ = Observable.of(this.gmailAuthCodeStaticUrl);
   }
 
   public ngOnInit() {
@@ -132,7 +135,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     //     this.accounts$ = Observable.of(accounts);
     //   }
     // });
-
   }
 
   public getInitialData() {
@@ -272,49 +274,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
   }
 
-  public ngAfterViewInit() {
-    if (!this.isGmailInited) {
-      this.googleInit();
-      this.isGmailInited = true;
+  private getRedirectUrl(baseHref: string) {
+    if (baseHref.indexOf('dev.giddh.com') > -1) {
+      return 'http://dev.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://test.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://stage.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
+      return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
+    } else {
+      return 'https://giddh.com/app/pages/settings?tab=integration';
     }
-  }
-
-  public googleInit() {
-    gapi.load('auth2', () => {
-      this.auth2 = gapi.auth2.init({
-        client_id: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-        // cookiepolicy: 'single_host_origin',
-        scope: 'https://www.googleapis.com/auth/gmail.send',
-        access_type: 'offline',
-        response_type: 'code',
-        auth_uri: 'https://accounts.google.com/o/oauth2/v2/auth',
-        prompt: 'select_account',
-        include_granted_scopes: true,
-        grant_type: 'authorization_code',
-        redirect_uri: 'http://localapp.giddh.com:3000/pages/home',
-        ux_mode: 'popup'
-      });
-      this.attachSignin(document.getElementById('googleBtn'));
-    });
-  }
-
-  public attachSignin(element) {
-    this.auth2.attachClickHandler(element, {},
-      (googleUser) => {
-
-        console.log('googleUser is :', googleUser.getAuthResponse());
-
-        let profile = googleUser.getBasicProfile();
-        console.log('Token || ' + googleUser.getAuthResponse(true).id_token);
-        console.log('ID: ' + profile.getId());
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
-        // YOUR CODE HERE
-
-      }, (error) => {
-        alert(JSON.stringify(error, undefined, 2));
-      });
   }
 
 }

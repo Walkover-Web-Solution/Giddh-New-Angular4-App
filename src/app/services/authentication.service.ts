@@ -323,4 +323,8 @@ export class AuthenticationService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
   }
+
+  public saveGmailAuthCode(data) {
+    return this._http.post('http://apitest.giddh.com/users/generate-mail-token', data);
+  }
 }
