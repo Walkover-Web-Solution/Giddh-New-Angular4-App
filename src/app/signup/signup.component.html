@@ -54,7 +54,7 @@
                         <input class="form-control mrB1" formControlName="verificationCode" type="text" placeholder="Enter verification code here" required>
                         <div class="clearfix mrB2">
                             <button [disabled]="!signupVerifyForm.controls['verificationCode'].valid" class="btn btn-success btn-block btn-lg" (click)="VerifyEmail(signupVerifyForm.controls['email'].value,signupVerifyForm.controls['verificationCode'].value)">Verify Email</button>
-                            <a class="btn btn-link cp pull-right" (click)="VerifyEmail(signupVerifyForm.controls['email'].value)">Resend code</a>
+                            <a class="btn btn-link cp pull-right" (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)">Resend code</a>
                         </div>
                     </div>
                 </form>
@@ -69,9 +69,9 @@
                 <li class="linkedin_ico"><a href="javascript:void(0);" (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a></li>
 
             </ul>
-            <div class="login_option">
+            <div class="login_option" *ngIf="loginUsing !== 'userName'">
                 <!--  -->
-                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">Email</a>
+                Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">email and password</a>
                 <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
             </div>
             <div class="mrT4">
