@@ -522,7 +522,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       } else {
         this.fetchedBaseCurrency = baseCurr;
         this.fetchedConvertToCurrency = convertTo;
-        this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
+        // this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
+        // Note: Sagar told me to interchange baseCurr and convertTo #1128
+        this._ledgerService.GetCurrencyRate(convertTo, baseCurr).subscribe((res: any) => {
           let rate = res.body;
           if (rate) {
             this.fetchedConvertedRate = rate;
