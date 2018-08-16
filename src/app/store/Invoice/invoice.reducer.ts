@@ -27,6 +27,7 @@ export interface InvoiceState {
     isRequestInFlight?: boolean
     isDeleteRequestInFlight?: boolean
   };
+  invoiceActionUpdated: boolean;
 }
 
 export const initialState: InvoiceState = {
@@ -44,7 +45,8 @@ export const initialState: InvoiceState = {
   isBulkInvoiceGeneratedWithoutErrors: false,
   recurringInvoiceData: {
     recurringInvoices: null,
-  }
+  },
+  invoiceActionUpdated: false
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -354,6 +356,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       }
       return state;
     }
+    case INVOICE_ACTIONS.ACTION_ON_INVOICE: {
+      let newState = _.cloneDeep(state);
+      newState.invoiceActionUpdated = false;
+      return Object.assign({}, state, newState);
+    }
     case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, string> = action.payload;
@@ -375,6 +382,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
 
         // Just refreshing the list for now
         newState.invoices = null;
+        newState.invoiceActionUpdated = true;
         return Object.assign({}, state, newState);
       }
       return state;

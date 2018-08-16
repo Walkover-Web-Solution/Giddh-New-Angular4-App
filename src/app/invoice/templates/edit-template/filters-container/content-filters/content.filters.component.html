@@ -5,6 +5,8 @@
 
         <div class="clearfix">
             <div *ngIf="fieldsAndVisibility.header.companyName" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name</div>
+            <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[1].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> GSTIN</div>
+            <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div>
             <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[4].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Invoice Date
                 <div class="mrL3"><input type="text" [maxlength]="15" class="form-control" name="invoiceDate" [(ngModel)]='customTemplate.sections[0].content[4].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[4].display"
@@ -154,8 +156,8 @@
                             /></td>
 
                     </tr>
-                    <!-- [hidden]="true" -->
-                    <tr>
+                    <!--  -->
+                    <tr [hidden]="true">
                         <td><label><input type="checkbox" name="dsc" [(ngModel)]="customTemplate.sections[1].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Description</label></td>
                         <td><input type="text" [maxlength]="10" class="form-control" name="dsc1" [(ngModel)]='customTemplate.sections[1].content[5].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[5].display"
                             /></td>
@@ -200,7 +202,12 @@
         <div class="clearfix">
             <h2>Footer</h2>
             <div class="clearfix bdrB">
-                <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group"> <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections[2].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Address</div>
+                <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group"> <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections[2].content[7].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Address
+                    <div class="mrL3">
+                        <textarea class="form-control" placeholder="Company Address" [(ngModel)]='customTemplate.sections[2].content[7].label' name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[7].display"></textarea>
+                    </div>
+                </div>
+
                 <div *ngIf="fieldsAndVisibility.footer.taxableAmount" class="form-group">
                     <input type="checkbox" name="tam" [(ngModel)]="customTemplate.sections[2].content[0].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Taxable Amount
                 </div>
@@ -223,7 +230,7 @@
             <div *ngIf="fieldsAndVisibility.footer.message1">
                 <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections[2].content[5].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Note 1
             </div>
-            <div *ngIf="fieldsAndVisibility.footer.message2" class="form-group mrL3 clearfix">
+            <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group mrL3 clearfix">
                 <div class="col-xs-12">
                     <div class="row">
                         <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='customTemplate.sections[2].content[5].label' name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[2].content[5].display"></textarea>

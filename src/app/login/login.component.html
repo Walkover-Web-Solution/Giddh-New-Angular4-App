@@ -178,11 +178,11 @@
                 <li class="linkedin_ico"><a href="javascript:void(0);" (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a></li>
 
             </ul>
-            <div class="login_option">
+            <div class="login_option" *ngIf="loginUsing !== 'userName'">
                 <!--  -->
-                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName';resetForgotPasswordProcess()">Email</a>
+                Login with <a href="javascript:void(0);" (click)="loginUsing = 'userName';resetForgotPasswordProcess()">email and password</a>
                 <!-- , <a href="javascript:void(0);" (click)="loginUsing = 'email';resetForgotPasswordProcess()">Email</a>  -->
-                or <a href="javascript:void(0);" (click)="loginUsing = 'mobile';resetForgotPasswordProcess()">Mobile</a>
+                <!-- or <a href="javascript:void(0);" (click)="loginUsing = 'mobile';resetForgotPasswordProcess()">Mobile</a> -->
             </div>
 
             <div class="mrT4">

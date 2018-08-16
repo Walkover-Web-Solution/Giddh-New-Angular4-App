@@ -9,6 +9,8 @@ import { InventoryEntry, InventoryUser } from '../../../models/api-models/Invent
 import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
 import { GeneralService } from '../../../services/general.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { StockUnitRequest } from '../../../models/api-models/Inventory';
+import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 
 @Component({
   selector: 'aside-menu',
@@ -57,7 +59,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
     :host .aside-pane {
       width: 480px;
-      padding:0;
+      padding: 0;
       background: #fff;
     }
   `],
@@ -65,6 +67,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export class AsideMenuComponent implements OnInit, OnChanges {
   public stockList$: Observable<IStocksItem[]>;
+  public stockUnits$: Observable<StockUnitRequest[]>;
   public userList$: Observable<InventoryUser[]>;
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public selectedAsideView: string;
@@ -78,8 +81,11 @@ export class AsideMenuComponent implements OnInit, OnChanges {
               private _inventoryEntryAction: InventoryEntryActions,
               private _generalService: GeneralService,
               private _inventoryUserAction: InventoryUsersActions,
+              private _customStockActions: CustomStockUnitAction,
   ) {
     this._store.dispatch(this._inventoryAction.GetStock());
+    // dispatch stockunit request
+    this._store.dispatch(this._customStockActions.GetStockUnit());
     this._store.dispatch(this._inventoryUserAction.getAllUsers());
     this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
   }
@@ -92,12 +98,11 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     this.stockList$ = this._store
       .select(p => p.inventory.stocksList && p.inventory.stocksList.results);
 
+    this.stockUnits$ = this._store
+      .select(p => p.inventory.stockUnits);
+
     this.userList$ = this._store
       .select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
-
-    this._store
-      .select(p => p.inventoryInOutState.entrySuccess)
-      .subscribe(p => p && this.closeAsidePane(p));
 
     this._store
       .select(p => p.inventoryInOutState.entryInProcess)
@@ -110,8 +115,8 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     this.createStockSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane(s);
-        let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
-        this._store.dispatch(this._inventoryAction.ManageInventoryAside( objToSend ));
+        let objToSend = {isOpen: false, isGroup: false, isUpdate: false};
+        this._store.dispatch(this._inventoryAction.ManageInventoryAside(objToSend));
       }
     });
   }
