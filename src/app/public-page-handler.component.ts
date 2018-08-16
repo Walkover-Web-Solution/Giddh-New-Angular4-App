@@ -19,6 +19,7 @@ export class PublicPageHandlerComponent {
       // this.router.navigate(['signup']);
       this.router.navigateByUrl('signup');
     } else {
+      console.log('this.router.routerState.snapshot.url is :', this.router.routerState.snapshot.url);
       this.router.navigate(['login']);
       // this.router.navigateByUrl('404');
     }
