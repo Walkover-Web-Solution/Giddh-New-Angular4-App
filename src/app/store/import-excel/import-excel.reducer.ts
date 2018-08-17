@@ -1,6 +1,7 @@
 import { CustomActions } from '../customActions';
 import { IMPORT_EXCEL } from '../../actions/import-excel/import-excel.const';
 import { ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export enum ImportExcelRequestStates {
   Default,
@@ -22,6 +23,9 @@ export const initialState: ImportExcelState = {
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case IMPORT_EXCEL.UPLOAD_FILE_REQUEST: {
       return {...state, requestState: ImportExcelRequestStates.UploadFileInProgress};
     }

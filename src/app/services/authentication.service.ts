@@ -315,4 +315,16 @@ export class AuthenticationService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
   }
+
+  public renewSession(): Observable<BaseResponse<any, any>> {
+    let userName = this._generalService.user.uniqueName;
+    return this._http.put(this.config.apiUrl + LOGIN_API.RENEW_SESSION.replace(':userUniqueName', encodeURIComponent(userName)), null).map((res) => {
+      let data: BaseResponse<string, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, any>(e));
+  }
+
+  public saveGmailAuthCode(data) {
+    return this._http.post('http://apitest.giddh.com/users/generate-mail-token', data);
+  }
 }

@@ -33,7 +33,7 @@ export function InventoryInOutReducer(state: InventoryInOutState = initialState,
       return {...state, inventoryReport: action.payload.body};
     }
     case INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY: {
-      return {...state, entryInProcess: true};
+      return {...state, entryInProcess: true, entrySuccess: false};
     }
     case INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE: {
       return {...state, entryInProcess: false, entrySuccess: action.payload.status === 'success'};

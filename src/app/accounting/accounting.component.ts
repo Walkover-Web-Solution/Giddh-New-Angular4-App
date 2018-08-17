@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AccountResponse } from '../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { SidebarAction } from '../actions/inventory/sidebar.actions';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
@@ -92,16 +93,18 @@ export class AccountingComponent implements OnInit, OnDestroy {
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
   public openDatePicker: boolean = false;
-  public openCreateAccountPopup: boolean = false;
+  public openCreateAccountPopupInVoucher: boolean = false;
+  public openCreateAccountPopupInInvoice: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
     private companyActions: CompanyActions,
-    private _router: Router,
-    private _keyboardService: KeyboardService,
+    // private _router: Router,
+    // private _keyboardService: KeyboardService,
     private _tallyModuleService: TallyModuleService,
-    private _accountService: AccountService) {
+    private _accountService: AccountService,
+    private sidebarAction: SidebarAction) {
       this._tallyModuleService.selectedPageInfo.subscribe((d) => {
         if (d) {
           this.gridType = d.gridType;
@@ -142,7 +145,17 @@ export class AccountingComponent implements OnInit, OnDestroy {
         return;
       }
     } else if (event.altKey && event.which === 67) { // Alt + C
-      this.openCreateAccountPopup = !this.openCreateAccountPopup;
+      if (this.gridType === 'voucher') {
+        this.openCreateAccountPopupInVoucher = true;
+        this.openCreateAccountPopupInInvoice = false;
+      } else if (this.gridType === 'invoice') {
+        this.openCreateAccountPopupInVoucher = false;
+        this.openCreateAccountPopupInInvoice = true;
+      }
+      setTimeout(() => {
+        this.openCreateAccountPopupInVoucher = false;
+        this.openCreateAccountPopupInInvoice = false;
+      }, 100);
     } else {
       let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
         if (event.altKey) {
@@ -177,6 +190,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
       });
       }
     });
+
+    this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
   }
 
   /**
