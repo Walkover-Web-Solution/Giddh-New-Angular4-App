@@ -134,7 +134,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
         moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
       ],
-      'Last Fiancial Year': [
+      'Last Financial Year': [
         moment(),
         moment()
       ],
@@ -531,11 +531,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (data && data.picker) {
 
       if (data.picker.chosenLabel === 'This Financial Year to Date') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('day');
+        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
       }
-      if (data.picker.chosenLabel === 'Last Fiancial Year') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('year').subtract(1, 'year');
-        data.picker.endDate = moment(this.activeFinancialYear.financialYearStarts).endOf('year').subtract(1, 'year');
+      if (data.picker.chosenLabel === 'Last Financial Year') {
+        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year');
+        data.picker.endDate = moment(_.clone(this.activeFinancialYear.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year');
       }
       this.isTodaysDateSelected = false;
       let dates = {
