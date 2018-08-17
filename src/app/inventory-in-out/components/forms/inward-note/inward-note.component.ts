@@ -295,12 +295,25 @@ export class InwardNoteComponent implements OnInit, OnChanges {
         transactions: rawValues,
       };
 
+      // if (this.mode === 'sender') {
+      //   value.transactions = value.transactions.map(trx => {
+      //     trx.manufacturingDetails = {
+      //       manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
+      //       manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
+      //       linkedStocks: this.manufacturingDetails.value.linkedStocks,
+      //     };
+      //     return trx;
+      //   });
+      //   value.isManufactured = this.isManufactured.value;
+      // }
+
       if (this.mode === 'sender') {
         value.transactions = value.transactions.map(trx => {
+          let linkedStocks: any = this.manufacturingDetails.controls.linkedStocks;
           trx.manufacturingDetails = {
             manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
             manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
-            linkedStocks: this.manufacturingDetails.value.linkedStocks,
+            linkedStocks: linkedStocks.controls.map(l => l.value),
           };
           return trx;
         });
