@@ -23,6 +23,7 @@ import { AccountService } from 'app/services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
 import { GeneralActions } from './general/general.actions';
+import { COMMON_ACTIONS } from './common.const';
 
 @Injectable()
 export class LoginActions {
@@ -83,6 +84,9 @@ export class LoginActions {
 
   public static resetPasswordRequest = 'resetPasswordRequest';
   public static resetPasswordResponse = 'resetPasswordResponse';
+
+  public static renewSessionRequest = 'renewSessionRequest';
+  public static renewSessionResponse = 'renewSessionResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -554,6 +558,19 @@ export class LoginActions {
       return { type: 'EmptyAction' };
     });
 
+  @Effect()
+  public renewSession$: Observable<Action> = this.actions$
+    .ofType(LoginActions.renewSessionRequest)
+    .switchMap((action: CustomActions) => this.auth.renewSession())
+    .map(response => this.renewSessionResponse(response));
+
+  @Effect()
+  public renewSessionResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.renewSessionResponse)
+    .map((action: CustomActions) => {
+      return { type: 'EmptyAction' };
+    });
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -759,9 +776,16 @@ export class LoginActions {
   }
 
   public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): CustomActions {
+    this.store.dispatch(this.ResetApplicationData());
     return {
       type: CompanyActions.CHANGE_COMPANY_RESPONSE,
       payload: value
+    };
+  }
+
+  public ResetApplicationData(): CustomActions {
+    return {
+      type: COMMON_ACTIONS.RESET_APPLICATION_DATA
     };
   }
 
@@ -891,6 +915,19 @@ export class LoginActions {
   public resetPasswordResponse(response): CustomActions {
     return {
       type: LoginActions.resetPasswordResponse,
+      payload: response
+    };
+  }
+
+  public renewSession(): CustomActions {
+    return {
+      type: LoginActions.renewSessionRequest,
+    };
+  }
+
+  public renewSessionResponse(response): CustomActions {
+    return {
+      type: LoginActions.renewSessionResponse,
       payload: response
     };
   }

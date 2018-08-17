@@ -7,6 +7,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -51,6 +52,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
   let data: BaseResponse<AccountResponse, string>;
   let transaction: BaseResponse<TransactionsResponse, TransactionsRequest>;
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+        return Object.assign({}, state, initialState);
+    }
     case LEDGER.GET_LEDGER_ACCOUNT:
       return Object.assign({}, state, {
         accountInprogress: true

@@ -13,16 +13,16 @@
 
         <div class="row">
             <div class="form-group col-xs-6">
-                <label for="">Closing Balance</label>
-                <div class="input-group">
+                <label for="">Balance for Trigger</label>
+                <div class="" [ngClass]="{'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
                     <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">DR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">DR.
                     </div>
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">CR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">CR.
                     </div>
                 </div>
             </div>
