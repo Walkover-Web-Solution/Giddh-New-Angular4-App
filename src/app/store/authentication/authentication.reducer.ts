@@ -383,6 +383,15 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
 
 export function SessionReducer(state: SessionState = sessionInitialState, action: CustomActions): SessionState {
   switch (action.type) {
+    case LoginActions.renewSessionResponse: {
+      let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body
+        });
+      }
+      return state;
+    }
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
       if (data.status === 'success') {

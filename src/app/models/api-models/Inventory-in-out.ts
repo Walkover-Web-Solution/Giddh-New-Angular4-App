@@ -1,4 +1,5 @@
 import { INameUniqueName } from './Inventory';
+import { IManufacturingDetails } from '../interfaces/stocksItem.interface';
 
 export interface Stock {
   uniqueName: string;
@@ -19,12 +20,14 @@ export interface Transaction {
   inventoryUser: InventoryUser;
   stock: Stock;
   stockUnit: StockUnit;
+  manufacturingDetails?: IManufacturingDetails;
 }
 
 export interface InventoryEntry {
   inventoryEntryDate: string;
   description: string;
   transactions: Transaction[];
+  isManufactured?: boolean;
 }
 
 export interface InventoryFilter {
