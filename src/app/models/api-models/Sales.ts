@@ -29,13 +29,13 @@ export const VOUCHER_TYPE_LIST: any[] = [
     label: 'Debit Note'
     }
   },
-  // {
-  //   value: 'Purchase',
-  //   label: 'Purchase',
-  //   additional: {
-  //     label: 'Purchase'
-  //   }
-  // }
+  {
+    value: 'Purchase',
+    label: 'Purchase',
+    additional: {
+      label: 'Purchase'
+    }
+  }
 ];
 /*
 RECEIPT("receipt"),
@@ -51,6 +51,7 @@ CREDIT_NOTE("credit note")
 export interface IStockUnit {
   text: string;
   id: string;
+  rate?: number;
 }
 
 export interface IForceClear {

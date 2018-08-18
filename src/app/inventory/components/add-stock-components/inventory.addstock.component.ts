@@ -526,8 +526,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public updateItemInLinkedStocks(item: FormGroup, i: any) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    const linkedStokesControl = control;
-    linkedStokesControl.controls[i].patchValue(item);
+    control.controls[i].patchValue(item);
     this.editLinkedStockIdx = null;
     this.editModeForLinkedStokes = false;
     let last = control.controls.length;
@@ -542,8 +541,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-    const linkedStokesControl = control;
-    linkedStokesControl.removeAt(i);
+    control.removeAt(i);
   }
 
   public checkIfLinkedStockIsUnique(v: IOption) {
@@ -650,7 +648,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.hsnNumber = formObj.hsnNumber;
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
-        return pr.stockUnitCode && pr.rate;
+        // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+        // return pr.stockUnitCode && pr.rate;
+        return pr.stockUnitCode || pr.rate;
       });
       stockObj.purchaseAccountDetails = {
         accountUniqueName: formObj.purchaseAccountUniqueName,
@@ -659,7 +659,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     if (formObj.enableSales) {
       formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-        return pr.stockUnitCode && pr.rate;
+        // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+        // return pr.stockUnitCode && pr.rate;
+        return pr.stockUnitCode || pr.rate;
       });
       stockObj.salesAccountDetails = {
         accountUniqueName: formObj.salesAccountUniqueName,
@@ -871,11 +873,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * validateLinkedStock
    */
   public validateLinkedStock(item) {
-    if (!item.quantity || !item.stockUniqueName || !item.stockUnitCode) {
-      return false;
-    } else {
-      return true;
-    }
+    return !(!item.quantity || !item.stockUniqueName || !item.stockUnitCode);
   }
 
   public addNewGroupPane() {

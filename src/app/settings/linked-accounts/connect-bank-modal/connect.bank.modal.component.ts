@@ -48,6 +48,7 @@ export class ConnectBankModalComponent implements OnChanges {
   public loginForm: FormGroup;
   public bankSyncInProgress: boolean;
   public apiInInterval: any;
+  public cancelRequest: boolean = false;
 
   constructor(public sanitizer: DomSanitizer,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
@@ -106,7 +107,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this.step = 1;
     this.selectedProvider = {};
     this.bankSyncInProgress = false;
-    // clearInterval(this.apiInInterval);
+    this.cancelRequest = true;
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -114,7 +115,7 @@ export class ConnectBankModalComponent implements OnChanges {
       if (e.item) {
         this.selectedProvider = e.item;
       }
-    }, 400);
+    }, 20);
   }
 
   // initial rowArray controls
@@ -167,6 +168,10 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public onSelectProvider() {
+    const inputRowControls = this.loginForm.controls['row'] as FormArray;
+    if (inputRowControls.controls.length > 1) {
+      inputRowControls.controls = inputRowControls.controls.splice(1);
+    }
     this.getProviderLoginForm(this.selectedProvider.id);
   }
 
@@ -204,6 +209,7 @@ export class ConnectBankModalComponent implements OnChanges {
         this._toaster.successToast(res.body);
         let providerId = res.body.replace(/[^0-9]+/ig, '');
         if (providerId) {
+          this.cancelRequest = false;
           this.getBankSyncStatus(providerId);
         } else {
           this.onCancel();
@@ -224,12 +230,10 @@ export class ConnectBankModalComponent implements OnChanges {
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
-        if (!validateProvider) {
+        if (!validateProvider && !this.cancelRequest) {
             setTimeout(() => {
               this.getBankSyncStatus(providerId);
             }, 10000);
-        } else {
-          this.onCancel();
         }
       }
     });
@@ -246,6 +250,14 @@ export class ConnectBankModalComponent implements OnChanges {
       } else {
         return false;
       }
+  }
+
+  /**
+   * resetBankForm
+   */
+  public resetBankForm() {
+    this.step = 1;
+    this.selectedProvider = {};
   }
 
 }
