@@ -35,7 +35,8 @@ export class FinancialYearComponent implements OnInit {
   public yearOptions = [];
   public FYPeriodOptions: IOption[] = [
     { label: 'JAN-DEC', value: 'JAN-DEC'},
-    { label: 'APR-MAR', value: 'APR-MAR'}
+    { label: 'APR-MAR', value: 'APR-MAR'},
+    { label: 'JULY-JULY', value: 'JULY-JULY'}
   ];
   public selectedFYPeriod: string;
   public selectedFinancialYearOption: string;
