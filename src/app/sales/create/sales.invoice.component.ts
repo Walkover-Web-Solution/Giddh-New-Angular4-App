@@ -819,18 +819,25 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 //   txn.sacNumber = null;
                 // }
                 if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
-                  txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
                   // set rate auto
                   txn.rate = null;
-                  if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
-                    txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
-                  }
                   let obj: IStockUnit = {
                     id: selectedAcc.additional.stock.stockUnit.code,
                     text: selectedAcc.additional.stock.stockUnit.name
                   };
                   txn.stockList = [];
-                  txn.stockList.push(obj);
+                  // debugger;
+                  if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
+                    txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
+                    txn.stockUnit = txn.stockList[0].id;
+                    txn.rate = txn.stockList[0].rate;
+                  } else {
+                    txn.stockList.push(obj);
+                    if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
+                      txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
+                    }
+                    txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+                  }
                   txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
                   txn.isStockTxn = true;
                 } else {
@@ -1112,7 +1119,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.toLocaleLowerCase().indexOf(term) > -1);
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public closeCreateAcModal() {
@@ -1202,4 +1209,28 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
+  /**
+   * prepareUnitArr
+   */
+  public prepareUnitArr(unitArr) {
+    let unitArray = [];
+      _.forEach(unitArr, (item) => {
+        unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+      });
+      return unitArray;
+  }
+
+  /**
+   * onChangeUnit
+   */
+  public onChangeUnit(txn, selectedUnit) {
+    if (!event) {
+      return;
+    }
+    _.find(txn.stockList, (o) => {
+      if (o.id === selectedUnit) {
+        return txn.rate = o.rate;
+      }
+    });
+  }
 }

@@ -198,9 +198,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
       if (c.openCreateAccountPopup.currentValue) {
         this.showQuickAccountModal();
-      } else {
-        this.hideQuickAccountModal();
       }
+      // else {
+      //   this.hideQuickAccountModal();
+      // }
     }
   }
 

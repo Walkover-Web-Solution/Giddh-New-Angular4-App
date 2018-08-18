@@ -181,48 +181,43 @@
         <!-- Discount collapse -->
         <!-- <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
 
-      <div class="col-xs-12">
-        <div class="form-group toggle-btn mrB">
-          <label class="cp" (click)="showDiscount = !showDiscount;">
+            <div class="col-xs-12">
+                <div class="form-group toggle-btn mrB">
+                    <label class="cp" (click)="showDiscount = !showDiscount;">
             <i class="fa cp" aria-hidden="true"
                [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
           </label>
-        </div>
-      </div> -->
-
-        <!-- discount container -->
-        <!-- <ng-container *ngIf="showDiscount">
-        <div class="col-xs-12">
-          <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
-            <div class="tax-label">
-              <label>All Applied Discounts</label>
+                </div>
             </div>
-            <div class="form-group">
-              <div class="input-group">
-                <sh-select [options]="companyDiscountDropDown" #discountShSelect
-                           [placeholder]="'Select Discount'" [multiple]="false"
-                           formControlName="discountUniqueName" [showClear]="false"
-                           style="width: calc(100% - 13px);">
-                </sh-select>
-                <span class="input-group-btn pdL2">
+
+             discount container
+            <ng-container *ngIf="showDiscount">
+                <div class="col-xs-12">
+                    <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
+                        <div class="tax-label">
+                            <label>All Applied Discounts</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <sh-select [options]="companyDiscountDropDown" #discountShSelect [placeholder]="'Select Discount'" [multiple]="false" formControlName="discountUniqueName" [showClear]="false" style="width: calc(100% - 13px);">
+                                </sh-select>
+                                <span class="input-group-btn pdL2">
                   <button type="submit" class="btn btn-success"
                           >Save</button>
                   <button type="button" class="btn btn-danger" style="margin-left: 5px;"
                           *ngIf="(activeAccount$ | async)?.discounts.length"
                           (click)="removeDiscount()" >Delete</button>
                 </span>
-              </div>
-            </div>
-          </form>
-        </div>
-      </ng-container>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-container>
 
-    </div> -->
-
+        </div> -->
+        <!-- discount -->
     </div>
-    <!--merge and taxes-->
 </div>
-
 <!-- modals -->
 
 <!--ng-busy-->
