@@ -31,6 +31,7 @@
           <sh-select [options]="stockListOptions"
                      [multiple]="false"
                      [placeholder]="'Select Product'"
+                     [disabled]="stock.disabled"
                      formControlName="stock"
                      (selected)="stockChanged($event)"></sh-select>
           <span *ngIf="stock.invalid">
