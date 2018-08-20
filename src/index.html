@@ -6,12 +6,8 @@
 
 <head>
   <script type="text/javascript">
-    console.log('window.location.hostname is :', window.location.hostname);
     if (window.location.hostname.indexOf("www") == 0) {
-        console.log('condition is true');
-        window.location = window.location.href.replace("www.","");
-    } else {
-      console.log('condition is false');
+      window.location = window.location.href.replace("www.","");
     }
   </script>
   <meta charset="utf-8">
