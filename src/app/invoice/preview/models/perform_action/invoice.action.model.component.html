@@ -43,10 +43,11 @@
                 </div>
                 <div class="col-xs-6 form-group">
                     <label>Cheque Clearance Date</label>
-                    <input type="text" [ngModel]="moment(paymentActionFormObj.chequeClearanceDate).format('DD-MM-YYYY')" name="chequeClearance" (focus)="showClearanceDatePicker = true;" class="form-control" (clickOutside)="showClearanceDatePicker=false;" />
-                    <div *ngIf="showClearanceDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                    <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control" [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance" placeholder="DD-MM-YYYY" />
+                    <!-- <input type="text" [ngModel]="moment(paymentActionFormObj.chequeClearanceDate).format('DD-MM-YYYY')" name="chequeClearance" (focus)="showClearanceDatePicker = true;" class="form-control" (clickOutside)="showClearanceDatePicker=false;" /> -->
+                    <!-- <div *ngIf="showClearanceDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                         <datepicker [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="clearanceDate" (selectionDone)="setClearanceDate($event)"></datepicker>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="row">

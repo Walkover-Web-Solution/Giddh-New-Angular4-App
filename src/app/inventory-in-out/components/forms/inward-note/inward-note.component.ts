@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
@@ -7,10 +7,11 @@ import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface'
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
-import { StockUnitRequest } from '../../../../models/api-models/Inventory';
+import { StockDetailResponse, StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
 import { ToasterService } from '../../../../services/toaster.service';
 import { IForceClear } from '../../../../models/api-models/Sales';
+import { InventoryService } from '../../../../services/inventory.service';
 
 @Component({
   selector: 'inward-note',
@@ -41,7 +42,6 @@ export class InwardNoteComponent implements OnInit, OnChanges {
   public editLinkedStockIdx: any = null;
   public editModeForLinkedStokes: boolean = false;
   public disableStockButton: boolean = false;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
 
   public get inventoryEntryDate(): FormControl {
     return this.form.get('inventoryEntryDate') as FormControl;
@@ -71,11 +71,13 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     return this.form.get('isManufactured') as FormControl;
   }
 
-  constructor(private _fb: FormBuilder, private _toasty: ToasterService) {
+  constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
+              private _zone: NgZone) {
     this.initializeForm(true);
   }
 
   public ngOnInit() {
+    this.manufacturingDetails.disable();
     this.isManufactured.valueChanges.subscribe(val => {
       this.manufacturingDetails.reset();
       val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
@@ -191,15 +193,43 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     }
   }
 
-  public stockChanged(option: IOption, index: number) {
+  public async stockChanged(option: IOption, index: number) {
     const items = this.transactions;
     const stockItem = this.stockList.find(p => p.uniqueName === option.value);
     const stock = stockItem ? {uniqueName: stockItem.uniqueName} : null;
     const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 
-    if (this.mode === 'sender') {
-      const manufacturingUnitCode = this.manufacturingDetails.get('manufacturingUnitCode');
-      manufacturingUnitCode.patchValue(stockUnit);
+    if (stockItem && this.mode === 'sender') {
+      this.stock.disable();
+      try {
+        let stockDetails = await this.getStockDetails(stockItem);
+        this._zone.run(() => {
+          this.stock.enable();
+        });
+
+        if (stockDetails.body && stockDetails.body.manufacturingDetails) {
+          let mfd = stockDetails.body.manufacturingDetails;
+          this.isManufactured.patchValue(true);
+
+          this.manufacturingDetails.patchValue({
+            manufacturingQuantity: mfd.manufacturingQuantity,
+            manufacturingUnitCode: mfd.manufacturingUnitCode
+          });
+
+          mfd.linkedStocks.map((item, i) => {
+            this.addItemInLinkedStocks(item, i, mfd.linkedStocks.length - 1);
+          });
+
+        } else {
+          this.isManufactured.patchValue(false);
+        }
+
+      } catch (e) {
+        this._zone.run(() => {
+          this.stock.enable();
+        });
+        this._toasty.errorToast('something went wrong. please try again!');
+      }
     }
 
     if (index >= 0) {
@@ -294,12 +324,25 @@ export class InwardNoteComponent implements OnInit, OnChanges {
         transactions: rawValues,
       };
 
+      // if (this.mode === 'sender') {
+      //   value.transactions = value.transactions.map(trx => {
+      //     trx.manufacturingDetails = {
+      //       manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
+      //       manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
+      //       linkedStocks: this.manufacturingDetails.value.linkedStocks,
+      //     };
+      //     return trx;
+      //   });
+      //   value.isManufactured = this.isManufactured.value;
+      // }
+
       if (this.mode === 'sender') {
         value.transactions = value.transactions.map(trx => {
+          let linkedStocks: any = this.manufacturingDetails.controls.linkedStocks;
           trx.manufacturingDetails = {
             manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
             manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
-            linkedStocks: this.manufacturingDetails.value.linkedStocks,
+            linkedStocks: linkedStocks.controls.map(l => l.value),
           };
           return trx;
         });
@@ -308,5 +351,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
       this.onSave.emit({...value});
     }
+  }
+
+  public async getStockDetails(stockItem: IStocksItem) {
+    return await this._inventoryService.GetStockDetails(stockItem.stockGroup.uniqueName, stockItem.uniqueName).toPromise();
   }
 }

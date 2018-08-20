@@ -13,6 +13,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 
+export declare const gapi: any;
+
 @Component({
   selector: 'setting-integration',
   templateUrl: './setting.integration.component.html',
@@ -30,6 +32,8 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 })
 export class SettingIntegrationComponent implements OnInit {
 
+  public auth2: any;
+
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
   public razorPayObj: RazorPayClass = new RazorPayClass();
@@ -43,16 +47,20 @@ export class SettingIntegrationComponent implements OnInit {
   public payoutAdded: boolean = false;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public bankAccounts$: Observable<IOption[]>;
+  public gmailAuthCodeUrl$: Observable<string> = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
 
   constructor(
     private router: Router,
     private store: Store<AppState>,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
-    private toasty: ToasterService,
+    private toasty: ToasterService
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl));
+    this.gmailAuthCodeUrl$ = Observable.of(this.gmailAuthCodeStaticUrl);
   }
 
   public ngOnInit() {
@@ -127,7 +135,6 @@ export class SettingIntegrationComponent implements OnInit {
     //     this.accounts$ = Observable.of(accounts);
     //   }
     // });
-
   }
 
   public getInitialData() {
@@ -266,4 +273,19 @@ export class SettingIntegrationComponent implements OnInit {
   public deletePaymentGateway() {
     this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
   }
+
+  private getRedirectUrl(baseHref: string) {
+    if (baseHref.indexOf('dev.giddh.com') > -1) {
+      return 'http://dev.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://test.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://stage.giddh.com/app/pages/settings?tab=integration';
+    } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
+      return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
+    } else {
+      return 'https://giddh.com/app/pages/settings?tab=integration';
+    }
+  }
+
 }
