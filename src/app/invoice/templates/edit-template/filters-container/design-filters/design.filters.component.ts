@@ -44,7 +44,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     styles: ['regular']
   });
 
-  public _presetFonts = ['Arial', 'Serif', 'Helvetica', 'Sans-Serif', 'Open Sans', 'Roboto Slab'];
+  public _presetFonts = ['Sans-Serif', 'Open Sans', 'Lato'];
   public presetFonts = this._presetFonts;
 
   public formData: FormData;
