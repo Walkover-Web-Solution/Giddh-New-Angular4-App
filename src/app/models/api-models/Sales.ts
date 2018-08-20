@@ -369,6 +369,7 @@ class VoucherDetailsClass {
   public gstTaxesTotal?: any;
   public totalTaxableValue?: number;
   public customerName?: any;
+  public voucherType?: string;
   constructor() {
     this.customerName = null;
     this.grandTotal = null;
