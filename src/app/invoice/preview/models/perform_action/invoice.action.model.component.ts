@@ -80,9 +80,11 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
   }
   public onConfirmation(formObj) {
     formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
-    if (this.isBankSelected) {
-      formObj.chequeClearanceDate = moment(formObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
-    }
+    // if (this.isBankSelected) {
+    //   formObj.chequeClearanceDate = moment(formObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+    // } else {
+    //   delete formObj['chequeClearanceDate'];
+    // }
     this.closeModelEvent.emit(formObj);
     this.resetFrom();
   }
@@ -100,8 +102,8 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
     this.showDatePicker = !this.showDatePicker;
   }
   public setClearanceDate(date) {
-    this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
     this.showClearanceDatePicker = !this.showClearanceDatePicker;
+    this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
   }
 
   public onSelectPaymentMode(event) {
@@ -111,11 +113,16 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
         this.isBankSelected = true;
       } else {
         this.isBankSelected = false;
+        this.paymentActionFormObj.chequeClearanceDate = '';
+        this.paymentActionFormObj.chequeNumber = '';
       }
     } else {
       this.paymentActionFormObj.accountUniqueName = '';
       this.isBankSelected = false;
+      this.paymentActionFormObj.chequeClearanceDate = '';
+      this.paymentActionFormObj.chequeNumber = '';
     }
+
   }
 
   public onTagSelected(ev) {
@@ -129,7 +136,8 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
     this.paymentActionFormObj = {};
     this.forceClear$ = Observable.of({status: true});
     this.paymentActionFormObj.paymentDate = moment();
-    this.paymentActionFormObj.chequeClearanceDate = moment();
+    // this.paymentActionFormObj.chequeClearanceDate = moment();
+    this.isBankSelected = false;
     this.ngOnDestroy();
   }
 

@@ -40,7 +40,7 @@
         </div>
 
         <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
-          <label class="mrB1">Sender <sup>*</sup></label>
+          <label class="mrB1">Receiver <sup>*</sup></label>
           <sh-select [options]="userListOptions"
                      [multiple]="false"
                      [placeholder]="'Select Receiver'"
@@ -48,7 +48,7 @@
                      (selected)="userChanged($event)"></sh-select>
           <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
-                    class="text-danger">Please select Sender.</span>
+                    class="text-danger">Please select Receiver.</span>
                     </span>
         </div>
 

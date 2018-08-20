@@ -384,7 +384,8 @@ export class UpdateLedgerVm {
 
     if (this.stockTrxEntry) {
       this.stockTrxEntry.amount = Number(Number(finalTotal).toFixed(2));
-      this.stockTrxEntry.inventory.rate = this.stockTrxEntry.amount;
+      const rate = Number(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity).toFixed(2));
+      this.stockTrxEntry.inventory.rate = rate;
       this.stockTrxEntry.isUpdated = true;
     } else {
       // find account that's from category income || expenses

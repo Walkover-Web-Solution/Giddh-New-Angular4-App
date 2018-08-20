@@ -648,7 +648,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.hsnNumber = formObj.hsnNumber;
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
-        return pr.stockUnitCode && pr.rate;
+        // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+        // return pr.stockUnitCode && pr.rate;
+        return pr.stockUnitCode || pr.rate;
       });
       stockObj.purchaseAccountDetails = {
         accountUniqueName: formObj.purchaseAccountUniqueName,
@@ -657,7 +659,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     if (formObj.enableSales) {
       formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-        return pr.stockUnitCode && pr.rate;
+        // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
+        // return pr.stockUnitCode && pr.rate;
+        return pr.stockUnitCode || pr.rate;
       });
       stockObj.salesAccountDetails = {
         accountUniqueName: formObj.salesAccountUniqueName,
