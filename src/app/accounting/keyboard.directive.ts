@@ -41,18 +41,23 @@ export class OnReturnDirective {
         // } else {
         //   alert('ele without directive');
         // }
+
+        if (target.value === 'NaN') {
+          target.value = '';
+        }
+
         if (target) {
           target.focus();
         }
 
       } else if (e.which === 8 || e.keyCode === 8) {
         const target = allElements[indx - 1];
-        if (selectedEle.value === '') {
+        // if (selectedEle.value === '') {
           e.preventDefault();
           if (target) {
             target.focus();
           }
-        }
+        // }
       }
 
       // console.log('currentEle is :', nextEle);
