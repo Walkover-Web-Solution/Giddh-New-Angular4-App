@@ -4,7 +4,6 @@
     <div class="clearfix">
         <div class="col-xs-9">
             <div class="row">
-                {{mode}}
                 <label><input type="text" class="form-control" placeholder="My Template Name" name="templateName" [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)" /></label>
             </div>
         </div>
@@ -16,7 +15,7 @@
     <button type="button" class="start-upload-btn" (click)="startUpload()">
     Start Upload
   </button> {{imagePreview}} -->
-    <div class="clearfix">
+    <div class="clearfix scrollAuto">
         <ul class="designTool">
             <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
@@ -28,20 +27,19 @@
                         <!-- {{ sampleTemplates | json}} -->
                         <ng-container *ngFor="let template of sampleTemplates">
                             <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice'">
-                                {{template.uniqueName}}
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
                             </li>
                         </ng-container>
                         <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_b')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_b')">
                             <img src="./assets/images/template1.jpg" alt="" />
-                        </li> -->
+                        </li> 
                         <li (click)="onDesignChange('uniqueName', 'gst_template_c')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_d')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_d')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="onDesignChange('uniqueName', 'gst_template_e')">
@@ -131,7 +129,7 @@
                 </div>
                 <!-- edit color end -->
             </li>
-            <!-- 
+
             <li [hidden]="templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
@@ -146,7 +144,7 @@
                         </div>
                     </div>
                 </div>
-            </li>  -->
+            </li>
             <li [hidden]="templateUISectionVisibility.print" (click)="onChangeVisibility('print')">
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
