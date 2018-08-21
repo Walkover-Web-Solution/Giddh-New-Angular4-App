@@ -21,12 +21,10 @@ export class PublicPageHandlerComponent {
     } else if (this.router.routerState.snapshot.url.includes('app/pages/settings')) {
       let url = this.router.routerState.snapshot.url;
       url = url.replace('/app', '');
-      console.log('this.router.routerState.snapshot.url is :', this.router.routerState.snapshot.url);
-      console.log('the url is :', url);
       this.router.navigateByUrl(url);
-      // this.router.navigateByUrl('404');
     } else {
-      this.router.navigate(['login']);
+      // this.router.navigate(['login']);
+      this.router.navigateByUrl('404');
     }
   }
 }
