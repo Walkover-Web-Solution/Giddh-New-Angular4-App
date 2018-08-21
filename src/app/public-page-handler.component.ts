@@ -27,9 +27,19 @@ export class PublicPageHandlerComponent {
       url = url.replace('/app', '');
       this.router.navigateByUrl(url);
     } else {
-      console.log('last else');
-      this.router.navigate(['login']);
-      // this.router.navigateByUrl('404');
+      console.log('the last else');
+      let url = this.router.routerState.snapshot.url;
+      url = url.replace('/app', '');
+
+      this.router.navigateByUrl(url).then((res) => {
+        console.log('the res then success is :', res);
+      }).catch((err) => {
+        console.log('the err from catch is :', err);
+      });
+
+      // console.log('last else');
+      // this.router.navigate(['login']);
+      // // this.router.navigateByUrl('404');
     }
   }
 }
