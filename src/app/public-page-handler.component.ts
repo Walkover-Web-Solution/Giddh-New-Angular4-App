@@ -30,7 +30,7 @@ export class PublicPageHandlerComponent {
       let url = this.router.routerState.snapshot.url;
       url = url.replace('/app/', '');
       console.log('the formatted url is :', url);
-      let existingRouteIndx = this.router.config.findIndex((r) => r.redirectTo === url);
+      let existingRouteIndx = this.router.config.findIndex((r) => r.redirectTo.includes(url));
       console.log('existingRouteIndx is :', existingRouteIndx);
       if (existingRouteIndx > -1) {
         console.log('YES');
