@@ -1,12 +1,12 @@
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormBuilder, FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import { CashfreeClass, EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { CashfreeClass, EmailKeyClass, RazorPayClass, SmsKeyClass, AmazonSellerClass } from '../../models/api-models/SettingsIntegraion';
 import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -40,6 +40,7 @@ export class SettingIntegrationComponent implements OnInit {
   public payoutObj: CashfreeClass = new CashfreeClass();
   public autoCollectObj: CashfreeClass = new CashfreeClass();
   public paymentGateway: CashfreeClass = new CashfreeClass();
+  public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
   public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
   public paymentGatewayAdded: boolean = false;
@@ -48,6 +49,7 @@ export class SettingIntegrationComponent implements OnInit {
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public bankAccounts$: Observable<IOption[]>;
   public gmailAuthCodeUrl$: Observable<string> = null;
+  public amazonSellerForm: FormGroup;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
 
@@ -56,7 +58,8 @@ export class SettingIntegrationComponent implements OnInit {
     private store: Store<AppState>,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
-    private toasty: ToasterService
+    private toasty: ToasterService,
+    private _fb: FormBuilder
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
     this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl));
@@ -135,6 +138,11 @@ export class SettingIntegrationComponent implements OnInit {
     //     this.accounts$ = Observable.of(accounts);
     //   }
     // });
+    this.amazonSellerForm = this._fb.group({
+      sellers: this._fb.array([
+        this.initAmazonReseller()
+      ])
+    });
   }
 
   public getInitialData() {
@@ -144,6 +152,7 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
     this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+    this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
   }
 
   public setDummyData() {
@@ -272,6 +281,50 @@ export class SettingIntegrationComponent implements OnInit {
    */
   public deletePaymentGateway() {
     this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
+  }
+
+  /**
+   * saveAmazonSeller
+   */
+  public saveAmazonSeller() {
+    let sellers = _.cloneDeep(this.amazonSellerForm.controls['sellers'].value);
+    this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
+    console.log('bingo');
+  }
+
+  /**
+   * updateAmazonSeller
+   */
+  public updateAmazonSeller() {
+    //
+  }
+  // initial initAmazonReseller controls
+  public initAmazonReseller() {
+    // initialize our controls
+    return this._fb.group({
+      sellerId: [''],
+      mwsAuthToken: [''],
+      accessKey: [''],
+      secretKey: ['']
+    });
+  }
+
+  public addMoreSeller(i: number, item?: any) {
+    const amazonSellerControl = this.amazonSellerForm.controls['sellers'] as FormArray;
+    const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+
+    if (item) {
+      if (control.controls[i]) {
+        control.controls[i].patchValue(item);
+      } else {
+        control.push(this.initAmazonReseller());
+        setTimeout(() => {
+          control.controls[i].patchValue(item);
+        }, 200);
+      }
+    } else {
+        control.push(this.initAmazonReseller());
+    }
   }
 
   private getRedirectUrl(baseHref: string) {
