@@ -75,6 +75,20 @@ export function agingReportReducer(state = initialState, action: CustomActions):
       return Object.assign({}, state, { setDueRangeRequestInFlight: false, setDueRangeOpen: false, agingDropDownoptions });
 
     }
+    case AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE: {
+      let data = action.payload as BaseResponse<string[], string>;
+
+      if (data.status === 'error') {
+        return state;
+      }
+      let agingDropDownoptions: AgingDropDownoptions = {
+        fourth: parseInt(data.body[0]),
+        fifth: parseInt(data.body[1]),
+        sixth: parseInt(data.body[2])
+      };
+      return Object.assign({}, state, { agingDropDownoptions });
+
+    }
     default: {
       return state;
     }

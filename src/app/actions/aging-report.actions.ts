@@ -19,6 +19,10 @@ export class AgingReportActions {
   public static CREATE_DUE_DAY_RANGE = 'CREATE_DUE_DAY_RANGE';
   public static CREATE_DUE_DAY_RANGE_RESPONSE = 'CREATE_DUE_DAY_RANGE_RESPONSE';
 
+  public static GET_DUE_DAY_RANGE = 'GET_DUE_DAY_RANGE';
+  public static GET_DUE_DAY_RANGE_RESPONSE = 'GET_DUE_DAY_RANGE_RESPONSE';
+
+
   @Effect()
   public createDueRange$: Observable<Action> = this.action$
     .ofType(AgingReportActions.CREATE_DUE_DAY_RANGE)
@@ -39,6 +43,27 @@ export class AgingReportActions {
 
       // check if new uer has created first company then set newUserLoggedIn false
     });
+
+  @Effect()
+  public getDueRange$: Observable<Action> = this.action$
+    .ofType(AgingReportActions.GET_DUE_DAY_RANGE)
+    .switchMap((action: CustomActions) => this._agingReportService.GetDueDaysRange())
+    .map(response => this.GetDueRangeResponse(response));
+
+  @Effect()
+  public getDueRangeResponse$: Observable<Action> = this.action$
+    .ofType(AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE)
+    .map((action: CustomActions) => {
+      let response = action.payload as BaseResponse<string[], string>;
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return { type: 'EmptyAction' };
+      }
+      this._toasty.successToast('Due date range created successfully', 'Success');
+      // set newly created company as active company
+      return { type: 'EmptyAction' };
+      // check if new uer has created first company then set newUserLoggedIn false
+    });
   constructor(
     private action$: Actions,
     private _agingReportService: AgingreportingService,
@@ -56,6 +81,19 @@ export class AgingReportActions {
   public CreateDueRangeResponse(value: BaseResponse<string, DueRangeRequest>): CustomActions {
     return {
       type: AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE,
+      payload: value
+    };
+  }
+
+  public GetDueRange(): CustomActions {
+    return {
+      type: AgingReportActions.GET_DUE_DAY_RANGE,
+      payload: null
+    };
+  }
+  public GetDueRangeResponse(value: BaseResponse<string[], string>): CustomActions {
+    return {
+      type: AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE,
       payload: value
     };
   }

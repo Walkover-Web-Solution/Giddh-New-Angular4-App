@@ -33,6 +33,15 @@ export class AgingreportingService implements OnInit {
       })
       .catch((e) => this.errorHandler.HandleCatch<string, DueRangeRequest>(e, model, {}));
   }
+  public GetDueDaysRange(): Observable<BaseResponse<string[], string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
+      .map((res) => {
+        let data: BaseResponse<string[], string> = res;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string[], string>(e, null, {}));
+  }
 
   public GetDueAmountReport(model: DueAmountReportRequest, q: string, page: number = 1, count: number = 20, sort: string = 'asc', sortBy: string = 'name'): Observable<BaseResponse<DueAmountReportResponse, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
