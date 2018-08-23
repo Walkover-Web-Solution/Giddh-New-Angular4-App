@@ -6,7 +6,7 @@ import * as _ from '../../lodash-optimized';
 import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { AgingDropDownoptions, Result, DueRangeRequest } from '../../models/api-models/Contact';
+import { AgingDropDownoptions, Result, DueRangeRequest, DueAmountReportRequest } from '../../models/api-models/Contact';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
 export interface AgingReportState {
@@ -20,6 +20,7 @@ export interface AgingReportState {
   totalItems: number;
   results: Result[];
   size: number;
+  dueAmountReportRequest: DueAmountReportRequest;
 }
 
 export const initialState: AgingReportState = {
@@ -37,6 +38,14 @@ export const initialState: AgingReportState = {
   totalItems: 0,
   results: [],
   size: 0,
+  dueAmountReportRequest: {
+    totalDueAmountGreaterThan: false,
+    totalDueAmountLessThan: false,
+    totalDueAmountEqualTo: false,
+    totalDueAmount: 0,
+    includeName: false,
+    name: [],
+  }
 };
 
 export function agingReportReducer(state = initialState, action: CustomActions): AgingReportState {
