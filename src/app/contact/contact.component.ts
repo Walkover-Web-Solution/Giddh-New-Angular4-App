@@ -16,10 +16,11 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { createSelector } from 'reselect';
 import * as _ from 'lodash';
+import { AgingDropDownoptions } from '../models/api-models/Contact';
 
 const CustomerType = [
-  {label: 'Customer', value: 'customer'},
-  {label: 'Vendor', value: 'vendor'}
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -87,7 +88,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   };
   public updateCommentIdx: number = null;
   public showAgingDropDownComponent: boolean = false;
-  public agingDropDownoptions: any = {
+  public agingDropDownoptions: AgingDropDownoptions = {
     fourth: 0,
     fifth: 0,
     sixth: 0
@@ -145,10 +146,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.bankAccounts$ = Observable.of(accounts);

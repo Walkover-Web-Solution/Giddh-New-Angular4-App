@@ -2,10 +2,6 @@ export interface DueRangeRequest {
   range: string[];
 }
 
-export interface DueDayRangeResponse {
-  status: string;
-  body: string;
-}
 
 export interface DueAmountReportRequest {
   totalDueAmountGreaterThan: boolean;
@@ -36,3 +32,5 @@ export interface DueAmountReportResponse {
   results: Result[];
   size: number;
 }
+
+export interface AgingDropDownoptions { fourth: number; fifth: number;  sixth: number; }
