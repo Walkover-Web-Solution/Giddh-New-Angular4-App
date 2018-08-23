@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
+import { AgingDropDownoptions } from '../../models/api-models/Contact';
 
 @Component({
   selector: 'aging-dropdown',
@@ -28,7 +29,7 @@ import { ToasterService } from '../../services/toaster.service';
 export class AgingDropdownComponent implements OnInit, OnDestroy {
   @Input() public showComponent: boolean = true;
   @Output() public closeEvent: EventEmitter<any> = new EventEmitter();
-  @Input() public options: { fourth: number, fourthDesc: string, fifth: number, fifthDesc: string, sixth: number, sixthDesc: string } = {
+  @Input() public options: AgingDropDownoptions = {
     fourth: 40,
     fifth: 80,
     sixth: 120,
