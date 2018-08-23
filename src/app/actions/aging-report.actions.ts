@@ -5,12 +5,15 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Injectable, Optional, ErrorHandler, Inject } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { CustomActions } from '../store/customActions';
-import { DueRangeRequest } from '../models/api-models/Contact';
+import { DueRangeRequest, DueAmountReportRequest, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { AgingreportingService } from '../services/agingreporting.service';
 import { debug } from 'util';
+import { count } from 'console';
+import { sortBy } from '../lodash-optimized';
+import { DaybookActions } from './daybook/daybook.actions';
 
 @Injectable()
 export class AgingReportActions {
@@ -22,6 +25,8 @@ export class AgingReportActions {
   public static GET_DUE_DAY_RANGE = 'GET_DUE_DAY_RANGE';
   public static GET_DUE_DAY_RANGE_RESPONSE = 'GET_DUE_DAY_RANGE_RESPONSE';
 
+  public static GET_DUE_DAY_REPORT = 'GET_DUE_DAY_REPORT';
+  public static GET_DUE_DAY_REPORT_RESPONSE = 'GET_DUE_DAY_REPORT_RESPONSE';
 
   @Effect()
   public createDueRange$: Observable<Action> = this.action$
@@ -59,10 +64,23 @@ export class AgingReportActions {
         this._toasty.errorToast(response.message, response.code);
         return { type: 'EmptyAction' };
       }
-      this._toasty.successToast('Due date range created successfully', 'Success');
+      // this._toasty.successToast('Due date range created successfully', 'Success');
       // set newly created company as active company
       return { type: 'EmptyAction' };
       // check if new uer has created first company then set newUserLoggedIn false
+    });
+
+  @Effect() private getDueReport$: Observable<Action> = this.action$
+    .ofType(AgingReportActions.GET_DUE_DAY_REPORT)
+    .switchMap((action: CustomActions) => {
+      return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest)
+        .map((r) => this.validateResponse<DueAmountReportResponse, DueAmountReportRequest>(r, {
+          type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
+          payload: r.body
+        }, true, {
+            type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
+            payload: null
+          }));
     });
   constructor(
     private action$: Actions,
@@ -97,6 +115,19 @@ export class AgingReportActions {
       payload: value
     };
   }
+
+  public GetDueReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest): CustomActions {
+    return {
+      type: AgingReportActions.GET_DUE_DAY_REPORT,
+      payload: { model, queryRequest }
+    };
+  }
+  public GetDueReportResponse(value: BaseResponse<string[], string>): CustomActions {
+    return {
+      type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
+      payload: value
+    };
+  }
   public OpenDueRange(): CustomActions {
     return {
       type: AgingReportActions.DUE_DAY_RANGE_POPUP_OPEN,
@@ -109,5 +140,13 @@ export class AgingReportActions {
       payload: null
     };
   }
-
+  private validateResponse<TResponse, TRequest>(response: BaseResponse < TResponse, TRequest > , successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+    if (response.status === 'error') {
+      if (showToast) {
+        this._toasty.errorToast(response.message);
+      }
+      return errorAction;
+    }
+    return successAction;
+  }
 }

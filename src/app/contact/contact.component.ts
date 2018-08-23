@@ -1,4 +1,4 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, ComponentFactoryResolver, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -10,14 +10,15 @@ import { Router } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { createSelector } from 'reselect';
 import * as _ from 'lodash';
-import { AgingDropDownoptions } from '../models/api-models/Contact';
+import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportResponse, DueAmountReportRequest } from '../models/api-models/Contact';
 import { AgingReportActions } from '../actions/aging-report.actions';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const CustomerType = [
   { label: 'Customer', value: 'customer' },
@@ -60,14 +61,11 @@ export interface PayNowRequest {
   ]
 })
 
-export class ContactComponent implements OnInit, OnDestroy {
+export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public CustomerType = CustomerType;
   public flattenAccounts: any = [];
   public sundryDebtorsAccountsBackup: any = {};
   public sundryDebtorsAccountsForAgingReport: IOption[] = [];
-  public names: any = [];
-  public totalDueAmount: number = 0;
-  public includeName: boolean = true;
   public sundryDebtorsAccounts$: Observable<any>;
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
@@ -80,7 +78,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
   public totalDueOptions: IOption[] = [{ label: 'greater then', value: '0' }, { label: 'less then', value: '1' }, { label: 'equal to', value: '2' }];
+  public includeName: boolean = false;
+  public totalDueAmount: number = 0;
   public totalDueSelectedOption: string = '0';
+  public names: any = [];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public agingDropDownoptions$: Observable<AgingDropDownoptions>;
   public agingDropDownoptions: AgingDropDownoptions;
@@ -100,10 +101,11 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-
+  @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  public dueAmountReportRequest: DueAmountReportQueryRequest;
+  public dueAmountReportData$: Observable<DueAmountReportResponse>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private createAccountIsSuccess$: Observable<boolean>;
-
   constructor(
     private store: Store<AppState>,
     private _toasty: ToasterService,
@@ -112,9 +114,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _agingReportActions: AgingReportActions,
-    private _companyActions: CompanyActions) {
+    private _companyActions: CompanyActions,
+    private componentFactoryResolver: ComponentFactoryResolver) {
     this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).takeUntil(this.destroyed$);
-
+    this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).takeUntil(this.destroyed$);
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
@@ -122,11 +125,45 @@ export class ContactComponent implements OnInit, OnDestroy {
       return s;
     })).takeUntil(this.destroyed$);
     // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
-
+    this.store.select(s => s.agingreport.data).takeUntil(this.destroyed$).subscribe((data) => {
+      if (data && data.results) {
+        this.dueAmountReportRequest.page = data.page;
+        this.loadPaginationComponent(data);
+      }
+      this.dueAmountReportData$ = Observable.of(data);
+    });
   }
-  public GenerateReport(e) {
-    debugger;
-    // this._agingReportActions.
+  public pageChangedDueReport(event: any): void {
+    this.dueAmountReportRequest.page = event.page;
+    this.go();
+  }
+  public go() {
+    let req = {};
+    if (this.totalDueSelectedOption === '0') {
+      req = {
+        totalDueAmountGreaterThan: true,
+        totalDueAmountLessThan: false,
+        totalDueAmountEqualTo: false
+      };
+    } else if (this.totalDueSelectedOption === '1') {
+      req = {
+        totalDueAmountGreaterThan: false,
+        totalDueAmountLessThan: true,
+        totalDueAmountEqualTo: false
+      };
+    } else if (this.totalDueSelectedOption === '2') {
+      req = {
+        totalDueAmountGreaterThan: false,
+        totalDueAmountLessThan: false,
+        totalDueAmountEqualTo: true
+      };
+    }
+    req = Object.assign(req, { totalDueAmount: this.totalDueAmount, includeName: this.includeName, names: this.names });
+    // totalDueAmount: number;
+    // includeName: boolean;
+    // name: string[];
+    // debugger;
+    this.store.dispatch(this._agingReportActions.GetDueReport(req as DueAmountReportRequest, this.dueAmountReportRequest));
   }
   public ngOnInit() {
 
@@ -167,13 +204,19 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  public ngOnChanges(c: SimpleChanges) {
+    //
+  }
+  public resetMe() {
+    this.dueAmountReportRequest.page = 0;
+  }
   public setActiveTab(tabName: 'customer' | 'aging', type: string) {
     this.activeTab = tabName;
     if (tabName !== 'aging') {
       this.getAccounts(type, null, null, 'true');
     } else {
       this.getSundrydebtorsAccounts();
+      this.go();
       this.store.dispatch(this._agingReportActions.GetDueRange());
     }
   }
@@ -380,7 +423,27 @@ export class ContactComponent implements OnInit, OnDestroy {
   public openAgingDropDown() {
     this.store.dispatch(this._agingReportActions.OpenDueRange());
   }
+  public loadPaginationComponent(s) {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+    if (this.paginationChild && this.paginationChild.viewContainerRef) {
+      let viewContainerRef = this.paginationChild.viewContainerRef;
+      viewContainerRef.remove();
 
+      let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+      viewContainerRef.insert(componentInstanceView.hostView);
+
+      let componentInstance = componentInstanceView.instance as PaginationComponent;
+      componentInstance.totalItems = s.count * s.totalPages;
+      componentInstance.itemsPerPage = s.count;
+      componentInstance.maxSize = 5;
+      componentInstance.writeValue(s.page);
+      componentInstance.boundaryLinks = true;
+      componentInstance.pageChanged.subscribe(e => {
+        this.pageChangedDueReport(e);
+      });
+    }
+  }
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
@@ -408,7 +471,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     this._contactService.GetContacts('sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
         this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({ label: p.name, value: p.uniqueName }));
-        debugger;
       }
     });
   }
