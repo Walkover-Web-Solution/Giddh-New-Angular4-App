@@ -35,6 +35,14 @@ export interface PayNowRequest {
     .dropdown-menu > li > a {
       padding: 2px 10px;
     }
+
+    .dis {
+      display: flex;
+    }
+
+    .pd1 {
+      padding: 5px;
+    }
   `],
   animations: [
     trigger('slideInOut', [
@@ -57,7 +65,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   public sundryDebtorsAccounts$: Observable<any>;
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
-  public activeTab: string = 'customer';
+  public activeTab: 'customer' | 'aging' = 'customer';
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
@@ -78,6 +86,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     comment: true
   };
   public updateCommentIdx: number = null;
+  public showAgingDropDownComponent: boolean = false;
+  public agingDropDownoptions: any = {
+    fourth: 0,
+    fifth: 0,
+    sixth: 0
+  };
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
@@ -142,7 +156,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setActiveTab(tabName: 'customer' | 'vendor', type: string) {
+  public setActiveTab(tabName: 'customer' | 'aging', type: string) {
     this.activeTab = tabName;
     this.getAccounts(type, null, null, 'true');
   }
@@ -246,7 +260,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.updateCommentIdx = null;
       }
     } else {
-      let canDelete  = this.canDeleteComment(account.uniqueName);
+      let canDelete = this.canDeleteComment(account.uniqueName);
       if (canDelete) {
         this.deleteComment(account.uniqueName);
       } else {
@@ -275,9 +289,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   public canDeleteComment(accountUniqueName) {
     let account;
     if (this.activeTab === 'customer') {
-      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     } else {
-      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     }
     if (account.comment) {
       account.comment = '';
@@ -293,9 +311,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   public canUpdateComment(accountUniqueName, comment) {
     let account;
     if (this.activeTab === 'customer') {
-      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     } else {
-      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     }
     if (account.comment !== comment) {
       account.comment = comment;
@@ -321,9 +343,26 @@ export class ContactComponent implements OnInit, OnDestroy {
    * updateInList
    */
   public updateInList(accountUniqueName, comment) {
-    if (this.activeTab === 'customer'){
+    if (this.activeTab === 'customer') {
       //
     }
+  }
+
+  public closeAgingDropDownop(options: any) {
+    this.agingDropDownoptions = options;
+    if (this.agingDropDownoptions.fourth >= (this.agingDropDownoptions.fifth || this.agingDropDownoptions.sixth)) {
+      this.showToaster();
+    }
+    if ((this.agingDropDownoptions.fifth >= this.agingDropDownoptions.sixth) || (this.agingDropDownoptions.fifth <= this.agingDropDownoptions.fourth)) {
+      this.showToaster();
+    }
+    if (this.agingDropDownoptions.sixth <= (this.agingDropDownoptions.fourth || this.agingDropDownoptions.fifth)) {
+      this.showToaster();
+    }
+  }
+
+  private showToaster() {
+    this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
 
   private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
