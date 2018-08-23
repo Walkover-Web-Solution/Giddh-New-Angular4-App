@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
+import { AppState } from '../../store';
+import { Store } from '@ngrx/store';
+import { Observable, ReplaySubject } from 'rxjs';
+import { AgingReportActions } from '../../actions/aging-report.actions';
 
 @Component({
   selector: 'aging-dropdown',
@@ -29,28 +33,43 @@ import { AgingDropDownoptions } from '../../models/api-models/Contact';
 export class AgingDropdownComponent implements OnInit, OnDestroy {
   @Input() public showComponent: boolean = true;
   @Output() public closeEvent: EventEmitter<any> = new EventEmitter();
-  @Input() public options: AgingDropDownoptions = {
-    fourth: 40,
-    fifth: 80,
-    sixth: 120,
-    fourthDesc: '0-39 Days',
-    fifthDesc: '40-79 Days',
-    sixthDesc: '80-119 Days',
-  };
-
-  constructor(public _toaster: ToasterService) {
+  @Input() public options: AgingDropDownoptions;
+  public setDueRangeRequestInFlight$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  constructor(private store: Store<AppState>, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
     //
+    this.setDueRangeRequestInFlight$ = this.store.select(s => s.agingreport.setDueRangeRequestInFlight).takeUntil(this.destroyed$);
+
   }
 
   public ngOnInit() {
     //
   }
-
-  public toggleTaxPopup(action: boolean) {
-    this.showComponent = action;
-  }
-
   public ngOnDestroy() {
-    this.closeEvent.emit(this.options);
+    // this.closeEvent.emit(this.options);
+  }
+  public closeAgingDropDown() {
+    this.store.dispatch(this._agingReportActions.CloseDueRange());
+  }
+  public saveAgingDropdown() {
+    let valid = true;
+    if (this.options.fourth >= (this.options.fifth || this.options.sixth)) {
+      this.showToaster();
+      valid = false;
+    }
+    if ((this.options.fifth >= this.options.sixth) || (this.options.fifth <= this.options.fourth)) {
+      this.showToaster();
+      valid = false;
+    }
+    if (this.options.sixth <= (this.options.fourth || this.options.fifth)) {
+      this.showToaster();
+      valid = false;
+    }
+    if (valid) {
+      this.store.dispatch(this._agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }))
+    }
+  }
+  private showToaster() {
+    this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
 }
