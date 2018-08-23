@@ -8,7 +8,7 @@
 
     <style type="text/css">
         /* reset */
-        
+
         #royal * {
             border: 0;
             box-sizing: content-box;
@@ -24,17 +24,18 @@
             text-decoration: none;
             vertical-align: top;
         }
-        
-         :focus {
+
+        :focus {
             outline: 0;
             border: 1px solid #ddd !important;
         }
-        
+
         contenteditable {
             border: 1px solid transparent;
         }
+
         /* NOTE:  comment padding, max-width, border in #royal css for java */
-        
+
         #royal {
             font: 12px/1 'Open Sans', sans-serif;
             overflow: auto;
@@ -45,121 +46,122 @@
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         #royal header h1 {
             /* margin-bottom: 10px; */
             font-size: 74px;
             color: #4b4c4f;
             line-height: 58px;
         }
-        
+
         #royal header .sub_head {
             font-size: 15px;
             margin-left: 5px;
         }
-        
+
         #royal .text-right {
             text-align: right;
         }
-        
+
         #royal .text-left {
             text-align: left !important;
         }
-        
+
         #royal .pull-right {
             float: right;
         }
-        
+
         #royal .pull-left {
             float: left;
         }
-        
+
         #royal table {
             width: 100%;
             table-layout: fixed;
             line-height: 20px;
             border-collapse: inherit
         }
-        
+
         #royal .logo {
             max-width: 120px;
             width: 100%;
         }
-        
+
         #royal strong {
             font-weight: bold;
         }
-        
+
         #royal .total-amount {
             text-align: center;
             vertical-align: bottom;
             padding-bottom: 10px
         }
-        
+
         #royal .total-amount h2 {
             font-size: 24px;
             padding: 0 0;
             display: inline-block;
             float: right;
         }
-        
+
         #royal .mrL2 {
             margin-left: 20px;
         }
-        
+
         #royal .mrB2 {
             margin-bottom: 20px;
         }
-        
+
         #royal .mrB1 {
             margin-bottom: 10px;
         }
-        
+
         #royal .meta {
             margin: 20px 0;
         }
-        
+
         #royal .meta h4 {
             font-weight: bold;
             font-size: 18px;
             line-height: 19px;
         }
-        
+
         #royal .product-table {
             background: #df49270d;
             position: relative;
             /* padding-bottom: 10px; */
         }
-        
+
         #royal .product-table tbody tr td:last-child,
         #royal .product-table tfoot tr th:last-child {
             /* background: #df49270d; */
         }
-        
+
         #royal .product-table tfoot tr:last-child th {
             padding: 15px 0;
         }
-        
+
         #royal .product-table thead tr th:last-child {
             position: relative;
         }
-        
+
         #royal .product-table tbody tr td:nth-last-child(2),
         #royal .product-table tfoot tr th:nth-last-child(2) {
             padding-right: 20px;
         }
-        
+
         #royal .product-table tfoot tr:nth-last-child(2) th {
             padding-bottom: 10px;
         }
-        
+
         #royal .product-table tfoot tr:last-child {
             padding: 7px 0;
         }
-        
+
         #royal .product-table tbody tr:last-child td {
             padding-bottom: 50px;
         }
+
         /* #royal .product-table:before {
             position: absolute;
             top: 0;
@@ -180,113 +182,113 @@
             width: 100%;
             z-index: -1;
         } */
-        
+
         #royal .inwords {
             color: #939393
         }
-        
+
         #royal .item {
             table-layout: auto !important;
         }
-        
+
         #royal .item tbody tr td,
         #royal .item thead tr th {
             text-align: right;
         }
-        
+
         #royal .item thead tr th {
             padding: 14px 0px;
             border-bottom: 1px solid #666666;
             line-height: 1.2rem;
             font-weight: bold;
         }
-        
+
         #royal .item tfoot tr th,
         #royal .item tbody tr td {
             padding: 3px 0;
         }
-        
+
         #royal .item tfoot tr:last-child th {
             border-top: 1px solid #666666;
             padding: 14px 0px;
             line-height: 1.2rem;
             vertical-align: middle
         }
-        
+
         #royal .total-row {
             border-top: 1px solid #000000;
         }
-        
+
         #royal .tax-table p {
             color: #595959;
         }
-        
+
         #royal .tax-table tfoot th {
             font-weight: bold
         }
-        
+
         #royal .bdrB {
             border-bottom: 1px solid#666;
         }
-        
+
         #royal .subfooter {
             margin-top: 100px;
         }
-        
+
         #royal .subfooter h1 {
             font-size: 24px;
             display: inline-block;
         }
-        
+
         #royal .subfooter .normal {
             font-size: 12px;
             vertical-align: baseline
         }
-        
+
         #royal .vmiddle {
             vertical-align: middle;
         }
-        
+
         #royal .note {
             margin-top: 20px;
             padding-left: 15px;
         }
-        
+
         #royal .note li {
             list-style-type: initial;
         }
-        
+
         #royal footer {
             margin-top: 7px;
             border-top: 2px solid #010101;
             padding: 6px 0 0;
             line-height: 20px;
         }
-        
+
         #royal .pos-rel {
             position: relative;
         }
-        
+
         #royal .primary-clr {
             color: #df4927;
         }
-        
+
         #royal .text-center {
             text-align: center
         }
-        
+
         #royal .mrB {
             margin-bottom: 10px;
         }
-        
+
         #royal .secondry_clr {
             color: #4b4c4f;
         }
-        
+
         .address {
             max-width: 220px;
         }
-        
+
         @page {
             margin: 0;
             size: A4 portrait;
@@ -307,7 +309,8 @@
                             <h4 class="sub_head">This is your INVOICE</h4>
                         </td>
                         <td class="text-right" *ngIf="showLogo">
-                            <img style="max-width: 160px;" class="clogo" src="{{logoSrc}}" alt="" />
+                            <figure class="col-xs-12"><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt=""
+                                    [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></figure>
                         </td>
                     </tr>
 
@@ -320,20 +323,31 @@
                 <tr>
                     <td>
                         <figure>
-                            <p><span>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Number'}}: 201770323-64</span> <span class="mrL2">{{(fieldsAndVisibility.header.invoiceDate?.display?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.display.label : 'Date'}}: 22/08/2017</span> </p>
-                            <p><span *ngIf="fieldsAndVisibility.header.shippingGstin?.display">GSTIN: 11AAAAAA000A1Z0</span> <span class="mrL2">{{(fieldsAndVisibility.header.pan?.label?.length > 0) ? fieldsAndVisibility.header.pan?.label : 'PAN'}}: AAACW9768L</span></p>
+                            <p>
+                                <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
+                                    > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Number'}}: 201770323-64</span>
+                                <span class="mrL2">{{(fieldsAndVisibility.header.invoiceDate?.display?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.display.label
+                                    : 'Date'}}: 22/08/2017</span>
+                            </p>
+                            <p>
+                                <span *ngIf="fieldsAndVisibility.header.shippingGstin?.display">GSTIN: 11AAAAAA000A1Z0
+                                </span>
+                                <span class="mrL2">{{(fieldsAndVisibility.header.pan?.label?.length > 0) ? fieldsAndVisibility.header.pan?.label
+                                    : 'PAN'}}: AAACW9768L</span>
+                            </p>
                         </figure>
                     </td>
                 </tr>
                 <tr class="secondry_clr">
                     <td style="padding-top: 20px;">
-                        <p  *ngIf="fieldsAndVisibility.header.billingAddress?.display"><strong>Billing Address</strong></p>
-                        <p class="address">Green Soft Solutions 24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                        <p *ngIf="fieldsAndVisibility.header.billingAddress?.display"><strong>Billing Address</strong></p>
+                        <p *ngIf="fieldsAndVisibility.header.billingAddress?.display" class="address">Green Soft Solutions
+                            24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingGstin?.display"><strong>GSTIN: 22BBBBBB000A1Z0</strong></p>
                     </td>
                     <!-- <td colspan="1"></td> -->
                     <td class="total-amount">
-                        <h2 class="amt secondry_clr">{{fieldsAndVisibility.table.total?.display}}/-</h2>
+                        <h2 class="amt secondry_clr" *ngIf="fieldsAndVisibility.table.total?.display">945/-</h2>
                     </td>
                 </tr>
             </tbody>
@@ -344,55 +358,126 @@
         <table class="item product-table mrB2" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
-                    <th *ngIf="fieldsAndVisibility.table.description?.display" class="text-left">Description</th>
-                    <th *ngIf="fieldsAndVisibility.table.hsnSac?.hsnSac">HSN/SAC</th>
-                    <th *ngIf="fieldsAndVisibility.table.quantity?.display">Qty.</th>
-                    <th *ngIf="fieldsAndVisibility.table.rate?.display">Price</th>
-                    <th *ngIf="fieldsAndVisibility.table.discount?.display">Disc</th>
-                    <th *ngIf="fieldsAndVisibility.table.total?.display">Amount</th>
+                    <th [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">{{(fieldsAndVisibility.table.sNo?.label?.length
+                        > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">{{(fieldsAndVisibility.table.date?.label?.length
+                        > 0) ? fieldsAndVisibility.table.date?.label : 'Date'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">{{(fieldsAndVisibility.table.item?.label?.length
+                        > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">{{(fieldsAndVisibility.table.hsnSac?.label?.length
+                        > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">{{(fieldsAndVisibility.table.quantity?.label?.length
+                        > 0) ? fieldsAndVisibility.table.quantity?.label : 'Qty.'}}</th>
+
+                    <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">{{(fieldsAndVisibility.table.discount?.label?.length
+                        > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}} (₹)</th>
+                    <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">{{(fieldsAndVisibility.table.taxableValue?.label?.length
+                        > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Value'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">{{(fieldsAndVisibility.table.taxes?.label?.length
+                        > 0) ? fieldsAndVisibility.table.taxes?.label : 'Tax'}}(₹)</th>
+                    <th [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">{{(fieldsAndVisibility.table.rate?.label?.length
+                        > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}} (₹)</th>
+                    <th [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">{{(fieldsAndVisibility.table.total?.label?.length
+                        > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}} (₹)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td *ngIf="fieldsAndVisibility.table.description?.display" class="text-left">Transactional Route</td>
-                    <td *ngIf="fieldsAndVisibility.table.hsnSac?.hsnSac" class="text-right">1223244</td>
-                    <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1</td>
-                    <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">7260.87</td>
-                    <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">0</td>
-                    <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">7260.87</td>
+                    <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">1</td>
+                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
+                    <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
+                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456</td>
+                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                    <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
+                        <p>@10%</p>
+                    </td>
+                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                 </tr>
-
                 <tr>
-                    <td class="text-left" colspan="5"></td>
-                    <td class="text-left" colspan="1"></td>
+                    <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">2</td>
+                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
+                    <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
+                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456</td>
+                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                    <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
+                        <p>@10%</p>
+                    </td>
+                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                 </tr>
             </tbody>
             <tfoot>
-                <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-                    <th colspan="5" class="text-right">Sub Total</th>
+                <tr>
+                    <th [attr.colspan]="columnsVisibled - 2"></th>
+                    <th class="text-right">Sub Total</th>
                     <th class="text-right">32500.00</th>
                 </tr>
-                <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-                    <th colspan="5" class="text-right">Discount</th>
+                <tr>
+                    <th [attr.colspan]="columnsVisibled -2"></th>
+                    <th class="text-right">Discount</th>
                     <th class="text-right">00.00</th>
                 </tr>
-                <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
-                    <th colspan="5" class="text-right">CGST</th>
+                <tr>
+                    <th [attr.colspan]="columnsVisibled -2"></th>
+                    <th class="text-right">CGST</th>
                     <th class="text-right">5250.00</th>
                 </tr>
-                <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
-                    <th colspan="5" class="text-right">SGST</th>
+                <tr>
+                    <th [attr.colspan]="columnsVisibled -2"></th>
+                    <th class="text-right">SGST</th>
                     <th class="text-right">5250.00</th>
                 </tr>
 
                 <tr>
-                    <th *ngIf="fieldsAndVisibility.footer.totalInWords?.display" class="text-left total-row inwords" colspan="4">Nine Hundred Forty Five only</th>
-                    <th class="text-right total-row"><strong>TOTAL</strong></th>
-                    <th class="text-right total-row"><strong>37750.00</strong></th>
+                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">Thirty Seven Thousand Seven Hundred
+                        Fifty Only</th>
+                    <th class="text-right"><strong>Total</strong></th>
+                    <th class="text-right"><strong>37750.00</strong></th>
                 </tr>
             </tfoot>
         </table>
+        <table class="tax-table item" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th class="text-left">HSN/SAC</th>
+                    <th>Taxable Amt.</th>
+                    <th>CGST Rate</th>
+                    <th>Amt.</th>
+                    <th>SGST Rate</th>
+                    <th>Amt.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left">12345678</td>
+                    <td>10000.00</td>
+                    <td>
+                        <p>@9%</p>
+                    </td>
+                    <td>900.00</td>
+                    <td>
+                        <p>@9%</p>
+                    </td>
+                    <td>900.00</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="1"></th>
 
+                    <th class="text-right">Total <span style="margin-left:20px;">25550.00</span></th>
+                    <th colspan="1"></th>
+                    <th class="text-right">1525.00</th>
+                    <th colspan="1"></th>
+                    <th class="text-right">1525.00</th>
+                </tr>
+            </tfoot>
+        </table>
         <!-- <table class="item" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
@@ -433,21 +518,23 @@
         </table> -->
     </div>
 
-    <div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
+    <div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }"
+        style="position: relative;float: left;width: 100%;">
         <table class="subfooter">
             <tbody>
                 <tr>
-                    <td *ngIf="fieldsAndVisibility.footer.thanks?.label" style="vertical-align: bottom;" colspan="2">
+                    <td *ngIf="fieldsAndVisibility.footer.thanks?.display" style="vertical-align: bottom;" colspan="2">
                         <h1 class="primary-clr">THANK YOU</h1>
                         <h4 class="primary-clr">FOR YOUR BUSINESS.</h4>
                     </td>
                     <td style="text-align: center;vertical-align: bottom;">
                         <p class="bdrB"></p>
                         <p> <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
-                        <p *ngIf="fieldsAndVisibility.footer.slogan?.display" [innerHTML]="fieldsAndVisibility.footer.slogan?.label"><small *ngIf="!fieldsAndVisibility.footer.slogan?.display"> &nbsp; </small></p>
+                        <p *ngIf="fieldsAndVisibility.footer.slogan?.display" [innerHTML]="fieldsAndVisibility.footer.slogan?.label"><small
+                                *ngIf="!fieldsAndVisibility.footer.slogan?.display"> &nbsp; </small></p>
                     </td>
                 </tr>
-                <tr  *ngIf="fieldsAndVisibility.footer.message1?.display">
+                <tr *ngIf="fieldsAndVisibility.footer.message1?.display">
                     <td colspan="3">
                         <ul class="note">
                             <li>Tax to be paid on reverse charge</li>

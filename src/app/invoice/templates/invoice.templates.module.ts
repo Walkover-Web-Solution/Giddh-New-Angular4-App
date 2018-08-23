@@ -10,6 +10,8 @@ import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst
 import { GstTemplateDComponent } from './edit-template/out-tempate/templates/gst-template-d/gst-template-d.component';
 import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst-template-b/gst-template-b.component';
 import { GstTemplateCComponent } from './edit-template/out-tempate/templates/gst-template-c/gst-template-c.component';
+import { GstTemplateFComponent } from './edit-template/out-tempate/templates/gst-template-f/gst-template-f.component';
+import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst-template-g/gst-template-g.component';
 
 @NgModule({
   imports: [
@@ -22,14 +24,16 @@ import { GstTemplateCComponent } from './edit-template/out-tempate/templates/gst
     OutTemplateComponent,
     ContentFilterComponent,
     GstTemplateAComponent,
-    // GstTemplateBComponent,
     GstTemplateEComponent,
     GstTemplateDComponent,
+    GstTemplateFComponent,
     GstTemplateBComponent,
-    GstTemplateCComponent
+    GstTemplateCComponent,
+    GstTemplateGComponent
   ],
   exports: [
     OutTemplateComponent,
     ContentFilterComponent,
-]})
-export class InvoiceTemplatesModule {}
+  ]
+})
+export class InvoiceTemplatesModule { }

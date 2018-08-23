@@ -119,7 +119,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
             }
           }
         });
-
+        // debugger;
         this._invoiceUiDataService.setFieldsAndVisibility(op);
       }
     });
