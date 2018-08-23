@@ -54,6 +54,7 @@ export function agingReportReducer(state = initialState, action: CustomActions):
     }
     case AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE: {
       let data = action.payload as BaseResponse<string, DueRangeRequest>;
+
       if (data.status === 'error') {
         return Object.assign({}, state, { setDueRangeRequestInFlight: false });
       }
