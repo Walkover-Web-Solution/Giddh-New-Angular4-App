@@ -64,6 +64,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   public CustomerType = CustomerType;
   public flattenAccounts: any = [];
   public sundryDebtorsAccountsBackup: any = {};
+  public sundryDebtorsAccountsForAgingReport: IOption[] = [];
+  public names: any = [];
+  public totalDueAmount: number = 0;
+  public includeName: boolean = true;
   public sundryDebtorsAccounts$: Observable<any>;
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
@@ -75,6 +79,8 @@ export class ContactComponent implements OnInit, OnDestroy {
   public cashFreeAvailableBalance: number;
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
+  public totalDueOptions: IOption[] = [{ label: 'greater then', value: '0' }, { label: 'less then', value: '1' }, { label: 'equal to', value: '2' }];
+  public totalDueSelectedOption: string = '0';
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public agingDropDownoptions$: Observable<AgingDropDownoptions>;
   public agingDropDownoptions: AgingDropDownoptions;
@@ -118,10 +124,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
 
   }
-
+  public GenerateReport(e) {
+    debugger;
+    // this._agingReportActions.
+  }
   public ngOnInit() {
 
-    this.filterDropDownList.placement = 'left';
+    // this.filterDropDownList.placement = 'left';
 
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -161,7 +170,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public setActiveTab(tabName: 'customer' | 'aging', type: string) {
     this.activeTab = tabName;
-    this.getAccounts(type, null, null, 'true');
+    if (tabName !== 'aging') {
+      this.getAccounts(type, null, null, 'true');
+    } else {
+      this.getSundrydebtorsAccounts();
+      this.store.dispatch(this._agingReportActions.GetDueRange());
+    }
   }
 
   public search(ev: any) {
@@ -371,10 +385,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20) {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh).subscribe((res) => {
+    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
@@ -390,6 +404,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
+  private getSundrydebtorsAccounts(count: number = 200000) {
+    this._contactService.GetContacts('sundrydebtors', 1, 'false', count).subscribe((res) => {
+      if (res.status === 'success') {
+        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({ label: p.name, value: p.uniqueName }));
+        debugger;
+      }
+    });
+  }
   private getCashFreeBalance() {
     this._contactService.GetCashFreeBalance().subscribe((res) => {
       if (res.status === 'success') {
