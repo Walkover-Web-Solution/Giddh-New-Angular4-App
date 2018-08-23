@@ -10,6 +10,7 @@ import { HttpWrapperService } from '../services/httpWrapper.service';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { AgingreportingService } from '../services/agingreporting.service';
+import { debug } from 'util';
 
 @Injectable()
 export class AgingReportActions {
@@ -58,4 +59,17 @@ export class AgingReportActions {
       payload: value
     };
   }
+  public OpenDueRange(): CustomActions {
+    return {
+      type: AgingReportActions.DUE_DAY_RANGE_POPUP_OPEN,
+      payload: null
+    };
+  }
+  public CloseDueRange(): CustomActions {
+    return {
+      type: AgingReportActions.DUE_DAY_RANGE_POPUP_CLOSE,
+      payload: null
+    };
+  }
+
 }

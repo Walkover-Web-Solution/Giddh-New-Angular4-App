@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -41,7 +42,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SelectModule.forRoot(),
     ModalModule,
     PaginationModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    DigitsOnlyModule
   ],
   providers: []
 })

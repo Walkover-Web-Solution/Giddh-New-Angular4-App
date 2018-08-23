@@ -17,6 +17,7 @@ import { SettingsIntegrationActions } from '../actions/settings/settings.integra
 import { createSelector } from 'reselect';
 import * as _ from 'lodash';
 import { AgingDropDownoptions } from '../models/api-models/Contact';
+import { AgingReportActions } from '../actions/aging-report.actions';
 
 const CustomerType = [
   { label: 'Customer', value: 'customer' },
@@ -75,6 +76,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public agingDropDownoptions$: Observable<AgingDropDownoptions>;
+  public agingDropDownoptions: AgingDropDownoptions;
+  public setDueRangeOpen$: Observable<boolean>;
   public payoutObj: CashfreeClass = new CashfreeClass();
   public showFieldFilter = {
     name: true,
@@ -87,12 +91,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     comment: true
   };
   public updateCommentIdx: number = null;
-  public showAgingDropDownComponent: boolean = false;
-  public agingDropDownoptions: AgingDropDownoptions = {
-    fourth: 0,
-    fifth: 0,
-    sixth: 0
-  };
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
@@ -107,7 +105,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     private _dashboardService: DashboardService,
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
+    private _agingReportActions: AgingReportActions,
     private _companyActions: CompanyActions) {
+    this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).takeUntil(this.destroyed$);
+
+    this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).takeUntil(this.destroyed$);
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
       // console.log('flattenAccountsStream$');
@@ -126,7 +128,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'contact';
-
+    this.agingDropDownoptions$.subscribe(p => this.agingDropDownoptions = _.cloneDeep(p));
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getAccounts('sundrydebtors', null, null, 'true');
@@ -349,17 +351,20 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
-  public closeAgingDropDownop(options: any) {
-    this.agingDropDownoptions = options;
-    if (this.agingDropDownoptions.fourth >= (this.agingDropDownoptions.fifth || this.agingDropDownoptions.sixth)) {
-      this.showToaster();
-    }
-    if ((this.agingDropDownoptions.fifth >= this.agingDropDownoptions.sixth) || (this.agingDropDownoptions.fifth <= this.agingDropDownoptions.fourth)) {
-      this.showToaster();
-    }
-    if (this.agingDropDownoptions.sixth <= (this.agingDropDownoptions.fourth || this.agingDropDownoptions.fifth)) {
-      this.showToaster();
-    }
+  public closeAgingDropDownop(options: AgingDropDownoptions) {
+    // this.agingDropDownoptions = options;
+    // if (this.agingDropDownoptions.fourth >= (this.agingDropDownoptions.fifth || this.agingDropDownoptions.sixth)) {
+    //   this.showToaster();
+    // }
+    // if ((this.agingDropDownoptions.fifth >= this.agingDropDownoptions.sixth) || (this.agingDropDownoptions.fifth <= this.agingDropDownoptions.fourth)) {
+    //   this.showToaster();
+    // }
+    // if (this.agingDropDownoptions.sixth <= (this.agingDropDownoptions.fourth || this.agingDropDownoptions.fifth)) {
+    //   this.showToaster();
+    // }
+  }
+  public openAgingDropDown() {
+    this.store.dispatch(this._agingReportActions.OpenDueRange());
   }
 
   private showToaster() {
