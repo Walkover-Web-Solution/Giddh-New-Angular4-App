@@ -36,7 +36,7 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
   @Input() public options: AgingDropDownoptions;
   public setDueRangeRequestInFlight$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
+  constructor(private store: Store<AppState>, private _toasty: ToasterService, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
     //
     this.setDueRangeRequestInFlight$ = this.store.select(s => s.agingreport.setDueRangeRequestInFlight).takeUntil(this.destroyed$);
 
@@ -66,7 +66,7 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
       valid = false;
     }
     if (valid) {
-      this.store.dispatch(this._agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }))
+      this.store.dispatch(this._agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
     }
   }
   private showToaster() {
