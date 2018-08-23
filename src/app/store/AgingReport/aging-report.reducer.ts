@@ -6,7 +6,7 @@ import * as _ from '../../lodash-optimized';
 import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { AgingDropDownoptions, Result, DueRangeRequest, DueAmountReportRequest } from '../../models/api-models/Contact';
+import { AgingDropDownoptions, Result, DueRangeRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
 export interface AgingReportState {
@@ -14,13 +14,9 @@ export interface AgingReportState {
   setDueRangeOpen: boolean;
   agingDropDownoptions: AgingDropDownoptions;
   getAgingReportRequestInFlight: boolean;
-  page: number;
-  count: number;
-  totalPages: number;
-  totalItems: number;
-  results: Result[];
-  size: number;
+  data?: DueAmountReportResponse;
   dueAmountReportRequest: DueAmountReportRequest;
+  noData: boolean;
 }
 
 export const initialState: AgingReportState = {
@@ -32,12 +28,7 @@ export const initialState: AgingReportState = {
     sixth: 120
   },
   getAgingReportRequestInFlight: false,
-  page: 1,
-  count: 20,
-  totalPages: 0,
-  totalItems: 0,
-  results: [],
-  size: 0,
+  data: null,
   dueAmountReportRequest: {
     totalDueAmountGreaterThan: false,
     totalDueAmountLessThan: false,
@@ -45,7 +36,8 @@ export const initialState: AgingReportState = {
     totalDueAmount: 0,
     includeName: false,
     name: [],
-  }
+  },
+  noData: true
 };
 
 export function agingReportReducer(state = initialState, action: CustomActions): AgingReportState {
@@ -88,6 +80,24 @@ export function agingReportReducer(state = initialState, action: CustomActions):
       };
       return Object.assign({}, state, { agingDropDownoptions });
 
+    }
+    case AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE: {
+      // no payload means error from server
+      if (action.payload) {
+        let data: DueAmountReportResponse = _.cloneDeep(action.payload) as DueAmountReportResponse;
+        // data.groupDetails = removeZeroAmountAccount((data.groupDetails));
+        let noData = false;
+        let getAgingReportRequestInFlight = false;
+        if (data.results.length < 1) {
+          noData = true;
+        }
+        return { ...state, getAgingReportRequestInFlight, data, noData };
+      } else {
+        return { ...state, getAgingReportRequestInFlight: false, data: null, noData: true };
+      }
+    }
+    case AgingReportActions.GET_DUE_DAY_REPORT: {
+      return { ...state, getAgingReportRequestInFlight: true };
     }
     default: {
       return state;

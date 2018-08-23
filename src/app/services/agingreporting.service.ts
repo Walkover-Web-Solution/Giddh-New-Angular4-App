@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
-import { DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../models/api-models/Contact';
+import { DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest, DueAmountReportQueryRequest } from '../models/api-models/Contact';
 import { Observable } from 'rxjs';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DUEAMOUNTREPORT_API_V2, DUEDAYSRANGE_API_V2 } from './apiurls/aging-reporting';
@@ -43,15 +43,24 @@ export class AgingreportingService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string[], string>(e, null, {}));
   }
 
-  public GetDueAmountReport(model: DueAmountReportRequest, q: string, page: number = 1, count: number = 20, sort: string = 'asc', sortBy: string = 'name'): Observable<BaseResponse<DueAmountReportResponse, string>> {
+  public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
+    debugger;
     if (this.companyUniqueName) {
-      return this._http.post(this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)
-        .replace(':q', encodeURIComponent(q || ''))
-        .replace(':page', encodeURIComponent(page.toString()))
-        .replace(':count', encodeURIComponent(count.toString()))
-        .replace(':sort', encodeURIComponent(sortBy.toString()))
-      ), model);
+      return this._http.post(
+        this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+          .replace(':q', encodeURIComponent(queryRequest.q || ''))
+          .replace(':page', encodeURIComponent(queryRequest.page.toString()))
+          .replace(':count', encodeURIComponent(queryRequest.count.toString()))
+          .replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
+          .replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
+        , model)
+        .map((res) => {
+          let data: BaseResponse<DueAmountReportResponse, DueAmountReportRequest> = res;
+          data.request = model;
+          data.queryString = queryRequest;
+          return data;
+        }).catch((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest));;
     } else {
       return observable.empty();
     }
