@@ -2,7 +2,6 @@ export interface DueRangeRequest {
   range: string[];
 }
 
-
 export interface DueAmountReportRequest {
   totalDueAmountGreaterThan: boolean;
   totalDueAmountLessThan: boolean;
