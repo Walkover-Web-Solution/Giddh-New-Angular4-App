@@ -1,4 +1,4 @@
-<div class="pr" [ngClass]="{'open': showComponent}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+<div class="pr" [ngClass]="{'open': showComponent}">
   <ul class="dropdown-menu pd depth" *ngIf="showComponent" (click)="$event.stopPropagation()">
 
     <li class="li-design">
