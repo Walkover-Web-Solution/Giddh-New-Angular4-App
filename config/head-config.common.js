@@ -75,6 +75,6 @@ module.exports = {
         { type: 'text/javascript', src: 'assets/js/lodash.min.js' },
         // { type: 'text/javascript', src: 'assets/js/plugins/select2/js/select2.full.min.js' },
         // { type: 'text/javascript', src: 'assets/js/plugins/tagmanager/tagmanager.js' },
-        {type: 'text/javascript', src: 'https://checkout.razorpay.com/v1/checkout.js'}
+        // {type: 'text/javascript', src: 'https://checkout.razorpay.com/v1/checkout.js'}
     ]
 };
