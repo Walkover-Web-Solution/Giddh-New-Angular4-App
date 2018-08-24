@@ -1,0 +1,22 @@
+<div class="container-fluid settings-bg">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="backup-data">
+        Backup Data
+      </div>
+    </div>
+    <div class="col-xs-12" id="settingTab">
+      <tabset #staticTabs>
+
+        <tab heading="Export">
+          <company-import-export-form-component [mode]="'export'"></company-import-export-form-component>
+        </tab>
+
+        <tab heading="Import">
+          <company-import-export-form-component [mode]="'import'"></company-import-export-form-component>
+        </tab>
+
+      </tabset>
+    </div>
+  </div>
+</div>
