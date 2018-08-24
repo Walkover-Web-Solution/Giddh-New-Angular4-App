@@ -72,6 +72,7 @@ export const ROUTES: Routes = [
       {path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule'},
       {path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule'},
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
+      {path: 'carriedoversales', loadChildren: './carried-over-sales/carried-over-sales.module#CarriedOverSalesModule'},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
