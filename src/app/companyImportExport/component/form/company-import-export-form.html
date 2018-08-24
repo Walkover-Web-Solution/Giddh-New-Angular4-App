@@ -8,20 +8,33 @@
         <sh-select placeholder="Select" name="file-type" [(ngModel)]="fileType"
                    [options]="fileTypes" [ItemHeight]="33"></sh-select>
       </div>
-      <div class="col-xs-3" *ngIf="mode === 'export'">
+      <div class="col-xs-3" *ngIf="mode === 'export' && fileType === '0'">
         <label class="d-block">Data Range</label>
         <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
                class="form-control date-range-picker"/>
       </div>
-      <div class="col-xs-3">
-          <label class="d-block">Data Range</label>
-       
+
+      <div class="col-xs-3" *ngIf="mode === 'import'">
+        <label class="d-block">Select File</label>
+        <input type="file" accept="application/json" class="form-control"
+               (change)="fileSelected($event.target.files)"/>
       </div>
+
       <div class="col-xs-6">
-          <button class="btn btn-success" style="margin-top: 24px" (click)="save()"> Save</button>
-          <button class="btn btn-danger pull-right" style="margin-top: 24px" (click)="backPressed.emit(true)">Back</button>
+
+        <button class="btn btn-primary" *ngIf="mode === 'export'" style="margin-top: 24px" (click)="save()"
+                [ladda]="isExportInProcess$ | async" [disabled]="(!fileType || !from || !to)"> Export
+        </button>
+
+        <button class="btn btn-success" *ngIf="mode === 'import'" style="margin-top: 24px" (click)="save()"
+                [ladda]="isImportInProcess$ | async" [disabled]="(!fileType || !selectedFile)"> Import
+        </button>
+
+        <button class="btn btn-danger pull-right" style="margin-top: 24px" (click)="backPressed.emit(true)">Back
+        </button>
       </div>
+
     </div>
   </div>
 </div>
