@@ -3457,7 +3457,7 @@ label {
 
 #customInvoice {
     background: #f4f5f8;
-    margin-bottom: 70px;
+    height: calc(100vh - 70px);
 }
 
 #customInvoice h2 {
@@ -3655,6 +3655,7 @@ label {
 .scrollAuto {
     overflow-y: auto;
     padding-right: 15px;
+    max-height: calc(100vh - 245px);
 }
 
 .scrollAuto::-webkit-scrollbar {

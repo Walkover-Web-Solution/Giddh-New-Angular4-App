@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, SimpleChanges, OnChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
@@ -7,18 +7,18 @@ import { InvoiceTemplatesService } from '../../../../services/invoice.templates.
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
-import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
-import { Observable } from '../../../../../../../../node_modules/rxjs';
 import { AppState } from 'app/store';
+import { Observable } from '../../../../../../../../node_modules/rxjs';
+import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
 
 @Component({
-  selector: 'gst-template-d',
-  templateUrl: './gst-template-d.component.html',
-  styleUrls: ['./gst-template-d.component.css'],
+  selector: 'gst-template-f',
+  templateUrl: './gst-template-f.component.html',
+  styleUrls: ['./gst-template-f.component.css'],
   encapsulation: ViewEncapsulation.Native
 })
 
-export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
+export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public fieldsAndVisibility: any = null;
   @Input() public isPreviewMode: boolean = false;
@@ -42,16 +42,27 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
     this.companySetting$ = this.store.select(s => s.settings.profile).takeUntil(this.destroyed$);
   }
 
+  public ngOnInit() {
+    //
+    this.companySetting$.subscribe(a => {
+      if (a && a.address) {
+        this.companyAddress = _.cloneDeep(a.address);
+      } else if (!a) {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+      }
+    });
+  }
   public ngOnChanges(changes: SimpleChanges) {
     if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
       this.columnsVisibled = 0;
+      console.log(changes.fieldsAndVisibility.currentValue);
       if (changes.fieldsAndVisibility.currentValue.table) {
         if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
           this.columnsVisibled++;
         }
-        // if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
-        //   this.columnsVisibled++;
-        // }
+        if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
+          this.columnsVisibled++;
+        }
         if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
           this.columnsVisibled++;
         }
@@ -79,17 +90,6 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
   }
-  public ngOnInit() {
-    //
-    this.companySetting$.subscribe(a => {
-      if (a && a.address) {
-        this.companyAddress = _.cloneDeep(a.address);
-      } else if (!a) {
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-      }
-    });
-  }
-
   public onClickSection(sectionName: string) {
     if (!this.isPreviewMode) {
       this.sectionName.emit(sectionName);
