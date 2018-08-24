@@ -7,6 +7,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
     ShSelectModule,
     FormsModule,
     CommonModule,
-    Daterangepicker
+    Daterangepicker,
+    LaddaModule
   ],
   exports: [],
   declarations: [

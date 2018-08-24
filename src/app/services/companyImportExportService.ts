@@ -21,19 +21,19 @@ export class CompanyImportExportService {
               private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
-  public ExportRequest(): Observable<BaseResponse<string, string>> {
+  public ExportRequest(): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     return this._http.get(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
       .map((res) => {
-        let data: BaseResponse<string, string> = res;
+        let data: BaseResponse<any, string> = res;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<any, string>(e, ''));
   }
 
-  public ExportLedgersRequest(from: string, to: string): Observable<BaseResponse<string, string>> {
+  public ExportLedgersRequest(from: string, to: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
@@ -43,15 +43,21 @@ export class CompanyImportExportService {
       .replace(':to', encodeURIComponent(to))
     )
       .map((res) => {
-        let data: BaseResponse<string, string> = res;
+        let data: BaseResponse<any, string> = res;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<any, string>(e, ''));
   }
 
-  public ImportRequest(): Observable<BaseResponse<string, string>> {
+  public ImportRequest(file: File): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    const formData: FormData = new FormData();
+    formData.append('importFile', file, file.name);
+
     return this._http.post(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {})
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData)
       .map((res) => {
         let data: BaseResponse<string, string> = res;
         return data;
@@ -59,9 +65,15 @@ export class CompanyImportExportService {
       .catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
   }
 
-  public ImportLedgersRequest(): Observable<BaseResponse<string, string>> {
+  public ImportLedgersRequest(file: File): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    const formData: FormData = new FormData();
+    formData.append('importFile', file, file.name);
+
     return this._http.post(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT_LEDGERS
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {})
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData)
       .map((res) => {
         let data: BaseResponse<string, string> = res;
         return data;
