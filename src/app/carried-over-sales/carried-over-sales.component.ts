@@ -10,6 +10,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Observable } from 'rxjs/Observable';
+import { ToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'carried-over-sales',
@@ -19,24 +20,24 @@ import { Observable } from 'rxjs/Observable';
 
 export class CarriedOverSalesComponent implements OnInit, OnDestroy {
   public GetTypeOptions: IOption[] = [{label: 'Month', value: 'month'}, {label: 'Quater', value: 'quater'}];
-  public selectedType: string = 'month';
-  public monthOptions: IOption[] = [{label: 'January', value: '0'}, {label: 'February', value: '1'}, {label: 'March', value: '2'}, {label: 'April', value: '3'}, {label: 'May', value: '4'}, {label: 'June', value: '5'}, {label: 'July', value: '6'}, {label: 'August', value: '7'}, {label: 'September', value: '8'}, {label: 'October', value: '9'}, {label: 'November', value: '10'}, {label: 'December', value: '11'}];
-  public selectedmonth: string = 'january';
+  public selectedType: string;
+  public monthOptions: IOption[] = [{label: 'January', value: '01'}, {label: 'February', value: '02'}, {label: 'March', value: '03'}, {label: 'April', value: '04'}, {label: 'May', value: '05'}, {label: 'June', value: '06'}, {label: 'July', value: '07'}, {label: 'August', value: '08'}, {label: 'September', value: '09'}, {label: 'October', value: '10'}, {label: 'November', value: '11'}, {label: 'December', value: '12'}];
+  public selectedmonth: string;
 
   public quaterOptions: IOption[] = [{label: 'Q1', value: 'q1'}, {label: 'Q2', value: 'q2'}, {label: 'Q3', value: 'q3'}, {label: 'Q4', value: 'q4'}];
   public selectedQuater: string = '';
 
   public yearOptions: IOption[] = [{label: '2014', value: '2014'}, {label: '2015', value: '2015'}, {label: '2016', value: '2016'}, {label: '2017', value: '2017'}, {label: '2018', value: '2018'}, {label: '2019', value: '2019'}, {label: '2020', value: '2020'}];
-  public selectedYear: string = '2014';
+  public selectedYear: string;
   public CarriedQueryRequest: CarriedOverSalesRequest;
-  public carriedOverSalesRequests: CarriedOverSalesRequest;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private searchFilterData: any = null;
 
   // public carriedData$: Observable<CarriedOverSalesResponse>;
 
   constructor(private store: Store<AppState>, private _CarriedOverSalesActions: CarriedOverSalesActions,
-              private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions) {
+              private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions,
+              private _toasty: ToasterService) {
     this.CarriedQueryRequest = new CarriedOverSalesRequest();
   }
 
@@ -56,13 +57,32 @@ export class CarriedOverSalesComponent implements OnInit, OnDestroy {
   // }
 
   public go() {
-    // validation
-    //
-    this.carriedOverSalesRequests.type = this.selectedType;
-    if (this.carriedOverSalesRequests.type === 'month') {
-      this.carriedOverSalesRequests.value = this.selectedmonth + '-' + this.selectedYear;
+
+    if (!this.selectedYear) {
+      this.showErrorToast('please select year');
+      return;
+    }
+
+    if (!this.selectedType) {
+      this.showErrorToast('please select type');
+      return;
+    }
+
+    if (this.selectedType && this.selectedType === 'month' && !(this.selectedmonth)) {
+      this.showErrorToast('please select month');
+      return;
+    }
+
+    if (this.selectedType && this.selectedType === 'quater' && !(this.selectedQuater)) {
+      this.showErrorToast('please select quater');
+      return;
+    }
+
+    this.CarriedQueryRequest.type = this.selectedType;
+    if (this.CarriedQueryRequest.type === 'month') {
+      this.CarriedQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
     } else {
-      this.carriedOverSalesRequests.value = this.selectedQuater + '-' + this.selectedYear;
+      this.CarriedQueryRequest.value = this.selectedQuater + '-' + this.selectedYear;
     }
 
     this.store.dispatch(this._CarriedOverSalesActions.GetCarriedOverSalesRequest(this.CarriedQueryRequest));
@@ -93,6 +113,10 @@ export class CarriedOverSalesComponent implements OnInit, OnDestroy {
         this.pageChanged(e);
       });
     }
+  }
+
+  public showErrorToast(msg) {
+    this._toasty.errorToast(msg);
   }
 
   public ngOnDestroy() {

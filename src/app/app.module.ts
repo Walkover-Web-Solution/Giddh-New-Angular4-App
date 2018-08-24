@@ -144,10 +144,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, {useHash: isElectron, preloadingStrategy: PreloadAllModules}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
-    StoreRouterConnectingModule,
-    StoreDevtoolsModule.instrument({
-      maxAge: 25
-    }),
+    // StoreRouterConnectingModule,
+    // StoreDevtoolsModule.instrument({
+    //   maxAge: 25
+    // }),
     ...CONDITIONAL_IMPORTS,
     /**
      * This section will import the `DevModuleModule` only in certain build types.
