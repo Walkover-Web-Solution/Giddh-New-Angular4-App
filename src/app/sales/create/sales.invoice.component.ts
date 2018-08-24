@@ -635,6 +635,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       obj.depositAccountUniqueName = '';
     }
 
+    // set voucher type
+    obj.voucher.voucherDetails.voucherType = this.selectedPage;
+
     this.salesService.generateGenericItem(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
         // reset form and other
