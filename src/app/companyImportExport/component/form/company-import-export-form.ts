@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import * as moment from 'moment';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -10,9 +10,10 @@ import { AccountResponse } from '../../../models/api-models/Account';
 
 export class CompanyImportExportFormComponent implements OnInit {
   @Input('mode') public mode: 'export' | 'import' = 'export';
+  @Output('backPressed') public backPressed: EventEmitter<boolean> = new EventEmitter();
   public fileTypes: IOption[] = [
-    {label: 'Accounting Entries', value: 'Accounting Entries'},
-    {label: 'Master Except Accounts', value: 'Master Except Accounts'},
+    { label: 'Accounting Entries', value: 'Accounting Entries' },
+    { label: 'Master Except Accounts', value: 'Master Except Accounts' },
   ];
   public fileType: string = '';
   public datePickerOptions: any = {
