@@ -42,8 +42,8 @@ export function companyImportExportReducer(state: CompanyImportExportState = ini
     case COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE:
       return {
         ...state,
-        exportRequestInProcess: false,
-        exportRequestSuccess: action.payload.status === 'success'
+        importRequestInProcess: false,
+        importRequestSuccess: action.payload.status === 'success'
       };
   }
 

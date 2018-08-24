@@ -7,18 +7,6 @@
 
     </div>
     <div class="col-xs-12" id="settingTab">
-      <!-- <tabset #staticTabs>
-
-        <tab heading="Export">
-          <company-import-export-form-component [mode]="'export'"></company-import-export-form-component>
-        </tab>
-
-        <tab heading="Import">
-          <company-import-export-form-component [mode]="'import'"></company-import-export-form-component>
-        </tab>
-
-      </tabset> -->
-
 
       <ng-container *ngIf="isFirstScreen">
         <div class="main-container-import-export">
@@ -54,7 +42,8 @@
       </ng-container>
 
       <ng-container *ngIf="!isFirstScreen">
-        <company-import-export-form-component [mode]="mode" (backPressed)="back()"></company-import-export-form-component>
+        <company-import-export-form-component [mode]="mode"
+                                              (backPressed)="back()"></company-import-export-form-component>
       </ng-container>
 
 
