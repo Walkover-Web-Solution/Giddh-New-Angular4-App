@@ -1,0 +1,52 @@
+<div class="container-fluid">
+
+  <div class="top_bar clearfix">
+    <div class="form-inline">
+      <div class="pull-left">
+        <div class="form-group mrR1 max500" >
+          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
+                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        </div>
+        <div class="form-group mrR1 max500" >
+          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
+                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        </div>
+        <div class="form-group mrR1 max500" >
+          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
+                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        </div>
+        <div class="form-group mrR1 max500" >
+          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
+                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table basic table-bordered">
+    <thead>
+    <tr>
+      <th colspan="2">Total</th>
+      <th colspan="4">July(New Customer)</th>
+      <th>Carried</th>
+    </tr>
+    <tr>
+      <th [style.width.%]="10">Amt</th>
+      <th [style.width.%]="10">Inv Count</th>
+      <th [style.width.%]="20">Amt</th>
+      <th [style.width.%]="10">Inv</th>
+      <th [style.width.%]="10">Amt</th>
+      <th [style.width.%]="10">Inv</th>
+      <th [style.width.%]="20">Month</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container>
+      <tr>
+        <td></td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+
+</div>
