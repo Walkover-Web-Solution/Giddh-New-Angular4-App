@@ -53,7 +53,7 @@ import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
-// import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -145,9 +145,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RouterModule.forRoot(ROUTES, {useHash: isElectron, preloadingStrategy: PreloadAllModules}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     StoreRouterConnectingModule,
-    // StoreDevtoolsModule.instrument({
-    //   maxAge: 25
-    // }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
+    }),
     ...CONDITIONAL_IMPORTS,
     /**
      * This section will import the `DevModuleModule` only in certain build types.

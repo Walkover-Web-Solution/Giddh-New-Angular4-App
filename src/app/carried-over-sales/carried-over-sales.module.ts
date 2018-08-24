@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { CarriedOverSalesComponent } from './carried-over-sales.component';
 import { CarriedOverSalesRoutingModule } from './carried-over-sales.routing.module';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -17,16 +18,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   declarations: [
-    CarriedOverSalesComponent,
-    AsideMenuAccountInContactComponent
-  ],
-  exports: [
-    AsideMenuAccountInContactComponent
+    CarriedOverSalesComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ElementViewChildModule,
     CarriedOverSalesRoutingModule,
     LaddaModule,
     ShSelectModule,
