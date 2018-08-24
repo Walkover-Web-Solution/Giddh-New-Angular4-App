@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="backup-data">
-        {{ isFirstScreen ? 'Backup Data' : mode.toUpperCase() + ' Data' }}
+        {{ (isFirstScreen ? 'Backup' : (mode === 'export' ? 'Export' : 'Import')) + ' Data' }}
       </div>
 
     </div>
