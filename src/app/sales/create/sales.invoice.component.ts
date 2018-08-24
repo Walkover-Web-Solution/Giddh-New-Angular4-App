@@ -635,6 +635,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       obj.depositAccountUniqueName = '';
     }
 
+    // set voucher type
+    obj.voucher.voucherDetails.voucherType = this.selectedPage;
+
     this.salesService.generateGenericItem(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
         // reset form and other
@@ -826,7 +829,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     text: selectedAcc.additional.stock.stockUnit.name
                   };
                   txn.stockList = [];
-                  // debugger;
                   if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
                     txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
                     txn.stockUnit = txn.stockList[0].id;
