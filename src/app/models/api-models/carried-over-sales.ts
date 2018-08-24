@@ -1,3 +1,7 @@
+export class CarriedOverSalesRequest {
+  public type: string = 'month';
+  public value: string = 'mm-YYYY';
+}
 
 export interface TotalSales {
   invoiceCount: number;
@@ -17,15 +21,8 @@ export interface CarriedSales {
   month: string;
 }
 
-export interface Body {
+export interface CarriedOverSalesResponse {
   totalSales: TotalSales[];
   newSales: NewSales[];
   carriedSales: CarriedSales[];
-
-}
-
-export interface CarriedOverSalesResponse {
-  status: string;
-  body: Body[];
-
 }

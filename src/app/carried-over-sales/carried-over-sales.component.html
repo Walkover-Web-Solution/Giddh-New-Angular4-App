@@ -3,21 +3,26 @@
   <div class="top_bar clearfix">
     <div class="form-inline">
       <div class="pull-left">
-        <div class="form-group mrR1 max500" >
-          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
-                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        <div class="form-group mrR1 max500">
+          <sh-select placeholder="Search Year..." [multiple]='false' name="names" [(ngModel)]="selectedYear"
+                     [options]="yearOptions"></sh-select>
         </div>
-        <div class="form-group mrR1 max500" >
-          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
-                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        <div class="form-group mrR1 max500">
+          <sh-select placeholder="Search customer..." [multiple]='false' name="names" [(ngModel)]="selectedType"
+                     [options]="GetTypeOptions"></sh-select>
         </div>
-        <div class="form-group mrR1 max500" >
-          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
-                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
+          <sh-select placeholder="Search Month..." [multiple]='false' name="names" [(ngModel)]="selectedmonth"
+                     [options]="monthOptions"></sh-select>
         </div>
-        <div class="form-group mrR1 max500" >
-          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names"
-                     [options]="sundryDebtorsAccountsForAgingReport"></sh-select>
+        <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
+          <sh-select placeholder="Search Quater..." [multiple]='false' name="names" [(ngModel)]="selectedQuater"
+                     [options]="quaterOptions"></sh-select>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-success" type="button" (click)="go()">
+            Go
+          </button>
         </div>
       </div>
     </div>
@@ -40,13 +45,55 @@
       <th [style.width.%]="20">Month</th>
     </tr>
     </thead>
-    <tbody>
-    <ng-container>
-      <tr>
-        <td></td>
-      </tr>
-    </ng-container>
-    </tbody>
   </table>
+
+  <div>
+    <!-- loop over entries -->
+    <section class="row row-1">
+      <div class="row">
+        <div class="col-xs-1 group"></div>
+        <div class="col-xs-3 group">
+        </div>
+        <div class="col-xs-2 group">
+        </div>
+        <div class="col-xs-2 group text-right"></div>
+        <div class="col-xs-2 group text-right"></div>
+        <div class="col-xs-2 group text-right">
+        </div>
+      </div>
+
+      <!--entry details container-->
+      <ng-container >
+        <section class="row row-2 account">
+          <div class="row">
+            <div class="col-xs-1 account"></div>
+            <div class="col-xs-3 account" style="padding-left: 15px;"></div>
+            <div class="col-xs-2 account"></div>
+            <div class="col-xs-2 account"></div>
+            <div class="col-xs-2 account text-right">
+              <span ></span>
+            </div>
+            <div class="col-xs-2 account text-right">
+              <span></span>
+            </div>
+          </div>
+        </section>
+      </ng-container>
+      <!--entry details container-->
+    </section>
+    <!-- loop over entries -->
+  </div>
+
+
+<!--<div class=" mrT2 text-center">-->
+  <!--<small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}} Transactions | {{(daybookData$ | async)?.totalPages}} Pages </small>-->
+  <!--<small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages </small>-->
+<!--</div>-->
+
+ <!--pagination-->
+<div style="text-align: center;">
+  <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
+</div>
+ <!--pagination-->
 
 </div>

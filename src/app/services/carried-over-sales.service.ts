@@ -6,8 +6,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CARRIEDOVERSALES_API } from './apiurls/carried-over-sales.api';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CarriedOverSalesResponse } from '../models/api-models/carried-over-sales';
-import { FlattenAccountsResponse } from '../models/api-models/Account';
+import { CarriedOverSalesRequest, CarriedOverSalesResponse } from '../models/api-models/carried-over-sales';
 
 @Injectable()
 export class CarriedOverSalesService implements OnInit {
@@ -23,16 +22,17 @@ export class CarriedOverSalesService implements OnInit {
     //
   }
 
-  public GetCarriedOverSales(q?: string, type: string = 'quarter', value?: string): Observable<BaseResponse<CarriedOverSalesResponse, string>> {
+  public GetCarriedOverSales(queryRequest: CarriedOverSalesRequest): Observable<BaseResponse<CarriedOverSalesResponse, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    if (this.companyUniqueName) {
-      return this._http.get(this.config.apiUrl + CARRIEDOVERSALES_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':type', encodeURIComponent(type || '')).replace(':value', encodeURIComponent(value || ''))).map((res) => {
+    return this._http.get(this.config.apiUrl + CARRIEDOVERSALES_API.GET
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':type', queryRequest.type.toString())
+      .replace(':value', queryRequest.value.toString()))
+      .map((res) => {
         let data: BaseResponse<CarriedOverSalesResponse, string> = res;
-        data.queryString = {q, type, value};
+        data.queryString = queryRequest;
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e));
-    } else {
-      return Observable.empty();
-    }
+      })
+      .catch((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e, null, queryRequest));
   }
 }
