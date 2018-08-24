@@ -19,7 +19,6 @@ export default class AppUpdater {
       // }, (buttonIndex) => {
       //     if (buttonIndex === 0) {
       if (updater) {
-        // debugger;
         updater.label = 'Downloading updates. . . . .';
         updater.enabled = false;
       }
