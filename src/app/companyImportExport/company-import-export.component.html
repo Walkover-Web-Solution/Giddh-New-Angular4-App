@@ -2,11 +2,12 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="backup-data">
-        Backup Data
+        {{ isFirstScreen ? 'Backup Data' : mode.toUpperCase() + ' Data' }}
       </div>
+
     </div>
     <div class="col-xs-12" id="settingTab">
-      <tabset #staticTabs>
+      <!-- <tabset #staticTabs>
 
         <tab heading="Export">
           <company-import-export-form-component [mode]="'export'"></company-import-export-form-component>
@@ -16,7 +17,47 @@
           <company-import-export-form-component [mode]="'import'"></company-import-export-form-component>
         </tab>
 
-      </tabset>
+      </tabset> -->
+
+
+      <ng-container *ngIf="isFirstScreen">
+        <div class="main-container-import-export">
+          <div>
+            <div>
+              <h2 class="text-center" style="font-size: 20px;">import or export your account master data </h2>
+            </div>
+
+            <div style="display:flex;margin-top: 100px;">
+
+              <div class="export-card btn" [ngClass]="{'selected': mode === 'export'}" (click)="setActiveTab('export')">
+                <div class="text-center" style="font-size: 50px;">
+                  <i class="fa fa-upload"></i>
+                </div>
+                <div>
+                  <span>EXPORT</span>
+                </div>
+              </div>
+
+
+              <div class="import-card btn" [ngClass]="{'selected': mode === 'import'}" (click)="setActiveTab('import')">
+                <div class="text-center" style="font-size: 50px;">
+                  <i class="fa fa-download"></i>
+                </div>
+                <div>
+                  <span>IMPORT</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isFirstScreen">
+        <company-import-export-form-component [mode]="mode" (backPressed)="back()"></company-import-export-form-component>
+      </ng-container>
+
+
     </div>
   </div>
 </div>

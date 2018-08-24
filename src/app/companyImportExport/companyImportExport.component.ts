@@ -10,15 +10,42 @@ import { Component, OnInit } from '@angular/core';
       font-weight: 500;
       color: black;
     }
+    .main-container-import-export{
+      height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .export-card{
+      padding: 40px 67px;margin-right:  15px;box-shadow: 0px 2px 18px gainsboro;border-radius: 8px;border: 2px solid gray;
+    }
+    .import-card{
+      padding: 40px 67px;margin-left:  15px;box-shadow: 0px 2px 18px gainsboro;border-radius: 8px;border: 2px solid gray;
+    }
+    .selected{
+      box-shadow: 0px 2px 18px #0095ff70 !important;
+      border-color: #84b1ff !important;
+    }
   `]
 })
 
 export class CompanyImportExportComponent implements OnInit {
+  public mode: 'import' | 'export' = 'export';
+  public isFirstScreen: boolean = true;
   constructor() {
     //
   }
 
   public ngOnInit() {
     //
+  }
+
+  public setActiveTab(mode: 'import' | 'export') {
+    this.mode = mode;
+    this.isFirstScreen = false;
+  }
+
+  public back() {
+    this.isFirstScreen = true;
   }
 }
