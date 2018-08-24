@@ -5,7 +5,7 @@ export interface DueRangeRequest {
 export class DueAmountReportQueryRequest {
   public q: string = '';
   public page: number = 0;
-  public count: number = 1;
+  public count: number = 20;
   public sortBy: 'name' | 'totalDueAmount' = 'name';
   public sort: 'asc' | 'desc' = 'asc';
 }
