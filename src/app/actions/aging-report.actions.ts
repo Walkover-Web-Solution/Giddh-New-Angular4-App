@@ -45,7 +45,7 @@ export class AgingReportActions {
       }
       this._toasty.successToast('Due date range created successfully', 'Success');
       // set newly created company as active company
-
+      return { type: 'EmptyAction' };
       // check if new uer has created first company then set newUserLoggedIn false
     });
 
@@ -140,7 +140,7 @@ export class AgingReportActions {
       payload: null
     };
   }
-  private validateResponse<TResponse, TRequest>(response: BaseResponse < TResponse, TRequest > , successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
