@@ -4060,12 +4060,16 @@ ng-select .select_drop i {
     pointer-events: none;
 }
 
-virtual-scroll .scrollable-content .item>a {
+virtual-scroll .scrollable-content .item >a {
     color: #333;
     padding: 6px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
+}
+
+virtual-scroll .scrollable-content .item.selected >a {
+    color: rgb(210, 95, 42)!important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
