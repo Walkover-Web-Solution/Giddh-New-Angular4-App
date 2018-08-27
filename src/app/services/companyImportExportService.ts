@@ -11,6 +11,7 @@ import { LogsRequest, LogsResponse } from '../models/api-models/Logs';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { COMPANY_IMPORT_EXPORT_API } from './apiurls/company-import-export.api';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class CompanyImportExportService {
@@ -56,8 +57,13 @@ export class CompanyImportExportService {
     const formData: FormData = new FormData();
     formData.append('importFile', file, file.name);
 
+    const httpOptions = {
+      headers: {'Content-Type': 'multipart/*'}
+    };
+
+    // const header = new Header
     return this._http.post(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData, httpOptions)
       .map((res) => {
         let data: BaseResponse<string, string> = res;
         return data;
@@ -72,8 +78,12 @@ export class CompanyImportExportService {
     const formData: FormData = new FormData();
     formData.append('importFile', file, file.name);
 
+    const httpOptions = {
+      headers: {'Content-Type': 'multipart/form-data', 'Accept': 'application/json'}
+    };
+
     return this._http.post(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT_LEDGERS
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData, httpOptions)
       .map((res) => {
         let data: BaseResponse<string, string> = res;
         return data;
