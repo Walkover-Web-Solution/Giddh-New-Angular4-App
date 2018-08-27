@@ -14,6 +14,7 @@ import { CarriedOverSalesRequest, CarriedOverSalesResponse } from '../models/api
 export class CarriedOverSalesActions {
   public static GET_CARRIED_SALES_REQUEST = 'GET_CARRIED_SALES_REQUEST';
   public static GET_CARRIED_SALES_RESPONSE = 'GET_CARRIED_SALES_RESPONSE';
+  public static GET_NULL = 'GET_NULL';
 
   @Effect()
   private getCarriedOverSalesResponse$: Observable<Action> = this.action$
@@ -37,6 +38,12 @@ export class CarriedOverSalesActions {
     return {
       type: CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST,
       payload: {queryRequest}
+    };
+  }
+
+  public GetResponseNull(): CustomActions {
+    return {
+      type: CarriedOverSalesActions.GET_NULL
     };
   }
 

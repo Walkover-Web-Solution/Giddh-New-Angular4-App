@@ -1,29 +1,67 @@
 <div class="container-fluid">
   <div class="top_bar clearfix">
     <div class="form-inline">
-      <div class="pull-left">
-        <div class="form-group mrR1 max500">
-          <sh-select placeholder="Search Year..." [multiple]='false' name="names" [(ngModel)]="selectedYear"
-                     [options]="yearOptions"></sh-select>
+
+
+      <form #carried="ngForm" (ngSubmit)="go(carried)">
+        <div class="pull-left">
+          <div class="form-group mrR1 max500">
+            <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear"
+                       #SelectYear="ngModel" [options]="yearOptions" required ></sh-select>
+           <div class="h-25px" style="color: red;"> <div *ngIf="SelectYear.invalid">please select year</div></div>
+          </div>
+
+
+          <div class="form-group mrR1 max500">
+            <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType" [(ngModel)]="selectedType"
+                       #SelectType="ngModel" [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
+            <div class="h-25px" style="color: red;"><div *ngIf="SelectType.invalid">please select type</div></div>
+          </div>
+
+          <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
+            <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth" [(ngModel)]="selectedmonth"
+                       #SelectMonth="ngModel" [options]="monthOptions" required ></sh-select>
+            <div class="h-25px" style="color: red;"><div *ngIf="SelectMonth.invalid">please select month</div></div>
+          </div>
+
+          <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
+            <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater"
+                       #SelectQuater="ngModel" [options]="quaterOptions" required ></sh-select>
+          <div class="h-25px" style="color: red;">  <div *ngIf="SelectQuater.invalid">please select quater</div></div>
+          </div>
+          <div class="btn-group">
+           <div> <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
+             Go
+           </button></div>
+            <div class="h-25px"></div>
+          </div>
         </div>
-        <div class="form-group mrR1 max500">
-          <sh-select placeholder="Search type..." [multiple]='false' name="names" [(ngModel)]="selectedType"
-                     [options]="GetTypeOptions"></sh-select>
-        </div>
-        <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
-          <sh-select placeholder="Search Month..." [multiple]='false' name="names" [(ngModel)]="selectedmonth"
-                     [options]="monthOptions"></sh-select>
-        </div>
-        <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
-          <sh-select placeholder="Search Quater..." [multiple]='false' name="names" [(ngModel)]="selectedQuater"
-                     [options]="quaterOptions"></sh-select>
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-success" type="button" (click)="go()">
-            Go
-          </button>
-        </div>
-      </div>
+      </form>
+
+
+      <!--<div class="pull-left">-->
+      <!--<div class="form-group mrR1 max500">-->
+      <!--<sh-select placeholder="Search Year..." [multiple]='false' name="names" [(ngModel)]="selectedYear"-->
+      <!--[options]="yearOptions"></sh-select>-->
+      <!--</div>-->
+      <!--<div class="form-group mrR1 max500">-->
+      <!--<sh-select placeholder="Search type..." [multiple]='false' name="names" [(ngModel)]="selectedType"-->
+      <!--[options]="GetTypeOptions"></sh-select>-->
+      <!--</div>-->
+      <!--<div class="form-group mrR1 max500" *ngIf="selectedType==='month'">-->
+      <!--<sh-select placeholder="Search Month..." [multiple]='false' name="names" [(ngModel)]="selectedmonth"-->
+      <!--[options]="monthOptions"></sh-select>-->
+      <!--</div>-->
+      <!--<div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">-->
+      <!--<sh-select placeholder="Search Quater..." [multiple]='false' name="names" [(ngModel)]="selectedQuater"-->
+      <!--[options]="quaterOptions"></sh-select>-->
+      <!--</div>-->
+      <!--<div class="btn-group">-->
+      <!--<button class="btn btn-success" type="button" (click)="go()">-->
+      <!--Go-->
+      <!--</button>-->
+      <!--</div>-->
+      <!--</div>-->
 
     </div>
   </div>
@@ -47,23 +85,27 @@
     </thead>
     <tbody>
     <tr *ngIf="selectedType==='month'">
-      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10"    style="vertical-align: top!important;">{{(carriedData$ |
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">
+        {{(carriedData$ |
         async)?.totalSales.total}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">
+        {{(carriedData$ |
         async)?.totalSales.invoiceCount}}
       </th>
       <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="20" style="vertical-align: top!important;">
         {{(carriedData$ | async)?.newSales.total}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">
+        {{(carriedData$ |
         async)?.newSales.invoiceCount}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3" style="vertical-align: top!important;">
+      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3"
+          style="vertical-align: top!important;">
         <table [style.width.%]="100">
           <tr>
             <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
-            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}} </td>
+            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
             <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
           </tr>
           <tr>
@@ -97,23 +139,27 @@
     </tr>
 
     <tr *ngIf="selectedType==='quater'">
-      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10"    style="vertical-align: top!important;">{{(carriedData$ |
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">
+        {{(carriedData$ |
         async)?.totalSales.total}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">
+        {{(carriedData$ |
         async)?.totalSales.invoiceCount}}
       </th>
       <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="20" style="vertical-align: top!important;">
         {{(carriedData$ | async)?.newSales.total}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">
+        {{(carriedData$ |
         async)?.newSales.invoiceCount}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3" style="vertical-align: top!important;">
+      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3"
+          style="vertical-align: top!important;">
         <table [style.width.%]="100">
           <tr>
             <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
-            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}} </td>
+            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
             <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
           </tr>
           <tr>
