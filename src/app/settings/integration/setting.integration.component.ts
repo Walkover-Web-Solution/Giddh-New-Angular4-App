@@ -48,6 +48,7 @@ export class SettingIntegrationComponent implements OnInit {
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public bankAccounts$: Observable<IOption[]>;
   public gmailAuthCodeUrl$: Observable<string> = null;
+  public isGmailIntegrated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
 
@@ -61,9 +62,12 @@ export class SettingIntegrationComponent implements OnInit {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
     this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl));
     this.gmailAuthCodeUrl$ = Observable.of(this.gmailAuthCodeStaticUrl);
+    this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).takeUntil(this.destroyed$).subscribe((o) => {
       // set sms form data

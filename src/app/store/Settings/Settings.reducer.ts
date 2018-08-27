@@ -62,6 +62,7 @@ export interface SettingsState {
   triggers: any;
   discount: DiscountState;
   refreshCompany: boolean;
+  isGmailIntegrated: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -76,7 +77,8 @@ export const initialState: SettingsState = {
   parentCompany: null,
   triggers: null,
   discount: discountInitialState,
-  refreshCompany: false
+  refreshCompany: false,
+  isGmailIntegrated: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -152,7 +154,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
-        newState.profile = response.body;
+        newState.profile = _.cloneDeep(response.body);
         newState.updateProfileSuccess = true;
         return Object.assign({}, state, newState);
       }
@@ -468,6 +470,14 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
           discountList: state.discount.discountList.filter(d => d.uniqueName !== action.payload)
         })
       });
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
+      let response: BaseResponse<any, any> = action.payload;
+      if (response.status === 'success') {
+        return Object.assign({}, state, { isGmailIntegrated: true });
+      } else {
+        return Object.assign({}, state, { isGmailIntegrated: false });
+      }
     }
     //  endregion discount reducer
     default: {
