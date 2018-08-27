@@ -22,6 +22,7 @@ import * as fromDayBook from './Daybook/daybook.reducer';
 import * as fromUserSession from './General/session.reducer';
 import * as fromImportExcel from './import-excel/import-excel.reducer';
 import * as fromInventoryInOut from './Inventory-in-out/inventory-in-out.reducer';
+import * as fromAgingReport from './AgingReport/aging-report.reducer';
 import * as fromInventoryBranchTransfer from './InventoryBranchTransfer/InventoryBranchTransfer.reducer';
 import * as fromCompanyImportExport from './CompanyImportExport/companyImportExport';
 import { ActionReducerMap } from '@ngrx/store';
@@ -53,6 +54,7 @@ export interface AppState {
   importExcel: fromImportExcel.ImportExcelState;
   inventoryInOutState: fromInventoryInOut.InventoryInOutState;
   inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferState;
+  agingreport: fromAgingReport.AgingReportState;
   companyImportExport: fromCompanyImportExport.CompanyImportExportState;
 }
 
@@ -82,6 +84,8 @@ export const reducers: ActionReducerMap<AppState> = {
   userLoggedInSessions: fromUserSession.SessionReducer,
   inventoryInOutState: fromInventoryInOut.InventoryInOutReducer,
   importExcel: fromImportExcel.importExcelReducer,
+  inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer,
+  agingreport: fromAgingReport.agingReportReducer
   inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer,
   companyImportExport: fromCompanyImportExport.companyImportExportReducer
 };
