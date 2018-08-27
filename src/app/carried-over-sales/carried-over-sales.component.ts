@@ -11,6 +11,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../services/toaster.service';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'carried-over-sales',
@@ -23,38 +24,51 @@ export class CarriedOverSalesComponent implements OnInit, OnDestroy {
   public selectedType: string;
   public monthOptions: IOption[] = [{label: 'January', value: '01'}, {label: 'February', value: '02'}, {label: 'March', value: '03'}, {label: 'April', value: '04'}, {label: 'May', value: '05'}, {label: 'June', value: '06'}, {label: 'July', value: '07'}, {label: 'August', value: '08'}, {label: 'September', value: '09'}, {label: 'October', value: '10'}, {label: 'November', value: '11'}, {label: 'December', value: '12'}];
   public selectedmonth: string;
-
-  public quaterOptions: IOption[] = [{label: 'Q1', value: 'q1'}, {label: 'Q2', value: 'q2'}, {label: 'Q3', value: 'q3'}, {label: 'Q4', value: 'q4'}];
+  public quaterOptions: IOption[] = [{label: 'Q1', value: '01'}, {label: 'Q2', value: '02'}, {label: 'Q3', value: '03'}, {label: 'Q4', value: '04'}];
   public selectedQuater: string = '';
+  public carriedData$: Observable<CarriedOverSalesResponse>;
 
   public yearOptions: IOption[] = [{label: '2014', value: '2014'}, {label: '2015', value: '2015'}, {label: '2016', value: '2016'}, {label: '2017', value: '2017'}, {label: '2018', value: '2018'}, {label: '2019', value: '2019'}, {label: '2020', value: '2020'}];
   public selectedYear: string;
   public CarriedQueryRequest: CarriedOverSalesRequest;
+  public columnName: string = '';
+  public isRequestSuccess$: Observable<boolean>;
+  public crdTotal: number = 0;
+  public invTotal: number = 0;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private searchFilterData: any = null;
-
-  // public carriedData$: Observable<CarriedOverSalesResponse>;
 
   constructor(private store: Store<AppState>, private _CarriedOverSalesActions: CarriedOverSalesActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions,
               private _toasty: ToasterService) {
     this.CarriedQueryRequest = new CarriedOverSalesRequest();
+    this.carriedData$ = this.store.select(s => s.carriedOverSales.data);
+    this.isRequestSuccess$ = this.store.select(s => s.carriedOverSales.requestInSuccess);
   }
 
   public ngOnInit() {
-    // let companyUniqueName = null;
-    // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-    // let stateDetailsRequest = new StateDetailsRequest();
-    // stateDetailsRequest.companyUniqueName = companyUniqueName;
-    // stateDetailsRequest.lastState = 'carriedoversales/';
-    // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-  }
 
-  // public selectedMonth(value: string) {
-  //   this.carriedOverSalesRequests.type = this.selectedType;
-  //   this.carriedOverSalesRequests.value = this.selectedmonth;
-  //   this.go();
-  // }
+    this.isRequestSuccess$.subscribe(s => {
+      if (s) {
+        if (this.CarriedQueryRequest.type === 'month') {
+          this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
+        } else {
+          this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
+        }
+      }
+    });
+
+    this.carriedData$.subscribe(s => {
+      if (s) {
+        this.crdTotal = s.carriedSales.reduce((p, c) => {
+          return p + c.total;
+        }, 0);
+        this.invTotal = s.carriedSales.reduce((p, c) => {
+          return p + c.invoiceCount;
+        }, 0);
+      }
+    });
+  }
 
   public go() {
 
@@ -86,33 +100,6 @@ export class CarriedOverSalesComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(this._CarriedOverSalesActions.GetCarriedOverSalesRequest(this.CarriedQueryRequest));
-  }
-
-  public pageChanged(event: any): void {
-    //  this.CarriedQueryRequest.page = event.page;
-    // this.go(this.searchFilterData);
-  }
-
-  public loadPaginationComponent(s) {
-    let transactionData = null;
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-    if (this.paginationChild && this.paginationChild.viewContainerRef) {
-      let viewContainerRef = this.paginationChild.viewContainerRef;
-      viewContainerRef.remove();
-
-      let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-      viewContainerRef.insert(componentInstanceView.hostView);
-
-      let componentInstance = componentInstanceView.instance as PaginationComponent;
-      componentInstance.totalItems = s.count * s.totalPages;
-      componentInstance.itemsPerPage = s.count;
-      componentInstance.maxSize = 5;
-      componentInstance.writeValue(s.page);
-      componentInstance.boundaryLinks = true;
-      componentInstance.pageChanged.subscribe(e => {
-        this.pageChanged(e);
-      });
-    }
   }
 
   public showErrorToast(msg) {
