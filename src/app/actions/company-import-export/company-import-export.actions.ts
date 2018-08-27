@@ -24,7 +24,7 @@ export class CompanyImportExportActions {
         return this._companyImportExportService.ExportRequest()
           .map((response: BaseResponse<any, string>) => {
             if (response.status === 'success') {
-              let res = response.body;
+              let res = {body: response.body};
               let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
               saveAs(blob, this._generalService.companyUniqueName + '.json');
               this._toasty.successToast('data exported successfully');
@@ -37,7 +37,7 @@ export class CompanyImportExportActions {
         return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to)
           .map((response: BaseResponse<any, string>) => {
             if (response.status === 'success') {
-              let res = response.body;
+              let res = {body: response.body};
               let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
               saveAs(blob, this._generalService.companyUniqueName + '.json');
             } else {
