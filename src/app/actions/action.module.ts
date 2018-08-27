@@ -90,8 +90,7 @@ import { AgingReportActions } from './aging-report.actions';
       SettingsTriggersActions,
       ImportExcelActions,
       SettingsDiscountActions,
-      AgingReportActions
-      SettingsDiscountActions,
+      AgingReportActions,
       CompanyImportExportActions
     ])
   ],

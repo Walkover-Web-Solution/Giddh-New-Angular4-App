@@ -104,8 +104,7 @@ export class ServiceModule {
         ImportExcelService,
         SettingsBunchService,
         SettingsDiscountService,
-        AgingreportingService
-        SettingsDiscountService,
+        AgingreportingService,
         CompanyImportExportService
       ]
     };

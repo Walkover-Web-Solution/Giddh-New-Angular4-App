@@ -85,7 +85,6 @@ export const reducers: ActionReducerMap<AppState> = {
   inventoryInOutState: fromInventoryInOut.InventoryInOutReducer,
   importExcel: fromImportExcel.importExcelReducer,
   inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer,
-  agingreport: fromAgingReport.agingReportReducer
-  inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer,
+  agingreport: fromAgingReport.agingReportReducer,
   companyImportExport: fromCompanyImportExport.companyImportExportReducer
 };
