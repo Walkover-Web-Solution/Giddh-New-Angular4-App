@@ -150,7 +150,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         (state: AppState) => state.company.taxes],
       (activeAccount, activeAccountTaxHierarchy, taxes) => {
         let arr: IOption[] = [];
-        // debugger;
         if (taxes) {
           if (activeAccount) {
             let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);

@@ -7,10 +7,14 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, ModalModule, PaginationModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, PaginationModule, TooltipModule, PaginationComponent } from 'ngx-bootstrap';
 import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -19,7 +23,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     ContactComponent,
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent,
+    AgingDropdownComponent
   ],
   exports: [
     AsideMenuAccountInContactComponent
@@ -37,7 +42,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SharedModule,
     SelectModule.forRoot(),
     ModalModule,
-    PaginationModule
+    PaginationModule,
+    ClickOutsideModule,
+    DigitsOnlyModule,
+    ElementViewChildModule
+  ],
+  entryComponents: [
+    PaginationComponent
   ],
   providers: []
 })
