@@ -34,6 +34,9 @@ export function carriedOverSalesReduce(state = initialState, action: CustomActio
     case CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST: {
       return {...state, showLoader: true, requestInSuccess: false};
     }
+    case CarriedOverSalesActions.GET_NULL: {
+      return {...state, data: null, noData: true};
+    }
     default: {
       return state;
     }
