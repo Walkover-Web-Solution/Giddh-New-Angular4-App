@@ -81,7 +81,6 @@ export class ExportGroupLedgerComponent implements OnInit {
 
   public exportLedger() {
     console.log('this.dateRange is :', this.dateRange);
-    debugger;
     this.closeExportGroupLedgerModal.emit({from: this.dateRange.from, to: this.dateRange.to, type: this.emailTypeSelected, fileType: this.fileType, order: this.order});
   }
 

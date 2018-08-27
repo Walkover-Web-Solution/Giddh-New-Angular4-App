@@ -321,7 +321,7 @@
                                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, $event)" container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, txn.voucherName, $event)" container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
                             </td>
@@ -437,7 +437,7 @@
                                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber , $event)" container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, txn.voucherName, $event)" container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
                             </td>
