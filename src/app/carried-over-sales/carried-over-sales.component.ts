@@ -12,11 +12,16 @@ import { CompanyActions } from '../actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../services/toaster.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'carried-over-sales',
   templateUrl: './carried-over-sales.component.html',
-  styles: []
+  styles: [`
+  .h-25px{
+    height: 25px;
+  }
+  `]
 })
 
 export class CarriedOverSalesComponent implements OnInit, OnDestroy {
@@ -50,9 +55,9 @@ export class CarriedOverSalesComponent implements OnInit, OnDestroy {
 
     this.isRequestSuccess$.subscribe(s => {
       if (s) {
-        if (this.CarriedQueryRequest.type === 'month') {
+        if (this.CarriedQueryRequest.type === 'month' && this.selectedmonth) {
           this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
-        } else {
+        } else if (this.CarriedQueryRequest.type === 'quater' && this.selectedQuater) {
           this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
         }
       }
@@ -70,28 +75,32 @@ export class CarriedOverSalesComponent implements OnInit, OnDestroy {
     });
   }
 
-  public go() {
+  public ChangingValue(event) {
+    this.selectedmonth = null;
+    this.selectedQuater = null;
+    this.store.dispatch(this._CarriedOverSalesActions.GetResponseNull());
+  }
 
-    if (!this.selectedYear) {
-      this.showErrorToast('please select year');
-      return;
-    }
-
-    if (!this.selectedType) {
-      this.showErrorToast('please select type');
-      return;
-    }
-
-    if (this.selectedType && this.selectedType === 'month' && !(this.selectedmonth)) {
-      this.showErrorToast('please select month');
-      return;
-    }
-
-    if (this.selectedType && this.selectedType === 'quater' && !(this.selectedQuater)) {
-      this.showErrorToast('please select quater');
-      return;
-    }
-
+  public go(form: NgForm) {
+    // if (!this.selectedYear) {
+    //   this.showErrorToast('please select year');
+    //   return;
+    // }
+    //
+    // if (!this.selectedType) {
+    //   this.showErrorToast('please select type');
+    //   return;
+    // }
+    //
+    // if (this.selectedType && this.selectedType === 'month' && !(this.selectedmonth)) {
+    //   this.showErrorToast('please select month');
+    //   return;
+    // }
+    //
+    // if (this.selectedType && this.selectedType === 'quater' && !(this.selectedQuater)) {
+    //   this.showErrorToast('please select quater');
+    //   return;
+    // }
     this.CarriedQueryRequest.type = this.selectedType;
     if (this.CarriedQueryRequest.type === 'month') {
       this.CarriedQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
