@@ -1,5 +1,4 @@
 <div class="container-fluid">
-
   <div class="top_bar clearfix">
     <div class="form-inline">
       <div class="pull-left">
@@ -8,7 +7,7 @@
                      [options]="yearOptions"></sh-select>
         </div>
         <div class="form-group mrR1 max500">
-          <sh-select placeholder="Search customer..." [multiple]='false' name="names" [(ngModel)]="selectedType"
+          <sh-select placeholder="Search type..." [multiple]='false' name="names" [(ngModel)]="selectedType"
                      [options]="GetTypeOptions"></sh-select>
         </div>
         <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
@@ -25,6 +24,7 @@
           </button>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -32,7 +32,7 @@
     <thead>
     <tr>
       <th colspan="2">Total</th>
-      <th colspan="4">July(New Customer)</th>
+      <th colspan="4">{{columnName}}(New Customer)</th>
       <th>Carried</th>
     </tr>
     <tr>
@@ -45,55 +45,95 @@
       <th [style.width.%]="20">Month</th>
     </tr>
     </thead>
+    <tbody>
+    <tr *ngIf="selectedType==='month'">
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10"    style="vertical-align: top!important;">{{(carriedData$ |
+        async)?.totalSales.total}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+        async)?.totalSales.invoiceCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="20" style="vertical-align: top!important;">
+        {{(carriedData$ | async)?.newSales.total}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+        async)?.newSales.invoiceCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3" style="vertical-align: top!important;">
+        <table [style.width.%]="100">
+          <tr>
+            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
+            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}} </td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
+          </tr>
+          <tr>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
+          </tr>
+          <tr>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
+          </tr>
+          <tr>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[3]?.total}}</td>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[3]?.invoiceCount}}</td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[3]?.month}}</td>
+          </tr>
+          <tr>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[4]?.total}}</td>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[4]?.invoiceCount}}</td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[4]?.month}}</td>
+          </tr>
+          <tr style="height: 22px;"></tr>
+          <tr style="border-top: 1px solid gainsboro;">
+            <td [style.width.%]="30">{{ crdTotal }}</td>
+            <td [style.width.%]="30"> {{ invTotal }}</td>
+            <td [style.width.%]="40">Total</td>
+          </tr>
+        </table>
+      </th>
+    </tr>
+
+    <tr *ngIf="selectedType==='quater'">
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10"    style="vertical-align: top!important;">{{(carriedData$ |
+        async)?.totalSales.total}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+        async)?.totalSales.invoiceCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="20" style="vertical-align: top!important;">
+        {{(carriedData$ | async)?.newSales.total}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">{{(carriedData$ |
+        async)?.newSales.invoiceCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3" style="vertical-align: top!important;">
+        <table [style.width.%]="100">
+          <tr>
+            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
+            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}} </td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
+          </tr>
+          <tr>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
+          </tr>
+          <tr>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
+            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
+            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
+          </tr>
+          <tr style="height: 22px;"></tr>
+          <tr style="border-top: 1px solid gainsboro;">
+            <td [style.width.%]="30">{{ crdTotal }}</td>
+            <td [style.width.%]="30"> {{ invTotal }}</td>
+            <td [style.width.%]="40">Total</td>
+          </tr>
+        </table>
+      </th>
+    </tr>
   </table>
-
-  <div>
-    <!-- loop over entries -->
-    <section class="row row-1">
-      <div class="row">
-        <div class="col-xs-1 group"></div>
-        <div class="col-xs-3 group">
-        </div>
-        <div class="col-xs-2 group">
-        </div>
-        <div class="col-xs-2 group text-right"></div>
-        <div class="col-xs-2 group text-right"></div>
-        <div class="col-xs-2 group text-right">
-        </div>
-      </div>
-
-      <!--entry details container-->
-      <ng-container>
-        <section class="row row-2 account">
-          <div class="row">
-            <div class="col-xs-1 account"></div>
-            <div class="col-xs-3 account" style="padding-left: 15px;"></div>
-            <div class="col-xs-2 account"></div>
-            <div class="col-xs-2 account"></div>
-            <div class="col-xs-2 account text-right">
-              <span></span>
-            </div>
-            <div class="col-xs-2 account text-right">
-              <span></span>
-            </div>
-          </div>
-        </section>
-      </ng-container>
-      <!--entry details container-->
-    </section>
-    <!-- loop over entries -->
-  </div>
-
-
-  <!--<div class=" mrT2 text-center">-->
-  <!--<small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}} Transactions | {{(daybookData$ | async)?.totalPages}} Pages </small>-->
-  <!--<small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages </small>-->
-  <!--</div>-->
-
-  <!--pagination-->
-  <div style="text-align: center;">
-    <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
-  </div>
-  <!--pagination-->
-
 </div>
