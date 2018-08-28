@@ -528,7 +528,7 @@
                             </div>
                             <div class="pdT1 pl0 max-600">
                                 <label class="mrB1">Message</label>
-                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message1"></textarea>
+                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
                         </td>
                         <td width="50%">
@@ -666,7 +666,7 @@
 <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"></aside-menu-account>
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
-<app-aside-recurring-entry [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+<app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">
     <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">

@@ -317,8 +317,8 @@ export class OtherSalesItemClass {
   public customField1: string;
   public customField2: string;
   public customField3: string;
-  public message1: string;
-  // public message2: string;
+  public message1?: string;
+  public message2?: string;
   public slogan?: any;
   constructor() {
     this.shippingDate = null;
@@ -369,6 +369,7 @@ class VoucherDetailsClass {
   public gstTaxesTotal?: any;
   public totalTaxableValue?: number;
   public customerName?: any;
+  public voucherType?: string;
   constructor() {
     this.customerName = null;
     this.grandTotal = null;

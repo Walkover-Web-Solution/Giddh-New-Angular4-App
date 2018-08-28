@@ -331,6 +331,12 @@ export class SettingsIntegrationActions {
       return {type: 'EmptyAction'};
     });
 
+  @Effect()
+  public GetGmailIntegrationStatus$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus())
+    .map(response => this.GetGmailIntegrationStatusResponse(response));
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -549,6 +555,19 @@ export class SettingsIntegrationActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE,
       payload: models
+    };
+  }
+
+  public GetGmailIntegrationStatus(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS
+    };
+  }
+
+  public GetGmailIntegrationStatusResponse(response): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE,
+      payload: response
     };
   }
 

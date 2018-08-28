@@ -37,7 +37,7 @@ export class DaybookService {
         data.queryString = queryRequest;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request));
+      .catch((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest));
   }
 
   public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {

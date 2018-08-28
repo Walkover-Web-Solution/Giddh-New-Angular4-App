@@ -6,12 +6,8 @@
         </small>
         <button class="btn pull-left isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
     </div>
-
-    <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e' || template.uniqueName === 'gst_template_f' || template.uniqueName === 'gst_template_g'" -->
     <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
-
-        <div class="template-grid" *ngIf="template.templateType === 'gst_template_a' || template.templateType === 'gst_template_c'">
-
+        <div class="template-grid" *ngIf="template.type === 'invoice' && template.templateType === 'gst_template_a'">
             <div class="template_info text-center">
                 <h3 class="primary_clr ellp">{{template.name}}</h3>
 
@@ -20,13 +16,12 @@
             </div>
 
             <div class="template_action">
-                <button [hidden]="template.templateType === 'gst_template_b' || template.templateType === 'gst_template_c' || template.templateType === 'gst_template_d' || template.templateType === 'gst_template_e' || template.templateType === 'gst_template_f' || template.templateType === 'gst_template_g'"
-                    class="btn btn-default" (click)="onPreview(template)">
+                <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
+                <button class="btn btn-default" (click)="onPreview(template)">
                         <i class="glyphicon glyphicon-eye-open" tooltip="Preview" aria-hidden="true"></i>
             </button>
-
-                <button [hidden]="template.templateType === 'gst_template_b' || template.templateType === 'gst_template_c' || template.templateType === 'gst_template_d' || template.templateType === 'gst_template_e' || template.templateType === 'gst_template_f' || template.templateType === 'gst_template_g'"
-                    class="btn btn-default" (click)="onUpdateTemplate(template)">
+                <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
+                <button class="btn btn-default" (click)="onUpdateTemplate(template)">
                             <i class="glyphicon glyphicon-cog" tooltip="Edit template" aria-hidden="true"></i>
             </button>
                 <button [disabled]="template.isDefault" class="btn btn-default" (click)="onDeleteTemplate(template)">
@@ -39,10 +34,8 @@
 
 
             </div>
-
         </div>
     </ng-container>
-
 </div>
 
 <!-- Template modal -->
@@ -50,7 +43,7 @@
     <div class="modal-dialog" style="width: 100%;margin:0;">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content" style="border-radius:0px;">
-            <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId" (closeModelEvent)="onCloseTemplateModal()"></invoice-template-modal>
+            <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId" (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
         </div>
     </div>
     <div class="sticky-footer pd2">

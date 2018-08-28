@@ -126,12 +126,20 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   }
 
   public toggleSelectAll(selectAll: boolean) {
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = selectAll;
+    this.searchResponseFiltered$.take(1).subscribe(p => {
+      this.searchResponseFiltered$ =  Observable.of(_.cloneDeep(p).map(j => {
+        j.isSelected = _.cloneDeep(selectAll);
         return j;
-      });
+      }));
     });
+
+    // this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => {
+    //   return _.cloneDeep(p).map(j => {
+    //     j.isSelected = selectAll;
+    //     console.log('the J is :', j);
+    //     return j;
+    //   });
+    // });
   }
 
   public ngOnDestroy() {
@@ -308,7 +316,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   }
 
   // Send Email/Sms for Accounts
-  public send() {
+  public async send() {
     let accountsUnqList = [];
     // this.searchResponseFiltered$.take(1).subscribe(p => {
     //   p.map(i => {
@@ -317,7 +325,17 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     //     }
     //   });
     // });
-    accountsUnqList = _.uniq(this.selectedItems);
+
+    await this.searchResponseFiltered$.take(1).subscribe(p => {
+      accountsUnqList = [];
+      p.forEach((item: AccountFlat) => {
+        if (item.isSelected) {
+          accountsUnqList.push(item.uniqueName);
+        }
+      });
+    });
+
+    // accountsUnqList = _.uniq(this.selectedItems);
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
     this.searchRequest$.take(1).subscribe(p => {
