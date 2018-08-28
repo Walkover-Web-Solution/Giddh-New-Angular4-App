@@ -8,7 +8,7 @@
         </div>
         <div class="form-group mrR1 max250" *ngIf="activeTab === 'aging'" style="width: 100px">
           <div class="checkbox square-switch">
-            <input type="checkbox" id="includeName" [(ngModel)]="includeName"  (change)="resetMe()"/>
+            <input type="checkbox" id="includeName" [(ngModel)]="includeName" (change)="resetMe()" />
             <label for="includeName">
               <span class="pull-left" *ngIf="includeName">Include</span>
               <span class="pull-right" *ngIf="!includeName">Exclude</span>
@@ -16,7 +16,8 @@
           </div>
         </div>
         <div class="form-group mrR1 max500" *ngIf="activeTab === 'aging'">
-          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names" [options]="sundryDebtorsAccountsForAgingReport" (change)="resetMe()"></sh-select>
+          <sh-select placeholder="Search customer..." [multiple]='true' name="names" [(ngModel)]="names" [options]="sundryDebtorsAccountsForAgingReport"
+            (change)="resetMe()"></sh-select>
         </div>
         <div class="form-group mrR1 max250 " *ngIf="activeTab === 'aging'">
           <sh-select placeholder="Link Account" name="totalDue" [(ngModel)]="totalDueSelectedOption" [options]="totalDueOptions" (change)="resetMe()"></sh-select>

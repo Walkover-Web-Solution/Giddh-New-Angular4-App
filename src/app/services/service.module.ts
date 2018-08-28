@@ -47,6 +47,7 @@ import { RecurringVoucherService } from './recurring-voucher.service';
 import { ImportExcelService } from './import-excel.service';
 import { SettingsBunchService } from './settings.bunch.service';
 import { SettingsDiscountService } from './settings.discount.service';
+import { CarriedOverSalesService } from './carried-over-sales.service';
 import { CompanyImportExportService } from './companyImportExportService';
 import { AgingreportingService } from './agingreporting.service';
 
@@ -104,6 +105,7 @@ export class ServiceModule {
         ImportExcelService,
         SettingsBunchService,
         SettingsDiscountService,
+        CarriedOverSalesService,
         AgingreportingService,
         CompanyImportExportService
       ]
