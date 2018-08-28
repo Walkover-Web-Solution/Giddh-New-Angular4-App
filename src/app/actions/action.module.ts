@@ -42,6 +42,7 @@ import { InventoryUsersActions } from './inventory/inventory.users.actions';
 import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
 import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
+import { CarriedOverSalesActions } from './carried-over-sales.actions';
 import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
 
@@ -90,6 +91,7 @@ import { AgingReportActions } from './aging-report.actions';
       SettingsTriggersActions,
       ImportExcelActions,
       SettingsDiscountActions,
+      CarriedOverSalesActions,
       AgingReportActions,
       CompanyImportExportActions
     ])
