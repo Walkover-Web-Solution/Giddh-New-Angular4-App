@@ -136,7 +136,7 @@ export class SettingsComponent implements OnInit {
       return 'http://dev.giddh.com/app/pages/settings?tab=integration';
     } else if (baseHref.indexOf('test.giddh.com') > -1) {
       return 'http://test.giddh.com/app/pages/settings?tab=integration';
-    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+    } else if (baseHref.indexOf('stage.giddh.com') > -1) {
       return 'http://stage.giddh.com/app/pages/settings?tab=integration';
     } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
       return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';

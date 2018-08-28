@@ -78,3 +78,4 @@ module.exports = {
         {type: 'text/javascript', src: 'https://checkout.razorpay.com/v1/checkout.js'}
     ]
 };
+
