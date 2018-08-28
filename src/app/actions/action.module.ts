@@ -43,6 +43,8 @@ import { SettingsTriggersActions } from './settings/triggers/settings.triggers.a
 import { ImportExcelActions } from './import-excel/import-excel.actions';
 import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
 import { CarriedOverSalesActions } from './carried-over-sales.actions';
+import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
+import { AgingReportActions } from './aging-report.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -89,7 +91,9 @@ import { CarriedOverSalesActions } from './carried-over-sales.actions';
       SettingsTriggersActions,
       ImportExcelActions,
       SettingsDiscountActions,
-      CarriedOverSalesActions
+      CarriedOverSalesActions,
+      AgingReportActions,
+      CompanyImportExportActions
     ])
   ],
   exports: [EffectsModule]

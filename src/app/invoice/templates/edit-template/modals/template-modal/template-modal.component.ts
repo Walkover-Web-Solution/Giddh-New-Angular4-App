@@ -1,4 +1,4 @@
-import { Component, DoCheck, EventEmitter, Input, Output } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { ISection } from '../../../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { Store } from '@ngrx/store';
@@ -10,9 +10,10 @@ import { AppState } from '../../../../../store/roots';
   styleUrls: ['./template-modal.component.css']
 })
 
-export class InvoiceTemplateModalComponent implements DoCheck {
+export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
   @Input() public templateId: string;
   @Input() public templateSections: ISection[];
+  @Input() public editMode: string;
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
 
   public isEmailTabSelected: boolean = false;
@@ -39,6 +40,16 @@ export class InvoiceTemplateModalComponent implements DoCheck {
     //   this.emailObject = obj;
     //   this.isEmailTabSelected = obj.isEmailTabSelected;
     // }
+  }
+
+  /**
+   * ngChanges
+   */
+  public ngOnChanges(s) {
+    if (s.editMode && s.editMode.currentValue !== s.editMode.previousValue) {
+      this.editMode = s.editMode.currentValue;
+    }
+    //
   }
 
 }
