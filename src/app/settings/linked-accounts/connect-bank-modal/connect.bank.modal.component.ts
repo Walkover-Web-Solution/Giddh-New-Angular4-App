@@ -139,9 +139,10 @@ export class ConnectBankModalComponent implements OnChanges {
       name: [''],
       maxLength: [''],
       type: [''],
-      value: [''],
+      value: [null],
       isOptional: [false],
-      valueEditable: [true]
+      valueEditable: [true],
+      option: []
     });
   }
 

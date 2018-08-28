@@ -57,9 +57,6 @@ export class TbsearchPipe implements PipeTransform {
   }
   public search(input: ChildGroup, s: string, allIncluded: boolean = false) {
     if (input) {
-      if (input.groupName.toUpperCase() === 'SWADHI1') {
-        debugger;
-      }
       let hasAnyVisible = false;
       for (let grp of input.childGroups) {
         grp.isIncludedInSearch = false;
