@@ -50,6 +50,8 @@ export class SettingIntegrationComponent implements OnInit {
   public bankAccounts$: Observable<IOption[]>;
   public gmailAuthCodeUrl$: Observable<string> = null;
   public amazonSellerForm: FormGroup;
+  public amazonEditItemIdx: number;
+  public amazonSellerRes: AmazonSellerClass[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
 
@@ -110,6 +112,13 @@ export class SettingIntegrationComponent implements OnInit {
       } else {
         this.paymentGateway = new CashfreeClass();
         this.paymentGatewayAdded = false;
+      }
+      if (o.amazonSeller && o.amazonSeller.length) {
+        this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
+        o.amazonSeller.map((item, i) => {
+          this.addAmazonSellerRow(i, item);
+        });
+        this.addAmazonSellerRow(o.amazonSeller.length);
       }
     });
 
@@ -286,8 +295,9 @@ export class SettingIntegrationComponent implements OnInit {
   /**
    * saveAmazonSeller
    */
-  public saveAmazonSeller() {
-    let sellers = _.cloneDeep(this.amazonSellerForm.controls['sellers'].value);
+  public saveAmazonSeller(obj) {
+    let sellers = [];
+    sellers.push(_.cloneDeep(obj.value));
     this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
     console.log('bingo');
   }
@@ -295,9 +305,27 @@ export class SettingIntegrationComponent implements OnInit {
   /**
    * updateAmazonSeller
    */
-  public updateAmazonSeller() {
-    //
+  public updateAmazonSeller(obj) {
+    if (!obj.value.sellerId) {
+      return;
+    }
+    let sellerObj = _.cloneDeep(obj.value);
+    delete sellerObj['secretKey'];
+    this.store.dispatch(this.settingsIntegrationActions.UpdateAmazonSeller(sellerObj));
   }
+
+  /**
+   * deleteAmazonSeller
+   */
+  public deleteAmazonSeller(sellerId, idx) {
+    let seller = this.amazonSellerRes.findIndex((o) => o.sellerId === sellerId);
+    if (seller > -1) {
+          this.store.dispatch(this.settingsIntegrationActions.DeleteAmazonSeller(sellerId));
+    } else {
+      this.removeAmazonSeller(idx);
+    }
+  }
+
   // initial initAmazonReseller controls
   public initAmazonReseller() {
     // initialize our controls
@@ -309,7 +337,7 @@ export class SettingIntegrationComponent implements OnInit {
     });
   }
 
-  public addMoreSeller(i: number, item?: any) {
+  public addAmazonSellerRow(i: number, item?: any) {
     const amazonSellerControl = this.amazonSellerForm.controls['sellers'] as FormArray;
     const control = this.amazonSellerForm.controls['sellers'] as FormArray;
 
@@ -325,6 +353,23 @@ export class SettingIntegrationComponent implements OnInit {
     } else {
         control.push(this.initAmazonReseller());
     }
+  }
+  // remove amazon Seller controls
+  public removeAmazonSeller(i: number) {
+    // remove address from the list
+    const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+    if (control.length > 1) {
+      control.removeAt(i);
+    } else {
+      control.controls[0].reset();
+    }
+  }
+
+  /**
+   * editAmazonSeller
+   */
+  public editAmazonSeller(idx: number) {
+    this.amazonEditItemIdx = idx;
   }
 
   private getRedirectUrl(baseHref: string) {

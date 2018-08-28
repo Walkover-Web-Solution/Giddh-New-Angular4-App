@@ -252,31 +252,35 @@
         <ng-container formArrayName="sellers">
             <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
                 <div class="clearfix" [formGroupName]="i">
-                    <div class="mrR1 pull-left" [ngClass]="{'mrT2': f}">
+                    <!-- <div class="mrR1 pull-left" [ngClass]="{'mrT2': f}">
                         <input type="checkbox" />
-                    </div>
+                    </div> -->
                     <div class="form-group col-xs-2">
                         <div class="row">
                             <label *ngIf="f">Seller Id<span class="required">*</span></label>
-                            <input class="form-control" type="text" placeholder="Seller Id" required autocomplete="off" formControlName="sellerId" />
+                            <input class="form-control" type="text" placeholder="Seller Id" required autocomplete="off" formControlName="sellerId" [disabled]="i !== amazonEditItemIdx" />
                         </div>
                     </div>
                     <div class="form-group col-xs-3">
                         <label *ngIf="f">Access Key<span class="required">*</span></label>
-                        <input class="form-control" type="text" placeholder="Access key" required autocomplete="off" formControlName="accessKey" />
+                        <input class="form-control" type="text" placeholder="Access key" required autocomplete="off" formControlName="accessKey" [disabled]="i !== amazonEditItemIdx" />
                     </div>
                     <div class="form-group col-xs-3 row">
                         <label *ngIf="f">AuthToken<span class="required">*</span></label>
-                        <input class="form-control" type="text" placeholder="AuthToken key" required autocomplete="off" formControlName="mwsAuthToken" />
+                        <input class="form-control" type="text" placeholder="AuthToken key" required autocomplete="off" formControlName="mwsAuthToken" [disabled]="i !== amazonEditItemIdx" />
                     </div>
 
                     <div class="form-group col-xs-3">
                         <label *ngIf="f">Secret Key<span class="required">*</span></label>
-                        <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" />
+                        <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
                     </div>
                     <div class="pull-left">
-                        <button type="button" class="btn btn-default" (click)="addMoreSeller(i)" *ngIf="l" [ngClass]="{'mrT2': f}"><i class="fa fa-plus"></i></button>
-                        <button type="button" class="btn btn-danger" (click)="addMoreSeller(i)" [ngClass]="{'mrL': l, 'mrT2': f}"><i class="fa fa-trash-o"></i></button>
+                        <div>
+                            <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-default" (click)="editAmazonSeller(i)" *ngIf="i !== amazonEditItemIdx"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-danger" (click)="deleteAmazonSeller(item.get('sellerId').value, i)" *ngIf="!l"><i class="fa fa-trash-o"></i></button>
+                        </div>
                     </div>
                 </div>
             </ng-container>
@@ -285,9 +289,9 @@
 
     <div class="row">
         <div class="col-xs-12 form-group ">
-            <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button>
-            <button class="btn btn-success" (click)="updateAmazonSeller()">Update</button>
-            <button class="btn btn-danger">Delete</button>
+            <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
+            <button class="btn btn-success" (click)="addAmazonSellerRow()">Add more</button>
+            <!-- <button class="btn btn-danger">Delete</button> -->
         </div>
     </div>
 </div>

@@ -13,6 +13,7 @@ export interface IntegrationPage {
   payoutForm: any;
   autoCollect: CashfreeClass;
   paymentGateway: CashfreeClass;
+  amazonSeller: AmazonSellerClass[];
 }
 
 export class IntegrationPageClass {
