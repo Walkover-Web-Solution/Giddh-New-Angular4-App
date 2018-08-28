@@ -245,36 +245,38 @@ export class SettingsIntegrationService {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass[]>(e));
   }
 
   public AddAmazonSeller(model: AmazonSellerClass[]): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
-      let data: BaseResponse<any, any> = res;
+      let data: BaseResponse<any, any[]> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass[]>(e, model));
   }
 
-  public UpdateAmazonSeller(model: CashfreeClass): Observable<BaseResponse<any, any>> {
+  public UpdateAmazonSeller(model: AmazonSellerClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    let sellerId = model.sellerId;
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId), model).map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
   }
 
-  public DeleteAmazonSeller(): Observable<BaseResponse<string, string>> {
+  public DeleteAmazonSeller(sellerId): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<string, string> = res;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId)).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = {sellerId};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
 
 }
