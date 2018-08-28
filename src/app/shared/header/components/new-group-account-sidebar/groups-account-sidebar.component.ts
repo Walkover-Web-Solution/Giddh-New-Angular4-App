@@ -332,7 +332,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     //     this.breadcrumbUniqueNamePath.pop();
     //     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     //     if (this.breadcrumbUniqueNamePath && this.breadcrumbUniqueNamePath.length > 0) {
-    //       debugger;
     //       this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.breadcrumbUniqueNamePath[this.breadcrumbUniqueNamePath.length - 1]));
     //     }
     //   }

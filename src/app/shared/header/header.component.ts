@@ -30,37 +30,38 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 export const NAVIGATION_ITEM_LIST: IOption[] = [
   {label: 'Dashboard', value: '/pages/home'},
   {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
-  { label: 'Sales', value: '/pages/sales' },
-  { label: 'Invoice', value: '/pages/invoice/preview' },
-  { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
-  { label: 'Invoice > Templates', value: '/pages/invoice/templates' },
-  { label: 'Invoice > Settings', value: '/pages/invoice/settings' },
-  { label: 'Daybook', value: '/pages/daybook' },
-  { label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 }  },
-  { label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 }  },
-  { label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 }  },
-  { label: 'Audit Logs', value: '/pages/audit-logs' },
-  { label: 'Taxes', value: '/pages/purchase/invoice' },
-  { label: 'Inventory', value: '/pages/inventory' },
-  { label: 'Manufacturing', value: '/pages/manufacturing/report' },
-  { label: 'Search', value: '/pages/search' },
-  { label: 'Permissions', value: '/pages/permissions/list' },
-  { label: 'Settings', value: '/pages/settings' },
-  { label: 'Settings > Taxes', value: '/pages/settings', additional: { tab: 'taxes', tabIndex: 0 } },
-  { label: 'Settings > Integration', value: '/pages/settings', additional: { tab: 'integration', tabIndex: 1 } },
-  { label: 'Settings > Linked Accounts', value: '/pages/settings', additional: { tab: 'linked-accounts', tabIndex: 2 } },
-  { label: 'Settings > Profile', value: '/pages/settings', additional: { tab: 'profile', tabIndex: 3 } },
-  { label: 'Settings > Financial Year', value: '/pages/settings', additional: { tab: 'financial-year', tabIndex: 4 } },
-  { label: 'Settings > Permission', value: '/pages/settings', additional: { tab: 'permission', tabIndex: 5 } },
-  { label: 'Settings > Branch', value: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
-  { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
-  { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
-  { label: 'Contact', value: '/pages/contact' },
-  { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
-  { label: 'Import', value: '/pages/import' },
-  { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
-  { label: 'Onboarding', value: '/onboarding' },
-  { label: 'Purchase Invoice ', value: '/pages/purchase/create' },
+  {label: 'Sales', value: '/pages/sales'},
+  {label: 'Invoice', value: '/pages/invoice/preview'},
+  {label: 'Invoice > Generate', value: '/pages/invoice/generate'},
+  {label: 'Invoice > Templates', value: '/pages/invoice/templates'},
+  {label: 'Invoice > Settings', value: '/pages/invoice/settings'},
+  {label: 'Daybook', value: '/pages/daybook'},
+  {label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
+  {label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
+  {label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'balance-sheet', tabIndex: 2}},
+  {label: 'Audit Logs', value: '/pages/audit-logs'},
+  {label: 'Taxes', value: '/pages/purchase/invoice'},
+  {label: 'Inventory', value: '/pages/inventory'},
+  {label: 'Manufacturing', value: '/pages/manufacturing/report'},
+  {label: 'Search', value: '/pages/search'},
+  {label: 'Permissions', value: '/pages/permissions/list'},
+  {label: 'Settings', value: '/pages/settings'},
+  {label: 'Settings > Taxes', value: '/pages/settings', additional: {tab: 'taxes', tabIndex: 0}},
+  {label: 'Settings > Integration', value: '/pages/settings', additional: {tab: 'integration', tabIndex: 1}},
+  {label: 'Settings > Linked Accounts', value: '/pages/settings', additional: {tab: 'linked-accounts', tabIndex: 2}},
+  {label: 'Settings > Profile', value: '/pages/settings', additional: {tab: 'profile', tabIndex: 3}},
+  {label: 'Settings > Financial Year', value: '/pages/settings', additional: {tab: 'financial-year', tabIndex: 4}},
+  {label: 'Settings > Permission', value: '/pages/settings', additional: {tab: 'permission', tabIndex: 5}},
+  {label: 'Settings > Branch', value: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
+  {label: 'Settings > Tag', value: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
+  {label: 'Settings > Trigger', value: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
+  {label: 'Contact', value: '/pages/contact'},
+  {label: 'Inventory In/Out', value: '/pages/inventory-in-out'},
+  {label: 'Import', value: '/pages/import'},
+  {label: 'Settings > Group', value: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
+  {label: 'Onboarding', value: '/onboarding'},
+  {label: 'Purchase Invoice ', value: '/pages/purchase/create'},
+  {label: 'Company Import/Export', value: '/pages/company-import-export'}
 ];
 
 @Component({
@@ -436,10 +437,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       // check if logged in via social accounts
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
-        // debugger;
         if (val) {
           this.socialAuthService.signOut().then(() => {
-            // debugger;
             this.store.dispatch(this.loginAction.ClearSession());
             this.store.dispatch(this.loginAction.socialLogoutAttempt());
           }).catch((err) => {
