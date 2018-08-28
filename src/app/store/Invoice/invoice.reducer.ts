@@ -304,6 +304,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         let form = res.queryString.form;
         newState.settings.invoiceSettings = form.invoiceSettings;
         newState.settings.companyCashFreeSettings = form.companyCashFreeSettings;
+        newState.settings.companyEmailSettings = form.companyEmailSettings;
         return Object.assign({}, state, newState);
       }
       return state;
