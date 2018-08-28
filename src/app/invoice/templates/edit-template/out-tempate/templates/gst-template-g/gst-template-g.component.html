@@ -2,371 +2,9 @@
 <html lang="en" id="gold">
 
 <head>
-    <title></title>
-    <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-
-    <style type="text/css">
-        /* reset */
-
-        #gold * {
-            border: 0;
-            box-sizing: content-box;
-            color: #231f20;
-            font-family: inherit;
-            font-size: inherit;
-            font-style: inherit;
-            font-weight: inherit;
-            line-height: 18px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            text-decoration: none;
-            vertical-align: top;
-        }
-
-        :focus {
-            outline: 0;
-            border: 1px solid #ddd !important;
-        }
-
-        contenteditable {
-            border: 1px solid transparent;
-        }
-
-        /* NOTE:  comment padding, max-width, border in #gold css for java */
-
-        #gold {
-            font: 12px/1 'Open Sans', sans-serif;
-            overflow: auto;
-            background: #fff;
-            border: 1px solid #bfbfbf;
-            max-width: 8.3in;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px 5px 0 5px;
-        }
-
-        #gold header h1 {
-            /* margin-bottom: 10px; */
-            font-size: 14px;
-            color: #DF4927;
-        }
-
-        #gold header p {
-            margin-bottom: 10px;
-            font-size: 10px;
-            color: #262626;
-        }
-
-        #gold h1.invoice {
-            font-size: 24px;
-            color: #DF4927;
-        }
-
-        #gold .invoice-table {
-            border-top: 1px solid #B3B3B3;
-            border-bottom: 1px solid #B3B3B3;
-            padding: 15px;
-        }
-
-        #gold header .sub_head {
-            font-size: 15px;
-            margin-left: 5px;
-        }
-
-        #gold .text-right {
-            text-align: right;
-        }
-
-        #gold .text-left {
-            text-align: left !important;
-        }
-
-        #gold .pull-right {
-            float: right;
-        }
-
-        #gold .pull-left {
-            float: left;
-        }
-
-        #gold table {
-            width: 100%;
-            table-layout: fixed;
-            line-height: 20px;
-            border-collapse: inherit
-        }
-
-        #gold .logo {
-            max-width: 120px;
-            width: 100%;
-        }
-
-        #gold strong {
-            font-weight: bold;
-        }
-
-        #gold .total-amount {
-            text-align: center;
-            vertical-align: bottom;
-            padding-bottom: 10px
-        }
-
-        #gold .total-amount h2 {
-            font-size: 24px;
-            padding: 0 0;
-            display: inline-block;
-            float: right;
-        }
-
-        #gold .address th {
-            /* text-align:left; */
-        }
-
-        #gold .mrL2 {
-            margin-left: 20px;
-        }
-
-        #gold .mrB2 {
-            margin-bottom: 20px;
-        }
-
-        #gold .mrB1 {
-            margin-bottom: 10px;
-        }
-
-        #gold .meta {
-            margin: 2px 0 10px 0;
-            padding: 0 10px;
-        }
-
-        #gold .meta h4 {
-            font-weight: bold;
-            font-size: 18px;
-            line-height: 19px;
-        }
-
-        #gold .product-table {
-            background: #df49270d;
-            position: relative;
-            /* padding-bottom: 10px; */
-        }
-
-
-        #gold .item {
-            table-layout: auto !important;
-            clear: both;
-            width: 100%;
-            table-layout: auto;
-        }
-
-        #gold .item thead tr th {
-            padding: 14px 5px;
-            border-bottom: 1px solid #666666;
-            line-height: 1.2rem;
-            font-weight: bold;
-        }
-
-        #gold .item th {
-            text-align: right;
-            padding: 14px 7px;
-            line-height: 1.2rem;
-        }
-
-        #gold table.item tr th,
-        #gold table.item tr td {
-            padding-right: 10px;
-            vertical-align: middle;
-        }
-
-        #gold table.item tr th:nth-child(2) {
-            text-align: left;
-        }
-
-        #gold table.item tr th:nth-child(1),
-        #gold table.item tr td:nth-child(1) {
-            text-align: center;
-        }
-
-        #gold table.item tr th:nth-child(1),
-        #gold table.item tr th:nth-child(2),
-        #gold table.item tr th:nth-child(3) {
-            vertical-align: middle;
-        }
-
-        #gold table.item td:nth-child(2) {
-            width: 38%;
-            text-align: left;
-        }
-
-        #gold table.item td:nth-child(3),
-        #gold table.item th:nth-child(3) {
-            width: 18%;
-            text-align: left;
-        }
-
-        #gold table.item td:nth-child(1) {
-            width: 26%;
-        }
-
-        #gold .item td {
-            border-radius: 0;
-            padding: 7px;
-            /* border-top: 1px solid rgba(89, 89, 89, 0.6); */
-            text-align: right;
-            line-height: 1.2rem;
-        }
-
-        #gold .item thead {
-            background: rgba(223, 73, 39, 0.05);
-        }
-
-        #gold .item thead tr th {
-            padding: 14px 5px;
-            border-bottom: 1px solid #666666;
-            line-height: 1.2rem;
-            font-weight: bold;
-        }
-
-        #gold .item tfoot tr {
-            background: rgba(223, 73, 39, 0.05);
-        }
-
-        #gold .item tfoot tr th,
-        #gold .item tbody tr td {
-            padding: 5px 5px;
-        }
-
-        #gold .item tbody tr:nth-child(even) {
-            background: #fff;
-        }
-
-        #gold .item tbody tr:nth-child(odd) {
-            background: #FAFAFA;
-        }
-
-
-        #gold .item tfoot tr:last-child th {
-            border-top: 1px solid #666666;
-            padding: 14px 0px;
-            line-height: 1.2rem;
-            vertical-align: middle
-        }
-
-        #gold table.item td:nth-child(5),
-        #silver table.item th:nth-child(5) {
-            width: 13%;
-            text-align: right;
-        }
-
-        #gold .balance {
-            width: 75%;
-            float: right;
-            margin: 20px 7px;
-            margin-bottom: 78px;
-        }
-
-        #gold .balance th,
-        #gold .balance td {
-            width: 50%;
-            text-align: right;
-            padding: 4px;
-        }
-
-        #gold article {
-            margin: 0 0 3em;
-        }
-
-        #gold .total-row {
-            border-top: 1px solid #000000;
-        }
-
-        #gold .tax-table p {
-            color: #595959;
-        }
-
-        #gold .tax-table tfoot th {
-            font-weight: bold
-        }
-
-        #gold .bdrB {
-            border-bottom: 1px solid#666;
-        }
-
-        #gold .subfooter {
-            margin-top: 100px;
-        }
-
-        #gold .subfooter tbody td:nth-child(2) {
-            padding-right: 15px;
-        }
-
-        #gold .subfooter h1 {
-            font-size: 14px;
-            display: inline-block;
-            color: #DF4927;
-            padding-left: 15px;
-        }
-
-        #gold .subfooter .normal {
-            font-size: 12px;
-            vertical-align: baseline
-        }
-
-        #gold .vmiddle {
-            vertical-align: middle;
-        }
-
-        #gold .note {
-            margin-top: 20px;
-            padding-left: 15px;
-        }
-
-        #gold .note li {
-            list-style-type: none;
-            font-size: 10px;
-
-        }
-
-        #gold footer {
-            margin-top: 7px;
-            border-top: 2px solid #DF4927;
-            padding: 8px 0;
-            line-height: 20px;
-            background: #F5F5F5;
-            margin-left: -5px;
-            margin-right: -5px;
-        }
-
-        #gold .pos-rel {
-            position: relative;
-        }
-
-        #gold .primary-clr {
-            color: #df4927;
-        }
-
-        #gold .text-center {
-            text-align: center
-        }
-
-        #gold .mrB {
-            margin-bottom: 10px;
-        }
-
-        #gold .secondry_clr {
-            color: #4b4c4f;
-        }
-
-        @page {
-            margin: 0;
-            size: A4 portrait;
-        }
-    </style>
 </head>
 
-<body>
+<body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
@@ -375,16 +13,13 @@
                 <tbody>
                     <tr>
                         <td class="text-center">
-                            <img style="max-width: 160px;" class="clogo" [hidden]='!showLogo' [src]="logoSrc" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}"
-                            />
+                            <img style="max-width: 160px;" class="clogo" [hidden]='!showLogo' [src]="logoSrc" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" />
                         </td>
                     </tr>
                     <tr>
                         <td class="text-center">
-                            <h1 [hidden]="!fieldsAndVisibility.header.companyName?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}"><strong
-                                    [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</strong></h1>
-                            <p [hidden]="!fieldsAndVisibility.header.gstin?.display">{{fieldsAndVisibility.header.gstin?.label}}:{{companyGSTIN
-                                ? companyGSTIN : 'AASDAS231234ASD'}}</p>
+                            <h1 [hidden]="!fieldsAndVisibility.header.companyName?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}"><strong [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</strong></h1>
+                            <p [hidden]="!fieldsAndVisibility.header.gstin?.display">{{fieldsAndVisibility.header.gstin?.label}}:{{companyGSTIN ? companyGSTIN : 'AASDAS231234ASD'}}</p>
                         </td>
                     </tr>
 
@@ -401,10 +36,8 @@
                                 <tr>
                                     <td>
 
-                                        <h1 class="invoice" [ngClass]="{'no-content' : (fieldsAndVisibility.header.formNameTaxInvoice && !fieldsAndVisibility.header.formNameTaxInvoice?.display)}"
-                                            [ngStyle]="{ 'color': inputTemplate.templateColor}" title="{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}">
-                                            {{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ?
-                                            fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}
+                                        <h1 class="invoice" [ngClass]="{'no-content' : (fieldsAndVisibility.header.formNameTaxInvoice && !fieldsAndVisibility.header.formNameTaxInvoice?.display)}" [ngStyle]="{ 'color': inputTemplate.templateColor}" title="{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}">
+                                            {{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}
 
 
                                         </h1>
@@ -445,11 +78,9 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">{{(fieldsAndVisibility.header.invoiceDate?.label?.length
-                                        > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}} </td>
+                                    <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display" style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}} </td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">23/06/2017</td>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
-                                        > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</td>
+                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display" style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">201770323-64</td>
                                 </tr>
 
@@ -491,8 +122,8 @@
                                                         <p>24 Building Name</p>
                                                         <p>3rd Floor</p>
                                                         <p>15 A.B. Road</p>
-                                                        <p>Indore <span [hidden]="!fieldsAndVisibility.header.billingState?.display">(M.P.)</span>
-                                                            452000</p>
+                                                        <p>Indore <span [hidden]="!fieldsAndVisibility.header.billingState?.display">(M.P.)</span> 452000
+                                                        </p>
                                                     </td>
                                                 </tr>
 
@@ -634,62 +265,60 @@
         </table>
         <!-- <span class="arrow-down "></span> -->
         <article>
-            <table class="item product-table mrB2 " cellspacing="0 " cellpadding="0 ">
+            <table class="item product-table mrB1" cellspacing="0 " cellpadding="0 ">
                 <thead>
                     <tr>
-                        <th [hidden]="!fieldsAndVisibility.table.sNo?.display ">{{(fieldsAndVisibility.table.sNo?.label?.length
-                            > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}</th>
-                        <th [hidden]="!fieldsAndVisibility.table.item?.display " colspan="2">{{(fieldsAndVisibility.table.item?.label?.length
-                            > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}</th>
-                        <th [hidden]="!fieldsAndVisibility.table.date?.display ">{{(fieldsAndVisibility.table.date?.label?.length
-                            > 0) ? fieldsAndVisibility.table.date?.label : 'Date'}}</th>
-                        <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display ">{{(fieldsAndVisibility.table.hsnSac?.label?.length
-                            > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
-                        <th [hidden]="!fieldsAndVisibility.table.quantity?.display ">{{(fieldsAndVisibility.table.quantity?.label?.length
-                            > 0) ? fieldsAndVisibility.table.quantity?.label : 'Qty.'}}</th>
-
-                        <th [hidden]="!fieldsAndVisibility.table.discount?.display ">{{(fieldsAndVisibility.table.discount?.label?.length
-                            > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}} (₹)</th>
-                        <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display ">{{(fieldsAndVisibility.table.taxableValue?.label?.length
-                            > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Value'}}</th>
-                        <th [hidden]="!fieldsAndVisibility.table.taxes?.display ">{{(fieldsAndVisibility.table.taxes?.label?.length
-                            > 0) ? fieldsAndVisibility.table.taxes?.label : 'Tax'}}(₹)</th>
-                        <th [hidden]="!fieldsAndVisibility.table.rate?.display ">{{(fieldsAndVisibility.table.rate?.label?.length
-                            > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}} (₹)</th>
-                        <th [hidden]="!fieldsAndVisibility.table.total?.display " colspan="2">{{(fieldsAndVisibility.table.total?.label?.length
-                            > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}} (₹)</th>
+                        <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.quantity?.label?.length > 0) ? fieldsAndVisibility.table.quantity?.label : 'Qty.'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Value'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.taxes?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label : 'Tax'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.total?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td [hidden]="!fieldsAndVisibility.table.sNo?.display ">1</td>
-                        <td [hidden]="!fieldsAndVisibility.table.item?.display " colspan="2">Dummy Product Edition 2</td>
-                        <td [hidden]="!fieldsAndVisibility.table.date?.display ">23/07/17</td>
-                        <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display ">123456</td>
-                        <td [hidden]="!fieldsAndVisibility.table.quantity?.display ">10 No.</td>
-                        <td [hidden]="!fieldsAndVisibility.table.discount?.display ">30.00</td>
-                        <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display ">970.00</td>
-                        <td [hidden]="!fieldsAndVisibility.table.taxes?.display ">970.00
+                        <!-- <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">1</td> -->
+                        <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456</td>
+                        <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
+                        <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                        <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
                             <p>@10%</p>
                         </td>
-                        <td [hidden]="!fieldsAndVisibility.table.rate?.display ">1000.00</td>
-                        <td [hidden]="!fieldsAndVisibility.table.total?.display " colspan="2">10670.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                     </tr>
                     <tr>
-                        <td [hidden]="!fieldsAndVisibility.table.sNo?.display ">2</td>
-                        <td [hidden]="!fieldsAndVisibility.table.item?.display " colspan="2">Dummy Product Edition 2</td>
-                        <td [hidden]="!fieldsAndVisibility.table.date?.display ">23/07/17</td>
-                        <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display ">123456</td>
-                        <td [hidden]="!fieldsAndVisibility.table.quantity?.display ">10 No.</td>
-                        <td [hidden]="!fieldsAndVisibility.table.discount?.display ">30.00</td>
-                        <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display ">970.00</td>
-                        <td [hidden]="!fieldsAndVisibility.table.taxes?.display ">970.00
+                        <!-- <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">2</td> -->
+                        <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456</td>
+                        <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
+                        <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                        <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
                             <p>@10%</p>
                         </td>
-                        <td [hidden]="!fieldsAndVisibility.table.rate?.display ">1000.00</td>
-                        <td [hidden]="!fieldsAndVisibility.table.total?.display " colspan="2">10670.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <!-- <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}</th> -->
+                        <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"></th>
+                        <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"></th>
+                        <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"></th>
+                        <th *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"></th>
+                        <th *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"></th>
+                        <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"><strong>30100.00</strong></th>
+                        <th *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"><strong>2960.00</strong></th>
+                        <th *ngIf="fieldsAndVisibility.table.total?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"><strong>36020.00</strong></th>
+                    </tr>
+                </tfoot>
             </table>
             <table class="balance ">
                 <tr [hidden]="!fieldsAndVisibility.footer.taxableAmount?.display ">
@@ -713,56 +342,36 @@
 
     </div>
 
-    <div id="Template-footer " (click)="onClickSection( 'footer') " [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer,
-                                            ' ': templateUISectionVisibility.footer } " style="position: relative;float: left;width: 100%; ">
-        <table class="subfooter ">
+    <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
+        <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer"><i class="fa fa-pencil"></i></a>
+        <table class="subfooter" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
             <tbody>
                 <tr>
-                    <td style="vertical-align: bottom; " colspan="2 " [hidden]="!fieldsAndVisibility.footer.thanks?.display ">
-                        <h1><span [ngStyle]="{ 'color': inputTemplate.templateColor} ">Thank You for your business.</span>
-                        </h1>
+                    <td *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
+                        <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</h1>
+                    </td>
+                    <td colspan="1"></td>
+                    <td style="text-align: center;vertical-align: bottom;">
+                        <p class="bdrB"></p>
+                        <p>{{fieldsAndVisibility.header.companyName?.label}}</p>
+                        <small *ngIf="fieldsAndVisibility.footer.slogan?.display" [innerHTML]="fieldsAndVisibility.footer.slogan?.label"><small *ngIf="!fieldsAndVisibility.footer.slogan?.display"> &nbsp; </small></small>
+                        <!-- <p> <strong *ngIf="fieldsAndVisibility.footer.slogan?.display">{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : 'Company Name'}}</strong></p>
+                        <p>(Signature)</p> -->
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2 ">
-                        <ul class="note ">
-                            <li contenteditable="true "><Strong>*Tax to be paid on reverse charge</Strong></li>
-                            <li contenteditable="true " *ngIf="fieldsAndVisibility.footer.message1?.display "><strong>Note:
-                                </strong> <span style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.message1?.label "></span></li>
+                <tr *ngIf="fieldsAndVisibility.footer.message1?.display">
+                    <td colspan="3">
+                        <ul class="note">
+                            <li>{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}</li>
                         </ul>
-                    </td>
-                    <td style="text-align: center;vertical-align: bottom; ">
-                        <p class="bdrB "></p>
-                        <p contenteditable="true "> <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
-                        <p *ngIf="fieldsAndVisibility.footer.slogan?.display " [innerHTML]="fieldsAndVisibility.footer.slogan?.label "><small
-                                *ngIf="!fieldsAndVisibility.footer.slogan?.display "> &nbsp; </small></p>
                     </td>
                 </tr>
             </tbody>
-            <!-- <tbody>
-                <tr>
-
-                    <td style="text-align: center;vertical-align: bottom; ">
-                        <p class="bdrB "></p>
-                        <p> <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
-                        <p *ngIf="fieldsAndVisibility.footer.slogan?.display " [innerHTML]="fieldsAndVisibility.footer.slogan?.label "><small
-                                *ngIf="!fieldsAndVisibility.footer.slogan?.display "> &nbsp; </small></p>
-                    </td>
-                </tr>
-                <tr *ngIf="fieldsAndVisibility.footer.message1?.display ">
-                    <td colspan="3 ">
-                        <ul class="note ">
-                            <li>Tax to be paid on reverse charge</li>
-                            <li>All payments to be made in cash. Contact us for queries on these quotations. </li>
-                        </ul>
-                    </td>
-                </tr>
-            </tbody> -->
         </table>
 
-        <footer style="text-align: center; ">
-            <p *ngIf="fieldsAndVisibility.header.companyName?.display "><strong>{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
-            <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display ">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>
+        <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
+            <p [ngStyle]="{ 'border-color': inputTemplate.templateColor}"><strong *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
+            <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}</p>
         </footer>
     </div>
 
