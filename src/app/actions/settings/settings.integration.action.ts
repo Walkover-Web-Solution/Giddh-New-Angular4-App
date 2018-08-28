@@ -335,11 +335,11 @@ export class SettingsIntegrationActions {
   public AddAmazonSeller$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER)
     .switchMap((action: CustomActions) => this.settingsIntegrationService.AddAmazonSeller(action.payload))
-    .map(response => this.AddAmazonSellerResponse(response.body));
+    .map(response => this.AddAmazonSellerResponse(response));
 
   @Effect()
   public AddAmazonSellerResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE)
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
@@ -351,9 +351,29 @@ export class SettingsIntegrationActions {
     });
 
   @Effect()
+  public UpdateAmazonSeller$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAmazonSeller(action.payload))
+    .map(response => this.UpdateAmazonSellerResponse(response));
+
+  @Effect()
+  public UpdateAmazonSellerResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      debugger;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body, '');
+      }
+      return {type: 'EmptyAction'};
+    });
+
+  @Effect()
   public DeleteAmazonSeller$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway())
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAmazonSeller(action.payload))
     .map(response => this.DeleteAmazonSellerResponse(response));
 
   @Effect()
@@ -371,13 +391,13 @@ export class SettingsIntegrationActions {
     });
 
   @Effect()
-  public GetAmazonSeller$: Observable<Action> = this.action$
+  public GetAmazonSellers$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER)
     .switchMap((action: CustomActions) => this.settingsIntegrationService.GetAmazonSeller())
-    .map(response => this.GetPaymentGatewayResponse(response));
+    .map(response => this.GetAmazonSellersResponse(response));
 
   @Effect()
-  public GetAmazonSellerResponse$: Observable<Action> = this.action$
+  public GetAmazonSellersResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
@@ -632,30 +652,31 @@ export class SettingsIntegrationActions {
     };
   }
 
-  public UpdateAmazonSeller(models: AmazonSellerClass[]): CustomActions {
+  public UpdateAmazonSeller(request: AmazonSellerClass[]): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER,
-      payload: models
+      payload: request
     };
   }
 
-  public UpdateAmazonSellerResponse(models: AmazonSellerClass[]): CustomActions {
+  public UpdateAmazonSellerResponse(models): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE,
       payload: models
     };
   }
 
-  public DeleteAmazonSeller(): CustomActions {
+  public DeleteAmazonSeller(sellerId): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER,
+      payload: sellerId
     };
   }
 
-  public DeleteAmazonSellerResponse(models): CustomActions {
+  public DeleteAmazonSellerResponse(response): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE,
-      payload: models
+      payload: response
     };
   }
 

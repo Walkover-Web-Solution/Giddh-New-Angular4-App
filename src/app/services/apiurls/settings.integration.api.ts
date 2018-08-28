@@ -8,5 +8,6 @@ export const SETTINGS_INTEGRATION_API = {
   CASHFREE: COMMON + 'cashfree', // GET, POST
   AUTOCOLLECT_USER: COMMON + 'cashfree/autocollect/users', // GET, POST, PUT, DELETE
   PAYMENT_GATEWAY: COMMON + 'cashfree/payment-gateway', // GET, POST, PUT, DELETE
-  AMAZON_SELLER: COMMON + 'amazon/seller' // GET, POST, PUT, DELETE
+  AMAZON_SELLER: COMMON + 'amazon/seller', // GET, POST
+  AMAZON_SELLER_OPERATION: COMMON + 'amazon/seller/:sellerId' // DELETE, PUT
 };

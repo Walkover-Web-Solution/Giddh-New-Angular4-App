@@ -469,6 +469,33 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         })
       });
     }
+    case SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE: {
+      let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (AmazonSellerRes.status === 'success') {
+        newState.integration.amazonSeller = AmazonSellerRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE: {
+      let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (AmazonSellerRes.status === 'success') {
+        newState.integration.amazonSeller = AmazonSellerRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE: {
+      let deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (deleteAmazonSellerRes.status === 'success') {
+        let amazonSeller = _.cloneDeep(newState.integration.amazonSeller);
+        let st = amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
+        amazonSeller.splice(st, 1);
+        newState.integration.amazonSeller = amazonSeller;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
     //  endregion discount reducer
     default: {
       return state;
