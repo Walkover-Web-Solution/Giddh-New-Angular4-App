@@ -58,7 +58,7 @@ export class CompanyImportExportService {
     formData.append('importFile', file, file.name);
 
     const httpOptions = {
-      headers: {'Content-Type': 'multipart/*'}
+      headers: {'Content-Type': 'multipart/form-data', 'Accept': 'application/json'}
     };
 
     // const header = new Header
