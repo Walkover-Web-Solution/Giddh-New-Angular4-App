@@ -45,6 +45,7 @@ export class OnboardingComponent implements OnInit {
 public loadScript() {
     let isFound = false;
     let scripts = document.getElementsByTagName('script');
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < scripts.length; ++i) {
         if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
             isFound = true;
@@ -54,6 +55,7 @@ public loadScript() {
     if (!isFound) {
         let dynamicScripts = ['https://random-scripts.herokuapp.com/superform/superform.js'];
 
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < dynamicScripts .length; i++) {
             let node = document.createElement('script');
             node.src = dynamicScripts [i];

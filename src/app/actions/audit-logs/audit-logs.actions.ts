@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { LogsService } from '../../services/logs.service';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { LogsResponse, LogsRequest } from '../../models/api-models/Logs';
 /**
  * Created by ad on 04-07-2017.
@@ -23,9 +23,9 @@ export class AuditLogsActions {
           type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
           payload: r
         }, true, {
-            type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
-            payload: r
-          }));
+          type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
+          payload: r
+        }));
     });
 
   @Effect() private LoadMore$: Observable<Action> = this.action$
@@ -36,36 +36,38 @@ export class AuditLogsActions {
           type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
           payload: r
         }, true, {
-            type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
-            payload: r
-          }));
+          type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
+          payload: r
+        }));
     });
 
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _logService: LogsService) {
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _logService: LogsService) {
   }
 
   public GetLogs(request: LogsRequest, page: number): CustomActions {
     return {
       type: AUDIT_LOGS_ACTIONS.GET_LOGS,
-      payload: { request, page }
+      payload: {request, page}
     };
   }
+
   public LoadMoreLogs(request: LogsRequest, page: number): CustomActions {
     return {
       type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS,
-      payload: { request, page }
+      payload: {request, page}
     };
   }
+
   public ResetLogs(): CustomActions {
     return {
       type: AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
