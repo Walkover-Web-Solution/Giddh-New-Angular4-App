@@ -61,7 +61,7 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   {label: 'Settings > Group', value: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
   {label: 'Onboarding', value: '/onboarding'},
   {label: 'Purchase Invoice ', value: '/pages/purchase/create'},
-  {label: 'Company Import/Export', value: '/pages/company-import-export'}
+  // {label: 'Company Import/Export', value: '/pages/company-import-export'}
 ];
 
 @Component({
