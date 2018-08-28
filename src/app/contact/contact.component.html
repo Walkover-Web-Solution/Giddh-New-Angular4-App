@@ -197,7 +197,7 @@
         <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth)-1}}
           Days
         </th>
-        <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fifth}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth +(agingDropDownoptions$| async )?.sixth)-1}}
+        <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth)}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth +(agingDropDownoptions$| async )?.sixth)-1}}
           Days
         </th>
         <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+(agingDropDownoptions$| async )?.fifth+(agingDropDownoptions$| async )?.sixth}}+ Days</th>
