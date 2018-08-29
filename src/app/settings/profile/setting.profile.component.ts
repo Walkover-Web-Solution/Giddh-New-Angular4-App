@@ -31,13 +31,13 @@ export interface IGstObj {
   animations: [
     trigger('fadeInAndSlide', [
       transition(':enter', [
-        style({ opacity: '0', marginTop: '100px' }),
-        animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
+        style({opacity: '0', marginTop: '100px'}),
+        animate('.1s ease-out', style({opacity: '1', marginTop: '20px'})),
       ]),
     ]),
   ],
 })
-export class SettingProfileComponent  implements OnInit, OnDestroy {
+export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public companyProfileObj: any = null;
   public stateStream$: Observable<States[]>;
@@ -71,15 +71,15 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   ) {
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     contriesWithCodes.map(c => {
-          this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-        });
+      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+    });
     this.stateStream$.subscribe((data) => {
       if (data) {
         this.stateResponse = _.cloneDeep(data);
         data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-          this.statesInBackground.push({ label: `${d.name}`, value: d.code });
-          this.statesSourceCompany.push({ label: `${d.name}`, value: `${d.name}` });
+          this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          this.statesInBackground.push({label: `${d.name}`, value: d.code});
+          this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -91,7 +91,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
+          currencies.push({label: d.code, value: d.code});
         });
       }
       this.currencySource$ = Observable.of(currencies);
@@ -302,6 +302,17 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
+
+        if (this.companyProfileObj.gstDetails.length > 0) {
+          let obj = {gstDetails: {}};
+          // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
+          for (let entry of this.companyProfileObj.gstDetails) {
+            if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
+              obj.gstDetails = _.without(this.companyProfileObj.gstDetails, entry);
+            }
+          }
+          this.patchProfile({gstDetails: obj.gstDetails});
+        }
       }
     } else {
       ele.classList.remove('error-box');
@@ -393,19 +404,45 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
+      this.patchProfile({country: this.companyProfileObj.country});
     }
   }
 
   public selectState(event) {
     if (event) {
-      //
+      this.patchProfile({state: this.companyProfileObj.state});
     }
+  }
+
+  public keyDownEventOfForm(event: any) {
+    if (event && event.target) {
+      Observable.fromEvent(event.target, 'keydown')
+        .debounceTime(3000)
+        .distinctUntilChanged()
+        .filter((e: any) => {
+          return e.target.name;
+        })
+        .map((e: any) => e.target.value)
+        .subscribe((val: string) => {
+          this.patchProfile({[event.target.name]: val});
+        });
+      return true;
+    }
+  }
+
+  public changeEventOfForm(key: string) {
+    this.patchProfile({[key]: this.companyProfileObj[key]});
+  }
+
+  public patchProfile(obj) {
+    this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
     this.dataSourceBackup.forEach(item => {
       if (item.city === e.item) {
         this.companyProfileObj.country = item.country;
+        this.patchProfile({city: this.companyProfileObj.city});
         // set country and state values
         // try {
         //   item.address_components.forEach(address => {
