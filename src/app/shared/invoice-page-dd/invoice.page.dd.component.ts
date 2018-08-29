@@ -17,15 +17,16 @@ const INV_PAGE = [
       height: auto;
       padding: 5px 15px;
     }
-  .spcl_dropdown {
+
+    .spcl_dropdown {
       border: 0 !important;
       background: transparent !important;
       box-shadow: none !important;
       border-radius: 0 !important;
       font-size: 24px;
-      // color: #393a3d;
+    / / color: #393a3d;
       padding: 0;
-  }
+    }
   `]
 })
 
@@ -36,7 +37,8 @@ export class InvoicePageDDComponent implements OnInit {
 
   public dropDownPages: any[] = [
     {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
-    {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'}
+    {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'},
+    {name: 'Receipt', uniqueName: 'receipt', path: 'receipt'},
   ];
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
