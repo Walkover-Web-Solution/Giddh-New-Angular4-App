@@ -29,7 +29,7 @@
 
 #gold header h1 {
     /* margin-bottom: 10px; */
-    font-size: 14px;
+    font-size: 16px;
 }
 
 #gold header p {
@@ -44,9 +44,10 @@
 }
 
 #gold .invoice-table {
-    border-top: 1px solid #B3B3B3;
-    border-bottom: 1px solid #B3B3B3;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
     padding: 15px;
+    margin-bottom: 15px;
 }
 
 #gold header .sub_head {
@@ -140,7 +141,7 @@
 }
 
 #gold .item thead tr th {
-    padding: 14px 5px;
+    padding: 14px 8px;
     border-bottom: 1px solid #666666;
     line-height: 1.2rem;
     font-weight: bold;
@@ -170,13 +171,6 @@
     background: rgba(223, 73, 39, 0.05);
 }
 
-#gold .item thead tr th {
-    padding: 14px 5px;
-    border-bottom: 1px solid #666666;
-    line-height: 1.2rem;
-    font-weight: bold;
-}
-
 #gold .item tfoot tr {
     background: rgba(223, 73, 39, 0.05);
 }
@@ -196,7 +190,7 @@
 
 #gold .item tfoot tr:last-child th {
     border-top: 1px solid #666666;
-    padding: 14px 0px;
+    padding: 14px 10px;
     line-height: 1.2rem;
     vertical-align: middle
 }
@@ -238,6 +232,7 @@
 
 #gold .bdrB {
     border-bottom: 1px solid#666;
+    margin-bottom: 6px;
 }
 
 #gold .subfooter {
@@ -276,7 +271,7 @@
     /* border-top: 2px solid; */
     /* padding: 10px 0; */
     line-height: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 8px;
     overflow: hidden;
 }
 

@@ -13,6 +13,15 @@
             text-decoration: none;
             vertical-align: top;
         }
+        
+        strong,
+        .strong {
+            font-weight: bold;
+        }
+        
+        #template-header {
+            padding: 15px 15px 0;
+        }
         /* NOTE:  comment padding, max-width, border in #royal css for java */
         
         #royal {
@@ -34,7 +43,7 @@
         }
         
         #royal header .sub_head {
-            font-size: 15px;
+            font-size: 16px;
             margin-left: 5px;
         }
         
@@ -73,15 +82,13 @@
         #royal .total-amount {
             text-align: center;
             vertical-align: bottom;
-            padding-bottom: 10px
         }
         
         #royal .total-amount h2 {
-            font-size: 38px;
-            padding: 0 0;
-            display: inline-block;
+            font-size: 34px;
             float: right;
             font-weight: bold;
+            display: flex;
         }
         
         #royal .mrL2 {
@@ -203,6 +210,7 @@
         
         #royal .bdrB {
             border-bottom: 1px solid#666;
+            margin-bottom: 10px;
         }
         
         #royal .subfooter {
@@ -278,4 +286,8 @@
         #royal .tax-table tfoot tr th {
             padding: 6px;
             border-right: 1px solid #666666;
+        }
+        
+        table.tax-table.item {
+            padding-top: 0px !important;
         }
