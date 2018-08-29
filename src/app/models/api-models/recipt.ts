@@ -54,6 +54,8 @@ export interface ReciptResponse {
   count: number;
   totalPages: number;
   totalItems: number;
+export interface ReciptRequestParams {
+
 }
 
 export interface VoucherDetails {
@@ -164,4 +166,8 @@ export interface ReciptRequest {
   entryUniqueNames: string[];
   updateAccountDetails: boolean;
   voucher: Voucher;
+}
+
+export interface DownloadVoucherRequest {
+  voucherNumber: string[];
 }
