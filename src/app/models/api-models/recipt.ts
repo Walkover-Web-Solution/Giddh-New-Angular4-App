@@ -54,8 +54,6 @@ export interface ReciptResponse {
   count: number;
   totalPages: number;
   totalItems: number;
-export interface ReciptRequestParams {
-
 }
 
 export interface VoucherDetails {
