@@ -88,10 +88,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return Object.assign({}, state, initialState);
     }
     case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD: {
-      return Object.assign({}, state, { refreshCompany: false});
+      return Object.assign({}, state, {refreshCompany: false});
     }
     case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE: {
-      return Object.assign({}, state, { refreshCompany: true});
+      return Object.assign({}, state, {refreshCompany: true});
     }
     case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:
       let gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
@@ -162,6 +162,19 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         updateProfileSuccess: true
       });
     }
+
+    case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.profile = _.cloneDeep(response.body);
+        newState.updateProfileSuccess = true;
+        return Object.assign({}, state, newState);
+      }
+      return Object.assign({}, state, {
+        updateProfileSuccess: true
+      });
+    }
+
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS: {
       newState.linkedAccounts.isBankAccountsInProcess = true;
       return Object.assign({}, state, newState);
@@ -474,9 +487,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
       if (response.status === 'success') {
-        return Object.assign({}, state, { isGmailIntegrated: true });
+        return Object.assign({}, state, {isGmailIntegrated: true});
       } else {
-        return Object.assign({}, state, { isGmailIntegrated: false });
+        return Object.assign({}, state, {isGmailIntegrated: false});
       }
     }
     //  endregion discount reducer
