@@ -1,171 +1,209 @@
 <div class="box clearfix mrT2">
-    <!--<div>
-    {{ companyProfileObj | json }}
-  </div>-->
-    <form (ngSubmit)="updateProfile(companyProfileObj)">
-        <div class="row">
-            <div class="form-group col-xs-3">
-                <label>Company Name</label><br>
-                <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" />
-            </div>
-            <div class="form-group col-xs-3">
-                <label>Unique Name</label><br>
-                <input type="text" placeholder="Unique Name" [disabled]="true" class="form-control" [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName" />
-            </div>
-            <div class="form-group col-xs-3">
-                <label>Email Address</label><br>
-                <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email" name="email" />
-            </div>
+  <!--<div>
+  {{ companyProfileObj | json }}
+</div>-->
+  <form (ngSubmit)="updateProfile(companyProfileObj)" (keydown)="keyDownEventOfForm($event)">
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>Company Name</label><br>
+        <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name"
+               name="name"/>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Unique Name</label><br>
+        <input type="text" placeholder="Unique Name" [disabled]="true" class="form-control"
+               [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName"/>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Email Address</label><br>
+        <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email"
+               name="email"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>Contact No.</label>
+        <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo"
+               #mobileNumberField name="contactNo"/>
+        <!-- commented temporary due to static countryCode  -->
+        <!-- <div class="input-group ">
+  <span class="input-group-addon">+{{countryCode}}</span>
+  <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField
+    (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
+</div> -->
+      </div>
+      <div class="col-xs-3 pd0">
+        <div class="form-group col-xs-6">
+          <label>Currency</label><br>
+          <div class="custom-select pos-rel">
+            <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true"
+                       name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency"
+                       (selected)="changeEventOfForm('baseCurrency')"></sh-select>
+          </div>
+          <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
         </div>
-        <div class="row">
-            <div class="form-group col-xs-3">
-                <label>Contact No.</label>
-                <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" />
-                <!-- commented temporary due to static countryCode  -->
-                <!-- <div class="input-group ">
-          <span class="input-group-addon">+{{countryCode}}</span>
-          <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField
-            (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
-        </div> -->
-            </div>
-            <div class="col-xs-3 pd0">
-                <div class="form-group col-xs-6">
-                    <label>Currency</label><br>
-                    <div class="custom-select pos-rel">
-                        <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency"></sh-select>
-                    </div>
-                    <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-                </div>
-                <div class="form-group col-xs-6">
-                    <div class="checkbox pdT2">
-                        <label>
-                <input type="checkbox" [(ngModel)]="companyProfileObj.isMultipleCurrency" name="isMultiple">Multicurrency?
+        <div class="form-group col-xs-6">
+          <div class="checkbox pdT2">
+            <label>
+              <input type="checkbox" [(ngModel)]="companyProfileObj.isMultipleCurrency" name="isMultiple"
+                     (change)="changeEventOfForm('isMultipleCurrency')">Multicurrency?
             </label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label>PAN Number</label><br>
-                            <input type="text" placeholder="PAN Number" maxLength="10" class="form-control" [(ngModel)]="companyProfileObj.panNumber" #panNumberField (blur)="isValidPAN(panNumberField)" name="panNumber" />
-                        </div>
-                    </div>
-                    <!--<div class="col-xs-6">
-                        <div class="form-group">
-                            <label>GST Number</label><br>
-                            <input type="text" #gstNumberField placeholder="GST Number" (keyup)="setMainState(gstNumberField)" minlength="15" maxlength="15" (blur)="checkGstNumValidation(gstNumberField)" class="form-control" name="gstNumber" (value)="getDefaultGstNumber()" />
-                        </div>
-                    </div>-->
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="col-xs-3">
         <div class="row">
-            <div class="form-group col-xs-3">
-                <label>Address</label><br>
-                <textarea rows="3" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address"></textarea>
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label>PAN Number</label><br>
+              <input type="text" placeholder="PAN Number" maxLength="10" class="form-control"
+                     [(ngModel)]="companyProfileObj.panNumber" #panNumberField (blur)="isValidPAN(panNumberField)"
+                     name="panNumber"/>
             </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Country</label><br>
-                            <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country" [options]="countrySource" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
-                            <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group select2-parent">
-                            <label>State</label><br>
-                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSourceCompany" [ItemHeight]="33" (selected)="selectState($event)" [hidden]="!countryIsIndia"></sh-select>
-                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" [hidden]="countryIsIndia" name="state" />
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>City</label><br>
-                            <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$">
-
-                            <ng-template #rt let-r="result" let-t="term">
-                                <span>{{ r }}</span>
-                            </ng-template>
-                            <!-- <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" /> -->
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Pincode</label><br>
-                            <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode" name="pincode" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
+          <!--<div class="col-xs-6">
+              <div class="form-group">
+                  <label>GST Number</label><br>
+                  <input type="text" #gstNumberField placeholder="GST Number" (keyup)="setMainState(gstNumberField)" minlength="15" maxlength="15" (blur)="checkGstNumValidation(gstNumberField)" class="form-control" name="gstNumber" (value)="getDefaultGstNumber()" />
+              </div>
+          </div>-->
         </div>
-        <div class="row mrB1" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
-            <div class="col-xs-12">
-                <hr><br />
-                <h3 class="mrB"> Add <span *ngIf="companyProfileObj.gstDetails && companyProfileObj.gstDetails.length >= 1">More</span> GST Number (Note: Check to set to default)</h3>
-                <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-                <div *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <div class="row">
-                                <div class="col-xs-12">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>Address</label><br>
+        <textarea rows="3" type="text" placeholder="Address" class="form-control"
+                  [(ngModel)]="companyProfileObj.address" name="address"></textarea>
+      </div>
+      <div class="col-xs-3">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label>Country</label><br>
+              <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"
+                         [options]="countrySource" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
+              <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group select2-parent">
+              <label>State</label><br>
+              <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state"
+                         [options]="statesSourceCompany" [ItemHeight]="33" (selected)="selectState($event)"
+                         [hidden]="!countryIsIndia"></sh-select>
+              <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state"
+                     [hidden]="countryIsIndia" name="state"/>
+            </div>
+          </div>
 
-                                    <div class="form-group">
-                                        <label for="" class="d-block">GSTIN</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <input type="checkbox" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}" tooltip="Default GST" placement="bottom" />
-                                            </div>
-                                            <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)" #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
-                                            />
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;" tooltip="Delete GST" placement="right"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="form-group select2-parent">
-                                        <label>State</label><br>
-                                        <sh-select [disabled]="gst.gstNumber != ''" (selected)="stateSelected($event, i)" placeholder="Select state" name="newstateCode+{{i}}" [options]="statesSource$ | async" [(ngModel)]="gst.addressList[0].stateCode"></sh-select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-3">
-                            <div class="form-group">
-                                <label>Address</label><br>
-                                <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.addressList[0].address" name="newaddress+{{i}}"></textarea>
-                            </div>
-                        </div>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label>City</label><br>
+              <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt"
+                     (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control"
+                     name="city" autocomplete="off" required maxlength="50" placeholder="City"
+                     pattern="^[^\s]+(\s+[^\s]+)*$">
+
+              <ng-template #rt let-r="result" let-t="term">
+                <span>{{ r }}</span>
+              </ng-template>
+              <!-- <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" /> -->
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label>Pincode</label><br>
+              <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode"
+                     name="pincode"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mrB1" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
+      <div class="col-xs-12">
+        <hr>
+        <br/>
+        <h3 class="mrB"> Add <span
+          *ngIf="companyProfileObj.gstDetails && companyProfileObj.gstDetails.length >= 1">More</span> GST Number (Note:
+          Check to set to default)</h3>
+        <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>
+          Add
+        </button>
+        <div *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst"
+             [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+          <div class="row">
+            <div class="col-xs-3">
+              <div class="row">
+                <div class="col-xs-12">
+
+                  <div class="form-group">
+                    <label for="" class="d-block">GSTIN</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <input type="checkbox" (click)="setGstAsDefault(i, $event)"
+                               [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}" tooltip="Default GST"
+                               placement="bottom" (change)="checkGstDetails()"/>
+                      </div>
+                      <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control"
+                             (keyup)="setChildState(gstNumberField, i)" #gstNumberField
+                             (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber"
+                             name="newgstNumber+{{i}}"
+                      />
+                      <div class="input-group-addon">
+                        <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true"
+                           style="font-size:18px;" tooltip="Delete GST" placement="right"></i>
+                      </div>
                     </div>
+                  </div>
                 </div>
-                <div class="col-xs-12 text-center" *ngIf="gstDetailsBackup">
-                    <button type="button" class="btn btn-link" (click)="onToggleAllGSTDetails()">
+                <div class="col-xs-12">
+                  <div class="form-group select2-parent">
+                    <label>State</label><br>
+                    <sh-select [disabled]="gst.gstNumber != ''" (selected)="stateSelected($event, i)"
+                               placeholder="Select state" name="newstateCode+{{i}}" [options]="statesSource$ | async"
+                               [(ngModel)]="gst.addressList[0].stateCode"></sh-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div class="form-group">
+                <label>Address</label><br>
+                <textarea rows="4" type="text" placeholder="Address" class="form-control"
+                          [(ngModel)]="gst.addressList[0].address" #gstAddressField
+                          name="newaddress+{{i}}" (blur)="checkGstDetails(gstAddressField)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 text-center" *ngIf="gstDetailsBackup">
+          <button type="button" class="btn btn-link" (click)="onToggleAllGSTDetails()">
             <span *ngIf="!showAllGST">Show more</span>
             <span *ngIf="showAllGST">Show less</span>
           </button>
-                </div>
-            </div>
         </div>
-        <div class="clearfix">
-            <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">Update</button>
-            <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
-            <!-- <button type="button" class="btn btn-danger">Delete {{ companyProfileObj.name }}</button> -->
-        </div>
-    </form>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
+        Update
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
+      <!-- <button type="button" class="btn btn-danger">Delete {{ companyProfileObj.name }}</button> -->
+    </div>
+  </form>
 </div>
 
 <style>
-    .error-box {
-        border: 2px solid red;
-    }
+  .error-box {
+    border: 2px solid red;
+  }
 </style>
