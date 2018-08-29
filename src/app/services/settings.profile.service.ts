@@ -44,4 +44,17 @@ export class SettingsProfileService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
   }
+
+  /**
+   * Patch company profile
+   */
+  public PatchProfile(model): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.patch(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+  }
 }
