@@ -30,7 +30,7 @@
                                     <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" [disabled]="fields.get('valueEditable').value === 'false'" class="form-control" formControlName="value" *ngIf="fields.get('type').value !== 'option'" />
                                     <select class="form-control" *ngIf="fields.get('type').value === 'option'" formControlName="value">
                                         <option [ngValue]="null" [selected]="true">Select Type</option>
-                                        <option *ngFor="let list of fields.get('option')?.value" [ngValue]="list">{{list.displayText}}</option>
+                                        <option *ngFor="let list of fields.get('option')?.value" [ngValue]="list.optionValue">{{list.displayText}}</option>
                                     </select>
                                 </ng-container>
                             </ng-container>
