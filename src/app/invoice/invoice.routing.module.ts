@@ -42,6 +42,7 @@ import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TextMaskModule } from '../../../node_modules/angular2-text-mask';
+import { ReceiptComponent } from './receipt/receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -58,7 +59,8 @@ const INVOICE_ROUTES: Routes = [
       {path: 'generate', component: InvoiceGenerateComponent},
       {path: 'templates', component: EditInvoiceComponent},
       {path: 'settings', component: InvoiceSettingComponent},
-      {path: 'recurring', component: RecurringComponent}
+      {path: 'recurring', component: RecurringComponent},
+      {path: 'receipt', component: ReceiptComponent}
     ]
   }
 ];
@@ -83,7 +85,8 @@ const INVOICE_ROUTES: Routes = [
     InvoiceTemplatePreviewModelComponent,
     EsignModalComponent,
     InvoicePageDDComponent,
-    RecurringComponent
+    RecurringComponent,
+    ReceiptComponent
   ],
   imports: [
     FormsModule,
