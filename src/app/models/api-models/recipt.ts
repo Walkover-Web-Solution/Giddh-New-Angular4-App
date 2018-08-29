@@ -18,13 +18,42 @@ export interface Filter {
   description: string;
 }
 
-export interface ReciptDelteRequest {
+export interface ReciptDeleteRequest {
   invoiceNumber: number;
   voucherType: string;
 }
 
-export interface ReciptRequestParams {
-  
+export class ReciptRequestParams {
+  public page: number;
+  public count: number;
+  public from: string;
+  public to: string;
+  public type: string;
+}
+
+export interface Account {
+  uniqueName: string;
+  accountType?: any;
+  name: string;
+}
+
+export interface Item {
+  voucherNumber: string;
+  account: Account;
+  uniqueName: string;
+  balanceStatus: string;
+  voucherDate: string;
+  grandTotal: number;
+  balanceDue: number;
+  dueDate: string;
+}
+
+export interface ReciptResponse {
+  items: Item[];
+  page: number;
+  count: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export interface VoucherDetails {
