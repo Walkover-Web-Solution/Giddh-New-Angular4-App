@@ -23,18 +23,20 @@ export class ReciptService implements OnInit {
     //
   }
 
-  public UpdateRecipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http(this.config.apiUrl + RECIPT_API.PUT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
-      .map((res) => {
-        let data: BaseResponse<string, ReciptRequest> = res;
-        data.request = model;
-        data.queryString = {accountUniqueName};
-        return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model));
-  }
+  // public UpdateRecipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
+  //   this.companyUniqueName = this._generalService.companyUniqueName;
+  //   return this._http(this.config.apiUrl + RECIPT_API.PUT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+  //     .map((res) => {
+  //       let data: BaseResponse<string, ReciptRequest> = res;
+  //       data.request = model;
+  //       data.queryString = {accountUniqueName};
+  //       return data;
+  //     })
+  //     .catch((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model));
+  // }
 
-  public GetAllRecipt()
+  public GetAllRecipt() {
+  //
+  }
 
 }
