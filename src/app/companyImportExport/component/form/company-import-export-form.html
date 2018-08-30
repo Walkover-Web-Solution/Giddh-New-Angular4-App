@@ -31,7 +31,7 @@
                 [ladda]="isImportInProcess$ | async" [disabled]="(!fileType || !selectedFile)"> Import
         </button>
 
-        <button class="btn btn-danger pull-right" style="margin-top: 24px" (click)="backPressed.emit(true)">Back
+        <button class="btn btn-danger pull-right" style="margin-top: 24px" (click)="backButtonPressed()">Back
         </button>
       </div>
 

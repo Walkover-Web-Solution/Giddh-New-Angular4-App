@@ -1,301 +1,293 @@
-#template2 * {
-    border: 0;
-    box-sizing: content-box;
-    color: #262626;
-    font-family: inherit;
-    font-size: inherit;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-decoration: none;
-    vertical-align: top;
-}
-
-
-/* heading */
-
-#template2 header {
-    padding-top: 30px;
-}
-
-#template2 header h1 {
-    color: #df4927;
-    margin-bottom: 10px;
-    font-size: 30px;
-}
-
-
-/* NOTE:  comment padding, max-width, border in #template2 css for java */
-
-#template2 {
-    font: 14px/1 'Open Sans', sans-serif;
-    overflow: auto;
-    background: #fff;
-    border: 1px solid #bfbfbf;
-    max-width: 8.3in;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0px;
-}
-
-#template2 .text-right {
-    text-align: right;
-}
-
-#template2 .text-left {
-    text-align: left !important;
-}
-
-#template2 .pull-right {
-    float: right;
-}
-
-#template2 .pull-left {
-    float: left;
-}
-
-#template2 table {
-    width: 100%;
-    table-layout: fixed;
-    line-height: 20px;
-    border-collapse: inherit
-}
-
-#template2 strong {
-    font-weight: bold;
-}
-
-#template2 .item {
-    padding: 0 20px;
-    table-layout: auto !important;
-}
-
-#template2 .item tbody tr td,
-#template2 .item thead tr th {
-    text-align: right;
-}
-
-#template2 .mrL2 {
-    margin-left: 20px;
-}
-
-#template2 .mrB2 {
-    margin-bottom: 20px;
-}
-
-#template2 .mrB1 {
-    margin-bottom: 10px;
-}
-
-#template2 .cargo-Detail {
-    margin-top: 10px;
-    line-height: 20px !important;
-}
-
-#template2 .product-table {
-    background: #df49270d;
-    position: relative;
-}
-
-#template2 .item thead tr th {
-    padding: 14px 0px;
-    border-bottom: 1px solid #666666;
-    line-height: 1.2rem;
-    font-weight: bold;
-}
-
-#template2 .product-table tbody tr:last-child td {
-    padding-bottom: 50px;
-}
-
-#template2 .inwords {
-    color: #939393
-}
-
-#template2 .item tfoot tr th,
-#template2 .item tbody tr td {
-    padding: 3px 0;
-}
-
-#template2 .item tfoot tr:last-child th {
-    border-top: 1px solid #666666;
-    padding: 14px 0px;
-    line-height: 1.2rem;
-}
-
-#template2 .bdrB {
-    border-bottom: 1px solid#666;
-}
-
-#template2 .subfooter {
-    margin-top: 100px;
-    padding: 0 10px;
-}
-
-#template2 .subfooter h1 {
-    font-size: 24px;
-    color: #df4927;
-    margin: 10px 0 0;
-}
-
-#template2 .subfooter h4 {
-    font-size: 12px;
-    color: #df4927;
-}
-
-#template2 .vmiddle {
-    vertical-align: middle;
-}
-
-#template2 .total-amount {
-    font-size: 26px;
-    /* background: url(amt.png); */
-    background-repeat: no-repeat;
-    background-position: center;
-    text-align: center;
-    background-size: 80%;
-}
-
-#template2 .note {
-    margin-top: 20px;
-    padding-left: 15px;
-}
-
-#template2 .note li {
-    list-style-type: initial;
-}
-
-#template2 footer {
-    border-top: 2px solid;
-    padding: 15px 0;
-    margin: 8px 0 0;
-}
-
-#template2 .arrow-down {
-    width: 0;
-    position: absolute;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 15px solid #fff;
-    z-index: 9;
-    margin-left: 90px;
-    top: -5px;
-}
-
-#template2 .disabled-area {
-    position: relative;
-    float: left;
-    width: 100%;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-#template2 .disabled-area:after {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed #808080;
-}
-
-#template2 .edit-template {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 4px;
-    height: 15px;
-    z-index: 1;
-    background: #fff;
-}
-
-#template2 .edit-template i {
-    color: #000;
-    font: normal normal normal 14px/1 FontAwesome;
-}
-
-#template2 .pos-rel {
-    position: relative;
-}
-
-:focus {
-    outline: 0;
-    border: 1px solid #ddd !important;
-}
-
-#template2 [contenteditable="true"] {
-    border: 1px solid transparent
-}
-
-
-/* #template2 [contenteditable="true"]:focus {
-  background: #ddd;
-} */
-
-#template2 .pdRL3 {
-    padding-right: 30px !important;
-    padding-left: 30px !important;
-}
-
-.cp {
-    cursor: pointer;
-}
-
-#upload_logo {
-    opacity: 0;
-    position: absolute;
-}
-
-#upload_label {
-    padding-left: 15px;
-    background: #f6f7f7;
-    width: auto;
-    display: inline-block;
-    line-height: 50px;
-    font-size: 16px;
-    color: $color_punch_approx;
-    border: 1px solid $color_punch_approx;
-}
-
-.paper_clip {
-    background: url(/assets/images/paper-clip.png);
-    width: 28px;
-    float: right;
-    background-repeat: no-repeat;
-    height: 50px;
-    background-position: center;
-    margin-left: 15px !important;
-    padding: 0 15px !important;
-    border-left: 1px solid $color_punch_approx !important;
-}
-
-#Template-table {
-    width: 100%;
-    float: left;
-}
-
-.disabled-area {
-    position: relative;
-    float: left;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.disabled-area:after {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed #808080;
-}
+        #royal * {
+            border: 0;
+            box-sizing: content-box;
+            color: #231f20;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            line-height: 18px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            vertical-align: top;
+        }
+        
+        strong,
+        .strong {
+            font-weight: bold;
+        }
+        
+        #template-header {
+            padding: 15px 15px 0;
+        }
+        /* NOTE:  comment padding, max-width, border in #royal css for java */
+        
+        #royal {
+            font: 12px/1 'Open Sans', sans-serif;
+            overflow: auto;
+            background: #fff;
+            border: 1px solid #bfbfbf;
+            max-width: 8.3in;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        #royal header h1 {
+            /* margin-bottom: 10px; */
+            font-weight: bolder;
+            font-size: 74px;
+            color: #4b4c4f;
+            line-height: 58px;
+        }
+        
+        #royal header .sub_head {
+            font-size: 16px;
+            margin-left: 5px;
+        }
+        
+        #royal .text-right {
+            text-align: right;
+        }
+        
+        #royal .text-left {
+            text-align: left !important;
+        }
+        
+        #royal .pull-right {
+            float: right;
+        }
+        
+        #royal .pull-left {
+            float: left;
+        }
+        
+        #royal table {
+            width: 100%;
+            table-layout: fixed;
+            line-height: 20px;
+            border-collapse: inherit
+        }
+        
+        #royal .logo {
+            max-width: 120px;
+            width: 100%;
+        }
+        
+        #royal strong {
+            font-weight: bold;
+        }
+        
+        #royal .total-amount {
+            text-align: center;
+            vertical-align: bottom;
+        }
+        
+        #royal .total-amount h2 {
+            font-size: 34px;
+            float: right;
+            font-weight: bold;
+            display: flex;
+        }
+        
+        #royal .mrL2 {
+            margin-left: 20px;
+        }
+        
+        #royal .mrB2 {
+            margin-bottom: 20px;
+        }
+        
+        #royal .mrB1 {
+            margin-bottom: 10px;
+        }
+        
+        #royal .meta {
+            margin: 20px 0;
+        }
+        
+        #royal .meta h4 {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 19px;
+        }
+        
+        #royal .product-table {
+            background: #df49270d;
+            position: relative;
+            /* padding-bottom: 10px; */
+        }
+        
+        #royal .product-table tbody tr td:last-child,
+        #royal .product-table tfoot tr th:last-child {
+            /* background: #df49270d; */
+        }
+        
+        #royal .product-table tfoot tr:last-child th {
+            padding: 15px 0;
+        }
+        
+        #royal .product-table thead tr th:last-child {
+            position: relative;
+        }
+        
+        #royal .product-table tfoot tr:nth-last-child(2) th {
+            padding-bottom: 10px;
+        }
+        
+        #royal .product-table tfoot tr:last-child {
+            padding: 7px 0;
+        }
+        
+        #royal .product-table tbody tr:last-child td {
+            padding-bottom: 50px;
+        }
+        /* #royal .product-table:before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            content: ' ';
+            background: #f7f7f7;
+            left: -20px;
+            width: 100%;
+            z-index: -1;
+        } */
+        /* #royal .product-table:after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            content: ' ';
+            background: #ededed;
+            right: -20px;
+            width: 100%;
+            z-index: -1;
+        } */
+        
+        #royal .inwords {
+            color: #939393
+        }
+        
+        #royal .item {
+            table-layout: auto !important;
+            padding: 0 20px;
+        }
+        
+        #royal .item tbody tr td,
+        #royal .item thead tr th {
+            text-align: right;
+        }
+        
+        #royal .item thead tr th {
+            padding: 15px 5px 10px 0;
+            border-bottom: 1px solid #666666;
+            line-height: 1.2rem;
+            font-weight: bold;
+        }
+        
+        #royal .item tbody tr td {
+            padding: 3px 0;
+        }
+        
+        #royal .item tfoot tr:last-child th {
+            border-top: 1px solid #666666;
+            padding: 6px;
+            line-height: 1.2rem;
+            vertical-align: middle
+        }
+        
+        #royal .total-row {
+            border-top: 1px solid #000000;
+        }
+        
+        #royal .tax-table p {
+            color: #595959;
+        }
+        
+        #royal .tax-table tfoot th {
+            font-weight: bold
+        }
+        
+        #royal .bdrB {
+            border-bottom: 1px solid#666;
+            margin-bottom: 10px;
+        }
+        
+        #royal .subfooter {
+            margin-top: 100px;
+            padding: 0 20px;
+        }
+        
+        #royal .subfooter h1 {
+            font-size: 24px;
+            display: inline-block;
+            font-weight: bolder;
+        }
+        
+        #royal .subfooter .normal {
+            font-size: 12px;
+            vertical-align: baseline
+        }
+        
+        #royal .vmiddle {
+            vertical-align: middle;
+        }
+        
+        #royal .note {
+            margin-top: 20px;
+            padding-left: 15px;
+        }
+        
+        #royal .note li {
+            list-style-type: initial;
+        }
+        
+        #royal footer {
+            border-top: 2px solid;
+            line-height: 20px;
+            padding: 15px 0;
+            margin: 8px 0 0;
+        }
+        
+        #royal .pos-rel {
+            position: relative;
+        }
+        
+        #royal .primary-clr {
+            color: #df4927;
+        }
+        
+        #royal .text-center {
+            text-align: center
+        }
+        
+        #royal .mrB {
+            margin-bottom: 10px;
+        }
+        
+        #royal .secondry_clr {
+            color: #4b4c4f;
+        }
+        
+        .address {
+            max-width: 220px;
+        }
+        
+        .tax-table {
+            table-layout: fixed;
+        }
+        
+        .tax-table thead tr th:nth-child(1) {
+            width: 30%;
+        }
+        
+        #royal .tax-table thead tr th,
+        #royal .tax-table tbody tr td,
+        #royal .tax-table tfoot tr th {
+            padding: 6px;
+            border-right: 1px solid #666666;
+        }
+        
+        table.tax-table.item {
+            padding-top: 0px !important;
+        }
