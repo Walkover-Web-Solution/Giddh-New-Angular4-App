@@ -7,10 +7,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { RECEIPT_API } from './apiurls/recipt.api';
-import { GenerateInvoiceRequestClass } from '../models/api-models/Invoice';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { DownloadLedgerRequest } from '../models/api-models/Ledger';
-import { LEDGER_API } from './apiurls/ledger.api';
 import { UserDetails } from '../models/api-models/loginModels';
 
 @Injectable()
@@ -28,7 +25,7 @@ export class ReceiptService implements OnInit {
     //
   }
 
-  public UpdateRecipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
+  public UpdateReceipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + RECEIPT_API.PUT
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -42,7 +39,7 @@ export class ReceiptService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model));
   }
 
-  public GetAllRecipt(queryRequest: ReciptRequestParams): Observable<BaseResponse<ReciptResponse, string>> {
+  public GetAllReceipt(queryRequest: ReciptRequestParams): Observable<BaseResponse<ReciptResponse, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + RECEIPT_API.GET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -59,7 +56,7 @@ export class ReceiptService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, string>(e, null, queryRequest));
   }
 
-  public DeleteRecipt(accountUniqueName: string, querRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
+  public DeleteReceipt(accountUniqueName: string, querRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + RECEIPT_API.DELETE
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
