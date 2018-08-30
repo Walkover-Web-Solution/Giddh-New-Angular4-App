@@ -51,7 +51,7 @@ export class SettingsProfileActions {
     });
 
   @Effect()
-  public PatchProfile$: Observable<Action> = this.action$
+  private PatchProfile$: Observable<Action> = this.action$
     .ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE)
     .switchMap((action: CustomActions) => {
       return this.settingsProfileService.PatchProfile(action.payload)
@@ -67,7 +67,7 @@ export class SettingsProfileActions {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.store.dispatch(this.companyActions.RefreshCompanies());
-        this.toasty.successToast('Profile Updated Successfully.');
+        // this.toasty.successToast('Profile Updated Successfully.');
       }
       if (data.request.isMultipleCurrency) {
         return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
