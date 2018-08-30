@@ -1,7 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" id="gold">
+<html lang="en" id="silver">
 
 <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+    <style type="text/css">
+        /* reset */
+    </style>
 </head>
 
 <body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
@@ -12,14 +19,34 @@
             <table>
                 <tbody>
                     <tr>
-                        <td class="text-center">
+                        <td class="text-left" colspan="2">
                             <img style="max-width: 160px;" class="clogo" [hidden]='!showLogo' [src]="logoSrc" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-center">
+                        <td>
                             <h1 [hidden]="!fieldsAndVisibility.header.companyName?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}"><strong [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</strong></h1>
-                            <p [hidden]="!fieldsAndVisibility.header.gstin?.display">{{fieldsAndVisibility.header.gstin?.label}}:{{companyGSTIN ? companyGSTIN : 'AASDAS231234ASD'}}</p>
+                            <p style="margin-top:10px;">
+                                <span [hidden]="!fieldsAndVisibility.header.gstin?.display">{{fieldsAndVisibility.header.gstin?.label}}:{{companyGSTIN ? companyGSTIN : 'AASDAS231234ASD'}}</span>
+                                <span style="margin-left: 7px;" [hidden]="!fieldsAndVisibility.header.pan?.display">{{fieldsAndVisibility.header.pan?.label}}: {{companyPAN ? companyPAN : 'AAACW9768L'}}</span>
+                            </p>
+
+                        </td>
+                        <td align="right">
+
+                            <h2 class="mr20" [ngClass]="{'no-content' : (fieldsAndVisibility.header.formNameTaxInvoice && !fieldsAndVisibility.header.formNameTaxInvoice?.display)}" [ngStyle]="{ 'color': inputTemplate.templateColor}" title="{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}">
+                                <strong [ngStyle]="{ 'color': inputTemplate.templateColor}"> {{( fieldsAndVisibility.header.formNameTaxInvoice
+                                    && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label
+                                    : 'INVOICE' }}
+                                </strong>
+
+                            </h2>
+                            <p style="margin-top:10px;">
+                                <span [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
+                                    > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}} 201770323-64</span>
+                                <span style="margin-left: 7px;" [hidden]="!fieldsAndVisibility.header.invoiceDate?.display"> {{(fieldsAndVisibility.header.invoiceDate?.label?.length
+                                    > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}} 23/06/2017</span>
+                            </p>
                         </td>
                     </tr>
 
@@ -31,18 +58,11 @@
             <tbody>
                 <tr>
                     <td>
-                        <table class="numDetail">
+                        <table class="numDetail meta">
                             <tbody>
                                 <tr>
                                     <td>
-
-                                        <h1 class="invoice" [ngClass]="{'no-content' : (fieldsAndVisibility.header.formNameTaxInvoice && !fieldsAndVisibility.header.formNameTaxInvoice?.display)}" [ngStyle]="{ 'color': inputTemplate.templateColor}" title="{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}">
-                                            {{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}
-
-
-                                        </h1>
-                                        <!-- <h1 class="invoice">TAX INVOICE</h1> -->
-                                        <!-- <table class="detail-header" *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                        <table class="detail-header" *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                             <thead>
                                                 <tr>
                                                     <th>
@@ -56,34 +76,55 @@
                                                 <tr>
                                                     <td>
                                                         <p>
-                                                            Green Soft Solutions<br> 24 Building Name<br> 3rd Floor<br> 15
-                                                            A.B. Road<br> Indore (M.P.) 452000 <br><span *ngIf="fieldsAndVisibility.header.billingState?.display">
+                                                            Green Soft Solutions<br> 24 Building Name<br> 3rd Floor<br> 15 A.B. Road<br> Indore (M.P.) 452000 <br><span *ngIf="fieldsAndVisibility.header.billingState?.display">
                                                                 Madhya Pradesh
                                                             </span>
                                                         </p>
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        </table> -->
+                                        </table>
                                     </td>
-                                    <!-- <td>
-                                        
-                                    </td> -->
+                                    <td>
+                                        <table class="detail-header">
+                                            <thead>
+                                                <tr>
+                                                    <th><strong>{{fieldsAndVisibility.header.gstin?.label}}</strong></th>
+                                                    <th><strong>Mr. Alok Gangrade</strong></th>
+                                                    <th><strong>Due Date</strong></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>22BBBBBB000A1Z0</td>
+                                                    <td>
+                                                        alokgangrade@gmail.com <br> +91 9876543210
+                                                    </td>
+                                                    <td>30/06/2017</td>
+                                                </tr>
+                                                <br />
+                                                <tr *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                                                    <td [hidden]="!fieldsAndVisibility.header.shippingDate.display"><strong>{{(fieldsAndVisibility.header.shippingDate?.label?.length
+                                                            > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship
+                                                            Date'}}
+                                                        </strong></td>
+                                                    <td [hidden]="!fieldsAndVisibility.header.shippedVia?.display"><strong>{{(fieldsAndVisibility.header.shippedVia?.label?.length
+                                                            > 0) ? fieldsAndVisibility.header.shippedVia?.label : 'Ship Via'}}</strong></td>
+                                                    <td [hidden]="!fieldsAndVisibility.header.trackingNumber?.display"><strong>{{(fieldsAndVisibility.header.trackingNumber?.label?.length
+                                                            > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking
+                                                            No'}}
+                                                        </strong></td>
+                                                </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                                                    <td [hidden]="!fieldsAndVisibility.header.shippingDate.display">30/06/2017</td>
+                                                    <td [hidden]="!fieldsAndVisibility.header.shippedVia?.display">FedEx</td>
+                                                    <td [hidden]="!fieldsAndVisibility.header.trackingNumber?.display">21654</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
 
                                 </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td class="pull-right">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display" style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}} </td>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">23/06/2017</td>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display" style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</td>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">201770323-64</td>
-                                </tr>
-
                             </tbody>
                         </table>
                     </td>
@@ -92,182 +133,12 @@
         </table>
     </div>
     <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
-        <table class="meta" cellspacing="0" cellpadding="0">
-            <tbody>
-                <tr>
-                    <td>
-                        <table class="meta" cellspacing="0" cellpadding="0">
-                            <tbody>
-                                <tr>
-                                    <td colspan="3">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th align="left"><strong>Mr. Alok Gangrade</strong></th>
-                                                    <th align="left" [hidden]="!fieldsAndVisibility.header.billingAddress?.display"><strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Billing
-                                                            Address'}}
-                                                        </strong>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <p>alokgangrade@gmail.com </p>
-                                                        <p>+91 9876543210</p>
-                                                    </td>
-                                                    <td [hidden]="!fieldsAndVisibility.header.billingAddress?.display">
-                                                        <p>Green Soft Solutions</p>
-                                                        <p>24 Building Name</p>
-                                                        <p>3rd Floor</p>
-                                                        <p>15 A.B. Road</p>
-                                                        <p>Indore <span [hidden]="!fieldsAndVisibility.header.billingState?.display">(M.P.)</span> 452000
-                                                        </p>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table class="" [hidden]="!fieldsAndVisibility.header.shippingAddress?.display">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <strong>{{(fieldsAndVisibility.header.shippingDate?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Shipping
-                                                            Address'}}
-                                                        </strong>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p>Green Soft Solutions</p>
-                                                        <p>24 Building Name</p>
-                                                        <p>3rd Floor</p>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>
-                        <table class="meta " cellspacing="0 " cellpadding="0 ">
-                            <tbody>
-                                <tr>
-                                    <td colspan="3 ">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th align="left "><strong>Due Date</strong></th>
-                                                    <th align="left "><strong>GSTIN</strong></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <p>30/06/2017</p>
-                                                    </td>
-                                                    <td>
-                                                        <p>22BBBBBB000A1Z0</p>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table class=" ">
-                                            <tbody>
-                                                <tr>
-                                                    <td><strong>GSTIN</strong></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p>22BBBBBB000A1Z0</p>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table class="meta " cellspacing="0 " cellpadding="0 ">
-                            <tbody>
-                                <tr>
-                                    <td colspan="3 ">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th align="left " [hidden]="!fieldsAndVisibility.header.shippingDate.display"><strong>{{(fieldsAndVisibility.header.shippingDate?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship
-                                                            Date'}}
-                                                        </strong>
-                                                    </th>
-                                                    <th align="left " [hidden]="!fieldsAndVisibility.header.shippedVia?.display"><strong>{{(fieldsAndVisibility.header.shippedVia?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.shippedVia?.label : 'Ship Via'}}</strong></th>
-                                                    <th align="left " [hidden]="!fieldsAndVisibility.header.trackingNumber?.display"><strong>
-                                                            {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking
-                                                            No.'}}
-                                                        </strong>
-                                                    </th>
-                                                    <th align="left " [hidden]="!fieldsAndVisibility.header.customField1.display"><strong>{{(fieldsAndVisibility.header.customField1?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.customField1?.label : 'Field
-                                                            1'}}
-                                                        </strong>
-                                                    </th>
-                                                    <th align="left " [hidden]="!fieldsAndVisibility.header.customField2.display"><strong>{{(fieldsAndVisibility.header.customField2?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.customField2?.label : 'Field
-                                                            2'}}
-                                                        </strong>
-                                                    </th>
-                                                    <th align="left " [hidden]="!fieldsAndVisibility.header.customField3.display"><strong>{{(fieldsAndVisibility.header.customField3?.label?.length
-                                                            > 0) ? fieldsAndVisibility.header.customField3?.label : 'Field
-                                                            3'}}
-                                                        </strong>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td [hidden]="!fieldsAndVisibility.header.shippingDate.display">30/06/2017</td>
-                                                    <td [hidden]="!fieldsAndVisibility.header.shippedVia?.display">FedEx</td>
-                                                    <td [hidden]="!fieldsAndVisibility.header.trackingNumber?.display">21654</td>
-                                                    <td [hidden]="!fieldsAndVisibility.header.customField1.display">Custom</td>
-                                                    <td [hidden]="!fieldsAndVisibility.header.customField2.display">Custom</td>
-                                                    <td [hidden]="!fieldsAndVisibility.header.customField3.display">Custom</td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- <span class="arrow-down "></span> -->
+        <!-- <span class="arrow-down"></span> -->
         <article>
-            <table class="item product-table mrB1" cellspacing="0 " cellpadding="0 ">
+            <table class="item product-table" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>
+                        <!-- <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}</th> -->
                         <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.quantity?.label?.length > 0) ? fieldsAndVisibility.table.quantity?.label : 'Qty.'}}</th>
@@ -320,20 +191,20 @@
                     </tr>
                 </tfoot>
             </table>
-            <table class="balance ">
-                <tr [hidden]="!fieldsAndVisibility.footer.taxableAmount?.display ">
+            <table class="balance">
+                <tr [hidden]="!fieldsAndVisibility.footer.taxableAmount?.display">
                     <th><strong>Taxable Amount</strong></th>
-                    <td><span><strong>₹30100.00</strong></span></td>
+                    <td><span><strong>30100.00</strong></span></td>
                 </tr>
-                <tr [hidden]="!fieldsAndVisibility.footer.totalTax?.display ">
+                <tr [hidden]="!fieldsAndVisibility.footer.totalTax?.display">
                     <th><strong>Total Tax*</strong></th>
-                    <td><span><strong>₹5920.00</strong></span></td>
+                    <td><span><strong>5920.00</strong></span></td>
                 </tr>
                 <tr>
                     <th><strong>Invoice Total</strong></th>
-                    <td><span><strong>₹36020.00</strong></span></td>
+                    <td><span><strong>36020.00</strong></span></td>
                 </tr>
-                <tr [hidden]="!fieldsAndVisibility.footer.totalInWords?.display ">
+                <tr [hidden]="!fieldsAndVisibility.footer.totalInWords?.display">
                     <th><strong>Invoice Total (In words)</strong></th>
                     <td><strong>Thirty Six Thousand Twenty Only</strong></td>
                 </tr>
@@ -348,7 +219,8 @@
             <tbody>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
-                        <h1><strong [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</strong></h1>
+                        <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU</h1>
+                        <h4 [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</h4>
                     </td>
                     <td colspan="1"></td>
                     <td style="text-align: center;vertical-align: bottom;">
