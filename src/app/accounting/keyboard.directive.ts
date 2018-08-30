@@ -51,6 +51,8 @@ export class OnReturnDirective {
           this.selectedField = allElements[indx];
         } else if (target.classList.contains('debit-credit')) {
           target = allElements[indx + 2];
+        } else if (allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
+          target = allElements[indx + 2];
         }
 
         // let attrArray = [];
@@ -109,7 +111,23 @@ export class OnReturnDirective {
 
         let target = allElements[indx - 1];
 
-        if (target.classList.contains('debit-credit')) {
+        const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+        const rowEntryType =  activatedRow[0].children[0].children[0].value;
+
+        if (allElements[indx].classList.contains('debit-credit')) {
+          if (rowEntryType === 'by') {
+            target = allElements[indx - 4];
+          } else if (rowEntryType === 'to') {
+            target = allElements[indx - 5];
+          }
+        } else if (allElements[indx].classList.contains('byTo')) {
+          if (rowEntryType === 'to') {
+            console.log('Here');
+            target = allElements[indx - 2];
+            console.log('target is :', target);
+          }
+        } else if (allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
+          console.log('check if disabled');
           target = allElements[indx - 2];
         }
 
