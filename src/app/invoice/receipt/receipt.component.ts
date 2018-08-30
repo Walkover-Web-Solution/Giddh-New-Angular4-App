@@ -1,5 +1,4 @@
-import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
-import { IOption } from './../../theme/ng-select/option.interface';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -19,10 +18,9 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -53,29 +51,16 @@ const PREVIEW_OPTIONS = [
 export class ReceiptComponent implements OnInit, OnDestroy {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
-  @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
-  @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
-  @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-  @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
-  public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
-  public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public counts: IOption[] = COUNTS;
   public accounts$: Observable<IOption[]>;
   public moment = moment;
-  public modalRef: BsModalRef;
-  public modalConfig = {
-    animated: true,
-    keyboard: false,
-    backdrop: 'static',
-    ignoreBackdropClick: true
-  };
   public startDate: Date;
   public endDate: Date;
   private universalDate: Date[];
@@ -90,7 +75,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
     private _invoiceTemplatesService: InvoiceTemplatesService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private _receiptAction: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
@@ -121,10 +106,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.getInvoices();
       }
     });
-
-    // this.store.select(p => p.invoice.isLoadingInvoices).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o: boolean) => {
-    //    this.isLoadingInvoices = _.cloneDeep(o);
-    // });
 
     this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
@@ -172,29 +153,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     })).subscribe();
   }
 
-  public loadDownloadOrSendMailComponent() {
-    let transactionData = null;
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
-    let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
-    viewContainerRef.remove();
-
-    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-    viewContainerRef.insert(componentInstanceView.hostView);
-
-    let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
-    componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
-    componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-    componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
-    // componentInstance.totalItems = s.count * s.totalPages;
-    // componentInstance.itemsPerPage = s.count;
-    // componentInstance.maxSize = 5;
-    // componentInstance.writeValue(s.page);
-    // componentInstance.boundaryLinks = true;
-    // componentInstance.pageChanged.subscribe(e => {
-    //   this.pageChanged(e);
-    // });
-  }
-
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
@@ -216,18 +174,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onPerformAction(item, ev: IOption) {
-    if (ev && ev.value) {
-      let actionToPerform = ev.value;
-      if (actionToPerform === 'paid') {
-        this.selectedInvoice = item;
-        this.performActionOnInvoiceModel.show();
-      } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, {action: actionToPerform}));
-      }
-    }
-  }
-
   public onDeleteBtnClick(uniqueName) {
     let allInvoices = _.cloneDeep(this.invoiceData.results);
     this.selectedInvoice = allInvoices.find((o) => o.uniqueName === uniqueName);
@@ -243,49 +189,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.invoiceConfirmationModel.hide();
   }
 
-  public closePerformActionPopup(data) {
-    this.performActionOnInvoiceModel.hide();
-    if (data) {
-      data.action = 'paid';
-      this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, data));
-    }
-  }
-
-  /**
-   * onSelectInvoice
-   */
-  public onSelectInvoice(invoice: IInvoiceResult) {
-    this.selectedInvoice = _.cloneDeep(invoice);
-    this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
-    this.loadDownloadOrSendMailComponent();
-    this.downloadOrSendMailModel.show();
-  }
-
-  public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
-    this.downloadOrSendMailModel.hide();
-    if (userResponse.action === 'update') {
-      this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
-      this.invoiceGenerateModel.show();
-    } else if (userResponse.action === 'closed') {
-      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
-    }
-  }
-
-  public closeInvoiceModel(e) {
-    this.invoiceGenerateModel.hide();
-    setTimeout(() => {
-      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
-    }, 2000);
-  }
-
-  /**
-   * download file as pdf
-   * @param data
-   * @param invoiceUniqueName
-   */
-  public downloadFile() {
-    let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
-    return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+  public downloadVoucherRequest(voucherNumber: string, accountUniqueName: string) {
+    this.store.dispatch(this._receiptAction.DownloadVoucherRequest({voucherNumber: [voucherNumber]}, accountUniqueName));
   }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -307,27 +212,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       offset += sliceSize;
     }
     return new Blob(byteArrays, {type: contentType});
-  }
-
-  /**
-   * onDownloadOrSendMailEvent
-   */
-  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
-    if (userResponse.action === 'download') {
-      this.downloadFile();
-    } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice}));
-    } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.invoiceNumber));
-    }
-  }
-
-  public setToday(model: string) {
-    this.invoiceSearchRequest[model] = String(moment());
-  }
-
-  public clearDate(model: string) {
-    this.invoiceSearchRequest[model] = '';
   }
 
   public getInvoices() {
@@ -387,14 +271,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
       this.getInvoices();
     }
-  }
-
-  public ondownloadInvoiceEvent(invoiceCopy) {
-    let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.invoiceNumber],
-      typeOfInvoice: invoiceCopy
-    };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
   }
 
   public ngOnDestroy() {

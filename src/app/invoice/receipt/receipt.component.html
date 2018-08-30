@@ -96,7 +96,8 @@
   <tbody>
   <tr *ngFor="let item of invoiceData.results; let i = index">
     <td>{{ i + 1}}</td>
-    <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+    <td><a (click)="downloadVoucherRequest(item.account.name, item.account.name)">{{item.dueDate ? item.dueDate : '-'
+      }}</a></td>
     <td>{{item.account.name}}</td>
     <td>{{item.invoiceDate}}</td>
     <td>{{item.grandTotal}}</td>
