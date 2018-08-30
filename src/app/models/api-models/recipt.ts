@@ -5,7 +5,7 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
 }
 
 export interface ReciptDeleteRequest {
-  invoiceNumber: number;
+  invoiceNumber: string;
   voucherType: string;
 }
 
@@ -154,4 +154,5 @@ export interface ReciptRequest {
 
 export interface DownloadVoucherRequest {
   voucherNumber: string[];
+  voucherType: string;
 }

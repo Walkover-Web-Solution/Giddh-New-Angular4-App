@@ -58,8 +58,24 @@ export class InvoicePageDDComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.router.routerState.snapshot.url.includes('recurring')) {
-      this.selectedPage = 'Recurring';
+    if (this.router.routerState.snapshot.url) {
+      let url = this.router.routerState.snapshot.url.split('/')
+      let lastUrl = url[url.length - 1];
+      this.pageChanged.emit(lastUrl);
+      switch (lastUrl) {
+        case 'invoice':
+          this.selectedPage = 'Invoice';
+          break;
+        case 'recurring':
+          this.selectedPage = 'Recurring';
+          break;
+        case 'receipt':
+          this.selectedPage = 'Receipt';
+          break;
+        default:
+          this.selectedPage = 'Invoice';
+          break;
+      }
     }
   }
 
