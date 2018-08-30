@@ -39,11 +39,11 @@
                             <table>
                                 <tbody>
                                     <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
-                                        <td><strong>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}</strong></td>
+                                        <td>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}</td>
                                         <td>23/06/2017</td>
                                     </tr>
                                     <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
-                                        <td><strong>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</strong></td>
+                                        <td>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</td>
                                         <td>201770323-64</td>
                                     </tr>
                                 </tbody>
@@ -195,9 +195,9 @@
                     </tr>
                 </tfoot>
             </table>
-            <table class="balance">
+            <table class="balance strong">
                 <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-                    <th>Taxable Amount</th>
+                    <th>strong</th>
                     <td><span>₹30100.00</span></td>
                 </tr>
                 <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
@@ -216,16 +216,16 @@
 
         </article>
     </div>
-    <div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
+    <div id="Template-footer" class="mrT60" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
         <aside>
             <table cellpadding="0" cellspacing="0" class="subfooter">
                 <tbody>
                     <tr>
                         <td colspan="2">
                             <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                <p style="margin-bottom: 15px;">*Tax to be paid on Reverse Charge</p>
+                                <p style="margin-bottom: 15px;"><strong>*Tax to be paid on Reverse Charge</strong></p>
                                 <section>
-                                    <h2>Notes</h2>
+                                    <h2 class="strong">Notes</h2>
                                     <p>All payments to be made in cash</p>
                                     <p>Contact us for queries on these quotations.</p>
                                 </section>
@@ -249,7 +249,7 @@
             </table>
 
         </aside>
-        <footer style="text-align: center;">
+        <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
             <p *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</p>
             <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>
         </footer>

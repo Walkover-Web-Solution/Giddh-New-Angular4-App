@@ -57,7 +57,7 @@ export class CompanyImportExportComponent implements OnInit {
   public setActiveTab(mode: 'import' | 'export') {
     this.mode = mode;
     this.isFirstScreen = false;
-    this._cdr.detectChanges();
+    // this._cdr.detectChanges();
   }
 
   public back() {
