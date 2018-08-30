@@ -8,7 +8,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
+import { DownloadVoucherRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -32,7 +32,32 @@ export class InvoiceReceiptActions {
     });
 
   @Effect()
-  private
+  private UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT)
+    .switchMap((action: CustomActions) => this._receiptService.UpdateReceipt(action.payload.accountUniqueName, action.payload.model))
+    .map(res => this.validateResponse<string, ReciptRequest>(res, {
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
+      payload: res
+    }));
+
+  @Effect()
+  private GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT)
+    .switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.queryRequest, action.payload.body))
+    .map(response => {
+      return this.GetAllInvoiceReceiptResponse(response);
+    });
+
+  @Effect()
+  private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT)
+    .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.querRequest))
+    .map(response => {
+      return this.DeleteInvoiceReceiptResponse(response);
+    });
 
   constructor(private action$: Actions, private _toasty: ToasterService,
               private store: Store<AppState>, private _receiptService: ReceiptService) {
@@ -56,5 +81,46 @@ export class InvoiceReceiptActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.INVOICE_RECEIPT_RESET
     };
+  }
+
+  public UpdateInvoiceReceiptRequest(accountUniqueName: string, model: ReciptRequest): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_GENERATED_INVOICE_RECEIPT,
+      payload: {accountUniqueName, body: model}
+    };
+  }
+
+  public GetAllInvoiceReceiptResponse(model: BaseResponse<ReciptResponse, ReciptRequestParams>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT_RESPONSE,
+      payload: model
+    };
+  }
+
+  public DeleteInvoiceReceiptResponse(model): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE,
+      payload: model
+    };
+  }
+
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
+                                                successAction: CustomActions,
+                                                showToast: boolean = false,
+                                                errorAction: CustomActions = {type: 'EmptyAction'},
+                                                message?: string): CustomActions {
+    if (response.status === 'error') {
+      if (showToast) {
+        this._toasty.errorToast(response.message);
+      }
+      return errorAction;
+    } else {
+      if (showToast && typeof response.body === 'string') {
+        this._toasty.successToast(response.body);
+      } else if (message) {
+        this._toasty.successToast(message);
+      }
+    }
+    return successAction;
   }
 }
