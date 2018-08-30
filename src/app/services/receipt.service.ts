@@ -63,10 +63,11 @@ export class ReceiptService implements OnInit {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)))
       .map((res) => {
-        let data: BaseResponse<any, any> = res;
+        let data: BaseResponse<string, ReciptDeleteRequest> = res;
         data.request = querRequest;
+        data.queryString = {accountUniqueName};
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, accountUniqueName));
+      }).catch((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName));
   }
 
   public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string): Observable<BaseResponse<any, DownloadVoucherRequest>> {

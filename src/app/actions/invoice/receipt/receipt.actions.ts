@@ -59,7 +59,7 @@ export class InvoiceReceiptActions {
   @Effect()
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.querRequest))
+    .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model))
     .map(response => {
       return this.DeleteInvoiceReceiptResponse(response);
     });
@@ -109,7 +109,14 @@ export class InvoiceReceiptActions {
     };
   }
 
-  public DeleteInvoiceReceiptResponse(model): CustomActions {
+  public DeleteInvoiceReceiptRequest(model: ReciptDeleteRequest, accountUniqueName: string): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT,
+      payload: {model, accountUniqueName}
+    };
+  }
+
+  public DeleteInvoiceReceiptResponse(model: BaseResponse<string, ReciptDeleteRequest>): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE,
       payload: model
