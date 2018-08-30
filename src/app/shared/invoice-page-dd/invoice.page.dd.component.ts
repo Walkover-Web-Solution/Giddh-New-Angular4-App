@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
@@ -34,6 +34,7 @@ export class InvoicePageDDComponent implements OnInit {
 
   public navItems: INameUniqueName[] = INV_PAGE;
   public selectedPage: string = null;
+  @Output('pageChanged') public pageChanged: EventEmitter<string> = new EventEmitter<string>();
 
   public dropDownPages: any[] = [
     {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
@@ -75,6 +76,7 @@ export class InvoicePageDDComponent implements OnInit {
 
   private changePage(page): void {
     this.selectedPage = page.name;
+    this.pageChanged.emit(page.path);
     this._cdRef.detectChanges();
     this.router.navigate(['/pages', 'invoice', page.path]);
   }

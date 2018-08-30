@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { GeneralService } from './general.service';
 import { DownloadVoucherRequest, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../models/api-models/recipt';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HttpWrapperService } from './httpWrapper.service';
 import { HttpClient } from '@angular/common/http';
