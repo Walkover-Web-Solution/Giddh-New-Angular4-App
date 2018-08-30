@@ -43,6 +43,7 @@ import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-en
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TextMaskModule } from '../../../node_modules/angular2-text-mask';
 import { ReceiptComponent } from './receipt/receipt.component';
+import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -86,7 +87,8 @@ const INVOICE_ROUTES: Routes = [
     EsignModalComponent,
     InvoicePageDDComponent,
     RecurringComponent,
-    ReceiptComponent
+    ReceiptComponent,
+    DownloadReceiptComponent
   ],
   imports: [
     FormsModule,
@@ -116,7 +118,7 @@ const INVOICE_ROUTES: Routes = [
     RouterModule,
     TooltipModule,
   ],
-  entryComponents: [DownloadOrSendInvoiceOnMailComponent],
+  entryComponents: [DownloadOrSendInvoiceOnMailComponent, DownloadReceiptComponent],
   providers: [InvoiceUiDataService, {
     provide: FONT_PICKER_CONFIG,
     useValue: DEFAULT_FONT_PICKER_CONFIG

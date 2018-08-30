@@ -8,28 +8,10 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
-  @Effect()
-  private DOWNLOAD_VOUCHER_REQUEST$: Observable<Action> = this.action$
-    .ofType(INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST)
-    .switchMap((action: CustomActions) => {
-
-      return this._receiptService.DownloadVoucher(action.payload.model, action.payload.accountUniqueName)
-        .map((response: BaseResponse<any, DownloadVoucherRequest>) => {
-          if (response.status === 'success') {
-            let res = {body: response.body};
-            let blob = new Blob([JSON.stringify(res)], {type: 'application/pdf'});
-            saveAs(blob, response.queryString.accountUniqueName + '.pdf');
-            this._toasty.successToast('voucher downloaded');
-          } else {
-            this._toasty.errorToast(response.message);
-          }
-          return this.DownloadVoucherResponse(response);
-        });
-    });
 
   @Effect()
   private UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = this.action$
@@ -46,7 +28,7 @@ export class InvoiceReceiptActions {
   @Effect()
   private GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.model))
+    .switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload))
     .map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
       if (response.status === 'success') {
         // this.showToaster('');
@@ -60,26 +42,14 @@ export class InvoiceReceiptActions {
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT)
     .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model))
-    .map(response => {
+    .map((response: BaseResponse<string, ReciptDeleteRequest>) => {
+      let success = response.status === 'success';
+      this.showToaster(success ? 'Receipt Deleted Successfully' : response.message, success ? 'success' : 'error');
       return this.DeleteInvoiceReceiptResponse(response);
     });
 
   constructor(private action$: Actions, private _toasty: ToasterService,
               private store: Store<AppState>, private _receiptService: ReceiptService) {
-  }
-
-  public DownloadVoucherRequest(model: DownloadVoucherRequest, accountUniqueName: string): CustomActions {
-    return {
-      type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST,
-      payload: {model, accountUniqueName}
-    };
-  }
-
-  public DownloadVoucherResponse(response: BaseResponse<any, DownloadVoucherRequest>): CustomActions {
-    return {
-      type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE,
-      payload: response
-    };
   }
 
   public ResetInvoiceReceiptState(): CustomActions {
