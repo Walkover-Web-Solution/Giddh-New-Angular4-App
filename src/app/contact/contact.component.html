@@ -86,9 +86,9 @@
           <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
         </div>
 
-        <!-- <button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging'">Aging
+        <button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging'">Aging
           Report
-        </button> -->
+        </button>
 
       </div>
     </div>
@@ -194,13 +194,13 @@
         <th [style.width.%]="14">Total Due</th>
         <th [style.width.%]="10">Future Due</th>
         <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth-1}} Days</th>
-        <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth}}-{{(agingDropDownoptions$| async )?.fifth-1}}
+        <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth)-1}}
           Days
         </th>
-        <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fifth}}-{{(agingDropDownoptions$| async )?.sixth-1}}
+        <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth)}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth +(agingDropDownoptions$| async )?.sixth)-1}}
           Days
         </th>
-        <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth}}+ Days</th>
+        <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+(agingDropDownoptions$| async )?.fifth+(agingDropDownoptions$| async )?.sixth}}+ Days</th>
       </tr>
     </thead>
     <tbody>
