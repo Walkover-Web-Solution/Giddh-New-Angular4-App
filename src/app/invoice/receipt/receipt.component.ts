@@ -21,6 +21,8 @@ import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccount
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptResponse } from '../../models/api-models/recipt';
+import { DownloadOrSendInvoiceOnMailComponent } from '../preview/models/download-or-send-mail/download-or-send-mail.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -53,14 +55,25 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
+  public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
+  public selectedReceipt: ReciptResponse;
   public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
+  public receiptSearchRequest: InvoiceReceiptFilter = new InvoiceReceiptFilter();
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
+  public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public counts: IOption[] = COUNTS;
   public accounts$: Observable<IOption[]>;
   public moment = moment;
+  public modalRef: BsModalRef;
+  public modalConfig = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
   public startDate: Date;
   public endDate: Date;
   private universalDate: Date[];
@@ -75,7 +88,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
     private _invoiceTemplatesService: InvoiceTemplatesService,
-    private _receiptAction: InvoiceReceiptActions
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
@@ -189,8 +203,14 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.invoiceConfirmationModel.hide();
   }
 
-  public downloadVoucherRequest(voucherNumber: string, accountUniqueName: string) {
-    this.store.dispatch(this._receiptAction.DownloadVoucherRequest({voucherNumber: [voucherNumber]}, accountUniqueName));
+  /**
+   * download file as pdf
+   * @param data
+   * @param invoiceUniqueName
+   */
+  public downloadFile() {
+    let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+    return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
   }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -271,6 +291,13 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
       this.getInvoices();
     }
+  }
+
+  public downloadVoucherRequest(voucherNumber: string) {
+    let dataToSend: DownloadVoucherRequest = {
+      voucherNumber: [voucherNumber]
+    };
+    // this.store.dispatch(this.invoiceReceiptActions.DownloadVoucherRequest(this.selectedReceipt.items, dataToSend));
   }
 
   public ngOnDestroy() {

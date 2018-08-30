@@ -1,21 +1,7 @@
-export interface Filter {
-  accountUniqueName: string;
-  voucherNumber: number;
-  proformaNumber?: number;
-  balanceDue?: number;
-  dueDate: number;
-  balanceMoreThan?: string;
-  balanceLessThan?: string;
-  dueDateBefore?: string;
-  dueDateAfter?: string;
-  dueDateEqual?: string;
-  companyName?: string;
-  groupUniqueName?: string;
-  totalMoreThan?: number;
-  totalLessThan?: number;
-  totalEqual?: number;
-  total: number;
-  description: string;
+import { InvoiceFilterClassForInvoicePreview } from './Invoice';
+
+export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
+  public voucherNumber?: number;
 }
 
 export interface ReciptDeleteRequest {
@@ -31,15 +17,15 @@ export class ReciptRequestParams {
   public type: string;
 }
 
-export interface Account {
+export interface ReceiptAccount {
   uniqueName: string;
   accountType?: any;
   name: string;
 }
 
-export interface Item {
+export interface ReceiptItem {
   voucherNumber: string;
-  account: Account;
+  account: ReceiptAccount;
   uniqueName: string;
   balanceStatus: string;
   voucherDate: string;
@@ -49,7 +35,7 @@ export interface Item {
 }
 
 export interface ReciptResponse {
-  items: Item[];
+  items: ReceiptItem[];
   page: number;
   count: number;
   totalPages: number;

@@ -8,7 +8,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { DownloadVoucherRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -46,8 +46,13 @@ export class InvoiceReceiptActions {
   @Effect()
   private GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.queryRequest, action.payload.body))
-    .map(response => {
+    .switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.model))
+    .map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
+      if (response.status === 'success') {
+        // this.showToaster('');
+      } else {
+        this.showToaster(response.message, 'error');
+      }
       return this.GetAllInvoiceReceiptResponse(response);
     });
 
@@ -90,7 +95,14 @@ export class InvoiceReceiptActions {
     };
   }
 
-  public GetAllInvoiceReceiptResponse(model: BaseResponse<ReciptResponse, ReciptRequestParams>): CustomActions {
+  public GetAllInvoiceReceiptRequest(model: InvoiceReceiptFilter): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT,
+      payload: model
+    };
+  }
+
+  public GetAllInvoiceReceiptResponse(model: BaseResponse<ReciptResponse, InvoiceReceiptFilter>): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT_RESPONSE,
       payload: model
@@ -102,6 +114,14 @@ export class InvoiceReceiptActions {
       type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE,
       payload: model
     };
+  }
+
+  private showToaster(message: string, type: string = 'success') {
+    if (type === 'error') {
+      this._toasty.errorToast(message);
+    } else {
+      this._toasty.successToast(message);
+    }
   }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
