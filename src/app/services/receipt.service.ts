@@ -39,7 +39,7 @@ export class ReceiptService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model));
   }
 
-  public GetAllReceipt(queryRequest: ReciptRequestParams): Observable<BaseResponse<ReciptResponse, string>> {
+  public GetAllReceipt(queryRequest: ReciptRequestParams, body): Observable<BaseResponse<ReciptResponse, ReciptRequestParams>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + RECEIPT_API.GET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -49,11 +49,11 @@ export class ReceiptService implements OnInit {
       .replace(':to', queryRequest.to.toString())
       .replace(':type', queryRequest.type.toString()))
       .map((res) => {
-        let data: BaseResponse<ReciptResponse, string> = res;
+        let data: BaseResponse<ReciptResponse, ReciptRequestParams> = res;
         data.queryString = queryRequest;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, string>(e, null, queryRequest));
+      .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, ReciptRequestParams>(e, body, queryRequest));
   }
 
   public DeleteReceipt(accountUniqueName: string, querRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
