@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { GeneralService } from './general.service';
-import { DownloadVoucherRequest, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../models/api-models/recipt';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../models/api-models/recipt';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -39,21 +39,22 @@ export class ReceiptService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model));
   }
 
-  public GetAllReceipt(queryRequest: ReciptRequestParams, body): Observable<BaseResponse<ReciptResponse, ReciptRequestParams>> {
+  public GetAllReceipt(body: InvoiceReceiptFilter): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + RECEIPT_API.GET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':page', queryRequest.page.toString())
-      .replace(':count', queryRequest.count.toString())
-      .replace(':from', queryRequest.from.toString())
-      .replace(':to', queryRequest.to.toString())
-      .replace(':type', queryRequest.type.toString()))
+      .replace(':page', body.page.toString())
+      .replace(':count', body.count.toString())
+      .replace(':from', body.from.toString())
+      .replace(':to', body.to.toString())
+      .replace(':type', 'pdf'))
       .map((res) => {
-        let data: BaseResponse<ReciptResponse, ReciptRequestParams> = res;
-        data.queryString = queryRequest;
+        let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
+        data.queryString = {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'};
+        data.request = body;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, ReciptRequestParams>(e, body, queryRequest));
+      .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'}));
   }
 
   public DeleteReceipt(accountUniqueName: string, querRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {

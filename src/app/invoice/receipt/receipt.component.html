@@ -3,7 +3,7 @@
 
   <div class="form-group mrR1">
     <label class="d-block">Voucher No.</label>
-    <sh-select placeholder="Select" name="count" [(ngModel)]="invoiceSearchRequest.count" [options]="counts"
+    <sh-select placeholder="Select" name="count" [(ngModel)]="receiptSearchRequest.voucherNumber" [options]="counts"
                [ItemHeight]="33"></sh-select>
   </div>
 
@@ -11,7 +11,7 @@
     <label class="d-block">Account</label>
     <div class="ng-select-wrap">
       <sh-select name="accountUniqueName" [options]="accounts$ | async"
-                 [(ngModel)]="invoiceSearchRequest.accountUniqueName" [placeholder]="'Select Account'"
+                 [(ngModel)]="receiptSearchRequest.accountUniqueName" [placeholder]="'Select Account'"
                  [notFoundLink]="false" [multiple]="false" [ItemHeight]="67"
                  [useInBuiltFilterForIOptionTypeItems]="true">
         <ng-template #optionTemplate let-option="option">
@@ -27,30 +27,30 @@
   <div class="form-group mrR1">
     <label class="d-block">Description</label>
     <input type="text" class="form-control" name="description" placeholder="By description"
-           [(ngModel)]="invoiceSearchRequest.description">
+           [(ngModel)]="receiptSearchRequest.description">
   </div>
   <div class="form-group mrR1">
     <label class="d-block">Count</label>
-    <sh-select placeholder="Select" name="count" [(ngModel)]="invoiceSearchRequest.count" [options]="counts"
+    <sh-select placeholder="Select" name="count" [(ngModel)]="receiptSearchRequest.count" [options]="counts"
                [ItemHeight]="33"></sh-select>
   </div>
   <div class="form-group mrR1">
     <label class="d-block">Amount</label>
     <div class="custom-select pos-rel">
-      <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy"
+      <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="receiptSearchRequest.entryTotalBy"
                  [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
     </div>
   </div>
   <div class="form-group mrR1">
     <label class="d-block">&nbsp;</label>
-    <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.balanceDue"
+    <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="receiptSearchRequest.balanceDue"
            placeholder="By amount">
   </div>
   <div class="form-group mrR1">
     <label class="d-block">From - To</label>
     <div class="input-group">
       <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control"
-             [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker
+             [ngModel]="receiptSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker
              [bsConfig]="bsConfig" required>
     </div>
   </div>
