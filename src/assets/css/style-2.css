@@ -4816,3 +4816,16 @@ panel.sFthanks.fieldset {
     right: 5px;
     top: -8px;
 }
+.auto_save {
+    float: right;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+.auto_save i {
+    top: 2px;
+    position: relative;
+}
+.auto_save i.rotate {
+    animation: rotate 1.5s infinite linear;
+}
