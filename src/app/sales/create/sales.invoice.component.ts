@@ -411,10 +411,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         try {
-          this.universalDate = moment(dateObj[1]).toDate();
+          this.universalDate = _.cloneDeep(moment(dateObj[1]).toDate());
           this.assignDates();
         } catch (e) {
-          this.universalDate = new Date();
+          this.universalDate = _.cloneDeep(new Date());
         }
       }
     })).subscribe();
@@ -429,8 +429,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public assignDates() {
-    let o = cloneDeep(this.invFormData);
-    let date = this.universalDate || new Date();
+    let o = _.cloneDeep(this.invFormData);
+    let date = _.cloneDeep(this.universalDate) || _.cloneDeep(new Date());
     o.voucherDetails.voucherDate = date;
     // o.voucherDetails.dueDate = date;
     // o.templateDetails.other.shippingDate = date;
@@ -1007,7 +1007,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
           // t.date = this.universalDate || new Date();
-          e.entryDate = this.universalDate || new Date();
+          // e.entryDate = this.universalDate || new Date();
         });
       });
     } else {
