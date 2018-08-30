@@ -1,10 +1,10 @@
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { GeneralService } from './general.service';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../models/api-models/recipt';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse } from '../models/api-models/recipt';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HttpWrapperService } from './httpWrapper.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { RECEIPT_API } from './apiurls/recipt.api';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -41,13 +41,13 @@ export class ReceiptService implements OnInit {
 
   public GetAllReceipt(body: InvoiceReceiptFilter): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + RECEIPT_API.GET
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':page', body.page.toString())
-      .replace(':count', body.count.toString())
-      .replace(':from', body.from.toString())
-      .replace(':to', body.to.toString())
-      .replace(':type', 'pdf'))
+
+    let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET, {
+      page: body.page, count: body.count, from: body.from, to: body.to, type: 'receipt'
+    });
+
+    return this._http.post(url
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body)
       .map((res) => {
         let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
         data.queryString = {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'};
@@ -57,31 +57,63 @@ export class ReceiptService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'}));
   }
 
-  public DeleteReceipt(accountUniqueName: string, querRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
+  public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + RECEIPT_API.DELETE
+    let sessionId = this._generalService.sessionId;
+    let args: any = {headers: {}};
+    if (sessionId) {
+      args.headers['Session-Id'] = sessionId;
+    }
+    args.headers['Content-Type'] = 'application/json';
+    args.headers['Accept'] = 'application/json';
+    args.headers = new HttpHeaders(args.headers);
+
+    return this._httpClient.request('delete', this.config.apiUrl + RECEIPT_API.DELETE
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
+      {
+        body: queryRequest,
+        headers: args.headers,
+      })
       .map((res) => {
-        let data: BaseResponse<string, ReciptDeleteRequest> = res;
-        data.request = querRequest;
+        let data: any = res;
+        data.request = queryRequest;
         data.queryString = {accountUniqueName};
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName));
   }
 
-  public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string): Observable<BaseResponse<any, DownloadVoucherRequest>> {
+  public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string): any {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + RECEIPT_API.DOWNLOAD_VOUCHER
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+      , model, {responseType: 'blob'})
       .map((res) => {
-        let data: BaseResponse<any, DownloadVoucherRequest> = res;
-        data.request = model;
-        data.queryString = {accountUniqueName};
-        return data;
+        return res;
       })
-      .catch((e) => this.errorHandler.HandleCatch<any, DownloadVoucherRequest>(e, model, {accountUniqueName}));
+      .catch((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}));
+  }
+
+  private createQueryString(str, model) {
+    let url = str;
+    if ((model.from)) {
+      url = url + 'from=' + model.from + '&';
+    }
+    if ((model.to)) {
+      url = url + 'to=' + model.to + '&';
+    }
+    if ((model.page)) {
+      url = url + 'page=' + model.page + '&';
+    }
+    if ((model.count)) {
+      url = url + 'count=' + model.count;
+    }
+
+    if ((model.type)) {
+      url = url + '&type=' + model.type;
+    }
+    return url;
   }
 }
