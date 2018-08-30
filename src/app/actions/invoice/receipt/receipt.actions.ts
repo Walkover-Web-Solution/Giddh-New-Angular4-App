@@ -8,7 +8,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { DownloadVoucherRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
+import { DownloadVoucherRequest, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -54,7 +54,7 @@ export class InvoiceReceiptActions {
   @Effect()
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.querRequest))
+    .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model))
     .map(response => {
       return this.DeleteInvoiceReceiptResponse(response);
     });
@@ -97,7 +97,14 @@ export class InvoiceReceiptActions {
     };
   }
 
-  public DeleteInvoiceReceiptResponse(model): CustomActions {
+  public DeleteInvoiceReceiptRequest(model: ReciptDeleteRequest, accountUniqueName: string): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT,
+      payload: {model, accountUniqueName}
+    };
+  }
+
+  public DeleteInvoiceReceiptResponse(model: BaseResponse<string, ReciptDeleteRequest>): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE,
       payload: model
