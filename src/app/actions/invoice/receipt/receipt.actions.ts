@@ -21,8 +21,8 @@ export class InvoiceReceiptActions {
         .map((response: BaseResponse<any, DownloadVoucherRequest>) => {
           if (response.status === 'success') {
             let res = {body: response.body};
-            let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
-            // saveAs(blob, this._generalService.companyUniqueName + '.json');
+            let blob = new Blob([JSON.stringify(res)], {type: 'application/pdf'});
+            saveAs(blob, response.queryString.accountUniqueName + '.pdf');
             this._toasty.successToast('voucher downloaded');
           } else {
             this._toasty.errorToast(response.message);
