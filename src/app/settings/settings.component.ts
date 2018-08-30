@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { ToasterService } from 'app/services/toaster.service';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
@@ -34,6 +35,8 @@ export class SettingsComponent implements OnInit {
   @ViewChild('bunchComp') public bunchComp: BunchComponent;
 
   public isUserSuperAdmin: boolean = false;
+  public isUpdateCompanyInProgress$: Observable<boolean>;
+  public isCompanyProfileUpdated: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -47,6 +50,8 @@ export class SettingsComponent implements OnInit {
     private _toast: ToasterService
   ) {
       this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
+      this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).takeUntil(this.destroyed$);
+      this.isCompanyProfileUpdated = false;
     }
   public ngOnInit() {
     let companyUniqueName = null;
@@ -63,6 +68,12 @@ export class SettingsComponent implements OnInit {
       } else if (val.tab === 'integration' && val.code) {
         this.saveGmailAuthCode(val.code);
         // this.selectTab(1);
+      }
+    });
+
+    this.isUpdateCompanyInProgress$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
+      if (yes) {
+        this.isCompanyProfileUpdated = true;
       }
     });
   }

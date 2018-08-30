@@ -13,6 +13,8 @@
                 </tab>
                 <tab heading="Profile" (select)="profileSelected($event)">
                     <setting-profile #profileComponent></setting-profile>
+                    <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;"><i class="glyphicon glyphicon-refresh mrR fs14 rotate"></i>Saving...</span>
+                    <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;"><i class="glyphicon glyphicon-check mrR fs14"></i>Saved</span>
                 </tab>
                 <tab heading="Financial Year" (select)="financialYearSelected($event)">
                     <financial-year #financialYearComp></financial-year>
