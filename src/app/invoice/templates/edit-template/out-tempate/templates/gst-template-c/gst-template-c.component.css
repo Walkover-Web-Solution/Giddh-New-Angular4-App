@@ -14,6 +14,14 @@
     vertical-align: top;
 }
 
+.mrT20 {
+    margin-top: 20px;
+}
+
+.mrT60 {
+    margin-top: 60px;
+}
+
 
 /* heading */
 
@@ -213,6 +221,7 @@ table.inventory {
     text-align: right;
     padding: 14px 7px;
     line-height: 1.2rem;
+    vertical-align: middle;
 }
 
 #Template2 table.item tr th:nth-child(2) {
@@ -229,6 +238,7 @@ table.inventory {
     border-top: 1px solid rgba(89, 89, 89, 0.6);
     text-align: right;
     line-height: 1.2rem;
+    vertical-align: middle;
 }
 
 #Template2 table.item td p {
@@ -319,6 +329,7 @@ table.inventory {
     margin: 10px 0 0
 }
 
-strong {
+strong,
+.strong {
     font-weight: bold;
 }
