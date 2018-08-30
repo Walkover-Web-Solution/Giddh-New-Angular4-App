@@ -31,6 +31,9 @@ export class InvoiceReceiptActions {
         });
     });
 
+  @Effect()
+  private
+
   constructor(private action$: Actions, private _toasty: ToasterService,
               private store: Store<AppState>, private _receiptService: ReceiptService) {
   }
