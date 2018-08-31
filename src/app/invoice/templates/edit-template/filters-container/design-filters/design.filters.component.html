@@ -25,15 +25,15 @@
                 <div class="clearfix">
                     <ul class="templateView">
                         <!-- {{ sampleTemplates | json}} -->
-                        <ng-container *ngFor="let template of sampleTemplates">
+                        <!-- <ng-container *ngFor="let template of sampleTemplates">
                             <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice'">
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
                             </li>
-                        </ng-container>
-                        <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
+                        </ng-container> -->
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <li (click)="onDesignChange('uniqueName', 'gst_template_b')">
+                        <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_b')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li> 
                         <li (click)="onDesignChange('uniqueName', 'gst_template_c')">
@@ -108,7 +108,7 @@
                                 <li class="" (click)="changeColor('#bdbdbd', '#fcfcfc')"></li>
                                 <li class="" (click)="changeColor('#636363', '#f7f7f7')"></li>
                                 <li class="" (click)="changeColor('#000000', '#f2f2f2')"></li>
-                                <li class="" (click)="changeColor('#a6bddb', '#fafcfd')"></li>
+                                <li class="" (click)="changeColor('#e34818', '#f2f3f4')"></li>
                                 <li class="" (click)="changeColor('#7889a1', '#f8f9fa')"></li>
                                 <li class="" (click)="changeColor('#48565f', '#f6f6f7')"></li>
                                 <li class="" (click)="changeColor('#79bd58', '#f8fcf6')"></li>
@@ -135,13 +135,14 @@
             </li>
             <li [hidden]="!templateUISectionVisibility.font">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
-                <div class="col-xs-9 font-selector mrT1">
+                <div class="col-xs-9 font-selector mrT1 form-group">
                     <div class="row">
-                        <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
+                        <sh-select [options]="presetFonts" (selected)="onFontSelect($event)" [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                        <!-- <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpSizeSelect]='false' [fpStyleSelect]='false' [fpPosition]="'bottom'" [fpPositionOffset]="'0%'"
                             [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts">
                             {{font.family}}
                             <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </li>

@@ -9,6 +9,7 @@ export class OnReturnDirective {
   private clickCount: number = 0;
   private activeIndx: number = null;
   private fieldToActivate: any = null;
+  private selectedField;
   constructor(private _el: ElementRef) {
     this.el = this._el;
   }
@@ -35,7 +36,25 @@ export class OnReturnDirective {
       // nodeList[indx + 1].focus();
       if (e.which === 13 || e.keyCode === 13) {
 
-        const target = allElements[indx + 1];
+        let target = allElements[indx + 1];
+
+        if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
+          // detect by or to
+          const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+          const rowEntryType =  activatedRow[0].children[0].children[0].value;
+          if (rowEntryType === 'by') {
+            target = allElements[indx + 4];
+          } else if (rowEntryType === 'to') {
+            target = allElements[indx + 5];
+          }
+        } else if (allElements[indx].classList.contains('stock-field') && this.selectedField !== allElements[indx]) {
+          this.selectedField = allElements[indx];
+        } else if (target.classList.contains('debit-credit')) {
+          target = allElements[indx + 2];
+        } else if (allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
+          target = allElements[indx + 2];
+        }
+
         // let attrArray = [];
         // for (let i = 0, atts = target.attributes, n = atts.length, arr = []; i < n; i++) {
         //   attrArray.push(atts[i].nodeName);
@@ -48,6 +67,7 @@ export class OnReturnDirective {
         // }
 
         if (target) {
+
           // if (this.activeIndx === indx) {
           //   this.clickCount++;
           //   if (this.clickCount > 1) {
@@ -88,7 +108,28 @@ export class OnReturnDirective {
         }
 
       } else if (e.which === 8 || e.keyCode === 8) {
-        const target = allElements[indx - 1];
+
+        let target = allElements[indx - 1];
+
+        const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+        const rowEntryType =  activatedRow[0].children[0].children[0].value;
+
+        if (allElements[indx].classList.contains('debit-credit')) {
+          if (rowEntryType === 'by') {
+            target = allElements[indx - 4];
+          } else if (rowEntryType === 'to') {
+            target = allElements[indx - 5];
+          }
+        } else if (allElements[indx].classList.contains('byTo')) {
+          if (rowEntryType === 'to') {
+            console.log('Here');
+            target = allElements[indx - 2];
+            console.log('target is :', target);
+          }
+        } else if (allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
+          console.log('check if disabled');
+          target = allElements[indx - 2];
+        }
 
         if (target && e.target.value.length === e.target.selectionEnd) {
           e.preventDefault();
