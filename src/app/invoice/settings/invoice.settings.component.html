@@ -24,16 +24,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="clearfix bdrB pdT1">
+                <!-- <div class="clearfix bdrB pdT1">
                     <div class="row">
                         <div class="col-xs-5">
                             <label>Send email through Gmail</label>
                         </div>
                         <div class="col-xs-7 form-group">
-                            <input type="checkbox" [(ngModel)]="invoiceSetting.sendThroughSendGmail" name="sendThroughSendGmail" />
+                            <input type="checkbox" [(ngModel)]="invoiceSetting.sendThroughGmail" name="sendThroughGmail" />
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="clearfix bdrB ">
                     <div class="row">
                         <div class="col-xs-5 lh34"><label>Use custom invoice</label></div>
@@ -125,7 +125,7 @@
                         </div>
                         <div class="form-group col-xs-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="invoiceLockDate" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" (focus)="showDatePicker = true;"/>
+                                <input type="text" class="form-control" name="invoiceLockDate" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" (focus)="showDatePicker = true;" />
                                 <span class="input-group-btn">
                                     <button [class.active]="showDatePicker" type="button" class="btn btn-default" (click)="showDatePicker = !showDatePicker">
                                         <i class="glyphicon glyphicon-calendar"></i>

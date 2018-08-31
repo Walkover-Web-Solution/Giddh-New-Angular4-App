@@ -259,6 +259,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * selectEntryType() to validate Type i.e BY/TO
    */
   public selectEntryType(transactionObj, val, idx) {
+    val = val.trim();
     if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
       this._toaster.errorToast("Spell error, you can only use 'To/By'");
       transactionObj.type = 'to';

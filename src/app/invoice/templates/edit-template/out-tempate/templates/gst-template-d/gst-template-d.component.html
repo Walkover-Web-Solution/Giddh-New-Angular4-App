@@ -45,19 +45,19 @@
                 <tr>
                     <td>
                         <h4 class="mrB1" *ngIf="fieldsAndVisibility.header.customerName?.display">Hello Customer Name,</h4>
-                        <p>This is a system generated <strong class="primary-clr" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
+                        <p>This is a system generated <strong [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
                                 > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}} #201770323-64</strong> due on <span *ngIf="fieldsAndVisibility.header.dueDate?.display">September 15, 2017</span> for
-                            <strong class="primary-clr" *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong> at 24
+                            <strong [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong> at 24
                             <span>{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label
                                 : companyAddress }}</span> <span>[{{fieldsAndVisibility.header.gstin?.label}}:{{companyGSTIN
-                                | uppercase}}]</span> and the total amount is <strong class="primary-clr">INR 945</strong>.</p>
+                                | uppercase}}]</span> and the total amount is <strong [ngStyle]="{ 'color': inputTemplate.templateColor}">INR 945</strong>.</p>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
-        <table class="item product-table" cellspacing="0" cellpadding="0">
+        <table class="item product-table" cellspacing="0" cellpadding="0" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
             <thead>
                 <tr>
                     <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}</th>
@@ -105,23 +105,23 @@
             <tfoot>
                 <tr>
                     <th [attr.colspan]="columnsVisibled - 2"></th>
-                    <th>Sub Total</th>
-                    <th class="text-right">32500.00</th>
+                    <th class="inwords">Sub Total</th>
+                    <th class="text-right inwords">32500.00</th>
                 </tr>
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
-                    <th>Discount</th>
-                    <th class="text-right">00.00</th>
+                    <th class="inwords">Discount</th>
+                    <th class="text-right inwords">00.00</th>
                 </tr>
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
-                    <th>CGST</th>
-                    <th class="text-right">5250.00</th>
+                    <th class="inwords">CGST</th>
+                    <th class="text-right inwords">5250.00</th>
                 </tr>
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
-                    <th>SGST</th>
-                    <th class="text-right">5250.00</th>
+                    <th class="inwords">SGST</th>
+                    <th class="text-right inwords">5250.00</th>
                 </tr>
 
                 <tr>
@@ -158,7 +158,7 @@
                 </tr>
             </tbody>
             <tfoot>
-                <tr>
+                <tr class="sub-total">
                     <th colspan="1"></th>
 
                     <th class="text-right">Total <span style="margin-left:20px;">25550.00</span></th>
@@ -177,7 +177,7 @@
             <tbody>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.footer.thanks?.display" colspan="2" style="vertical-align: bottom;">
-                        <h1 class="" [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU
+                        <h1 class="strong" [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU
                             <span class="normal" [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</span>
                         </h1>
                         <!-- <h1 class="primary-clr">
@@ -203,7 +203,7 @@
             </tbody>
         </table>
 
-        <footer style="text-align: center;">
+        <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
             <p><strong *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
             <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>
         </footer>

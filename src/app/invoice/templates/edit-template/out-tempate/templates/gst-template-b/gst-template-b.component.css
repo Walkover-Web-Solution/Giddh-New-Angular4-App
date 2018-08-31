@@ -19,7 +19,7 @@
 /* heading */
 
 #template2 header {
-    padding-top: 30px;
+    padding: 30px 15px;
 }
 
 #template2 header h1 {
@@ -73,9 +73,10 @@
 }
 
 #template2 .item tbody tr td,
-#template2 .item thead tr th {
+#template2 .item thead tr th,
+#template2 .item tfoot tr th {
     text-align: right;
-    padding: 3px 7px;
+    padding: 2px 7px;
 }
 
 #template2 .mrL2 {
@@ -97,7 +98,7 @@
 #template2 .cargo-Detail {
     margin-top: 10px;
     line-height: 20px !important;
-    padding-bottom: 30px;
+    padding: 0 15px 30px;
 }
 
 #template2 .product-table {
@@ -105,7 +106,7 @@
 }
 
 #template2 .item thead tr th {
-    padding: 14px 7px 0;
+    padding: 20px 7px 0;
     border-bottom: 1px solid #666666;
     line-height: 1.2rem;
     font-weight: bold;
@@ -154,7 +155,7 @@
 
 #template2 .total-amount {
     font-size: 26px;
-    /* background: url(amt.png); */
+    /* background: url('amt.png'); */
     background-repeat: no-repeat;
     background-position: center;
     text-align: center;
@@ -256,4 +257,12 @@
 
 .cargo-Detail tr:nth-child(1) td {
     margin-bottom: 10px;
+}
+
+.meta {
+    padding: 0 15px !important;
+}
+
+th[data-thead="sno"] {
+    width: 20px;
 }
