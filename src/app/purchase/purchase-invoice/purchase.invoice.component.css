@@ -50,7 +50,32 @@
     color: rgb(211, 95, 41);
 }
 
+.bt-border-1px {
+    border-bottom: 1px solid gainsboro;
+}
+
+.tr-td-div>td div {
+    padding: 4px 0px;
+}
+
+/* #settingTab .nav-tabs>li.active>a {
+    color: #ff5f00;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #ff5f00;
+} */
 
 /*.ranges:nth-of-type(2) {
     display: none !important;
 }*/
+
+#c-tab ::ng-deep .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-right: 0 !important;
+    border-left: 0 !important;
+    border-top: 0 !important;
+    border-bottom-color: #025cff;
+}
