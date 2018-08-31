@@ -106,12 +106,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj) {
-        this.universalDate = _.cloneDeep(dateObj);
-        this.receiptSearchRequest.dateRange = this.universalDate;
-        this.isUniversalDateApplicable = true;
-        this.getInvoiceReceipts();
-      }
+      // if (dateObj) {
+      //       //   this.universalDate = _.cloneDeep(dateObj);
+      //       //   this.receiptSearchRequest.dateRange = this.universalDate;
+      //       //   this.isUniversalDateApplicable = true;
+      //       //   this.getInvoiceReceipts();
+      //       // }
     })).subscribe();
   }
 
@@ -210,7 +210,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     if (event) {
       this.receiptSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
       this.receiptSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
-      this.getInvoiceReceipts();
+      // this.getInvoiceReceipts();
     }
   }
 
