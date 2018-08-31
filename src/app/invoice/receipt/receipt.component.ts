@@ -5,10 +5,10 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import { find, orderBy } from '../../lodash-optimized';
+import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { CustomTemplateResponse, GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
@@ -19,7 +19,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
-import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
 import { ReceiptService } from '../../services/receipt.service';
@@ -52,7 +51,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public selectedInvoice: IInvoiceResult;
   public selectedReceipt: ReceiptItem;
-  public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public receiptSearchRequest: InvoiceReceiptFilter = new InvoiceReceiptFilter();
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public receiptData: ReciptResponse;
@@ -62,6 +60,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public moment = moment;
   public startDate: Date;
   public endDate: Date;
+  public isGetAllRequestInProcess$: Observable<boolean>;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -82,6 +81,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.receiptSearchRequest.count = 25;
     this.receiptSearchRequest.entryTotalBy = '';
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -115,25 +115,16 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     })).subscribe();
   }
 
-  public getInvoiceTemplateDetails(templateUniqueName: string) {
-    if (templateUniqueName) {
-      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
-    } else {
-      console.log('error hardcoded: templateUniqueName');
-      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
-    }
-  }
-
   public pageChanged(event: any): void {
     this.receiptSearchRequest.page = event.page;
     this.getInvoiceReceipts();
   }
 
   public getInvoiceReceiptByFilters(f: NgForm) {
-    if (f.valid) {
-      this.isUniversalDateApplicable = false;
-      this.getInvoiceReceipts();
-    }
+    // if (f.valid) {
+    this.isUniversalDateApplicable = false;
+    this.getInvoiceReceipts();
+    // }
   }
 
   public onEditBtnClick(uniqueName) {
@@ -167,10 +158,15 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     ));
   }
 
-  public prepareModelForInvoiceReceiptApi(): InvoiceFilterClassForInvoicePreview {
-    let model: InvoiceFilterClassForInvoicePreview = {};
+  public prepareModelForInvoiceReceiptApi(): InvoiceReceiptFilter {
+    let model: InvoiceReceiptFilter = {};
     let o = _.cloneDeep(this.receiptSearchRequest);
-    if (o && o.accountUniqueName) {
+
+    if (o.voucherNumber) {
+      model.voucherNumber = o.voucherNumber;
+    }
+
+    if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
     if (o.balanceDue) {
@@ -228,7 +224,11 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     this._receiptService.DownloadVoucher(dataToSend, this.selectedReceipt.account.uniqueName)
       .subscribe(s => {
-        return saveAs(s, `Receipt-${this.selectedReceipt.account.uniqueName}.pdf`);
+        if (s) {
+          return saveAs(s, `Receipt-${this.selectedReceipt.account.uniqueName}.pdf`);
+        } else {
+          this._toasty.errorToast('File not Downloaded Please Try Again');
+        }
       }, (e) => {
         this._toasty.errorToast('File not Downloaded Please Try Again');
       });

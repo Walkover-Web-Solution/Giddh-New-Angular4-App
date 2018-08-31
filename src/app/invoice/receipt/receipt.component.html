@@ -56,18 +56,18 @@
   </div>
   <div class="form-group mrR1">
     <label class="d-block">&nbsp;</label>
-    <button class="btn btn-success btn-sm" type="submit">GO</button>
+    <button class="btn btn-success btn-sm" type="submit" [ladda]="isGetAllRequestInProcess$ | async">GO</button>
   </div>
 </form>
 
 <div class="no-data mrT2" *ngIf="!receiptData">
-  <h1>No Entry found in sales!</h1>
-  <h1>Have to do some sales before creating invoice</h1>
+  <h1>No Entry found!</h1>
+  <!--<h1>Have to do some sales before creating invoice</h1>-->
 </div>
 
 <div class="no-data" *ngIf="receiptData && receiptData.items.length === 0">
   <h1>No entries found within given criteria.</h1>
-  <h1>Do search with some other dates</h1>
+  <h1>Do search with some other filters</h1>
 </div>
 
 <!-- grid -->
