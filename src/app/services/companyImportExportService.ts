@@ -6,12 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { LOGS_API } from './apiurls/logs.api';
-import { LogsRequest, LogsResponse } from '../models/api-models/Logs';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { COMPANY_IMPORT_EXPORT_API } from './apiurls/company-import-export.api';
-import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class CompanyImportExportService {
