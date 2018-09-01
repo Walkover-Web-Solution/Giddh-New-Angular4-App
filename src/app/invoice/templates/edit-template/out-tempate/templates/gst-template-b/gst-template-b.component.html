@@ -117,23 +117,23 @@
                 </tbody>
                 <tfoot>
                     <tr *ngIf="fieldsAndVisibility.table.taxableAmount?.display">
-                        <th [attr.colspan]="columnsVisibled -2"></th>
+                        <th [attr.colspan]="columnsVisibled-2"></th>
                         <th class="text-left">{{fieldsAndVisibility.footer.taxableAmount?.label}}</th>
                         <th class="text-right">32500.00</th>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.discount?.display">
-                        <th [attr.colspan]="columnsVisibled -2"></th>
+                        <th [attr.colspan]="columnsVisibled-2"></th>
                         <th class="text-left">Discount</th>
                         <th class="text-right">00.00</th>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.taxes?.display">
-                        <th [attr.colspan]="columnsVisibled -2"></th>
+                        <th [attr.colspan]="columnsVisibled-2"></th>
                         <th class="text-left">IGST</th>
                         <th class="text-right">5250.00</th>
                     </tr>
 
                     <tr>
-                        <th class="text-left inwords" [attr.colspan]="columnsVisibled -2">Thirty Seven Thousand Seven Hundred Fifty Only</th>
+                        <th class="text-left inwords" [attr.colspan]="columnsVisibled-2">Thirty Seven Thousand Seven Hundred Fifty Only</th>
                         <th class="text-left"><strong>Total</strong></th>
                         <th class="text-right"><strong>37750.00</strong></th>
                     </tr>
