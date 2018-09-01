@@ -1,29 +1,25 @@
 <div class="pr" [ngClass]="{'open': showComponent}">
-  <ul class="dropdown-menu pd depth" *ngIf="showComponent" style="left:-40px" (click)="$event.stopPropagation()">
+    <ul class="dropdown-menu pd depth dropdown-menu-right" *ngIf="showComponent" (click)="$event.stopPropagation()">
 
-    <li class="li-design">
-      <label class="oh width100 lable-design pdB">4th Column</label>
-      <input class="pull-left input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fourth"
-        (click)="$event.stopPropagation()" />
-    </li>
+        <li class="li-design">
+            <label class="oh width100 lable-design pdB">4th Column</label>
+            <input class="pull-left input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fourth" (click)="$event.stopPropagation()" />
+        </li>
 
-    <li class="li-design">
-      <label class="oh width100 lable-design pdB">5th Column</label>
-      <input class="pull-left input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fifth"
-        (click)="$event.stopPropagation()" />
-    </li>
+        <li class="li-design">
+            <label class="oh width100 lable-design pdB">5th Column</label>
+            <input class="pull-left input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fifth" (click)="$event.stopPropagation()" />
+        </li>
 
-    <li class="li-design">
-      <label class="oh width100 lable-design pdB">6th Column</label>
-      <input class="pull-left input-design" name="opt_4th" digitsOnlyDirective type="number" [(ngModel)]="options.sixth"
-        (click)="$event.stopPropagation()" />
-    </li>
-    <li class="li-design">
-      <button class="btn btn-share pull-right" [ladda]="setDueRangeRequestInFlight$  | async" (click)="saveAgingDropdown()"
-        style="margin:5px">Save
+        <li class="li-design">
+            <label class="oh width100 lable-design pdB">6th Column</label>
+            <input class="pull-left input-design" name="opt_4th" digitsOnlyDirective type="number" [(ngModel)]="options.sixth" (click)="$event.stopPropagation()" />
+        </li>
+        <li class="li-design">
+            <button class="btn btn-share pull-right ladda-button" [ladda]="setDueRangeRequestInFlight$  | async" (click)="saveAgingDropdown()" style="margin:5px">Save
       </button>
-      <button class="btn btn-share pull-right" (click)="closeAgingDropDown()" style="margin:5px">Cancel
+            <button class="btn btn-default pull-right" (click)="closeAgingDropDown()" style="margin:5px">cancel
       </button>
-    </li>
-  </ul>
+        </li>
+    </ul>
 </div>

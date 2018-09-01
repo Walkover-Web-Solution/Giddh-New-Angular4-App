@@ -69,7 +69,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sundryDebtorsAccounts$: Observable<any>;
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
-  public activeTab: 'customer' | 'aging' = 'customer';
+  public activeTab: 'customer' | 'aging' | 'vendor' = 'customer';
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
@@ -210,7 +210,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public resetMe() {
     this.dueAmountReportRequest.page = 0;
   }
-  public setActiveTab(tabName: 'customer' | 'aging', type: string) {
+  public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.activeTab = tabName;
     if (tabName !== 'aging') {
       this.getAccounts(type, null, null, 'true');
