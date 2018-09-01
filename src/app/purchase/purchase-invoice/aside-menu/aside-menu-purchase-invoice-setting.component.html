@@ -1,69 +1,122 @@
 <div class="aside-pane">
-    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
-    <div class="form_header">
-        <!-- <h2>File GST via-</h2> -->
-        <h2 *ngIf="selectedService === 'JIO_GST'">Jio GST</h2>
-        <h2 *ngIf="selectedService === 'TAX_PRO'">Tax Pro</h2>
-    </div>
-    <div class="form_body witBg clearfix mrBChldLbl">
-        <div class="form_bg clearfix">
+  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+  <div class="form_header">
+    <!-- <h2>File GST via-</h2> -->
+    <h2 *ngIf="selectedService === 'JIO_GST'">Jio GST</h2>
+    <h2 *ngIf="selectedService === 'TAX_PRO'">Tax Pro</h2>
+    <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
+  </div>
+  <div class="form_body witBg clearfix mrBChldLbl">
+    <div class="form_bg clearfix">
 
-            <!-- GIO GST -->
-            <form class="form-group" *ngIf="selectedService === 'JIO_GST'">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label for="jio_user_name">Username:</label>
-                            <input autocomplete="off" type="email" name="username" class="form-control" id="jio_user_name" [(ngModel)]="jioGstForm.uid">
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label for="jio_password">Password:</label>
-                            <input type="password" name="pwd" class="form-control" id="jio_password" [(ngModel)]="jioGstForm.pwd">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12 mrT1">
-                        <button class="btn btn-success" (click)="save(jioGstForm, 'JIO_GST')">Save</button>
-                        <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- TAX PRO -->
-            <form class="form-group" *ngIf="selectedService === 'TAX_PRO'">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label for="tax_pro_username">Username:</label>
-                            <input autocomplete="off" type="text" name="username" class="form-control" id="tax_pro_username" [(ngModel)]="taxProForm.uid">
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label for="tax_pro_gst_number">GSTIN:</label>
-                            <input autocomplete="off" type="text" name="gstin" class="form-control" id="tax_pro_gst_number" [(ngModel)]="taxProForm.gstin">
-                        </div>
-                    </div>
-                    <div class="col-xs-6" *ngIf="otpSentSuccessFully">
-                        <div class="form-group">
-                            <label for="tax_pro_otp">OTP:</label>
-                            <input autocomplete="off" type="text" name="otp" class="form-control" id="tax_pro_otp" [(ngModel)]="taxProForm.otp">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12 mrT1">
-                        <button class="btn btn-success" (click)="save(taxProForm, 'TAX_PRO')">Save</button>
-                        <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
-                    </div>
-                </div>
-            </form>
+      <!-- GIO GST -->
+      <form class="form-group" *ngIf="selectedService === 'JIO_GST'">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="jio_user_name">Username:</label>
+              <input autocomplete="off" type="email" name="username" class="form-control" id="jio_user_name"
+                     [(ngModel)]="jioGstForm.uid">
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="jio_password">Password:</label>
+              <input type="password" name="pwd" class="form-control" id="jio_password" [(ngModel)]="jioGstForm.pwd">
+            </div>
+          </div>
         </div>
 
+        <div class="row">
+          <div class="col-xs-12 mrT1">
+            <button class="btn btn-success" (click)="save(jioGstForm, 'JIO_GST')">Save</button>
+            <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- TAX PRO -->
+      <form class="form-group" *ngIf="selectedService === 'TAX_PRO'">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="tax_pro_username">Username:</label>
+              <input autocomplete="off" type="text" name="username" class="form-control" id="tax_pro_username"
+                     [(ngModel)]="taxProForm.uid">
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="tax_pro_gst_number">GSTIN:</label>
+              <input autocomplete="off" type="text" name="gstin" class="form-control" id="tax_pro_gst_number"
+                     [(ngModel)]="taxProForm.gstin">
+            </div>
+          </div>
+          <div class="col-xs-6" *ngIf="otpSentSuccessFully">
+            <div class="form-group">
+              <label for="tax_pro_otp">OTP:</label>
+              <input autocomplete="off" type="text" name="otp" class="form-control" id="tax_pro_otp"
+                     [(ngModel)]="taxProForm.otp">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 mrT1">
+            <button class="btn btn-success" (click)="save(taxProForm, 'TAX_PRO')">Save</button>
+            <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
+          </div>
+        </div>
+      </form>
+
+      <!--reconcile-->
+      <form class="form-group" *ngIf="selectedService === 'RECONCILE'">
+        <div class="row">
+
+          <ng-container *ngIf="!(reconcileOtpSuccess$ | async)" >
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label for="tax_pro_username">Username:</label>
+                <input autocomplete="off" type="text" name="username" class="form-control" id="reconcile_username"
+                       [(ngModel)]="reconcileForm.uid">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label for="reconcile_gst_number">GSTIN:</label>
+                <input autocomplete="off" type="text" name="gstin" class="form-control" id="reconcile_gst_number"
+                       [(ngModel)]="reconcileForm.gstin">
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
+          <div class="col-xs-6" *ngIf="reconcileOtpSuccess$ | async">
+            <div class="form-group">
+              <label for="reconcile_otp">OTP:</label>
+              <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp"
+                     [(ngModel)]="reconcileForm.otp">
+            </div>
+          </div>
+          </ng-container>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 mrT1">
+            <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
+                    *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async">Submit
+            </button>
+
+            <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
+                    *ngIf="(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpVerifyInProcess$ | async">Submit
+            </button>
+
+            <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
+          </div>
+        </div>
+      </form>
+      <!--reconcile-->
     </div>
+
+  </div>
 </div>

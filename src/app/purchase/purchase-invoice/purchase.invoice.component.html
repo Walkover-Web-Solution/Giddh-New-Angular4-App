@@ -1,397 +1,416 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
-    <form class="">
-        <div class="row">
-            <div class="form-group col-xs-2">
-                <label>GSTR Form</label>
-                <div class="btn-group btn-block" dropdown>
-                    <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
-                        <span *ngIf="!selectedGstrType.name">-- Select GSTR --</span>
-                        <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span>
-                        <span class="pull-right">
+  <form class="">
+    <div class="row">
+      <div class="form-group col-xs-2">
+        <label>GSTR Form</label>
+        <div class="btn-group btn-block" dropdown>
+          <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
+            <span *ngIf="!selectedGstrType.name">-- Select GSTR --</span>
+            <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span>
+            <span class="pull-right">
                             <i class="fa fa-caret-down"></i>
                         </span>
-                    </button>
-                    <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                        <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
-                            {{item.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
-                <div class="row">
-                    <label>Month</label>
-                    <div class="input-group">
-                        <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;"
-                            class="form-control" required/>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
+          </button>
+          <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+            <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
+              {{item.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;"
+           [hidden]="!selectedGstrType.name">
+        <div class="row">
+          <label>Month</label>
+          <div class="input-group">
+            <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')"
+                   (focus)="showGSTR1DatePicker = true;"
+                   class="form-control" required/>
+            <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                    (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
                                 <i class="glyphicon glyphicon-calendar"></i>
                             </button>
                         </span>
-                    </div>
-                    <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <ul class="my-dropdown-menu calendar-dropdown">
-                            <li>
-                                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1"
-                                    (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false" [minMode]="'month'"></datepicker>
-                            </li>
-                            <li class="pd1 clearfix pdT pdB">
+          </div>
+          <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <ul class="my-dropdown-menu calendar-dropdown">
+              <li>
+                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
+                            [(ngModel)]="selectedDateForGSTR1"
+                            (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false"
+                            [minMode]="'month'"></datepicker>
+              </li>
+              <li class="pd1 clearfix pdT pdB">
                                 <span class="btn-group pull-left">
-                                    <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
-                                    <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
+                                    <button type="button" class="btn btn-xs btn-primary mrR"
+                                            (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                    <button type="button" class="btn btn-xs btn-success"
+                                            (click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
-                <label>Email <i class='fa fa-info-circle' tooltip-placement="top" tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address"
-                />
-            </div>
-            <!-- comment by mustafa for GSTR2
-                <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
-                    <label>Report</label>
-                    <div class="btn-group btn-block" dropdown>
-                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-             </button>
-                        <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                            <li class="cp" *ngFor="let item of purchaseReportOptions">
-                                {{item.name}}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                -->
-            <!-- hide due to unused
-                <div class="form-group inline" *ngIf="selectedGstrType.name">
-                    <br />
-                   <button [disabled]="!selectedGstrType.name || selectedGstrType.name =='GSTR1'" class="btn btn-success">GO</button>
-    
-                </div>
-            -->
-            <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
-                <label class="d-block">&nbsp;</label>
-                <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
-                    <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
-                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
-                            {{ selectedGstrType.name }}
-                            <span class="pull-right mrL4">
+                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
+        <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
+                        tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
+        <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off"
+               placeholder="Email address"
+        />
+      </div>
+      <!-- comment by mustafa for GSTR2
+          <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
+              <label>Report</label>
+              <div class="btn-group btn-block" dropdown>
+                  <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+       </button>
+                  <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                      <li class="cp" *ngFor="let item of purchaseReportOptions">
+                          {{item.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          -->
+      <!-- hide due to unused
+          <div class="form-group inline" *ngIf="selectedGstrType.name">
+              <br />
+             <button [disabled]="!selectedGstrType.name || selectedGstrType.name =='GSTR1'" class="btn btn-success">GO</button>
+
+          </div>
+      -->
+      <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
+        <label class="d-block">&nbsp;</label>
+        <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
+          <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
+            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
+              {{ selectedGstrType.name }}
+              <span class="pull-right mrL4">
                                 <i class="fa fa-caret-down"></i>
                             </span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download
-                                Sheet
-                            </li>
-                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download
-                                Error Sheet</li>
-                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download
-                                Error Sheet</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File
-                                GSTR1 using Jio GST</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File
-                                GSTR1 using Tax Pro</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email
-                                Sheet
-                            </li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email
-                                With Detail Sheet</li>
-                            <!-- <li class="cp dd-options">Use JIOGST API</li> -->
-                            <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
-                        </ul>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
+              <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'"
+                  (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download
+                Sheet
+              </li>
+              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'"
+                  (click)="onDownloadSheetGSTR('gstr1-error-export');">Download
+                Error Sheet
+              </li>
+              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'"
+                  (click)="onDownloadSheetGSTR('gstr2-error-export');">Download
+                Error Sheet
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'"
+                  (click)="fileJioGstReturn('JIO_GST');">File
+                GSTR1 using Jio GST
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'"
+                  (click)="fileJioGstReturn('TAX_PRO');">File
+                GSTR1 using Tax Pro
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email
+                Sheet
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email
+                With Detail Sheet
+              </li>
+              <!-- <li class="cp dd-options">Use JIOGST API</li> -->
+              <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
+            </ul>
+          </div>
+          <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading...</small>
+        </div>
+      </div>
+      <!-- hide due to unused -->
+      <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
+          class="fa fa-cog" aria-hidden="true"></i> Jio GST
+        </button>
+        <span style="margin: 5px 10px;" class="pull-right">OR</span>
+        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i
+          class="fa fa-cog" aria-hidden="true"></i> Tax Pro
+        </button>
+      </div>
+
+    </div>
+  </form>
+  <!-- Top filter end  -->
+
+  <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
+  <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
+    <div class="row">
+      <h1 class="section_title">
+        <strong>Reconciliations </strong>
+        <small>(To file your GST return, all missing data needs to be filled properly)</small>
+        <button class="btn isActive btn-sm pull-right" style="margin-bottom: 10px"
+                (click)="toggleSettingAsidePane($event, 'RECONCILE');">Pull from GSTN
+        </button>
+      </h1>
+    </div>
+  </div>
+
+  <!-- reconcile -->
+  <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
+    <!-- filter -->
+    <div class="col-xs-12">
+      <div class="row">
+        <tabset #staticTabs id="c-tab">
+          <tab heading="Missing in GSTN (1)">
+
+
+            <div>
+              <table class="table ">
+                <thead style="font-size: 14px;">
+                <tr>
+                  <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
+                  <th>VENDOR DETAILS</th>
+                  <th>ACCOUNT NAME</th>
+                  <th>INVOICE NUMBER</th>
+                  <th>TRANSATION DATE</th>
+                  <th>PLACE OF SUPPLY</th>
+                  <th class="text-right">TAXABLE AMOUNT</th>
+                  <th class="text-right">IGST</th>
+                  <th class="text-right">CGST</th>
+                  <th class="text-right">SGST</th>
+                  <th class="text-right">CESS</th>
+                  <th class="text-right">TOTAL AMOUNT</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="bt-border-1px  tr-td-div">
+                  <td><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></td>
+                  <td>
+                    <div>
+                      <span>06AACCG0527D128 </span>
+                      <span style="font-size: 12PX;color: gray;display: block">(3265654521)</span></div>
+
+                  </td>
+                  <td>
+                    <div>yogesh</div>
+
+                  </td>
+                  <td>
+                    <div>1549141</div>
+
+                  </td>
+                  <td>
+                    <div>31/05/18</div>
+
+
+                  </td>
+                  <td>
+                    <div>
+                      madhya pradesh (23)
                     </div>
-                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading... </small>
-                </div>
+
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 1555555</div>
+
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 1659565</div>
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 0.00</div>
+
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 0.00</div>
+
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 0.00</div>
+
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 85155555</div>
+
+
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
-            <!-- hide due to unused -->
-            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
-                <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
-                        class="fa fa-cog" aria-hidden="true"></i> Jio GST</button>
-                <span style="margin: 5px 10px;" class="pull-right">OR</span>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i
-                        class="fa fa-cog" aria-hidden="true"></i> Tax Pro</button>
+
+
+          </tab>
+          <tab heading="Missing in Giddh (0)">
+            <div>
+              <table class="table ">
+                <thead style="font-size: 14px;">
+                <tr>
+                  <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
+                  <th>VENDOR DETAILS</th>
+                  <th>ACCOUNT NAME</th>
+                  <th>INVOICE NUMBER</th>
+                  <th>TRANSATION DATE</th>
+                  <th>PLACE OF SUPPLY</th>
+                  <th class="text-right">TAXABLE AMOUNT</th>
+                  <th class="text-right">IGST</th>
+                  <th class="text-right">CGST</th>
+                  <th class="text-right">SGST</th>
+                  <th class="text-right">CESS</th>
+                  <th class="text-right">TOTAL AMOUNT</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
             </div>
-
-        </div>
-    </form>
-    <!-- Top filter end  -->
-
-    <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
-    <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
-        <div class="row">
-            <h1 class="section_title">
-                <strong>Reconciliations </strong>
-                <small>(To file your GST return, all missing data needs to be filled properly)</small>
-                <button class="btn isActive btn-sm pull-right">Pull from GSTN</button>
-            </h1>
-        </div>
-    </div>
-
-    <!-- reconcile -->
-    <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
-        <!-- filter -->
-        <div class="col-xs-12">
             <div class="row">
-                <tabset #staticTabs id="c-tab">
-                    <tab heading="Missing in GSTN (1)">
-
-
-                        <div>
-                            <table class="table ">
-                                <thead style="font-size: 14px;">
-                                    <tr>
-                                        <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
-                                        <th>VENDOR DETAILS</th>
-                                        <th>ACCOUNT NAME</th>
-                                        <th>INVOICE NUMBER</th>
-                                        <th>TRANSATION DATE</th>
-                                        <th>PLACE OF SUPPLY</th>
-                                        <th class="text-right">TAXABLE AMOUNT</th>
-                                        <th class="text-right">IGST</th>
-                                        <th class="text-right">CGST</th>
-                                        <th class="text-right">SGST</th>
-                                        <th class="text-right">CESS</th>
-                                        <th class="text-right">TOTAL AMOUNT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="bt-border-1px  tr-td-div">
-                                        <td><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></td>
-                                        <td>
-                                            <div><span>06AACCG0527D128 <span style="font-size: 12PX;color: gray;">(3265654521)</span></span></div>
-
-                                        </td>
-                                        <td>
-                                            <div>yogesh</div>
-
-                                        </td>
-                                        <td>
-                                            <div>1549141</div>
-
-                                        </td>
-                                        <td>
-                                            <div>31/05/18</div>
-
-
-                                        </td>
-                                        <td>
-                                            <div>
-                                                madhya pradesh (23)
-                                            </div>
-
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 1555555</div>
-
-
-
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 1659565</div>
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 0.00</div>
-
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 0.00</div>
-
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 0.00</div>
-
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 85155555</div>
-
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-
-
-                    </tab>
-                    <tab heading="Missing in Giddh (0)">
-                        <div>
-                            <table class="table ">
-                                <thead style="font-size: 14px;">
-                                    <tr>
-                                        <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
-                                        <th>VENDOR DETAILS</th>
-                                        <th>ACCOUNT NAME</th>
-                                        <th>INVOICE NUMBER</th>
-                                        <th>TRANSATION DATE</th>
-                                        <th>PLACE OF SUPPLY</th>
-                                        <th class="text-right">TAXABLE AMOUNT</th>
-                                        <th class="text-right">IGST</th>
-                                        <th class="text-right">CGST</th>
-                                        <th class="text-right">SGST</th>
-                                        <th class="text-right">CESS</th>
-                                        <th class="text-right">TOTAL AMOUNT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <h3 class="text-center">NO DATA</h3>
-                        </div>
-
-
-
-                    </tab>
-                    <tab heading="Partially Matched (0)">
-                        <div>
-                            <table class="table ">
-                                <thead style="font-size: 14px;">
-                                    <tr>
-                                        <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
-                                        <th>VENDOR DETAILS</th>
-                                        <th>ACCOUNT NAME</th>
-                                        <th>INVOICE NUMBER</th>
-                                        <th>TRANSATION DATE</th>
-                                        <th>PLACE OF SUPPLY</th>
-                                        <th class="text-right">TAXABLE AMOUNT</th>
-                                        <th class="text-right">IGST</th>
-                                        <th class="text-right">CGST</th>
-                                        <th class="text-right">SGST</th>
-                                        <th class="text-right">CESS</th>
-                                        <th class="text-right">TOTAL AMOUNT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="bt-border-1px  tr-td-div">
-                                        <td><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></td>
-                                        <td>
-                                            <div><span>06AACCG0527D128 <span style="font-size: 12PX;color: gray;">(3265654521)</span></span></div>
-
-                                        </td>
-                                        <td>
-                                            <div>yogesh</div>
-                                            <div>vishal</div>
-                                        </td>
-                                        <td>
-                                            <div>1549141</div>
-                                            <div>4578564</div>
-                                        </td>
-                                        <td>
-                                            <div>31/05/18</div>
-                                            <div>31/05/18</div>
-
-                                        </td>
-                                        <td>
-                                            <div>
-                                                madhya pradesh (23)
-                                            </div>
-                                            <div>
-                                                madhya pradesh (23)
-                                            </div>
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 1555555</div>
-                                            <div class="text-danger">₹ 1555555</div>
-
-
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 1659565</div>
-                                            <div class="text-danger">₹ 1659565</div>
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 0.00</div>
-                                            <div class="text-danger">₹ 0.00</div>
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 0.00</div>
-                                            <div class="text-danger">₹ 0.00</div>
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 0.00</div>
-                                            <div class="text-danger">₹ 0.00</div>
-
-                                        </td>
-                                        <td class="text-right">
-                                            <div>₹ 85155555</div>
-                                            <div class="text-danger">₹ 2554554</div>
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-
-
-                    </tab>
-                    <tab heading="Matched (0)">
-                        <div>
-                            <table class="table ">
-                                <thead style="font-size: 14px;">
-                                    <tr>
-                                        <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
-                                        <th>VENDOR DETAILS</th>
-                                        <th>ACCOUNT NAME</th>
-                                        <th>INVOICE NUMBER</th>
-                                        <th>TRANSATION DATE</th>
-                                        <th>PLACE OF SUPPLY</th>
-                                        <th class="text-right">TAXABLE AMOUNT</th>
-                                        <th class="text-right">IGST</th>
-                                        <th class="text-right">CGST</th>
-                                        <th class="text-right">SGST</th>
-                                        <th class="text-right">CESS</th>
-                                        <th class="text-right">TOTAL AMOUNT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <h3 class="text-center">NO DATA</h3>
-                        </div>
-
-
-
-                    </tab>
-
-                </tabset>
-
-
-                <!-- search form  -->
+              <h3 class="text-center">NO DATA</h3>
             </div>
-        </div>
-        <!-- filter end  -->
 
-        <!-- table  -->
 
+          </tab>
+          <tab heading="Partially Matched (0)">
+            <div>
+              <table class="table ">
+                <thead style="font-size: 14px;">
+                <tr>
+                  <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
+                  <th>VENDOR DETAILS</th>
+                  <th>ACCOUNT NAME</th>
+                  <th>INVOICE NUMBER</th>
+                  <th>TRANSATION DATE</th>
+                  <th>PLACE OF SUPPLY</th>
+                  <th class="text-right">TAXABLE AMOUNT</th>
+                  <th class="text-right">IGST</th>
+                  <th class="text-right">CGST</th>
+                  <th class="text-right">SGST</th>
+                  <th class="text-right">CESS</th>
+                  <th class="text-right">TOTAL AMOUNT</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="bt-border-1px  tr-td-div">
+                  <td><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></td>
+                  <td>
+                    <div>06AACCG0527D128</div>
+                    <div style="font-size: 12PX;color: gray;">(3265654521)</div>
+                  </td>
+                  <td>
+                    <div>yogesh</div>
+                    <div>vishal</div>
+                  </td>
+                  <td>
+                    <div>1549141</div>
+                    <div>4578564</div>
+                  </td>
+                  <td>
+                    <div>31/05/18</div>
+                    <div>31/05/18</div>
+
+                  </td>
+                  <td>
+                    <div>
+                      madhya pradesh (23)
+                    </div>
+                    <div>
+                      madhya pradesh (23)
+                    </div>
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 1555555</div>
+                    <div class="text-danger">₹ 1555555</div>
+
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 1659565</div>
+                    <div class="text-danger">₹ 1659565</div>
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 0.00</div>
+                    <div class="text-danger">₹ 0.00</div>
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 0.00</div>
+                    <div class="text-danger">₹ 0.00</div>
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 0.00</div>
+                    <div class="text-danger">₹ 0.00</div>
+
+                  </td>
+                  <td class="text-right">
+                    <div>₹ 85155555</div>
+                    <div class="text-danger">₹ 2554554</div>
+
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+          </tab>
+          <tab heading="Matched (0)">
+            <div>
+              <table class="table ">
+                <thead style="font-size: 14px;">
+                <tr>
+                  <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
+                  <th>VENDOR DETAILS</th>
+                  <th>ACCOUNT NAME</th>
+                  <th>INVOICE NUMBER</th>
+                  <th>TRANSATION DATE</th>
+                  <th>PLACE OF SUPPLY</th>
+                  <th class="text-right">TAXABLE AMOUNT</th>
+                  <th class="text-right">IGST</th>
+                  <th class="text-right">CGST</th>
+                  <th class="text-right">SGST</th>
+                  <th class="text-right">CESS</th>
+                  <th class="text-right">TOTAL AMOUNT</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <h3 class="text-center">NO DATA</h3>
+            </div>
+
+
+          </tab>
+
+        </tabset>
+
+
+        <!-- search form  -->
+      </div>
     </div>
-    <!-- reconcile -->
+    <!-- filter end  -->
 
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-    <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+    <!-- table  -->
+
+  </div>
+  <!-- reconcile -->
+
+  <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+  <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState"
+                      [@slideInOut]="accountAsideMenuState"
+                      (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
