@@ -45,6 +45,7 @@ import { SettingsDiscountActions } from './settings/discount/settings.discount.a
 import { CarriedOverSalesActions } from './carried-over-sales.actions';
 import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
+import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -93,7 +94,8 @@ import { AgingReportActions } from './aging-report.actions';
       SettingsDiscountActions,
       CarriedOverSalesActions,
       AgingReportActions,
-      CompanyImportExportActions
+      CompanyImportExportActions,
+      InvoiceReceiptActions
     ])
   ],
   exports: [EffectsModule]

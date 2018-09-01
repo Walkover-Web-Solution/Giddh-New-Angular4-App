@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
@@ -14,7 +14,8 @@ import { SettingsProfileActions } from '../../../../../../actions/settings/profi
 @Component({
   selector: 'gst-template-a',
   templateUrl: './gst-template-a.component.html',
-  styleUrls: ['./gst-template-a.component.css']
+  styleUrls: ['./gst-template-a.component.css'],
+  encapsulation: ViewEncapsulation.Native
 })
 
 export class GstTemplateAComponent implements OnInit, OnDestroy {
