@@ -7,7 +7,7 @@ export interface InvoiceSetting {
   razorPayform?: RazorPayDetailsResponse;
   companyCashFreeSettings?: CashFreeSetting;
   companyEmailSettings?: {
-    sendThroughSendGmail: boolean,
+    sendThroughGmail: boolean,
     sendThroughSendgrid: boolean
   };
 }
@@ -30,7 +30,7 @@ export class InvoiceISetting {
     public enableNarrationOnInvAndVoucher: boolean;
     public sendInvLinkOnSms: boolean;
     public smsContent: string;
-    public sendThroughSendGmail: boolean;
+    public sendThroughGmail: boolean;
 }
 export interface InvoiceWebhooks {
     entity: string;

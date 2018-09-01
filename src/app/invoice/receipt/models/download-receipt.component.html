@@ -1,0 +1,47 @@
+<div id="downloadReceipt">
+  <div id="share-modal" class="" ng-if="ledgerCtrl.toggleShare">
+    <div class="modal-header">
+      <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModelEvent.emit(fileType)"
+            aria-label="Close">×</span>
+      <h3>Download Receipt</h3>
+    </div>
+
+    <div class="modal-body " id="SharePop">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-check">
+            <label class="radio-inline pd0">
+              <input class="radio_theme cp" name="fileType" type="radio"
+                     value="pdf" [(ngModel)]="fileType">Save as PDF
+            </label>
+
+          </div>
+
+        </div>
+        <div class="col-sm-12">
+          <div class="form-check">
+            <label class="radio-inline pd0">
+              <input class="radio_theme cp" name="fileType" type="radio"
+                     value="xls" [(ngModel)]="fileType">Save as Excel
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 30px">
+        <div>
+          <button class="btn btn-success " style="margin-right: 30px;font-size: 16px"
+                  (click)="closeModelEvent.emit(fileType)">save
+          </button>
+          <button class="btn btn-danger" style="font-size: 16px"
+                  (click)="closeModelEvent.emit(fileType)">close
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

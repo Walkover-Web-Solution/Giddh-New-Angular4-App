@@ -7,6 +7,7 @@
 
 <body>
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
+        <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header"><i class="fa fa-pencil"></i></a>
         <header>
             <figure class="col-xs-6">
                 <h1 *ngIf="fieldsAndVisibility.header.companyName?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</h1>
@@ -134,8 +135,8 @@
             </tbody>
         </table>
     </div>
-    <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table"><i class="fa fa-pencil"></i></a>
     <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
+        <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table"><i class="fa fa-pencil"></i></a>
         <article>
             <table class="item" cellpadding="0" cellspacing="0">
                 <thead>
@@ -216,8 +217,9 @@
 
         </article>
     </div>
-    <div id="Template-footer" class="mrT60" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
-        <aside>
+    <div id="Template-footer" class="" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
+        <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer"><i class="fa fa-pencil"></i></a>
+        <aside class="mrT60">
             <table cellpadding="0" cellspacing="0" class="subfooter">
                 <tbody>
                     <tr>
