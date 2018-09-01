@@ -153,13 +153,16 @@
     vertical-align: middle;
 }
 
-#template2 .total-amount {
+#template2 .total-amount h2 {
     font-size: 26px;
-    /* background: url('amt.png'); */
+    background: url('/assets/images/circle-border.svg');
     background-repeat: no-repeat;
     background-position: center;
     text-align: center;
-    background-size: 80%;
+    background-size: auto;
+    padding: 46px;
+    display: inline-block;
+    float: right;
 }
 
 #template2 .note {
@@ -197,12 +200,14 @@
     top: 0px;
 }
 
+
+/* common template css  */
+
 #template2 .disabled-area {
     position: relative;
     float: left;
     width: 100%;
-    /* margin-bottom: 10px; */
-    cursor: pointer;
+    margin-bottom: 10px !important;
 }
 
 #template2 .disabled-area:after {
@@ -225,11 +230,16 @@
     height: 15px;
     z-index: 1;
     background: #fff;
+    width: 20px;
 }
 
 #template2 .edit-template i {
-    color: #000;
-    font: normal normal normal 14px/1 FontAwesome;
+    background: url(/assets/images/edit-ico.svg) no-repeat;
+    width: 15px;
+    position: absolute;
+    right: 1px;
+    background-size: contain;
+    height: 12px;
 }
 
 #template2 .pos-rel {
