@@ -39,10 +39,10 @@
                 </div>
 
                 <div class="btn-group plus-btn">
-                    <button *ngIf="activeTab === 'customer'" class="btn btn-link" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
+                    <button *ngIf="activeTab == 'customer'" class="btn btn-link" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
             Add Customer
           </button>
-                    <button *ngIf="activeTab === 'vendor'" class="btn btn-link " (click)="openAddAndManage('vendor')">+
+                    <button *ngIf="activeTab == 'vendor'" class="btn btn-link " (click)="openAddAndManage('vendor')">+
             Add Vendor</button>
                 </div>
 
