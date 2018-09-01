@@ -59,7 +59,7 @@
                 <button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>
 
 
-                <div *ngIf="activeTab === 'customer'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+                <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
                     <i dropdownToggle class="icon-options pd cp fs20"></i>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                         <li role="menuitem">
@@ -207,10 +207,10 @@
                 <th [style.width.%]="20">Customer Name</th>
                 <th [style.width.%]="14">Total Due</th>
                 <th [style.width.%]="10">Future Due</th>
-                <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth-1}} Days</th>
-                <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth)-1}} Days
+                <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
+                <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days
                 </th>
-                <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth)}}-{{((agingDropDownoptions$| async )?.fourth + (agingDropDownoptions$| async )?.fifth +(agingDropDownoptions$| async )?.sixth)-1}} Days
+                <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days
                 </th>
                 <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
             </tr>
