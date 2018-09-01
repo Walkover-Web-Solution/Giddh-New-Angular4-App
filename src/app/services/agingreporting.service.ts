@@ -46,7 +46,7 @@ export class AgingreportingService implements OnInit {
 
   public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    debugger;
+    // debugger;
     if (this.companyUniqueName) {
       return this._http.post(
         this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
