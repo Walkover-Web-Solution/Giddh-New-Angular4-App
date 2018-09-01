@@ -85,12 +85,12 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate.display) {
           this.columnsVisibled++;
         }
-        if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
-          this.columnsVisibled++;
-        }
-        if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
-          this.columnsVisibled++;
-        }
+        // if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
+        //   this.columnsVisibled++;
+        // }
+        // if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
+        //   this.columnsVisibled++;
+        // }
         if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
           this.columnsVisibled++;
         }
