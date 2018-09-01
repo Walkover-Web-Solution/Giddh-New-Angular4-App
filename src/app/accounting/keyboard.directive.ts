@@ -121,13 +121,10 @@ export class OnReturnDirective {
             target = allElements[indx - 5];
           }
         } else if (allElements[indx].classList.contains('byTo')) {
-          if (rowEntryType === 'to') {
-            console.log('Here');
+          if (target.disabled) {
             target = allElements[indx - 2];
-            console.log('target is :', target);
           }
-        } else if (allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
-          console.log('check if disabled');
+        } else if (allElements[indx - 1] && allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
           target = allElements[indx - 2];
         }
 
