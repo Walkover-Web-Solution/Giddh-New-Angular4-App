@@ -50,6 +50,7 @@ import { SettingsDiscountService } from './settings.discount.service';
 import { CarriedOverSalesService } from './carried-over-sales.service';
 import { CompanyImportExportService } from './companyImportExportService';
 import { AgingreportingService } from './agingreporting.service';
+import { GstReconcileService } from './GstReconcile.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -107,7 +108,8 @@ export class ServiceModule {
         SettingsDiscountService,
         CarriedOverSalesService,
         AgingreportingService,
-        CompanyImportExportService
+        CompanyImportExportService,
+        GstReconcileService
       ]
     };
   }
