@@ -21,8 +21,8 @@ import { AgingReportActions } from '../actions/aging-report.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -77,7 +77,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public cashFreeAvailableBalance: number;
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
-  public totalDueOptions: IOption[] = [{ label: 'greater then', value: '0' }, { label: 'less then', value: '1' }, { label: 'equal to', value: '2' }];
+  public totalDueOptions: IOption[] = [{label: 'greater then', value: '0'}, {label: 'less then', value: '1'}, {label: 'equal to', value: '2'}];
   public includeName: boolean = false;
   public totalDueAmount: number = 0;
   public totalDueSelectedOption: string = '0';
@@ -106,6 +106,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private createAccountIsSuccess$: Observable<boolean>;
+
   constructor(
     private store: Store<AppState>,
     private _toasty: ToasterService,
@@ -133,10 +134,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       this.dueAmountReportData$ = Observable.of(data);
     });
   }
+
   public pageChangedDueReport(event: any): void {
     this.dueAmountReportRequest.page = event.page;
     this.go();
   }
+
   public go() {
     let req = {};
     if (this.totalDueSelectedOption === '0') {
@@ -158,13 +161,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         totalDueAmountEqualTo: true
       };
     }
-    req = Object.assign(req, { totalDueAmount: this.totalDueAmount, includeName: this.includeName, names: this.names });
+    req = Object.assign(req, {totalDueAmount: this.totalDueAmount, includeName: this.includeName, names: this.names});
     // totalDueAmount: number;
     // includeName: boolean;
     // name: string[];
     // debugger;
     this.store.dispatch(this._agingReportActions.GetDueReport(req as DueAmountReportRequest, this.dueAmountReportRequest));
   }
+
   public ngOnInit() {
 
     // this.filterDropDownList.placement = 'left';
@@ -174,7 +178,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'contact';
-    this.agingDropDownoptions$.subscribe(p => this.agingDropDownoptions = _.cloneDeep(p));
+    this.agingDropDownoptions$.subscribe(p => {
+      this.agingDropDownoptions = _.cloneDeep(p);
+      this.go();
+    });
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getAccounts('sundrydebtors', null, null, 'true');
@@ -194,29 +201,32 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = Observable.of(accounts);
       }
     });
   }
+
   public ngOnChanges(c: SimpleChanges) {
     //
   }
+
   public resetMe() {
     this.dueAmountReportRequest.page = 0;
   }
+
   public setActiveTab(tabName: 'customer' | 'aging', type: string) {
     this.activeTab = tabName;
     if (tabName !== 'aging') {
       this.getAccounts(type, null, null, 'true');
     } else {
       this.getSundrydebtorsAccounts();
-      this.go();
+      // this.go();
       this.store.dispatch(this._agingReportActions.GetDueRange());
     }
   }
@@ -420,9 +430,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     //   this.showToaster();
     // }
   }
+
   public openAgingDropDown() {
     this.store.dispatch(this._agingReportActions.OpenDueRange());
   }
+
   public loadPaginationComponent(s) {
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
@@ -444,6 +456,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
+
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
@@ -470,10 +483,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   private getSundrydebtorsAccounts(count: number = 200000) {
     this._contactService.GetContacts('sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
-        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({ label: p.name, value: p.uniqueName }));
+        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
       }
     });
   }
+
   private getCashFreeBalance() {
     this._contactService.GetCashFreeBalance().subscribe((res) => {
       if (res.status === 'success') {
