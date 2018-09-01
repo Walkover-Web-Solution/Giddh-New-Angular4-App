@@ -61,7 +61,6 @@ export class AgingreportingService implements OnInit {
           data.queryString = queryRequest;
           return data;
         }).catch((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest));
-
     } else {
       return observable.empty();
     }

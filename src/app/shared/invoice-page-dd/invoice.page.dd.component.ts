@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
@@ -17,15 +17,16 @@ const INV_PAGE = [
       height: auto;
       padding: 5px 15px;
     }
-  .spcl_dropdown {
+
+    .spcl_dropdown {
       border: 0 !important;
       background: transparent !important;
       box-shadow: none !important;
       border-radius: 0 !important;
       font-size: 24px;
-      // color: #393a3d;
+    / / color: #393a3d;
       padding: 0;
-  }
+    }
   `]
 })
 
@@ -33,10 +34,12 @@ export class InvoicePageDDComponent implements OnInit {
 
   public navItems: INameUniqueName[] = INV_PAGE;
   public selectedPage: string = null;
+  @Output('pageChanged') public pageChanged: EventEmitter<string> = new EventEmitter<string>();
 
   public dropDownPages: any[] = [
     {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
-    {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'}
+    {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'},
+    {name: 'Receipt', uniqueName: 'receipt', path: 'receipt'},
   ];
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
@@ -55,8 +58,24 @@ export class InvoicePageDDComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.router.routerState.snapshot.url.includes('recurring')) {
-      this.selectedPage = 'Recurring';
+    if (this.router.routerState.snapshot.url) {
+      let url = this.router.routerState.snapshot.url.split('/')
+      let lastUrl = url[url.length - 1];
+      this.pageChanged.emit(lastUrl);
+      switch (lastUrl) {
+        case 'invoice':
+          this.selectedPage = 'Invoice';
+          break;
+        case 'recurring':
+          this.selectedPage = 'Recurring';
+          break;
+        case 'receipt':
+          this.selectedPage = 'Receipt';
+          break;
+        default:
+          this.selectedPage = 'Invoice';
+          break;
+      }
     }
   }
 
@@ -73,6 +92,7 @@ export class InvoicePageDDComponent implements OnInit {
 
   private changePage(page): void {
     this.selectedPage = page.name;
+    this.pageChanged.emit(page.path);
     this._cdRef.detectChanges();
     this.router.navigate(['/pages', 'invoice', page.path]);
   }
