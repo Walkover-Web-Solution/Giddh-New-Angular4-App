@@ -19,6 +19,7 @@ import { AccountService } from '../../services/account.service';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -135,7 +136,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private toasty: ToasterService,
     private companyActions: CompanyActions,
     private purchaseInvoiceService: PurchaseInvoiceService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private _reconcileActions: GstReconcileActions
   ) {
     this.purchaseInvoiceObject.TaxList = [];
     this.purchaseInvoiceRequestObject.entryUniqueName = [];
@@ -242,6 +244,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public onSelectGstrOption(gstrType) {
     this.selectedGstrType = gstrType;
+
+    if (gstrType === 'RECONCILE') {
+      // this.store.dispatch(this._reconcileActions.GstReconcileInvoicePeriodRequest(''));
+    }
   }
 
   /**
