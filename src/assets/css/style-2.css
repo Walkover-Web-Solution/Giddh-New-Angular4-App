@@ -576,6 +576,13 @@ header .navbar {
 /* header {
     border-bottom: 1px solid rgb(214, 214, 214);
 } */
+.p-t-5 {
+    padding-right: 5px;
+}
+.p-t-10 {
+    padding-left: 10px;
+}
+
 
 .company-name {
     min-width: 380px;
@@ -2001,6 +2008,9 @@ a.btn.btn-xs.btn-link.pull-right {
 .mrl0 {
     margin-left: 0 !important;
 }
+.mr-b-5 {
+    margin-bottom: 5px;
+}
 
 .modal-header {
     position: relative;
@@ -2150,6 +2160,16 @@ input[type=radio]:checked:after {
 
 #inventory-sidebar .input-group {
     padding: 0 15px;
+}
+
+.search-input {
+    margin-top: 25px;
+    position: relative;
+    top: 1px;
+}
+
+.search-input .bdr.ng-star-inserted {
+    border-radius: 3px;
 }
 
 .form-group.mrB,
@@ -4259,7 +4279,7 @@ small {
     line-height: 32px;
     margin: 0;
     position: relative;
-    border-radius: 2px;
+    border-radius: 2px !important;
 }
 
 .square-switch>label {
@@ -4267,7 +4287,7 @@ small {
     transition: all 0.3s ease;
     width: 100%;
     border: 1px solid #cccccc;
-    border-radius: 1px;
+    border-radius: 2px;
     color: #666;
     padding: 0 7px;
 }
@@ -4717,12 +4737,48 @@ table td[class*=col-]:last-child {
     /* max-width: 300px; */
 }
 
+.plus-btn .btn {
+    background: none;
+}
+.header-left .btn {
+    vertical-align: bottom;
+}
+.header-left .form-group {
+    vertical-align: bottom !important;
+}
+
+.icon-options {
+    vertical-align: -webkit-baseline-middle;
+}
+
+
 .max900 {
     max-width: 900px;
 }
 
+.max70 {
+    max-width: 70px;
+}
+
+.radius-2 {
+    border-radius: 3px !important;
+}
+
+.max120 {
+    max-width: 120px;
+}
+.select-option .form-control {
+    width: 100% !important;
+    border-radius: 3px;
+}
+
 .m-r-15 {
     margin-right: 15px;
+}
+
+.go-btn {
+    margin-top: 27px;
+    margin-left: 5px;
 }
 
 .overdue_chart {
