@@ -1,5 +1,5 @@
 <div class="box clearfix mrT2">
-  <form (ngSubmit)="updateProfile(companyProfileObj)" (keydown)="keyDownEventOfForm($event)">
+  <form (ngSubmit)="updateProfile(companyProfileObj)" (change)="keyDownEventOfForm($event)">
     <div class="row">
       <div class="form-group col-xs-3">
         <label>Company Name</label><br>
