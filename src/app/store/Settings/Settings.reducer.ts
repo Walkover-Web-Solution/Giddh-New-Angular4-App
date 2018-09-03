@@ -49,6 +49,16 @@ const discountInitialState: DiscountState = {
   isDiscountUpdateSuccess: false
 };
 
+export interface AmazonState {
+  isSellerSuccess: boolean;
+  isSellerUpdated: boolean;
+}
+
+const AmazonInititalState: AmazonState = {
+  isSellerSuccess: false,
+  isSellerUpdated: false
+};
+
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
@@ -62,6 +72,7 @@ export interface SettingsState {
   triggers: any;
   discount: DiscountState;
   refreshCompany: boolean;
+  amazonState: AmazonState;
 }
 
 export const initialState: SettingsState = {
@@ -76,7 +87,8 @@ export const initialState: SettingsState = {
   parentCompany: null,
   triggers: null,
   discount: discountInitialState,
-  refreshCompany: false
+  refreshCompany: false,
+  amazonState: AmazonInititalState
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -477,10 +489,36 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return state;
     }
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER: {
+      return Object.assign({}, state, {
+        amazonState: {
+          isSellerSuccess: false,
+        }
+      });
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE: {
+      let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (AmazonSellerRes.status === 'success') {
+        newState.amazonState.isSellerSuccess = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER: {
+      return Object.assign({}, state, {
+        amazonState: {
+          isSellerUpdated: false,
+        }
+      });
+    }
+
     case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE: {
       let AmazonSellerRes: BaseResponse<any, any> = action.payload;
       if (AmazonSellerRes.status === 'success') {
-        newState.integration.amazonSeller = AmazonSellerRes.body;
+        // debugger;
+        let seller = state.integration.amazonSeller.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
+        newState.integration.amazonSeller[seller] = _.cloneDeep(AmazonSellerRes.body);
+        newState.amazonState.isSellerUpdated = true;
         return Object.assign({}, state, newState);
       }
       return state;
@@ -488,10 +526,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE: {
       let deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
       if (deleteAmazonSellerRes.status === 'success') {
-        let amazonSeller = _.cloneDeep(newState.integration.amazonSeller);
-        let st = amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
-        amazonSeller.splice(st, 1);
-        newState.integration.amazonSeller = amazonSeller;
+        let st = newState.integration.amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
+        newState.integration.amazonSeller.splice(st, 1);
         return Object.assign({}, state, newState);
       }
       return state;
