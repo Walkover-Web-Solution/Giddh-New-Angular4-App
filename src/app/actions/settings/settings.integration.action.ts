@@ -361,11 +361,10 @@ export class SettingsIntegrationActions {
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE)
     .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
-      debugger;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast(data.body, '');
+        this.toasty.successToast('Seller Updated Successfully', '');
       }
       return {type: 'EmptyAction'};
     });
@@ -645,14 +644,14 @@ export class SettingsIntegrationActions {
     };
   }
 
-  public AddAmazonSellerResponse(models: AmazonSellerClass[]): CustomActions {
+  public AddAmazonSellerResponse(models): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE,
       payload: models
     };
   }
 
-  public UpdateAmazonSeller(request: AmazonSellerClass[]): CustomActions {
+  public UpdateAmazonSeller(request: AmazonSellerClass): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER,
       payload: request
