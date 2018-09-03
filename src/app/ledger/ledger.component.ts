@@ -394,10 +394,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.isTransactionRequestInProcess$.subscribe(s => {
-      if (!s && this.showLoader) {
-        this.showLoader = false;
-      }
+    this.isTransactionRequestInProcess$.subscribe((s: boolean) => {
+      this.showLoader = _.clone(s);
+      // if (!s && this.showLoader) {
+      //   this.showLoader = false;
+      // }
     });
 
     this.lc.transactionData$.subscribe((lt: any) => {
