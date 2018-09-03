@@ -266,7 +266,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass>(e, model));
   }
 
   public DeleteAmazonSeller(sellerId): Observable<BaseResponse<string, string>> {
