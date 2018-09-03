@@ -587,7 +587,7 @@
                     <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile?.amount}} {{closingBalanceBeforeReconcile?.type}}</h3>
                 </div>
             </div>
-            <button [hidden]="closingBalanceBeforeReconcile" class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation</button>
+            <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation</button>
         </div>
     </div>
 </div>
