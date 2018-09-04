@@ -1,10 +1,10 @@
 <div class="box clearfix mrT2">
-  <form (ngSubmit)="updateProfile(companyProfileObj)" (keydown)="keyDownEventOfForm($event)">
+  <form (ngSubmit)="updateProfile(companyProfileObj)">
     <div class="row">
       <div class="form-group col-xs-3">
         <label>Company Name</label><br>
         <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name"
-               name="name"/>
+               name="name" (keydown)="keyDownSubject$.next($event)"/>
       </div>
       <div class="form-group col-xs-3">
         <label>Unique Name</label><br>
@@ -14,14 +14,14 @@
       <div class="form-group col-xs-3">
         <label>Email Address</label><br>
         <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email"
-               name="email"/>
+               name="email" (keydown)="keyDownSubject$.next($event)"/>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-xs-3">
         <label>Contact No.</label>
         <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo"
-               #mobileNumberField name="contactNo"/>
+               #mobileNumberField name="contactNo" (keydown)="keyDownSubject$.next($event)"/>
         <!-- commented temporary due to static countryCode  -->
         <!-- <div class="input-group ">
   <span class="input-group-addon">+{{countryCode}}</span>
@@ -71,7 +71,8 @@
       <div class="form-group col-xs-3">
         <label>Address</label><br>
         <textarea rows="3" type="text" placeholder="Address" class="form-control"
-                  [(ngModel)]="companyProfileObj.address" name="address"></textarea>
+                  [(ngModel)]="companyProfileObj.address" name="address"
+                  (keydown)="keyDownSubject$.next($event)"></textarea>
       </div>
       <div class="col-xs-3">
         <div class="row">
@@ -90,7 +91,7 @@
                          [options]="statesSourceCompany" [ItemHeight]="33" (selected)="selectState($event)"
                          [hidden]="!countryIsIndia"></sh-select>
               <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state"
-                     [hidden]="countryIsIndia" name="state"/>
+                     [hidden]="countryIsIndia" name="state" (keydown)="keyDownSubject$.next($event)"/>
             </div>
           </div>
 
@@ -116,7 +117,7 @@
             <div class="form-group">
               <label>Pincode</label><br>
               <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode"
-                     name="pincode"/>
+                     name="pincode" (keydown)="keyDownSubject$.next($event)"/>
             </div>
           </div>
         </div>
