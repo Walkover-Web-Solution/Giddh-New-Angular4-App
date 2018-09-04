@@ -88,6 +88,7 @@ export class AgingReportComponent implements OnInit{
   }
 
   public ngOnInit() {
+    this.getSundrydebtorsAccounts();
     this.store.dispatch(this._agingReportActions.GetDueRange());
     this.agingDropDownoptions$.subscribe(p => {
       this.agingDropDownoptions = _.cloneDeep(p);
