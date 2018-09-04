@@ -133,7 +133,7 @@
                             /></td>
 
                     </tr>
-                    <tr *ngIf="fieldsAndVisibility.table.date" [hidden]="true">
+                    <tr *ngIf="fieldsAndVisibility.table.date">
                         <td><label><input type="checkbox" name="dt"[(ngModel)]="customTemplate.sections[1].content[1].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/>Date</label></td>
                         <td><input type="text" [maxlength]="10" class="form-control" name="dt1" [(ngModel)]='customTemplate.sections[1].content[1].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[1].content[1].display"
                             /></td>
