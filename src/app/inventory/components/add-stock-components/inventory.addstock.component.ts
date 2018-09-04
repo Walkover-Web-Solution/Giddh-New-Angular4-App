@@ -562,6 +562,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public resetStockForm() {
+    this.needForceClear$ = Observable.of({status: true});
     this.forceClear$ = Observable.of({status: true});
     this.forceClearStock$ = Observable.of({status: true});
     this.forceClearStockUnit$ = Observable.of({ status: true});
