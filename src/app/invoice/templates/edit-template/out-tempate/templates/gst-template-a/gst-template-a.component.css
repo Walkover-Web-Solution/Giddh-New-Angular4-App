@@ -149,7 +149,7 @@ header img {
 
 #default header img {
     max-height: 100%;
-    max-width: 100%;
+    max-width: 180px;
 }
 
 #default header table tr td {
@@ -378,11 +378,16 @@ strong {
     height: 15px;
     z-index: 1;
     background: #fff;
+    width: 20px;
 }
 
 .edit-template i {
-    color: #000;
-    font: normal normal normal 14px/1 FontAwesome;
+    background: url(/assets/images/edit-ico.svg) no-repeat;
+    width: 15px;
+    position: absolute;
+    right: 1px;
+    background-size: contain;
+    height: 12px;
 }
 
 footer p {
