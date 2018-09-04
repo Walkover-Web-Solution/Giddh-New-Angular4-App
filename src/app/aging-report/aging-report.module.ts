@@ -1,19 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { LaddaModule } from 'angular2-ladda';
+import { AgingDropdownComponent } from '../contact/aging-dropdown/aging.dropdown.component';
+import { CommonModule } from '@angular/common';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
-import { ContactComponent } from './contact.component';
-import { ContactRoutingModule } from './contact.routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, ModalModule, PaginationComponent, PaginationModule, TooltipModule } from 'ngx-bootstrap';
-import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
+import { BsDropdownModule, ModalModule, PaginationComponent, PaginationModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { AgingReportComponent } from './aging-report.component';
+import { AgingReportRoutingModule } from './aging-report.routing.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -21,17 +20,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   declarations: [
-    ContactComponent,
-    AsideMenuAccountInContactComponent,
+    AgingDropdownComponent,
+    AgingReportComponent
   ],
-  exports: [
-    AsideMenuAccountInContactComponent
-  ],
+  exports: [],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ContactRoutingModule,
+    AgingReportRoutingModule,
     LaddaModule,
     ShSelectModule,
     TabsModule,
@@ -50,5 +47,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   providers: []
 })
-export class ContactModule {
+export class AgingReportModule {
+
 }
