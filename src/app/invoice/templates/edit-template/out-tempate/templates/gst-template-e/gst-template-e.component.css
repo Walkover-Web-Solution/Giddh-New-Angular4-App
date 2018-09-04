@@ -21,6 +21,7 @@
         
         #template-header {
             padding: 15px 15px 0;
+            width: auto;
         }
         /* NOTE:  comment padding, max-width, border in #royal css for java */
         

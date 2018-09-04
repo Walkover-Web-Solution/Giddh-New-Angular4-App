@@ -44,6 +44,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 
 @Component({
   selector: 'ledger',
@@ -434,7 +435,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
-      if (data[0] && data[1]) {let accountDetails: AccountResponse = data[0];
+      if (data[0] && data[1]) {
+        let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+        if (data[1]) {
+          stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
+        }
+        let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
@@ -446,14 +452,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-            accountDetails.stocks.map(as => {
-              // stock entry
-              accountsArray.push({
-                value: uuid.v4(),
-                label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, {stock: as})
-              });
-            });
+            // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
+              if (stockListFormFlattenAccount) {
+                stockListFormFlattenAccount.stocks.map(as => {
+                  // stock entry
+                  accountsArray.push({
+                    value: uuid.v4(),
+                    label: acc.name + '(' + as.uniqueName + ')',
+                    additional: Object.assign({}, acc, {stock: as})
+                  });
+                });
+              }
           });
         } else {
           // stocks from account itself
