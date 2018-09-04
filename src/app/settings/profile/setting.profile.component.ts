@@ -61,7 +61,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public statesSourceCompany: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
-  private intervalRef;
 
   constructor(
     private router: Router,
@@ -410,33 +409,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public keyDownEventOfForm(event: any) {
-    if (this.intervalRef) {
-      clearTimeout(this.intervalRef);
+    if (event && event.target) {
+      Observable.fromEvent(event.target, 'keydown')
+        .debounceTime(3000)
+        .distinctUntilChanged()
+        .takeUntil(this.destroyed$)
+        .filter((e: any) => {
+          return e.target.name;
+        })
+        .map((e: any) => e.target.value)
+        .subscribe((val: string) => {
+          this.patchProfile({[event.target.name]: val});
+          event.preventDefault();
+        });
+     return true;
     }
-
-    this.intervalRef = setTimeout(() => {
-      this.patchProfile({[event.target.name]: event.target.value});
-    }, 3000);
-
-    // if (event && event.target) {
-    //   Observable.fromEvent(event.target, 'keydown')
-    //     .debounceTime(3000)
-    //     .distinctUntilChanged((x, y) => {
-    //         return x === y;
-    //     })
-    //     .takeUntil(this.destroyed$)
-    //     .filter((e: any) => {
-    //       return e.target.name;
-    //     })
-    //     .map((e: any) => e.target.value)
-    //     .subscribe((val: string) => {
-    //       debugger;
-    //       console.log('the val is...', val);
-    //       this.patchProfile({[event.target.name]: val});
-    //       event.preventDefault();
-    //     });
-    //  return true;
-    // }
   }
 
   public changeEventOfForm(key: string) {
