@@ -16,12 +16,38 @@ const commonConfig = require('./webpack.renderer.js');
 /**
  * Webpack Plugins
  */
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
+const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
+const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+/**
+ * Webpack Constants
+ */
+// const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+// const HOST = process.env.HOST || 'giddh.com';
+// const PORT = process.env.PORT || 80;
+// const AppUrl = 'https://giddh.com/new/';
+// const ApiUrl = 'https://api.giddh.com/';
+// const METADATA = webpackMerge(commonConfig({
+//   env: ENV
+// }).metadata, {
+//     host: HOST,
+//     port: PORT,
+//     ENV: ENV,
+//     HMR: false,
+//     isElectron: false,
+//     errlyticsNeeded: true,
+//     errlyticsKey: ERRLYTICS_KEY_PROD,
+//     AppUrl: AppUrl,
+//     ApiUrl: ApiUrl
+//   });
+
 
 function getUglifyOptions(supportES2015) {
   const uglifyCompressOptions = {
@@ -46,24 +72,27 @@ function getUglifyOptions(supportES2015) {
 module.exports = function (env) {
   const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
-  const AppUrl = 'localhost';
+  const AppUrl = 'https://giddh.com/new/';
+  const ApiUrl = 'https://api.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
-    baseUrl: '',
-    host: process.env.HOST || 'localhost',
+    baseUrl:'',
+    host: process.env.HOST || 'giddh.com',
     port: process.env.PORT || 80,
     ENV: ENV,
     HMR: false,
     isElectron: true,
     errlyticsNeeded: false,
     errlyticsKey: ERRLYTICS_KEY_PROD,
-    AppUrl: AppUrl
+    AppUrl: AppUrl,
+    ApiUrl: ApiUrl,
+    APP_FOLDER:''
+
   });
 
   // set environment suffix so these environments are loaded.
-  METADATA.envFileSuffix = process.env.envFileSuffix;
+  METADATA.envFileSuffix = METADATA.E2E ? 'e2e.prod' : 'prod';
   return webpackMerge(commonConfig({ env: ENV, metadata: METADATA }), {
-    mode: 'production',
-    devtool: 'cheap-source-map',
+
     /**
      * Options affecting the output of the compilation.
      *
@@ -92,7 +121,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '[file].map',
+      // sourceMapFilename: '[file].map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -113,7 +142,10 @@ module.exports = function (env) {
          */
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+          loader: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: 'css-loader'
+          }),
           include: [helpers.root('src', 'styles')]
         },
 
@@ -122,52 +154,48 @@ module.exports = function (env) {
          */
         {
           test: /\.scss$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+          loader: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: 'css-loader!sass-loader'
+          }),
           include: [helpers.root('src', 'styles')]
         },
-        // {
-        //   test: /\.js$/,
-        //   loader: '@angular-devkit/build-optimizer/webpack-loader',
-        //   options: {
-        //     sourceMap: false
-        //   }
-        // }
+        {
+          test: /\.js$/,
+          loader: '@angular-devkit/build-optimizer/webpack-loader',
+          options: {
+            sourceMap: false
+          }
+        }
 
       ]
 
     },
-    optimization: {
-      minimizer: [
-        /**
-         * Plugin: UglifyJsPlugin
-         * Description: Minimize all JavaScript output of chunks.
-         * Loaders are switched into minimizing mode.
-         *
-         * See: https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
-         *
-         * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-         */
-        new UglifyJsPlugin({
-          sourceMap: true,
-          parallel: true,
-          cache: helpers.root('webpack-cache/uglify-cache'),
-          uglifyOptions: getUglifyOptions(supportES2015, true)
-        })
-      ],
-      splitChunks: {
-        chunks: 'all'
-      }
-    },
+
     /**
      * Add additional plugins to the compiler.
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
+      // new SourceMapDevToolPlugin({
+      //   filename: '[file].map[query]',
+      //   moduleFilenameTemplate: '[resource-path]',
+      //   fallbackModuleFilenameTemplate: '[resource-path]?[hash]',
+      //   sourceRoot: 'webpack:///'
+      // }),
 
-      new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css' }),
+      /**
+       * Plugin: ExtractTextPlugin
+       * Description: Extracts imported CSS files into external stylesheet
+       *
+       * See: https://github.com/webpack/extract-text-webpack-plugin
+       */
+      new ExtractTextPlugin('[name].[contenthash].css'),
+
+      new PurifyPlugin(), /* buildOptimizer */
       new HashedModuleIdsPlugin(),
-
+      new ModuleConcatenationPlugin(),
       /**
          * Plugin: DefinePlugin
          * Description: Define free variables.
@@ -177,27 +205,29 @@ module.exports = function (env) {
          *
          * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
          */
-      // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-      // new webpack.DefinePlugin({
-      //   'ENV': JSON.stringify(METADATA.ENV),
-      //   'HMR': JSON.stringify(METADATA.HMR),
-      //   'isElectron': JSON.stringify(true),
-      //   'errlyticsNeeded': JSON.stringify(false),
-      //   'errlyticsKey': ERRLYTICS_KEY_PROD,
-      //   'AppUrl': JSON.stringify(METADATA.AppUrl),
-      //   'process.env': {
-      //     'ENV': JSON.stringify(METADATA.ENV),
-      //     'NODE_ENV': JSON.stringify(METADATA.ENV),
-      //     'HMR': JSON.stringify(METADATA.HMR)
-      //   }
-      // }),
-      // new HtmlWebpackPlugin({
-      //   template: 'src/index.html',
-      //   title: METADATA.title,
-      //   chunksSortMode: 'dependency',
-      //   metadata: METADATA,
-      //   inject: 'body'
-      // }),
+        // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
+        new DefinePlugin({
+          'ENV': JSON.stringify(METADATA.ENV),
+          'HMR': METADATA.HMR,
+          'isElectron': true,
+          'errlyticsNeeded': false,
+          'errlyticsKey': ERRLYTICS_KEY_PROD,
+          'AppUrl': JSON.stringify(METADATA.AppUrl),
+          'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'APP_FOLDER':JSON.stringify(METADATA.APP_FOLDER),
+          'process.env': {
+            'ENV': JSON.stringify(METADATA.ENV),
+            'NODE_ENV': JSON.stringify(METADATA.ENV),
+            'HMR': METADATA.HMR
+          }
+        }),
+      new HtmlWebpackPlugin({
+        template: 'src/index.html',
+        title: METADATA.title,
+        chunksSortMode: 'dependency',
+        metadata: METADATA,
+        inject: 'body'
+      }),
       /**
        * Plugin: UglifyJsPlugin
        * Description: Minimize all JavaScript output of chunks.
@@ -206,27 +236,11 @@ module.exports = function (env) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
        *
        * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-      //  */
+       */
       // new UglifyJsPlugin({
       //   uglifyOptions: getUglifyOptions(supportES2015)
       // })
 
-    ],
-
-    /**
-     * Include polyfills or mocks for various node stuff
-     * Description: Node configuration
-     *
-     * See: https://webpack.github.io/docs/configuration.html#node
-     */
-    // node: {
-    //   global: true,
-    //   crypto: 'empty',
-    //   process: false,
-    //   module: false,
-    //   clearImmediate: false,
-    //   setImmediate: false
-    // }
-
+    ]
   });
 }

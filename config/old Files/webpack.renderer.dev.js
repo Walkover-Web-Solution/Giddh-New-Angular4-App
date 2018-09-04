@@ -1,12 +1,50 @@
 /**
  * @author: @AngularClass
  */
+
 const webpack = require('webpack');
 const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
-const webpackMerge = require('webpack-merge'); // used to merge webpack configs
-const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const webpackMerge = require('webpack-merge');
+const commonConfig = require('./webpack.renderer.js'); // the settings that are common to prod and dev
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+/**
+ * Webpack Plugins
+ */
+// const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
+const EvalSourceMapDevToolPlugin = require('webpack/lib/EvalSourceMapDevToolPlugin');
+
+const ERRLYTICS_KEY_DEV = '';
+
+// /**
+//  * Webpack Constants
+//  */
+// const ENV = process.env.ENV = process.env.NODE_ENV = 'development:renderer';
+// const HOST = process.env.HOST || 'localhost';
+// const PORT = process.env.PORT || 3000;
+// const HMR = helpers.hasProcessFlag('hot');
+// const AppUrl = 'localhost';
+// const ApiUrl = 'http://apidev.giddh.com/';
+// const METADATA = webpackMerge(commonConfig({
+//   env: ENV
+// }).metadata, {
+//   host: HOST,
+//   port: PORT,
+//   ENV: ENV,
+//   HMR: HMR,
+//   isElectron: true,
+//   errlyticsNeeded: false,
+//   errlyticsKey: ERRLYTICS_KEY_DEV,
+//   AppUrl: AppUrl,
+//   ApiUrl: ApiUrl
+// });
+
+
+// const DllBundlesPlugin = require('webpack-dll-bundles-plugin').DllBundlesPlugin;
 
 /**
  * Webpack configuration
@@ -14,26 +52,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+
+  const ENV = process.env.ENV = process.env.NODE_ENV = 'development:renderer';
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 3000;
-  const AppUrl = 'http://localhost:3000/';
+  const AppUrl = 'localhost';
+  const ApiUrl = 'http://apitest.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: HOST,
     port: PORT,
     ENV: ENV,
-    isElectron: false,
     HMR: helpers.hasProcessFlag('hot'),
     PUBLIC: process.env.PUBLIC_DEV || HOST + ':' + PORT,
+    isElectron: true,
+    AOT: true,
+    errlyticsNeeded: false,
+    errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
+    ApiUrl: ApiUrl,
+    APP_FOLDER: ''
   });
-
   return webpackMerge(commonConfig({
     env: ENV,
     metadata: METADATA
   }), {
-    mode: 'development',
-    devtool: 'inline-source-map',
+
     /**
      * Options affecting the output of the compilation.
      *
@@ -98,7 +141,7 @@ module.exports = function (options) {
         {
           test: /\.scss$/,
           use: ['style-loader', 'css-loader', 'sass-loader'],
-          include: [helpers.root('src', 'styles'), helpers.root('src', '../node_modules')]
+          include: [helpers.root('src', 'styles')]
         },
 
       ]
@@ -117,18 +160,25 @@ module.exports = function (options) {
        *
        * NOTE: when adding more properties, make sure you include them in custom-typings.d.ts
        */
-      // new webpack.DefinePlugin({
-      //   'ENV': JSON.stringify(METADATA.ENV),
-      //   'HMR': JSON.stringify(METADATA.HMR),
-      //   'isElectron': JSON.stringify(false),
-      //   'AppUrl': JSON.stringify(METADATA.AppUrl),
-      //   'process.env': {
-      //     'ENV': JSON.stringify(METADATA.ENV),
-      //     'NODE_ENV': JSON.stringify(METADATA.ENV),
-      //     'HMR': JSON.stringify(METADATA.HMR)
-      //   }
-      // }),
-
+      new DefinePlugin({
+        'ENV': JSON.stringify(METADATA.ENV),
+        'HMR': METADATA.HMR,
+        'isElectron': false,
+        'errlyticsNeeded': false,
+        'errlyticsKey': ERRLYTICS_KEY_DEV,
+        'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+        'APP_FOLDER': JSON.stringify(METADATA.APP_FOLDER),
+        'process.env': {
+          'ENV': JSON.stringify(METADATA.ENV),
+          'NODE_ENV': JSON.stringify(METADATA.ENV),
+          'HMR': METADATA.HMR
+        }
+      }),
+      new EvalSourceMapDevToolPlugin({
+        moduleFilenameTemplate: '[resource-path]',
+        sourceRoot: 'webpack:///'
+      }),
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         title: METADATA.title,
@@ -137,16 +187,25 @@ module.exports = function (options) {
         inject: 'body'
       }),
 
+
+      /**
+       * Plugin: NamedModulesPlugin (experimental)
+       * Description: Uses file names as module name.
+       *
+       * See: https://github.com/webpack/webpack/commit/a04ffb928365b19feb75087c63f13cadfc08e1eb
+       */
+      new NamedModulesPlugin(),
+
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
+       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
        */
-      new webpack.LoaderOptionsPlugin({
+      new LoaderOptionsPlugin({
         debug: true,
         options: {}
-      }),
+      })
 
-      // TODO: HMR
     ],
 
     /**
@@ -160,8 +219,6 @@ module.exports = function (options) {
     devServer: {
       port: METADATA.port,
       host: METADATA.host,
-      hot: METADATA.HMR,
-      public: METADATA.PUBLIC,
       historyApiFallback: true,
       watchOptions: {
         // if you're using Docker you may need this
@@ -174,7 +231,7 @@ module.exports = function (options) {
        *
        * See: https://webpack.github.io/docs/webpack-dev-server.html
        */
-      before: function(app) {
+      setup: function (app) {
         // For example, to define custom handlers for some paths:
         // app.get('/some/path', function(req, res) {
         //   res.json({ custom: 'response' });
@@ -188,15 +245,14 @@ module.exports = function (options) {
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
-    node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false,
-      fs: 'empty'
-    }
+    // node: {
+    //     global: true,
+    //     crypto: 'empty',
+    //     process: true,
+    //     module: false,
+    //     clearImmediate: false,
+    //     setImmediate: false
+    // }
 
   });
 }

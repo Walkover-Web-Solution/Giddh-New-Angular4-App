@@ -9,15 +9,30 @@ const helpers = require('./helpers');
  *
  * problem with copy-webpack-plugin
  */
-
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackInlineManifestPlugin = require('webpack-inline-manifest-plugin');
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
-const webpack = require('webpack');
+const ngcWebpack = require('ngc-webpack');
+
+
 const buildUtils = require('./build-utils');
+// /**
+//  * Webpack Constants
+//  */
+// const HMR = helpers.hasProcessFlag('hot');
+// const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot');
+// const METADATA = {
+//   title: 'Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software',
+//   baseUrl: '/',
+//   isDevServer: helpers.isWebpackDevServer(),
+//   HMR: HMR,
+//   isElectron: false
+// };
 
 /**
  * Webpack configuration
@@ -26,10 +41,7 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
-  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {
-    baseUrl: '',
-    isElectron: true
-  });
+  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {});
   const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
   const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
 
@@ -49,19 +61,7 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#entry
      */
     entry: entry,
-    externals: [
-      (function () {
-        var IGNORES = [
-          'electron'
-        ];
-        return function (context, request, callback) {
-          if (IGNORES.indexOf(request) >= 0) {
-            return callback(null, "require('" + request + "')");
-          }
-          return callback();
-        };
-      })()
-    ],
+
     /**
      * Options affecting the resolving of modules.
      *
@@ -112,6 +112,15 @@ module.exports = function (options) {
 
       rules: [
         ...ngcWebpackConfig.loaders,
+        /**
+         * Json loader support for *.json files.
+         *
+         * See: https://github.com/webpack/json-loader
+         */
+        {
+          test: /\.json$/,
+          use: 'json-loader'
+        },
 
         /**
          * To string and css loader support for *.css files (from Angular components)
@@ -166,15 +175,6 @@ module.exports = function (options) {
 
     },
 
-    // optimization: {
-    //   namedModules: true,
-    //   splitChunks: {
-    //     chunks: "all"
-    //   },
-    //   runtimeChunk: true,
-    //   concatenateModules: true
-    // },
-
     /**
      * Add additional plugins to the compiler.
      *
@@ -191,18 +191,13 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-
-      new webpack.DefinePlugin({
+      new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
-        'isElectron': JSON.stringify(true),
-        'AppUrl': JSON.stringify(METADATA.AppUrl),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
-        'process.env.HMR': METADATA.HMR,
-        'process.env.isElectron': JSON.stringify(true),
-        'process.env.AppUrl': JSON.stringify(METADATA.AppUrl),
+        'process.env.HMR': METADATA.HMR
       }),
 
       /**
@@ -213,22 +208,22 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
        * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
        */
-      // new CommonsChunkPlugin({
-      //   name: 'polyfills',
-      //   chunks: ['polyfills']
-      // }),
+      new CommonsChunkPlugin({
+        name: 'polyfills',
+        chunks: ['polyfills']
+      }),
 
 
-      // new CommonsChunkPlugin({
-      //   minChunks: Infinity,
-      //   name: 'inline'
-      // }),
-      // new CommonsChunkPlugin({
-      //   name: 'main',
-      //   async: 'common',
-      //   children: true,
-      //   minChunks: 2
-      // }),
+      new CommonsChunkPlugin({
+        minChunks: Infinity,
+        name: 'inline'
+      }),
+      new CommonsChunkPlugin({
+        name: 'main',
+        async: 'common',
+        children: true,
+        minChunks: 2
+      }),
 
 
       /**
@@ -239,17 +234,11 @@ module.exports = function (options) {
        *
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
-      new CopyWebpackPlugin([{
-            from: 'src/assets',
-            to: 'assets'
-          },
-          {
-            from: 'src/meta'
-          }
-        ],
-        isProd ? {
-          ignore: ['mock-data/**/*']
-        } : undefined
+      new CopyWebpackPlugin([
+        { from: 'src/assets', to: 'assets' },
+        { from: 'src/meta' }
+      ],
+        isProd ? { ignore: ['mock-data/**/*'] } : undefined
       ),
 
       /*
@@ -264,7 +253,7 @@ module.exports = function (options) {
         template: 'src/index.html',
         title: METADATA.title,
         chunksSortMode: function (a, b) {
-          const entryPoints = ["inline","polyfills","sw-register","styles","vendor","main"];
+          const entryPoints = ["inline", "polyfills", "sw-register", "styles", "vendor", "main"];
           return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0]);
         },
         metadata: METADATA,
@@ -278,12 +267,12 @@ module.exports = function (options) {
       }),
 
       /**
-       * Plugin: ScriptExtHtmlWebpackPlugin
-       * Description: Enhances html-webpack-plugin functionality
-       * with different deployment options for your scripts including:
-       *
-       * See: https://github.com/numical/script-ext-html-webpack-plugin
-       */
+      * Plugin: ScriptExtHtmlWebpackPlugin
+      * Description: Enhances html-webpack-plugin functionality
+      * with different deployment options for your scripts including:
+      *
+      * See: https://github.com/numical/script-ext-html-webpack-plugin
+      */
       new ScriptExtHtmlWebpackPlugin({
         sync: /inline|polyfills|vendor/,
         defaultAttribute: 'async',
@@ -316,15 +305,15 @@ module.exports = function (options) {
       new HtmlElementsPlugin({
         headTags: require('./head-config.common')
       }),
-      new AngularCompilerPlugin(ngcWebpackConfig.plugin),
+
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
        * See: https://gist.github.com/sokra/27b24881210b56bbaff7
        */
-      // new webpack.LoaderOptionsPlugin({}),
+      new LoaderOptionsPlugin({}),
 
-      // new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
+      new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
 
       /**
        * Plugin: InlineManifestWebpackPlugin
@@ -332,7 +321,7 @@ module.exports = function (options) {
        *
        * https://github.com/szrenwei/inline-manifest-webpack-plugin
        */
-      new WebpackInlineManifestPlugin(),
+      new InlineManifestWebpackPlugin(),
     ],
 
     /**
@@ -341,14 +330,14 @@ module.exports = function (options) {
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
-    // node: {
-    //   global: true,
-    //   crypto: 'empty',
-    //   process: true,
-    //   module: false,
-    //   clearImmediate: false,
-    //   setImmediate: false
-    // }
-    target: 'electron-renderer'
+    node: {
+      global: true,
+      crypto: 'empty',
+      process: true,
+      module: false,
+      clearImmediate: false,
+      setImmediate: false
+    }
+
   };
-};
+}

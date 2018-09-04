@@ -1,45 +1,27 @@
-
+const commonConfig = require('./webpack.common.js');
 const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const helpers = require('./helpers');
-const buildUtils = require('./build-utils');
+
 /**
  * Webpack Plugins
  */
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const ElectronConnectWebpackPlugin = require('electron-connect-webpack-plugin');
 const SpecifyTsFilesPlugin = require('./specify-ts-files-plugin');
-
-function getUglifyOptions (supportES2015) {
-  const uglifyCompressOptions = {
-    pure_getters: true,
-    passes: 3
-  };
-
-  return {
-    ecma: supportES2015 ? 6 : 5,
-    warnings: false,    // TODO verbose based on option?
-    ie8: false,
-    mangle: true,
-    compress: uglifyCompressOptions,
-    output: {
-      ascii_only: true,
-      comments: false
-    }
-  };
-}
 
 /**
  * Webpack Constants
  */
-const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
 const PROD = helpers.hasNpmFlag('prod');
 const ENV = JSON.stringify(process.env.NODE_ENV = process.env.ENV = PROD ? 'production' : 'development');
 const HOST = JSON.stringify(process.env.HOST || 'localhost');
 const PORT = process.env.PORT || 3000;
 const AppUrl = 'localhost';
+const ApiUrl = 'http://apitest.giddh.com/';
 module.exports = function (options) {
 
   DEV_SERVER = options && options['live'] || false;
@@ -49,7 +31,8 @@ module.exports = function (options) {
     ENV: ENV,
     DEV_SERVER: DEV_SERVER,
     isElectron: true,
-    AppUrl: AppUrl
+    AppUrl: AppUrl,
+    ApiUrl: ApiUrl
   };
 
   const entry = {
@@ -65,13 +48,10 @@ module.exports = function (options) {
     configFileName: customTsConfigFileName
   };
 
-  // devtool: PROD ? 'source-map' : 'cheap-module-source-map',
   return {
     name: "main",
 
-    mode: 'production',
-
-    devtool: PROD ? 'none' : 'cheap-module-source-map',
+    devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
     entry: entry,
 
@@ -92,10 +72,8 @@ module.exports = function (options) {
           loader: 'awesome-typescript-loader?' + JSON.stringify(atlConfig)
         },
         {
-          // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
-          // Removing this will cause deprecation warnings to appear.
-          test: /[\/\\]@angular[\/\\]core[\/\\].+\.js$/,
-          parser: { system: true },
+          test: /\.json$/,
+          loader: 'json-loader'
         }
       ]
     },
@@ -111,17 +89,18 @@ module.exports = function (options) {
       PROD ? new NoEmitOnErrorsPlugin() : null,
       new webpack.DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
-        'HMR': JSON.stringify(METADATA.HMR),
+        'HMR': METADATA.HMR,
         'DEV_SERVER': METADATA.DEV_SERVER,
-        'isElectron': JSON.stringify(METADATA.isElectron),
+        'isElectron': false,
         'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
-          'HMR': JSON.stringify(METADATA.HMR)
+          'HMR': METADATA.HMR
         }
       }),
-      // new CheckerPlugin(),
+      new CheckerPlugin(),
       new webpack.IgnorePlugin(new RegExp("^(spawn-sync|bufferutil|utf-8-validate)$")),
       new SpecifyTsFilesPlugin({
         root: helpers.root('.'),
@@ -132,8 +111,26 @@ module.exports = function (options) {
       }),
 
       PROD ? new UglifyJsPlugin({
-        sourceMap: true,
-        uglifyOptions: getUglifyOptions(supportES2015)
+        beautify: false, //prod
+        output: {
+          comments: false
+        }, //prod
+        mangle: {
+          screw_ie8: true
+        }, //prod
+        compress: {
+          screw_ie8: true,
+          warnings: false,
+          conditionals: true,
+          unused: true,
+          comparisons: true,
+          sequences: true,
+          dead_code: true,
+          evaluate: true,
+          if_return: true,
+          join_vars: true,
+          negate_iife: false // we need this for lazy v8
+        },
       }) : null,
       DEV_SERVER ? new ElectronConnectWebpackPlugin({
         path: helpers.root('dev'),
