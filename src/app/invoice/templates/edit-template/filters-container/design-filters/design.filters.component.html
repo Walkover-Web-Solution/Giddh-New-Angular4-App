@@ -26,8 +26,7 @@
                     <ul class="templateView">
                         <!-- {{ sampleTemplates | json}} -->
                         <ng-container *ngFor="let template of sampleTemplates">
-                            <!-- @nidhi will send type *ngIf="template.type === 'invoice'" -->
-                            <li (click)="onDesignChange('uniqueName', template.uniqueName)">
+                            <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice'">
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
                             </li>
                         </ng-container>

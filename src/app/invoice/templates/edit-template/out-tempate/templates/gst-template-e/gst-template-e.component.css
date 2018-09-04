@@ -21,6 +21,7 @@
         
         #template-header {
             padding: 15px 15px 0;
+            width: auto;
         }
         /* NOTE:  comment padding, max-width, border in #royal css for java */
         
@@ -291,12 +292,12 @@
         table.tax-table.item {
             padding-top: 0px !important;
         }
-
+        
         .disabled-area {
             position: relative;
             float: left;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 10px !important;
         }
         
         .disabled-area:after {
@@ -309,4 +310,28 @@
             pointer-events: none;
             background: rgba(204, 204, 204, 0.5);
             border: 1px dashed #808080;
+        }
+        
+        #Template-table {
+            clear: both;
+        }
+        
+        .edit-template {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 4px;
+            height: 15px;
+            z-index: 1;
+            background: #fff;
+            width: 20px;
+        }
+        
+        .edit-template i {
+            background: url(/assets/images/edit-ico.svg) no-repeat;
+            width: 15px;
+            position: absolute;
+            right: 1px;
+            background-size: contain;
+            height: 12px;
         }

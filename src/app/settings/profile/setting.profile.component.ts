@@ -15,6 +15,7 @@ import { setTimeout } from 'timers';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
+import { debounceTime, map } from 'rxjs/operators';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -419,8 +420,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         .map((e: any) => e.target.value)
         .subscribe((val: string) => {
           this.patchProfile({[event.target.name]: val});
+          event.preventDefault();
         });
-      return true;
+     return true;
     }
   }
 
