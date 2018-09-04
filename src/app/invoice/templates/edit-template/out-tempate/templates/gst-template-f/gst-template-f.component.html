@@ -7,7 +7,7 @@
 <body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
-        <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
+        <a href="javascript:void(0);" class="edit-template" *ngIf="templateUISectionVisibility.header"><i class="fa fa-pencil"></i></a>
         <header>
             <table>
                 <tbody>
@@ -92,6 +92,7 @@
         </table>
     </div>
     <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
+        <a href="javascript:void(0);" class="edit-template" *ngIf="templateUISectionVisibility.table"><i class="fa fa-pencil"></i></a>
         <table class="meta" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
