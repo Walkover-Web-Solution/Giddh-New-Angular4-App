@@ -4,7 +4,7 @@ const fs = require('fs');
 const helpers = require('./helpers');
 
 const DEFAULT_METADATA = {
-  title: 'Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software',
+  title: 'KISS - By Walkover',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
   HMR: helpers.hasProcessFlag('hot'),
@@ -12,12 +12,12 @@ const DEFAULT_METADATA = {
   E2E: !!process.env.BUILD_E2E,
   WATCH: helpers.hasProcessFlag('watch'),
   tsConfigPath: 'tsconfig.webpack.json',
-  isElectron: false,
+
   /**
    * This suffix is added to the environment.ts file, if not set the default environment file is loaded (development)
    * To disable environment files set this to null
    */
-  envFileSuffix: ''
+  envFileSuffix: process.env.envFileSuffix
 };
 
 function supportES2015(tsConfigPath) {
@@ -75,13 +75,8 @@ function ngcWebpackSetup(prod, metadata) {
     metadata = DEFAULT_METADATA;
   }
 
-  const buildOptimizer = parseInt(prod && metadata.AOT);
-  if (buildOptimizer) {
-    console.log('Building AOT Build');
-  }else {
-    console.log('Building NON - AOT Build');
-  }
-  const sourceMap = false; // TODO: apply based on tsconfig value?
+  const buildOptimizer = prod;
+  const sourceMap = true; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
     skipCodeGeneration: !metadata.AOT,
     sourceMap
@@ -108,14 +103,20 @@ function ngcWebpackSetup(prod, metadata) {
     }
   };
 
-  const loaders = [{
+  const loaders = [
+    {
       test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-      use: buildOptimizer ? [buildOptimizerLoader, '@ngtools/webpack'] : ['@ngtools/webpack']
+      use: metadata.AOT && buildOptimizer ? [buildOptimizerLoader, '@ngtools/webpack'] : ['@ngtools/webpack']
     },
-    ...buildOptimizer ? [{
-      test: /\.js$/,
-      use: [buildOptimizerLoader]
-    }] : []
+    {
+      // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
+      // Removing this will cause deprecation warnings to appear.
+      test: /[\/\\]@angular[\/\\]core[\/\\].+\.js$/,
+      parser: { system: true },
+    },
+    ...buildOptimizer
+      ? [{ test: /\.js$/, use: [buildOptimizerLoader] }]
+      : []
   ];
 
   return {

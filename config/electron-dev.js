@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 
 const config = require('./webpack.renderer.dev')({
   HMR: true,
-  AOT: true,
+  AOT: false,
   isElectron: true
 });
 config.entry.hmr = `webpack-hot-middleware/client?path=http://${HOST}:${PORT}/__webpack_hmr`;
@@ -28,7 +28,7 @@ config.plugins.push(
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new WriteFilePlugin({
-    log: true
+    log: false
   })
 );
 
@@ -56,25 +56,23 @@ const server = app.listen(PORT, 'localhost', serverError => {
 
   // Launch Electron after the initial compile is complete
   let started = false;
-  compiler.plugin('done', () => {
+  compiler.hooks.done.tap('test', () => {
     if (started) {
       return;
     }
+    // console.log(JSON.stringify(process.env))
     spawn('npm', ['run', 'start:main:dev'], {
-        shell: true,
-        env: process.env,
-        stdio: 'inherit'
-      })
+      shell: true,
+      env: process.env,
+      stdio: 'inherit'
+    })
       .on('close', code => process.exit(code))
       .on('error', spawnError => console.error(spawnError));
     started = true;
   });
-
-  console.log('Listening at http://localhost:' + PORT);
 });
 
 process.on('SIGTERM', () => {
-  console.log('Stopping dev server');
   wdm.close();
   server.close(() => {
     process.exit(0);
