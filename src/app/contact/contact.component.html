@@ -13,30 +13,6 @@
                 <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
                     <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)" />
                 </div>
-                <div class="form-group mrR1 max250" *ngIf="activeTab === 'aging'" style="width: 100px">
-                    <label class="mr-b-5">Name</label>
-                    <div class="checkbox square-switch">
-                        <input type="checkbox" id="includeName" [(ngModel)]="includeName" (change)="resetMe()" />
-                        <label for="includeName">
-              <span class="p-t-10" *ngIf="includeName">Include</span>
-              <span class="pull-right" *ngIf="!includeName">Exclude</span>
-            </label>
-                    </div>
-                </div>
-
-                <div class="form-group mrR1 max500 search-input" *ngIf="activeTab === 'aging'">
-                    <sh-select placeholder="Search customer" [multiple]='true' name="names" [(ngModel)]="names" [options]="sundryDebtorsAccountsForAgingReport" (change)="resetMe()"></sh-select>
-                </div>
-
-                <div class="form-group mrR1 max120 select-option" *ngIf="activeTab === 'aging'">
-                    <label class="mr-b-5">Total Due</label>
-                    <sh-select placeholder="Link Account" name="totalDue" [(ngModel)]="totalDueSelectedOption" [options]="totalDueOptions" (change)="resetMe()"></sh-select>
-                </div>
-
-                <div class="form-group" *ngIf="activeTab === 'aging'">
-                    <label class="mr-b-5 d-block">Number</label>
-                    <input type="text" placeholder="Number" class="form-control max70" [(ngModel)]="totalDueAmount" (change)="resetMe()" digitsOnlyDirective/>
-                </div>
 
                 <div class="btn-group plus-btn">
                     <button *ngIf="activeTab == 'customer'" class="btn btn-link" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
@@ -46,17 +22,13 @@
             Add Vendor</button>
                 </div>
 
-                <div class="form-group go-btn" *ngIf="activeTab === 'aging'">
-                    <label class="d-block"></label>
-                    <button class="btn btn-success" type="button" (click)="go()">Go</button>
-                </div>
-
             </div>
             <div class="pull-right dis">
                 <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
                     <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
                 </div>
-                <button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>
+              <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
+                <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']" >Aging Report </button>
 
 
                 <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
@@ -93,16 +65,6 @@
                         </li>
                     </ul>
                 </div>
-
-                <div class="mrL1 mrT2" *ngIf="activeTab === 'aging'">
-                    <div (click)="openAgingDropDown()">
-                        <label class="pd1">Total due Today </label>
-                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                    </div>
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
-                </div>
-
-
             </div>
         </div>
     </div>
@@ -201,52 +163,6 @@
     <ng-container>
 
     </ng-container>
-    <table class="table basic table-bordered" *ngIf="activeTab == 'aging'">
-        <thead>
-            <tr>
-                <th [style.width.%]="20">Customer Name</th>
-                <th [style.width.%]="14">Total Due</th>
-                <th [style.width.%]="10">Future Due</th>
-                <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
-                <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days
-                </th>
-                <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days
-                </th>
-                <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
-                <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td>{{ entry.name }}</td>
-                    <td> {{ entry.totalDueAmount }}</td>
-                    <td>{{ entry.futureDueAmount }}</td>
-                    <td>{{ entry.currentAndPastDueAmount[0].dueAmount }}</td>
-                    <td>{{ entry.currentAndPastDueAmount[1].dueAmount }}</td>
-                    <td>{{ entry.currentAndPastDueAmount[2].dueAmount }}</td>
-                    <td>{{ entry.currentAndPastDueAmount[3].dueAmount }}</td>
-                </tr>
-            </ng-container>
-
-            <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
-                <tr>
-                    <td colspan="7" class="text-center empty_table">
-                        <h1>No Record Found !!</h1>
-                    </td>
-                </tr>
-            </ng-container>
-        </tbody>
-
-        <tfoot *ngIf="(dueAmountReportData$ | async)?.results?.length">
-            <tr>
-                <td colspan="100%">
-                    <div class="alC" style="text-align: center;">
-                        <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
-                    </div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
 </div>
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
