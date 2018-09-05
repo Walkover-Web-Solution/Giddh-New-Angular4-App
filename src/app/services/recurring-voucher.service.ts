@@ -27,7 +27,7 @@ export class RecurringVoucherService {
         let data: BaseResponse<RecurringInvoice[], string> = res;
         data.queryString = {};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)));
     }
     return this._http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
       .replace('{{companyname}}', companyUniqueName)
@@ -36,7 +36,7 @@ export class RecurringVoucherService {
       let data: BaseResponse<RecurringInvoice[], string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)));
   }
 
   public createRecurringVouchers(model: RecurringInvoice) {
@@ -46,7 +46,7 @@ export class RecurringVoucherService {
       let data: BaseResponse<RecurringInvoice, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)));
   }
 
   public updateRecurringVouchers(model: RecurringInvoice) {
@@ -63,7 +63,7 @@ export class RecurringVoucherService {
         let data: BaseResponse<RecurringInvoice, string> = res;
         data.queryString = {};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)));
   }
 
   public deleteRecurringVouchers(id: string) {
@@ -75,6 +75,6 @@ export class RecurringVoucherService {
       data.queryString = {};
       data.request = id;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 }

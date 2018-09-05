@@ -24,7 +24,7 @@ export class InvoiceReceiptActions {
       }, true, {
         type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   private GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
@@ -37,7 +37,7 @@ export class InvoiceReceiptActions {
           this.showToaster(response.message, 'error');
         }
         return this.GetAllInvoiceReceiptResponse(response);
-      }),);
+      }));
 
   @Effect()
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
@@ -47,7 +47,7 @@ export class InvoiceReceiptActions {
         let success = response.status === 'success';
         this.showToaster(success ? 'Receipt Deleted Successfully' : response.message, success ? 'success' : 'error');
         return this.DeleteInvoiceReceiptResponse(response);
-      }),);
+      }));
 
   constructor(private action$: Actions, private _toasty: ToasterService,
               private store: Store<AppState>, private _receiptService: ReceiptService) {

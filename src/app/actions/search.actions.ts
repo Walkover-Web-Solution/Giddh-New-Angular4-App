@@ -27,15 +27,15 @@ export class SearchActions {
             type: SearchActions.SEARCH_RESPONSE,
             payload: r
           }, true, {
-            type: SearchActions.SEARCH_RESPONSE,
-            payload: r
-          })));
+              type: SearchActions.SEARCH_RESPONSE,
+              payload: r
+            })));
       }));
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _searchService: SearchService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _searchService: SearchService) {
   }
 
   public GetStocksReport(request: SearchRequest): CustomActions {
@@ -51,7 +51,7 @@ export class SearchActions {
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

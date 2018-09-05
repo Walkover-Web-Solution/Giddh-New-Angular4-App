@@ -18,7 +18,7 @@ export class CreateHttpService {
   public Generate(data: any): Observable<BaseResponse<any, any>> {
     return this._http.post(this.config.apiUrl + 'invoices', data).pipe(map((res) => {
       return res;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   // public MapEledgerTransaction(model: EledgerMapRequest, accountUniqueName: string, transactionId: string): Observable<BaseResponse<string, EledgerMapRequest>> {

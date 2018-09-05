@@ -30,7 +30,7 @@ export class SettingsDiscountService {
     return this._http.get(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<IDiscountList, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList, string>(e, '')));
   }
 
   /**
@@ -45,7 +45,7 @@ export class SettingsDiscountService {
       let data: BaseResponse<AccountResponse, CreateDiscountRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model)));
   }
 
   /**
@@ -61,7 +61,7 @@ export class SettingsDiscountService {
       data.request = model;
       data.queryString = uniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model)));
   }
 
   /**
@@ -74,6 +74,6 @@ export class SettingsDiscountService {
       let data: BaseResponse<any, any> = res;
       data.request = uniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, uniqueName)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, uniqueName)));
   }
 }

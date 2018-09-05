@@ -29,7 +29,7 @@ export class CompanyImportExportService {
         let data: BaseResponse<any, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
   }
 
   public ExportLedgersRequest(from: string, to: string): Observable<BaseResponse<any, string>> {
@@ -45,7 +45,7 @@ export class CompanyImportExportService {
         let data: BaseResponse<any, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
   }
 
   public ImportRequest(file: File): Observable<BaseResponse<string, string>> {
@@ -66,7 +66,7 @@ export class CompanyImportExportService {
         let data: BaseResponse<string, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
   public ImportLedgersRequest(file: File): Observable<BaseResponse<string, string>> {
@@ -86,6 +86,6 @@ export class CompanyImportExportService {
         let data: BaseResponse<string, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 }

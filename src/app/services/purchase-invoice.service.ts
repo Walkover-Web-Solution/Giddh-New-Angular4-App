@@ -119,7 +119,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<IInvoicePurchaseResponse, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e)));
   }
 
   /*
@@ -134,7 +134,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<ITaxResponse[], string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ITaxResponse[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ITaxResponse[], string>(e)));
   }
 
   /*
@@ -153,7 +153,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<IInvoicePurchaseItem, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IInvoicePurchaseItem, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IInvoicePurchaseItem, string>(e)));
   }
 
   /*
@@ -168,7 +168,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /*
@@ -183,7 +183,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /*
@@ -198,7 +198,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Observable<BaseResponse<any, string>> {
@@ -212,7 +212,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public UpdatePurchaseEntry(model): Observable<BaseResponse<any, string>> {
@@ -230,7 +230,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public UpdateInvoice(model): Observable<BaseResponse<any, string>> {
@@ -247,7 +247,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public SaveJioGst(model: object): Observable<BaseResponse<any, string>> {
@@ -257,7 +257,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public SaveTaxPro(model: any): Observable<BaseResponse<any, string>> {
@@ -267,7 +267,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public SaveTaxProWithOTP(model: any): Observable<BaseResponse<any, string>> {
@@ -277,7 +277,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   public FileJioGstReturn(reqObj): Observable<BaseResponse<any, string>> {
@@ -293,7 +293,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
 }

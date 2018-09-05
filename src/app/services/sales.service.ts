@@ -40,7 +40,7 @@ export class SalesService {
         data.request = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -59,6 +59,6 @@ export class SalesService {
         data.request = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
   }
 }

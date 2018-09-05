@@ -65,12 +65,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   constructor(private _fb: FormBuilder,
-              private store: Store<AppState>,
-              private router: Router,
-              private loginAction: LoginActions,
-              private authService: AuthService,
-              @Inject(DOCUMENT) private document: Document,
-              private _toaster: ToasterService
+    private store: Store<AppState>,
+    private router: Router,
+    private loginAction: LoginActions,
+    private authService: AuthService,
+    @Inject(DOCUMENT) private document: Document,
+    private _toaster: ToasterService
   ) {
     this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.countryName, label: c.value});
+      this.countryCodeList.push({ value: c.countryName, label: c.value });
     });
     this.userLoginState$ = this.store.select(p => p.session.userLoginState);
     this.userDetails$ = this.store.select(p => p.session.user);
@@ -156,7 +156,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       uniqueKey: ['', [Validators.required]],
       newPassword: ['', [Validators.required]]
     });
-    this.setCountryCode({value: 'India', label: 'India'});
+    this.setCountryCode({ value: 'India', label: 'India' });
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -389,7 +389,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public forgotPassword(userId) {
-    this.resetPasswordForm.patchValue({uniqueKey: userId});
+    this.resetPasswordForm.patchValue({ uniqueKey: userId });
     this.userUniqueKey = userId;
     this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
   }

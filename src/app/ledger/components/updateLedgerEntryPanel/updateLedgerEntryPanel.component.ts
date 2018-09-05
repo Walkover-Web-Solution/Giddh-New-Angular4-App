@@ -81,7 +81,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).pipe(takeUntil(this.destroyed$));
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).pipe(takeUntil(this.destroyed$));
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).pipe(takeUntil(this.destroyed$));
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$), shareReplay(),);
+    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$), shareReplay());
     this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }

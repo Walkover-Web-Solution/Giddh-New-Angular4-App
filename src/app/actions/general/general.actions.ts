@@ -23,7 +23,7 @@ export class GeneralActions {
       ),
       map(response => {
         return this.getGroupWithAccountsResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetFlattenAccounts$: Observable<Action> = this.action$
@@ -33,13 +33,13 @@ export class GeneralActions {
       ),
       map(response => {
         return this.getFlattenAccountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public getAllState$: Observable<Action> = this.action$
     .ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES).pipe(
       switchMap(() => this._companyService.getAllStates()),
-      map(resp => this.getAllStateResponse(resp)),);
+      map(resp => this.getAllStateResponse(resp)));
 
   constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService,
               private _companyService: CompanyService) {

@@ -28,7 +28,7 @@ export class ImportExcelService {
     return this._http.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}}).pipe(map((res) => {
       let data: BaseResponse<ImportExcelResponseData, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)));
   }
 
   public processImport(entity: string, model: ImportExcelResponseData) {
@@ -40,7 +40,7 @@ export class ImportExcelService {
     return this._http.post(url, model).pipe(map((res) => {
       let data: BaseResponse<ImportExcelResponseData, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)));
   }
 
 }

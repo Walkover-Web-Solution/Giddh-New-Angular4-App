@@ -74,7 +74,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
       map((response) => {
         return this.applyGroupTaxResponse(response);
-      }),);
+      }));
 
   @Effect()
   public ApplyGroupTaxResponse$: Observable<Action> = this.action$
@@ -117,7 +117,7 @@ export class GroupWithAccountsAction {
           this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));
         }
         return this.getGroupWithAccountsResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
@@ -137,7 +137,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload)),
       map((response) => {
         return this.getGroupDetailsResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetGroupDetailsResponse$: Observable<Action> = this.action$
@@ -160,7 +160,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._groupService.CreateGroup(action.payload)),
       map((response) => {
         return this.createGroupResponse(response);
-      }),);
+      }));
 
   @Effect()
   public CreateGroupResponse$: Observable<Action> = this.action$
@@ -185,7 +185,7 @@ export class GroupWithAccountsAction {
       ),
       map((response) => {
         return this.getFlattenGroupsAccountsResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
@@ -210,7 +210,7 @@ export class GroupWithAccountsAction {
       ),
       map((response) => {
         return this.shareGroupResponse(response);
-      }),);
+      }));
 
   @Effect()
   public shareGroupResponse$: Observable<Action> = this.action$
@@ -243,7 +243,7 @@ export class GroupWithAccountsAction {
       ),
       map((response) => {
         return this.unShareGroupResponse(response);
-      }),);
+      }));
 
   @Effect()
   public unShareGroupResponse$: Observable<Action> = this.action$
@@ -265,7 +265,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._groupService.ShareWithGroup(action.payload)),
       map((response) => {
         return this.sharedGroupWithResponse(response);
-      }),);
+      }));
 
   @Effect()
   public sharedGroupResponse$: Observable<Action> = this.action$
@@ -290,7 +290,7 @@ export class GroupWithAccountsAction {
       ),
       map(response => {
         return this.moveGroupResponse(response);
-      }),);
+      }));
 
   @Effect()
   public moveGroupResponse$: Observable<Action> = this.action$
@@ -323,7 +323,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._groupService.GetTaxHierarchy(action.payload)),
       map(response => {
         return this.getTaxHierarchyResponse(response);
-      }),);
+      }));
 
   @Effect()
   public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
@@ -343,7 +343,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName)),
       map(response => {
         return this.updateGroupResponse(response);
-      }),);
+      }));
   @Effect()
   public UpdateGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE).pipe(
@@ -373,7 +373,7 @@ export class GroupWithAccountsAction {
         });
         response.queryString = {groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName};
         return this.deleteGroupResponse(response);
-      }),);
+      }));
 
   @Effect()
   public DeleteGroupResponse$: Observable<Action> = this.action$
@@ -399,7 +399,7 @@ export class GroupWithAccountsAction {
       switchMap((action: CustomActions) => this._groupService.GetGrouptDetails(action.payload)),
       map(response => {
         return this.getGroupUniqueNameResponse(response);
-      }),);
+      }));
   @Effect()
   public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE).pipe(

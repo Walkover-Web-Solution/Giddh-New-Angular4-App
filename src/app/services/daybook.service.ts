@@ -37,7 +37,7 @@ export class DaybookService {
         data.queryString = queryRequest;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)),);
+      catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)));
   }
 
   public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
@@ -61,7 +61,7 @@ export class DaybookService {
         data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)),);
+      catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
   }
 
   public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
@@ -83,6 +83,6 @@ export class DaybookService {
         data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)),);
+      catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
   }
 }

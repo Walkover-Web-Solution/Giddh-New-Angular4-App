@@ -56,7 +56,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>, private _invoiceActions: InvoiceActions
   ) {
-    this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged(),);
+    this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
   }
 
   public ngOnInit() {

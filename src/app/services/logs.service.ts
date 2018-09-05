@@ -34,6 +34,6 @@ export class LogsService {
         data.queryString = {page};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, {page})),);
+      catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, {page})));
   }
 }

@@ -35,7 +35,7 @@ export class LedgerService {
       data.request = accountUniqueName;
       data.queryString = {accountUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IELedgerResponse[], string>(e, {accountUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IELedgerResponse[], string>(e, {accountUniqueName})));
   }
 
   /*
@@ -51,7 +51,7 @@ export class LedgerService {
         data.queryString = unqObj;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model, unqObj)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model, unqObj)));
   }
 
   /**
@@ -75,7 +75,7 @@ export class LedgerService {
       data.request = request;
       data.queryString = {q, page, count, accountUniqueName, from, to, reversePage, sort};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, {q, page, count, accountUniqueName, from, to, reversePage, sort})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, {q, page, count, accountUniqueName, from, to, reversePage, sort})));
   }
 
   /*
@@ -92,7 +92,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, {accountUniqueName})));
   }
 
   /*
@@ -108,7 +108,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName, entryUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<LedgerResponse, LedgerUpdateRequest>(e, model, {accountUniqueName, entryUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<LedgerResponse, LedgerUpdateRequest>(e, model, {accountUniqueName, entryUniqueName})));
   }
 
   /*
@@ -121,7 +121,7 @@ export class LedgerService {
       let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, entryUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueName})));
   }
 
   /*
@@ -134,7 +134,7 @@ export class LedgerService {
       let data: BaseResponse<LedgerResponse, string> = res;
       data.queryString = {accountUniqueName, entryUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<LedgerResponse, string>(e, accountUniqueName, {accountUniqueName, entryUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<LedgerResponse, string>(e, accountUniqueName, {accountUniqueName, entryUniqueName})));
   }
 
   /**
@@ -150,7 +150,7 @@ export class LedgerService {
       let data: BaseResponse<ReconcileResponse[], string> = res;
       data.queryString = {accountUniqueName, from, to, chequeNumber};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ReconcileResponse[], string>(e, '', {accountUniqueName, from, to, chequeNumber})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ReconcileResponse[], string>(e, '', {accountUniqueName, from, to, chequeNumber})));
   }
 
   public DownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
@@ -164,7 +164,7 @@ export class LedgerService {
         data.queryString = {fileName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, {fileName})),);
+      catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, {fileName})));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
@@ -178,7 +178,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, DownloadLedgerRequest>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<string, DownloadLedgerRequest>(e, model, {accountUniqueName})));
   }
 
   public GenerateMagicLink(model: MagicLinkRequest, accountUniqueName: string): Observable<BaseResponse<MagicLinkResponse, MagicLinkRequest>> {
@@ -193,7 +193,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, {accountUniqueName})));
   }
 
   public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<string, ExportLedgerRequest>> {
@@ -209,7 +209,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName, fileType: model.format};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ExportLedgerRequest>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ExportLedgerRequest>(e, model, {accountUniqueName})));
   }
 
   public MailLedger(model: MailLedgerRequest, accountUniqueName: string, from: string = '', to: string = '', format: string = ''): Observable<BaseResponse<string, MailLedgerRequest>> {
@@ -224,7 +224,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName, from, to, format};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, {accountUniqueName})));
   }
 
   public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: number = 1, count: number = 15, q: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
@@ -239,7 +239,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName, from, to, count};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>(e, model, {accountUniqueName})));
   }
 
   public GetReconciliation(model: any, accountUniqueName: string): Observable<BaseResponse<any, any>> {
@@ -252,7 +252,7 @@ export class LedgerService {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})));
   }
 
   public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
@@ -274,7 +274,7 @@ export class LedgerService {
         data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null)),);
+      catchError((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null)));
   }
 
   /*
@@ -288,7 +288,7 @@ export class LedgerService {
       let data: any = res;
       data.queryString = {accountUniqueName, entryUniqueNamesArray};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName, entryUniqueNamesArray})));
   }
 
   public GetCurrencyRate(fromCurrency: string, toCurrency: string): Observable<BaseResponse<any, any>> {
@@ -296,6 +296,6 @@ export class LedgerService {
     return this._http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
       let data: any = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 }

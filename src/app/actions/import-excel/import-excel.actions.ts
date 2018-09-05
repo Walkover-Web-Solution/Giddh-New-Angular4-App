@@ -21,7 +21,7 @@ export class ImportExcelActions {
         return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
       }), map((res) => {
         return this.validateResponse(res, this.uploadFileResponse(res.body), true, this.uploadFileResponse(res.body));
-      }),);
+      }));
   @Effect()
   public processImport$: Observable<Action> = this.action$
     .ofType(IMPORT_EXCEL.PROCESS_IMPORT_REQUEST).pipe(
@@ -29,7 +29,7 @@ export class ImportExcelActions {
         return this._importExcelService.processImport(action.payload.entity, action.payload.data);
       }), map((res) => {
         return this.validateResponse(res, this.processImportResponse(res.body), true);
-      }),);
+      }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {
     //

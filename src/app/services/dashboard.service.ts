@@ -30,7 +30,7 @@ export class DashboardService {
       data.queryString = {fromDate, toDate, interval, refresh};
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<DashboardResponse, string>(e, '', {fromDate, toDate, interval, refresh})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<DashboardResponse, string>(e, '', {fromDate, toDate, interval, refresh})));
   }
 
   public GetGroupHistory(model: GroupHistoryRequest, fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> {
@@ -46,7 +46,7 @@ export class DashboardService {
       toDate,
       interval,
       refresh
-    })),);
+    })));
   }
 
   public GetClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
@@ -57,7 +57,7 @@ export class DashboardService {
       data.queryString = {fromDate, toDate, groupUniqueName, refresh};
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ClosingBalanceResponse, string>(e, '', {fromDate, toDate, groupUniqueName, refresh})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ClosingBalanceResponse, string>(e, '', {fromDate, toDate, groupUniqueName, refresh})));
   }
 
   public GetBankAccounts(): Observable<BaseResponse<BankAccountsResponse[], string>> {
@@ -67,7 +67,7 @@ export class DashboardService {
       let data: BaseResponse<BankAccountsResponse[], string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '')));
   }
 
   public RefreshBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {
@@ -77,7 +77,7 @@ export class DashboardService {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '')));
   }
 
   public ReconnectBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {
@@ -87,7 +87,7 @@ export class DashboardService {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '')));
   }
 
   public GetRationAnalysis(date: string): Observable<BaseResponse<BankAccountsResponse[], string>> {
@@ -97,6 +97,6 @@ export class DashboardService {
       let data: BaseResponse<BankAccountsResponse[], string> = res;
       data.request = date;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '')));
   }
 }

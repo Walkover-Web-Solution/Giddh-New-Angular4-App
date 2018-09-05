@@ -30,7 +30,7 @@ export class SettingsTagService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /**
@@ -43,7 +43,7 @@ export class SettingsTagService {
       let data: BaseResponse<TagRequest, TagRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)));
   }
 
   /**
@@ -60,7 +60,7 @@ export class SettingsTagService {
       let data: BaseResponse<TagRequest, TagRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)));
   }
 
   /**
@@ -73,7 +73,7 @@ export class SettingsTagService {
       let data: BaseResponse<TagRequest, TagRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)));
   }
 
 //   /*

@@ -34,7 +34,7 @@ export class SearchService {
       map((res) => {
         return res;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)));
   }
 
 }

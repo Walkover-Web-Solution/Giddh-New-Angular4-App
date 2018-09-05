@@ -63,7 +63,7 @@ export class GroupService {
       let data: BaseResponse<GroupResponse, GroupCreateRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, GroupCreateRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, GroupCreateRequest>(e, model)));
   }
 
   public UpdateGroup(modele: GroupUpateRequest, groupUniqueName: string): Observable<BaseResponse<GroupResponse, GroupUpateRequest>> {
@@ -74,7 +74,7 @@ export class GroupService {
       data.queryString = {groupUniqueName};
       data.request = modele;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, GroupUpateRequest>(e, modele, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, GroupUpateRequest>(e, modele, {groupUniqueName})));
   }
 
   public ShareGroup(modele: ShareGroupRequest, groupUniqueName: string): Observable<BaseResponse<string, ShareGroupRequest>> {
@@ -86,7 +86,7 @@ export class GroupService {
       data.queryString = {groupUniqueName};
       data.request = modele;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, ShareGroupRequest>(e, modele, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, ShareGroupRequest>(e, modele, {groupUniqueName})));
   }
 
   public GetGrouptDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
@@ -96,7 +96,7 @@ export class GroupService {
       let data: BaseResponse<GroupResponse, string> = res;
       data.queryString = {groupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e)));
   }
 
   // need to check on Effect
@@ -109,7 +109,7 @@ export class GroupService {
       data.request = userEmail;
       data.queryString = {groupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, userEmail, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, userEmail, {groupUniqueName})));
   }
 
   public ShareWithGroup(groupUniqueName: string): Observable<BaseResponse<GroupSharedWithResponse[], string>> {
@@ -120,7 +120,7 @@ export class GroupService {
       data.queryString = {groupUniqueName};
       data.request = groupUniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, {groupUniqueName})));
   }
 
   public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
@@ -131,7 +131,7 @@ export class GroupService {
         let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
         data.request = q;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q)));
     } else {
       return observableEmpty();
     }
@@ -145,7 +145,7 @@ export class GroupService {
       data.request = modele;
       data.queryString = {groupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<MoveGroupResponse, MoveGroupRequest>(e, modele, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<MoveGroupResponse, MoveGroupRequest>(e, modele, {groupUniqueName})));
   }
 
   public GetGroupDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
@@ -156,7 +156,7 @@ export class GroupService {
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, {groupUniqueName})));
   }
 
   public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string, string>> {
@@ -167,7 +167,7 @@ export class GroupService {
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, {groupUniqueName})));
   }
 
   public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
@@ -184,7 +184,7 @@ export class GroupService {
         data.queryString = {q, page, count, showEmptyGroups};
         // data.response.results.forEach(p => p.isOpen = false);
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', {q, page, count, showEmptyGroups})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', {q, page, count, showEmptyGroups})));
     } else {
       return observableEmpty();
     }
@@ -198,7 +198,7 @@ export class GroupService {
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupsTaxHierarchyResponse, string>(e, groupUniqueName, {groupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupsTaxHierarchyResponse, string>(e, groupUniqueName, {groupUniqueName})));
   }
 
   /**
@@ -214,7 +214,7 @@ export class GroupService {
         data.request = groupUniqueName;
         data.queryString = {groupUniqueName};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, {groupUniqueName})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, {groupUniqueName})));
     } else {
       return observableEmpty();
     }

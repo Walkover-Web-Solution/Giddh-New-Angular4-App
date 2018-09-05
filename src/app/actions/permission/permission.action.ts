@@ -25,7 +25,7 @@ export class PermissionActions {
       switchMap((action: CustomActions) => this._permissionService.GetAllPageNames()),
       map(response => {
         return this.GetAllPagesResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetAllPagesResponse$: Observable<Action> = this.action$
@@ -40,7 +40,7 @@ export class PermissionActions {
       switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
       map(response => {
         return this.GetAllPermissionsResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetAllPermissionsResponse$: Observable<Action> = this.action$
@@ -55,7 +55,7 @@ export class PermissionActions {
       switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
       map(response => {
         return this.GetRolesResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetRolesResponse$: Observable<Action> = this.action$
@@ -92,7 +92,7 @@ export class PermissionActions {
       switchMap((action: CustomActions) => this._permissionService.UpdateRole(action.payload)),
       map(response => {
         return this.UpdateRoleResponse(response);
-      }),);
+      }));
 
   @Effect()
   private UpdateRoleResponse$: Observable<Action> = this.action$
@@ -138,7 +138,7 @@ export class PermissionActions {
       switchMap((action: CustomActions) => this._permissionService.DeleteRole(action.payload)),
       map(response => {
         return this.DeleteRoleResponse(response);
-      }),);
+      }));
 
   @Effect()
   private DeleteRoleResponse$: Observable<Action> = this.action$

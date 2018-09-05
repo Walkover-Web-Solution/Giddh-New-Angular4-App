@@ -34,6 +34,6 @@ export class CarriedOverSalesService implements OnInit {
         data.queryString = queryRequest;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e, null, queryRequest)),);
+      catchError((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e, null, queryRequest)));
   }
 }

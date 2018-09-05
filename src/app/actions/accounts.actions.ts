@@ -71,7 +71,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
       map(response => {
         return this.applyAccountTaxResponse(response);
-      }),);
+      }));
 
   @Effect()
   public ApplyAccountTaxResponse$: Observable<Action> = this.action$
@@ -80,7 +80,7 @@ export class AccountsAction {
         let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         this._toasty.successToast(action.payload.body, action.payload.status);
         let accName = null;
@@ -98,7 +98,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.ApplyDiscount(action.payload)),
       map(response => {
         return this.applyAccountDiscountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public ApplyAccountDiscountResponse$: Observable<Action> = this.action$
@@ -107,7 +107,7 @@ export class AccountsAction {
         let data: BaseResponse<string, ApplyDiscountRequest> = action.payload;
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         this._toasty.successToast('Discount Linked Successfully', action.payload.status);
         let accName = null;
@@ -125,7 +125,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.DeleteDiscount(action.payload.discountUniqueName, action.payload.accountUniqueName)),
       map(response => {
         return this.removeAccountDiscountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public RemoveAccountDiscountResponse$: Observable<Action> = this.action$
@@ -134,7 +134,7 @@ export class AccountsAction {
         let data: BaseResponse<string, string> = action.payload;
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         this._toasty.successToast('Discount Removed Successfully', action.payload.status);
         let accName = null;
@@ -152,7 +152,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName)),
       map(response => {
         return this.createAccountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public CreateAccountResponse$: Observable<Action> = this.action$
@@ -175,7 +175,7 @@ export class AccountsAction {
         } else {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect()
@@ -187,7 +187,7 @@ export class AccountsAction {
           this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
         }
         return this.createAccountResponseV2(response);
-      }),);
+      }));
 
   @Effect()
   public CreateAccountResponseV2$: Observable<Action> = this.action$
@@ -200,7 +200,7 @@ export class AccountsAction {
             type: 'EmptyAction'
           };
         } else {
-          this._generalServices.eventHandler.next({name: eventsConst.accountAdded, payload: action.payload});
+          this._generalServices.eventHandler.next({ name: eventsConst.accountAdded, payload: action.payload });
           this._toasty.successToast('Account Created Successfully');
           if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
             this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
@@ -217,7 +217,7 @@ export class AccountsAction {
           // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
         setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect()
@@ -226,7 +226,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
       map(response => {
         return this.getAccountDetailsResponse(response);
-      }),);
+      }));
   @Effect()
   public GetAccountDetailsResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE).pipe(
@@ -249,7 +249,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload)),
       map(response => {
         return this.getAccountUniqueNameResponse(response);
-      }),);
+      }));
   @Effect()
   public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE).pipe(
@@ -266,7 +266,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
       map(response => {
         return this.updateAccountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public UpdateAccountResponse$: Observable<Action> = this.action$
@@ -287,7 +287,7 @@ export class AccountsAction {
             this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
           }
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect()
@@ -299,7 +299,7 @@ export class AccountsAction {
           this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
         }
         return this.updateAccountResponseV2(response);
-      }),);
+      }));
 
   @Effect()
   public UpdateAccountResponseV2$: Observable<Action> = this.action$
@@ -309,15 +309,15 @@ export class AccountsAction {
         if (action.payload.status === 'error') {
           this._toasty.clearAllToaster();
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         } else {
-          this._generalServices.eventHandler.next({name: eventsConst.accountUpdated, payload: resData});
+          this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
           this._toasty.successToast('Account Updated Successfully');
 
           setTimeout(this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm()), 1000);
           this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
   @Effect()
   public getGroupTaxHierarchy$: Observable<Action> = this.action$
@@ -325,7 +325,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.GetTaxHierarchy(action.payload)),
       map(response => {
         return this.getTaxHierarchyResponse(response);
-      }),);
+      }));
 
   @Effect()
   public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
@@ -350,7 +350,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.shareEntityResponse(response);
-      }),);
+      }));
   @Effect()
   public shareEntityResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.SHARE_ENTITY_RESPONSE).pipe(
@@ -383,7 +383,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.UnShareEntityResponse(response);
-      }),);
+      }));
 
   @Effect()
   public unShareEntityResponse$: Observable<Action> = this.action$
@@ -418,7 +418,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.updateEntityPermissionResponse(response);
-      }),);
+      }));
 
   @Effect()
   public updateEntityPermissionResponse$: Observable<Action> = this.action$
@@ -448,7 +448,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.unShareAccountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public unShareAccountResponse$: Observable<Action> = this.action$
@@ -475,7 +475,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload)),
       map(response => {
         return this.sharedAccountWithResponse(response);
-      }),);
+      }));
   @Effect()
   public sharedAccountResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE).pipe(
@@ -500,7 +500,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.moveAccountResponse(response);
-      }),);
+      }));
   @Effect()
   public moveAccountResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE).pipe(
@@ -509,7 +509,7 @@ export class AccountsAction {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
           let data: BaseResponse<string, AccountMoveRequest> = action.payload;
-          this._generalServices.eventHandler.next({name: eventsConst.accountMoved, payload: data});
+          this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
           this._toasty.successToast('Account moved successfully', '');
           this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
         }
@@ -529,7 +529,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.mergeAccountResponse(response);
-      }),);
+      }));
   @Effect()
   public mergeAccountResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE).pipe(
@@ -539,7 +539,7 @@ export class AccountsAction {
         } else {
           this._toasty.successToast(action.payload.body, '');
           let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
-          this._generalServices.eventHandler.next({name: eventsConst.accountMerged, payload: data});
+          this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
           return this.getAccountDetails(data.queryString.accountUniqueName);
         }
         return {
@@ -558,7 +558,7 @@ export class AccountsAction {
       ),
       map(response => {
         return this.unmergeAccountResponse(response);
-      }),);
+      }));
   @Effect()
   public unMergeAccountResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE).pipe(
@@ -581,7 +581,7 @@ export class AccountsAction {
       switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName)),
       map(response => {
         return this.deleteAccountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public DeleteAccountResponse$: Observable<Action> = this.action$
@@ -591,7 +591,7 @@ export class AccountsAction {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
           this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
-          this._generalServices.eventHandler.next({name: eventsConst.accountDeleted, payload: action.payload});
+          this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
           this._toasty.successToast(action.payload.body, '');
         }
         return {
@@ -600,12 +600,12 @@ export class AccountsAction {
       }));
 
   constructor(private action$: Actions,
-              private _accountService: AccountService,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private groupWithAccountsAction: GroupWithAccountsAction,
-              private _generalActions: GeneralActions,
-              private _generalServices: GeneralService) {
+    private _accountService: AccountService,
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private _generalActions: GeneralActions,
+    private _generalServices: GeneralService) {
   }
 
   public createAccount(value: string, account: AccountRequest): CustomActions {
@@ -614,8 +614,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-        account
-      })
+          account
+        })
     };
   }
 
@@ -632,8 +632,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-        account
-      })
+          account
+        })
     };
   }
 
@@ -650,8 +650,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-        account
-      })
+          account
+        })
     };
   }
 
@@ -665,7 +665,7 @@ export class AccountsAction {
   public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): CustomActions {
     return {
       type: AccountsAction.UPDATE_ACCOUNTV2,
-      payload: {account, value}
+      payload: { account, value }
     };
   }
 
@@ -711,8 +711,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-        accountUniqueName
-      })
+          accountUniqueName
+        })
     };
   }
 
@@ -727,7 +727,7 @@ export class AccountsAction {
   public unShareEntity(entryUniqueName: string, entity: string, entityUniqueName: string): CustomActions {
     return {
       type: AccountsAction.UN_SHARE_ENTITY,
-      payload: {entryUniqueName, entity, entityUniqueName}
+      payload: { entryUniqueName, entity, entityUniqueName }
     };
   }
 
@@ -742,7 +742,7 @@ export class AccountsAction {
   public updateEntityPermission(model: ShareRequestForm, newRoleUniqueName: string, entity: string): CustomActions {
     return {
       type: AccountsAction.UPDATE_ENTITY_PERMISSION,
-      payload: {model, newRoleUniqueName, entity}
+      payload: { model, newRoleUniqueName, entity }
     };
   }
 
@@ -759,8 +759,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-        accountUniqueName
-      })
+          accountUniqueName
+        })
     };
   }
 
@@ -777,9 +777,9 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-        accountUniqueName,
-        activeGroupUniqueName
-      })
+          accountUniqueName,
+          activeGroupUniqueName
+        })
     };
   }
 
@@ -855,7 +855,7 @@ export class AccountsAction {
   public removeAccountDiscount(discountUniqueName: string, accountUniqueName: string): CustomActions {
     return {
       type: AccountsAction.DELETE_ACCOUNT_DISCOUNT,
-      payload: {discountUniqueName, accountUniqueName}
+      payload: { discountUniqueName, accountUniqueName }
     };
   }
 
@@ -869,7 +869,7 @@ export class AccountsAction {
   public deleteAccount(accountUniqueName: string, groupUniqueName: string): CustomActions {
     return {
       type: AccountsAction.DELETE_ACCOUNT,
-      payload: {accountUniqueName, groupUniqueName}
+      payload: { accountUniqueName, groupUniqueName }
     };
   }
 
@@ -883,7 +883,7 @@ export class AccountsAction {
   public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): CustomActions {
     return {
       type: AccountsAction.MERGE_ACCOUNT,
-      payload: {accountUniqueName, data}
+      payload: { accountUniqueName, data }
     };
   }
 
@@ -897,7 +897,7 @@ export class AccountsAction {
   public unmergeAccount(accountUniqueName: string, data: AccountUnMergeRequest): CustomActions {
     return {
       type: AccountsAction.UNMERGE_ACCOUNT,
-      payload: {accountUniqueName, data}
+      payload: { accountUniqueName, data }
     };
   }
 

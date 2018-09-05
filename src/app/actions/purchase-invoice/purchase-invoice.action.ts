@@ -28,7 +28,7 @@ export class InvoicePurchaseActions {
       }, true, {
         type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public UpdatePurchaseInvoice$: Observable<Action> = this.action$
@@ -49,7 +49,7 @@ export class InvoicePurchaseActions {
       }, true, {
         type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GeneratePurchaseInvoice$: Observable<Action> = this.action$

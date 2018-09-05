@@ -34,7 +34,7 @@ export class PermissionService {
       let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest[], string>(e)));
   }
 
   /**
@@ -47,7 +47,7 @@ export class PermissionService {
       let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<CreateNewRoleResponse, CreateNewRoleRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<CreateNewRoleResponse, CreateNewRoleRequest>(e, model)));
   }
 
   /**
@@ -60,7 +60,7 @@ export class PermissionService {
       let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>(e, model)));
   }
 
   /**
@@ -74,7 +74,7 @@ export class PermissionService {
       data.request = '';
       data.queryString = {roleUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {roleUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {roleUniqueName})));
   }
 
   /*
@@ -85,7 +85,7 @@ export class PermissionService {
       let data: BaseResponse<IPageStr[], string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e)));
   }
 
   /**
@@ -98,7 +98,7 @@ export class PermissionService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -111,7 +111,7 @@ export class PermissionService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -123,6 +123,6 @@ export class PermissionService {
     return this._http.get(this.config.apiUrl + PERMISSION_API.COMPANY_SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 }

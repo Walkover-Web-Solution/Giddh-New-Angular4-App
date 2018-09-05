@@ -53,9 +53,9 @@ export class ConnectBankModalComponent implements OnChanges {
   public cancelRequest: boolean = false;
 
   constructor(public sanitizer: DomSanitizer,
-              private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
-              private _fb: FormBuilder,
-              private _toaster: ToasterService
+    private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
+    private _fb: FormBuilder,
+    private _toaster: ToasterService
   ) {
     this.dataSource = (text$: Observable<any>): Observable<any> => {
       return text$.pipe(
@@ -75,7 +75,7 @@ export class ConnectBankModalComponent implements OnChanges {
             this.dataSourceBackup = res;
             return data;
           }
-        }),);
+        }));
     };
 
     this.loginForm = this._fb.group({
@@ -187,7 +187,6 @@ export class ConnectBankModalComponent implements OnChanges {
     this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
       if (a && a.status === 'success') {
         let response = _.cloneDeep(a.body.loginForm[0]);
-        debugger;
         this.loginForm.patchValue({
           id: response.id,
           forgotPasswordUrL: response.forgotPasswordUrL,

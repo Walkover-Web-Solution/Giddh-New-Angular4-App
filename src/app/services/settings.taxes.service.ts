@@ -29,7 +29,7 @@ export class SettingsTaxesService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -42,7 +42,7 @@ export class SettingsTaxesService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -55,6 +55,6 @@ export class SettingsTaxesService {
       let data: BaseResponse<any, any> = res;
       data.request = taxUniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, taxUniqueName)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, taxUniqueName)));
   }
 }

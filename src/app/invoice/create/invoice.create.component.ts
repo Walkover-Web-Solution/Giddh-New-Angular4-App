@@ -112,7 +112,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private invoiceService: InvoiceService
   ) {
-    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged(),);
+    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
   }
 
   public ngOnInit() {

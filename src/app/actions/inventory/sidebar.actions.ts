@@ -31,8 +31,8 @@ export class SidebarAction {
             // this.store.dispatch(this.OpenGroup(response.body.uniqueName));
           }
           return {type: 'EmptyAction'};
-        }),);
-      }),);
+        }));
+      }));
 
   // @Effect()
   // public GetInventoryGroupResponse$: Observable<Action> = this.action$
@@ -61,7 +61,7 @@ export class SidebarAction {
           this._toasty.errorToast('Stock Not Found');
           return {type: 'EmptyAction'};
         }
-      }),);
+      }));
 
   @Effect()
   public GetInventoryStockResponse$: Observable<Action> = this.action$
@@ -83,7 +83,7 @@ export class SidebarAction {
       switchMap((action: CustomActions) => this._inventoryService.GetGroupsStock(action.payload)),
       map(response => {
         return this.GetGroupUniqueNameResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
@@ -98,7 +98,7 @@ export class SidebarAction {
       switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload)),
       map(response => {
         return this.GetGroupsWithStocksHierarchyMinResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> = this.action$
@@ -117,7 +117,7 @@ export class SidebarAction {
       switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload)),
       map(response => {
         return this.SearchGroupsWithStocksResponse(response);
-      }),);
+      }));
 
   @Effect()
   public SearchGroupsWithStocksResponse$: Observable<Action> = this.action$

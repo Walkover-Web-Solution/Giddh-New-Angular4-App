@@ -30,7 +30,7 @@ export class SettingsProfileService {
       let data: BaseResponse<SmsKeyClass, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
   }
 
   /**
@@ -43,7 +43,7 @@ export class SettingsProfileService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -56,6 +56,6 @@ export class SettingsProfileService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 }
