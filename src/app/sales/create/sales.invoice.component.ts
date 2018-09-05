@@ -1,6 +1,6 @@
-import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
-import { cloneDeep, forEach } from '../../lodash-optimized';
+import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -35,6 +35,7 @@ import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -750,7 +751,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    */
   public generateGrandTotal(txns: SalesTransactionItemClass[]) {
     return txns.reduce((pv, cv) => {
-        return cv.total ? pv + cv.total : pv;
+      return cv.total ? pv + cv.total : pv;
     }, 0);
   }
 
@@ -1045,11 +1046,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-      txn.total = Number(txn.getTransactionTotal(tax, entry));
-      this.txnChangeOccurred();
-      entry.taxSum = _.sumBy(entry.taxes, function(o) {
-        return o.amount;
-      });
+    txn.total = Number(txn.getTransactionTotal(tax, entry));
+    this.txnChangeOccurred();
+    entry.taxSum = _.sumBy(entry.taxes, function (o) {
+      return o.amount;
+    });
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
@@ -1092,7 +1093,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function(o) {
+    entry.discountSum = _.sumBy(entry.discounts, function (o) {
       return o.amount;
     });
   }
@@ -1216,10 +1217,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    */
   public prepareUnitArr(unitArr) {
     let unitArray = [];
-      _.forEach(unitArr, (item) => {
-        unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
-      });
-      return unitArray;
+    _.forEach(unitArr, (item) => {
+      unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+    });
+    return unitArray;
   }
 
   /**

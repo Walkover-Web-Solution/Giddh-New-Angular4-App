@@ -1,6 +1,6 @@
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
-import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -9,13 +9,11 @@ import { CompanyService } from '../../services/companyService.service';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
-import { Select2OptionData } from '../../theme/select2';
 import { States } from '../../models/api-models/Company';
-import { setTimeout } from 'timers';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
-import { debounceTime, map } from 'rxjs/operators';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -422,7 +420,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           this.patchProfile({[event.target.name]: val});
           event.preventDefault();
         });
-     return true;
+      return true;
     }
   }
 

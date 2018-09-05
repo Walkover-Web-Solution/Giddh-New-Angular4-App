@@ -1,6 +1,7 @@
-import { animate, Component, OnInit, state, style, transition, trigger } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'inventory-inout-header',
