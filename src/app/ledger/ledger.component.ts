@@ -490,6 +490,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
+        // need to clear selected entries when account changes
+        this.entryUniqueNamesForBulkAction = [];
         this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
