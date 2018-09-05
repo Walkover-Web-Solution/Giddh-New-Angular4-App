@@ -29,41 +29,41 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 export const NAVIGATION_ITEM_LIST: IOption[] = [
-  {label: 'Dashboard', value: '/pages/home'},
-  {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
-  {label: 'Sales', value: '/pages/sales'},
-  {label: 'Invoice', value: '/pages/invoice/preview'},
-  {label: 'Invoice > Generate', value: '/pages/invoice/generate'},
-  {label: 'Invoice > Templates', value: '/pages/invoice/templates'},
-  {label: 'Invoice > Settings', value: '/pages/invoice/settings'},
-  {label: 'Daybook', value: '/pages/daybook'},
-  {label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
-  {label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
-  {label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'balance-sheet', tabIndex: 2}},
-  {label: 'Audit Logs', value: '/pages/audit-logs'},
-  {label: 'Taxes', value: '/pages/purchase/invoice'},
-  {label: 'Inventory', value: '/pages/inventory'},
-  {label: 'Manufacturing', value: '/pages/manufacturing/report'},
-  {label: 'Search', value: '/pages/search'},
-  {label: 'Permissions', value: '/pages/permissions/list'},
-  {label: 'Settings', value: '/pages/settings'},
-  {label: 'Settings > Taxes', value: '/pages/settings', additional: {tab: 'taxes', tabIndex: 0}},
-  {label: 'Settings > Integration', value: '/pages/settings', additional: {tab: 'integration', tabIndex: 1}},
-  {label: 'Settings > Linked Accounts', value: '/pages/settings', additional: {tab: 'linked-accounts', tabIndex: 2}},
-  {label: 'Settings > Profile', value: '/pages/settings', additional: {tab: 'profile', tabIndex: 3}},
-  {label: 'Settings > Financial Year', value: '/pages/settings', additional: {tab: 'financial-year', tabIndex: 4}},
-  {label: 'Settings > Permission', value: '/pages/settings', additional: {tab: 'permission', tabIndex: 5}},
-  {label: 'Settings > Branch', value: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
-  {label: 'Settings > Tag', value: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
-  {label: 'Settings > Trigger', value: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
-  {label: 'Contact', value: '/pages/contact'},
-  {label: 'Inventory In/Out', value: '/pages/inventory-in-out'},
-  {label: 'Import', value: '/pages/import'},
-  {label: 'Settings > Group', value: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
-  {label: 'Onboarding', value: '/onboarding'},
-  {label: 'Purchase Invoice ', value: '/pages/purchase/create'},
-  {label: 'Company Import/Export', value: '/pages/company-import-export'},
-  {label: 'New V/S Old Invoices', value: '/pages/carriedoversales'}
+  { label: 'Dashboard', value: '/pages/home' },
+  { label: 'Journal Voucher', value: '/pages/accounting-voucher' },
+  { label: 'Sales', value: '/pages/sales' },
+  { label: 'Invoice', value: '/pages/invoice/preview' },
+  { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
+  { label: 'Invoice > Templates', value: '/pages/invoice/templates' },
+  { label: 'Invoice > Settings', value: '/pages/invoice/settings' },
+  { label: 'Daybook', value: '/pages/daybook' },
+  { label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 } },
+  { label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
+  { label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
+  { label: 'Audit Logs', value: '/pages/audit-logs' },
+  { label: 'Taxes', value: '/pages/purchase/invoice' },
+  { label: 'Inventory', value: '/pages/inventory' },
+  { label: 'Manufacturing', value: '/pages/manufacturing/report' },
+  { label: 'Search', value: '/pages/search' },
+  { label: 'Permissions', value: '/pages/permissions/list' },
+  { label: 'Settings', value: '/pages/settings' },
+  { label: 'Settings > Taxes', value: '/pages/settings', additional: { tab: 'taxes', tabIndex: 0 } },
+  { label: 'Settings > Integration', value: '/pages/settings', additional: { tab: 'integration', tabIndex: 1 } },
+  { label: 'Settings > Linked Accounts', value: '/pages/settings', additional: { tab: 'linked-accounts', tabIndex: 2 } },
+  { label: 'Settings > Profile', value: '/pages/settings', additional: { tab: 'profile', tabIndex: 3 } },
+  { label: 'Settings > Financial Year', value: '/pages/settings', additional: { tab: 'financial-year', tabIndex: 4 } },
+  { label: 'Settings > Permission', value: '/pages/settings', additional: { tab: 'permission', tabIndex: 5 } },
+  { label: 'Settings > Branch', value: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
+  { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
+  { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
+  { label: 'Contact', value: '/pages/contact' },
+  { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
+  { label: 'Import', value: '/pages/import' },
+  { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
+  { label: 'Onboarding', value: '/onboarding' },
+  { label: 'Purchase Invoice ', value: '/pages/purchase/create' },
+  { label: 'Company Import/Export', value: '/pages/company-import-export' },
+  { label: 'New V/S Old Invoices', value: '/pages/carriedoversales' }
 ];
 
 @Component({
@@ -96,8 +96,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    {name: 'ENGLISH', value: 'en'},
-    {name: 'DUTCH', value: 'nl'}
+    { name: 'ENGLISH', value: 'en' },
+    { name: 'DUTCH', value: 'nl' }
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
@@ -149,9 +149,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = {isopen: false};
-  public userMenu: { isopen: boolean } = {isopen: false};
-  public companyMenu: { isopen: boolean } = {isopen: false};
+  public sideMenu: { isopen: boolean } = { isopen: false };
+  public userMenu: { isopen: boolean } = { isopen: false };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -171,7 +171,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userAvatar: string;
   public navigationOptionList: IOption[] = NAVIGATION_ITEM_LIST;
   public selectedNavigation: string = '';
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   private loggedInUserEmail: string;
@@ -182,18 +182,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-              private socialAuthService: AuthService,
-              private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private groupWithAccountsAction: GroupWithAccountsAction,
-              private router: Router,
-              private flyAccountActions: FlyAccountsActions,
-              private componentFactoryResolver: ComponentFactoryResolver,
-              private cdRef: ChangeDetectorRef,
-              private zone: NgZone,
-              private route: ActivatedRoute,
-              private _generalActions: GeneralActions,
-              private authService: AuthenticationService) {
+    private socialAuthService: AuthService,
+    private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private router: Router,
+    private flyAccountActions: FlyAccountsActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private cdRef: ChangeDetectorRef,
+    private zone: NgZone,
+    private route: ActivatedRoute,
+    private _generalActions: GeneralActions,
+    private authService: AuthenticationService) {
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -254,7 +254,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
-    this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$),);
+    this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -298,7 +298,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.filterAccounts(newValue);
       });
 
-    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$),).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
       if (a && a !== '') {
         this.zone.run(() => {
           this.filterAccounts('');
@@ -593,7 +593,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.hideNavigationModal();
     if (ev && ev.value) {
       if (ev.additional && ev.additional.tab) {
-        this.router.navigate([ev.value], {queryParams: {tab: ev.additional.tab, tabIndex: ev.additional.tabIndex}});
+        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
       } else {
         this.router.navigate([ev.value]);
       }
@@ -610,14 +610,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.navigationOptionList.forEach((ele) => {
       ele.isHilighted = false;
     });
-    this.forceClear$ = observableOf({status: false});
+    this.forceClear$ = observableOf({ status: false });
     this.navigationModalVisible = true;
     this.navigationModal.show();
     setTimeout(() => this.navigationShSelect.show(''), 200);
   }
 
   private hideNavigationModal() {
-    this.forceClear$ = observableOf({status: true});
+    this.forceClear$ = observableOf({ status: true });
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();

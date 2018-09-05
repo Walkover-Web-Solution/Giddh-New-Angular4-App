@@ -20,7 +20,7 @@ export class ManufacturingActions {
       switchMap((action: CustomActions) => this._manufacturingService.GetMfReport(action.payload)),
       map(response => {
         return this.GetMfReportResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetMfReportResponse$: Observable<Action> = this.action$
@@ -40,7 +40,7 @@ export class ManufacturingActions {
       switchMap((action: CustomActions) => this._manufacturingService.GetStockWithRate(action.payload)),
       map(response => {
         return this.GetStockWithRateResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetStockWithRateResponse$: Observable<Action> = this.action$
@@ -60,7 +60,7 @@ export class ManufacturingActions {
       switchMap((action: CustomActions) => this._manufacturingService.GetManufacturingItem(action.payload)),
       map(response => {
         return this.GetMfItemDetailsResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetMFItemDetailResponse$: Observable<Action> = this.action$

@@ -47,7 +47,7 @@ export class CompanyActions {
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY).pipe(
       switchMap((action: CustomActions) => this._companyService.CreateCompany(action.payload)),
-      map(response => this.CreateCompanyResponse(response)),);
+      map(response => this.CreateCompanyResponse(response)));
 
   @Effect()
   public createCompanyResponse$: Observable<Action> = this.action$
@@ -100,7 +100,7 @@ export class CompanyActions {
           return {type: 'EmptyAction'};
         }
         return this.RefreshCompaniesResponse(response);
-      }),);
+      }));
 
   @Effect()
   public RefreshCompaniesResponse$: Observable<CustomActions> = this.action$
@@ -154,7 +154,7 @@ export class CompanyActions {
           return {type: 'EmptyAction'};
         }
         return this.GetStateDetailsResponse(response);
-      }),);
+      }));
 
   @Effect()
   public SetStateDetails$: Observable<Action> = this.action$
@@ -166,7 +166,7 @@ export class CompanyActions {
           return {type: 'EmptyAction'};
         }
         return this.SetStateDetailsResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetApplicationDate$: Observable<Action> = this.action$
@@ -178,7 +178,7 @@ export class CompanyActions {
           return {type: 'EmptyAction'};
         }
         return this.SeApplicationDateResponse(response);
-      }),);
+      }));
 
   @Effect()
   public SetApplicationDate$: Observable<Action> = this.action$
@@ -192,7 +192,7 @@ export class CompanyActions {
           this._toasty.successToast('Application date updated successfully.', 'Success');
           return this.SeApplicationDateResponse(response);
         }
-      }),);
+      }));
 
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
@@ -200,7 +200,7 @@ export class CompanyActions {
       switchMap((action: CustomActions) => this._companyService.DeleteCompany(action.payload)),
       map(response => {
         return this.DeleteCompanyResponse(response);
-      }),);
+      }));
 
   @Effect()
   public DeleteCompanyResponse$: Observable<Action> = this.action$
@@ -222,7 +222,7 @@ export class CompanyActions {
       switchMap((action: CustomActions) => this._companyService.getComapnyTaxes()),
       map(response => {
         return this.getTaxResponse(response);
-      }),);
+      }));
 
   @Effect()
   public CompanyTaxResponse$: Observable<Action> = this.action$

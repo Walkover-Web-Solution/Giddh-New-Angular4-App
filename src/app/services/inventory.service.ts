@@ -63,7 +63,7 @@ export class InventoryService {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
   }
 
   /**
@@ -77,7 +77,7 @@ export class InventoryService {
       data.request = model;
       data.queryString = {stockGroupUniquename};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model, {stockGroupUniquename})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model, {stockGroupUniquename})));
   }
 
   /**
@@ -91,7 +91,7 @@ export class InventoryService {
       data.request = stockGroupUniqueName;
       data.queryString = {stockGroupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, stockGroupUniqueName, {stockGroupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, stockGroupUniqueName, {stockGroupUniqueName})));
   }
 
   public GetGroupsStock(stockGroupUniqueName: string): Observable<BaseResponse<StockGroupResponse, string>> {
@@ -102,7 +102,7 @@ export class InventoryService {
       data.request = stockGroupUniqueName;
       data.queryString = {stockGroupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, string>(e, stockGroupUniqueName, {stockGroupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, string>(e, stockGroupUniqueName, {stockGroupUniqueName})));
   }
 
   /**
@@ -116,7 +116,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {q, page, count};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksFlatten, string>(e, '', {q, page, count})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksFlatten, string>(e, '', {q, page, count})));
   }
 
   public GetGroupsWithStocksFlatten(): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
@@ -126,7 +126,7 @@ export class InventoryService {
       let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {})));
   }
 
   /**
@@ -147,7 +147,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})));
   }
 
   /**
@@ -161,7 +161,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})));
   }
 
   /**
@@ -175,7 +175,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})));
   }
 
   /**
@@ -189,7 +189,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {q, page, count};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {q, page, count})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {q, page, count})));
   }
 
   /**
@@ -202,7 +202,7 @@ export class InventoryService {
       let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model)));
   }
 
   /**
@@ -216,7 +216,7 @@ export class InventoryService {
       data.request = model;
       data.queryString = {uName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model, {uName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model, {uName})));
   }
 
   /**
@@ -230,7 +230,7 @@ export class InventoryService {
       data.request = uName;
       data.queryString = {uName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uName, {uName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uName, {uName})));
   }
 
   /**
@@ -244,7 +244,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse[], string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse[], string>(e, '', {})));
   }
 
   /**
@@ -258,7 +258,7 @@ export class InventoryService {
       data.request = model;
       data.queryString = {stockGroupUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, {stockGroupUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, {stockGroupUniqueName})));
   }
 
   /**
@@ -272,7 +272,7 @@ export class InventoryService {
       data.request = model;
       data.queryString = {stockGroupUniqueName, stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, {stockGroupUniqueName, stockUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, {stockGroupUniqueName, stockUniqueName})));
   }
 
   /**
@@ -286,7 +286,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {stockGroupUniqueName, stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {stockGroupUniqueName, stockUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {stockGroupUniqueName, stockUniqueName})));
   }
 
   /**
@@ -300,7 +300,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {stockGroupUniqueName, stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockGroupUniqueName, stockUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockGroupUniqueName, stockUniqueName})));
   }
 
   /**
@@ -314,7 +314,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockUniqueName})));
   }
 
   /**
@@ -349,7 +349,7 @@ export class InventoryService {
         to: stockReportRequest.to,
         count: stockReportRequest.count,
         page: stockReportRequest.page
-      })),);
+      })));
   }
 
   /**
@@ -406,7 +406,7 @@ export class InventoryService {
         to: stockReportRequest.to,
         count: stockReportRequest.count,
         page: stockReportRequest.page
-      })),);
+      })));
   }
 
   /**
@@ -420,7 +420,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockUniqueName})));
   }
 
   public CreateInventoryUser(name: string): Observable<BaseResponse<InventoryUser, string>> {
@@ -433,7 +433,7 @@ export class InventoryService {
         map((res) => {
           let data: BaseResponse<InventoryUser, string> = res;
           return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {name})),);
+        }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {name})));
   }
 
   public GetInventoryUser(uniqueName: string): Observable<BaseResponse<InventoryUser, string>> {
@@ -448,7 +448,7 @@ export class InventoryService {
         data.request = '';
         data.queryString = {uniqueName};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {uniqueName})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {uniqueName})));
   }
 
   public GetAllInventoryUser(q: string = '', refresh = false, page = 0, count = 0): Observable<BaseResponse<IPaginatedResponse<InventoryUser>, string>> {
@@ -465,7 +465,7 @@ export class InventoryService {
         let data: BaseResponse<IPaginatedResponse<InventoryUser>, string> = res;
         data.request = '';
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<IPaginatedResponse<InventoryUser>, string>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<IPaginatedResponse<InventoryUser>, string>(e, '', {})));
   }
 
   public UpdateInventoryUser(name: string): Observable<BaseResponse<InventoryUser, string>> {
@@ -478,7 +478,7 @@ export class InventoryService {
         let data: BaseResponse<InventoryUser, string> = res;
         data.request = '';
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {})));
   }
 
   public DeleteInventoryUser(uniqueName: string): Observable<BaseResponse<string, string>> {
@@ -492,7 +492,7 @@ export class InventoryService {
         let data: BaseResponse<string, string> = res;
         data.request = '';
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {})));
   }
 
   public CreateInventoryEntry(entry: InventoryEntry, reciever?: InventoryUser): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
@@ -506,7 +506,7 @@ export class InventoryService {
         map((res) => {
           let data: BaseResponse<InventoryEntry, InventoryEntry> = res;
           return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '')),);
+        }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '')));
   }
 
   public GetInventoryEntry(inventoryUserUniqueName: string, uniqueName: string): Observable<BaseResponse<InventoryEntry, string>> {
@@ -520,7 +520,7 @@ export class InventoryService {
       ).pipe(map((res) => {
         let data: BaseResponse<InventoryEntry, string> = res;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, string>(e, '')),);
+      }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, string>(e, '')));
   }
 
   public UpdateInventoryEntry(entry: InventoryEntry, inventoryUserUniqueName: string, inventoryEntryUniqueName: string): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
@@ -535,7 +535,7 @@ export class InventoryService {
       ).pipe(map((res) => {
         let data: BaseResponse<InventoryEntry, InventoryEntry> = res;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '', {})));
   }
 
   public DeleteInventoryEntry(inventoryUserUniqueName: string, uniqueName: string): Observable<BaseResponse<string, string>> {
@@ -550,7 +550,7 @@ export class InventoryService {
         let data: BaseResponse<string, string> = res;
         data.request = '';
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {})));
   }
 
   public GetInventoryReport({stockUniqueName, from = '', to = '', page = 1, count = 10, reportFilters}: {
@@ -597,7 +597,7 @@ export class InventoryService {
         let data: BaseResponse<InventoryReport, string> = res;
         data.request = '';
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {})));
   }
 
   // region branch
@@ -608,7 +608,7 @@ export class InventoryService {
           let data: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest> = res;
           data.request = modal;
           return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>(e, modal, '')),);
+        }), catchError((e) => this.errorHandler.HandleCatch<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>(e, modal, '')));
   }
 
   //  endregion
@@ -623,7 +623,7 @@ export class InventoryService {
         let data: BaseResponse<LinkedStocksResponse, string> = res;
         data.request = '';
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<LinkedStocksResponse, string>(e, '', {})),);
+      }), catchError((e) => this.errorHandler.HandleCatch<LinkedStocksResponse, string>(e, '', {})));
   }
 
   // endregion
@@ -639,7 +639,7 @@ export class InventoryService {
       data.request = '';
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse[], string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse[], string>(e, '', {})));
   }
 
   /**
@@ -661,6 +661,6 @@ export class InventoryService {
       data.request = '';
       data.queryString = requestObj;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
 }

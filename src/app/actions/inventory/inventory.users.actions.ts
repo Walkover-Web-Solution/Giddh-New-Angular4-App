@@ -20,7 +20,7 @@ export class InventoryUsersActions {
   public addNewUser$: Observable<Action> = this.action$
     .ofType(INVENTORY_USER_ACTIONS.CREATE_USER).pipe(
       switchMap((action: CustomActions) => this._inventoryService.CreateInventoryUser(action.payload)),
-      map(response => this.addNewUserResponse(response)),);
+      map(response => this.addNewUserResponse(response)));
 
   @Effect()
   public addNewUserResponse$: Observable<Action> = this.action$
@@ -40,7 +40,7 @@ export class InventoryUsersActions {
   public updateUser$: Observable<Action> = this.action$
     .ofType(INVENTORY_USER_ACTIONS.UPDATE_USER).pipe(
       switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryUser(action.payload)),
-      map(response => this.updateUserResponse(response)),);
+      map(response => this.updateUserResponse(response)));
 
   @Effect()
   public updateUserResponse$: Observable<Action> = this.action$
@@ -60,7 +60,7 @@ export class InventoryUsersActions {
   public deleteUser$: Observable<Action> = this.action$
     .ofType(INVENTORY_USER_ACTIONS.DELETE_USER).pipe(
       switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryUser(action.payload)),
-      map(response => this.deleteUserResponse(response)),);
+      map(response => this.deleteUserResponse(response)));
 
   @Effect()
   public deleteUserResponse$: Observable<Action> = this.action$
@@ -80,7 +80,7 @@ export class InventoryUsersActions {
   public getUser$: Observable<Action> = this.action$
     .ofType(INVENTORY_USER_ACTIONS.GET_USER).pipe(
       switchMap((action: CustomActions) => this._inventoryService.GetInventoryUser(action.payload)),
-      map(response => this.getUserResponse(response)),);
+      map(response => this.getUserResponse(response)));
 
   @Effect()
   public getUserResponse$: Observable<Action> = this.action$
@@ -108,7 +108,7 @@ export class InventoryUsersActions {
           return this.getAllUsersResponse(data);
         }
         return {type: 'EmptyAction'};
-      }),);
+      }));
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {

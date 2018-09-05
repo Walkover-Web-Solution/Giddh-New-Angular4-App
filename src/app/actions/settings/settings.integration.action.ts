@@ -25,7 +25,7 @@ export class SettingsIntegrationActions {
       }, false, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GetEmailKey$: Observable<Action> = this.action$
@@ -37,7 +37,7 @@ export class SettingsIntegrationActions {
       }, false, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public SaveSMSKey$: Observable<Action> = this.action$
@@ -49,7 +49,7 @@ export class SettingsIntegrationActions {
       }, true, {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public SaveEmailKey$: Observable<Action> = this.action$
@@ -61,7 +61,7 @@ export class SettingsIntegrationActions {
       }, true, {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
@@ -73,7 +73,7 @@ export class SettingsIntegrationActions {
       }, false, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public SaveRazorPayDetails$: Observable<Action> = this.action$
@@ -85,7 +85,7 @@ export class SettingsIntegrationActions {
       }, true, {
         type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public DeleteRazorPayDetails$: Observable<Action> = this.action$
@@ -97,7 +97,7 @@ export class SettingsIntegrationActions {
       }, true, {
         type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public UpdateRazorPayDetails$: Observable<Action> = this.action$
@@ -109,13 +109,13 @@ export class SettingsIntegrationActions {
       }, true, {
         type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public SaveCashfreeDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.SaveCashFreeDetail(action.payload)),
-      map(response => this.SaveCashfreeDetailsResponse(response)),);
+      map(response => this.SaveCashfreeDetailsResponse(response)));
 
   @Effect()
   public SaveCashfreeDetailsResponse$: Observable<Action> = this.action$
@@ -135,7 +135,7 @@ export class SettingsIntegrationActions {
   public DeleteCashfreeDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteCashFreeDetail()),
-      map(response => this.DeleteCashfreeDetailsResponse(response)),);
+      map(response => this.DeleteCashfreeDetailsResponse(response)));
 
   @Effect()
   public DeleteCashfreeDetailsResponse$: Observable<Action> = this.action$
@@ -154,7 +154,7 @@ export class SettingsIntegrationActions {
   public AddAutoCollectUser$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.AddAutoCollectUser(action.payload)),
-      map(response => this.AddAutoCollectUserResponse(response)),);
+      map(response => this.AddAutoCollectUserResponse(response)));
 
   @Effect()
   public AddAutoCollectUserResponse$: Observable<Action> = this.action$
@@ -174,7 +174,7 @@ export class SettingsIntegrationActions {
   public DeleteAutoCollectUser$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAutoCollectUser()),
-      map(response => this.DeleteAutoCollectUserResponse(response)),);
+      map(response => this.DeleteAutoCollectUserResponse(response)));
 
   @Effect()
   public DeleteAutoCollectUserResponse$: Observable<Action> = this.action$
@@ -194,7 +194,7 @@ export class SettingsIntegrationActions {
   public GetCashfreeDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetCashFreeDetail()),
-      map(response => this.GetCashfreeDetailsResponse(response)),);
+      map(response => this.GetCashfreeDetailsResponse(response)));
 
   @Effect()
   public GetCashfreeDetailsResponse$: Observable<Action> = this.action$
@@ -208,7 +208,7 @@ export class SettingsIntegrationActions {
   public GetAutoCollectDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetAutoCollectUser()),
-      map(response => this.GetAutoCollectDetailsResponse(response)),);
+      map(response => this.GetAutoCollectDetailsResponse(response)));
 
   @Effect()
   public GetAutoCollectDetailsResponse$: Observable<Action> = this.action$
@@ -222,7 +222,7 @@ export class SettingsIntegrationActions {
   public UpdateCashfreeDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateCashFreeDetail(action.payload)),
-      map(response => this.UpdateCashfreeDetailsResponse(response)),);
+      map(response => this.UpdateCashfreeDetailsResponse(response)));
 
   @Effect()
   public UpdateCashfreeDetailsResponse$: Observable<Action> = this.action$
@@ -243,7 +243,7 @@ export class SettingsIntegrationActions {
   public GetPaymentGateway$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetPaymentGateway()),
-      map(response => this.GetPaymentGatewayResponse(response)),);
+      map(response => this.GetPaymentGatewayResponse(response)));
 
   @Effect()
   public GetPaymentGatewayResponse$: Observable<Action> = this.action$
@@ -257,7 +257,7 @@ export class SettingsIntegrationActions {
   public AddPaymentGateway$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.AddPaymentGateway(action.payload)),
-      map(response => this.AddPaymentGatewayResponse(response)),);
+      map(response => this.AddPaymentGatewayResponse(response)));
 
   @Effect()
   public AddPaymentGatewayResponse$: Observable<Action> = this.action$
@@ -276,7 +276,7 @@ export class SettingsIntegrationActions {
   public UpdatePaymentGateway$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.UpdatePaymentGateway(action.payload)),
-      map(response => this.UpdatePaymentGatewayResponse(response)),);
+      map(response => this.UpdatePaymentGatewayResponse(response)));
 
   @Effect()
   public UpdatePaymentGatewayResponse$: Observable<Action> = this.action$
@@ -296,7 +296,7 @@ export class SettingsIntegrationActions {
   public DeletePaymentGateway$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway()),
-      map(response => this.DeletePaymentGatewayResponse(response)),);
+      map(response => this.DeletePaymentGatewayResponse(response)));
 
   @Effect()
   public DeletePaymentGatewayResponse$: Observable<Action> = this.action$
@@ -316,7 +316,7 @@ export class SettingsIntegrationActions {
   public UpdateAutoCollectUser$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload)),
-      map(response => this.UpdateAutoCollectUserResponse(response)),);
+      map(response => this.UpdateAutoCollectUserResponse(response)));
 
   @Effect()
   public UpdateAutoCollectUserResponse$: Observable<Action> = this.action$
@@ -336,7 +336,7 @@ export class SettingsIntegrationActions {
   public GetGmailIntegrationStatus$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
-      map(response => this.GetGmailIntegrationStatusResponse(response)),);
+      map(response => this.GetGmailIntegrationStatusResponse(response)));
 
   constructor(private action$: Actions,
               private toasty: ToasterService,

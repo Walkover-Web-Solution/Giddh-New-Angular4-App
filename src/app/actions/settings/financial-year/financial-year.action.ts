@@ -26,7 +26,7 @@ export class SettingsFinancialYearActions {
       }, true, {
         type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public LockFinancialYear$: Observable<Action> = this.action$
@@ -122,7 +122,7 @@ export class SettingsFinancialYearActions {
       }, true, {
         type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
         payload: res
-      })),);
+      })));
 
   constructor(private action$: Actions,
               private toasty: ToasterService,

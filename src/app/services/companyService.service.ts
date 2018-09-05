@@ -36,7 +36,7 @@ export class CompanyService {
         data.request = company;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyRequest>(e, company)),);
+      catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyRequest>(e, company)));
   }
 
   /**
@@ -49,7 +49,7 @@ export class CompanyService {
         let data: BaseResponse<CompanyResponse[], string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
   }
 
   /**
@@ -61,7 +61,7 @@ export class CompanyService {
         let data: BaseResponse<ICurrencyResponse[], string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<ICurrencyResponse[], string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<ICurrencyResponse[], string>(e, '')));
   }
 
   /**
@@ -73,7 +73,7 @@ export class CompanyService {
         let data: BaseResponse<string, string> = res;
         data.queryString = {uniqueName};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
   /**
@@ -91,7 +91,7 @@ export class CompanyService {
       data.queryString = cmpUniqueName;
       data.request = cmpUniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName)));
   }
 
   public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
@@ -114,7 +114,7 @@ export class CompanyService {
         let data: BaseResponse<string, StateDetailsRequest> = res;
         data.request = stateDetails;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails)));
     } else {
       return observableEmpty();
     }
@@ -126,7 +126,7 @@ export class CompanyService {
       return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
         let data: BaseResponse<string, any> = res;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     } else {
       // When new user sign up without company
       return observableEmpty();
@@ -138,7 +138,7 @@ export class CompanyService {
     return this._http.put(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), dateObj).pipe(map((res) => {
       let data: BaseResponse<string, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj)));
   }
 
   public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
@@ -148,7 +148,7 @@ export class CompanyService {
       return this._http.get(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
         let data: BaseResponse<TaxResponse[], string> = res;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e)));
     } else {
       return observableEmpty();
     }
@@ -160,7 +160,7 @@ export class CompanyService {
     return this._http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_USERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<AccountSharedWithResponse[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e)));
   }
 
   public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
@@ -172,7 +172,7 @@ export class CompanyService {
       .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
   }
 
   public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
@@ -184,7 +184,7 @@ export class CompanyService {
       .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
   }
 
   /**
@@ -194,7 +194,7 @@ export class CompanyService {
     return this._http.get(this.config.apiUrl + COMPANY_API.GET_ALL_STATES).pipe(map((res) => {
       let data: BaseResponse<States[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<States[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<States[], string>(e)));
   }
 
   /**
@@ -208,7 +208,7 @@ export class CompanyService {
       .replace(':code', encodeURIComponent(couponCode))).pipe(map((res) => {
       let data: BaseResponse<GetCouponResp, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e)));
   }
 
   /**
@@ -220,7 +220,7 @@ export class CompanyService {
       map((res) => {
         let data = res;
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
 }

@@ -43,7 +43,7 @@ export class SettingsFinancialYearService {
       let data: BaseResponse<IFinancialYearResponse, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
   }
 
   /*
@@ -58,7 +58,7 @@ export class SettingsFinancialYearService {
       let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, ILockFinancialYearRequest>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, ILockFinancialYearRequest>(e)));
   }
 
   /*
@@ -73,7 +73,7 @@ export class SettingsFinancialYearService {
       let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, ILockFinancialYearRequest>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, ILockFinancialYearRequest>(e)));
   }
 
   /*
@@ -88,7 +88,7 @@ export class SettingsFinancialYearService {
       let data: BaseResponse<ActiveFinancialYear, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ActiveFinancialYear, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ActiveFinancialYear, string>(e)));
   }
 
   /*
@@ -103,7 +103,7 @@ export class SettingsFinancialYearService {
       let data: BaseResponse<IFinancialYearResponse, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
   }
 
   /*
@@ -121,6 +121,6 @@ export class SettingsFinancialYearService {
       let data: BaseResponse<IFinancialYearResponse, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
   }
 }

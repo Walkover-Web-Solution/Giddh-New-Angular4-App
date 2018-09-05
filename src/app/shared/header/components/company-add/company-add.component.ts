@@ -99,7 +99,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
-        }),);
+        }));
     };
 
     this.isMobileVerified.subscribe(p => {

@@ -28,7 +28,7 @@ export class InvoiceTemplatesService {
     return this._http.get(this.config.apiUrl + INVOICE_API.GET_USER_TEMPLATES).pipe(map((res) => {
       let data: BaseResponse<CustomTemplateResponse[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
   }
 
   public getAllCreatedTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
@@ -37,7 +37,7 @@ export class InvoiceTemplatesService {
     return this._http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<CustomTemplateResponse[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
   }
 
   public getCustomTemplate(templateUniqueName: string): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse, string>> {
@@ -49,7 +49,7 @@ export class InvoiceTemplatesService {
     }), catchError((e) => {
       let object = this.errorHandler.HandleCatch<any, string>(e);
       return object.pipe(map(p => p.body));
-    }),);
+    }));
   }
 
   public setTemplateAsDefault(templateUniqueName: string): Observable<BaseResponse<any, string>> {
@@ -62,7 +62,7 @@ export class InvoiceTemplatesService {
     }), catchError((e) => {
       let object = this.errorHandler.HandleCatch<any, string>(e);
       return object.pipe(map(p => p.body));
-    }),);
+    }));
   }
 
   public deleteTemplate(templateUniqueName: string): Observable<BaseResponse<any, string>> {
@@ -75,7 +75,7 @@ export class InvoiceTemplatesService {
     }), catchError((e) => {
       let object = this.errorHandler.HandleCatch<any, string>(e);
       return object.pipe(map(p => p.body));
-    }),);
+    }));
   }
 
   // public saveTemplates(model: any): Observable<Template> {
@@ -103,7 +103,7 @@ export class InvoiceTemplatesService {
       data.request = model;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)));
   }
 
   public updateTemplate(templateUniqueName: string, model: any): Observable<BaseResponse<string, string>> {
@@ -114,7 +114,7 @@ export class InvoiceTemplatesService {
       data.request = model;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)));
   }
 
   // public getTopMargin(): Observable<number> {

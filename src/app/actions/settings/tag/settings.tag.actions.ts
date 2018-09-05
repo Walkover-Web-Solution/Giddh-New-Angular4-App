@@ -21,7 +21,7 @@ export class SettingsTagActions {
       switchMap((action: CustomActions) => this.settingsTagService.GetAllTags()),
       map((res) => {
         return {type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res};
-      }),);
+      }));
 
   @Effect()
   public GetAllTagsResponse$: Observable<Action> = this.action$

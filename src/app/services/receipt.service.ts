@@ -37,7 +37,7 @@ export class ReceiptService implements OnInit {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model)));
   }
 
   public GetAllReceipt(body: InvoiceReceiptFilter): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
@@ -55,7 +55,7 @@ export class ReceiptService implements OnInit {
         data.request = body;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'})),);
+      catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'})));
   }
 
   public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
@@ -81,7 +81,7 @@ export class ReceiptService implements OnInit {
         data.request = queryRequest;
         data.queryString = {accountUniqueName};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)));
   }
 
   public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string): any {
@@ -94,7 +94,7 @@ export class ReceiptService implements OnInit {
       map((res) => {
         return res;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})));
   }
 
   private createQueryString(str, model) {

@@ -31,8 +31,8 @@ export interface IGstObj {
   animations: [
     trigger('fadeInAndSlide', [
       transition(':enter', [
-        style({opacity: '0', marginTop: '100px'}),
-        animate('.1s ease-out', style({opacity: '1', marginTop: '20px'})),
+        style({ opacity: '0', marginTop: '100px' }),
+        animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
       ]),
     ]),
   ],
@@ -71,15 +71,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   ) {
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
     });
     this.stateStream$.subscribe((data) => {
       if (data) {
         this.stateResponse = _.cloneDeep(data);
         data.map(d => {
-          this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
-          this.statesInBackground.push({label: `${d.name}`, value: d.code});
-          this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
+          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          this.statesInBackground.push({ label: `${d.name}`, value: d.code });
+          this.statesSourceCompany.push({ label: `${d.name}`, value: `${d.name}` });
         });
       }
       this.statesSource$ = observableOf(this.states);
@@ -91,7 +91,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({label: d.code, value: d.code});
+          currencies.push({ label: d.code, value: d.code });
         });
       }
       this.currencySource$ = observableOf(currencies);
@@ -123,7 +123,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
-        }),);
+        }));
     };
   }
 
@@ -268,7 +268,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     }
     this.companyProfileObj = profileObj;
-    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+    this.patchProfile({ gstDetails: this.companyProfileObj.gstDetails });
   }
 
   public setGstAsDefault(indx, ev) {
@@ -397,13 +397,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
-      this.patchProfile({country: this.companyProfileObj.country});
+      this.patchProfile({ country: this.companyProfileObj.country });
     }
   }
 
   public selectState(event) {
     if (event) {
-      this.patchProfile({state: this.companyProfileObj.state});
+      this.patchProfile({ state: this.companyProfileObj.state });
     }
   }
 
@@ -416,9 +416,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         filter((e: any) => {
           return e.target.name;
         }),
-        map((e: any) => e.target.value),)
+        map((e: any) => e.target.value))
         .subscribe((val: string) => {
-          this.patchProfile({[event.target.name]: val});
+          this.patchProfile({ [event.target.name]: val });
           event.preventDefault();
         });
       return true;
@@ -426,13 +426,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public changeEventOfForm(key: string) {
-    this.patchProfile({[key]: this.companyProfileObj[key]});
+    this.patchProfile({ [key]: this.companyProfileObj[key] });
   }
 
   public checkGstDetails(ele?: HTMLInputElement) {
     if (this.companyProfileObj.gstDetails.length > 0) {
 
-      let obj = {gstDetails: this.companyProfileObj.gstDetails};
+      let obj = { gstDetails: this.companyProfileObj.gstDetails };
       // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
       for (let entry of this.companyProfileObj.gstDetails) {
         if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
@@ -444,14 +444,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         observableFromEvent(ele, 'keydown').pipe(
           debounceTime(3000),
           distinctUntilChanged(),
-          takeUntil(this.destroyed$),)
+          takeUntil(this.destroyed$))
           .subscribe(s => {
-            this.patchProfile({gstDetails: obj.gstDetails});
+            this.patchProfile({ gstDetails: obj.gstDetails });
           });
 
-        ele.dispatchEvent(new Event('keydown', {bubbles: true}));
+        ele.dispatchEvent(new Event('keydown', { bubbles: true }));
       } else {
-        this.patchProfile({gstDetails: obj.gstDetails});
+        this.patchProfile({ gstDetails: obj.gstDetails });
       }
     }
   }
@@ -464,7 +464,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.dataSourceBackup.forEach(item => {
       if (item.city === e.item) {
         this.companyProfileObj.country = item.country;
-        this.patchProfile({city: this.companyProfileObj.city});
+        this.patchProfile({ city: this.companyProfileObj.city });
         // set country and state values
         // try {
         //   item.address_components.forEach(address => {

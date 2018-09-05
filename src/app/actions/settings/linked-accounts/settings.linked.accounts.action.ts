@@ -25,7 +25,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public RefreshEbankAccounts$: Observable<Action> = this.action$
@@ -37,7 +37,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public ReconnectEbankAccount$: Observable<Action> = this.action$
@@ -49,7 +49,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public DeleteAccount$: Observable<Action> = this.action$
@@ -61,7 +61,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public RefreshAccount$: Observable<Action> = this.action$
@@ -73,7 +73,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public LinkAccount$: Observable<Action> = this.action$
@@ -85,7 +85,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public UnlinkAccount$: Observable<Action> = this.action$
@@ -97,7 +97,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public UpdateDate$: Observable<Action> = this.action$
@@ -109,7 +109,7 @@ export class SettingsLinkedAccountsActions {
       }, true, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   constructor(private action$: Actions,
               private toasty: ToasterService,

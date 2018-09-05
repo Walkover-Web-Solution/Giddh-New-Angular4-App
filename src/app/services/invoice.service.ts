@@ -46,7 +46,7 @@ export class InvoiceService {
         data.queryString = {model};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<IGetAllInvoicesResponse, CommonPaginatedRequest>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<IGetAllInvoicesResponse, CommonPaginatedRequest>(e, '')));
   }
 
   /*
@@ -65,7 +65,7 @@ export class InvoiceService {
         data.queryString = {reqObj};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(e, reqObj, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(e, reqObj, model)));
   }
 
   /*
@@ -108,7 +108,7 @@ export class InvoiceService {
         data.queryString = {reqObj, requestedFrom};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model)));
   }
 
   /**
@@ -125,7 +125,7 @@ export class InvoiceService {
         data.queryString = {invoiceNumber, accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, string>(e, invoiceNumber)),);
+      catchError((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, string>(e, invoiceNumber)));
   }
 
   /**
@@ -141,7 +141,7 @@ export class InvoiceService {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model)));
   }
 
   /*
@@ -159,7 +159,7 @@ export class InvoiceService {
         data.request = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(e, model)));
   }
 
   /**
@@ -174,7 +174,7 @@ export class InvoiceService {
         data.request = '';
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<GenerateInvoiceRequestClass, string>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<GenerateInvoiceRequestClass, string>(e, model)));
   }
 
   /**
@@ -191,7 +191,7 @@ export class InvoiceService {
         data.queryString = {templateUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<InvoiceTemplateDetailsResponse, string>(e, templateUniqueName)),);
+      catchError((e) => this.errorHandler.HandleCatch<InvoiceTemplateDetailsResponse, string>(e, templateUniqueName)));
   }
 
   /**
@@ -219,7 +219,7 @@ export class InvoiceService {
         data.queryString = {invoiceNumber};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceNumber)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceNumber)));
   }
 
   /**
@@ -236,7 +236,7 @@ export class InvoiceService {
         data.queryString = {invoiceUniqueName, action};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceUniqueName)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceUniqueName)));
   }
 
   /**
@@ -252,7 +252,7 @@ export class InvoiceService {
           let data: BaseResponse<InvoiceSetting, string> = res;
           return data;
         }),
-        catchError((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e)),);
+        catchError((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e)));
     } else {
       return observableEmpty();
     }
@@ -271,7 +271,7 @@ export class InvoiceService {
         data.queryString = {uniquename};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /**
@@ -287,7 +287,7 @@ export class InvoiceService {
         data.queryString = {emailId};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /**
@@ -303,7 +303,7 @@ export class InvoiceService {
         data.queryString = {webhook};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /**
@@ -319,7 +319,7 @@ export class InvoiceService {
         data.queryString = {form};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /**
@@ -334,7 +334,7 @@ export class InvoiceService {
         let data: BaseResponse<RazorPayDetailsResponse, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)));
   }
 
   /**
@@ -353,7 +353,7 @@ export class InvoiceService {
         data.queryString = {form};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)));
   }
 
   /**
@@ -368,7 +368,7 @@ export class InvoiceService {
         let data: BaseResponse<string, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /**
@@ -383,7 +383,7 @@ export class InvoiceService {
         let data: BaseResponse<string, string> = res;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /**
@@ -402,7 +402,7 @@ export class InvoiceService {
         data.queryString = {form};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)));
   }
 
   /*
@@ -417,7 +417,7 @@ export class InvoiceService {
       let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, dataToSend};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /*
@@ -432,7 +432,7 @@ export class InvoiceService {
       let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, dataToSend};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   /*
@@ -447,7 +447,7 @@ export class InvoiceService {
       let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, dataToSend};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
 }

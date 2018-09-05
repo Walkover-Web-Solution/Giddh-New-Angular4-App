@@ -40,7 +40,7 @@ export class HomeActions {
           type: HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
           payload: {operatingcostActiveyear: res[0], indirectexpensesActiveyear: res[1]}
         };
-      }),);
+      }));
 
   @Effect()
   public GetExpensesChartLastYear$: Observable<Action> = this.action$
@@ -64,7 +64,7 @@ export class HomeActions {
         return {
           type: 'EmptyAction'
         };
-      }),);
+      }));
 
   @Effect()
   public GetRevenueChartActiveYear$: Observable<Action> = this.action$
@@ -89,7 +89,7 @@ export class HomeActions {
           type: HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
           payload: {revenuefromoperationsActiveyear: res[0], otherincomeActiveyear: res[1]}
         };
-      }),);
+      }));
 
   @Effect()
   public GetRevenueChartLastYear$: Observable<Action> = this.action$
@@ -113,7 +113,7 @@ export class HomeActions {
         return {
           type: 'EmptyAction'
         };
-      }),);
+      }));
 
   @Effect()
   public GetComparisionChartActiveYear$: Observable<Action> = this.action$
@@ -215,7 +215,7 @@ export class HomeActions {
         return {
           type: 'EmptyAction'
         };
-      }),);
+      }));
 
   @Effect()
   public GetComparisionChartLastYear$: Observable<Action> = this.action$
@@ -317,7 +317,7 @@ export class HomeActions {
         return {
           type: 'EmptyAction'
         };
-      }),);
+      }));
 
   @Effect()
   public GetNetworthChartActiveYear$: Observable<Action> = this.action$
@@ -344,7 +344,7 @@ export class HomeActions {
         return {
           type: 'EmptyAction'
         };
-      }),);
+      }));
 
   @Effect()
   public GetBankAccounts$: Observable<Action> = this.action$
@@ -358,7 +358,7 @@ export class HomeActions {
       }, true, {
         type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
         payload: res
-      })),);
+      })));
   @Effect()
   public RefereshBankAccounts$: Observable<Action> = this.action$
     .ofType(HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT).pipe(
@@ -370,7 +370,7 @@ export class HomeActions {
       }, true, {
         type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public ReConnectBankAccounts$: Observable<Action> = this.action$
@@ -383,7 +383,7 @@ export class HomeActions {
       }, true, {
         type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GetRatioAnalysis$: Observable<Action> = this.action$
@@ -397,7 +397,7 @@ export class HomeActions {
       }, true, {
         type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GetTotalOverdues$: Observable<Action> = this.action$
@@ -418,7 +418,7 @@ export class HomeActions {
           };
         }
         return {type: 'EmptyAction'};
-      }),);
+      }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //

@@ -31,7 +31,7 @@ export class SalesActions {
       switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
       map(response => {
         return this.getAccountDetailsForSalesResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetAccountDetailsResponse$: Observable<Action> = this.action$
@@ -50,7 +50,7 @@ export class SalesActions {
   public GetGroupsListForSales$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS).pipe(
       switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksFlatten()),
-      map(response => this.getGroupsListForSalesResponse(response)),);
+      map(response => this.getGroupsListForSalesResponse(response)));
 
   @Effect()
   public GetGroupsListForSalesResponse$: Observable<Action> = this.action$
@@ -75,7 +75,7 @@ export class SalesActions {
       }, true, {
         type: SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // get sales Ac list
   @Effect()
@@ -88,7 +88,7 @@ export class SalesActions {
       }, true, {
         type: SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE,
         payload: res
-      })),);
+      })));
 
   constructor(private action$: Actions,
               private _toasty: ToasterService,

@@ -31,7 +31,7 @@ export class MagicLinkService {
     return this._http.get(URL).pipe(map((res) => {
       let data: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>(e, {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>(e, {})));
   }
 
   /**
@@ -41,6 +41,6 @@ export class MagicLinkService {
     return this._http.get(this.config.apiUrl + LEDGER_API.MAGIC_LINK_DOWNLOAD_FILE.replace(':id', id).replace(':invoiceNum', invoiceNum)).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, {})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, {})));
   }
 }

@@ -29,7 +29,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + EBANKS.GET_TOKEN.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<IGetEbankTokenResponse, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IGetEbankTokenResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IGetEbankTokenResponse, string>(e)));
   }
 
   /**
@@ -41,7 +41,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + EBANKS.GET_ALL_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<IGetAllEbankAccountResponse[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IGetAllEbankAccountResponse[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IGetAllEbankAccountResponse[], string>(e)));
   }
 
   /**
@@ -53,7 +53,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + EBANKS.REFRESH_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<IGetAllEbankAccountResponse[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IGetAllEbankAccountResponse[], string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IGetAllEbankAccountResponse[], string>(e)));
   }
 
   /**
@@ -65,7 +65,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + EBANKS.RECONNECT_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -78,7 +78,7 @@ export class SettingsLinkedAccountsService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {loginId};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -91,7 +91,7 @@ export class SettingsLinkedAccountsService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {ebankItemId};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -104,7 +104,7 @@ export class SettingsLinkedAccountsService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {accountId};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -117,7 +117,7 @@ export class SettingsLinkedAccountsService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {accountId};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -130,7 +130,7 @@ export class SettingsLinkedAccountsService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {accountId};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -142,7 +142,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.ACCESS_TOKEN.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<IAccessTokenResponse, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IAccessTokenResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IAccessTokenResponse, string>(e)));
   }
 
   /**
@@ -154,7 +154,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -166,7 +166,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.SEARCH_BANKS.replace(':companyUniqueName', this.companyUniqueName).replace(':queryString', value)).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /**
@@ -178,7 +178,7 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_LOGIN_FORM.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', value)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -190,7 +190,7 @@ export class SettingsLinkedAccountsService {
     return this._http.post(this.config.apiUrl + YODLEE_FASTLINK.ADD_PROVIDER.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', providerId), objToSend).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -202,6 +202,6 @@ export class SettingsLinkedAccountsService {
     return this._http.get(this.config.apiUrl + YODLEE_FASTLINK.GET_BANK_SYNC_STATUS.replace(':companyUniqueName', this.companyUniqueName).replace(':providerId', value)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 }

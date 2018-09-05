@@ -32,7 +32,7 @@ export class SessionActions {
   public getAllSession$: Observable<Action> = this.actions$
     .ofType(SessionActions.GET_ALL_SESSION_REQUEST).pipe(
       switchMap((action: CustomActions) => this.auth.GetUserSession()),
-      map(response => this.getAllSessionResponse(response)),);
+      map(response => this.getAllSessionResponse(response)));
 
   @Effect()
   public getAllSessionResponse$: Observable<Action> = this.actions$
@@ -49,7 +49,7 @@ export class SessionActions {
   public deleteSession$: Observable<Action> = this.actions$
     .ofType(SessionActions.DELETE_SESSION_REQUEST).pipe(
       switchMap((action: CustomActions) => this.auth.DeleteSession(action.payload)),
-      map(response => this.deleteSessionResponse(response)),);
+      map(response => this.deleteSessionResponse(response)));
 
   @Effect()
   public deleteSessionResponse$: Observable<Action> = this.actions$
@@ -66,7 +66,7 @@ export class SessionActions {
   public deleteAllSession$: Observable<Action> = this.actions$
     .ofType(SessionActions.DELETE_ALL_SESSION_REQUEST).pipe(
       switchMap((action: CustomActions) => this.auth.DeleteAllSession()),
-      map(response => this.deleteAllSessionResponse(response)),);
+      map(response => this.deleteAllSessionResponse(response)));
 
   @Effect()
   public deleteAllSessionResponse$: Observable<Action> = this.actions$

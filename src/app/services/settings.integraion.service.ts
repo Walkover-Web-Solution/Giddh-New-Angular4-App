@@ -30,7 +30,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<SmsKeyClass, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
   }
 
   /**
@@ -43,7 +43,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<string, SmsKeyClass> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   /*
@@ -56,7 +56,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<EmailKeyClass, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<EmailKeyClass, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<EmailKeyClass, string>(e)));
   }
 
   /**
@@ -69,7 +69,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<string, EmailKeyClass> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, EmailKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, EmailKeyClass>(e, model)));
   }
 
   /*
@@ -81,7 +81,7 @@ export class SettingsIntegrationService {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)));
   }
 
   /*
@@ -94,7 +94,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model)));
   }
 
   /*
@@ -107,7 +107,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model)));
   }
 
   /*
@@ -119,7 +119,7 @@ export class SettingsIntegrationService {
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public SaveCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
@@ -130,7 +130,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   public GetCashFreeDetail(): Observable<BaseResponse<any, any>> {
@@ -139,7 +139,7 @@ export class SettingsIntegrationService {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
   public UpdateCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
@@ -150,7 +150,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   public DeleteCashFreeDetail(): Observable<BaseResponse<string, string>> {
@@ -159,7 +159,7 @@ export class SettingsIntegrationService {
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public GetAutoCollectUser(): Observable<BaseResponse<any, any>> {
@@ -168,7 +168,7 @@ export class SettingsIntegrationService {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
   public AddAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
@@ -179,7 +179,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   public UpdateAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
@@ -190,7 +190,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   public DeleteAutoCollectUser(): Observable<BaseResponse<string, string>> {
@@ -199,7 +199,7 @@ export class SettingsIntegrationService {
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public GetPaymentGateway(): Observable<BaseResponse<any, any>> {
@@ -208,7 +208,7 @@ export class SettingsIntegrationService {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
   public AddPaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
@@ -218,7 +218,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   public UpdatePaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
@@ -228,7 +228,7 @@ export class SettingsIntegrationService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
   }
 
   public DeletePaymentGateway(): Observable<BaseResponse<string, string>> {
@@ -237,14 +237,14 @@ export class SettingsIntegrationService {
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public GetGmailIntegrationStatus(): Observable<BaseResponse<any, any>> {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
 }

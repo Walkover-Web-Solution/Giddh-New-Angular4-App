@@ -24,7 +24,7 @@ export class SettingsBunchActions {
       }, true, {
         type: SETTINGS_BUNCH_ACTIONS.GET_ALL_BUNCH_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public CreateBunch$: Observable<Action> = this.action$
@@ -51,7 +51,7 @@ export class SettingsBunchActions {
   public RemoveBranch$: Observable<Action> = this.action$
     .ofType(SETTINGS_BUNCH_ACTIONS.DELETE_BUNCH).pipe(
       switchMap((action: CustomActions) => this.settingsBranchService.RemoveBunch(action.payload)),
-      map(response => this.RemoveBunchResponse(response)),);
+      map(response => this.RemoveBunchResponse(response)));
 
   @Effect()
   public RemoveBranchResponse$: Observable<Action> = this.action$

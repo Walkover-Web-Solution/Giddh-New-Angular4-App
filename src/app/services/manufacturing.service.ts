@@ -34,7 +34,7 @@ export class ManufacturingService {
         data.queryString = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
   }
 
   /**
@@ -50,7 +50,7 @@ export class ManufacturingService {
       data.request = model;
       data.queryString = {stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model)));
   }
 
   /**
@@ -65,7 +65,7 @@ export class ManufacturingService {
       data.request = model;
       data.queryString = reqModal;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model)));
   }
 
   /**
@@ -80,7 +80,7 @@ export class ManufacturingService {
       data.request = '';
       data.queryString = {model};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {model})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {model})));
   }
 
   /**
@@ -124,7 +124,7 @@ export class ManufacturingService {
         data.queryString = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<StocksResponse, IMfStockSearchRequest>(e, model)),);
+      catchError((e) => this.errorHandler.HandleCatch<StocksResponse, IMfStockSearchRequest>(e, model)));
   }
 
   /**
@@ -140,6 +140,6 @@ export class ManufacturingService {
         data.queryString = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')),);
+      catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
   }
 }
