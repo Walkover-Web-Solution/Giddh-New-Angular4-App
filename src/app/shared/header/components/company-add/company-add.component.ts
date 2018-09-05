@@ -11,7 +11,7 @@ import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../actions/login.action';
-import { AuthService } from 'ng4-social-login';
+import { AuthService } from 'ng-social-login-module';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../actions/general/general.actions';

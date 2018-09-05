@@ -24,7 +24,7 @@ import { GroupUpdateComponent } from './header/components/group-update/group-upd
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
 // social login injection
-import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
+import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng-social-login-module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { LaddaModule } from 'angular2-ladda';

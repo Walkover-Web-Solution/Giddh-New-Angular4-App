@@ -17,7 +17,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
-import { AuthService } from 'ng4-social-login';
+import { AuthService } from 'ng-social-login-module';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
