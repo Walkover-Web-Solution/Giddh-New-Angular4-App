@@ -66,7 +66,7 @@ export class CustomStockUnitAction {
       switchMap((action: CustomActions) => this._inventoryService.GetStockUnitByName(action.payload)),
       map(response => {
         return this.GetStockUnitByNameResponse(response);
-      }),);
+      }));
 
   @Effect()
   private GetStockUnitByNameResponse$: Observable<Action> = this.action$

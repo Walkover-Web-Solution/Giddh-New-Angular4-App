@@ -28,7 +28,7 @@ export class AgingReportActions {
   public createDueRange$: Observable<Action> = this.action$
     .ofType(AgingReportActions.CREATE_DUE_DAY_RANGE).pipe(
       switchMap((action: CustomActions) => this._agingReportService.CreateDueDaysRange(action.payload)),
-      map(response => this.CreateDueRangeResponse(response)),);
+      map(response => this.CreateDueRangeResponse(response)));
 
   @Effect()
   public createDueRangeResponse$: Observable<Action> = this.action$
@@ -49,7 +49,7 @@ export class AgingReportActions {
   public getDueRange$: Observable<Action> = this.action$
     .ofType(AgingReportActions.GET_DUE_DAY_RANGE).pipe(
       switchMap((action: CustomActions) => this._agingReportService.GetDueDaysRange()),
-      map(response => this.GetDueRangeResponse(response)),);
+      map(response => this.GetDueRangeResponse(response)));
 
   @Effect()
   public getDueRangeResponse$: Observable<Action> = this.action$

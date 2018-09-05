@@ -31,7 +31,7 @@ export class AuthenticationService {
     return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithEmail, {email}).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, email)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, email)));
   }
 
   public VerifyEmail(model: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
@@ -40,7 +40,7 @@ export class AuthenticationService {
       data.request = model;
       // console.log(data);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model)));
   }
 
   public SignupWithMobile(model: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
@@ -48,7 +48,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, SignupWithMobile> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model)));
     // return this._http.get(this.config.apiUrl + LOGIN_API.LoginWithNumber.replace(':countryCode', String(model.countryCode)).replace(':mobileNumber', model.mobileNumber)).map((res) => {
     //   let data: BaseResponse<string, SignupWithMobile> = res;
     //   data.request = model;
@@ -62,7 +62,7 @@ export class AuthenticationService {
       data.request = modele;
       // console.log(data);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele)));
   }
 
   public SignupWithPassword(modele: SignUpWithPassword): Observable<BaseResponse<VerifyMobileResponseModel, SignUpWithPassword>> {
@@ -71,7 +71,7 @@ export class AuthenticationService {
       data.request = modele;
       // console.log(data);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, SignUpWithPassword>(e, modele)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, SignUpWithPassword>(e, modele)));
   }
 
   public LoginWithPassword(modele: LoginWithPassword): Observable<BaseResponse<VerifyMobileResponseModel, LoginWithPassword>> {
@@ -80,7 +80,7 @@ export class AuthenticationService {
       data.request = modele;
       // console.log(data);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, LoginWithPassword>(e, modele)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, LoginWithPassword>(e, modele)));
   }
 
   public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
@@ -88,7 +88,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, SignupWithMobile> = res;
       data.request = modele;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, modele)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, modele)));
   }
 
   public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string, VerifyMobileModel>> {
@@ -96,7 +96,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, VerifyMobileModel> = res;
       data.request = modele;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, VerifyMobileModel>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, VerifyMobileModel>(e)));
   }
 
   public ClearSession(): Observable<BaseResponse<string, string>> {
@@ -104,7 +104,7 @@ export class AuthenticationService {
     return this._http.delete(this.config.apiUrl + LOGIN_API.CLEAR_SESSION.replace(':userUniqueName', encodeURIComponent(userName))).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public LoginWithGoogle(token: string) {
@@ -120,7 +120,7 @@ export class AuthenticationService {
     }).pipe(map((res) => {
       let data: BaseResponse<VerifyEmailResponseModel, string> = res as BaseResponse<VerifyEmailResponseModel, string>;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args)));
   }
 
   public LoginWithLinkedin(model: LinkedInRequestModel) {
@@ -140,7 +140,7 @@ export class AuthenticationService {
       let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)));
   }
 
   public SetSettings(model): Observable<BaseResponse<string, string>> {
@@ -153,7 +153,7 @@ export class AuthenticationService {
       data.queryString = {};
       // data.response.results.forEach(p => p.isOpen = false);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
   public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
@@ -167,7 +167,7 @@ export class AuthenticationService {
       data.queryString = {};
       // data.response.results.forEach(p => p.isOpen = false);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')));
   }
 
   public GetSubScribedCompanies(): Observable<BaseResponse<string, string>> {
@@ -180,7 +180,7 @@ export class AuthenticationService {
       data.queryString = {};
       // data.response.results.forEach(p => p.isOpen = false);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
   public AddBalance(model): Observable<BaseResponse<string, string>> {
@@ -193,7 +193,7 @@ export class AuthenticationService {
       data.queryString = {};
       // data.response.results.forEach(p => p.isOpen = false);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
   public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
@@ -206,7 +206,7 @@ export class AuthenticationService {
       data.queryString = {};
       // data.response.results.forEach(p => p.isOpen = false);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
   }
 
   public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
@@ -219,7 +219,7 @@ export class AuthenticationService {
       data.queryString = {};
       // data.response.results.forEach(p => p.isOpen = false);
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
   }
 
   public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
@@ -231,7 +231,7 @@ export class AuthenticationService {
       data.request = '';
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
   }
 
   // fetch user profile picture using emailId
@@ -240,7 +240,7 @@ export class AuthenticationService {
       .replace(':user_id', userId)).pipe(map(res => {
       let data = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   // Get User Sessions
@@ -250,7 +250,7 @@ export class AuthenticationService {
       .replace(':userEmail', userEmail)).pipe(map(res => {
       let data = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   // Delete Single Sessions
@@ -261,7 +261,7 @@ export class AuthenticationService {
       let data = res;
       data.queryString = id;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   // Delete All Sessions
@@ -270,7 +270,7 @@ export class AuthenticationService {
     return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION.replace(':userEmail', userEmail)).pipe(map(res => {
       let data = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   // Delete All Sessions
@@ -280,7 +280,7 @@ export class AuthenticationService {
       .replace(':userEmail', userEmail), '').pipe(map(res => {
       let data = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   // Get Electron App Version
@@ -296,7 +296,7 @@ export class AuthenticationService {
     }).pipe(map((res) => {
       // let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<any, any>;
       return res;
-    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)));
   }
 
   public forgotPassword(userId): Observable<BaseResponse<string, any>> {
@@ -305,7 +305,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, any> = res;
       data.request = userId;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
   }
 
   public resetPassword(model): Observable<BaseResponse<string, any>> {
@@ -314,7 +314,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
   }
 
   public renewSession(): Observable<BaseResponse<any, any>> {
@@ -322,7 +322,7 @@ export class AuthenticationService {
     return this._http.put(this.config.apiUrl + LOGIN_API.RENEW_SESSION.replace(':userUniqueName', encodeURIComponent(userName)), null).pipe(map((res) => {
       let data: BaseResponse<string, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
   }
 
   public saveGmailAuthCode(data) {

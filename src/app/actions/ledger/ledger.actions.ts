@@ -36,7 +36,7 @@ export class LedgerActions {
       }, true, {
         type: LEDGER.GET_TRANSACTION_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
@@ -48,7 +48,7 @@ export class LedgerActions {
       }, true, {
         type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public DownloadInvoiceFile$: Observable<Action> = this.action$
@@ -60,7 +60,7 @@ export class LedgerActions {
       }, true, {
         type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public GetDiscountAccounts$: Observable<Action> = this.action$
@@ -72,7 +72,7 @@ export class LedgerActions {
       }, true, {
         type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public CreateBlankLedger$: Observable<Action> = this.action$
@@ -84,13 +84,13 @@ export class LedgerActions {
       }, true, {
         type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public DeleteTrxEntry$: Observable<Action> = this.action$
     .ofType(LEDGER.DELETE_TRX_ENTRY).pipe(
       switchMap((action: CustomActions) => this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName)),
-      map(res => this.deleteTrxEntryResponse(res)),);
+      map(res => this.deleteTrxEntryResponse(res)));
 
   @Effect()
   public DeleteTrxEntryResponse$: Observable<Action> = this.action$
@@ -117,7 +117,7 @@ export class LedgerActions {
       ),
       map(response => {
         return this.shareAccountResponse(response);
-      }),);
+      }));
   @Effect()
   public shareAccountResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE).pipe(
@@ -145,7 +145,7 @@ export class LedgerActions {
       ),
       map(response => {
         return this.unShareAccountResponse(response);
-      }),);
+      }));
 
   @Effect()
   public unShareAccountResponse$: Observable<Action> = this.action$
@@ -169,7 +169,7 @@ export class LedgerActions {
       switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload)),
       map(response => {
         return this.sharedAccountWithResponse(response);
-      }),);
+      }));
   @Effect()
   public sharedAccountResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE).pipe(
@@ -189,7 +189,7 @@ export class LedgerActions {
         action.payload.accountUniqueName, action.payload.entryUniqueName)),
       map(resp => {
         return this.updateTxnEntryResponse(resp);
-      }),);
+      }));
 
   @Effect()
   public updateTxnEntryResponse$: Observable<Action> = this.action$
@@ -220,7 +220,7 @@ export class LedgerActions {
       switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
       map(response => {
         return this.createQuickAccountResponseV2(response);
-      }),);
+      }));
 
   @Effect()
   public CreateQuickAccountResponseV2$: Observable<Action> = this.action$
@@ -251,7 +251,7 @@ export class LedgerActions {
         action.payload.to, '', action.payload.page, action.payload.count, action.payload.q)),
       map(response => {
         return this.advanceSearchResponse(response);
-      }),);
+      }));
 
   @Effect()
   public AdvanceSearchResponse$: Observable<Action> = this.action$
@@ -283,7 +283,7 @@ export class LedgerActions {
           this._toasty.errorToast(response.message, response.code);
         }
         return {type: 'EmptyAction'};
-      }),);
+      }));
 
   @Effect()
   public getLedgerTrxDetails$: Observable<CustomActions> = this.action$
@@ -297,7 +297,7 @@ export class LedgerActions {
           type: LEDGER.GET_LEDGER_TRX_DETAILS_RESPONSE,
           payload: response
         });
-      }),);
+      }));
 
   @Effect()
   public GetReconciliation$: Observable<Action> = this.action$
@@ -315,7 +315,7 @@ export class LedgerActions {
           type: LEDGER.GET_RECONCILIATION_RESPONSE,
           payload: response
         };
-      }),);
+      }));
 
   @Effect()
   public ExportGroupLedger$: Observable<Action> = this.action$
@@ -338,7 +338,7 @@ export class LedgerActions {
   public DeleteMultipleLedgerEntries$: Observable<Action> = this.action$
     .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES).pipe(
       switchMap((action: CustomActions) => this._ledgerService.DeleteMultipleLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueNames)),
-      map(res => this.DeleteMultipleLedgerEntriesResponse(res)),);
+      map(res => this.DeleteMultipleLedgerEntriesResponse(res)));
 
   @Effect()
   public DeleteMultipleLedgerEntriesResponse$: Observable<Action> = this.action$

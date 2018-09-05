@@ -19,7 +19,7 @@ export class InventoryAction {
   public addNewGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.AddNewGroup).pipe(
       switchMap((action: CustomActions) => this._inventoryService.CreateStockGroup(action.payload)),
-      map(response => this.addNewGroupResponse(response)),);
+      map(response => this.addNewGroupResponse(response)));
 
   @Effect()
   public addNewGroupResponse$: Observable<Action> = this.action$
@@ -39,7 +39,7 @@ export class InventoryAction {
   public updateGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateGroup).pipe(
       switchMap((action: CustomActions) => this._inventoryService.UpdateStockGroup(action.payload.body, action.payload.stockGroupUniquename)),
-      map(response => this.updateGroupResponse(response)),);
+      map(response => this.updateGroupResponse(response)));
 
   @Effect()
   public updateGroupResponse$: Observable<Action> = this.action$
@@ -59,7 +59,7 @@ export class InventoryAction {
   public removeGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.RemoveGroup).pipe(
       switchMap((action: CustomActions) => this._inventoryService.DeleteStockGroup(action.payload)),
-      map(response => this.removeGroupResponse(response)),);
+      map(response => this.removeGroupResponse(response)));
 
   @Effect()
   public removeGroupResponse$: Observable<Action> = this.action$
@@ -81,7 +81,7 @@ export class InventoryAction {
       switchMap((action: CustomActions) => this._inventoryService.GetStockDetails(action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
       map(response => {
         return this.GetStockUniqueNameResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetStockUniqueNameResponse$: Observable<Action> = this.action$
@@ -96,7 +96,7 @@ export class InventoryAction {
       switchMap((action: CustomActions) => this._inventoryService.GetStocks(action.payload)),
       map(response => {
         return this.GetStockResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetStockResponse$: Observable<Action> = this.action$
@@ -112,7 +112,7 @@ export class InventoryAction {
       switchMap((action: CustomActions) => this._inventoryService.GetManufacturingStocks()),
       map(response => {
         return this.GetManufacturingStockResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetManufacturingStockResponse$: Observable<Action> = this.action$
@@ -128,7 +128,7 @@ export class InventoryAction {
       switchMap((action: CustomActions) => this._inventoryService.GetManufacturingStocksForCreateMF()),
       map(response => {
         return this.GetManufacturingCreateStockResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetManufacturingStockForCreateResponse$: Observable<Action> = this.action$
@@ -141,7 +141,7 @@ export class InventoryAction {
   public createStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.CreateStock).pipe(
       switchMap((action: CustomActions) => this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName)),
-      map(response => this.createStockResponse(response)),);
+      map(response => this.createStockResponse(response)));
 
   @Effect()
   public createStockResponse$: Observable<Action> = this.action$
@@ -163,7 +163,7 @@ export class InventoryAction {
   public updateStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateStock).pipe(
       switchMap((action: CustomActions) => this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
-      map(response => this.updateStockResponse(response)),);
+      map(response => this.updateStockResponse(response)));
 
   @Effect()
   public updateStockResponse$: Observable<Action> = this.action$
@@ -184,7 +184,7 @@ export class InventoryAction {
   public removeStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.RemoveStock).pipe(
       switchMap((action: CustomActions) => this._inventoryService.DeleteStock(action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
-      map(response => this.removeStockResponse(response)),);
+      map(response => this.removeStockResponse(response)));
 
   @Effect()
   public removeStockResponse$: Observable<Action> = this.action$
@@ -206,7 +206,7 @@ export class InventoryAction {
       switchMap((action: CustomActions) => this._inventoryService.GetStockUniqueNameWithDetail(action.payload.stockUniqueName)),
       map(response => {
         return this.GetStockWithUniqueNameResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetStockWithUniqueNameResponse$: Observable<Action> = this.action$
@@ -229,7 +229,7 @@ export class InventoryAction {
           type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE,
           payload: res.status === 'success' ? res.body : null
         } as CustomActions;
-      }),);
+      }));
 
   @Effect()
   public GetLinkedStocks$: Observable<Action> = this.action$
@@ -244,7 +244,7 @@ export class InventoryAction {
           type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS_RESPONSE,
           payload: res.status === 'success' ? res.body : null
         };
-      }),);
+      }));
 
   @Effect()
   public MoveStock$: Observable<Action> = this.action$
@@ -252,7 +252,7 @@ export class InventoryAction {
       switchMap((action: CustomActions) => this._inventoryService.MoveStock(action.payload.activeGroup, action.payload.stockUniqueName, action.payload.groupUniqueName)),
       map(response => {
         return this.MoveStockResponse(response);
-      }),);
+      }));
 
   @Effect()
   public MoveStockResponse$: Observable<Action> = this.action$

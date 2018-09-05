@@ -26,7 +26,7 @@ export class ContactService {
       let data: BaseResponse<any, any> = res;
       data.request = body;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body, '')));
   }
 
   public GetContacts(groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20): Observable<BaseResponse<any, string>> {
@@ -36,7 +36,7 @@ export class ContactService {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
   }
 
   public GetCashFreeBalance(): Observable<BaseResponse<any, string>> {
@@ -45,7 +45,7 @@ export class ContactService {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
   }
 
   public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
@@ -55,7 +55,7 @@ export class ContactService {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
   }
 
   public deleteComment(accountUniqueName): Observable<BaseResponse<any, string>> {
@@ -64,6 +64,6 @@ export class ContactService {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
   }
 }

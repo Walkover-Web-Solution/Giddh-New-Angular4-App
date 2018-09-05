@@ -29,7 +29,7 @@ export class SettingsPermissionService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /**
@@ -42,7 +42,7 @@ export class SettingsPermissionService {
       let data: BaseResponse<IUpdatePermissionResponse, ShareRequestForm> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IUpdatePermissionResponse, ShareRequestForm>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<IUpdatePermissionResponse, ShareRequestForm>(e, model)));
   }
 
 }

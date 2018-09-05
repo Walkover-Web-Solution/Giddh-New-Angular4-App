@@ -25,7 +25,7 @@ export class InventoryReportActions {
           return this.genReportResponse(response);
         }
         return {type: 'EmptyAction'};
-      }),);
+      }));
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService) {

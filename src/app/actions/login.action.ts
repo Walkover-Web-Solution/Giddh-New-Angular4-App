@@ -97,7 +97,7 @@ export class LoginActions {
       ),
       map(response => {
         return this.signupWithGoogleResponse(response);
-      }),);
+      }));
 
   @Effect()
   public signupWithGoogleResponse$: Observable<Action> = this.actions$
@@ -124,7 +124,7 @@ export class LoginActions {
       switchMap((action: CustomActions) =>
         this.auth.LoginWithLinkedin(action.payload)
       ),
-      map(response => this.signupWithLinkedinResponse(response)),);
+      map(response => this.signupWithLinkedinResponse(response)));
 
   @Effect()
   public signupWithLinkedinResponse$: Observable<Action> = this.actions$
@@ -149,7 +149,7 @@ export class LoginActions {
   public signupWithEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailRequest).pipe(
       switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload)),
-      map(response => this.SignupWithEmailResponce(response)),);
+      map(response => this.SignupWithEmailResponce(response)));
 
   @Effect()
   public signupWithEmailResponse$: Observable<Action> = this.actions$
@@ -169,7 +169,7 @@ export class LoginActions {
       switchMap((action: CustomActions) =>
         this.auth.VerifyEmail(action.payload as VerifyEmailModel)
       ),
-      map(response => this.VerifyEmailResponce(response)),);
+      map(response => this.VerifyEmailResponce(response)));
 
   @Effect()
   public verifyEmailResponse$: Observable<Action> = this.actions$
@@ -187,7 +187,7 @@ export class LoginActions {
   public signupWithMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithMobileRequest).pipe(
       switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload)),
-      map(response => this.SignupWithMobileResponce(response)),);
+      map(response => this.SignupWithMobileResponce(response)));
 
   @Effect()
   public signupWithMobileResponse$: Observable<Action> = this.actions$
@@ -237,7 +237,7 @@ export class LoginActions {
             return this.doSameStuffs(companies);
           }
         }
-      }),);
+      }));
 
   @Effect()
   public logoutSuccess$: Observable<Action> = this.actions$
@@ -253,7 +253,7 @@ export class LoginActions {
       switchMap((action: CustomActions) =>
         this.auth.VerifyOTP(action.payload as VerifyMobileModel)
       ),
-      map(response => this.VerifyMobileResponce(response)),);
+      map(response => this.VerifyMobileResponce(response)));
 
   @Effect()
   public verifyMobileResponse$: Observable<Action> = this.actions$
@@ -273,7 +273,7 @@ export class LoginActions {
       switchMap((action: CustomActions) =>
         this.auth.VerifyOTP(action.payload as VerifyMobileModel)
       ),
-      map(response => this.VerifyTwoWayAuthResponse(response)),);
+      map(response => this.VerifyTwoWayAuthResponse(response)));
 
   @Effect()
   public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
@@ -303,7 +303,7 @@ export class LoginActions {
         }
         // return this.LoginSuccess();
         return this.signupWithGoogleResponse(data);
-      }),);
+      }));
 
   @Effect()
   public LinkedInElectronLogin$: Observable<Action> = this.actions$
@@ -327,7 +327,7 @@ export class LoginActions {
         }
         // return this.LoginSuccess();
         return this.signupWithGoogleResponse(data);
-      }),);
+      }));
 
   @Effect()
   public ClearSession$: Observable<Action> = this.actions$
@@ -336,7 +336,7 @@ export class LoginActions {
         return this.auth.ClearSession();
       }), map(data => {
         return this.LogOut();
-      }),);
+      }));
 
   @Effect()
   public CHANGE_COMPANY$: Observable<Action> = this.actions$
@@ -383,7 +383,7 @@ export class LoginActions {
         }
 
         return this.ChangeCompanyResponse(response);
-      }),);
+      }));
 
   @Effect()
   public ChangeCompanyResponse$: Observable<Action> = this.actions$
@@ -401,7 +401,7 @@ export class LoginActions {
   public addNewMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddNewMobileNo).pipe(
       switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload)),
-      map(response => this.AddNewMobileNoResponce(response)),);
+      map(response => this.AddNewMobileNoResponce(response)));
 
   @Effect()
   public addNewMobileResponse$: Observable<Action> = this.actions$
@@ -421,7 +421,7 @@ export class LoginActions {
       switchMap((action: CustomActions) =>
         this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
       ),
-      map(response => this.VerifyAddNewMobileNoResponce(response)),);
+      map(response => this.VerifyAddNewMobileNoResponce(response)));
 
   @Effect()
   public verifyAddNewMobileResponse$: Observable<Action> = this.actions$
@@ -440,7 +440,7 @@ export class LoginActions {
   public FectchUserDetails$: Observable<Action> = this.actions$
     .ofType(LoginActions.FetchUserDetails).pipe(
       switchMap((action: CustomActions) => this.auth.FetchUserDetails()),
-      map(response => this.FetchUserDetailsResponse(response)),);
+      map(response => this.FetchUserDetailsResponse(response)));
 
   @Effect()
   public FectchUserDetailsResponse$: Observable<Action> = this.actions$
@@ -456,13 +456,13 @@ export class LoginActions {
   public SubscribedCompanies$: Observable<Action> = this.actions$
     .ofType(LoginActions.SubscribedCompanies).pipe(
       switchMap((action: CustomActions) => this.auth.GetSubScribedCompanies()),
-      map(response => this.SubscribedCompaniesResponse(response)),);
+      map(response => this.SubscribedCompaniesResponse(response)));
 
   @Effect()
   public AddBalance$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddBalance).pipe(
       switchMap((action: CustomActions) => this.auth.AddBalance(action.payload)),
-      map(response => this.AddBalanceResponse(response)),);
+      map(response => this.AddBalanceResponse(response)));
 
   @Effect()
   public AddBalanceResponse$: Observable<Action> = this.actions$
@@ -480,13 +480,13 @@ export class LoginActions {
       switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload)),
       map((res) => {
         return {type: 'EmptyAction'};
-      }),);
+      }));
 
   @Effect()
   public SignupWithPasswdRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithPasswdRequest).pipe(
       switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload)),
-      map(response => this.SignupWithPasswdResponse(response)),);
+      map(response => this.SignupWithPasswdResponse(response)));
 
   @Effect()
   public SignupWithPasswdResponse$: Observable<Action> = this.actions$
@@ -507,7 +507,7 @@ export class LoginActions {
   public LoginWithPasswdRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginWithPasswdRequest).pipe(
       switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload)),
-      map(response => this.LoginWithPasswdResponse(response)),);
+      map(response => this.LoginWithPasswdResponse(response)));
 
   @Effect()
   public LoginWithPasswdResponse$: Observable<Action> = this.actions$
@@ -525,7 +525,7 @@ export class LoginActions {
   public forgotPasswordRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.forgotPasswordRequest).pipe(
       switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload)),
-      map(response => this.forgotPasswordResponse(response)),);
+      map(response => this.forgotPasswordResponse(response)));
 
   @Effect()
   public forgotPasswordResponse$: Observable<Action> = this.actions$
@@ -544,7 +544,7 @@ export class LoginActions {
   public resetPasswordRequest$: Observable<Action> = this.actions$
     .ofType(LoginActions.resetPasswordRequest).pipe(
       switchMap((action: CustomActions) => this.auth.resetPassword(action.payload)),
-      map(response => this.resetPasswordResponse(response)),);
+      map(response => this.resetPasswordResponse(response)));
 
   @Effect()
   public resetPasswordResponse$: Observable<Action> = this.actions$
@@ -563,7 +563,7 @@ export class LoginActions {
   public renewSession$: Observable<Action> = this.actions$
     .ofType(LoginActions.renewSessionRequest).pipe(
       switchMap((action: CustomActions) => this.auth.renewSession()),
-      map(response => this.renewSessionResponse(response)),);
+      map(response => this.renewSessionResponse(response)));
 
   @Effect()
   public renewSessionResponse$: Observable<Action> = this.actions$

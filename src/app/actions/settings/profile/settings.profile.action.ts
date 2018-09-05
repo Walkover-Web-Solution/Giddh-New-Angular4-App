@@ -26,7 +26,7 @@ export class SettingsProfileActions {
       }, true, {
         type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public UpdateProfile$: Observable<Action> = this.action$

@@ -29,7 +29,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /*
@@ -42,7 +42,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /**
@@ -55,7 +55,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /*
@@ -68,7 +68,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /*
@@ -81,7 +81,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /*
@@ -98,7 +98,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /*
@@ -114,7 +114,7 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /*
@@ -127,6 +127,6 @@ export class SettingsBunchService {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 }

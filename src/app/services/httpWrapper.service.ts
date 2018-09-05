@@ -8,6 +8,9 @@ import { GeneralService } from './general.service';
 @Injectable()
 export class HttpWrapperService {
 
+  constructor(private _http: HttpClient, private _loaderService: LoaderService, private _generalService: GeneralService) {
+  }
+
   public get = (url: string, params?: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
     options.params = params;
@@ -15,7 +18,7 @@ export class HttpWrapperService {
       //
     }), finalize(() => {
       this.hideLoader();
-    }),);
+    }));
   }
   public post = (url: string, body: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
@@ -23,7 +26,7 @@ export class HttpWrapperService {
       //
     }), finalize(() => {
       this.hideLoader();
-    }),);
+    }));
   }
   public put = (url: string, body: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
@@ -31,7 +34,7 @@ export class HttpWrapperService {
       //
     }), finalize(() => {
       this.hideLoader();
-    }),);
+    }));
   }
   public delete = (url: string, params?: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
@@ -40,7 +43,7 @@ export class HttpWrapperService {
       //
     }), finalize(() => {
       this.hideLoader();
-    }),);
+    }));
   }
   public patch = (url: string, body: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
@@ -48,12 +51,8 @@ export class HttpWrapperService {
       //
     }), finalize(() => {
       this.hideLoader();
-    }),);
+    }));
   }
-
-  constructor(private _http: HttpClient, private _loaderService: LoaderService, private _generalService: GeneralService) {
-  }
-
   public prepareOptions(options: any): any {
     this.showLoader();
     let sessionId = this._generalService.sessionId;

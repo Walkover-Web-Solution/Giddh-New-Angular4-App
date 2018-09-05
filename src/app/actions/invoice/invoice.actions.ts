@@ -27,7 +27,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body)),
       map(response => {
         return this.GetAllInvoicesResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GetAllInvoicesResponse$: Observable<Action> = this.action$
@@ -47,7 +47,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // Preview Invoice
   @Effect()
@@ -60,7 +60,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // Preview of Generated Invoice
   @Effect()
@@ -73,7 +73,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // Preview of Generated Invoice
   @Effect()
@@ -86,7 +86,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // Generate Invoice
   @Effect()
@@ -99,7 +99,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // Generate Bulk Invoice
   // @Effect()
@@ -119,7 +119,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom)),
       map(response => {
         return this.GenerateBulkInvoiceResponse(response);
-      }),);
+      }));
 
   @Effect()
   public GenerateBulkInvoiceResponse$: Observable<Action> = this.action$
@@ -147,7 +147,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload)),
       map(response => {
         return this.DeleteInvoiceResponse(response);
-      }),);
+      }));
 
   @Effect()
   public DeleteInvoiceResponse$: Observable<Action> = this.action$
@@ -169,7 +169,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action)),
       map(response => {
         return this.ActionOnInvoiceResponse(response);
-      }),);
+      }));
 
   @Effect()
   public ActionOnInvoiceResponse$: Observable<Action> = this.action$
@@ -194,7 +194,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
         payload: res
-      })),);
+      })));
 
   // *********************************** MUSTAFA //***********************************\\
 
@@ -211,7 +211,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * DELETE INVOICE WEBHOOK
@@ -226,7 +226,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * UPDATE INVOICE EMAILID
@@ -241,7 +241,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * SAVE INVOICE WEBHOOK
@@ -256,7 +256,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * UPDATE INVOICE SETTING
@@ -271,7 +271,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * GET RAZORPAY DETAIL
@@ -286,7 +286,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * UPDATE RAZORPAY DETAIL
@@ -301,7 +301,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * DELETE RAZORPAY DETAIL
@@ -316,7 +316,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * DELETE INVOICE EMAIL
@@ -331,7 +331,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE,
         payload: res
-      })),);
+      })));
 
   /**
    * SAVE RAZORPAY DETAIL
@@ -346,7 +346,7 @@ export class InvoiceActions {
       }, true, {
         type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public DownloadInvoice$: Observable<Action> = this.action$
@@ -440,7 +440,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceTemplatesService.getTemplates()),
       map(response => {
         return this.getSampleTemplateResponse(response);
-      }),);
+      }));
 
   @Effect()
   private getSampleTemplateResponse$: Observable<Action> = this.action$
@@ -460,7 +460,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates()),
       map(response => {
         return this.getAllCreatedTemplatesResponse(response);
-      }),);
+      }));
 
   @Effect()
   private getAllCreatedTemplatesResponse$: Observable<Action> = this.action$
@@ -480,7 +480,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload)),
       map(response => {
         return this.setTemplateAsDefaultResponse(response);
-      }),);
+      }));
 
   @Effect()
   private setTemplateAsDefaultResponse$: Observable<Action> = this.action$
@@ -502,7 +502,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceTemplatesService.deleteTemplate(action.payload)),
       map(response => {
         return this.deleteTemplateResponse(response);
-      }),);
+      }));
 
   @Effect()
   private deleteTemplateResponse$: Observable<Action> = this.action$
@@ -521,7 +521,7 @@ export class InvoiceActions {
   private GetAllRecurringInvoices$: Observable<Action> = this.action$
     .ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA).pipe(
       switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers(action.payload)),
-      map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res.body), true, this.GetAllRecurringInvoicesResponse(res.body))),);
+      map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res.body), true, this.GetAllRecurringInvoicesResponse(res.body))));
   /**
    * SAVE Recurring Voucher
    */
@@ -529,7 +529,7 @@ export class InvoiceActions {
   private SaveRecurrigVoucher$: Observable<Action> = this.action$
     .ofType(INVOICE.RECURRING.CREATE_RECURRING_INVOICE).pipe(
       switchMap((action: CustomActions) => this._recurringService.createRecurringVouchers(action.payload)),
-      map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), 'Recurring Invoice Created.')),);
+      map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), 'Recurring Invoice Created.')));
 
   /**
    * UPDATE Recurring Vouchers
@@ -539,7 +539,7 @@ export class InvoiceActions {
     .ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE).pipe(
       switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload)),
       map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
-        this.updateRecurringInvoiceResponse(null), 'Recurring Invoice Updated.')),);
+        this.updateRecurringInvoiceResponse(null), 'Recurring Invoice Updated.')));
 
   /**
    * DELETE Recurring Vouchers
@@ -550,7 +550,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._recurringService.deleteRecurringVouchers(action.payload)),
       map(res => this.validateResponse<string, string>(res, this.deleteRecurringInvoiceResponse(res.request),
         true,
-        this.deleteRecurringInvoiceResponse(null))),);
+        this.deleteRecurringInvoiceResponse(null))));
 
   constructor(
     private action$: Actions,

@@ -24,7 +24,7 @@ export class SettingsBranchActions {
       }, true, {
         type: SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE,
         payload: res
-      })),);
+      })));
 
   @Effect()
   public UpdateProfile$: Observable<Action> = this.action$
@@ -51,7 +51,7 @@ export class SettingsBranchActions {
   public RemoveBranch$: Observable<Action> = this.action$
     .ofType(SETTINGS_BRANCH_ACTIONS.REMOVE_BRANCH).pipe(
       switchMap((action: CustomActions) => this.settingsBranchService.RemoveBranch(action.payload)),
-      map(response => this.CreateBranchesResponse(response)),);
+      map(response => this.CreateBranchesResponse(response)));
 
   @Effect()
   public RemoveBranchResponse$: Observable<Action> = this.action$
@@ -70,7 +70,7 @@ export class SettingsBranchActions {
   public GetParentCompany$: Observable<Action> = this.action$
     .ofType(SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY).pipe(
       switchMap((action: CustomActions) => this.settingsBranchService.GetParentCompany()),
-      map(response => this.GetParentCompanyResponse(response)),);
+      map(response => this.GetParentCompanyResponse(response)));
 
   constructor(private action$: Actions,
               private toasty: ToasterService,

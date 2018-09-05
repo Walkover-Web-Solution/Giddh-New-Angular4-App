@@ -38,7 +38,7 @@ export class EledgerService {
       let data: BaseResponse<EledgerResponse[], string> = res;
       data.queryString = {accountUniqueName, refresh};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<EledgerResponse[], string>(e, '', {accountUniqueName, refresh})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<EledgerResponse[], string>(e, '', {accountUniqueName, refresh})));
   }
 
   /*
@@ -52,7 +52,7 @@ export class EledgerService {
       let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, transactionId};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {accountUniqueName, transactionId})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {accountUniqueName, transactionId})));
   }
 
   /*
@@ -69,7 +69,7 @@ export class EledgerService {
         data.queryString = {accountUniqueName, transactionId};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, EledgerMapRequest>(e, model, {accountUniqueName, transactionId})),);
+      catchError((e) => this.errorHandler.HandleCatch<string, EledgerMapRequest>(e, model, {accountUniqueName, transactionId})));
   }
 
 }

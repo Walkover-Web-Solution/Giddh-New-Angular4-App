@@ -18,6 +18,7 @@ import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
+import { BsDaterangepickerDirective, BsDaterangepickerConfig } from 'ngx-bootstrap';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
@@ -36,7 +37,7 @@ const COMPARISON_FILTER = [
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
-  @ViewChild('dp') public dateRangePicker: BsDaterangepickerComponent;
+  @ViewChild('dp') public dateRangePicker: BsDaterangepickerDirective;
   public bsRangeValue: string[];
   @Input() public advanceSearchRequest: AdvanceSearchRequest;
   @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
@@ -45,7 +46,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
   public showChequeDatePicker: boolean = false;
-  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY' };
+  public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY' };
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;

@@ -19,7 +19,7 @@ export class InventoryEntryActions {
   public addNewEntry$: Observable<Action> = this.action$
     .ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY).pipe(
       switchMap((action: CustomActions) => this._inventoryService.CreateInventoryEntry(action.payload.entry, action.payload.reciever)),
-      map(response => this.addNewEntryResponse(response)),);
+      map(response => this.addNewEntryResponse(response)));
 
   @Effect()
   public addNewEntryResponse$: Observable<Action> = this.action$
@@ -39,7 +39,7 @@ export class InventoryEntryActions {
   public updateEntry$: Observable<Action> = this.action$
     .ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY).pipe(
       switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryEntry(action.payload.entry, action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
-      map(response => this.updateEntryResponse(response)),);
+      map(response => this.updateEntryResponse(response)));
 
   @Effect()
   public updateEntryResponse$: Observable<Action> = this.action$
@@ -59,7 +59,7 @@ export class InventoryEntryActions {
   public deleteEntry$: Observable<Action> = this.action$
     .ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY).pipe(
       switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryEntry(action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
-      map(response => this.deleteEntryResponse(response)),);
+      map(response => this.deleteEntryResponse(response)));
 
   @Effect()
   public deleteEntryResponse$: Observable<Action> = this.action$
@@ -79,7 +79,7 @@ export class InventoryEntryActions {
   public getEntry$: Observable<Action> = this.action$
     .ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY).pipe(
       switchMap((action: CustomActions) => this._inventoryService.GetInventoryEntry(action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
-      map(response => this.getEntryResponse(response)),);
+      map(response => this.getEntryResponse(response)));
 
   @Effect()
   public getEntryResponse$: Observable<Action> = this.action$

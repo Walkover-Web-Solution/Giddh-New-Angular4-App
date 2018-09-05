@@ -45,7 +45,7 @@ export class AccountService implements OnInit {
         data.queryString = {groupUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e, model, {groupUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e, model, {groupUniqueName})));
   }
 
   public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
@@ -58,7 +58,7 @@ export class AccountService implements OnInit {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e)));
   }
 
   public GetAccountDetails(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
@@ -68,7 +68,7 @@ export class AccountService implements OnInit {
       let data: BaseResponse<AccountResponse, string> = res;
       data.queryString = {accountUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e)));
   }
 
   public GetAccountUniqueName(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
@@ -79,7 +79,7 @@ export class AccountService implements OnInit {
       data.queryString = {accountUniqueName};
       data.request = accountUniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e)));
   }
 
   public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string, AccountMergeRequest[]>> {
@@ -92,7 +92,7 @@ export class AccountService implements OnInit {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, AccountMergeRequest[]>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, AccountMergeRequest[]>(e)));
   }
 
   public UnmergeAccount(model: AccountUnMergeRequest, accountUniqueName: string): Observable<BaseResponse<string, AccountUnMergeRequest>> {
@@ -105,7 +105,7 @@ export class AccountService implements OnInit {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, AccountUnMergeRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, AccountUnMergeRequest>(e)));
   }
 
   public ApplyTax(model: ApplyTaxRequest): Observable<BaseResponse<string, ApplyTaxRequest>> {
@@ -119,7 +119,7 @@ export class AccountService implements OnInit {
         data.request = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ApplyTaxRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ApplyTaxRequest>(e)));
   }
 
   public ApplyDiscount(model: ApplyDiscountRequest): Observable<BaseResponse<string, ApplyDiscountRequest>> {
@@ -131,7 +131,7 @@ export class AccountService implements OnInit {
         data.request = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ApplyDiscountRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ApplyDiscountRequest>(e)));
   }
 
   public DeleteDiscount(discountUniqueName: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
@@ -147,7 +147,7 @@ export class AccountService implements OnInit {
         data.queryString = {discountUniqueName, accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public AccountMove(model: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
@@ -160,7 +160,7 @@ export class AccountService implements OnInit {
         data.queryString = {accountUniqueName, activeGroupUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, AccountMoveRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, AccountMoveRequest>(e)));
   }
 
   public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string, ShareAccountRequest>> {
@@ -173,7 +173,7 @@ export class AccountService implements OnInit {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ShareAccountRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ShareAccountRequest>(e)));
   }
 
   public Share(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
@@ -186,7 +186,7 @@ export class AccountService implements OnInit {
         data.queryString = {roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)));
   }
 
   public UnShare(entryUniqueName: string, entity: string, entityUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
@@ -198,7 +198,7 @@ export class AccountService implements OnInit {
         data.queryString = {entryUniqueName, entityUniqueName, entity};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)));
   }
 
   public UpdateEntityPermission(model: ShareRequestForm, entity: string, newRoleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
@@ -211,7 +211,7 @@ export class AccountService implements OnInit {
         data.queryString = {model, newRoleUniqueName, entity};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e)));
   }
 
   public AccountUnshare(userEmail: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
@@ -223,7 +223,7 @@ export class AccountService implements OnInit {
       data.request = userEmail;
       data.queryString = {accountUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
 
   public AccountShareWith(accountUniqueName: string): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
@@ -236,7 +236,7 @@ export class AccountService implements OnInit {
         data.queryString = {accountUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e)));
   }
 
   public DeleteAccount(accountUniqueName: string, groupUniqueName: string): Observable<BaseResponse<string, any>> {
@@ -247,7 +247,7 @@ export class AccountService implements OnInit {
       data.request = {accountUniqueName, groupUniqueName};
       data.queryString = accountUniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName})),);
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, {accountUniqueName})));
   }
 
   public GetFlattenAccounts(q?: string, page?: string, count?: string): Observable<BaseResponse<FlattenAccountsResponse, string>> {
@@ -259,7 +259,7 @@ export class AccountService implements OnInit {
         data.request = '';
         data.queryString = {q, page, count};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, string>(e)),);
+      }), catchError((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, string>(e)));
     } else {
       return observableEmpty();
     }
@@ -273,7 +273,7 @@ export class AccountService implements OnInit {
       data.request = groupUniqueNames;
       data.queryString = {count, q, page};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, { groupUniqueNames: string[] }>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, { groupUniqueNames: string[] }>(e)));
   }
 
   public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse, string>> {
@@ -284,7 +284,7 @@ export class AccountService implements OnInit {
       data.request = '';
       data.queryString = {accountUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountsTaxHierarchyResponse, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountsTaxHierarchyResponse, string>(e)));
   }
 
   /**
@@ -297,7 +297,7 @@ export class AccountService implements OnInit {
       let data: BaseResponse<AccountResponseV2, string> = res;
       data.queryString = {accountUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e)));
   }
 
   public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
@@ -310,7 +310,7 @@ export class AccountService implements OnInit {
         data.queryString = {groupUniqueName};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, {groupUniqueName})),);
+      catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, {groupUniqueName})));
   }
 
   public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
@@ -325,6 +325,6 @@ export class AccountService implements OnInit {
         data.queryString = reqObj;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)),);
+      catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
   }
 }

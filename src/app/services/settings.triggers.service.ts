@@ -26,7 +26,7 @@ export class SettingsTriggersService {
     return this._http.get(this.config.apiUrl + TRIGGER_API.GET.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   /**
@@ -39,7 +39,7 @@ export class SettingsTriggersService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -52,7 +52,7 @@ export class SettingsTriggersService {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
 
   /**
@@ -65,6 +65,6 @@ export class SettingsTriggersService {
       let data: BaseResponse<any, any> = res;
       data.request = triggerUniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, triggerUniqueName)),);
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, triggerUniqueName)));
   }
 }
