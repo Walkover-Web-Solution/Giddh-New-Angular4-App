@@ -86,7 +86,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     });
 
     // Refresh stock list on company change
-    this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$), distinct((val) => val === 'companyUniqueName'),).subscribe((value: any) => {
+    this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$), distinct((val) => val === 'companyUniqueName')).subscribe((value: any) => {
       this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     });
 

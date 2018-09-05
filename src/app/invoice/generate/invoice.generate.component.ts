@@ -120,7 +120,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
           return false;
         }
         return true;
-      }),).subscribe((o: PreviewInvoiceResponseClass) => {
+      })).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o) {
         this.getInvoiceTemplateDetails(o.templateUniqueName);
       }

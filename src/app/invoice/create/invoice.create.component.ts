@@ -118,7 +118,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).pipe(
       takeUntil(this.destroyed$),
-      distinctUntilChanged(),)
+      distinctUntilChanged())
       .subscribe((o: PreviewInvoiceResponseClass) => {
           if (o && o.invoiceDetails) {
             this.invFormData = _.cloneDeep(o);
@@ -162,7 +162,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     this.store.select(p => p.invoice.invoiceTemplateConditions).pipe(
       takeUntil(this.destroyed$),
-      distinctUntilChanged(),)
+      distinctUntilChanged())
       .subscribe((o: InvoiceTemplateDetailsResponse) => {
           if (o) {
             this.invTempCond = _.cloneDeep(o);
@@ -184,7 +184,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     this.store.select(state => state.invoice.visitedFromPreview).pipe(
       takeUntil(this.destroyed$),
-      distinctUntilChanged(),)
+      distinctUntilChanged())
       .subscribe((val: boolean) => {
           this.updateMode = val;
         }

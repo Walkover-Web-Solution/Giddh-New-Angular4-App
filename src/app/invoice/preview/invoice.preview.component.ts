@@ -137,7 +137,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
           return false;
         }
         return true;
-      }),).subscribe((o: PreviewInvoiceResponseClass) => {
+      })).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o) {
         /**
          * find if templateUniqueName is exist in company all templates

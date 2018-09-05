@@ -30,14 +30,22 @@ module.exports = function (options) {
 
   const entry = {
     polyfills: './src/polyfills.browser.ts',
-    main:      './src/main.browser.ts'
+    main: './src/main.browser.ts'
   };
 
   Object.assign(ngcWebpackConfig.plugin, {
     tsConfigPath: METADATA.tsConfigPath,
     mainPath: entry.main
   });
-
+  console.log('Define Plugin : ---', JSON.stringify(Object.assign({
+    'ENV': JSON.stringify(METADATA.ENV),
+    'HMR': METADATA.HMR,
+    'AOT': METADATA.AOT,
+    'process.env.ENV': JSON.stringify(METADATA.ENV),
+    'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+    'process.env.HMR': METADATA.HMR,
+    'process.env.isElectron': JSON.stringify(false)
+  }, METADATA.definePluginObject, { process: { env: METADATA.definePluginObject } })))
   return {
     /**
      * The entry point for the bundle
@@ -53,7 +61,7 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#resolve
      */
     resolve: {
-      mainFields: [ ...(supportES2015 ? ['es2015'] : []), 'browser', 'module', 'main' ],
+      mainFields: [...(supportES2015 ? ['es2015'] : []), 'browser', 'module', 'main'],
 
       /**
        * An array of extensions that should be used to resolve modules.
@@ -177,18 +185,15 @@ module.exports = function (options) {
        * See: https://webpack.js.org/plugins/define-plugin/
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-      new webpack.DefinePlugin({
+      new webpack.DefinePlugin(Object.assign({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
-        'isElectron': JSON.stringify(false),
-        'AppUrl': JSON.stringify(METADATA.AppUrl),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
-        'process.env.isElectron': JSON.stringify(false),
-        'process.env.AppUrl': JSON.stringify(METADATA.AppUrl),
-      }),
+        'process.env.isElectron': JSON.stringify(false)
+      }, METADATA.definePluginObject, { process: { env: METADATA.definePluginObject } })),
 
       /**
        * Plugin: CommonsChunkPlugin
@@ -225,9 +230,9 @@ module.exports = function (options) {
        */
       new CopyWebpackPlugin([
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/meta'}
+        { from: 'src/meta' }
       ],
-        isProd ? { ignore: [ 'mock-data/**/*' ] } : undefined
+        isProd ? { ignore: ['mock-data/**/*'] } : undefined
       ),
 
       /*
@@ -242,7 +247,7 @@ module.exports = function (options) {
         template: 'src/index.html',
         title: METADATA.title,
         chunksSortMode: function (a, b) {
-          const entryPoints = ["inline","polyfills","sw-register","styles","vendor","main"];
+          const entryPoints = ["inline", "polyfills", "sw-register", "styles", "vendor", "main"];
           return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0]);
         },
         metadata: METADATA,
@@ -255,13 +260,13 @@ module.exports = function (options) {
         } : false
       }),
 
-       /**
-       * Plugin: ScriptExtHtmlWebpackPlugin
-       * Description: Enhances html-webpack-plugin functionality
-       * with different deployment options for your scripts including:
-       *
-       * See: https://github.com/numical/script-ext-html-webpack-plugin
-       */
+      /**
+      * Plugin: ScriptExtHtmlWebpackPlugin
+      * Description: Enhances html-webpack-plugin functionality
+      * with different deployment options for your scripts including:
+      *
+      * See: https://github.com/numical/script-ext-html-webpack-plugin
+      */
       new ScriptExtHtmlWebpackPlugin({
         sync: /inline|polyfills|vendor/,
         defaultAttribute: 'async',

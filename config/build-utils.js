@@ -2,9 +2,9 @@ const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');
 const helpers = require('./helpers');
-
+const environments = require('./environment');
 const DEFAULT_METADATA = {
-  title: 'KISS - By Walkover',
+  title: 'Giddh Application',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
   HMR: helpers.hasProcessFlag('hot'),
@@ -12,12 +12,8 @@ const DEFAULT_METADATA = {
   E2E: !!process.env.BUILD_E2E,
   WATCH: helpers.hasProcessFlag('watch'),
   tsConfigPath: 'tsconfig.webpack.json',
-
-  /**
-   * This suffix is added to the environment.ts file, if not set the default environment file is loaded (development)
-   * To disable environment files set this to null
-   */
-  envFileSuffix: process.env.envFileSuffix
+  envFileSuffix: process.env.envFileSuffix,
+  definePluginObject: GetEnvPlugin(process.env.definePluginEnv || 'local')
 };
 
 function supportES2015(tsConfigPath) {
@@ -27,7 +23,27 @@ function supportES2015(tsConfigPath) {
   }
   return supportES2015['supportES2015'];
 }
+function GetEnvPlugin(env) {
+  let environment = environments[env];
 
+  console.log(JSON.stringify(environment));
+  return environment;
+  // let plugin = new DefinePlugin({
+  //   'ENV': JSON.stringify(METADATA.ENV),
+  //   'HMR': METADATA.HMR,
+  //   'isElectron': false,
+  //   'errlyticsNeeded': env.errlyticsNeeded,
+  //   'errlyticsKey': env.errlyticsKey,
+  //   'AppUrl': JSON.stringify(env.AppUrl),
+  //   'ApiUrl': JSON.stringify(env.ApiUrl),
+  //   'APP_FOLDER': JSON.stringify(env.APP_FOLDER),
+  //   'process.env': {
+  //     'ENV': JSON.stringify(METADATA.ENV),
+  //     'NODE_ENV': JSON.stringify(METADATA.ENV),
+  //     'HMR': METADATA.HMR
+  //   }
+  // }),
+}
 function readTsConfig(tsConfigPath) {
   const configResult = ts.readConfigFile(tsConfigPath, ts.sys.readFile);
   return ts.parseJsonConfigFileContent(configResult.config, ts.sys,
@@ -74,7 +90,7 @@ function ngcWebpackSetup(prod, metadata) {
   if (!metadata) {
     metadata = DEFAULT_METADATA;
   }
-
+  console.log('govinda : prod ', prod)
   const buildOptimizer = prod;
   const sourceMap = true; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
@@ -132,3 +148,4 @@ exports.readTsConfig = readTsConfig;
 exports.getEnvFile = getEnvFile;
 exports.rxjsAlias = rxjsAlias;
 exports.ngcWebpackSetup = ngcWebpackSetup;
+

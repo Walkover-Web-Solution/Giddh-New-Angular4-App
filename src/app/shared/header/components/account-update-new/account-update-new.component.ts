@@ -137,7 +137,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       this.countryPhoneCode.push({value: c.value, label: c.value});
     });
 
-    this.store.select(s => s.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$),).subscribe((profile) => {
+    this.store.select(s => s.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());
     });
     this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {

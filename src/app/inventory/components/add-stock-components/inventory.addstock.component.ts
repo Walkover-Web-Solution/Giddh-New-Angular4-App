@@ -132,7 +132,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.customStockActions.GetStockUnit());
 
     // subscribe route parameters
-    this.route.params.pipe(distinct(), takeUntil(this.destroyed$),).subscribe(params => {
+    this.route.params.pipe(distinct(), takeUntil(this.destroyed$)).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
       if (params['stockUniqueName'] && params['groupUniqueName']) {
@@ -840,7 +840,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
     let count = 0;
-    _.forEach(control.controls, function (o) {
+    _.forEach(control.controls, (o) => {
       if (o.value.stockUniqueName === uniqueName) {
         count++;
       }
@@ -862,7 +862,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
     let rawArr = control.getRawValue();
-    _.forEach(rawArr, function (o, i) {
+    _.forEach(rawArr,  (o, i) => {
       if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
         rawArr = _.without(rawArr, o);
         control.removeAt(i);
@@ -909,7 +909,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
         this.isUpdatingStockForm = false;
         this.companyTaxesList$.subscribe(a => {
-          _.forEach(a, function (o) {
+          _.forEach(a,  (o) => {
             o.isChecked = false;
           });
         });
@@ -939,8 +939,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let taxToMap = [];
     let e: any = {target: {checked: true}};
     let common = this.companyTaxesList$.subscribe(a => {
-      _.filter(a, function (tax) {
-        _.find(taxes, function (unq) {
+      _.filter(a, (tax) => {
+        _.find(taxes,  (unq) => {
           if (unq === tax.uniqueName) {
             return taxToMap.push(tax);
           }
