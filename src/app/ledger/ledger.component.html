@@ -17,7 +17,7 @@
                 <div class="col-xs-2">
                     <div class="row">
                         <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-                               (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                                (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
                         <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
                         <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
                         <!--type="text" ng-model="cDate" options="opts" required="">-->
@@ -61,7 +61,7 @@
         <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
             <div class="alert alert-danger fade in pr" style="padding-right:15px">
                 <button type="button" class="close">
-          <span style="font-size:12px;font-weight:normal" (click)="lc.showEledger = !lc.showEledger">Close</span>
+            <span style="font-size:12px;font-weight:normal" (click)="lc.showEledger = !lc.showEledger">Close</span>
         </button>
 
                 <table class="table ledgerTable" style="margin-bottom:0">
@@ -319,10 +319,10 @@
                             <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.voucherGenerated }">
                                 {{ txn.amount | number: '1.0-2' }}
                                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
                                 <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, txn.voucherName, $event)" container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
                             </td>
                         </tr>
@@ -416,7 +416,7 @@
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
                                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
-                  {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.2-2'}}</span>
+                    {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.2-2'}}</span>
                                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
                             </td>
                         </tr>
@@ -435,10 +435,10 @@
                             <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.voucherGenerated }">
                                 {{txn.amount | number: '1.0-2'}}
                                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
                                 <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" (click)="downloadInvoice(txn.voucherNumber, txn.voucherName, $event)" container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
                             </td>
                         </tr>
@@ -522,7 +522,7 @@
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'" class="">
-                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2' }}
+                    C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2' }}
                 </span>
                             </td>
                         </tr>
@@ -540,9 +540,9 @@
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
-                  C/F: Dr
-                  <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2'}}
-                  </span>
+                    C/F: Dr
+                    <span class="primary_clr">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.2-2'}}
+                    </span>
                                 </span>
                             </td>
                         </tr>
