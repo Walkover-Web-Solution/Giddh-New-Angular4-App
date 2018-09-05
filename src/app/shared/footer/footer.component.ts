@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
@@ -9,15 +9,20 @@ import { Observable } from 'rxjs/Observable';
 })
 export class FooterComponent implements OnInit, AfterViewInit {
   public title: Observable<string>;
-  public languages: any[] = [{ name: 'ENGLISH', value: 'en' }, { name: 'DUTCH', value: 'nl' }];
+  public languages: any[] = [{name: 'ENGLISH', value: 'en'}, {name: 'DUTCH', value: 'nl'}];
 
   /**
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor() {
+  }
+
   // tslint:disable-next-line:no-empty
-  public ngOnInit() { }
+  public ngOnInit() {
+  }
+
   // tslint:disable-next-line:no-empty
-  public ngAfterViewInit() { }
+  public ngAfterViewInit() {
+  }
 }

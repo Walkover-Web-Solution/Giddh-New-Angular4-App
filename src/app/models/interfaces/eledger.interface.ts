@@ -9,7 +9,7 @@ export interface IEledgerTransactionRemarks {
   chequeNumber?: any;
 }
 
- export interface IEledgerTransaction {
+export interface IEledgerTransaction {
   remarks: IEledgerTransactionRemarks;
   amount: number;
   type: string;

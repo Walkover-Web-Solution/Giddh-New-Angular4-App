@@ -10,4 +10,5 @@ import { DaterangepickerConfig } from './config.service';
   exports: [DaterangePickerComponent]
 
 })
-export class Daterangepicker { }
+export class Daterangepicker {
+}

@@ -1,3 +1,4 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -6,9 +7,9 @@ import { ToasterService } from '../../services/toaster.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DaybookService } from '../../services/daybook.service';
 import { saveAs } from 'file-saver';
-import { DayBookRequestModel, DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, DayBookRequestModel } from '../../models/api-models/DaybookRequest';
 import { DayBookResponseModel } from '../../models/api-models/Daybook';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class DaybookActions {
@@ -23,55 +24,55 @@ export class DaybookActions {
   public static readonly EXPORT_DAYBOOK_POST_RESPONSE = 'EXPORT_DAYBOOK_POST_RESPONSE';
 
   @Effect() private GetDaybook$: Observable<Action> = this.action$
-    .ofType(DaybookActions.GET_DAYBOOK_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._daybookService.GetDaybook(action.payload.request, action.payload.queryRequest)
-        .map((r) => this.validateResponse<DayBookResponseModel, DayBookRequestModel>(r, {
-          type: DaybookActions.GET_DAYBOOK_RESPONSE,
-          payload: r.body
-        }, true, {
+    .ofType(DaybookActions.GET_DAYBOOK_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._daybookService.GetDaybook(action.payload.request, action.payload.queryRequest).pipe(
+          map((r) => this.validateResponse<DayBookResponseModel, DayBookRequestModel>(r, {
+            type: DaybookActions.GET_DAYBOOK_RESPONSE,
+            payload: r.body
+          }, true, {
             type: DaybookActions.GET_DAYBOOK_RESPONSE,
             payload: null
-          }));
-    });
+          })));
+      }));
 
   @Effect() private ExportDaybook$: Observable<Action> = this.action$
-    .ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest)
-        .map((res) => {
-          if (res.status === 'success') {
-            let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
-            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
-            saveAs(blob, 'response' + type);
-          } else {
-            this._toasty.clearAllToaster();
-            this._toasty.errorToast(res.message);
-          }
-          return { type: 'EmptyAction' };
-        });
-    });
+    .ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest).pipe(
+          map((res) => {
+            if (res.status === 'success') {
+              let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
+              let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
+              saveAs(blob, 'response' + type);
+            } else {
+              this._toasty.clearAllToaster();
+              this._toasty.errorToast(res.message);
+            }
+            return {type: 'EmptyAction'};
+          }));
+      }));
 
-    @Effect() private ExportDaybookPost$: Observable<Action> = this.action$
-    .ofType(DaybookActions.EXPORT_DAYBOOK_POST_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._daybookService.ExportDaybookPost(action.payload.request, action.payload.queryRequest)
-        .map((res) => {
-          if (res.status === 'success') {
-            let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
-            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
-            saveAs(blob, 'response' + type);
-          } else {
-            this._toasty.clearAllToaster();
-            this._toasty.errorToast(res.message);
-          }
-          return { type: 'EmptyAction' };
-        });
-    });
+  @Effect() private ExportDaybookPost$: Observable<Action> = this.action$
+    .ofType(DaybookActions.EXPORT_DAYBOOK_POST_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._daybookService.ExportDaybookPost(action.payload.request, action.payload.queryRequest).pipe(
+          map((res) => {
+            if (res.status === 'success') {
+              let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
+              let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
+              saveAs(blob, 'response' + type);
+            } else {
+              this._toasty.clearAllToaster();
+              this._toasty.errorToast(res.message);
+            }
+            return {type: 'EmptyAction'};
+          }));
+      }));
 
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private _daybookService: DaybookService) {
+              private _toasty: ToasterService,
+              private _daybookService: DaybookService) {
   }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -92,31 +93,31 @@ export class DaybookActions {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: DaybookActions.GET_DAYBOOK_REQUEST,
-      payload: { request, queryRequest }
+      payload: {request, queryRequest}
     };
   }
 
   public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: DaybookActions.EXPORT_DAYBOOK_REQUEST,
-      payload: { request, queryRequest }
+      payload: {request, queryRequest}
     };
   }
 
   public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {
     return {
       type: DaybookActions.EXPORT_DAYBOOK_POST_REQUEST,
-      payload: { request, queryRequest }
+      payload: {request, queryRequest}
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse < TResponse, TRequest > , successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

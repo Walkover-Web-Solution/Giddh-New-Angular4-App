@@ -1,8 +1,9 @@
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { LocationService } from '../../../../services/location.service';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
@@ -16,7 +17,6 @@ import { AuthenticationService } from '../../../../services/authentication.servi
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GeneralService } from '../../../../services/general.service';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
@@ -51,22 +51,22 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
-    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-    private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
-    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+              private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+              private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
+              private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({ value: c.countryName, label: c.value });
+      this.countryCodeList.push({value: c.countryName, label: c.value});
     });
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
-    this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
-    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
-    this.setCountryCode({ value: 'India' });
+    this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).pipe(takeUntil(this.destroyed$));
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
+    this.setCountryCode({value: 'India'});
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         if (s.session.user.user.mobileNo) {
@@ -75,13 +75,13 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           return s.session.user.user.contactNo !== null;
         }
       }
-    }).takeUntil(this.destroyed$);
-    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
+    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.dataSource = (text$: Observable<any>): Observable<any> => {
-      return text$
-        .debounceTime(300)
-        .distinctUntilChanged()
-        .switchMap((term: string) => {
+      return text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term: string) => {
           if (term.startsWith(' ', 0)) {
             return [];
           }
@@ -90,16 +90,16 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
             AdministratorLevel: undefined,
             Country: undefined,
             OnlyCity: true
-          }).catch(e => {
+          }).pipe(catchError(e => {
             return [];
-          });
-        })
-        .map((res) => {
+          }));
+        }),
+        map((res) => {
           // let data = res.map(item => item.address_components[0].long_name);
           let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
-        });
+        }),);
     };
 
     this.isMobileVerified.subscribe(p => {
@@ -195,7 +195,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
   public closeModal() {
     let companies = null;
-    this.companies$.take(1).subscribe(c => companies = c);
+    this.companies$.pipe(take(1)).subscribe(c => companies = c);
     if (companies) {
       if (companies.length > 0) {
         this.store.dispatch(this._generalActions.getGroupWithAccounts());

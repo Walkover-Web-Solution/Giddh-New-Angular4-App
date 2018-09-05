@@ -43,7 +43,7 @@ export class EditFiltersContainersComponent implements OnChanges {
 
   /**
    * ngOnChanges
-  */
+   */
   public ngOnChanges(s) {
     if (s.editMode && s.editMode.currentValue !== s.editMode.previousValue) {
       this.editMode = s.editMode.currentValue;

@@ -9,11 +9,12 @@ import { UserDetailsComponent } from './userDetails.component';
       {
         path: '', component: UserDetailsComponent, canActivate: [NeedsAuthentication],
         children: [
-          { path: 'profile', component: UserDetailsComponent, canActivate: [NeedsAuthentication] }
+          {path: 'profile', component: UserDetailsComponent, canActivate: [NeedsAuthentication]}
         ]
       }
     ])
   ],
   exports: [RouterModule]
 })
-export class UserDetailsRoutingModule { }
+export class UserDetailsRoutingModule {
+}

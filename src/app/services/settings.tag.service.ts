@@ -1,12 +1,12 @@
-import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { SmsKeyClass } from '../models/api-models/SettingsIntegraion';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_TAG_API } from './apiurls/settings.tag.api';
 import { TagRequest } from '../models/api-models/settingsTags';
 
@@ -26,11 +26,11 @@ export class SettingsTagService {
   public GetAllTags(): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + SETTINGS_TAG_API.GET_ALL_TAGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + SETTINGS_TAG_API.GET_ALL_TAGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
   }
 
   /**
@@ -39,11 +39,11 @@ export class SettingsTagService {
   public CreateTag(model: TagRequest): Observable<BaseResponse<TagRequest, TagRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SETTINGS_TAG_API.CREATE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_TAG_API.CREATE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<TagRequest, TagRequest> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)),);
   }
 
   /**
@@ -56,11 +56,11 @@ export class SettingsTagService {
     };
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + SETTINGS_TAG_API.UPDATE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':tagUniqueName', encodeURIComponent(model.uniqueName)), body).map((res) => {
+    return this._http.put(this.config.apiUrl + SETTINGS_TAG_API.UPDATE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':tagUniqueName', encodeURIComponent(model.uniqueName)), body).pipe(map((res) => {
       let data: BaseResponse<TagRequest, TagRequest> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)),);
   }
 
   /**
@@ -69,11 +69,11 @@ export class SettingsTagService {
   public DeleteTag(model: TagRequest): Observable<BaseResponse<TagRequest, TagRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + SETTINGS_TAG_API.DELETE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':tagUniqueName', encodeURIComponent(model.uniqueName))).map((res) => {
+    return this._http.delete(this.config.apiUrl + SETTINGS_TAG_API.DELETE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':tagUniqueName', encodeURIComponent(model.uniqueName))).pipe(map((res) => {
       let data: BaseResponse<TagRequest, TagRequest> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)),);
   }
 
 //   /*

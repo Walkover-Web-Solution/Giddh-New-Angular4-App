@@ -1,4 +1,5 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { take, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
@@ -41,14 +42,14 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     }
 
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     // Sagar: show new trial balance for Walkover company only
     this.isWalkoverCompany = (companyUniqueName === 'walkpvindore14504197149880siqli') ? true : false;
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'trial-balance-and-profit-loss';
 
-    this._route.queryParams.takeUntil(this.destroyed$).subscribe((val) => {
+    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
         this.selectTab(val.tabIndex);
       }

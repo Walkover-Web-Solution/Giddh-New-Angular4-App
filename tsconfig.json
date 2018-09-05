@@ -20,7 +20,8 @@
       "@angular/*": ["node_modules/@angular/*"]
     },
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "./node_modules"
     ],
     "types": [
       "hammerjs",
@@ -28,7 +29,7 @@
       "node",
       "source-map",
       "uglify-js",
-      "webpack"
+      "webpack",
     ]
   },
   "exclude": [

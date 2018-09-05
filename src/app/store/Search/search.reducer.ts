@@ -1,4 +1,3 @@
-import { Action } from '@ngrx/store';
 import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
 import { SearchActions } from '../../actions/search.actions';
 import * as _ from '../../lodash-optimized';
@@ -30,7 +29,7 @@ export const initialState: SearchState = {
 export function searchReducer(state = initialState, action: CustomActions): SearchState {
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case SearchActions.SEARCH_RESPONSE: {
       let searchResp: BaseResponse<SearchResponse[], SearchRequest> = action.payload;

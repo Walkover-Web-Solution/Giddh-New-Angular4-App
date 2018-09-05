@@ -32,4 +32,5 @@ import { ClickOutsideModule } from 'ng-click-outside';
     ClickOutsideModule
   ]
 })
-export class PurchaseModule { }
+export class PurchaseModule {
+}

@@ -1,4 +1,3 @@
-
 export const COMPANY_API = {
   GET_STATE_DETAILS: 'state-details?companyUniqueName=:companyUniqueName',
   SET_STATE_DETAILS: 'state-details',
@@ -9,7 +8,7 @@ export const COMPANY_API = {
   DELETE_COMPANY: 'company/:uniqueName',
   TAX: 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: 'company/:companyUniqueName/users',
-  GET_ALL_STATES:  'states',
+  GET_ALL_STATES: 'states',
   GET_COUPON: 'coupon/:code',
   UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
   CONTACT_FORM: 'contact/submitDetails'

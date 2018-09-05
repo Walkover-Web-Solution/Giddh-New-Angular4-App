@@ -1,3 +1,4 @@
+import { catchError, map } from 'rxjs/operators';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -24,10 +25,10 @@ export class ImportExcelService {
     ;
     const formData: FormData = new FormData();
     formData.append('file', model, model.name);
-    return this._http.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}}).map((res) => {
+    return this._http.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}}).pipe(map((res) => {
       let data: BaseResponse<ImportExcelResponseData, string> = res;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)),);
   }
 
   public processImport(entity: string, model: ImportExcelResponseData) {
@@ -36,10 +37,10 @@ export class ImportExcelService {
       .replace(':companyUniqueName', companyUniqueName)
       .replace(':entity', entity)
     ;
-    return this._http.post(url, model).map((res) => {
+    return this._http.post(url, model).pipe(map((res) => {
       let data: BaseResponse<ImportExcelResponseData, string> = res;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)),);
   }
 
 }

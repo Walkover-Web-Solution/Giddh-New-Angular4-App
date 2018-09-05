@@ -1,12 +1,11 @@
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
-import { ROUTES } from './app.routes';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 
@@ -47,10 +46,10 @@ export class AppComponent implements AfterViewInit {
   public ngAfterViewInit() {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
-          return;
+        return;
       }
       window.scrollTo(0, 0);
-  });
+    });
   }
 
 }

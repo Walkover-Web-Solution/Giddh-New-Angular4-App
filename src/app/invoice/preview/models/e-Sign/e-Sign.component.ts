@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Esignature, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { forIn } from 'app/lodash-optimized';
 
@@ -31,7 +32,7 @@ export class EsignModalComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
+    this.store.select(p => p.invoice.invoiceData).pipe(takeUntil(this.destroyed$)).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
         this.eSignModel.ReferenceNumber = o.uniqueName;
         this.eSignModel.Name = o.company.name;

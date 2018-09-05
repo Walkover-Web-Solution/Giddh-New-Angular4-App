@@ -1,5 +1,4 @@
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { CompanyActions } from '../../company.actions';
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
@@ -18,73 +17,73 @@ export class SettingsTagActions {
 
   @Effect()
   public GetAllTags$: Observable<Action> = this.action$
-    .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS)
-    .switchMap((action: CustomActions) => this.settingsTagService.GetAllTags())
-    .map((res) => {
-      return { type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res };
-    });
+    .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS).pipe(
+      switchMap((action: CustomActions) => this.settingsTagService.GetAllTags()),
+      map((res) => {
+        return {type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res};
+      }),);
 
-    @Effect()
-      public GetAllTagsResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE)
-        .map((response: CustomActions) => {
-          return { type: 'EmptyAction' };
-        });
+  @Effect()
+  public GetAllTagsResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public CreateTag$: Observable<Action> = this.action$
-    .ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG)
-    .switchMap((action: CustomActions) => {
-      return this.settingsTagService.CreateTag(action.payload)
-        .map(response => this.CreateTagResponse(response));
-    });
+    .ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsTagService.CreateTag(action.payload).pipe(
+          map(response => this.CreateTagResponse(response)));
+      }));
 
   @Effect()
   public CreateTagResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Tag created successfully.', 'Success');
-      }
-      return this.GetALLTags();
-    });
+    .ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Tag created successfully.', 'Success');
+        }
+        return this.GetALLTags();
+      }));
 
   @Effect()
   public UpdateTag$: Observable<Action> = this.action$
-    .ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG)
-    .switchMap((action: CustomActions) => {
-      return this.settingsTagService.UpdateTag(action.payload)
-        .map(response => this.UpdateTagResponse(response));
-    });
+    .ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsTagService.UpdateTag(action.payload).pipe(
+          map(response => this.UpdateTagResponse(response)));
+      }));
 
   @Effect()
   public UpdateTagResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Tag updated successfully.', 'Success');
-      }
-      return this.GetALLTags();
-    });
+    .ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Tag updated successfully.', 'Success');
+        }
+        return this.GetALLTags();
+      }));
 
   @Effect()
-    public DeleteTag$: Observable<Action> = this.action$
-      .ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG)
-      .switchMap((action: CustomActions) => {
-        return this.settingsTagService.DeleteTag(action.payload)
-          .map(response => this.DeleteTagResponse(response));
-      });
+  public DeleteTag$: Observable<Action> = this.action$
+    .ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsTagService.DeleteTag(action.payload).pipe(
+          map(response => this.DeleteTagResponse(response)));
+      }));
 
   @Effect()
-    public DeleteTagResponse$: Observable<Action> = this.action$
-      .ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE)
-      .map((response: CustomActions) => {
+  public DeleteTagResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE).pipe(
+      map((response: CustomActions) => {
         let data: BaseResponse<any, any> = response.payload;
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
@@ -92,38 +91,38 @@ export class SettingsTagActions {
           this.toasty.successToast('Tag deleted successfully.', 'Success');
         }
         return this.GetALLTags();
-      });
+      }));
 
-    // @Effect()
-    // public RemoveBranch$: Observable<Action> = this.action$
-    //   .ofType(SETTINGS_TAG_ACTIONS.REMOVE_BRANCH)
-    //   .switchMap((action: CustomActions) => this.settingsTagService.RemoveBranch(action.payload))
-    //   .map(response => this.CreateBranchesResponse(response));
+  // @Effect()
+  // public RemoveBranch$: Observable<Action> = this.action$
+  //   .ofType(SETTINGS_TAG_ACTIONS.REMOVE_BRANCH)
+  //   .switchMap((action: CustomActions) => this.settingsTagService.RemoveBranch(action.payload))
+  //   .map(response => this.CreateBranchesResponse(response));
 
-    // @Effect()
-    // public RemoveBranchResponse$: Observable<Action> = this.action$
-    //   .ofType(SETTINGS_TAG_ACTIONS.REMOVE_BRANCH_RESPONSE)
-    //   .map((response: CustomActions) => {
-    //     let data: BaseResponse<any, any> = response.payload;
-    //     if (data.status === 'error') {
-    //       this.toasty.errorToast(data.message, data.code);
-    //     } else {
-    //       this.toasty.successToast(data.body);
-    //     }
-    //     return this.GetALLBranches();
-    //   });
+  // @Effect()
+  // public RemoveBranchResponse$: Observable<Action> = this.action$
+  //   .ofType(SETTINGS_TAG_ACTIONS.REMOVE_BRANCH_RESPONSE)
+  //   .map((response: CustomActions) => {
+  //     let data: BaseResponse<any, any> = response.payload;
+  //     if (data.status === 'error') {
+  //       this.toasty.errorToast(data.message, data.code);
+  //     } else {
+  //       this.toasty.successToast(data.body);
+  //     }
+  //     return this.GetALLBranches();
+  //   });
 
-    // @Effect()
-    // public GetParentCompany$: Observable<Action> = this.action$
-    //   .ofType(SETTINGS_TAG_ACTIONS.GET_PARENT_COMPANY)
-    //   .switchMap((action: CustomActions) => this.settingsTagService.GetParentCompany())
-    //   .map(response => this.GetParentCompanyResponse(response));
+  // @Effect()
+  // public GetParentCompany$: Observable<Action> = this.action$
+  //   .ofType(SETTINGS_TAG_ACTIONS.GET_PARENT_COMPANY)
+  //   .switchMap((action: CustomActions) => this.settingsTagService.GetParentCompany())
+  //   .map(response => this.GetParentCompanyResponse(response));
 
   constructor(private action$: Actions,
-    private toasty: ToasterService,
-    private router: Router,
-    private store: Store<AppState>,
-    private settingsTagService: SettingsTagService) {
+              private toasty: ToasterService,
+              private router: Router,
+              private store: Store<AppState>,
+              private settingsTagService: SettingsTagService) {
   }
 
   public GetALLTags(): CustomActions {
@@ -201,7 +200,7 @@ export class SettingsTagActions {
   //   };
   // }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

@@ -52,7 +52,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     id: LinkedinLoginProvider.PROVIDER_ID,
     provider: new LinkedinLoginProvider('817roify24ig8g')
   }
-]);
+], false);
 
 export function provideConfig() {
   return SOCIAL_CONFIG || {id: null, providers: []};

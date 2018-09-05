@@ -1,13 +1,14 @@
-import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { PURCHASE_INVOICE_API, GST_RETURN_API } from './apiurls/purchase-invoice.api';
+import { GST_RETURN_API, PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 export interface Account {
   name: string;
@@ -114,11 +115,11 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let req = model;
-    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).pipe(map((res) => {
       let data: BaseResponse<IInvoicePurchaseResponse, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e)),);
   }
 
   /*
@@ -129,11 +130,11 @@ export class PurchaseInvoiceService {
   public GetTaxesForThisCompany(): Observable<BaseResponse<ITaxResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.GET_TAXES.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.GET_TAXES.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<ITaxResponse[], string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<ITaxResponse[], string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<ITaxResponse[], string>(e)),);
   }
 
   /*
@@ -148,11 +149,11 @@ export class PurchaseInvoiceService {
       uniqueNames: [model.entryUniqueName],
       taxes: model.taxes
     };
-    return this._http.post(this.config.apiUrl + PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).map((res) => {
+    return this._http.post(this.config.apiUrl + PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).pipe(map((res) => {
       let data: BaseResponse<IInvoicePurchaseItem, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseItem, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<IInvoicePurchaseItem, string>(e)),);
   }
 
   /*
@@ -163,11 +164,11 @@ export class PurchaseInvoiceService {
   public DownloadGSTR1Sheet(reqObj: { month: string, gstNumber: string, type: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   /*
@@ -178,11 +179,11 @@ export class PurchaseInvoiceService {
   public DownloadGSTR1ErrorSheet(reqObj: { month: string, gstNumber: string, type: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   /*
@@ -193,11 +194,11 @@ export class PurchaseInvoiceService {
   public SendGSTR3BEmail(reqObj: { month: string, gstNumber: string, isNeedDetailSheet: string, email?: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Observable<BaseResponse<any, string>> {
@@ -207,11 +208,11 @@ export class PurchaseInvoiceService {
       uniqueNames: entryUniqueName,
       taxes: taxUniqueName
     };
-    return this._http.put(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).map((res) => {
+    return this._http.put(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public UpdatePurchaseEntry(model): Observable<BaseResponse<any, string>> {
@@ -225,11 +226,11 @@ export class PurchaseInvoiceService {
       availItc: model.availItc
     };
 
-    return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
+    return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public UpdateInvoice(model): Observable<BaseResponse<any, string>> {
@@ -242,41 +243,41 @@ export class PurchaseInvoiceService {
       sendToGstr2: model.sendToGstr2
     };
 
-    return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).map((res) => {
+    return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public SaveJioGst(model: object): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_JIO_GST.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_JIO_GST.replace(':companyUniqueName', this.companyUniqueName), model).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public SaveTaxPro(model: any): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public SaveTaxProWithOTP(model: any): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO_WITH_OTP.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName).replace(':OTP', model.otp)).map((res) => {
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO_WITH_OTP.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName).replace(':OTP', model.otp)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
   public FileJioGstReturn(reqObj): Observable<BaseResponse<any, string>> {
@@ -288,11 +289,11 @@ export class PurchaseInvoiceService {
     } else if (reqObj.via === 'TAX_PRO') {
       url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber);
     }
-    return this._http.get(this.config.apiUrl + url).map((res) => {
+    return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)),);
   }
 
 }

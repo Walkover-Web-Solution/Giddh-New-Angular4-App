@@ -13,22 +13,22 @@
     <div class="table-container clearfix trial-balance">
       <table class="tb-head table basic">
         <thead>
-          <tr>
-            <th style="width: 33.5%;" class="">Particular</th>
-            <th style="width: 16.5%;" class="text-right">Opening Bal</th>
-            <th style="width: 33.4%;" class="text-center">
-              Transactions
-              <table class="width100">
-                <thead>
-                  <tr>
-                    <th style="width: 49.8%;" class="text-right">Debit (Dr.)</th>
-                    <th style="width: 49.8%;" class="text-right">Credit (Cr.)</th>
-                  </tr>
-                </thead>
-              </table>
-            </th>
-            <th class="text-right">Closing Bal</th>
-          </tr>
+        <tr>
+          <th style="width: 33.5%;" class="">Particular</th>
+          <th style="width: 16.5%;" class="text-right">Opening Bal</th>
+          <th style="width: 33.4%;" class="text-center">
+            Transactions
+            <table class="width100">
+              <thead>
+              <tr>
+                <th style="width: 49.8%;" class="text-right">Debit (Dr.)</th>
+                <th style="width: 49.8%;" class="text-right">Credit (Cr.)</th>
+              </tr>
+              </thead>
+            </table>
+          </th>
+          <th class="text-right">Closing Bal</th>
+        </tr>
         </thead>
       </table>
 
@@ -37,15 +37,17 @@
 
         <ng-template #groupDetails let-list let-padding="padding">
           <ng-container *ngFor="let grp of list">
-            <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible" [ngClass]="grp.category" tb-pl-bs-grid-row [groupDetail]="grp"
-              [padding]="padding" [search]="search">
-              <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+            <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible"
+                     [ngClass]="grp.category" tb-pl-bs-grid-row [groupDetail]="grp"
+                     [padding]="padding" [search]="search">
+              <ng-container
+                *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
             </section>
           </ng-container>
 
         </ng-template>
-        <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 0 }"></ng-container>
-
+        <ng-container
+          *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 0 }"></ng-container>
 
 
       </div>
@@ -62,17 +64,17 @@
         <div class="table-responsive">
           <table class="table basic" style="margin-bottom:0;">
             <thead>
-              <tr>
-                <th class="" style="width: 33.5%;">
-                  <span class="">Grand Total</span>
-                </th>
-                <th style="width: 16.6%;" class="text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
-                <th style="width: 16.6%;" class="text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
-                <th style="width: 16.6%;" class="text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
-                <th style="width: 16.6%;" class="text-right">
-                  <span class="">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
-                </th>
-              </tr>
+            <tr>
+              <th class="" style="width: 33.5%;">
+                <span class="">Grand Total</span>
+              </th>
+              <th style="width: 16.6%;" class="text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
+              <th style="width: 16.6%;" class="text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
+              <th style="width: 16.6%;" class="text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
+              <th style="width: 16.6%;" class="text-right">
+                <span class="">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
+              </th>
+            </tr>
             </thead>
           </table>
         </div>

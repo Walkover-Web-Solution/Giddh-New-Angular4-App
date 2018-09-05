@@ -1,10 +1,10 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../actions/home/home.actions';
 import * as moment from 'moment/moment';
 import * as _ from 'lodash';
@@ -37,8 +37,8 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
+    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -46,7 +46,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       if (c) {
         let activeCmpUniqueName = '';
         let financialYears = [];
-        this.activeCompanyUniqueName$.take(1).subscribe(a => {
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
           activeCmpUniqueName = a;
           let res = c.find(p => p.uniqueName === a);
           if (res) {
@@ -98,9 +98,11 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       this.requestInFlight = false;
     });
   }
+
   public flattenGroup(tree: IChildGroups[]) {
     return _.flattenDeep(this.recurse(tree));
   }
+
   public recurse(nodes: IChildGroups[]) {
     return _.map(nodes, (node: IChildGroups) => {
       return [
@@ -109,10 +111,12 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       ];
     });
   }
+
   public refreshChart() {
     this.refresh = true;
     this.fetchChartData();
   }
+
   public fetchChartData() {
     this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
@@ -175,7 +179,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-        '<td style="padding:0"><b>{point.y:.1f} rs</b></td></tr>',
+          '<td style="padding:0"><b>{point.y:.1f} rs</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
@@ -211,7 +215,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public generateActiveYearString(): INameUniqueName[] {
     let activeStrings: INameUniqueName[] = [];
     this.activeYearAccounts.map(acc => {
-      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
+      activeStrings.push({uniqueName: acc.uniqueName, name: acc.groupName});
     });
     return activeStrings;
   }
@@ -219,10 +223,11 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public generateLastYearString(): INameUniqueName[] {
     let lastStrings: INameUniqueName[] = [];
     this.lastYearAccounts.map(acc => {
-      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
+      lastStrings.push({uniqueName: acc.uniqueName, name: acc.groupName});
     });
     return lastStrings;
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

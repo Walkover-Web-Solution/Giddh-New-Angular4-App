@@ -1,4 +1,6 @@
-import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -8,11 +10,9 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { find, orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CustomTemplateResponse, GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
-import { Observable } from 'rxjs/Observable';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -26,25 +26,25 @@ import { BaseResponse } from 'app/models/api-models/BaseResponse';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
-  { label: '12', value: '12' },
-  { label: '25', value: '25' },
-  { label: '50', value: '50' },
-  { label: '100', value: '100' }
+  {label: '12', value: '12'},
+  {label: '25', value: '25'},
+  {label: '50', value: '50'},
+  {label: '100', value: '100'}
 ];
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
 ];
 
 const PREVIEW_OPTIONS = [
-  { label: 'Paid', value: 'paid' },
-  { label: 'Unpaid', value: 'unpaid' },
-  { label: 'Hold', value: 'hold' },
-  { label: 'Cancel', value: 'cancel' },
+  {label: 'Paid', value: 'paid'},
+  {label: 'Unpaid', value: 'unpaid'},
+  {label: 'Hold', value: 'hold'},
+  {label: 'Cancel', value: 'cancel'},
 ];
 
 @Component({
@@ -96,7 +96,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
     this.invoiceSearchRequest.entryTotalBy = '';
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -104,14 +104,14 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
-        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1 )) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
+          accounts.push({label: item.name, value: item.uniqueName});
         }
       });
-      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.invoice.invoices).takeUntil(this.destroyed$).subscribe((o: GetAllInvoicesPaginatedResponse) => {
+    this.store.select(p => p.invoice.invoices).pipe(takeUntil(this.destroyed$)).subscribe((o: GetAllInvoicesPaginatedResponse) => {
       if (o) {
         this.invoiceData = _.cloneDeep(o);
         _.map(this.invoiceData.results, (item: IInvoiceResult) => {
@@ -127,9 +127,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     //    this.isLoadingInvoices = _.cloneDeep(o);
     // });
 
-    this.store.select(p => p.invoice.invoiceData)
-      .takeUntil(this.destroyed$)
-      .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+    this.store.select(p => p.invoice.invoiceData).pipe(
+      takeUntil(this.destroyed$),
+      distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
         if (p && q) {
           return (p.templateUniqueName === q.templateUniqueName);
         }
@@ -137,30 +137,30 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
           return false;
         }
         return true;
-      }).subscribe((o: PreviewInvoiceResponseClass) => {
-        if (o) {
-          /**
-           * find if templateUniqueName is exist in company all templates
-           * check for isDefault flag
-           * last hope call api from first template
-           * */
-          this._invoiceTemplatesService.getAllCreatedTemplates().subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
-            if (res.status === 'success' && res.body.length) {
-              let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
+      }),).subscribe((o: PreviewInvoiceResponseClass) => {
+      if (o) {
+        /**
+         * find if templateUniqueName is exist in company all templates
+         * check for isDefault flag
+         * last hope call api from first template
+         * */
+        this._invoiceTemplatesService.getAllCreatedTemplates().subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
+          if (res.status === 'success' && res.body.length) {
+            let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
+            if (template) {
+              this.getInvoiceTemplateDetails(template.uniqueName);
+            } else {
+              template = find(res.body, (item) => item.isDefault);
               if (template) {
                 this.getInvoiceTemplateDetails(template.uniqueName);
-              }else {
-                template = find(res.body, (item) => item.isDefault);
-                if (template) {
-                  this.getInvoiceTemplateDetails(template.uniqueName);
-                }else {
-                  this.getInvoiceTemplateDetails(res.body[0].uniqueName);
-                }
+              } else {
+                this.getInvoiceTemplateDetails(res.body[0].uniqueName);
               }
             }
-          });
-        }
-      });
+          }
+        });
+      }
+    });
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
@@ -170,8 +170,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.isUniversalDateApplicable = true;
         this.getInvoices();
       }
-    })).takeUntil(this.destroyed$).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
+
   public loadDownloadOrSendMailComponent() {
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
@@ -194,6 +195,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     //   this.pageChanged(e);
     // });
   }
+
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
@@ -222,7 +224,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.selectedInvoice = item;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, {action: actionToPerform}));
       }
     }
   }
@@ -305,19 +307,19 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   /**
-  * onDownloadOrSendMailEvent
-  */
+   * onDownloadOrSendMailEvent
+   */
   public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
     if (userResponse.action === 'download') {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice }));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber], typeOfInvoice: userResponse.typeOfInvoice}));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.invoiceNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.invoiceNumber));
     }
   }
 

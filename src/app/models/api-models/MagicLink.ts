@@ -8,6 +8,7 @@ export class IMagicLinkLedgerResponse {
   public fromDate: string;
   public toDate: string;
 }
+
 export interface IMagicLinkLedgerRequest {
   data: Model;
 }
@@ -17,6 +18,7 @@ interface Model {
   from?: string;
   to?: string;
 }
+
 interface LedgerTransactions {
   forwardedBalance: ForwardedBalance;
   creditTotal: number;

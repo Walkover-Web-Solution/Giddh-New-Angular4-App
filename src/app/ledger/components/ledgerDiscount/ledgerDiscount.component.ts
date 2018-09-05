@@ -1,8 +1,8 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
 
@@ -22,7 +22,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
+    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -42,7 +42,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
    */
   public prepareDiscountList() {
     let discountAccountsList: IFlattenGroupsAccountsDetail = null;
-    this.discountAccountsList$.take(1).subscribe(d => discountAccountsList = d);
+    this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
     if (!this.discountAccountsDetails.length && discountAccountsList) {
       discountAccountsList.accountDetails.map(acc => {
         let disObj: ILedgerDiscount = {

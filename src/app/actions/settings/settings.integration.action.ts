@@ -1,9 +1,10 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
@@ -16,332 +17,332 @@ export class SettingsIntegrationActions {
 
   @Effect()
   public GetSMSKey$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetSMSKey())
-    .map(res => this.validateResponse<SmsKeyClass, string>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
-      payload: res
-    }, false, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetSMSKey()),
+      map(res => this.validateResponse<SmsKeyClass, string>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
         payload: res
-      }));
+      }, false, {
+        type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public GetEmailKey$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetEmailKey())
-    .map(res => this.validateResponse<EmailKeyClass, string>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
-      payload: res
-    }, false, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetEmailKey()),
+      map(res => this.validateResponse<EmailKeyClass, string>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
         payload: res
-      }));
+      }, false, {
+        type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public SaveSMSKey$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.SaveSMSKey(action.payload))
-    .map(res => this.validateResponse<string, SmsKeyClass>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
-      payload: res
-    }, true, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.SaveSMSKey(action.payload)),
+      map(res => this.validateResponse<string, SmsKeyClass>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
         payload: res
-      }));
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public SaveEmailKey$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.SaveEmailKey(action.payload))
-    .map(res => this.validateResponse<string, EmailKeyClass>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
-      payload: res
-    }, true, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.SaveEmailKey(action.payload)),
+      map(res => this.validateResponse<string, EmailKeyClass>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
         payload: res
-      }));
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetRazorPayDetails())
-    .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
-      payload: res
-    }, false, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetRazorPayDetails()),
+      map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      }));
+      }, false, {
+        type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public SaveRazorPayDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.SaveRazorPayDetails(action.payload))
-    .map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
-      payload: res
-    }, true, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.SaveRazorPayDetails(action.payload)),
+      map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      }));
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public DeleteRazorPayDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteRazorPayDetails())
-    .map(res => this.validateResponse<string, string>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
-      payload: res
-    }, true, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteRazorPayDetails()),
+      map(res => this.validateResponse<string, string>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      }));
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public UpdateRazorPayDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateRazorPayDetails(action.payload))
-    .map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
-      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
-      payload: res
-    }, true, {
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateRazorPayDetails(action.payload)),
+      map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
-      }));
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public SaveCashfreeDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.SaveCashFreeDetail(action.payload))
-    .map(response => this.SaveCashfreeDetailsResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.SaveCashFreeDetail(action.payload)),
+      map(response => this.SaveCashfreeDetailsResponse(response)),);
 
   @Effect()
   public SaveCashfreeDetailsResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.clearAllToaster();
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.clearAllToaster();
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public DeleteCashfreeDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteCashFreeDetail())
-    .map(response => this.DeleteCashfreeDetailsResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteCashFreeDetail()),
+      map(response => this.DeleteCashfreeDetailsResponse(response)),);
 
   @Effect()
   public DeleteCashfreeDetailsResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<string, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<string, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public AddAutoCollectUser$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.AddAutoCollectUser(action.payload))
-    .map(response => this.AddAutoCollectUserResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.AddAutoCollectUser(action.payload)),
+      map(response => this.AddAutoCollectUserResponse(response)),);
 
   @Effect()
   public AddAutoCollectUserResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.clearAllToaster();
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.clearAllToaster();
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public DeleteAutoCollectUser$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAutoCollectUser())
-    .map(response => this.DeleteAutoCollectUserResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAutoCollectUser()),
+      map(response => this.DeleteAutoCollectUserResponse(response)),);
 
   @Effect()
   public DeleteAutoCollectUserResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.clearAllToaster();
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.message, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.clearAllToaster();
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.message, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public GetCashfreeDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetCashFreeDetail())
-    .map(response => this.GetCashfreeDetailsResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetCashFreeDetail()),
+      map(response => this.GetCashfreeDetailsResponse(response)),);
 
   @Effect()
   public GetCashfreeDetailsResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public GetAutoCollectDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetAutoCollectUser())
-    .map(response => this.GetAutoCollectDetailsResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetAutoCollectUser()),
+      map(response => this.GetAutoCollectDetailsResponse(response)),);
 
   @Effect()
   public GetAutoCollectDetailsResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public UpdateCashfreeDetails$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateCashFreeDetail(action.payload))
-    .map(response => this.UpdateCashfreeDetailsResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateCashFreeDetail(action.payload)),
+      map(response => this.UpdateCashfreeDetailsResponse(response)),);
 
   @Effect()
   public UpdateCashfreeDetailsResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.clearAllToaster();
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        // console.log(data);
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.clearAllToaster();
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          // console.log(data);
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public GetPaymentGateway$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetPaymentGateway())
-    .map(response => this.GetPaymentGatewayResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetPaymentGateway()),
+      map(response => this.GetPaymentGatewayResponse(response)),);
 
   @Effect()
   public GetPaymentGatewayResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public AddPaymentGateway$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.AddPaymentGateway(action.payload))
-    .map(response => this.AddPaymentGatewayResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.AddPaymentGateway(action.payload)),
+      map(response => this.AddPaymentGatewayResponse(response)),);
 
   @Effect()
   public AddPaymentGatewayResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public UpdatePaymentGateway$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdatePaymentGateway(action.payload))
-    .map(response => this.UpdatePaymentGatewayResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.UpdatePaymentGateway(action.payload)),
+      map(response => this.UpdatePaymentGatewayResponse(response)),);
 
   @Effect()
   public UpdatePaymentGatewayResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        // console.log(data);
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          // console.log(data);
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public DeletePaymentGateway$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway())
-    .map(response => this.DeletePaymentGatewayResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway()),
+      map(response => this.DeletePaymentGatewayResponse(response)),);
 
   @Effect()
   public DeletePaymentGatewayResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        // console.log(data);
-        this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          // console.log(data);
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public UpdateAutoCollectUser$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload))
-    .map(response => this.UpdateAutoCollectUserResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload)),
+      map(response => this.UpdateAutoCollectUserResponse(response)),);
 
   @Effect()
   public UpdateAutoCollectUserResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        // console.log(data);
-        // this.toasty.successToast(data.body, '');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          // console.log(data);
+          // this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public GetGmailIntegrationStatus$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS)
-    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus())
-    .map(response => this.GetGmailIntegrationStatusResponse(response));
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
+      map(response => this.GetGmailIntegrationStatusResponse(response)),);
 
   constructor(private action$: Actions,
-    private toasty: ToasterService,
-    private router: Router,
-    private store: Store<AppState>,
-    private settingsIntegrationService: SettingsIntegrationService) {
+              private toasty: ToasterService,
+              private router: Router,
+              private store: Store<AppState>,
+              private settingsIntegrationService: SettingsIntegrationService) {
   }
 
   public GetSMSKey(): CustomActions {
@@ -571,7 +572,7 @@ export class SettingsIntegrationActions {
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

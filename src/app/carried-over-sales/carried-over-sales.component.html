@@ -7,32 +7,44 @@
         <div class="pull-left">
           <div class="form-group mrR1 max500">
             <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear"
-                       #SelectYear="ngModel" [options]="yearOptions" required ></sh-select>
-           <div class="h-25px" style="color: red;"> <div *ngIf="SelectYear.invalid">please select year</div></div>
+                       #SelectYear="ngModel" [options]="yearOptions" required></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectYear.invalid">please select year</div>
+            </div>
           </div>
 
 
           <div class="form-group mrR1 max500">
             <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType" [(ngModel)]="selectedType"
-                       #SelectType="ngModel" [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
-            <div class="h-25px" style="color: red;"><div *ngIf="SelectType.invalid">please select type</div></div>
+                       #SelectType="ngModel" [options]="GetTypeOptions" required
+                       (selected)="ChangingValue($event)"></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectType.invalid">please select type</div>
+            </div>
           </div>
 
           <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
             <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth" [(ngModel)]="selectedmonth"
-                       #SelectMonth="ngModel" [options]="monthOptions" required ></sh-select>
-            <div class="h-25px" style="color: red;"><div *ngIf="SelectMonth.invalid">please select month</div></div>
+                       #SelectMonth="ngModel" [options]="monthOptions" required></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectMonth.invalid">please select month</div>
+            </div>
           </div>
 
           <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
-            <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater"
-                       #SelectQuater="ngModel" [options]="quaterOptions" required ></sh-select>
-          <div class="h-25px" style="color: red;">  <div *ngIf="SelectQuater.invalid">please select quater</div></div>
+            <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater"
+                       [(ngModel)]="selectedQuater"
+                       #SelectQuater="ngModel" [options]="quaterOptions" required></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectQuater.invalid">please select quater</div>
+            </div>
           </div>
           <div class="btn-group">
-           <div> <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
-             Go
-           </button></div>
+            <div>
+              <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
+                Go
+              </button>
+            </div>
             <div class="h-25px"></div>
           </div>
         </div>

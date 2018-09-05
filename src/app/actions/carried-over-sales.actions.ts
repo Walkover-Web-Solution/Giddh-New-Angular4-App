@@ -1,6 +1,7 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { CarriedOverSalesService } from '../services/carried-over-sales.service';
 import { ToasterService } from '../services/toaster.service';
@@ -18,17 +19,17 @@ export class CarriedOverSalesActions {
 
   @Effect()
   private getCarriedOverSalesResponse$: Observable<Action> = this.action$
-    .ofType(CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._carriedService.GetCarriedOverSales(action.payload.queryRequest)
-        .map((r) => this.validateResponse<CarriedOverSalesResponse, string>(r, {
-          type: CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE,
-          payload: r.body
-        }, true, {
-          type: CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE,
-          payload: null
-        }));
-    });
+    .ofType(CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._carriedService.GetCarriedOverSales(action.payload.queryRequest).pipe(
+          map((r) => this.validateResponse<CarriedOverSalesResponse, string>(r, {
+            type: CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE,
+            payload: r.body
+          }, true, {
+            type: CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE,
+            payload: null
+          })));
+      }));
 
   constructor(private action$: Actions, private _carriedService: CarriedOverSalesService,
               private _toasty: ToasterService, private store: Store<AppState>, private _generalService: GeneralService) {

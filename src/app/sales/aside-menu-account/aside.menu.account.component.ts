@@ -1,8 +1,9 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -15,7 +16,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 @Component({
   selector: 'aside-menu-account',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -24,10 +25,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       width: 480px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -36,13 +39,16 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 480px;
     }
+
     .aside-body {
       margin-bottom: 80px;
     }
@@ -75,9 +81,9 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
     private accountsAction: AccountsAction
   ) {
     // account-add component's property
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -104,16 +110,16 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
         let currentassets = _.find(res.body, {uniqueName: parentGrp});
         let sundryGrp;
         if (currentassets) {
-           sundryGrp = _.find(currentassets.groups, {uniqueName: findItem});
+          sundryGrp = _.find(currentassets.groups, {uniqueName: findItem});
         }
         if (sundryGrp) {
           let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
           _.forEach(flatGrps, (grp: GroupResponse) => {
-            result.push({ label: grp.name, value: grp.uniqueName });
+            result.push({label: grp.name, value: grp.uniqueName});
           });
         }
       }
-      this.flatAccountWGroupsList$ = Observable.of(result);
+      this.flatAccountWGroupsList$ = observableOf(result);
       this.activeGroupUniqueName = 'sundrycreditors';
     });
   }

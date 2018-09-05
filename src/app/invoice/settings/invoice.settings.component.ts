@@ -1,16 +1,17 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
-import { Observable } from 'rxjs/Observable';
 import { IOption } from '../../theme/ng-select/option.interface';
 
 const PaymentGateway = [
@@ -60,26 +61,27 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     private invoiceActions: InvoiceActions,
     private _toasty: ToasterService,
     private _accountService: AccountService
-  ) { }
+  ) {
+  }
 
   public ngOnInit() {
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     // get flatten_accounts list
     this.initSettingObj();
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+    this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         let linkAccount: IOption[] = [];
         this.accountList = _.cloneDeep(data.body.results);
         data.body.results.map(d => {
-          linkAccount.push({ label: d.name, value: d.uniqueName });
+          linkAccount.push({label: d.name, value: d.uniqueName});
         });
-        this.linkAccountDropDown$ = Observable.of(linkAccount);
+        this.linkAccountDropDown$ = observableOf(linkAccount);
       }
     });
   }
 
   public initSettingObj() {
-     this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((setting: InvoiceSetting) => {
+    this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
 
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
@@ -134,6 +136,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   /**
    * Add New Webhook
    */
@@ -143,11 +146,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       this._toasty.warningToast("Last row can't be blank.");
       return false;
     } else if (objToSave.url && objToSave.triggerAt) {
-        this.validateWebhook(objToSave);
-        if (this.webhookIsValidate) {
-          this.saveWebhook(objToSave);
-        }
+      this.validateWebhook(objToSave);
+      if (this.webhookIsValidate) {
+        this.saveWebhook(objToSave);
       }
+    }
   }
 
   /**
@@ -177,29 +180,29 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
     // if (!_.isEqual(form, this.invoiceLastState)) {
-      // if (!_.isEqual(form, this.invoiceLastState)) {
+    // if (!_.isEqual(form, this.invoiceLastState)) {
 
-        if (!this.invoiceWebhook[this.invoiceWebhook.length - 1].url && !this.invoiceWebhook[this.invoiceWebhook.length - 1].triggerAt) {
-          this.invoiceWebhook.splice(this.invoiceWebhook.length - 1);
-        }
-        // perform operation to update 'invoice' webhooks
-        this.mergeWebhooks(this.invoiceWebhook);
+    if (!this.invoiceWebhook[this.invoiceWebhook.length - 1].url && !this.invoiceWebhook[this.invoiceWebhook.length - 1].triggerAt) {
+      this.invoiceWebhook.splice(this.invoiceWebhook.length - 1);
+    }
+    // perform operation to update 'invoice' webhooks
+    this.mergeWebhooks(this.invoiceWebhook);
 
-        this.formToSave = _.cloneDeep(this.settingResponse);
-        this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
-        this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
-        this.formToSave.companyEmailSettings = {
-          sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
-          sendThroughSendgrid: false
-        };
-        delete this.formToSave.sendThroughGmail;
-        delete this.formToSave.razorPayform; // delete razorPay before sending form
+    this.formToSave = _.cloneDeep(this.settingResponse);
+    this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
+    this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
+    this.formToSave.companyEmailSettings = {
+      sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
+      sendThroughSendgrid: false
+    };
+    delete this.formToSave.sendThroughGmail;
+    delete this.formToSave.razorPayform; // delete razorPay before sending form
 
-        if (this.formToSave.invoiceSettings.lockDate && this.isLockDateSet) {
-          this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
-        } else {
-          this.formToSave.invoiceSettings.lockDate = null;
-        }
+    if (this.formToSave.invoiceSettings.lockDate && this.isLockDateSet) {
+      this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+    } else {
+      this.formToSave.invoiceSettings.lockDate = null;
+    }
 
     if (this.isAutoPaidOn) {
       this.formToSave.invoiceSettings.autoPaid = 'runtime';
@@ -207,12 +210,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       this.formToSave.invoiceSettings.autoPaid = 'never';
     }
     this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
-        this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
-      // }
+    this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
+    // }
 
-      if (!_.isEqual(this.razorpayObj, razorpayObj) && form.createPaymentEntry) {
-        this.saveRazorPay(this.razorpayObj, form);
-      }
+    if (!_.isEqual(this.razorpayObj, razorpayObj) && form.createPaymentEntry) {
+      this.saveRazorPay(this.razorpayObj, form);
+    }
     // } else {
     //   this._toasty.warningToast('No changes made.');
     //   return false;
@@ -221,7 +224,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
   /**
    * Update RazorPay
-  */
+   */
 
   public saveRazorPay(razorForm, form) {
     let assignAccountToRazorPay = _.cloneDeep(this.accountToSend);

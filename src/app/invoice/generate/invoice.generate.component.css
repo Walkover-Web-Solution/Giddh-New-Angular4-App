@@ -1,14 +1,13 @@
 .flex-container {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    flex-flow: row wrap;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-flow: row wrap;
 }
 
 table {
-    table-layout: fixed
+  table-layout: fixed
 }
-
 
 /* .table.basic tbody tr td {
     background-color: #fff;
@@ -19,12 +18,11 @@ table {
 } */
 
 .mh18_img img {
-    max-height: 20px;
-    cursor: pointer
+  max-height: 20px;
+  cursor: pointer
 }
 
-
-/* 
+/*
 .table.basic>tbody>tr>td>table tbody tr td {
     padding: 5px 0;
 }

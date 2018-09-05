@@ -1,15 +1,16 @@
-import { Injectable, Optional, Inject } from '@angular/core';
-import 'rxjs/add/operator/map';
+import { catchError, map } from 'rxjs/operators';
+import { Inject, Injectable, Optional } from '@angular/core';
+
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { LOGS_API } from './apiurls/logs.api';
 import { LogsRequest, LogsResponse } from '../models/api-models/Logs';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class LogsService {
@@ -26,13 +27,13 @@ export class LogsService {
   public GetAuditLogs(model: LogsRequest, page: number = 1): Observable<BaseResponse<LogsResponse, LogsRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model)
-      .map((res) => {
+    return this._http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model).pipe(
+      map((res) => {
         let data: BaseResponse<LogsResponse, LogsRequest> = res;
         data.request = model;
         data.queryString = {page};
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, {page}));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, {page})),);
   }
 }

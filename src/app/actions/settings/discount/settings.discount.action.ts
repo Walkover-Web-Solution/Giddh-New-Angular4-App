@@ -1,9 +1,10 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../../store/customActions';
@@ -17,80 +18,80 @@ export class SettingsDiscountActions {
 
   @Effect()
   public GetDiscount$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT)
-    .switchMap((action: CustomActions) => {
-      return this.settingsDiscountService.GetDiscounts()
-        .map(response => this.validateResponse<IDiscountList, string>(response, {
-          type: SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE,
-          payload: response.body
-        }, true, {
-          type: SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE,
-          payload: []
-        }));
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsDiscountService.GetDiscounts().pipe(
+          map(response => this.validateResponse<IDiscountList, string>(response, {
+            type: SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE,
+            payload: response.body
+          }, true, {
+            type: SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE,
+            payload: []
+          })));
+      }));
 
   @Effect()
   public CreateDiscount$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT)
-    .switchMap((action: CustomActions) => {
-      return this.settingsDiscountService.CreateDiscount(action.payload)
-        .map(response => this.CreateDiscountResponse(response));
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsDiscountService.CreateDiscount(action.payload).pipe(
+          map(response => this.CreateDiscountResponse(response)));
+      }));
 
   @Effect()
   public CreateDiscountResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Discount Created Successfully.');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Discount Created Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public UpdateDiscount$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT)
-    .switchMap((action: CustomActions) => {
-      return this.settingsDiscountService.UpdateDiscount(action.payload.modal, action.payload.uniqueName)
-        .map(response => this.UpdateDiscountResponse(response));
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsDiscountService.UpdateDiscount(action.payload.modal, action.payload.uniqueName).pipe(
+          map(response => this.UpdateDiscountResponse(response)));
+      }));
 
   @Effect()
   public UpdateDiscountResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Discount Updated Successfully.');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Discount Updated Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public DeleteDiscount$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT)
-    .switchMap((action: CustomActions) => {
-      return this.settingsDiscountService.DeleteDiscount(action.payload)
-        .map(response => this.DeleteDiscountResponse(response));
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsDiscountService.DeleteDiscount(action.payload).pipe(
+          map(response => this.DeleteDiscountResponse(response)));
+      }));
 
   @Effect()
   public DeleteDiscountResponse$: Observable<Action> = this.action$
-    .ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Discount Deleted Successfully.');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Discount Deleted Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   constructor(private action$: Actions,
               private toasty: ToasterService,

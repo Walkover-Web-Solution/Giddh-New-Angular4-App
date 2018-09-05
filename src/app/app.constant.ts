@@ -1,4 +1,3 @@
-
 export const Configuration = {
   AppUrl,
   ApiUrl,

@@ -1,55 +1,54 @@
 .section_title {
-    padding: 15px 0;
+  padding: 15px 0;
 }
 
 .input-err {
-    border-color: #ce1b1b;
+  border-color: #ce1b1b;
 }
 
 .input-warn {
-    border-color: #f2e200;
+  border-color: #f2e200;
 }
 
 .btn-generate {
-    margin-top: 4px;
-    color: #fff;
-    background: #ff5f00;
+  margin-top: 4px;
+  color: #fff;
+  background: #ff5f00;
 }
 
 .btn-generate:disabled {
-    color: #ff5f00;
-    background: #e5e5e5;
+  color: #ff5f00;
+  background: #e5e5e5;
 }
 
 .search-form .input-group-btn {
-    width: 35px;
-    font-size: inherit;
-    border: 1px solid #d6d6d6;
-    text-align: center;
-    color: #999999;
-    background: #fff;
-    border-right: 0;
-    vertical-align: middle;
-    line-height: 32px;
+  width: 35px;
+  font-size: inherit;
+  border: 1px solid #d6d6d6;
+  text-align: center;
+  color: #999999;
+  background: #fff;
+  border-right: 0;
+  vertical-align: middle;
+  line-height: 32px;
 }
 
 .search-form .form-control {
-    border-left: 0;
+  border-left: 0;
 }
 
-.open>.pageListDD {
-    display: inline-block;
-    min-width: 200px;
-    width: 100%;
-    max-height: 180px;
-    overflow: auto;
-    padding-left: 7px;
+.open > .pageListDD {
+  display: inline-block;
+  min-width: 200px;
+  width: 100%;
+  max-height: 180px;
+  overflow: auto;
+  padding-left: 7px;
 }
 
 .dd-options:hover {
-    color: rgb(211, 95, 41);
+  color: rgb(211, 95, 41);
 }
-
 
 /*.ranges:nth-of-type(2) {
     display: none !important;

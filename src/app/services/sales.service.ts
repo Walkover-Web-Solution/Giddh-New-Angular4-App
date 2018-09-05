@@ -1,13 +1,14 @@
-import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 import { SALES_API_V2 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class SalesService {
@@ -33,13 +34,13 @@ export class SalesService {
     let accountUniqueName = model.invoice.account.uniqueName;
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
-      .map((res) => {
+    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+      map((res) => {
         let data: BaseResponse<any, any> = res;
         data.request = model;
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
   }
 
   /**
@@ -52,12 +53,12 @@ export class SalesService {
     let accountUniqueName = model.voucher.accountDetails.uniqueName;
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
-      .map((res) => {
+    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+      map((res) => {
         let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
         data.request = model;
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)),);
   }
 }

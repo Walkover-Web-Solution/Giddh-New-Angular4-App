@@ -1,3 +1,4 @@
+import { map, switchMap, take } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
@@ -14,7 +15,7 @@ import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'app/services/general.service';
 import { eventsConst } from 'app/shared/header/components/eventsConst';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ApplyDiscountRequest } from '../models/api-models/ApplyDiscount';
 
 @Injectable()
@@ -66,537 +67,537 @@ export class AccountsAction {
 
   @Effect()
   public ApplyAccountTax$: Observable<Action> = this.action$
-    .ofType(AccountsAction.APPLY_GROUP_TAX)
-    .switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload))
-    .map(response => {
-      return this.applyAccountTaxResponse(response);
-    });
+    .ofType(AccountsAction.APPLY_GROUP_TAX).pipe(
+      switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
+      map(response => {
+        return this.applyAccountTaxResponse(response);
+      }),);
 
   @Effect()
   public ApplyAccountTaxResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
-      }
-      this._toasty.successToast(action.payload.body, action.payload.status);
-      let accName = null;
-      this.store.take(1).subscribe((s) => {
-        if (s.groupwithaccounts.activeGroup) {
-          accName = s.groupwithaccounts.activeAccount.uniqueName;
+    .ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
         }
-      });
-      return this.getAccountDetails(accName);
-    });
+        this._toasty.successToast(action.payload.body, action.payload.status);
+        let accName = null;
+        this.store.pipe(take(1)).subscribe((s) => {
+          if (s.groupwithaccounts.activeGroup) {
+            accName = s.groupwithaccounts.activeAccount.uniqueName;
+          }
+        });
+        return this.getAccountDetails(accName);
+      }));
 
   @Effect()
   public ApplyAccountDiscount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT)
-    .switchMap((action: CustomActions) => this._accountService.ApplyDiscount(action.payload))
-    .map(response => {
-      return this.applyAccountDiscountResponse(response);
-    });
+    .ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT).pipe(
+      switchMap((action: CustomActions) => this._accountService.ApplyDiscount(action.payload)),
+      map(response => {
+        return this.applyAccountDiscountResponse(response);
+      }),);
 
   @Effect()
   public ApplyAccountDiscountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<string, ApplyDiscountRequest> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
-      }
-      this._toasty.successToast('Discount Linked Successfully', action.payload.status);
-      let accName = null;
-      this.store.take(1).subscribe((s) => {
-        if (s.groupwithaccounts.activeGroup) {
-          accName = s.groupwithaccounts.activeAccount.uniqueName;
+    .ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<string, ApplyDiscountRequest> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
         }
-      });
-      return this.getAccountDetails(accName);
-    });
+        this._toasty.successToast('Discount Linked Successfully', action.payload.status);
+        let accName = null;
+        this.store.pipe(take(1)).subscribe((s) => {
+          if (s.groupwithaccounts.activeGroup) {
+            accName = s.groupwithaccounts.activeAccount.uniqueName;
+          }
+        });
+        return this.getAccountDetails(accName);
+      }));
 
   @Effect()
   public RemoveAccountDiscount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.DELETE_ACCOUNT_DISCOUNT)
-    .switchMap((action: CustomActions) => this._accountService.DeleteDiscount(action.payload.discountUniqueName, action.payload.accountUniqueName))
-    .map(response => {
-      return this.removeAccountDiscountResponse(response);
-    });
+    .ofType(AccountsAction.DELETE_ACCOUNT_DISCOUNT).pipe(
+      switchMap((action: CustomActions) => this._accountService.DeleteDiscount(action.payload.discountUniqueName, action.payload.accountUniqueName)),
+      map(response => {
+        return this.removeAccountDiscountResponse(response);
+      }),);
 
   @Effect()
   public RemoveAccountDiscountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.DELETE_ACCOUNT_DISCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<string, string> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
-      }
-      this._toasty.successToast('Discount Removed Successfully', action.payload.status);
-      let accName = null;
-      this.store.take(1).subscribe((s) => {
-        if (s.groupwithaccounts.activeGroup) {
-          accName = s.groupwithaccounts.activeAccount.uniqueName;
+    .ofType(AccountsAction.DELETE_ACCOUNT_DISCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<string, string> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
         }
-      });
-      return this.getAccountDetails(accName);
-    });
+        this._toasty.successToast('Discount Removed Successfully', action.payload.status);
+        let accName = null;
+        this.store.pipe(take(1)).subscribe((s) => {
+          if (s.groupwithaccounts.activeGroup) {
+            accName = s.groupwithaccounts.activeAccount.uniqueName;
+          }
+        });
+        return this.getAccountDetails(accName);
+      }));
 
   @Effect()
   public CreateAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.CREATE_ACCOUNT)
-    .switchMap((action: CustomActions) => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName))
-    .map(response => {
-      return this.createAccountResponse(response);
-    });
+    .ofType(AccountsAction.CREATE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName)),
+      map(response => {
+        return this.createAccountResponse(response);
+      }),);
 
   @Effect()
   public CreateAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        this._toasty.successToast('Account Created Successfully');
-      }
-      this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
-      let groupSearchString: string;
-      this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
-      if (groupSearchString) {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
-      } else {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-      }
-      return {type: 'EmptyAction'};
-    });
-
-  @Effect()
-  public CreateAccountV2$: Observable<Action> = this.action$
-    .ofType(AccountsAction.CREATE_ACCOUNTV2)
-    .switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
-    .map(response => {
-      if (response.status === 'success') {
+    .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          this._toasty.successToast('Account Created Successfully');
+        }
         this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
-      }
-      return this.createAccountResponseV2(response);
-    });
-
-  @Effect()
-  public CreateAccountResponseV2$: Observable<Action> = this.action$
-    .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        this._generalServices.eventHandler.next({name: eventsConst.accountAdded, payload: action.payload});
-        this._toasty.successToast('Account Created Successfully');
-        if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
-          this._toasty.warningToast('Virtual account could not be created for Account "' +action.payload.body.name+ '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
-        }
-        if (action.payload.body.errorMessageForBankDetails) {
-          this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
-        }
-      }
-      let groupSearchString: string;
-      this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
-      if (groupSearchString) {
-        // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
-      } else {
-        // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-      }
-      setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
-      return {type: 'EmptyAction'};
-    });
-
-  @Effect()
-  public GetAccountDetails$: Observable<Action> = this.action$
-    .ofType(AccountsAction.GET_ACCOUNT_DETAILS)
-    .switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload))
-    .map(response => {
-      return this.getAccountDetailsResponse(response);
-    });
-  @Effect()
-  public GetAccountDetailsResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<AccountResponseV2, string> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      }
-      // return this.sharedAccountWith(data.body.uniqueName); // JIRA CARD EL-351
-      return {
-        type: 'EmptyAction'
-      };
-    });
-  @Effect()
-  public GetAccountUniqueName$: Observable<Action> = this.action$
-    .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME)
-    .switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload))
-    .map(response => {
-      return this.getAccountUniqueNameResponse(response);
-    });
-  @Effect()
-  public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<AccountResponse, string> = action.payload;
-      return {
-        type: 'EmptyAction'
-      };
-    });
-
-  @Effect()
-  public UpdateAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UPDATE_ACCOUNT)
-    .switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName))
-    .map(response => {
-      return this.updateAccountResponse(response);
-    });
-
-  @Effect()
-  public UpdateAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._toasty.successToast('Account Updated Successfully');
         let groupSearchString: string;
-        this.store.take(1).subscribe(a => {
-          groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
-        });
+        this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
         if (groupSearchString) {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
         } else {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
-      }
-      return {type: 'EmptyAction'};
-    });
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  public CreateAccountV2$: Observable<Action> = this.action$
+    .ofType(AccountsAction.CREATE_ACCOUNTV2).pipe(
+      switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
+      map(response => {
+        if (response.status === 'success') {
+          this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
+        }
+        return this.createAccountResponseV2(response);
+      }),);
+
+  @Effect()
+  public CreateAccountResponseV2$: Observable<Action> = this.action$
+    .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          this._generalServices.eventHandler.next({name: eventsConst.accountAdded, payload: action.payload});
+          this._toasty.successToast('Account Created Successfully');
+          if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
+            this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
+          }
+          if (action.payload.body.errorMessageForBankDetails) {
+            this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
+          }
+        }
+        let groupSearchString: string;
+        this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
+        if (groupSearchString) {
+          // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+        } else {
+          // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        }
+        setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  public GetAccountDetails$: Observable<Action> = this.action$
+    .ofType(AccountsAction.GET_ACCOUNT_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
+      map(response => {
+        return this.getAccountDetailsResponse(response);
+      }),);
+  @Effect()
+  public GetAccountDetailsResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<AccountResponseV2, string> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        }
+        // return this.sharedAccountWith(data.body.uniqueName); // JIRA CARD EL-351
+        return {
+          type: 'EmptyAction'
+        };
+      }));
+  @Effect()
+  public GetAccountUniqueName$: Observable<Action> = this.action$
+    .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME).pipe(
+      switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload)),
+      map(response => {
+        return this.getAccountUniqueNameResponse(response);
+      }),);
+  @Effect()
+  public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<AccountResponse, string> = action.payload;
+        return {
+          type: 'EmptyAction'
+        };
+      }));
+
+  @Effect()
+  public UpdateAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
+      map(response => {
+        return this.updateAccountResponse(response);
+      }),);
+
+  @Effect()
+  public UpdateAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._toasty.successToast('Account Updated Successfully');
+          let groupSearchString: string;
+          this.store.pipe(take(1)).subscribe(a => {
+            groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
+          });
+          if (groupSearchString) {
+            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+          } else {
+            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+          }
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public UpdateAccountV2$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UPDATE_ACCOUNTV2)
-    .switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value))
-    .map(response => {
-      if (response.status === 'success') {
-        this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
-      }
-      return this.updateAccountResponseV2(response);
-    });
+    .ofType(AccountsAction.UPDATE_ACCOUNTV2).pipe(
+      switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
+      map(response => {
+        if (response.status === 'success') {
+          this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+        }
+        return this.updateAccountResponseV2(response);
+      }),);
 
   @Effect()
   public UpdateAccountResponseV2$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2)
-    .map((action: CustomActions) => {
-      let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: 'EmptyAction'};
-      } else {
-        this._generalServices.eventHandler.next({name: eventsConst.accountUpdated, payload: resData});
-        this._toasty.successToast('Account Updated Successfully');
+    .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2).pipe(
+      map((action: CustomActions) => {
+        let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        } else {
+          this._generalServices.eventHandler.next({name: eventsConst.accountUpdated, payload: resData});
+          this._toasty.successToast('Account Updated Successfully');
 
-        setTimeout(this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm()), 1000);
-        this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
-      }
-      return {type: 'EmptyAction'};
-    });
+          setTimeout(this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm()), 1000);
+          this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
+        }
+        return {type: 'EmptyAction'};
+      }));
   @Effect()
   public getGroupTaxHierarchy$: Observable<Action> = this.action$
-    .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY)
-    .switchMap((action: CustomActions) => this._accountService.GetTaxHierarchy(action.payload))
-    .map(response => {
-      return this.getTaxHierarchyResponse(response);
-    });
+    .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY).pipe(
+      switchMap((action: CustomActions) => this._accountService.GetTaxHierarchy(action.payload)),
+      map(response => {
+        return this.getTaxHierarchyResponse(response);
+      }),);
 
   @Effect()
   public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public shareEntity$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARE_ENTITY)
-    .switchMap((action: CustomActions) =>
-      this._accountService.Share(
-        action.payload.body,
-        action.payload.accountUniqueName
-      )
-    )
-    .map(response => {
-      return this.shareEntityResponse(response);
-    });
+    .ofType(AccountsAction.SHARE_ENTITY).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.Share(
+          action.payload.body,
+          action.payload.accountUniqueName
+        )
+      ),
+      map(response => {
+        return this.shareEntityResponse(response);
+      }),);
   @Effect()
   public shareEntityResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARE_ENTITY_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-        this._toasty.successToast('Shared successfully', '');
-        if (data.queryString.entity === 'account') {
-          return this.sharedAccountWith(data.queryString.entityUniqueName);
-        } else if (data.queryString.entity === 'group') {
-          return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
-        } else {
+    .ofType(AccountsAction.SHARE_ENTITY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
           return {
             type: 'EmptyAction'
           };
+        } else {
+          let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+          this._toasty.successToast('Shared successfully', '');
+          if (data.queryString.entity === 'account') {
+            return this.sharedAccountWith(data.queryString.entityUniqueName);
+          } else if (data.queryString.entity === 'group') {
+            return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
+          } else {
+            return {
+              type: 'EmptyAction'
+            };
+          }
         }
-      }
-    });
+      }));
 
   @Effect()
   public unShareEntity$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UN_SHARE_ENTITY)
-    .switchMap((action: CustomActions) =>
-      this._accountService.UnShare(action.payload.entryUniqueName, action.payload.entity, action.payload.entityUniqueName)
-    )
-    .map(response => {
-      return this.UnShareEntityResponse(response);
-    });
+    .ofType(AccountsAction.UN_SHARE_ENTITY).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.UnShare(action.payload.entryUniqueName, action.payload.entity, action.payload.entityUniqueName)
+      ),
+      map(response => {
+        return this.UnShareEntityResponse(response);
+      }),);
 
   @Effect()
   public unShareEntityResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-        this._toasty.successToast(action.payload.body, '');
-        if (data.queryString.entity === 'account') {
-          return this.sharedAccountWith(data.queryString.entityUniqueName);
-        } else if (data.queryString.entity === 'group') {
-          return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
-        } else {
+    .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
           return {
             type: 'EmptyAction'
           };
+        } else {
+          let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+          this._toasty.successToast(action.payload.body, '');
+          if (data.queryString.entity === 'account') {
+            return this.sharedAccountWith(data.queryString.entityUniqueName);
+          } else if (data.queryString.entity === 'group') {
+            return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
+          } else {
+            return {
+              type: 'EmptyAction'
+            };
+          }
         }
-      }
-    });
+      }));
 
   // Update entity permission
   @Effect()
   public updateEntityPermission$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION)
-    .switchMap((action: CustomActions) =>
-      this._accountService.UpdateEntityPermission(action.payload.model, action.payload.entity, action.payload.newRoleUniqueName)
-    )
-    .map(response => {
-      return this.updateEntityPermissionResponse(response);
-    });
+    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.UpdateEntityPermission(action.payload.model, action.payload.entity, action.payload.newRoleUniqueName)
+      ),
+      map(response => {
+        return this.updateEntityPermissionResponse(response);
+      }),);
 
   @Effect()
   public updateEntityPermissionResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        this._toasty.successToast('Role updated successfully.', '');
-        return {
-          type: 'EmptyAction'
-        };
-      }
-    });
+    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          this._toasty.successToast('Role updated successfully.', '');
+          return {
+            type: 'EmptyAction'
+          };
+        }
+      }));
 
   @Effect()
   public unShareAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UNSHARE_ACCOUNT)
-    .switchMap((action: CustomActions) =>
-      this._accountService.AccountUnshare(
-        action.payload.user,
-        action.payload.accountUniqueName
-      )
-    )
-    .map(response => {
-      return this.unShareAccountResponse(response);
-    });
+    .ofType(AccountsAction.UNSHARE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.AccountUnshare(
+          action.payload.user,
+          action.payload.accountUniqueName
+        )
+      ),
+      map(response => {
+        return this.unShareAccountResponse(response);
+      }),);
 
   @Effect()
   public unShareAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        this._toasty.successToast(action.payload.body, '');
-      }
-      let accountUniqueName = null;
-      this.store.take(1).subscribe(s => {
-        accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
-      });
-      return this.sharedAccountWith(accountUniqueName);
-    });
+    .ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          this._toasty.successToast(action.payload.body, '');
+        }
+        let accountUniqueName = null;
+        this.store.pipe(take(1)).subscribe(s => {
+          accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
+        });
+        return this.sharedAccountWith(accountUniqueName);
+      }));
 
   @Effect()
   public sharedAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARED_ACCOUNT_WITH)
-    .switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload))
-    .map(response => {
-      return this.sharedAccountWithResponse(response);
-    });
+    .ofType(AccountsAction.SHARED_ACCOUNT_WITH).pipe(
+      switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload)),
+      map(response => {
+        return this.sharedAccountWithResponse(response);
+      }),);
   @Effect()
   public sharedAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public moveAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.MOVE_ACCOUNT)
-    .switchMap((action: CustomActions) =>
-      this._accountService.AccountMove(
-        action.payload.body,
-        action.payload.accountUniqueName,
-        action.payload.activeGroupUniqueName
-      )
-    )
-    .map(response => {
-      return this.moveAccountResponse(response);
-    });
+    .ofType(AccountsAction.MOVE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.AccountMove(
+          action.payload.body,
+          action.payload.accountUniqueName,
+          action.payload.activeGroupUniqueName
+        )
+      ),
+      map(response => {
+        return this.moveAccountResponse(response);
+      }),);
   @Effect()
   public moveAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        let data: BaseResponse<string, AccountMoveRequest> = action.payload;
-        this._generalServices.eventHandler.next({name: eventsConst.accountMoved, payload: data});
-        this._toasty.successToast('Account moved successfully', '');
-        this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          let data: BaseResponse<string, AccountMoveRequest> = action.payload;
+          this._generalServices.eventHandler.next({name: eventsConst.accountMoved, payload: data});
+          this._toasty.successToast('Account moved successfully', '');
+          this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public mergeAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.MERGE_ACCOUNT)
-    .switchMap((action: CustomActions) =>
-      this._accountService.MergeAccount(
-        action.payload.data,
-        action.payload.accountUniqueName
-      )
-    )
-    .map(response => {
-      return this.mergeAccountResponse(response);
-    });
+    .ofType(AccountsAction.MERGE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.MergeAccount(
+          action.payload.data,
+          action.payload.accountUniqueName
+        )
+      ),
+      map(response => {
+        return this.mergeAccountResponse(response);
+      }),);
   @Effect()
   public mergeAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._toasty.successToast(action.payload.body, '');
-        let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
-        this._generalServices.eventHandler.next({name: eventsConst.accountMerged, payload: data});
-        return this.getAccountDetails(data.queryString.accountUniqueName);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._toasty.successToast(action.payload.body, '');
+          let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+          this._generalServices.eventHandler.next({name: eventsConst.accountMerged, payload: data});
+          return this.getAccountDetails(data.queryString.accountUniqueName);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public unMergeAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UNMERGE_ACCOUNT)
-    .switchMap((action: CustomActions) =>
-      this._accountService.UnmergeAccount(
-        action.payload.data,
-        action.payload.accountUniqueName
-      )
-    )
-    .map(response => {
-      return this.unmergeAccountResponse(response);
-    });
+    .ofType(AccountsAction.UNMERGE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) =>
+        this._accountService.UnmergeAccount(
+          action.payload.data,
+          action.payload.accountUniqueName
+        )
+      ),
+      map(response => {
+        return this.unmergeAccountResponse(response);
+      }),);
   @Effect()
   public unMergeAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._toasty.successToast(action.payload.body, '');
-        let data: BaseResponse<string, AccountUnMergeRequest> = action.payload;
-        return this.getAccountDetails(data.queryString.accountUniqueName);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._toasty.successToast(action.payload.body, '');
+          let data: BaseResponse<string, AccountUnMergeRequest> = action.payload;
+          return this.getAccountDetails(data.queryString.accountUniqueName);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public DeleteAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.DELETE_ACCOUNT)
-    .switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName))
-    .map(response => {
-      return this.deleteAccountResponse(response);
-    });
+    .ofType(AccountsAction.DELETE_ACCOUNT).pipe(
+      switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName)),
+      map(response => {
+        return this.deleteAccountResponse(response);
+      }),);
 
   @Effect()
   public DeleteAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
-        this._generalServices.eventHandler.next({name: eventsConst.accountDeleted, payload: action.payload});
-        this._toasty.successToast(action.payload.body, '');
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
+          this._generalServices.eventHandler.next({name: eventsConst.accountDeleted, payload: action.payload});
+          this._toasty.successToast(action.payload.body, '');
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   constructor(private action$: Actions,
               private _accountService: AccountService,

@@ -1,18 +1,14 @@
-import { from } from 'rxjs/observable/from';
-import { IMagicLinkLedgerResponse, IMagicLinkLedgerRequest } from './../models/api-models/MagicLink';
-import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
-import { Injectable, Optional, Inject } from '@angular/core';
-import 'rxjs/add/operator/map';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { IMagicLinkLedgerRequest, IMagicLinkLedgerResponse } from './../models/api-models/MagicLink';
+import { Inject, Injectable, Optional } from '@angular/core';
+
 import { HttpWrapperService } from './httpWrapper.service';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { BlankLedgerVM } from '../ledger/ledger.vm';
-import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+
 @Injectable()
 export class MagicLinkService {
 
@@ -32,19 +28,19 @@ export class MagicLinkService {
     } else {
       URL = this.config.apiUrl + LEDGER_API.GET_MAGIC_LINK_DATA.replace(':id', model.data.id);
     }
-    return this._http.get(URL).map((res) => {
+    return this._http.get(URL).pipe(map((res) => {
       let data: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest> = res;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>(e, {}));
+    }), catchError((e) => this.errorHandler.HandleCatch<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>(e, {})),);
   }
 
   /**
    * get base64 data of a file
    */
   public DownloadInvoice(id: string, invoiceNum: string): Observable<BaseResponse<any, any>> {
-    return this._http.get(this.config.apiUrl + LEDGER_API.MAGIC_LINK_DOWNLOAD_FILE.replace(':id', id).replace(':invoiceNum', invoiceNum)).map((res) => {
+    return this._http.get(this.config.apiUrl + LEDGER_API.MAGIC_LINK_DOWNLOAD_FILE.replace(':id', id).replace(':invoiceNum', invoiceNum)).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, {}));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, {})),);
   }
 }

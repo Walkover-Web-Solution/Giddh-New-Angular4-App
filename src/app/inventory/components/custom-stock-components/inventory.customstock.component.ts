@@ -1,12 +1,13 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { find, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
-import { Observable } from 'rxjs/Observable';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import * as  _ from '../../../lodash-optimized';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
@@ -38,27 +39,27 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public country: string;
   public selectedUnitName: string;
   public isIndia: boolean;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public isStockUnitCodeAvailable$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
-    private sidebarAction: SidebarAction, private settingsProfileActions: SettingsProfileActions) {
+              private sidebarAction: SidebarAction, private settingsProfileActions: SettingsProfileActions) {
     this.customUnitObj = new StockUnitRequest();
-    this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).takeUntil(this.destroyed$);
-    this.isStockUnitCodeAvailable$ = this.store.select(state => state.inventory.isStockUnitCodeAvailable).takeUntil(this.destroyed$);
+    this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).pipe(takeUntil(this.destroyed$));
+    this.isStockUnitCodeAvailable$ = this.store.select(state => state.inventory.isStockUnitCodeAvailable).pipe(takeUntil(this.destroyed$));
 
-    this.store.select(state => state.inventory.stockUnits).takeUntil(this.destroyed$).subscribe( p  => {
+    this.store.select(state => state.inventory.stockUnits).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
         let units = p;
         let unitArr = units.map(unit => {
-          return { label: `${unit.name} (${unit.code})`, value: unit.code };
+          return {label: `${unit.name} (${unit.code})`, value: unit.code};
         });
-        this.stockUnitsDropDown$ = Observable.of(unitArr);
+        this.stockUnitsDropDown$ = observableOf(unitArr);
       }
     });
 
-    this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (!_.isEmpty(o)) {
         this.companyProfile = _.cloneDeep(o);
         if (this.companyProfile.country) {
@@ -74,16 +75,16 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
       }
     });
-    this.activeGroupUniqueName$ = this.store.select(s => s.inventory.activeGroupUniqueName).takeUntil(this.destroyed$);
-    this.createCustomStockInProcess$ = this.store.select(s => s.inventory.createCustomStockInProcess).takeUntil(this.destroyed$);
-    this.updateCustomStockInProcess$ = this.store.select(s => s.inventory.updateCustomStockInProcess).takeUntil(this.destroyed$);
-    this.deleteCustomStockInProcessCode$ = this.store.select(s => s.inventory.deleteCustomStockInProcessCode).takeUntil(this.destroyed$);
-    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).takeUntil(this.destroyed$);
+    this.activeGroupUniqueName$ = this.store.select(s => s.inventory.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
+    this.createCustomStockInProcess$ = this.store.select(s => s.inventory.createCustomStockInProcess).pipe(takeUntil(this.destroyed$));
+    this.updateCustomStockInProcess$ = this.store.select(s => s.inventory.updateCustomStockInProcess).pipe(takeUntil(this.destroyed$));
+    this.deleteCustomStockInProcessCode$ = this.store.select(s => s.inventory.deleteCustomStockInProcessCode).pipe(takeUntil(this.destroyed$));
+    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     let activeGroup = null;
-    this.activeGroupUniqueName$.take(1).subscribe(a => activeGroup = a);
+    this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroup = a);
     if (activeGroup) {
       this.store.dispatch(this.sidebarAction.OpenGroup(activeGroup));
     }
@@ -136,7 +137,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
   public clearFields() {
     this.customUnitObj = new StockUnitRequest();
-    this.forceClear$ = Observable.of({status: true});
+    this.forceClear$ = observableOf({status: true});
     this.customUnitObj.parentStockUnitCode = null;
     this.editMode = false;
     this.editCode = '';
@@ -144,14 +145,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   }
 
   public change(v) {
-    this.stockUnit$.find(p => {
+    this.stockUnit$.pipe(find(p => {
       let unit = p.find(q => q.code === v);
       if (unit !== undefined) {
         this.customUnitObj.parentStockUnit = unit;
         return true;
       }
-    }).subscribe();
+    })).subscribe();
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -199,7 +201,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     if (val) {
       this.store.dispatch(this.customStockActions.GetStockUnitByName(val));
 
-      this.isStockUnitCodeAvailable$.takeUntil(this.destroyed$).subscribe(a => {
+      this.isStockUnitCodeAvailable$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
             this.customUnitObj.code = val;

@@ -6,11 +6,9 @@ import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inv
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
-import { Observable } from 'rxjs/Observable';
-import { StockDetailResponse, StockUnitRequest } from '../../../../models/api-models/Inventory';
+import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
 import { ToasterService } from '../../../../services/toaster.service';
-import { IForceClear } from '../../../../models/api-models/Sales';
 import { InventoryService } from '../../../../services/inventory.service';
 
 @Component({
@@ -43,6 +41,11 @@ export class InwardNoteComponent implements OnInit, OnChanges {
   public editModeForLinkedStokes: boolean = false;
   public disableStockButton: boolean = false;
 
+  constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
+              private _zone: NgZone) {
+    this.initializeForm(true);
+  }
+
   public get inventoryEntryDate(): FormControl {
     return this.form.get('inventoryEntryDate') as FormControl;
   }
@@ -69,11 +72,6 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   public get isManufactured(): FormControl {
     return this.form.get('isManufactured') as FormControl;
-  }
-
-  constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
-              private _zone: NgZone) {
-    this.initializeForm(true);
   }
 
   public ngOnInit() {

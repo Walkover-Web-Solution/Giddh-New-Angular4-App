@@ -1,4 +1,3 @@
-
 let COMMON_URL = 'company/:companyUniqueName/';
 export const EBANKS = {
   GET_TOKEN: COMMON_URL + 'ebanks/token', // GET

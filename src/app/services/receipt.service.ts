@@ -1,3 +1,4 @@
+import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { GeneralService } from './general.service';
 import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse } from '../models/api-models/recipt';
@@ -29,14 +30,14 @@ export class ReceiptService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + RECEIPT_API.PUT
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
-      .map((res) => {
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+      map((res) => {
         let data: BaseResponse<string, ReciptRequest> = res;
         data.request = model;
         data.queryString = {accountUniqueName};
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model)),);
   }
 
   public GetAllReceipt(body: InvoiceReceiptFilter): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
@@ -47,14 +48,14 @@ export class ReceiptService implements OnInit {
     });
 
     return this._http.post(url
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body)
-      .map((res) => {
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
+      map((res) => {
         let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
         data.queryString = {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'};
         data.request = body;
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'}));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'})),);
   }
 
   public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
@@ -74,13 +75,13 @@ export class ReceiptService implements OnInit {
       {
         body: queryRequest,
         headers: args.headers,
-      })
-      .map((res) => {
+      }).pipe(
+      map((res) => {
         let data: any = res;
         data.request = queryRequest;
         data.queryString = {accountUniqueName};
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName));
+      }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)),);
   }
 
   public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string): any {
@@ -89,11 +90,11 @@ export class ReceiptService implements OnInit {
     return this._http.post(this.config.apiUrl + RECEIPT_API.DOWNLOAD_VOUCHER
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      , model, {responseType: 'blob'})
-      .map((res) => {
+      , model, {responseType: 'blob'}).pipe(
+      map((res) => {
         return res;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})),);
   }
 
   private createQueryString(str, model) {

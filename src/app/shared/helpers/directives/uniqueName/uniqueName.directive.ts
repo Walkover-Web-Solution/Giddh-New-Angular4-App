@@ -1,12 +1,17 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 import { ToasterService } from '../../../../services/toaster.service';
-import { uniqueNameInvalidStringReplace } from '../../helperFunctions';
 
 @Directive({
   selector: '[UniqueNameDirective]'
 })
 export class UniqueNameDirective {
   public el: HTMLInputElement;
+
+  // tslint:disable-next-line:member-ordering
+  constructor(private elementRef: ElementRef, private _toaster: ToasterService) {
+    this.el = this.elementRef.nativeElement;
+  }
+
   @HostListener('keypress', ['$event'])
   public onKeyPress(event: KeyboardEvent) {
     if (event.which === 32) {
@@ -23,11 +28,6 @@ export class UniqueNameDirective {
   @HostListener('input', ['$event'])
   public onInput(event: any) {
     this.el.value = this.el.value.toLowerCase();
-  }
-
-  // tslint:disable-next-line:member-ordering
-  constructor(private elementRef: ElementRef, private _toaster: ToasterService) {
-    this.el = this.elementRef.nativeElement;
   }
 
 }

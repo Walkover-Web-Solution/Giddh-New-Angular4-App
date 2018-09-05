@@ -1,19 +1,20 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -170,7 +171,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userAvatar: string;
   public navigationOptionList: IOption[] = NAVIGATION_ITEM_LIST;
   public selectedNavigation: string = '';
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   private loggedInUserEmail: string;
@@ -197,23 +198,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
 
-    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
 
     this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
       if (user) {
         this.loggedInUserEmail = user.user.email;
         return user.user;
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
 
-    this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).takeUntil(this.destroyed$);
+    this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
 
-    this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).takeUntil(this.destroyed$);
+    this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
       if (companies && companies.length) {
         return _.orderBy(companies, 'name');
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
@@ -252,15 +253,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
-    })).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => p.session.userLoginState).distinctUntilChanged().takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
+    this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$),);
   }
 
   public ngOnInit() {
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
-    this.user$.take(1).subscribe((u) => {
+    this.user$.pipe(take(1)).subscribe((u) => {
       if (u) {
         let userEmail = u.email;
         // this.getUserAvatar(userEmail);
@@ -287,8 +288,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
-    this.accountSearchControl.valueChanges
-      .debounceTime(300)
+    this.accountSearchControl.valueChanges.pipe(
+      debounceTime(300))
       .subscribe((newValue) => {
         this.accountSearchValue = newValue;
         if (newValue.length > 0) {
@@ -297,7 +298,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.filterAccounts(newValue);
       });
 
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().takeUntil(this.destroyed$).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$),).subscribe(a => {
       if (a && a !== '') {
         this.zone.run(() => {
           this.filterAccounts('');
@@ -379,7 +380,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public hideManageGroupsModal() {
-    this.store.select(c => c.session.lastState).take(1).subscribe((s: string) => {
+    this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
       if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
         this.store.dispatch(this._generalActions.addAndManageClosed());
       }
@@ -609,14 +610,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.navigationOptionList.forEach((ele) => {
       ele.isHilighted = false;
     });
-    this.forceClear$ = Observable.of({status: false});
+    this.forceClear$ = observableOf({status: false});
     this.navigationModalVisible = true;
     this.navigationModal.show();
     setTimeout(() => this.navigationShSelect.show(''), 200);
   }
 
   private hideNavigationModal() {
-    this.forceClear$ = Observable.of({status: true});
+    this.forceClear$ = observableOf({status: true});
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();

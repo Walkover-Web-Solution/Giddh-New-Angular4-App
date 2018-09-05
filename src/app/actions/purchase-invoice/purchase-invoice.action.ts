@@ -1,14 +1,15 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
-import { PURCHASE_INVOICE_ACTIONS, GST_RETURN_ACTIONS } from './purchase-invoice.const';
+import { GST_RETURN_ACTIONS, PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
 
 import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
-import { IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
+import { IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store/index';
@@ -19,290 +20,290 @@ export class InvoicePurchaseActions {
 
   @Effect()
   public GetPurchaseInvoices$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES)
-    .switchMap((action: CustomActions) =>  this.purchaseInvoiceService.GetPurchaseInvoice(action.payload))
-    .map(res => this.validateResponse<IInvoicePurchaseResponse, string>(res, {
-      type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
-      payload: res
-    }, true, {
+    .ofType(PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES).pipe(
+      switchMap((action: CustomActions) => this.purchaseInvoiceService.GetPurchaseInvoice(action.payload)),
+      map(res => this.validateResponse<IInvoicePurchaseResponse, string>(res, {
         type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
         payload: res
-      }));
+      }, true, {
+        type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   public UpdatePurchaseInvoice$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE)
-    .switchMap((action: CustomActions) => {
-      console.log('Effect CAlled');
-      return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName)
-        .map(response => this.UpdatePurchaseInvoiceResponse(response));
-    });
-
-  @Effect()
-  public GetTaxesForThisCompany$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES)
-    .switchMap((action: CustomActions) =>  this.purchaseInvoiceService.GetTaxesForThisCompany())
-    .map(res => this.validateResponse<ITaxResponse[], string>(res, {
-      type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
-      payload: res
-    }, true, {
-        type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
-        payload: res
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE).pipe(
+      switchMap((action: CustomActions) => {
+        console.log('Effect CAlled');
+        return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName).pipe(
+          map(response => this.UpdatePurchaseInvoiceResponse(response)));
       }));
 
   @Effect()
+  public GetTaxesForThisCompany$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES).pipe(
+      switchMap((action: CustomActions) => this.purchaseInvoiceService.GetTaxesForThisCompany()),
+      map(res => this.validateResponse<ITaxResponse[], string>(res, {
+        type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+        payload: res
+      }, true, {
+        type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+        payload: res
+      })),);
+
+  @Effect()
   public GeneratePurchaseInvoice$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload)
-        .map(response => this.UpdatePurchaseInvoiceResponse(response));
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload).pipe(
+          map(response => this.UpdatePurchaseInvoiceResponse(response)));
+      }));
 
   @Effect()
   private UpdatePurchaseInvoiceResponse$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Purchase Invoice Updated Successfully.');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Purchase Invoice Updated Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   private DownloadGSTR1Sheet$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.DownloadGSTR1Sheet(action.payload)
-        .map(response => this.DownloadGSTR1SheetResponse(response));
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.DownloadGSTR1Sheet(action.payload).pipe(
+          map(response => this.DownloadGSTR1SheetResponse(response)));
+      }));
 
   @Effect()
   private DownloadGSTR1SheetResponse$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.downloadFile(data.body, data.queryString.reqObj.month, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type);
-        this.toasty.successToast('Sheet Downloaded Successfully.');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.downloadFile(data.body, data.queryString.reqObj.month, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type);
+          this.toasty.successToast('Sheet Downloaded Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   private DownloadGSTR1ErrorSheet$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.DownloadGSTR1ErrorSheet(action.payload)
-        .map(response => this.DownloadGSTR1ErrorSheetResponse(response));
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.DownloadGSTR1ErrorSheet(action.payload).pipe(
+          map(response => this.DownloadGSTR1ErrorSheetResponse(response)));
+      }));
 
   @Effect()
   private DownloadGSTR1ErrorSheetResponse$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.downloadFile(data.body, data.queryString.reqObj.month, data.queryString.reqObj.gstNumber, data.queryString.reqObj.gstNumber);
-        this.toasty.successToast('Error Sheet Downloaded Successfully.');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.downloadFile(data.body, data.queryString.reqObj.month, data.queryString.reqObj.gstNumber, data.queryString.reqObj.gstNumber);
+          this.toasty.successToast('Error Sheet Downloaded Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
-    @Effect()
+  @Effect()
   private SendGSTR3BEmail$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.SendGSTR3BEmail(action.payload)
-        .map(response => this.SendGSTR3BEmailResponse(response));
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.SendGSTR3BEmail(action.payload).pipe(
+          map(response => this.SendGSTR3BEmailResponse(response)));
+      }));
 
   @Effect()
   private SendGSTR3BEmailResponse$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   /**
    * UPDATE PURCHASE ENTRY
    */
   @Effect()
   private UpdatePurchaseEntry$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.UpdatePurchaseEntry(action.payload)
-        .map(response => this.UpdatePurchaseEntryResponse(response));
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.UpdatePurchaseEntry(action.payload).pipe(
+          map(response => this.UpdatePurchaseEntryResponse(response)));
+      }));
 
   /**
    * UPDATE PURCHASE ENTRY RESPONSE
    */
   @Effect()
   private UpdatePurchaseEntryResponse$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Entry Updated Successfully.');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Entry Updated Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   /**
    * UPDATE INVOICE
    */
   @Effect()
   private UpdateInvoice$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.UpdateInvoice(action.payload)
-        .map(response => this.UpdateInvoiceResponse(response));
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.UpdateInvoice(action.payload).pipe(
+          map(response => this.UpdateInvoiceResponse(response)));
+      }));
 
   /**
    * UPDATE PURCHASE ENTRY RESPONSE
    */
   @Effect()
   private UpdateInvoiceResponse$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast('Entry Updated Successfully.');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast('Entry Updated Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   /**
    * Save Jio Gst Details
    */
   @Effect()
   private SaveJioGst$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.SaveJioGst(action.payload)
-        .map(response => this.SaveJioGstResponse(response));
-    });
+    .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.SaveJioGst(action.payload).pipe(
+          map(response => this.SaveJioGstResponse(response)));
+      }));
 
   /**
    * Save Jio Gst Details RESPONSE
    */
   @Effect()
   private SaveJioGstResponse$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   /**
    * Save Tax Pro Details
    */
   @Effect()
   private SaveTaxPro$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.SaveTaxPro(action.payload)
-        .map(response => this.SaveTaxProResponse(response));
-    });
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.SaveTaxPro(action.payload).pipe(
+          map(response => this.SaveTaxProResponse(response)));
+      }));
 
   /**
    * Save Tax Pro RESPONSE
    */
   @Effect()
   private SaveTaxProResponse$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   /**
    * Save Tax Pro With OTP Details
    */
   @Effect()
   private SaveTaxProWithOTP$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.SaveTaxProWithOTP(action.payload)
-        .map(response => this.SaveTaxProWithOTPResponse(response));
-    });
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.SaveTaxProWithOTP(action.payload).pipe(
+          map(response => this.SaveTaxProWithOTPResponse(response)));
+      }));
 
   /**
    * Save Tax Pro With OTP Details RESPONSE
    */
   @Effect()
   private SaveTaxProWithOTPResponse$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   /**
    * File Jio GSTR1
    */
   @Effect()
   private FileJioGstReturn$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST)
-    .switchMap((action: CustomActions) => {
-      return this.purchaseInvoiceService.FileJioGstReturn(action.payload)
-        .map(response => this.FileJioGstReturnResponse(response));
-    });
+    .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.FileJioGstReturn(action.payload).pipe(
+          map(response => this.FileJioGstReturnResponse(response)));
+      }));
 
   /**
    * File Jio GSTR1 Response
    */
   @Effect()
   private FileJioGstReturnResponse$: Observable<Action> = this.action$
-    .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<any, string> = response.payload;
-      if (data.status === 'error') {
-        this.toasty.errorToast(data.message, data.code);
-      } else {
-        this.toasty.successToast(data.body);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   constructor(private action$: Actions,
-    private toasty: ToasterService,
-    private router: Router,
-    private store: Store<AppState>,
-    private purchaseInvoiceService: PurchaseInvoiceService) {
+              private toasty: ToasterService,
+              private router: Router,
+              private store: Store<AppState>,
+              private purchaseInvoiceService: PurchaseInvoiceService) {
   }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -323,7 +324,7 @@ export class InvoicePurchaseActions {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   public downloadFile(data: Response, month: string, gstNumber: string, type: string) {
@@ -341,7 +342,7 @@ export class InvoicePurchaseActions {
   public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE,
-      payload: { entryUniqueName, taxUniqueName, accountUniqueName }
+      payload: {entryUniqueName, taxUniqueName, accountUniqueName}
     };
   }
 
@@ -368,7 +369,7 @@ export class InvoicePurchaseActions {
   public DownloadGSTR1Sheet(month: string, gstNumber: string, type: string): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET,
-      payload: { month, gstNumber, type }
+      payload: {month, gstNumber, type}
     };
   }
 
@@ -382,7 +383,7 @@ export class InvoicePurchaseActions {
   public DownloadGSTR1ErrorSheet(month: string, gstNumber: string, type: string): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET,
-      payload: { month, gstNumber, type }
+      payload: {month, gstNumber, type}
     };
   }
 
@@ -396,7 +397,7 @@ export class InvoicePurchaseActions {
   public SendGSTR3BEmail(month: string, gstNumber: string, isNeedDetailSheet: boolean, email?: string): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL,
-      payload: { month, gstNumber, isNeedDetailSheet, email }
+      payload: {month, gstNumber, isNeedDetailSheet, email}
     };
   }
 
@@ -491,7 +492,7 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

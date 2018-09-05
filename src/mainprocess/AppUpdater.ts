@@ -1,5 +1,4 @@
 import { autoUpdater } from 'electron-updater';
-import { dialog } from 'electron';
 
 let updater;
 export default class AppUpdater {

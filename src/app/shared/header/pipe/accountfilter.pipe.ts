@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from '../../../lodash-optimized';
+
 @Pipe({
   // tslint:disable-next-line:pipe-naming
   name: 'grpsrch',
@@ -11,9 +12,11 @@ export class AccountFilterPipe implements PipeTransform {
    *
    */
   public srch: string;
+
   constructor() {
     //
   }
+
   public transform(input: any, search: string): any {
     input = _.cloneDeep(input);
     if (!_.isUndefined(search)) {
@@ -113,6 +116,7 @@ export class AccountFilterPipe implements PipeTransform {
       }
     });
   }
+
   public resetSearch(input) {
     return _.each(input, (grp: any) => {
       // grp = Object.assign(grp, { isVisible: false });
@@ -128,6 +132,7 @@ export class AccountFilterPipe implements PipeTransform {
       }
     });
   }
+
   public checkIndex(src, str) {
     if (src.indexOf(str) !== -1) {
       return true;
