@@ -1,12 +1,13 @@
+import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
+
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Router } from '@angular/router';
 
@@ -35,7 +36,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router) {
-    this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).takeUntil(this.destroyed$);
+    this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
     this.sidebarRect = window.screen.height;
     // console.log(this.sidebarRect);
   }
@@ -52,10 +53,10 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public ngAfterViewInit() {
-    Observable.fromEvent(this.search.nativeElement, 'input')
-      .debounceTime(500)
-      .distinctUntilChanged()
-      .map((e: any) => e.target.value)
+    observableFromEvent(this.search.nativeElement, 'input').pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      map((e: any) => e.target.value),)
       .subscribe((val: string) => {
         if (val) {
           this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));

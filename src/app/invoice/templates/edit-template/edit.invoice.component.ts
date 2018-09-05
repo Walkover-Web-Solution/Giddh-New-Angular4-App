@@ -1,11 +1,8 @@
-/**
- * Created by kunalsaxena on 6/29/17.
- */
-
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
 import * as _ from '../../../lodash-optimized';
@@ -13,6 +10,10 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { ToasterService } from '../../../services/toaster.service';
+
+/**
+ * Created by kunalsaxena on 6/29/17.
+ */
 
 @Component({
   selector: 'edit-invoice',
@@ -51,7 +52,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     // Get custom created templates
-    this.store.select(c => c.invoiceTemplate).takeUntil(this.destroyed$).subscribe((s) => {
+    this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
       if (s && s.customCreatedTemplates) {
         this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
       }
@@ -67,12 +68,12 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     let companies = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.session).take(1).subscribe(ss => {
+    this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
     });
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -171,7 +172,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     let customCreatedTemplates = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       customCreatedTemplates = ss.customCreatedTemplates;
       defaultTemplate = ss.defaultTemplate;
     });
@@ -188,7 +189,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     let customCreatedTemplates = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       customCreatedTemplates = ss.customCreatedTemplates;
       defaultTemplate = ss.defaultTemplate;
     });

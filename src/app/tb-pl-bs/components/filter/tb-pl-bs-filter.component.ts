@@ -1,3 +1,4 @@
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -9,9 +10,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { createSelector } from 'reselect';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -79,43 +79,18 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public showClearSearch: boolean;
   public request: TrialBalanceRequest = {};
   public expand: boolean = false;
-  public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Financial Year', value: '0' }];
+  public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
 
   @Input() public showLoader: boolean = true;
 
   @Input() public showLabels: boolean = false;
-
-  // init form and other properties from input company
-  @Input()
-  public set selectedCompany(value: CompanyResponse) {
-    if (!value) {
-      return;
-    }
-    this._selectedCompany = value;
-    this.financialOptions = value.financialYears.map(q => {
-      return { label: q.uniqueName, value: q.uniqueName };
-    });
-    this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-    this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
-    this.filterForm.patchValue({
-      to: value.activeFinancialYear.financialYearEnds,
-      from: value.activeFinancialYear.financialYearStarts,
-      selectedFinancialYearOption: value.activeFinancialYear.uniqueName
-    });
-  }
-
-  public get selectedCompany() {
-    return this._selectedCompany;
-  }
-
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
-  private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private fb: FormBuilder,
-    private cd: ChangeDetectorRef,
-    private store: Store<AppState>,
-    private _settingsTagActions: SettingsTagActions) {
+              private cd: ChangeDetectorRef,
+              private store: Store<AppState>,
+              private _settingsTagActions: SettingsTagActions) {
     this.filterForm = this.fb.group({
       from: [''],
       to: [''],
@@ -129,6 +104,31 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
+  private _selectedCompany: CompanyResponse;
+
+  public get selectedCompany() {
+    return this._selectedCompany;
+  }
+
+  // init form and other properties from input company
+  @Input()
+  public set selectedCompany(value: CompanyResponse) {
+    if (!value) {
+      return;
+    }
+    this._selectedCompany = value;
+    this.financialOptions = value.financialYears.map(q => {
+      return {label: q.uniqueName, value: q.uniqueName};
+    });
+    this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+    this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
+    this.filterForm.patchValue({
+      to: value.activeFinancialYear.financialYearEnds,
+      from: value.activeFinancialYear.financialYearStarts,
+      selectedFinancialYearOption: value.activeFinancialYear.uniqueName
+    });
+  }
+
   public ngOnChanges(changes: SimpleChanges): void {
     // if (changes['needToReCalculate']) {
     //   this.calculateTotal();
@@ -138,10 +138,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit() {
     //
     if (!this.showLabels) {
-      this.filterForm.patchValue({ selectedDateOption: '0' });
+      this.filterForm.patchValue({selectedDateOption: '0'});
     }
-    this.accountSearchControl.valueChanges
-      .debounceTime(700)
+    this.accountSearchControl.valueChanges.pipe(
+      debounceTime(700))
       .subscribe((newValue) => {
         this.search = newValue;
         this.seachChange.emit(this.search);
@@ -156,7 +156,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
         return _.orderBy(tags, 'name');
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
 
   }
 
@@ -167,10 +167,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public selectDateOption(v: IOption) {
     // this.selectedDateOption = v.value || '';
   }
+
   public selectedDate(value: any) {
     this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
     this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
   }
+
   public selectFinancialYearOption(v: IOption) {
     if (v.value) {
       let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
@@ -191,10 +193,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
+
   public filterData() {
     this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
     this.onPropertyChanged.emit(this.filterForm.value);
   }
+
   public refreshData() {
     this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
     let data = _.cloneDeep(this.filterForm.value);
@@ -219,7 +223,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public emitExpand() {
     this.expand = !this.expand;
     setTimeout(() => {
-    this.expandAll.emit(this.expand);
+      this.expandAll.emit(this.expand);
     }, 10);
   }
 

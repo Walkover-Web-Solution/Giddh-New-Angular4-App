@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'inventory-update-group',  // <home></home>

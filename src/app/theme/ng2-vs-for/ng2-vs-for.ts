@@ -1,16 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Directive,
-  ElementRef,
-  EmbeddedViewRef,
-  Input,
-  NgZone,
-  OnChanges, OnDestroy,
-  OnInit,
-  TemplateRef,
-  ViewContainerRef
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, EmbeddedViewRef, Input, NgZone, OnChanges, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 
 const dde: any = document.documentElement;
 const matchingFunction = dde.matches ? 'matches' :
@@ -91,8 +79,6 @@ function nextElementSibling(el: any) {
 })
 
 export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
-  public _originalCollection: any[] = [];
-  public _slicedCollection: any[] = [];
   public originalLength: number;
   public before: HTMLElement;
   public after: HTMLElement;
@@ -118,7 +104,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
   public _maxEndIndex: number;
   public onWindowResize: any;
   public onZone: any;
-
   @Input()
   public vsForSize: any;
   @Input()
@@ -136,37 +121,11 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   public vsForTagName = 'div';
 
-  @Input('vsFor')
-  set originalCollection(value: any[]) {
-    this._originalCollection = value || [];
-    if (this.scrollParent) {
-      this.refresh();
-    } else {
-      this.postDigest(this.refresh.bind(this));
-    }
-    // this.slicedCollection = value.slice(1, -1);
-    // this.view.setLocal('vsCollection', this.slicedCollection);
-  }
-
-  get originalCollection() {
-    return this._originalCollection;
-  }
-
-  set slicedCollection(value: any[]) {
-    this._slicedCollection = value;
-    this.view.context.vsCollection = this._slicedCollection;
-    // this.view.setLocal('vsCollection', this._slicedCollection);
-  }
-
-  get slicedCollection() {
-    return this._slicedCollection;
-  }
-
   constructor(private _element: ElementRef,
-    private _viewContainer: ViewContainerRef,
-    private _templateRef: TemplateRef<any>,
-    private _ngZone: NgZone,
-    private _changeDetectorRef: ChangeDetectorRef) {
+              private _viewContainer: ViewContainerRef,
+              private _templateRef: TemplateRef<any>,
+              private _ngZone: NgZone,
+              private _changeDetectorRef: ChangeDetectorRef) {
     let _prevClientSize: number;
     const reinitOnClientHeightChange = () => {
       if (!this.scrollParent) {
@@ -185,6 +144,36 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     };
 
     this.onZone = this._ngZone.onStable.subscribe(reinitOnClientHeightChange);
+  }
+
+  public _originalCollection: any[] = [];
+
+  get originalCollection() {
+    return this._originalCollection;
+  }
+
+  @Input('vsFor')
+  set originalCollection(value: any[]) {
+    this._originalCollection = value || [];
+    if (this.scrollParent) {
+      this.refresh();
+    } else {
+      this.postDigest(this.refresh.bind(this));
+    }
+    // this.slicedCollection = value.slice(1, -1);
+    // this.view.setLocal('vsCollection', this.slicedCollection);
+  }
+
+  public _slicedCollection: any[] = [];
+
+  get slicedCollection() {
+    return this._slicedCollection;
+  }
+
+  set slicedCollection(value: any[]) {
+    this._slicedCollection = value;
+    this.view.context.vsCollection = this._slicedCollection;
+    // this.view.setLocal('vsCollection', this._slicedCollection);
   }
 
   public ngOnChanges() {
@@ -432,7 +421,7 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
       __endIndex = Math.min(
         __startIndex + Math.ceil(
-          $clientSize / this.elementSize
+        $clientSize / this.elementSize
         ) + this.vsForExcess,
         this.originalLength
       );
@@ -491,6 +480,7 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
     return digestRequired;
   }
+
   public scrollToElement(itemIndex: number) {
     this.sizes = this.originalCollection.map((item, index) => {
       if (typeof this.vsForSize === 'function') {
@@ -513,6 +503,7 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     this.updateInnerCollection();
     // this.refresh();
   }
+
   public _getOffset(index: number) {
     if (typeof this.vsForSize !== 'undefined') {
       return this.sizesCumulative[index + this.startIndex] + this.vsForOffsetBefore;

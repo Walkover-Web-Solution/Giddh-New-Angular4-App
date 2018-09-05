@@ -13,31 +13,32 @@ export interface InvoiceSetting {
 }
 
 export class InvoiceISetting {
-    public autoEntryAndInvoice: boolean;
-    public autoEntryVoucherAndEmail: boolean;
-    public autoMail: boolean;
-    public autoPaid: string;
-    public createPaymentEntry?: boolean;
-    public duePeriod?: number;
-    public email: string;
-    public emailVerified: boolean;
-    public showSeal: boolean;
-    public lockDate?: any;
-    public useCustomInvoiceNumber: boolean;
-    public invoiceNumberPrefix: string;
-    public initialInvoiceNumber: string;
-    public defaultPaymentGateway: string;
-    public enableNarrationOnInvAndVoucher: boolean;
-    public sendInvLinkOnSms: boolean;
-    public smsContent: string;
-    public sendThroughGmail: boolean;
+  public autoEntryAndInvoice: boolean;
+  public autoEntryVoucherAndEmail: boolean;
+  public autoMail: boolean;
+  public autoPaid: string;
+  public createPaymentEntry?: boolean;
+  public duePeriod?: number;
+  public email: string;
+  public emailVerified: boolean;
+  public showSeal: boolean;
+  public lockDate?: any;
+  public useCustomInvoiceNumber: boolean;
+  public invoiceNumberPrefix: string;
+  public initialInvoiceNumber: string;
+  public defaultPaymentGateway: string;
+  public enableNarrationOnInvAndVoucher: boolean;
+  public sendInvLinkOnSms: boolean;
+  public smsContent: string;
+  public sendThroughGmail: boolean;
 }
+
 export interface InvoiceWebhooks {
-    entity: string;
-    operation?: string;
-    triggerAt: number;
-    uniqueName?: string;
-    url: string;
+  entity: string;
+  operation?: string;
+  triggerAt: number;
+  uniqueName?: string;
+  url: string;
 }
 
 export class EmailSettingObjDefinition {

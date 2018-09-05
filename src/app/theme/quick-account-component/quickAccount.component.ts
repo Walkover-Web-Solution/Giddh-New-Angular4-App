@@ -1,13 +1,14 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import * as _ from 'app/lodash-optimized';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'app/services/group.service';
-import { Observable } from 'rxjs/Observable';
 import { CompanyService } from 'app/services/companyService.service';
 import { AccountRequestV2 } from 'app/models/api-models/Account';
-import { Store, State } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 import { LedgerActions } from 'app/actions/ledger/ledger.actions';
 import { GeneralActions } from 'app/actions/general/general.actions';
@@ -27,7 +28,7 @@ export class QuickAccountComponent implements OnInit {
   public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
   public flattenGroupsArray: IOption[] = [];
   public statesStream$: Observable<States[]>;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
   public isQuickAccountInProcess$: Observable<boolean>;
   public isQuickAccountCreatedSuccessfully$: Observable<boolean>;
   public showGstBox: boolean = false;
@@ -37,18 +38,18 @@ export class QuickAccountComponent implements OnInit {
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _groupService: GroupService,
-    private _companyService: CompanyService, private _toaster: ToasterService,
-    private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
-    this.isQuickAccountInProcess$ = this.store.select(p => p.ledger.isQuickAccountInProcess).takeUntil(this.destroyed$);
-    this.isQuickAccountCreatedSuccessfully$ = this.store.select(p => p.ledger.isQuickAccountCreatedSuccessfully).takeUntil(this.destroyed$);
-    this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
-    this.statesStream$ = this.store.select(p => p.general.states).takeUntil(this.destroyed$);
+              private _companyService: CompanyService, private _toaster: ToasterService,
+              private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
+    this.isQuickAccountInProcess$ = this.store.select(p => p.ledger.isQuickAccountInProcess).pipe(takeUntil(this.destroyed$));
+    this.isQuickAccountCreatedSuccessfully$ = this.store.select(p => p.ledger.isQuickAccountCreatedSuccessfully).pipe(takeUntil(this.destroyed$));
+    this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+    this.statesStream$ = this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$));
     this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').subscribe(result => {
       if (result.status === 'success') {
         let groupsListArray: IOption[] = [];
         result.body.results = this.removeFixedGroupsFromArr(result.body.results);
         result.body.results.forEach(a => {
-          groupsListArray.push({ label: a.groupName, value: a.groupUniqueName });
+          groupsListArray.push({label: a.groupName, value: a.groupUniqueName});
         });
         this.flattenGroupsArray = groupsListArray;
 
@@ -63,10 +64,10 @@ export class QuickAccountComponent implements OnInit {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
-      this.statesSource$ = Observable.of(states);
+      this.statesSource$ = observableOf(states);
     }, (err) => {
       // console.log(err);
     });
@@ -81,7 +82,7 @@ export class QuickAccountComponent implements OnInit {
       addresses: this._fb.array([
         this._fb.group({
           gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-          stateCode: [{ value: '', disabled: false }]
+          stateCode: [{value: '', disabled: false}]
         })
       ]),
     });
@@ -119,7 +120,7 @@ export class QuickAccountComponent implements OnInit {
   public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
-      this.statesSource$.take(1).subscribe(state => {
+      this.statesSource$.pipe(take(1)).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
         statesEle.disabled = true;
         if (s) {
@@ -167,6 +168,7 @@ export class QuickAccountComponent implements OnInit {
       return !(fixedArr.indexOf(da.groupUniqueName) > -1);
     });
   }
+
   public submit() {
     let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
     if (!this.showGstBox) {

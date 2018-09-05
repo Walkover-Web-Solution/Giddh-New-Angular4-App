@@ -1,3 +1,6 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -8,11 +11,9 @@ import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
-import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -20,18 +21,18 @@ import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccount
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
-  { label: '12', value: '12' },
-  { label: '25', value: '25' },
-  { label: '50', value: '50' },
-  { label: '100', value: '100' }
+  {label: '12', value: '12'},
+  {label: '25', value: '25'},
+  {label: '50', value: '50'},
+  {label: '100', value: '100'}
 ];
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
 ];
 
 @Component({
@@ -53,7 +54,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
-  public  modalRef: BsModalRef;
+  public modalRef: BsModalRef;
   public modalConfig = {
     animated: true,
     keyboard: false,
@@ -78,9 +79,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     // set initial values
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-    this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).takeUntil(this.destroyed$);
-    this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).takeUntil(this.destroyed$);
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).pipe(takeUntil(this.destroyed$));
+    this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -90,15 +91,15 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         // o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' ||  o.uniqueName === 'revenuefromoperations' || o.uniqueName === 'otherincome'
-        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1 )) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+        if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
+          accounts.push({label: item.name, value: item.uniqueName});
         }
       });
-      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.invoice.ledgers)
-      .takeUntil(this.destroyed$)
+    this.store.select(p => p.invoice.ledgers).pipe(
+      takeUntil(this.destroyed$))
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
           let a = _.cloneDeep(o);
@@ -109,9 +110,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store.select(p => p.invoice.invoiceData)
-      .takeUntil(this.destroyed$)
-      .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+    this.store.select(p => p.invoice.invoiceData).pipe(
+      takeUntil(this.destroyed$),
+      distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
         if (p && q) {
           return (p.templateUniqueName === q.templateUniqueName);
         }
@@ -119,11 +120,11 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
           return false;
         }
         return true;
-      }).subscribe((o: PreviewInvoiceResponseClass) => {
-        if (o) {
-          this.getInvoiceTemplateDetails(o.templateUniqueName);
-        }
-      });
+      }),).subscribe((o: PreviewInvoiceResponseClass) => {
+      if (o) {
+        this.getInvoiceTemplateDetails(o.templateUniqueName);
+      }
+    });
 
     // listen for bulk invoice generate and successfully generate and do the things
     this.isBulkInvoiceGenerated$.subscribe(result => {
@@ -217,7 +218,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     let arr: GenBulkInvoiceGroupByObj[] = [];
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
       if (item.isSelected) {
-        arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
+        arr.push({accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName});
       }
     });
     let res = _.groupBy(arr, 'accUniqueName');
@@ -246,7 +247,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
-    }else {
+    } else {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }
@@ -295,8 +296,8 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
-      fromDate  = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate  = moment().format(GIDDH_DATE_FORMAT);
+      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
     return {
       from: this.isUniversalDateApplicable ? fromDate : o.from,
@@ -344,7 +345,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     // check if all selected entries are from same account
     if (this.selectedCountOfAccounts.length) {
       this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
-    }else {
+    } else {
       this.togglePrevGenBtn = false;
     }
   }

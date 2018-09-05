@@ -1,11 +1,10 @@
 import { CompanyActions } from './actions/company.actions';
-import { LoginActions } from './actions/login.action';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from './store/roots';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'page',
@@ -22,6 +21,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) {
   }
 

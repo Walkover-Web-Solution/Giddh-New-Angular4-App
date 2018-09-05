@@ -1,3 +1,4 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -9,7 +10,7 @@ import { CustomActions } from '../../store/customActions';
 import { INVENTORY_USER_ACTIONS } from './inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InventoryUser } from '../../models/api-models/Inventory-in-out';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 
 @Injectable()
@@ -17,97 +18,97 @@ export class InventoryUsersActions {
 
   @Effect()
   public addNewUser$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.CREATE_USER)
-    .switchMap((action: CustomActions) => this._inventoryService.CreateInventoryUser(action.payload))
-    .map(response => this.addNewUserResponse(response));
+    .ofType(INVENTORY_USER_ACTIONS.CREATE_USER).pipe(
+      switchMap((action: CustomActions) => this._inventoryService.CreateInventoryUser(action.payload)),
+      map(response => this.addNewUserResponse(response)),);
 
   @Effect()
   public addNewUserResponse$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<InventoryUser, string> = response.payload;
-      if (data.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message, data.code);
-      } else {
-        this._toasty.successToast('User Created Successfully');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<InventoryUser, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('User Created Successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public updateUser$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.UPDATE_USER)
-    .switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryUser(action.payload))
-    .map(response => this.updateUserResponse(response));
+    .ofType(INVENTORY_USER_ACTIONS.UPDATE_USER).pipe(
+      switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryUser(action.payload)),
+      map(response => this.updateUserResponse(response)),);
 
   @Effect()
   public updateUserResponse$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.UPDATE_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<InventoryUser, string> = response.payload;
-      if (data.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message, data.code);
-      } else {
-        this._toasty.successToast('User Updated Successfully');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(INVENTORY_USER_ACTIONS.UPDATE_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<InventoryUser, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('User Updated Successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public deleteUser$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.DELETE_USER)
-    .switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryUser(action.payload))
-    .map(response => this.deleteUserResponse(response));
+    .ofType(INVENTORY_USER_ACTIONS.DELETE_USER).pipe(
+      switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryUser(action.payload)),
+      map(response => this.deleteUserResponse(response)),);
 
   @Effect()
   public deleteUserResponse$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.DELETE_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<string, string> = response.payload;
-      if (data.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message, data.code);
-      } else {
-        this._toasty.successToast('User Deleted Successfully');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(INVENTORY_USER_ACTIONS.DELETE_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<string, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('User Deleted Successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public getUser$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.GET_USER)
-    .switchMap((action: CustomActions) => this._inventoryService.GetInventoryUser(action.payload))
-    .map(response => this.getUserResponse(response));
+    .ofType(INVENTORY_USER_ACTIONS.GET_USER).pipe(
+      switchMap((action: CustomActions) => this._inventoryService.GetInventoryUser(action.payload)),
+      map(response => this.getUserResponse(response)),);
 
   @Effect()
   public getUserResponse$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.GET_USER_RESPONSE)
-    .map((response: CustomActions) => {
-      let data: BaseResponse<InventoryUser, string> = response.payload;
-      if (data.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message, data.code);
-      } else {
-        // this._toasty.successToast('User Updated Successfully');
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(INVENTORY_USER_ACTIONS.GET_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<InventoryUser, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          // this._toasty.successToast('User Updated Successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public getAllUsers$: Observable<Action> = this.action$
-    .ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS)
-    .switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser())
-    .map(data => {
-      if (data.status === 'error') {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message, data.code);
-      } else {
-        return this.getAllUsersResponse(data);
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS).pipe(
+      switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser()),
+      map(data => {
+        if (data.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          return this.getAllUsersResponse(data);
+        }
+        return {type: 'EmptyAction'};
+      }),);
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {

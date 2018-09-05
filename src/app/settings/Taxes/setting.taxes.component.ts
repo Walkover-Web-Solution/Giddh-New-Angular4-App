@@ -1,10 +1,11 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyActions } from '../../actions/company.actions';
@@ -17,16 +18,16 @@ import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
 
 const taxesType = [
-  { label: 'GST', value: 'GST' },
-  { label: 'InputGST', value: 'InputGST' },
-  { label: 'Others', value: 'others' }
+  {label: 'GST', value: 'GST'},
+  {label: 'InputGST', value: 'InputGST'},
+  {label: 'Others', value: 'others'}
 ];
 
 const taxDuration = [
-  { label: 'Monthly', value: 'MONTHLY' },
-  { label: 'Quarterly', value: 'QUARTERLY' },
-  { label: 'Half-Yearly', value: 'HALFYEARLY' },
-  { label: 'Yearly', value: 'YEARLY' }
+  {label: 'Monthly', value: 'MONTHLY'},
+  {label: 'Quarterly', value: 'QUARTERLY'},
+  {label: 'Half-Yearly', value: 'HALFYEARLY'},
+  {label: 'Yearly', value: 'YEARLY'}
 ];
 
 @Component({
@@ -52,7 +53,7 @@ export class SettingTaxesComponent implements OnInit {
   public accounts$: IOption[];
   public taxList: IOption[] = taxesType;
   public duration: IOption[] = taxDuration;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -65,16 +66,16 @@ export class SettingTaxesComponent implements OnInit {
   ) {
     for (let i = 1; i <= 31; i++) {
       let day = i.toString();
-      this.days.push({ label: day, value: day });
+      this.days.push({label: day, value: day});
     }
 
     this.store.dispatch(this._companyActions.getTax());
   }
 
   public ngOnInit() {
-    this.store.select(p => p.company).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.taxes) {
-        this.forceClear$ = Observable.of({status: true});
+        this.forceClear$ = observableOf({status: true});
         _.map(o.taxes, (tax) => {
           _.each(tax.taxDetail, (t) => {
             t.date = moment(t.date, GIDDH_DATE_FORMAT);
@@ -107,14 +108,14 @@ export class SettingTaxesComponent implements OnInit {
       this.accounts$.forEach((obj) => {
         if (obj.value === dataToSave.account) {
           let accountObj = obj.label.split(' - ');
-          dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
+          dataToSave.accounts.push({name: accountObj[0], uniqueName: obj.value});
         }
       });
     }
 
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
-    dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
+    dataToSave.taxDetail = [{date: dataToSave.date, taxValue: dataToSave.taxValue}];
     if (dataToSave.duration) {
       this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
     } else {
@@ -158,7 +159,7 @@ export class SettingTaxesComponent implements OnInit {
 
   public addMoreDateAndPercentage(taxIndex: number) {
     let taxes = _.cloneDeep(this.availableTaxes);
-    taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
+    taxes[taxIndex].taxDetail.push({date: null, taxValue: null});
     this.availableTaxes = taxes;
   }
 
@@ -169,28 +170,30 @@ export class SettingTaxesComponent implements OnInit {
   }
 
   public reloadTaxList() {
-    this.store.select(p => p.company).take(1).subscribe((o) => {
+    this.store.select(p => p.company).pipe(take(1)).subscribe((o) => {
       if (o.taxes) {
         this.onCancel();
         this.availableTaxes = _.cloneDeep(o.taxes);
       }
     });
   }
+
   /**
    *
    */
   public getFlattenAccounts(value) {
     let query = value || '';
     // get flattern accounts
-    this._accountService.GetFlattenAccounts(query, '').debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
+    this._accountService.GetFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$),).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+          accounts.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
           // `${d.name} (${d.uniqueName})`
         });
         this.accounts$ = accounts;
-    }});
+      }
+    });
   }
 
   public customAccountFilter(term: string, item: IOption) {

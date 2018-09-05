@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
@@ -14,7 +14,7 @@ export class UpdateLedgerVm {
   public flatternAccountList4Select: Observable<IOption[]>;
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
-  public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
+  public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
   public grandTotal: number = 0;
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
@@ -24,11 +24,6 @@ export class UpdateLedgerVm {
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
   public taxRenderData: TaxControlData[] = [];
-
-  public get stockTrxEntry(): ILedgerTransactionItem {
-    return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
-  }
-
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public discountComponent: UpdateLedgerDiscountComponent;
   public ledgerUnderStandingObj = {
@@ -69,6 +64,10 @@ export class UpdateLedgerVm {
       label: 'Credit Note',
       value: 'credit note'
     }];
+  }
+
+  public get stockTrxEntry(): ILedgerTransactionItem {
+    return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
   }
 
   public blankTransactionItem(type: string = 'DEBIT'): ILedgerTransactionItem {
@@ -404,7 +403,7 @@ export class UpdateLedgerVm {
 
   public unitChanged(stockUnitCode: string) {
     let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
-    this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+    this.stockTrxEntry.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
   }
@@ -455,6 +454,7 @@ export class UpdateLedgerVm {
       this.ledgerUnderStandingObj = _.cloneDeep(data);
     }
   }
+
   public resetVM() {
     this.selectedLedger = null;
     this.selectedLedgerBackup = null;

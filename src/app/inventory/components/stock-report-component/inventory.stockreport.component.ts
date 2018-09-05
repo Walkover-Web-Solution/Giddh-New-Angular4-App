@@ -1,3 +1,4 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
@@ -10,25 +11,24 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
   templateUrl: './inventory.stockreport.component.html',
   styles: [`
-  .bdrT {
-    border-color: #ccc;
-  }
+    .bdrT {
+      border-color: #ccc;
+    }
   `]
 })
 export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   public today: Date = new Date();
   public activeStock$: string;
-  public  stockReport$: Observable<StockReportResponse>;
+  public stockReport$: Observable<StockReportResponse>;
   public sub: Subscription;
   public groupUniqueName: string;
   public stockUniqueName: string;
@@ -80,7 +80,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
+    this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$));
     this.stockReportRequest = new StockReportRequest();
   }
 
@@ -125,7 +125,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         if (this.groupUniqueName && this.stockUniqueName) {
           this.store.select(p => {
             return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
-          }).take(1).subscribe(p => this.activeStock$ = p);
+          }).pipe(take(1)).subscribe(p => this.activeStock$ = p);
           this.stockReportRequest.count = 10;
           this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
           this.toDate = moment().format('DD-MM-YYYY');
@@ -155,7 +155,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public ngAfterViewInit() {
-    this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
+    this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
       if (!a) {
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
@@ -206,6 +206,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
   }
 }

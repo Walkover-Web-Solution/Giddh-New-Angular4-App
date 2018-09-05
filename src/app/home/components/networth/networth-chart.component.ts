@@ -1,12 +1,12 @@
+import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { Observable } from 'rxjs/Observable';
 import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
@@ -81,9 +81,10 @@ export class NetworthChartComponent implements OnInit {
   private networthData: any;
   private currentchart: string = 'Yearly';
   private AllSeries: IndividualSeriesOptionsExtension[];
+
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
+    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
     this.options = this.yearlyOption;
   }
 
@@ -91,6 +92,7 @@ export class NetworthChartComponent implements OnInit {
     this.currentchart = str;
     this.generateCharts();
   }
+
   public generateCharts() {
     if (this.currentchart === 'Yearly') {
       this.options = _.cloneDeep(this.yearlyOption);
@@ -106,10 +108,12 @@ export class NetworthChartComponent implements OnInit {
       }];
     }
   }
+
   public refreshChart() {
     this.refresh = true;
     this.fetchChartData();
   }
+
   public fetchChartData() {
     this.requestInFlight = true;
     this.networthData = [];
@@ -118,13 +122,14 @@ export class NetworthChartComponent implements OnInit {
       this.activeFinancialYear.financialYearEnds, this.refresh));
     this.refresh = false;
   }
+
   public ngOnInit() {
     this.companies$.subscribe(c => {
       if (c) {
         let activeCompany: CompanyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
-        this.activeCompanyUniqueName$.take(1).subscribe(a => {
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
           if (activeCompany) {
@@ -155,9 +160,9 @@ export class NetworthChartComponent implements OnInit {
         // this.fetchChartData();
       }
     });
-    this.comparisionChartData
-      .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
-      // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
+    this.comparisionChartData.pipe(
+      skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear))))
+    // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
       .subscribe(p => {
         this.networthData = p.NetworthActiveYear;
         this.generateCharts();

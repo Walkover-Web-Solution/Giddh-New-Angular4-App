@@ -20,6 +20,10 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   public dataModel: DataModel[];
   private importRequestData: ImportExcelRequestData;
 
+  constructor() {
+    //
+  }
+
   private _importData: ImportExcelResponseData;
 
   public get importData(): ImportExcelResponseData {
@@ -30,10 +34,6 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   public set importData(value: ImportExcelResponseData) {
     this.prepareDataModel(value);
     this._importData = value;
-  }
-
-  constructor() {
-    //
   }
 
   public ngOnInit() {

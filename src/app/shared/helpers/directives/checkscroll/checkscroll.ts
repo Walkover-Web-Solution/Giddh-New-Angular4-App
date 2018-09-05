@@ -6,7 +6,7 @@ import { Directive, HostListener, OnInit } from '@angular/core';
 export class CheckscrollDirective implements OnInit {
 
   constructor() {
-  //
+    //
   }
 
   public ngOnInit() {

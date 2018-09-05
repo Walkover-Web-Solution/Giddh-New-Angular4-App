@@ -1,15 +1,16 @@
-import { Injectable, Optional, Inject } from '@angular/core';
-import 'rxjs/add/operator/map';
+import { catchError, map } from 'rxjs/operators';
+import { Inject, Injectable, Optional } from '@angular/core';
+
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { SEARCH_API } from './apiurls/search.api';
 import { SearchRequest, SearchResponse } from '../models/api-models/Search';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class SearchService {
@@ -27,13 +28,13 @@ export class SearchService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SEARCH_API.SEARCH
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupName', encodeURIComponent(request.groupName)),
-      {from: request.fromDate, to: request.toDate, refresh: request.refresh})
-      .map((res) => {
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupName', encodeURIComponent(request.groupName)),
+      {from: request.fromDate, to: request.toDate, refresh: request.refresh}).pipe(
+      map((res) => {
         return res;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)),);
   }
 
 }

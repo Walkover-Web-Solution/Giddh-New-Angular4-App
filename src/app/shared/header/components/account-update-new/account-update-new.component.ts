@@ -1,3 +1,6 @@
+import { of as observableOf } from 'rxjs';
+
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
@@ -78,15 +81,15 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
-    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
-    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
-    { value: 'SEZ', label: 'SEZ' }
+    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
+    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
+    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
+    {value: 'SEZ', label: 'SEZ'}
   ];
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
-  public currencySource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
+  public currencySource$: Observable<IOption[]> = observableOf([]);
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
@@ -97,49 +100,49 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService) {
-    this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
+              private _companyService: CompanyService, private _toaster: ToasterService) {
+    this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
 
     // bind state sources
     this.stateStream$.subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
-      this.statesSource$ = Observable.of(states);
+      this.statesSource$ = observableOf(states);
     });
 
-    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
+          currencies.push({label: d.code, value: d.code});
         });
       }
-      this.currencySource$ = Observable.of(currencies);
+      this.currencySource$ = observableOf(currencies);
     });
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
+      this.countryPhoneCode.push({value: c.value, label: c.value});
     });
 
-    this.store.select(s => s.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((profile) => {
+    this.store.select(s => s.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$),).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());
     });
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
       if (a) {
-        this.companiesList$.take(1).subscribe(companies => {
+        this.companiesList$.pipe(take(1)).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
         });
       }
@@ -166,7 +169,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{ value: '', disabled: false }],
+      hsnNumber: [{value: '', disabled: false}],
       sacNumber: [{value: '', disabled: false}],
       accountBankDetails: this._fb.array([
         this._fb.group({
@@ -275,7 +278,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.select(s => s.session).takeUntil(this.destroyed$).subscribe((session) => {
+    this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
       let companyUniqueName: string;
       if (session.companyUniqueName) {
         companyUniqueName = _.cloneDeep(session.companyUniqueName);
@@ -317,7 +320,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{ value: '', disabled: false }],
+      stateCode: [{value: '', disabled: false}],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
@@ -372,7 +375,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
 
     if (gstVal.length >= 2) {
-      this.statesSource$.take(1).subscribe(state => {
+      this.statesSource$.pipe(take(1)).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
         statesEle.setDisabledState(false);
         // statesEle.disabled = true;
@@ -427,7 +430,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     let activeAccountName: string;
-    this.activeAccount$.take(1).subscribe(a => activeAccountName = a.uniqueName);
+    this.activeAccount$.pipe(take(1)).subscribe(a => activeAccountName = a.uniqueName);
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
       delete accountRequest['addresses'];
@@ -470,7 +473,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
 
     this.submitClicked.emit({
-      value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName },
+      value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName},
       accountRequest: this.addAccountForm.value
     });
   }

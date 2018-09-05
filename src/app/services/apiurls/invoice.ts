@@ -1,4 +1,3 @@
-
 export const INVOICE_API = {
   // GET_USER_TEMPLATES: 'templates-v2/sample-templates',
   GET_USER_TEMPLATES: 'v2/sample-templates',

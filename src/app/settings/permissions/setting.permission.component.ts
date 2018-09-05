@@ -1,20 +1,16 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from './../../services/general.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { PermissionActions } from '../../actions/permission/permission.action';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { CompanyService } from '../../services/companyService.service';
+import { ReplaySubject } from 'rxjs';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { digitsOnly } from '../../shared/helpers/customValidationHelper';
-import isCidr from 'is-cidr';
-import { ShareRequestForm, ISharedWithResponseForUI } from '../../models/api-models/Permission';
+import { FormBuilder } from '@angular/forms';
+import { ShareRequestForm } from '../../models/api-models/Permission';
 import { ModalDirective } from 'ngx-bootstrap';
 import { forIn } from 'app/lodash-optimized';
 
@@ -56,7 +52,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
+    this.store.select(s => s.settings.usersWithCompanyPermissions).pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
         let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
@@ -65,7 +61,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
           if (value[0].emailId === this.loggedInUserEmail) {
             value[0].isLoggedInUser = true;
           }
-          arr.push({ name: value[0].userName, rows: value });
+          arr.push({name: value[0].userName, rows: value});
         });
         this.usersList = _.sortBy(arr, ['name']);
       }
@@ -75,7 +71,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
   public getInitialData() {
     this.store.dispatch(this._permissionActions.GetRoles());
-    this.store.take(1).subscribe(s => {
+    this.store.pipe(take(1)).subscribe(s => {
       this.selectedCompanyUniqueName = s.session.companyUniqueName;
       this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
       if (s.session.user) {
@@ -88,19 +84,19 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     return data.map((o) => {
       if (o.allowedCidrs && o.allowedCidrs.length > 0) {
         o.cidrsStr = o.allowedCidrs.toString();
-      }else {
+      } else {
         o.cidrsStr = null;
       }
       if (o.allowedIps && o.allowedIps.length > 0) {
         o.ipsStr = o.allowedIps.toString();
-      }else {
+      } else {
         o.ipsStr = null;
       }
       return o;
     });
   }
 
-  public submitPermissionForm(e: {action: string, data: ShareRequestForm}) {
+  public submitPermissionForm(e: { action: string, data: ShareRequestForm }) {
     if (e.action === 'update') {
       this.closeEditUserModal();
     }

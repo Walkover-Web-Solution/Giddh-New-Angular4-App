@@ -4,7 +4,9 @@
  * @returns {string}
  */
 export const uniqueNameInvalidStringReplace = (val: string): string => {
-  if (val) { return val.replace(/[\\/(){};:"<>#?%, ]/g, '').toLowerCase(); }
+  if (val) {
+    return val.replace(/[\\/(){};:"<>#?%, ]/g, '').toLowerCase();
+  }
   return val;
 };
 
@@ -32,7 +34,7 @@ export const base64ToBlob = (b64Data, contentType, sliceSize) => {
     byteArrays.push(byteArray);
     offset += sliceSize;
   }
-  return new Blob(byteArrays, { type: contentType });
+  return new Blob(byteArrays, {type: contentType});
 };
 
 /**

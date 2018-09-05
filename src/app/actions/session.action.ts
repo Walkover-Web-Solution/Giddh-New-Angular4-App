@@ -1,24 +1,17 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { CompanyActions } from './company.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
-import { CompanyResponse, StateDetailsResponse } from '../models/api-models/Company';
-import { ROUTES } from '../app.routes';
-import { Configuration } from '../app.constant';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToasterService } from '../services/toaster.service';
 import { AppState } from '../store/index';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
-import { sortBy } from 'app/lodash-optimized';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class SessionActions {
@@ -37,54 +30,54 @@ export class SessionActions {
 
   @Effect()
   public getAllSession$: Observable<Action> = this.actions$
-    .ofType(SessionActions.GET_ALL_SESSION_REQUEST)
-    .switchMap((action: CustomActions) => this.auth.GetUserSession())
-    .map(response => this.getAllSessionResponse(response));
+    .ofType(SessionActions.GET_ALL_SESSION_REQUEST).pipe(
+      switchMap((action: CustomActions) => this.auth.GetUserSession()),
+      map(response => this.getAllSessionResponse(response)),);
 
   @Effect()
   public getAllSessionResponse$: Observable<Action> = this.actions$
-    .ofType(SessionActions.GET_ALL_SESSION_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status !== 'success') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        // this._toaster.successToast('action.payload.me');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(SessionActions.GET_ALL_SESSION_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status !== 'success') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          // this._toaster.successToast('action.payload.me');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public deleteSession$: Observable<Action> = this.actions$
-    .ofType(SessionActions.DELETE_SESSION_REQUEST)
-    .switchMap((action: CustomActions) => this.auth.DeleteSession(action.payload))
-    .map(response => this.deleteSessionResponse(response));
+    .ofType(SessionActions.DELETE_SESSION_REQUEST).pipe(
+      switchMap((action: CustomActions) => this.auth.DeleteSession(action.payload)),
+      map(response => this.deleteSessionResponse(response)),);
 
   @Effect()
   public deleteSessionResponse$: Observable<Action> = this.actions$
-    .ofType(SessionActions.DELETE_SESSION_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status !== 'success') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        // this._toaster.successToast('action.payload.me');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(SessionActions.DELETE_SESSION_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status !== 'success') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          // this._toaster.successToast('action.payload.me');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public deleteAllSession$: Observable<Action> = this.actions$
-    .ofType(SessionActions.DELETE_ALL_SESSION_REQUEST)
-    .switchMap((action: CustomActions) => this.auth.DeleteAllSession())
-    .map(response => this.deleteAllSessionResponse(response));
+    .ofType(SessionActions.DELETE_ALL_SESSION_REQUEST).pipe(
+      switchMap((action: CustomActions) => this.auth.DeleteAllSession()),
+      map(response => this.deleteAllSessionResponse(response)),);
 
   @Effect()
   public deleteAllSessionResponse$: Observable<Action> = this.actions$
-    .ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status !== 'success') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        // this._toaster.successToast('action.payload.me');
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status !== 'success') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          // this._toaster.successToast('action.payload.me');
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

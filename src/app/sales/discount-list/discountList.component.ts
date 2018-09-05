@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ComponentFactoryResolver, ViewChild, ElementRef, Renderer, ChangeDetectorRef } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
@@ -14,12 +15,14 @@ import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAc
   selector: 'discount-list',
   templateUrl: 'discountList.component.html',
   styles: [`
-    .dropdown-menu>li>a.btn-link{
+    .dropdown-menu > li > a.btn-link {
       color: #10aae0;
     }
-    :host .dropdown-menu{
+
+    :host .dropdown-menu {
       overflow: auto;
     }
+
     .form-control[readonly] {
       background: #fff !important;
     }
@@ -44,15 +47,16 @@ export class DiscountListComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private ledgerActions: LedgerActions,
     private componentFactoryResolver: ComponentFactoryResolver
-  ) {}
+  ) {
+  }
 
   public ngOnInit() {
-    this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).subscribe((o: IFlattenGroupsAccountsDetail) => {
+    this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$)).subscribe((o: IFlattenGroupsAccountsDetail) => {
       if (o) {
         this.prepareDiscountList(o.accountDetails);
-        this.discountItem$ = Observable.of(o);
-      }else {
-        this.discountItem$ = Observable.of(null);
+        this.discountItem$ = observableOf(o);
+      } else {
+        this.discountItem$ = observableOf(null);
         this.discountAccountsList = [];
         this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
       }

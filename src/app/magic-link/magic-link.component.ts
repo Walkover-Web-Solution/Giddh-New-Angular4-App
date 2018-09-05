@@ -1,16 +1,16 @@
-import { from } from 'rxjs/observable/from';
+import { filter } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 import { BaseResponse } from './../models/api-models/BaseResponse';
-import { IMagicLinkLedgerResponse, IMagicLinkLedgerRequest } from './../models/api-models/MagicLink';
+import { IMagicLinkLedgerRequest, IMagicLinkLedgerResponse } from './../models/api-models/MagicLink';
 import { MagicLinkService } from './../services/magic-link.service';
-import { Component, OnInit, ViewEncapsulation, Inject, HostListener, OnDestroy } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import 'rxjs/add/operator/filter';
+
 import * as _ from 'app/lodash-optimized';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { ToasterService } from 'app/services/toaster.service';
 import { DOCUMENT } from '@angular/platform-browser';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { WindowRef } from 'app/shared/helpers/window.object';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
 import { CompanyService } from 'app/services/companyService.service';
@@ -73,12 +73,12 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private route: ActivatedRoute, private _magicLinkService: MagicLinkService, private _toaster: ToasterService, private _companyService: CompanyService, @Inject(DOCUMENT) private document: Document, private winRef: WindowRef) {
-    this.ledgerData.account = { name: '', uniqueName: '' };
+    this.ledgerData.account = {name: '', uniqueName: ''};
     this.ledgerData.ledgerTransactions = {
-      forwardedBalance: { amount: 0, type: '', description: '' },
+      forwardedBalance: {amount: 0, type: '', description: ''},
       creditTotal: 0,
       debitTotal: 0,
-      balance: { amount: 0, type: '' },
+      balance: {amount: 0, type: ''},
       ledgers: [],
       totalTransactions: 0,
       totalCreditTransactions: 0,
@@ -87,8 +87,8 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.route.queryParams
-      .filter(params => params.id)
+    this.route.queryParams.pipe(
+      filter(params => params.id))
       .subscribe(params => {
         if (params && params.id) {
           this.id = params.id;
@@ -192,7 +192,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   /**

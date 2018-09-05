@@ -1,12 +1,7 @@
-import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ILogsItem } from '../../models/interfaces/logs.interface';
-import { Action } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
-import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
-import { COMMON_ACTIONS } from '../../actions/common.const';
-import { AgingDropDownoptions, Result, DueRangeRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+import { AgingDropDownoptions, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../../models/api-models/Contact';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
 export interface AgingReportState {

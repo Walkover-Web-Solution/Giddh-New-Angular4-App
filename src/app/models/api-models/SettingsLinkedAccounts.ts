@@ -1,7 +1,7 @@
 export interface IGetEbankTokenResponse {
-    connectUrl: string;
-    token: string;
-    token_URL: string;
+  connectUrl: string;
+  token: string;
+  token_URL: string;
 }
 
 export interface IGetAllEbankAccountResponse {
@@ -27,15 +27,16 @@ export interface IEbankAccount {
 }
 
 export interface IAccessTokenResponse {
-    user: IAccessToken;
-    rsession: string;
+  user: IAccessToken;
+  rsession: string;
 }
 
 export interface IAccessToken {
   accessTokens: IAccessTokenObj[];
 }
+
 export interface IAccessTokenObj {
-    appId: string;
-    value: string;
-    url: string;
+  appId: string;
+  value: string;
+  url: string;
 }

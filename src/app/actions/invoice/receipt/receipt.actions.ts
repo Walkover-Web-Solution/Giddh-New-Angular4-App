@@ -1,3 +1,4 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { CustomActions } from '../../../store/customActions';
@@ -15,38 +16,38 @@ export class InvoiceReceiptActions {
 
   @Effect()
   private UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = this.action$
-    .ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.UpdateReceipt(action.payload.accountUniqueName, action.payload.model))
-    .map(res => this.validateResponse<string, ReciptRequest>(res, {
-      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
-      payload: res
-    }, true, {
-      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
-      payload: res
-    }));
+    .ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT).pipe(
+      switchMap((action: CustomActions) => this._receiptService.UpdateReceipt(action.payload.accountUniqueName, action.payload.model)),
+      map(res => this.validateResponse<string, ReciptRequest>(res, {
+        type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
+        payload: res
+      }, true, {
+        type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
+        payload: res
+      })),);
 
   @Effect()
   private GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
-    .ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload))
-    .map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
-      if (response.status === 'success') {
-        // this.showToaster('');
-      } else {
-        this.showToaster(response.message, 'error');
-      }
-      return this.GetAllInvoiceReceiptResponse(response);
-    });
+    .ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT).pipe(
+      switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload)),
+      map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+          this.showToaster(response.message, 'error');
+        }
+        return this.GetAllInvoiceReceiptResponse(response);
+      }),);
 
   @Effect()
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
-    .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT)
-    .switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model))
-    .map((response: BaseResponse<string, ReciptDeleteRequest>) => {
-      let success = response.status === 'success';
-      this.showToaster(success ? 'Receipt Deleted Successfully' : response.message, success ? 'success' : 'error');
-      return this.DeleteInvoiceReceiptResponse(response);
-    });
+    .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT).pipe(
+      switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
+      map((response: BaseResponse<string, ReciptDeleteRequest>) => {
+        let success = response.status === 'success';
+        this.showToaster(success ? 'Receipt Deleted Successfully' : response.message, success ? 'success' : 'error');
+        return this.DeleteInvoiceReceiptResponse(response);
+      }),);
 
   constructor(private action$: Actions, private _toasty: ToasterService,
               private store: Store<AppState>, private _receiptService: ReceiptService) {

@@ -1,6 +1,8 @@
 <span class="pr" [ngClass]="{'open': isMenuOpen}" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">
-  <input type="number" (blur)="discountInputBlur($event)" name="" (focus)="toggleDiscountMenu()" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
-  <ul #disInptEle [style.max-height.px]="39*3" [style.min-height.px]="39" class="dropdown-menu" (click)="$event.stopPropagation()">
+  <input type="number" (blur)="discountInputBlur($event)" name="" (focus)="toggleDiscountMenu()"
+         class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true"/>
+  <ul #disInptEle [style.max-height.px]="39*3" [style.min-height.px]="39" class="dropdown-menu"
+      (click)="$event.stopPropagation()">
     <li *ngFor="let item of discountAccountsList">
       <table>
         <tr>
@@ -11,7 +13,8 @@
         </tr>
       </table>
     </li>
-    <li style="line-height:39px;" class="alC"><a class="btn-link" href (blur)="hideDiscountMenu()" (click)="hideDiscountMenu(); addNewDiscount($event)">Add New Discount</a></li>
+    <li style="line-height:39px;" class="alC"><a class="btn-link" href (blur)="hideDiscountMenu()"
+                                                 (click)="hideDiscountMenu(); addNewDiscount($event)">Add New Discount</a></li>
   </ul>
 </span>
 

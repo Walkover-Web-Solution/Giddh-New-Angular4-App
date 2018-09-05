@@ -19,4 +19,5 @@ import { SignupRoutingModule } from './signup.routing.module';
   ],
   declarations: [SignupComponent]
 })
-export class SignupModule { }
+export class SignupModule {
+}

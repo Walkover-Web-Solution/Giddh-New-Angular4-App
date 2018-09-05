@@ -1,9 +1,10 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
@@ -17,8 +18,8 @@ export const SALES_GROUPS = ['revenuefromoperations']; // sales
   selector: 'create-account-modal',
   templateUrl: 'create.account.modal.html',
   styles: [`
-    .form-group label{
-      margin-bottom:5px;
+    .form-group label {
+      margin-bottom: 5px;
     }
   `]
 })
@@ -45,14 +46,16 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
     private _salesActions: SalesActions,
     private _accountsAction: AccountsAction
   ) {
-    this.isAccountNameAvailable$ = this._store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-    this.createAccountInProcess$ = this._store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this._store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.isAccountNameAvailable$ = this._store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this._store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this._store.select(state => state.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
   }
+
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public ngOnInit(): void {
 
     // init ac form
@@ -76,7 +79,7 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
     });
 
     // listen for add account success
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
+    this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
         this.addAcFormReset();
         this.closeCreateAcModal();
@@ -97,8 +100,8 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT'],
       openingBalance: [0, Validators.compose([digitsOnly])],
       hsnOrSac: [null],
-      hsnNumber: [{ value: null, disabled: false }],
-      sacNumber: [{ value: null, disabled: false }]
+      hsnNumber: [{value: null, disabled: false}],
+      sacNumber: [{value: null, disabled: false}]
     });
   }
 
@@ -109,14 +112,14 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
       this._store.dispatch(this._accountsAction.getAccountUniqueName(val));
       this.isAccountNameAvailable$.subscribe(a => {
         if (a) {
-          this.addAcForm.patchValue({ uniqueName: val });
+          this.addAcForm.patchValue({uniqueName: val});
         } else {
           let num = 1;
-          this.addAcForm.patchValue({ uniqueName: val + num });
+          this.addAcForm.patchValue({uniqueName: val + num});
         }
       });
-    }else {
-      this.addAcForm.patchValue({ uniqueName: null });
+    } else {
+      this.addAcForm.patchValue({uniqueName: null});
     }
 
   }
@@ -126,7 +129,7 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
     if (this.gType === 'Sales') {
       this.selectedGroup = 'sales';
     } else if (this.gType === 'Purchase') {
-      this.selectedGroup =  'purchases';
+      this.selectedGroup = 'purchases';
     }
     this._store.dispatch(this._accountsAction.createAccountV2(this.selectedGroup, formObj));
   }

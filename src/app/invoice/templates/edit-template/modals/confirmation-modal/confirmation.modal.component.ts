@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 
 @Component({
@@ -14,17 +14,17 @@ export class DeleteTemplateConfirmationModelComponent {
 
   public onConfirmation() {
     if (this.flag === 'closeConfirmation') {
-      this.closeModelEvent.emit({ response: true, close: 'closeConfirmation'});
+      this.closeModelEvent.emit({response: true, close: 'closeConfirmation'});
     } else {
-      this.closeModelEvent.emit({ response: true, close: 'deleteConfirmation'});
+      this.closeModelEvent.emit({response: true, close: 'deleteConfirmation'});
     }
   }
 
   public onCancel() {
     if (this.flag === 'closeConfirmation') {
-      this.closeModelEvent.emit({ response: false, close: 'closeConfirmation'});
+      this.closeModelEvent.emit({response: false, close: 'closeConfirmation'});
     } else {
-      this.closeModelEvent.emit({ response: false, close: 'deleteConfirmation'});
+      this.closeModelEvent.emit({response: false, close: 'deleteConfirmation'});
     }
   }
 }

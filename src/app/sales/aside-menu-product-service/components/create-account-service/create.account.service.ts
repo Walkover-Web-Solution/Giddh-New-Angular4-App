@@ -1,10 +1,12 @@
+import { Observable, of as observableOf } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import * as _ from '../../../../lodash-optimized';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
@@ -22,10 +24,11 @@ export const SALES_GROUPS = ['revenuefromoperations']; // sales
   selector: 'create-account-service',
   templateUrl: 'create.account.service.html',
   styles: [`
-    .form-group label{
-      margin-bottom:5px;
+    .form-group label {
+      margin-bottom: 5px;
     }
-    .fake_header{
+
+    .fake_header {
       border-bottom: 1px solid #ddd;
       padding-bottom: 15px;
       margin-bottom: 15px;
@@ -58,14 +61,16 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
     private _accountService: AccountService,
     private _accountsAction: AccountsAction
   ) {
-    this.isAccountNameAvailable$ = this._store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-    this.createAccountInProcess$ = this._store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this._store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.isAccountNameAvailable$ = this._store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this._store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this._store.select(state => state.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
   }
+
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public ngOnInit(): void {
 
     // init ac form
@@ -95,10 +100,10 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
         let revenueGrp = _.find(res.body, {uniqueName: 'revenuefromoperations'});
         let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
         _.forEach(flatGrps, (grp: GroupResponse) => {
-          result.push({ label: grp.name, value: grp.uniqueName });
+          result.push({label: grp.name, value: grp.uniqueName});
         });
       }
-      this.flatAccountWGroupsList$ = Observable.of(result);
+      this.flatAccountWGroupsList$ = observableOf(result);
     });
 
   }
@@ -110,8 +115,8 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT'],
       openingBalance: [0, Validators.compose([digitsOnly])],
       hsnOrSac: ['sac'],
-      hsnNumber: [{ value: null, disabled: false }],
-      sacNumber: [{ value: null, disabled: false }]
+      hsnNumber: [{value: null, disabled: false}],
+      sacNumber: [{value: null, disabled: false}]
     });
   }
 
@@ -122,14 +127,14 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
       this._store.dispatch(this._accountsAction.getAccountUniqueName(val));
       this.isAccountNameAvailable$.subscribe(a => {
         if (a) {
-          this.addAcForm.patchValue({ uniqueName: val });
+          this.addAcForm.patchValue({uniqueName: val});
         } else {
           let num = 1;
-          this.addAcForm.patchValue({ uniqueName: val + num });
+          this.addAcForm.patchValue({uniqueName: val + num});
         }
       });
-    }else {
-      this.addAcForm.patchValue({ uniqueName: null });
+    } else {
+      this.addAcForm.patchValue({uniqueName: null});
     }
 
   }
@@ -141,7 +146,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
         this._toasty.successToast('A/c created successfully.');
         this.closeCreateAcModal();
         this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
-      }else {
+      } else {
         this._toasty.errorToast(res.message, res.code);
       }
     });

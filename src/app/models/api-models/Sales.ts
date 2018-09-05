@@ -12,21 +12,21 @@ export const VOUCHER_TYPE_LIST: any[] = [
     value: 'Sales',
     label: 'Sales',
     additional: {
-    label: 'Invoice'
+      label: 'Invoice'
     }
   },
   {
     value: 'Credit Note',
     label: 'Credit Note',
     additional: {
-    label: 'Credit Note'
+      label: 'Credit Note'
     }
   },
   {
     value: 'Debit Note',
     label: 'Debit Note',
     additional: {
-    label: 'Debit Note'
+      label: 'Debit Note'
     }
   },
   {
@@ -37,6 +37,7 @@ export const VOUCHER_TYPE_LIST: any[] = [
     }
   }
 ];
+
 /*
 RECEIPT("receipt"),
 JOURNAL("journal"),
@@ -60,7 +61,7 @@ export interface IForceClear {
 
 /**
  * draw invoice on ui and api model related class and interface
-*/
+ */
 class CompanyDetailsClass {
   public name: string;
   public gstNumber: string;
@@ -80,6 +81,7 @@ export class GstDetailsClass {
   public address: string[];
   public stateCode?: any;
   public panNumber?: any;
+
   constructor() {
     this.address = [];
   }
@@ -97,6 +99,7 @@ export class AccountDetailsClass {
   public billingDetails: GstDetailsClass;
   public shippingDetails: GstDetailsClass;
   public country?: CountryClass;
+
   constructor(attrs?: any) {
     this.country = new CountryClass();
     this.billingDetails = new GstDetailsClass();
@@ -117,7 +120,7 @@ export class AccountDetailsClass {
         this.shippingDetails.stateCode = attrs.addresses[0].stateCode;
         this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
       }
-    }else {
+    } else {
       this.attentionTo = null;
       this.email = null;
       this.mobileNo = null;
@@ -163,6 +166,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public stockList?: IStockUnit[] = [];
   public applicableTaxes: string[] = [];
   public taxRenderData: ITaxList[] = [];
+
   constructor() {
     super();
     this.amount = null;
@@ -182,7 +186,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
       if (_.isEmpty(this.accountUniqueName)) {
         r = 'Product/Service can\'t be empty';
       }
-    }else {
+    } else {
       r = 'Product/Service can\'t be empty';
     }
     return r;
@@ -204,7 +208,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         count += item.amount;
       });
       return this.checkForInfinity(count);
-    }else {
+    } else {
       return count;
     }
   }
@@ -220,7 +224,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
       a = this.checkForInfinity(a);
       let b = _.cloneDeep(this.getTaxableValue(entry));
       count = a + b;
-    }else {
+    } else {
       count = _.cloneDeep(this.getTaxableValue(entry));
     }
     return Number(count.toFixed(2));
@@ -280,6 +284,7 @@ export class SalesEntryClass {
   public entryTotal: number;
   public taxSum?: number;
   public discountSum?: number;
+
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
     this.taxes = [];
@@ -303,6 +308,7 @@ class ITotaltaxBreakdown {
 class CountryClass {
   public countryName: string;
   public countryCode: string;
+
   constructor(attrs?: any) {
     if (attrs) {
       return Object.assign({}, this, attrs);
@@ -320,6 +326,7 @@ export class OtherSalesItemClass {
   public message1?: string;
   public message2?: string;
   public slogan?: any;
+
   constructor() {
     this.shippingDate = null;
     this.shippedVia = null;
@@ -333,7 +340,7 @@ export class OtherSalesItemClass {
 
 /**
  * end draw invoice on ui and api model related class and interface
-*/
+ */
 
 // generate sales interface
 
@@ -344,7 +351,7 @@ interface IPaymentAction {
 
 /**
  * Generic request class to generate sales, credit note, debit note
-*/
+ */
 
 export interface GenericRequestForGenerateSCD {
   entryUniqueNames?: string[];
@@ -370,6 +377,7 @@ class VoucherDetailsClass {
   public totalTaxableValue?: number;
   public customerName?: any;
   public voucherType?: string;
+
   constructor() {
     this.customerName = null;
     this.grandTotal = null;
@@ -383,6 +391,7 @@ class TemplateDetailsClass {
   public logoPath: string;
   public other: OtherSalesItemClass;
   public templateUniqueName: string;
+
   constructor() {
     this.other = new OtherSalesItemClass();
   }
@@ -395,6 +404,7 @@ export class VoucherClass {
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
   public depositAccountUniqueName: string;
+
   constructor() {
     this.accountDetails = new AccountDetailsClass();
     this.entries = [new SalesEntryClass()];

@@ -37,7 +37,7 @@
               <label *ngIf="item.value.queryDiffer === 'Equals' " [style.margin-right.px]="15">to</label>
               <span class="form-group">
                <input required [style.width.px]="70" class="form-control" formControlName="amount" type="text"
-               placeholder="amount" decimalDigitsDirective [DecimalPlaces]="2"/>
+                      placeholder="amount" decimalDigitsDirective [DecimalPlaces]="2"/>
                </span>
               <span class="custom-select pos-rel form-group"
                     *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance'  || !item.value.queryType">
@@ -63,7 +63,7 @@
             <button *ngIf="searchDataSet.controls.length > 1" class="btn btn-default mrR1" (click)="removeSearchRow()">
               Delete
               Row
-      </button>
+            </button>
             <!-- <button type="button" class="btn btn-success" (click)="createCsv.emit()">Download CSV</button> -->
             <!-- <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog.emit()">Send as Email</button>
 <button type="button" class="btn btn-success mrL1" (click)="openSmsDialog.emit()">Send as Sms</button> -->

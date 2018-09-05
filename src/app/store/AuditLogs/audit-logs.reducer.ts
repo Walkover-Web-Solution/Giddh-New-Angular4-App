@@ -1,7 +1,6 @@
 import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ILogsItem } from '../../models/interfaces/logs.interface';
-import { Action } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
 import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
@@ -34,7 +33,7 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
   let newState: AuditLogsState = null;
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case AUDIT_LOGS_ACTIONS.GET_LOGS: {
       newState = _.cloneDeep(initialState);
@@ -54,7 +53,7 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         newState.totalPages = data.body.totalPages;
         return newState;
       }
-      return Object.assign({}, state, { getLogInProcess: false });
+      return Object.assign({}, state, {getLogInProcess: false});
     }
     case AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS: {
       newState = _.cloneDeep(state);
@@ -75,7 +74,7 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         newState.totalPages = data.body.totalPages;
         return newState;
       }
-      return Object.assign({}, state, { getLogInProcess: false });
+      return Object.assign({}, state, {getLogInProcess: false});
     }
     case AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET: {
       return Object.assign({}, state, initialState);

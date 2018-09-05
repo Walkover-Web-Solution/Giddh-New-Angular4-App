@@ -13,4 +13,5 @@ import { AuditLogsComponent } from './audit-logs.component';
   ],
   exports: [RouterModule]
 })
-export class AuditLogsRoutingModule { }
+export class AuditLogsRoutingModule {
+}

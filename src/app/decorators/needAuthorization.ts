@@ -1,10 +1,7 @@
-import { PermissionDataService, IScope } from './../permissions/permission-data.service';
+import { IScope, PermissionDataService } from './../permissions/permission-data.service';
 import { ToasterService } from './../services/toaster.service';
-import { AppState } from '../store';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
 export const SCOPE_TO_ROUTE_MAPPING = [
   {
@@ -62,7 +59,8 @@ export class NeedsAuthorization implements CanActivate {
 
   private requestedScope: IScope = null;
 
-  constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
+  constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) {
+  }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return true;

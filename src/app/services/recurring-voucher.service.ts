@@ -1,3 +1,4 @@
+import { catchError, map } from 'rxjs/operators';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -22,30 +23,30 @@ export class RecurringVoucherService {
       return this._http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
         .replace('{{companyname}}', companyUniqueName)
         .replace(':page', page.toString())
-        .replace(':count', count.toString()), filter).map((res) => {
+        .replace(':count', count.toString()), filter).pipe(map((res) => {
         let data: BaseResponse<RecurringInvoice[], string> = res;
         data.queryString = {};
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e));
+      }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)),);
     }
     return this._http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
       .replace('{{companyname}}', companyUniqueName)
       .replace(':page', page.toString())
-      .replace(':count', count.toString())).map((res) => {
+      .replace(':count', count.toString())).pipe(map((res) => {
       let data: BaseResponse<RecurringInvoice[], string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)),);
   }
 
   public createRecurringVouchers(model: RecurringInvoice) {
     const companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + RECURRING_VOUCHER_API.CREATE
-      .replace('{{companyname}}', companyUniqueName), model).map((res) => {
+      .replace('{{companyname}}', companyUniqueName), model).pipe(map((res) => {
       let data: BaseResponse<RecurringInvoice, string> = res;
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)),);
   }
 
   public updateRecurringVouchers(model: RecurringInvoice) {
@@ -57,23 +58,23 @@ export class RecurringVoucherService {
     };
     return this._http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
       .replace('{{companyname}}', companyUniqueName)
-      .replace('{{uniqueName}}', model.uniqueName), req)
-      .map((res) => {
+      .replace('{{uniqueName}}', model.uniqueName), req).pipe(
+      map((res) => {
         let data: BaseResponse<RecurringInvoice, string> = res;
         data.queryString = {};
         return data;
-      }).catch((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e));
+      }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice, string>(e)),);
   }
 
   public deleteRecurringVouchers(id: string) {
     const companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + RECURRING_VOUCHER_API.DELETE
       .replace('{{companyname}}', companyUniqueName)
-      .replace('{{uniqueName}}', id)).map((res) => {
+      .replace('{{uniqueName}}', id)).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       data.queryString = {};
       data.request = id;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)),);
   }
 }

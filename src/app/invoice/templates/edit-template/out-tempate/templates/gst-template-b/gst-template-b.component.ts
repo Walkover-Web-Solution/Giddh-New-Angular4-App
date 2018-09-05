@@ -1,15 +1,16 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
-import { Observable } from '../../../../../../../../node_modules/rxjs/Observable';
 import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
 import { AppState } from 'app/store';
+
 
 @Component({
   selector: 'gst-template-b',
@@ -30,7 +31,7 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
-  public companySetting$: Observable<any> = Observable.of(null);
+  public companySetting$: Observable<any> = Observable.from(null);
   public companyAddress: string = '';
   public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -38,12 +39,12 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions) {
-    this.companySetting$ = this.store.select(s => s.settings.profile).takeUntil(this.destroyed$);
+    this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
     //
   }
 
   public ngOnInit() {
-    this.companySetting$.subscribe( a => {
+    this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);
       } else if (!a) {
@@ -70,9 +71,6 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
           this.columnsVisibled++;
         }
-        // if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
-        //   this.columnsVisibled++;
-        // }
         if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
           this.columnsVisibled++;
         }
@@ -85,12 +83,6 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate.display) {
           this.columnsVisibled++;
         }
-        // if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
-        //   this.columnsVisibled++;
-        // }
-        // if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
-        //   this.columnsVisibled++;
-        // }
         if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
           this.columnsVisibled++;
         }

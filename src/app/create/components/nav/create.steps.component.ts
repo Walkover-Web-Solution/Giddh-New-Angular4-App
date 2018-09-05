@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -25,14 +26,14 @@ export class CreateInvoiceStepsComponent implements OnInit, OnDestroy {
       return;
     }
     this.stage = id;
-    console.log ('setStep:', id, this.stage);
+    console.log('setStep:', id, this.stage);
     if (id === 'one') {
       this._router.navigate(['/create-invoice/invoice']);
     }
   }
 
   public ngOnInit() {
-    this._route.params.takeUntil(this.destroyed$).subscribe(params => {
+    this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
       if (params['templateId']) {
         this.stage = 'two';
       } else {

@@ -1,73 +1,80 @@
 <div id="main" class="welcome_outer">
-    <app-header></app-header>
-    <layout-main>
+  <app-header></app-header>
+  <layout-main>
 
-        <div class="welcome-header">
-            <h2>Welcome To Giddh! </h2>
-        </div>
-        <hr/>
+    <div class="welcome-header">
+      <h2>Welcome To Giddh! </h2>
+    </div>
+    <hr/>
 
-        <div class="welcome-container width350">
+    <div class="welcome-container width350">
 
-            <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix horizontal-form" autocomplete="off">
-                <div class="box clearfix mrT3">
+      <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix horizontal-form" autocomplete="off">
+        <div class="box clearfix mrT3">
 
-                    <div class="col-xs-12">
-                        <div class="form-group form-custom">
-                            <label for="state_dd">State</label>
-                            <sh-select placeholder="Select state" name="state_dd" id="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia" [ItemHeight]="33"></sh-select>
-                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
-                        </div>
-                    </div>
+          <div class="col-xs-12">
+            <div class="form-group form-custom">
+              <label for="state_dd">State</label>
+              <sh-select placeholder="Select state" name="state_dd" id="state_dd" [(ngModel)]="companyProfileObj.state"
+                         [options]="statesSource$ | async" *ngIf="countryIsIndia" [ItemHeight]="33"></sh-select>
+              <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state"
+                     *ngIf="!countryIsIndia" name="state"/>
+            </div>
+          </div>
 
-                    <div class="col-xs-12">
-                        <div class="form-group form-custom">
-                            <label for="city">City</label>
-                            <input type="text" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$" autocomplete="off" />
-                        </div>
-                    </div>
+          <div class="col-xs-12">
+            <div class="form-group form-custom">
+              <label for="city">City</label>
+              <input type="text" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" id="city"
+                     required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$" autocomplete="off"/>
+            </div>
+          </div>
 
-                    <div class="col-xs-12">
-                        <div class="form-group form-custom">
-                            <label for="mobile">Mobile Number</label>
-                            <div style="display: flex;justify-content: space-between">
-                                <sh-select [options]="countryCodeList" name="country" [placeholder]="'CC'" [(ngModel)]="companyProfileObj.country" [width]="'65px'" id="" [ItemHeight]="33"></sh-select>
-                                <input type="text" class="form-control mrL2" [(ngModel)]="companyProfileObj.contactNo" name="contactNo" id="mobile" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$" />
-                            </div>
-                        </div>
-                    </div>
+          <div class="col-xs-12">
+            <div class="form-group form-custom">
+              <label for="mobile">Mobile Number</label>
+              <div style="display: flex;justify-content: space-between">
+                <sh-select [options]="countryCodeList" name="country" [placeholder]="'CC'"
+                           [(ngModel)]="companyProfileObj.country" [width]="'65px'" id="" [ItemHeight]="33"></sh-select>
+                <input type="text" class="form-control mrL2" [(ngModel)]="companyProfileObj.contactNo" name="contactNo"
+                       id="mobile" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+              </div>
+            </div>
+          </div>
 
-                    <div class="col-xs-12">
-                        <div class="form-group form-custom">
-                            <label for="industry">Industry</label>
-                            <sh-select [options]="industrialList" name="industry" id="industry" [placeholder]="'Industry'" [(ngModel)]="companyProfileObj.industry" [ItemHeight]="33"></sh-select>
-                        </div>
-                    </div>
+          <div class="col-xs-12">
+            <div class="form-group form-custom">
+              <label for="industry">Industry</label>
+              <sh-select [options]="industrialList" name="industry" id="industry" [placeholder]="'Industry'"
+                         [(ngModel)]="companyProfileObj.industry" [ItemHeight]="33"></sh-select>
+            </div>
+          </div>
 
-                    <div class="col-xs-12">
-                        <div class="form-group form-custom">
-                            <label for="mobile">Prev. Software</label>
-                            <input type="text" class="form-control" [(ngModel)]="companyProfileObj.prevSoft" name="prevSoft" id="prev" required maxlength="50" placeholder="Previous Software" pattern="^[^\s]+(\s+[^\s]+)*$" />
-                        </div>
-                    </div>
-                    <div class="col-xs-12 mrT">
-                        <button type="submit" class="btn btn-default" (click)="submit()">
+          <div class="col-xs-12">
+            <div class="form-group form-custom">
+              <label for="mobile">Prev. Software</label>
+              <input type="text" class="form-control" [(ngModel)]="companyProfileObj.prevSoft" name="prevSoft" id="prev"
+                     required maxlength="50" placeholder="Previous Software" pattern="^[^\s]+(\s+[^\s]+)*$"/>
+            </div>
+          </div>
+          <div class="col-xs-12 mrT">
+            <button type="submit" class="btn btn-default" (click)="submit()">
               Save
             </button>
-                        <button type="button" class="btn btn-link btn-skip" (click)="skip()">Skip</button>
-                    </div>
-                </div>
-
-                <!-- <div class="clearfix">
-          <button type="submit" class="btn btn-success" (click)="submit()">Save</button>
-          <button type="button" class="btn btn-primary">Skip</button>
-        </div> -->
-
-            </form>
-
-
+            <button type="button" class="btn btn-link btn-skip" (click)="skip()">Skip</button>
+          </div>
         </div>
 
-    </layout-main>
-    <app-footer></app-footer>
+        <!-- <div class="clearfix">
+  <button type="submit" class="btn btn-success" (click)="submit()">Save</button>
+  <button type="button" class="btn btn-primary">Skip</button>
+</div> -->
+
+      </form>
+
+
+    </div>
+
+  </layout-main>
+  <app-footer></app-footer>
 </div>

@@ -1,8 +1,9 @@
+import { map, switchMap, take } from 'rxjs/operators';
 import { AppState } from '../store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse, ShareGroupRequest } from '../models/api-models/Group';
 import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -69,353 +70,353 @@ export class GroupWithAccountsAction {
 
   @Effect()
   public ApplyGroupTax$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX)
-    .switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload))
-    .map((response) => {
-      return this.applyGroupTaxResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX).pipe(
+      switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
+      map((response) => {
+        return this.applyGroupTaxResponse(response);
+      }),);
 
   @Effect()
   public ApplyGroupTaxResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
-      }
-      this._toasty.successToast(action.payload.body, action.payload.status);
-      let grouName = null;
-      this.store.take(1).subscribe((s) => {
-        if (s.groupwithaccounts.activeGroup) {
-          grouName = s.groupwithaccounts.activeGroup.uniqueName;
+    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
         }
-      });
-      return this.getTaxHierarchy(grouName);
-    });
+        this._toasty.successToast(action.payload.body, action.payload.status);
+        let grouName = null;
+        this.store.pipe(take(1)).subscribe((s) => {
+          if (s.groupwithaccounts.activeGroup) {
+            grouName = s.groupwithaccounts.activeGroup.uniqueName;
+          }
+        });
+        return this.getTaxHierarchy(grouName);
+      }));
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
-    .map((action: CustomActions) => {
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP).pipe(
+      map((action: CustomActions) => {
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public GetGroupsWithAccount$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS)
-    .switchMap((action: CustomActions) =>
-      this._groupService.GetGroupsWithAccounts(action.payload)
-    )
-    .map((response) => {
-      if (response.request.length > 0) {
-        this.store.dispatch(this.resetAddAndMangePopup());
-      } else {
-        this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));
-      }
-      return this.getGroupWithAccountsResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS).pipe(
+      switchMap((action: CustomActions) =>
+        this._groupService.GetGroupsWithAccounts(action.payload)
+      ),
+      map((response) => {
+        if (response.request.length > 0) {
+          this.store.dispatch(this.resetAddAndMangePopup());
+        } else {
+          this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));
+        }
+        return this.getGroupWithAccountsResponse(response);
+      }),);
 
   @Effect()
   public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public GetGroupsDetails$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS)
-    .switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload))
-    .map((response) => {
-      return this.getGroupDetailsResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload)),
+      map((response) => {
+        return this.getGroupDetailsResponse(response);
+      }),);
 
   @Effect()
   public GetGroupDetailsResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<GroupResponse, string> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
-      }
-      // return this.sharedGroupWith(data.body.uniqueName); // JIRA CARD EL-351
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<GroupResponse, string> = action.payload;
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        }
+        // return this.sharedGroupWith(data.body.uniqueName); // JIRA CARD EL-351
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public CreateGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.CREATE_GROUP)
-    .switchMap((action: CustomActions) => this._groupService.CreateGroup(action.payload))
-    .map((response) => {
-      return this.createGroupResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.CREATE_GROUP).pipe(
+      switchMap((action: CustomActions) => this._groupService.CreateGroup(action.payload)),
+      map((response) => {
+        return this.createGroupResponse(response);
+      }),);
 
   @Effect()
   public CreateGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
-        this._toasty.successToast('Sub group added successfully', 'Success');
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._generalService.eventHandler.next({name: eventsConst.groupAdded, payload: action.payload});
+          this._toasty.successToast('Sub group added successfully', 'Success');
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public GetFlattenGroupsAccounts$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS)
-    .switchMap((action: CustomActions) =>
-      this._groupService.GetFlattenGroupsAccounts(action.payload)
-    )
-    .map((response) => {
-      return this.getFlattenGroupsAccountsResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS).pipe(
+      switchMap((action: CustomActions) =>
+        this._groupService.GetFlattenGroupsAccounts(action.payload)
+      ),
+      map((response) => {
+        return this.getFlattenGroupsAccountsResponse(response);
+      }),);
 
   @Effect()
   public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public shareGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.SHARE_GROUP)
-    .switchMap((action: CustomActions) =>
-      this._groupService.ShareGroup(
-        action.payload.body,
-        action.payload.groupUniqueName
-      )
-    )
-    .map((response) => {
-      return this.shareGroupResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.SHARE_GROUP).pipe(
+      switchMap((action: CustomActions) =>
+        this._groupService.ShareGroup(
+          action.payload.body,
+          action.payload.groupUniqueName
+        )
+      ),
+      map((response) => {
+        return this.shareGroupResponse(response);
+      }),);
 
   @Effect()
   public shareGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._toasty.successToast(action.payload.body, '');
-        let groupUniqueName = '';
-        this.store.take(1).subscribe(s => {
-          groupUniqueName = s.groupwithaccounts.activeGroup.uniqueName;
-        });
+    .ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._toasty.successToast(action.payload.body, '');
+          let groupUniqueName = '';
+          this.store.pipe(take(1)).subscribe(s => {
+            groupUniqueName = s.groupwithaccounts.activeGroup.uniqueName;
+          });
 
-        return this.sharedGroupWith(groupUniqueName);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+          return this.sharedGroupWith(groupUniqueName);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public unShareGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.UNSHARE_GROUP)
-    .switchMap((action: CustomActions) =>
-      this._groupService.UnShareGroup(
-        action.payload.user,
-        action.payload.groupUniqueName
-      )
-    )
-    .map((response) => {
-      return this.unShareGroupResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.UNSHARE_GROUP).pipe(
+      switchMap((action: CustomActions) =>
+        this._groupService.UnShareGroup(
+          action.payload.user,
+          action.payload.groupUniqueName
+        )
+      ),
+      map((response) => {
+        return this.unShareGroupResponse(response);
+      }),);
 
   @Effect()
   public unShareGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._toasty.successToast(action.payload.body, '');
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._toasty.successToast(action.payload.body, '');
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public sharedGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH)
-    .switchMap((action: CustomActions) => this._groupService.ShareWithGroup(action.payload))
-    .map((response) => {
-      return this.sharedGroupWithResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH).pipe(
+      switchMap((action: CustomActions) => this._groupService.ShareWithGroup(action.payload)),
+      map((response) => {
+        return this.sharedGroupWithResponse(response);
+      }),);
 
   @Effect()
   public sharedGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public moveGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.MOVE_GROUP)
-    .switchMap((action: CustomActions) =>
-      this._groupService.MoveGroup(
-        action.payload.body,
-        action.payload.groupUniqueName
-      )
-    )
-    .map(response => {
-      return this.moveGroupResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.MOVE_GROUP).pipe(
+      switchMap((action: CustomActions) =>
+        this._groupService.MoveGroup(
+          action.payload.body,
+          action.payload.groupUniqueName
+        )
+      ),
+      map(response => {
+        return this.moveGroupResponse(response);
+      }),);
 
   @Effect()
   public moveGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
+    .ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
 
-        // let groups;
-        // this.store.select(g => g.general.groupswithaccounts).take(1).subscribe(grps => groups = grps);
-        // this.store.dispatch({
-        //   type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
-        //   payload: { groups, groupUniqueName: data.request.parentGroupUniqueName }
-        // });
+          // let groups;
+          // this.store.select(g => g.general.groupswithaccounts).take(1).subscribe(grps => groups = grps);
+          // this.store.dispatch({
+          //   type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
+          //   payload: { groups, groupUniqueName: data.request.parentGroupUniqueName }
+          // });
 
-        this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
-        this._toasty.successToast('Group moved successfully', '');
-        return this.getGroupDetails(data.request.parentGroupUniqueName);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+          this._generalService.eventHandler.next({name: eventsConst.groupMoved, payload: data});
+          this._toasty.successToast('Group moved successfully', '');
+          return this.getGroupDetails(data.request.parentGroupUniqueName);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public getGroupTaxHierarchy$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY)
-    .switchMap((action: CustomActions) => this._groupService.GetTaxHierarchy(action.payload))
-    .map(response => {
-      return this.getTaxHierarchyResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY).pipe(
+      switchMap((action: CustomActions) => this._groupService.GetTaxHierarchy(action.payload)),
+      map(response => {
+        return this.getTaxHierarchyResponse(response);
+      }),);
 
   @Effect()
   public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public UpdateGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.UPDATE_GROUP)
-    .switchMap((action: CustomActions) => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName))
-    .map(response => {
-      return this.updateGroupResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.UPDATE_GROUP).pipe(
+      switchMap((action: CustomActions) => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName)),
+      map(response => {
+        return this.updateGroupResponse(response);
+      }),);
   @Effect()
   public UpdateGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
-        this._toasty.successToast('Group Updated Successfully');
-        return {
-          type: 'EmptyAction'
-        };
-      }
-    });
+    .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          this._generalService.eventHandler.next({name: eventsConst.groupUpdated, payload: action.payload});
+          this._toasty.successToast('Group Updated Successfully');
+          return {
+            type: 'EmptyAction'
+          };
+        }
+      }));
 
   @Effect()
   public DeleteGroup$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.DELETE_GROUP)
-    .switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload))
-    .map(response => {
-      let activeGrp: IGroupsWithAccounts;
-      this.store.select(s => s.groupwithaccounts.groupswithaccounts).take(1).subscribe(a => {
-        activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null);
-      });
-      response.queryString = { groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
-      return this.deleteGroupResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.DELETE_GROUP).pipe(
+      switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload)),
+      map(response => {
+        let activeGrp: IGroupsWithAccounts;
+        this.store.select(s => s.groupwithaccounts.groupswithaccounts).pipe(take(1)).subscribe(a => {
+          activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null);
+        });
+        response.queryString = {groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName};
+        return this.deleteGroupResponse(response);
+      }),);
 
   @Effect()
   public DeleteGroupResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this._generalService.eventHandler.next({ name: eventsConst.groupDeleted, payload: action.payload });
-        this._toasty.successToast(action.payload.body, '');
-        if (action.payload.queryString.parentUniqueName) {
-          this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
+    .ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._generalService.eventHandler.next({name: eventsConst.groupDeleted, payload: action.payload});
+          this._toasty.successToast(action.payload.body, '');
+          if (action.payload.queryString.parentUniqueName) {
+            this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
+          }
         }
-      }
-      return {
-        type: 'EmptyAction'
-      };
-    });
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   @Effect()
   public GetGroupUniqueName$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME)
-    .switchMap((action: CustomActions) => this._groupService.GetGrouptDetails(action.payload))
-    .map(response => {
-      return this.getGroupUniqueNameResponse(response);
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME).pipe(
+      switchMap((action: CustomActions) => this._groupService.GetGrouptDetails(action.payload)),
+      map(response => {
+        return this.getGroupUniqueNameResponse(response);
+      }),);
   @Effect()
   public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE)
-    .map((action: CustomActions) => {
-      let data: BaseResponse<GroupResponse, string> = action.payload;
-      return {
-        type: 'EmptyAction'
-      };
-    });
+    .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let data: BaseResponse<GroupResponse, string> = action.payload;
+        return {
+          type: 'EmptyAction'
+        };
+      }));
 
   constructor(private action$: Actions,
-    private _groupService: GroupService,
-    private _accountService: AccountService,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _generalActions: GeneralActions,
-    private _generalService: GeneralService) {
+              private _groupService: GroupService,
+              private _accountService: AccountService,
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _generalActions: GeneralActions,
+              private _generalService: GeneralService) {
     //
   }
 
@@ -507,8 +508,8 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          groupUniqueName
-        })
+        groupUniqueName
+      })
     };
   }
 
@@ -525,8 +526,8 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-          groupUniqueName
-        })
+        groupUniqueName
+      })
     };
   }
 
@@ -557,8 +558,8 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          groupUniqueName
-        })
+        groupUniqueName
+      })
     };
   }
 
@@ -640,7 +641,7 @@ export class GroupWithAccountsAction {
   public updateGroup(value: GroupUpateRequest, groupUniqueName: string): CustomActions {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP,
-      payload: Object.assign({}, { groupUniqueName }, { data: value })
+      payload: Object.assign({}, {groupUniqueName}, {data: value})
     };
   }
 

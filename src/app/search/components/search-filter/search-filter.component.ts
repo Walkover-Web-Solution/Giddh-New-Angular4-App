@@ -23,8 +23,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   public queryTypes = [
     {name: 'Closing Balance', uniqueName: 'closingBalance'},
     {name: 'Opening Balance', uniqueName: 'openingBalance'},
-    { name: 'Cr. total', uniqueName: 'creditTotal' },
-    { name: 'Dr. total', uniqueName: 'debitTotal' }
+    {name: 'Cr. total', uniqueName: 'creditTotal'},
+    {name: 'Dr. total', uniqueName: 'debitTotal'}
   ];
   public queryDiffers = [
     'Less',
@@ -33,8 +33,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   ];
 
   public balType = [
-    { name: 'CR', uniqueName: 'CREDIT' },
-    { name: 'DR', uniqueName: 'DEBIT' }
+    {name: 'CR', uniqueName: 'CREDIT'},
+    {name: 'DR', uniqueName: 'DEBIT'}
   ];
   public searchQueryForm: FormGroup;
   public searchDataSet: FormArray;

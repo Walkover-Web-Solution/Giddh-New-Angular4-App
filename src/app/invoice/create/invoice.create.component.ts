@@ -1,13 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
-import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
 import { OtherSalesItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -100,7 +101,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public autoFillShipping: boolean = false;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
   public maxDueDate: Date;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -111,68 +112,68 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private invoiceService: InvoiceService
   ) {
-    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged(),);
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.invoiceData)
-      .takeUntil(this.destroyed$)
-      .distinctUntilChanged()
+    this.store.select(p => p.invoice.invoiceData).pipe(
+      takeUntil(this.destroyed$),
+      distinctUntilChanged(),)
       .subscribe((o: PreviewInvoiceResponseClass) => {
-        if (o && o.invoiceDetails) {
-          this.invFormData = _.cloneDeep(o);
-          if (o.invoiceDetails.invoiceDate) {
-            let d = o.invoiceDetails.invoiceDate.split('-');
-            if (d.length === 3) {
-              this.invFormData.invoiceDetails.invoiceDate = new Date(d[2], d[1] - 1, d[0]);
-            } else {
-              this.invFormData.invoiceDetails.invoiceDate = '';
+          if (o && o.invoiceDetails) {
+            this.invFormData = _.cloneDeep(o);
+            if (o.invoiceDetails.invoiceDate) {
+              let d = o.invoiceDetails.invoiceDate.split('-');
+              if (d.length === 3) {
+                this.invFormData.invoiceDetails.invoiceDate = new Date(d[2], d[1] - 1, d[0]);
+              } else {
+                this.invFormData.invoiceDetails.invoiceDate = '';
+              }
+              if (this.invFormData.invoiceDetails.invoiceNumber === '##########') {
+                this.invFormData.invoiceDetails.invoiceNumber = null;
+              }
             }
-            if (this.invFormData.invoiceDetails.invoiceNumber === '##########') {
-              this.invFormData.invoiceDetails.invoiceNumber = null;
+            if (o.invoiceDetails.dueDate) {
+              let d = o.invoiceDetails.dueDate.split('-');
+              if (d.length === 3) {
+                this.invFormData.invoiceDetails.dueDate = new Date(d[2], d[1] - 1, d[0]);
+              } else {
+                this.invFormData.invoiceDetails.dueDate = '';
+              }
             }
-          }
-          if (o.invoiceDetails.dueDate) {
-            let d = o.invoiceDetails.dueDate.split('-');
-            if (d.length === 3) {
-              this.invFormData.invoiceDetails.dueDate = new Date(d[2], d[1] - 1, d[0]);
-            } else {
-              this.invFormData.invoiceDetails.dueDate = '';
+            // if address found prepare local var due to array and string issue
+            this.prepareAddressForUI('billingDetails');
+            this.prepareAddressForUI('shippingDetails');
+            if (!this.invFormData.other) {
+              this.invFormData.other = new OtherSalesItemClass();
             }
-          }
-          // if address found prepare local var due to array and string issue
-          this.prepareAddressForUI('billingDetails');
-          this.prepareAddressForUI('shippingDetails');
-          if (!this.invFormData.other) {
-            this.invFormData.other = new OtherSalesItemClass();
-          }
 
-          // replace br to /n in case of message
-          // if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
-          //   this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
-          // }
-          this.setMaxDueDate(this.invFormData.entries);
-          this.invoiceDataFound = true;
-        }else {
-          this.invoiceDataFound = false;
+            // replace br to /n in case of message
+            // if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
+            //   this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
+            // }
+            this.setMaxDueDate(this.invFormData.entries);
+            this.invoiceDataFound = true;
+          } else {
+            this.invoiceDataFound = false;
+          }
         }
-      }
-    );
+      );
 
-    this.store.select(p => p.invoice.invoiceTemplateConditions)
-      .takeUntil(this.destroyed$)
-      .distinctUntilChanged()
+    this.store.select(p => p.invoice.invoiceTemplateConditions).pipe(
+      takeUntil(this.destroyed$),
+      distinctUntilChanged(),)
       .subscribe((o: InvoiceTemplateDetailsResponse) => {
-        if (o) {
-          this.invTempCond = _.cloneDeep(o);
-          let obj = _.cloneDeep(o);
-          this.tableCond = _.find(obj.sections, {sectionName: 'table'});
-          this.headerCond = _.find(obj.sections, {sectionName: 'header'});
-          this.prepareThead();
-          this.prepareTemplateHeader();
+          if (o) {
+            this.invTempCond = _.cloneDeep(o);
+            let obj = _.cloneDeep(o);
+            this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
+            this.prepareThead();
+            this.prepareTemplateHeader();
+          }
         }
-      }
-    );
+      );
 
     this.isInvoiceGenerated$.subscribe((o) => {
       if (o) {
@@ -181,38 +182,38 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.select(state => state.invoice.visitedFromPreview)
-      .takeUntil(this.destroyed$)
-      .distinctUntilChanged()
+    this.store.select(state => state.invoice.visitedFromPreview).pipe(
+      takeUntil(this.destroyed$),
+      distinctUntilChanged(),)
       .subscribe((val: boolean) => {
-        this.updateMode = val;
-      }
-    );
+          this.updateMode = val;
+        }
+      );
 
     // bind state sources
-    this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
+    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
           arr.push({label: `${d.name}`, value: d.code});
         });
       }
-      this.statesSource$ = Observable.of(arr);
+      this.statesSource$ = observableOf(arr);
     });
   }
 
   public getArrayFromString(str) {
-    if (str && str.length > 0 ) {
+    if (str && str.length > 0) {
       return str.split('\n');
-    }else {
+    } else {
       return [];
     }
   }
 
   public getStringFromArr(arr) {
-    if (Array.isArray(arr) && arr.length > 0 ) {
+    if (Array.isArray(arr) && arr.length > 0) {
       return arr.toString().replace(RegExp(',', 'g'), '\n');
-    }else {
+    } else {
       return null;
     }
   }
@@ -232,7 +233,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       dummyObj[item.field] = item;
     });
     // sorting object
-    Object.keys(dummyObj).sort().forEach( (key) => {
+    Object.keys(dummyObj).sort().forEach((key) => {
       this.templateHeader[key] = dummyObj[key];
     });
   }
@@ -260,7 +261,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       } catch (error) {
         return '';
       }
-    }else {
+    } else {
       return '';
     }
   }
@@ -291,11 +292,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       model.updateAccountDetails = this.updtFlag;
       if (this.updateMode) {
         this.store.dispatch(this.invoiceActions.UpdateGeneratedInvoice(accountUniqueName, model));
-      }else {
+      } else {
         this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
       }
       this.updtFlag = false;
-    }else {
+    } else {
       // this._toasty.warningToast('Something went wrong, please reload the page');
     }
   }
@@ -317,7 +318,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     }
     if (count > 0) {
       return count;
-    }else {
+    } else {
       return null;
     }
   }
@@ -327,7 +328,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     count = this.getEntryTaxableAmount(entry.transactions[idx], entry.discounts) + this.getTransactionTotalTax(entry.taxes);
     if (count > 0) {
       return count;
-    }else {
+    } else {
       return null;
     }
   }
@@ -341,7 +342,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     }
     if (count > 0) {
       return count;
-    }else {
+    } else {
       return null;
     }
   }
@@ -355,7 +356,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     }
     if (count > 0) {
       return count;
-    }else {
+    } else {
       return null;
     }
   }
@@ -379,7 +380,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public getStateCode(type: string, statesEle: SelectComponent) {
     let gstVal = _.cloneDeep(this.invFormData.account[type].gstNumber);
     if (gstVal && gstVal.length >= 2) {
-      this.statesSource$.take(1).subscribe(st => {
+      this.statesSource$.pipe(take(1)).subscribe(st => {
         let s = st.find(item => item.value === gstVal.substr(0, 2));
         if (s) {
           this.invFormData.account[type].stateCode = s.value;
@@ -400,9 +401,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
    * setMaxDueDate
    */
   public setMaxDueDate(entries) {
-    let maxDateEnrty = _.maxBy(entries, function(o) { if (o.entryDate) {
-      return o.entryDate;
-    }});
+    let maxDateEnrty = _.maxBy(entries, function (o) {
+      if (o.entryDate) {
+        return o.entryDate;
+      }
+    });
     // console.log(maxDateEnrty);
     if (maxDateEnrty) {
       this.maxDueDate = maxDateEnrty.entryDate;

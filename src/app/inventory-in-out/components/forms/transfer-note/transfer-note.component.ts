@@ -32,6 +32,20 @@ export class TransferNoteComponent implements OnChanges, OnInit {
   public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
   public today = new Date();
 
+  // public inventoryEntryDateValid;
+  constructor(private _fb: FormBuilder) {
+    this.form = this._fb.group({
+      inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
+      transactions: this._fb.array([]),
+      description: [''],
+      type: ['SENDER', Validators.required],
+      quantity: ['', Validators.required],
+      inventoryUser: ['', Validators.required],
+      stock: ['', Validators.required],
+      stockUnit: ['', Validators.required]
+    });
+  }
+
   public get inventoryEntryDate(): FormControl {
     return this.form.get('inventoryEntryDate') as FormControl;
   }
@@ -62,20 +76,6 @@ export class TransferNoteComponent implements OnChanges, OnInit {
 
   public get transactions(): FormArray {
     return this.form.get('transactions') as FormArray;
-  }
-
-  // public inventoryEntryDateValid;
-  constructor(private _fb: FormBuilder) {
-    this.form = this._fb.group({
-      inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
-      transactions: this._fb.array([]),
-      description: [''],
-      type: ['SENDER', Validators.required],
-      quantity: ['', Validators.required],
-      inventoryUser: ['', Validators.required],
-      stock: ['', Validators.required],
-      stockUnit: ['', Validators.required]
-    });
   }
 
   public ngOnInit() {

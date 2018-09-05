@@ -1,5 +1,5 @@
 const lodash = (window as any)._;
-const { maxBy, clone, cloneDeep, concat, difference, differenceBy, each, filter, find, findIndex, flatten, flattenDeep, forEach, groupBy, includes, indexOf, isEmpty, isArray, isEqual, isNull, isNumber, isString, isUndefined, last, map, omit, orderBy, range, reject, remove, sortBy, sumBy, toArray, union, unionBy, uniq, without, uniqBy, some, intersection, forIn, pick, startsWith, get } = lodash;
+const {maxBy, clone, cloneDeep, concat, difference, differenceBy, each, filter, find, findIndex, flatten, flattenDeep, forEach, groupBy, includes, indexOf, isEmpty, isArray, isEqual, isNull, isNumber, isString, isUndefined, last, map, omit, orderBy, range, reject, remove, sortBy, sumBy, toArray, union, unionBy, uniq, without, uniqBy, some, intersection, forIn, pick, startsWith, get} = lodash;
 
 export {
   maxBy,

@@ -1,8 +1,8 @@
+import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -17,16 +17,18 @@ import { DashboardService } from '../../../services/dashboard.service';
   templateUrl: 'total-overdues-chart.component.html',
   styleUrls: ['../../home.component.scss'],
   styles: [
-    `
-    .total_amt {
-      font-size: 18px;
-    }
-    .primary_text {
-      color: #005b77;
-    }
-    .secondary_text {
-      color: #d37c59;
-    }
+      `
+      .total_amt {
+        font-size: 18px;
+      }
+
+      .primary_text {
+        color: #005b77;
+      }
+
+      .secondary_text {
+        color: #d37c59;
+      }
     `
   ]
 })
@@ -54,9 +56,9 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService) {
-    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).takeUntil(this.destroyed$);
+    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+    this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -66,7 +68,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         let activeCompany: CompanyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
-        this.activeCompanyUniqueName$.take(1).subscribe(a => {
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
           if (activeCompany) {
@@ -100,8 +102,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), false));
 
-    this.totalOverDuesResponse$
-      .skipWhile(p => (isNullOrUndefined(p)))
+    this.totalOverDuesResponse$.pipe(
+      skipWhile(p => (isNullOrUndefined(p))))
       .subscribe(p => {
         if (p.length) {
           this.overDueObj = p;
@@ -191,7 +193,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       tooltip: {
         headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.percentage:.1f} %</b> </td>' +
-        '</tr>',
+          '</tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true

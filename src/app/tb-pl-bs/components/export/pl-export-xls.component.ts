@@ -26,7 +26,7 @@ export class PlExportXlsComponent implements OnInit, OnDestroy {
   }
 
   public downloadPlXls() {
-    let request = { fy: this.fy } as ProfitLossRequest;
+    let request = {fy: this.fy} as ProfitLossRequest;
     this.store.dispatch(this._tbPlActions.DownloadProfitLossExcel(request));
   }
 

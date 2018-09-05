@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, SimpleChanges, Component, Input, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { ChildGroup, Account } from '../../models/api-models/Search';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Account, ChildGroup } from '../../models/api-models/Search';
 
 @Component({
   selector: '[tb-pl-bs-grid-row]',  // <home></home>
@@ -39,6 +39,7 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   constructor(private cd: ChangeDetectorRef) {
     //
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
       this.cd.detectChanges();
@@ -47,9 +48,11 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
       this.cd.detectChanges();
     }
   }
+
   public ngOnInit() {
     //
   }
+
   public trackByFn(index, item: Account) {
     return item;
   }

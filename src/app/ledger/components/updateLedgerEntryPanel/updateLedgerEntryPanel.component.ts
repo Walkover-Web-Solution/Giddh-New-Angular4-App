@@ -1,10 +1,11 @@
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
@@ -67,21 +68,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseCurrency: string = null;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-    private _toasty: ToasterService, private _accountService: AccountService,
-    private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
-    private _settingsTagActions: SettingsTagActions) {
-    this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
-    this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).takeUntil(this.destroyed$);
-    this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-    this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
-    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
-    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
-    this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
-    this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).shareReplay();
-    this.closeUpdateLedgerModal.takeUntil(this.destroyed$);
+              private _toasty: ToasterService, private _accountService: AccountService,
+              private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
+              private _settingsTagActions: SettingsTagActions) {
+    this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
+    this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).pipe(takeUntil(this.destroyed$));
+    this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).pipe(takeUntil(this.destroyed$));
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).pipe(takeUntil(this.destroyed$));
+    this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).pipe(takeUntil(this.destroyed$));
+    this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).pipe(takeUntil(this.destroyed$));
+    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$), shareReplay(),);
+    this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
@@ -99,10 +100,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
         return _.orderBy(tags, 'name');
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
 
     // get enetry name and ledger account uniquename
-    Observable.combineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
+    observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
       if (resp[0] && resp[1]) {
         this.entryUniqueName = resp[0];
         this.accountUniqueName = resp[1];
@@ -113,15 +114,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     // emit upload event
     this.uploadInput = new EventEmitter<UploadInput>();
     // set file upload options
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
 
     // get flatten_accounts list && get transactions list && get ledger account list
-    Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
+    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
           this.vm.flatternAccountList = resp[0];
-          this.activeAccount$ = Observable.of(resp[2].body);
+          this.activeAccount$ = observableOf(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
 
           this.activeAccount$.subscribe((acc) => {
@@ -152,7 +153,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             // stocks from ledger account
             resp[0].map(acc => {
               // normal entry
-              accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+              accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               // normal merge account entry
               if (acc.mergedAccounts && acc.mergedAccounts !== '') {
                 let mergeAccs = acc.mergedAccounts.split(',');
@@ -169,7 +170,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 accountsArray.push({
                   value: `${acc.uniqueName}#${as.uniqueName}`,
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, { stock: as })
+                  additional: Object.assign({}, acc, {stock: as})
                 });
                 // normal merge account entry
                 if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -178,7 +179,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     accountsArray.push({
                       value: `${ma}#${as.uniqueName}`,
                       label: ma + '(' + as.uniqueName + ')',
-                      additional: Object.assign({}, acc, { stock: as })
+                      additional: Object.assign({}, acc, {stock: as})
                     });
                   });
                 }
@@ -192,12 +193,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   accountsArray.push({
                     value: `${acc.uniqueName}#${as.uniqueName}`,
                     label: `${acc.name} (${as.uniqueName})`,
-                    additional: Object.assign({}, acc, { stock: as })
+                    additional: Object.assign({}, acc, {stock: as})
                   });
                 });
-                accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               } else {
-                accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               }
               // normal merge account entry
               if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -213,7 +214,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             });
             // accountsArray = uniqBy(accountsArray, 'value');
           }
-          this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
+          this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'text'));
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
@@ -288,7 +289,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
     let isMultiCurrencyAvailable: boolean = false;
     if (txn.selectedAccount && txn.selectedAccount.currency) {
-      this.activeAccount$.take(1).subscribe((acc) => {
+      this.activeAccount$.pipe(take(1)).subscribe((acc) => {
         if (acc.currency !== txn.selectedAccount.currency) {
           this.isMultiCurrencyAvailable = true;
           isMultiCurrencyAvailable = true;
@@ -314,15 +315,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
       let companyUniqueName = null;
-      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
-      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+      this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -459,9 +460,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public onTxnAmountChange(txn) {
     if (!txn.selectedAccount) {
-      this.vm.flatternAccountList4Select.take(1).subscribe((accounts) => {
+      this.vm.flatternAccountList4Select.pipe(take(1)).subscribe((accounts) => {
         if (accounts && accounts.length) {
-          let selectedAcc  = accounts.find(acc => acc.value === txn.particular.uniqueName);
+          let selectedAcc = accounts.find(acc => acc.value === txn.particular.uniqueName);
           if (selectedAcc) {
             txn.selectedAccount = selectedAcc.additional;
           }
@@ -537,7 +538,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public deleteTrxEntry() {
     let entryName: string = null;
-    this.entryUniqueName$.take(1).subscribe(en => entryName = en);
+    this.entryUniqueName$.pipe(take(1)).subscribe(en => entryName = en);
     this.store.dispatch(this._ledgerAction.deleteTrxEntry(this.accountUniqueName, entryName));
     this.hideDeleteEntryModal();
   }
@@ -581,7 +582,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
-    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
     let downloadRequest = new DownloadLedgerRequest();
     downloadRequest.invoiceNumber = [invoiceName];
     downloadRequest.voucherType = voucherType;

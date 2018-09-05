@@ -1,15 +1,15 @@
+import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, OnChanges, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
-import { ProfitLossData, ProfitLossRequest, BalanceSheetData } from '../../../models/api-models/tb-pl-bs';
+import { BalanceSheetData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from '../../../lodash-optimized';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { BsGridComponent } from './bs-grid/bs-grid.component';
 import { createSelector } from 'reselect';
-import { ChildGroup, Account } from '../../../models/api-models/Search';
+import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -26,21 +26,21 @@ import { ToasterService } from '../../../services/toaster.service';
       (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
     <div *ngIf="(showLoader | async)">
-         <!-- loader -->
-         <div class="loader" >
-           <span></span>
-           <span></span>
-           <span></span>
-           <span></span>
-           <span></span>
-          <h1>loading balance sheet</h1>
-        </div>
+      <!-- loader -->
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <h1>loading balance sheet</h1>
+      </div>
     </div>
     <div *ngIf="!(showLoader | async)">
       <bs-grid #bsGrid
-      [search]="search"
-      [expandAll]="expandAll"
-        [bsData]="data$ | async"
+               [search]="search"
+               [expandAll]="expandAll"
+               [bsData]="data$ | async"
       ></bs-grid>
     </div>
   `,
@@ -53,6 +53,40 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public expandAll: boolean;
   public search: string;
   @ViewChild('bsGrid') public bsGrid: BsGridComponent;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
+    this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).pipe(takeUntil(this.destroyed$));
+    this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.bs.data, (p: BalanceSheetData) => {
+      let data = _.cloneDeep(p) as BalanceSheetData;
+      if (data && data.message) {
+        setTimeout(() => {
+          this._toaster.clearAllToaster();
+          this._toaster.infoToast(data.message);
+        }, 100);
+      }
+      if (data.liabilities) {
+        this.InitData(data.liabilities);
+        data.liabilities.forEach(g => {
+          g.isVisible = true;
+          g.isCreated = true;
+          g.isIncludedInSearch = true;
+        });
+      }
+      if (data.assets) {
+        this.InitData(data.assets);
+        data.assets.forEach(g => {
+          g.isVisible = true;
+          g.isCreated = true;
+          g.isIncludedInSearch = true;
+        });
+      }
+      return data;
+    })).pipe(takeUntil(this.destroyed$));
+  }
+
+  private _selectedCompany: CompanyResponse;
+
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
   }
@@ -73,34 +107,10 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     }
   }
 
-  private _selectedCompany: CompanyResponse;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-    this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.bs.data, (p: BalanceSheetData) => {
-      let data = _.cloneDeep(p) as BalanceSheetData;
-      if (data && data.message) {
-        setTimeout(() => {
-          this._toaster.clearAllToaster();
-          this._toaster.infoToast(data.message);
-        }, 100);
-      }
-      if (data.liabilities) {
-        this.InitData(data.liabilities);
-        data.liabilities.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
-      }
-      if (data.assets) {
-        this.InitData(data.assets);
-        data.assets.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
-      }
-      return data;
-    })).takeUntil(this.destroyed$);
-  }
-
   public ngOnInit() {
     // console.log('hello Tb Component');
   }
+
   public InitData(d: ChildGroup[]) {
     _.each(d, (grp: ChildGroup) => {
       grp.isVisible = false;
@@ -116,14 +126,17 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       }
     });
   }
+
   public ngAfterViewInit() {
     this.cd.detectChanges();
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
     //   this.cd.detectChanges();
     // }
   }
+
   public filterData(request: ProfitLossRequest) {
     request.from = request.from;
     request.to = request.to;
@@ -136,9 +149,11 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public exportXLS(event) {
     //
   }
+
   public findIndex(activeFY, financialYears) {
     let tempFYIndex = 0;
     _.each(financialYears, (fy: any, index: number) => {
@@ -152,6 +167,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     });
     return tempFYIndex;
   }
+
   public expandAllEvent(event: boolean) {
     this.cd.checkNoChanges();
     this.expandAll = !this.expandAll;
@@ -160,6 +176,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       this.cd.detectChanges();
     }, 1);
   }
+
   public searchChanged(event: string) {
     // this.cd.checkNoChanges();
     this.search = event;

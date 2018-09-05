@@ -1,8 +1,9 @@
-import { Injectable, Optional, Inject } from '@angular/core';
+import { catchError, map } from 'rxjs/operators';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ErrorHandler } from '../services/catchManager/catchmanger';
 
 @Injectable()
@@ -15,9 +16,9 @@ export class CreateHttpService {
   }
 
   public Generate(data: any): Observable<BaseResponse<any, any>> {
-    return this._http.post(this.config.apiUrl + 'invoices', data).map((res) => {
+    return this._http.post(this.config.apiUrl + 'invoices', data).pipe(map((res) => {
       return res;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)),);
   }
 
   // public MapEledgerTransaction(model: EledgerMapRequest, accountUniqueName: string, transactionId: string): Observable<BaseResponse<string, EledgerMapRequest>> {

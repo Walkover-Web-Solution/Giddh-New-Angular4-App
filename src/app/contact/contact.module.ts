@@ -7,7 +7,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, ModalModule, PaginationModule, TooltipModule, PaginationComponent } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, PaginationComponent, PaginationModule, TooltipModule } from 'ngx-bootstrap';
 import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';

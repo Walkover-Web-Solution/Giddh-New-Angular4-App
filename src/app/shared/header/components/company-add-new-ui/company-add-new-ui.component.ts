@@ -1,3 +1,4 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
@@ -12,8 +13,7 @@ import { GeneralService } from '../../../../services/general.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { AppState } from '../../../../store';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { userLoginStateEnum } from '../../../../store/authentication/authentication.reducer';
@@ -44,18 +44,18 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
               private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
     contriesWithCodes.map(c => {
       this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     });
   }
 
   public ngOnInit() {
-    this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
-    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
-    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
+    this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
+    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$.subscribe(s => {
       if (s && !this.createBranch) {
         let isNewUSer = false;
-        this.store.select(state => state.session.userLoginState).take(1).subscribe(st => {
+        this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
           isNewUSer = st === userLoginStateEnum.newUserLoggedIn;
         });
 
@@ -83,7 +83,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   public closeModal() {
     let companies = null;
-    this.companies$.take(1).subscribe(c => companies = c);
+    this.companies$.pipe(take(1)).subscribe(c => companies = c);
     if (companies) {
       if (companies.length > 0) {
         this.store.dispatch(this._generalActions.getGroupWithAccounts());

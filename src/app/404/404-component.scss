@@ -1,26 +1,26 @@
-.flex-col{
+.flex-col {
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
-  height:100vh;
-  .inner{
-  display: flex;
-  justify-content:center;
-  align-items: center;
-  flex-direction: column;
+  height: 100vh;
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
-  img{
-    width:400px;
+  img {
+    width: 400px;
     opacity: 0.3;
   }
-  span{
-    font-size:40px;
-    font-weight:bold;
+  span {
+    font-size: 40px;
+    font-weight: bold;
     display: block;
-    margin-top:20px;
+    margin-top: 20px;
   }
-  p{
+  p {
     color: #7B7C7D;
     line-height: 30px;
     margin-top: 20px;

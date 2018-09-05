@@ -1,17 +1,13 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { CarriedOverSalesRequest, CarriedOverSalesResponse } from '../models/api-models/carried-over-sales';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { CarriedOverSalesActions } from '../actions/carried-over-sales.actions';
-import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { NgForm } from '@angular/forms';
 
 @Component({

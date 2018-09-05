@@ -1,4 +1,3 @@
-
 let COMMON_URL = 'company/:companyUniqueName/';
 let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';

@@ -1,3 +1,4 @@
+import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -27,12 +28,12 @@ export class CarriedOverSalesService implements OnInit {
     return this._http.get(this.config.apiUrl + CARRIEDOVERSALES_API.GET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':type', queryRequest.type.toString())
-      .replace(':value', queryRequest.value.toString()))
-      .map((res) => {
+      .replace(':value', queryRequest.value.toString())).pipe(
+      map((res) => {
         let data: BaseResponse<CarriedOverSalesResponse, string> = res;
         data.queryString = queryRequest;
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e, null, queryRequest));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e, null, queryRequest)),);
   }
 }
