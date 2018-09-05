@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, animate, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -6,6 +6,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'inventory-header',
