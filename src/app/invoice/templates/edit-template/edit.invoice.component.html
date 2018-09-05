@@ -7,7 +7,7 @@
         <button class="btn pull-left isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
     </div>
     <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
-        <div class="template-grid" *ngIf="template.type === 'invoice' && template.templateType === 'gst_template_a'">
+        <div class="template-grid" *ngIf="template.type === 'invoice'">
             <div class="template_info text-center">
                 <h3 class="primary_clr ellp">{{template.name}}</h3>
 
