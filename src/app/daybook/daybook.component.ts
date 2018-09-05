@@ -1,3 +1,6 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { map, take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
@@ -5,8 +8,6 @@ import * as moment from 'moment/moment';
 import { ModalDirective } from 'ngx-bootstrap';
 import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -14,18 +15,18 @@ import { CompanyActions } from '../actions/company.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 import { cloneDeep } from 'app/lodash-optimized';
-import { isNull } from 'util';
 
 @Component({
   selector: 'daybook',
   templateUrl: './daybook.component.html',
   styles: [`
-  .table-container section div>div {
-    padding: 8px 8px;
-  }
-  .trial-balance.table-container>div>section {
-    border-left: 0;
-  }
+    .table-container section div > div {
+      padding: 8px 8px;
+    }
+
+    .trial-balance.table-container > div > section {
+      border-left: 0;
+    }
   `]
 })
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -36,7 +37,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
   public daybookExportRequestType: 'get' | 'post';
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
-  @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
+  @ViewChild('dateRangePickerCmp', {read: DaterangePickerComponent}) public dateRangePickerCmp: DaterangePickerComponent;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   public datePickerOptions: any = {
     locale: {
@@ -77,9 +78,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
   private searchFilterData: any = null;
 
   constructor(private store: Store<AppState>, private _daybookActions: DaybookActions,
-    private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
+              private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
     this.daybookQueryRequest = new DaybookQueryRequest();
-    this.store.select(s => s.daybook.data).takeUntil(this.destroyed$).subscribe((data) => {
+    this.store.select(s => s.daybook.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.entries) {
         this.daybookQueryRequest.page = data.page;
         // data.entries.sort((a, b) => {
@@ -92,14 +93,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
         this.loadPaginationComponent(data);
       }
-      this.daybookData$ = Observable.of(data);
+      this.daybookData$ = observableOf(data);
     });
     let companyUniqueName;
     let company;
-    store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$)
+    store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
       .subscribe(p => companyUniqueName = p);
 
-    store.select(p => p.session.companies).takeUntil(this.destroyed$)
+    store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$))
       .subscribe(p => {
         company = p.find(q => q.uniqueName === companyUniqueName);
       });
@@ -111,7 +112,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     // set state details
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'daybook/';
@@ -165,10 +166,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
   public toggleExpand() {
     this.isAllExpanded = !this.isAllExpanded;
-    this.daybookData$ = this.daybookData$.map(sc => {
+    this.daybookData$ = this.daybookData$.pipe(map(sc => {
       sc.entries.map(e => e.isExpanded = this.isAllExpanded);
       return sc;
-    });
+    }));
   }
 
   public initialRequest() {

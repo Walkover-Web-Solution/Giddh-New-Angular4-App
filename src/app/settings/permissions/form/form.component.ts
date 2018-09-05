@@ -1,10 +1,11 @@
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'app/lodash-optimized';
 import isCidr from 'is-cidr';
-import { Component, OnInit, OnDestroy, EventEmitter, Input, Output } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
 
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ShareRequestForm } from '../../../models/api-models/Permission';
@@ -13,8 +14,6 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import * as moment from 'moment';
-import { Moment } from 'moment';
-import { Observable } from 'rxjs/Observable';
 
 // some local const
 const DATE_RANGE = 'daterange';
@@ -54,7 +53,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private _fb: FormBuilder
   ) {
-    this.createPermissionInProcess$ = this.store.select(p => p.permission.createPermissionInProcess).takeUntil(this.destroyed$);
+    this.createPermissionInProcess$ = this.store.select(p => p.permission.createPermissionInProcess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnDestroy() {
@@ -68,11 +67,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
       this.dateRangePickerValue = [from._d, to._d];
       this.initAcForm(this.userdata);
-    }else {
+    } else {
       this.initAcForm();
     }
     // reset form
-    this.createPermissionInProcess$.takeUntil(this.destroyed$).subscribe((val) => {
+    this.createPermissionInProcess$.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val) {
         this.permissionForm.reset();
         this.initAcForm();
@@ -80,7 +79,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     });
 
     // get roles
-    this.store.select(s => s.permission).takeUntil(this.destroyed$).subscribe(p => {
+    this.store.select(s => s.permission).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.roles) {
         let roles = _.cloneDeep(p.roles);
         let allRoleArray = [];
@@ -91,17 +90,17 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
           });
         });
         this.allRoles = _.cloneDeep(allRoleArray);
-      }else {
+      } else {
         this.store.dispatch(this._permissionActions.GetRoles());
       }
     });
 
     // utitlity
-    this.permissionForm.get('periodOptions').valueChanges.debounceTime(100).subscribe( val => {
+    this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100)).subscribe(val => {
       this.togglePeriodOptionsVal(val);
     });
 
-    this.permissionForm.get('ipOptions').valueChanges.subscribe( val => {
+    this.permissionForm.get('ipOptions').valueChanges.subscribe(val => {
       this.toggleIpOptVal(val);
     });
   }
@@ -109,7 +108,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
   public toggleIpOptVal(val: string) {
     if (val === IP_ADDR) {
       this.selectedIPRange = 'IP Address';
-    }else if (val === CIDR_RANGE) {
+    } else if (val === CIDR_RANGE) {
       this.selectedIPRange = 'CIDR Range';
     }
   }
@@ -125,7 +124,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
   public togglePeriodOptionsVal(val: string) {
     if (val === DATE_RANGE) {
       this.selectedTimeSpan = 'Date Range';
-    }else if (val === PAST_PERIOD) {
+    } else if (val === PAST_PERIOD) {
       this.selectedTimeSpan = 'Past Period';
       this.dateRangePickerValue = [];
       if (this.permissionForm) {
@@ -181,7 +180,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         _.forEach(data.allowedIps, (val) => {
           allowedIps.push(this.initRangeForm(val));
         });
-      }else {
+      } else {
         allowedIps.push(this.initRangeForm());
       }
 
@@ -189,11 +188,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         _.forEach(data.allowedCidrs, (val) => {
           allowedCidrs.push(this.initRangeForm(val));
         });
-      }else {
+      } else {
         allowedCidrs.push(this.initRangeForm());
       }
 
-    }else {
+    } else {
       this.permissionForm = this._fb.group({
         emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150)])],
         entity: ['company'],
@@ -255,7 +254,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
     if (errFound) {
       this._toasty.warningToast(msg || 'Field Cannot be empty');
-    }else {
+    } else {
       arow.push(this.initRangeForm());
     }
   }
@@ -310,7 +309,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     if (obj.action === 'create') {
       this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
       this.onSubmitForm.emit(obj);
-    }else if (obj.action === 'update') {
+    } else if (obj.action === 'update') {
       if ((obj.data.from && obj.data.from) === 'Invalid date' || (obj.data.to && obj.data.to) === 'Invalid date') {
         delete obj.data.from;
         delete obj.data.to;
@@ -319,7 +318,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       this._settingsPermissionService.UpdatePermission(form).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Permission Updated Successfully!');
-        }else {
+        } else {
           this._toasty.warningToast(res.message, res.code);
         }
         this.onSubmitForm.emit(obj);

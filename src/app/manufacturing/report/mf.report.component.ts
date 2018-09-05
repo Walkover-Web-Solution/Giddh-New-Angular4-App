@@ -1,35 +1,33 @@
-import { Observable } from 'rxjs/Observable';
+import { distinct, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { Select2OptionData } from '../../theme/select2';
-
-const filter1 = [
-  { label: 'Greater', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
-];
-
-const filter2 = [
-  { label: 'Quantity Inward', value: 'quantityInward' },
-  // { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
-  { label: 'Voucher Number', value: 'voucherNumber' }
-];
-
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { Router } from '@angular/router';
 import { createSelector } from 'reselect';
+
+const filter1 = [
+  {label: 'Greater', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
+];
+
+const filter2 = [
+  {label: 'Quantity Inward', value: 'quantityInward'},
+  // { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
+  {label: 'Voucher Number', value: 'voucherNumber'}
+];
 
 @Component({
   templateUrl: './mf.report.component.html',
@@ -52,16 +50,16 @@ export class MfReportComponent implements OnInit, OnDestroy {
   private universalDate: Date[];
   private isUniversalDateApplicable: boolean = false;
   private lastPage: number = 0;
-  private destroyed$: ReplaySubject<boolean > = new ReplaySubject(1);
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private manufacturingActions: ManufacturingActions,
-    private inventoryAction: InventoryAction,
-    private router: Router) {
+              private manufacturingActions: ManufacturingActions,
+              private inventoryAction: InventoryAction,
+              private router: Router) {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
-    this.isReportLoading$ = this.store.select(p => p.manufacturing.isMFReportLoading).takeUntil(this.destroyed$);
+    this.isReportLoading$ = this.store.select(p => p.manufacturing.isMFReportLoading).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -69,26 +67,26 @@ export class MfReportComponent implements OnInit, OnDestroy {
     // Refresh the stock list
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
-    this.store.select(p => p.inventory.manufacturingStockList).takeUntil(this.destroyed$).subscribe((o: any) => {
+    this.store.select(p => p.inventory.manufacturingStockList).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o) {
         if (o.results) {
           this.stockListDropDown = [];
           _.forEach(o.results, (unit: any) => {
-            this.stockListDropDown.push({ label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName });
+            this.stockListDropDown.push({label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName});
           });
         }
       } else {
         this.store.dispatch(this.inventoryAction.GetManufacturingStock());
       }
     });
-    this.store.select(p => p.manufacturing.reportData).takeUntil(this.destroyed$).subscribe((o: any) => {
+    this.store.select(p => p.manufacturing.reportData).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o) {
         this.reportData = _.cloneDeep(o);
       }
     });
 
     // Refresh stock list on company change
-    this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).distinct((val) => val === 'companyUniqueName').subscribe((value: any) => {
+    this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$), distinct((val) => val === 'companyUniqueName'),).subscribe((value: any) => {
       this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     });
 
@@ -110,6 +108,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
+
   public goToCreateNewPage() {
     this.store.dispatch(this.manufacturingActions.RemoveMFItemUniqueNameFomStore());
     this.router.navigate(['/pages/manufacturing/edit']);
@@ -149,10 +148,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
     let data = _.cloneDeep(this.mfStockSearchRequest);
     if (this.universalDate) {
       data.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-      data.to =  moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+      data.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     } else {
       data.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      data.to =  moment().format(GIDDH_DATE_FORMAT);
+      data.to = moment().format(GIDDH_DATE_FORMAT);
     }
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }

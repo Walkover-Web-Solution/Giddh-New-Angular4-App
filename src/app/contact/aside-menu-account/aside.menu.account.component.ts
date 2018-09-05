@@ -1,8 +1,9 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
 import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
@@ -13,7 +14,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 @Component({
   selector: 'aside-menu-account',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -22,10 +23,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       width: 480px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -34,10 +37,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 480px;
     }
@@ -74,15 +79,15 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private accountsAction: AccountsAction
   ) {
     // account-add component's property
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     this.isGstEnabledAcc = this.activeGroupUniqueName !== 'discount';
     this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
-    this.flatAccountWGroupsList$ = Observable.of(this.groups);
+    this.flatAccountWGroupsList$ = observableOf(this.groups);
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {

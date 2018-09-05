@@ -1,3 +1,4 @@
+import { map, switchMap } from 'rxjs/operators';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -5,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { SearchService } from '../services/search.service';
 import { SearchRequest, SearchResponse } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -19,22 +20,22 @@ export class SearchActions {
   public static readonly RESET_SEARCH_STATE = 'RESET_SEARCH_STATE';
 
   @Effect() private Search$: Observable<Action> = this.action$
-    .ofType(SearchActions.SEARCH_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._searchService.Search(action.payload)
-        .map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
-          type: SearchActions.SEARCH_RESPONSE,
-          payload: r
-        }, true, {
+    .ofType(SearchActions.SEARCH_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._searchService.Search(action.payload).pipe(
+          map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
             type: SearchActions.SEARCH_RESPONSE,
             payload: r
-          }));
-    });
+          }, true, {
+            type: SearchActions.SEARCH_RESPONSE,
+            payload: r
+          })));
+      }));
 
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _searchService: SearchService) {
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _searchService: SearchService) {
   }
 
   public GetStocksReport(request: SearchRequest): CustomActions {
@@ -50,7 +51,7 @@ export class SearchActions {
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

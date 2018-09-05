@@ -1,8 +1,11 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { GroupService } from '../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { BsDatepickerConfig, BsDaterangepickerComponent } from 'ngx-bootstrap/datepicker';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
@@ -11,20 +14,18 @@ import { Store } from '@ngrx/store';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { AccountService } from '../../../services/account.service';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 
 const COMPARISON_FILTER = [
-  {label: 'Greater Than', value: 'greaterThan'},
-  {label: 'Less Than', value: 'lessThan'},
-  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
-  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
-  {label: 'Equals', value: 'equals'},
-  {label: 'Exclude', value: 'exclude'}
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' },
+  { label: 'Exclude', value: 'exclude' }
 ];
 
 @Component({
@@ -44,7 +45,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
   public showChequeDatePicker: boolean = false;
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY' };
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
@@ -54,9 +55,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService) {
-    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
+    this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -66,9 +67,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
       if (data) {
         let accounts: IOption[] = [];
         data.map(d => {
-          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
+          accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
         });
-        this.accounts$ = Observable.of(accounts);
+        this.accounts$ = observableOf(accounts);
       }
     });
 
@@ -78,19 +79,19 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         let units = data.results;
 
         return units.map(unit => {
-          return {label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+          return { label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
         });
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
 
     // Get groups with accounts
-    this._groupService.GetFlattenGroupsAccounts().takeUntil(this.destroyed$).subscribe(data => {
+    this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         let groups: IOption[] = [];
         data.body.results.map(d => {
-          groups.push({label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName});
+          groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
         });
-        this.groups$ = Observable.of(groups);
+        this.groups$ = observableOf(groups);
       }
     });
     this.setAdvanceSearchForm();
@@ -192,7 +193,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   }
 
   public setVoucherTypes() {
-    this.voucherTypeList = Observable.of([{
+    this.voucherTypeList = observableOf([{
       label: 'Sales',
       value: 'sales'
     }, {

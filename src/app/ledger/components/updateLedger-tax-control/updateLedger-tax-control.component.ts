@@ -13,8 +13,9 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   useExisting: forwardRef(() => UpdateLedgerTaxControlComponent),
   multi: true
 };
+
 export class UpdateLedgerTaxData {
-  public particular: INameUniqueName = { name: '', uniqueName: '' };
+  public particular: INameUniqueName = {name: '', uniqueName: ''};
   public amount: number = 0;
 }
 
@@ -49,10 +50,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['applicableTaxes'] && changes['applicableTaxes'].currentValue !== changes['applicableTaxes'].previousValue) {
-        this.taxRenderData = [];
-        this.sum = 0;
-        this.prepareTaxObject();
-        this.change();
+      this.taxRenderData = [];
+      this.sum = 0;
+      this.prepareTaxObject();
+      this.change();
     }
 
     if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
@@ -63,6 +64,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       }
     }
   }
+
   /**
    * prepare taxObject as per needed
    */
@@ -99,9 +101,11 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       // }
     });
   }
+
   public toggleTaxPopup(action: boolean) {
     this.showTaxPopup = action;
   }
+
   public trackByFn(index) {
     return index; // or item.id
   }
@@ -111,6 +115,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     this.isApplicableTaxesEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
   }
+
   /**
    * select/deselect tax checkbox
    */

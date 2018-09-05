@@ -1,3 +1,4 @@
+import { distinctUntilKeyChanged, map } from 'rxjs/operators';
 import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
@@ -11,7 +12,7 @@ export class UserAuthenticated implements CanActivate {
   }
 
   public canActivate() {
-    return this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').map(p => {
+    return this.store.select(p => p.session).pipe(distinctUntilKeyChanged('companyUniqueName'), map(p => {
       if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
         if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
           console.log('UserAuthenticated');
@@ -24,6 +25,6 @@ export class UserAuthenticated implements CanActivate {
         this._router.navigate(['/new-user']);
       }
       return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);
-    });
+    }),);
   }
 }

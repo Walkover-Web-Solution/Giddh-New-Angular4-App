@@ -1,4 +1,3 @@
-
 export const DASHBOARD_API = {
   DASHBOARD: 'company/:companyUniqueName/dashboard?from=:from&to=:to&interval=:interval&refresh=:refresh', // get call
   GROUP_HISTORY: 'company/:companyUniqueName/group-history?from=:from&to=:to&interval=:interval&refresh=:refresh', // post call

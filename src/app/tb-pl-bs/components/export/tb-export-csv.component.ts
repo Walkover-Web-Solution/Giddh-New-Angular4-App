@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { ChildGroup } from '../../../models/api-models/Search';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,7 @@ export interface Total {
 }
 
 class FormatCsv implements IFormatable {
+  public csv = () => `${this.header}\r\n\r\n${this.title}\r\n${this.body}\r\n${this.footer}\r\n`;
   private header: string = '';
   private body: string = '';
   private footer: string = '';
@@ -26,7 +27,6 @@ class FormatCsv implements IFormatable {
     //
   }
 
-  public csv = () => `${this.header}\r\n\r\n${this.title}\r\n${this.body}\r\n${this.footer}\r\n`;
   public setHeader(selectedCompany: CompanyResponse) {
     this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\nTrial Balance: ${this.request.from} to ${this.request.to}\r\n`;
   }
@@ -144,7 +144,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
       win.document.execCommand('SaveAs', true, fileName);
       win.close();
     } else {
-      let data = new Blob([csv], { type: 'data:text/csv;charset=utf-8' });
+      let data = new Blob([csv], {type: 'data:text/csv;charset=utf-8'});
       saveAs(data, fileName);
     }
   }

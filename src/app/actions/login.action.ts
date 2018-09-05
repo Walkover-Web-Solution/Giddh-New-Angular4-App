@@ -1,9 +1,11 @@
+import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
+
+import { map, switchMap, take } from 'rxjs/operators';
 import { ICurrencyResponse } from './../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
 import { CompanyActions } from './company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
@@ -20,8 +22,7 @@ import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
 import { sortBy } from 'app/lodash-optimized';
 import { AccountService } from 'app/services/account.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
+import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { GeneralActions } from './general/general.actions';
 import { COMMON_ACTIONS } from './common.const';
 
@@ -90,486 +91,486 @@ export class LoginActions {
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST)
-    .switchMap((action: CustomActions) =>
-      this.auth.LoginWithGoogle(action.payload)
-    )
-    .map(response => {
-      return this.signupWithGoogleResponse(response);
-    });
+    .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST).pipe(
+      switchMap((action: CustomActions) =>
+        this.auth.LoginWithGoogle(action.payload)
+      ),
+      map(response => {
+        return this.signupWithGoogleResponse(response);
+      }),);
 
   @Effect()
   public signupWithGoogleResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-      if (response.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
-      }
-      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
-        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        return this.LoginSuccess();
-      }
-    });
+    .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+        if (response.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        }
+        if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+          this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          return this.LoginSuccess();
+        }
+      }));
 
   @Effect()
   public signupWithLinkedin$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST)
-    .switchMap((action: CustomActions) =>
-      this.auth.LoginWithLinkedin(action.payload)
-    )
-    .map(response => this.signupWithLinkedinResponse(response));
+    .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST).pipe(
+      switchMap((action: CustomActions) =>
+        this.auth.LoginWithLinkedin(action.payload)
+      ),
+      map(response => this.signupWithLinkedinResponse(response)),);
 
   @Effect()
   public signupWithLinkedinResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-      if (response.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
-      }
-      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
-        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
-        return {
-          type: 'EmptyAction'
-        };
-      } else {
-        return this.LoginSuccess();
-      }
-    });
+    .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+        if (response.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        }
+        if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+          this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          return this.LoginSuccess();
+        }
+      }));
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithEmailRequest)
-    .switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload))
-    .map(response => this.SignupWithEmailResponce(response));
+    .ofType(LoginActions.SignupWithEmailRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload)),
+      map(response => this.SignupWithEmailResponce(response)),);
 
   @Effect()
   public signupWithEmailResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithEmailResponce)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        this._toaster.successToast(action.payload.body);
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.SignupWithEmailResponce).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          this._toaster.successToast(action.payload.body);
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public verifyEmail$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyEmailRequest)
-    .switchMap((action: CustomActions) =>
-      this.auth.VerifyEmail(action.payload as VerifyEmailModel)
-    )
-    .map(response => this.VerifyEmailResponce(response));
+    .ofType(LoginActions.VerifyEmailRequest).pipe(
+      switchMap((action: CustomActions) =>
+        this.auth.VerifyEmail(action.payload as VerifyEmailModel)
+      ),
+      map(response => this.VerifyEmailResponce(response)),);
 
   @Effect()
   public verifyEmailResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyEmailResponce)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
-      if (response.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
-      }
-      return this.LoginSuccess();
-    });
+    .ofType(LoginActions.VerifyEmailResponce).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+        if (response.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.LoginSuccess();
+      }));
 
   @Effect()
   public signupWithMobile$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithMobileRequest)
-    .switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload))
-    .map(response => this.SignupWithMobileResponce(response));
+    .ofType(LoginActions.SignupWithMobileRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload)),
+      map(response => this.SignupWithMobileResponce(response)),);
 
   @Effect()
   public signupWithMobileResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithMobileResponce)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        this._toaster.successToast(action.payload.body);
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.SignupWithMobileResponce).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          this._toaster.successToast(action.payload.body);
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
-    .ofType(LoginActions.LoginSuccess)
-    .switchMap((action) => {
-      return Observable.zip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
-    }).map((results: any[]) => {
-      let cmpUniqueName = '';
-      let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
-      let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-      let currencies = results[2] as BaseResponse<ICurrencyResponse[], string>;
-      if (currencies.body && currencies.status === 'success') {
-        this.store.dispatch(this.SetCurrencyInStore(currencies.body));
-      }
-      if (companies.body && companies.body.length === 0) {
-        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-        this._router.navigate(['/pages/new-user']);
-        return { type: 'EmptyAction' };
-      } else {
-        if (stateDetail.body && stateDetail.status === 'success') {
-          this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
-          cmpUniqueName = stateDetail.body.companyUniqueName;
-          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-            return this.finalThingTodo(stateDetail, companies);
+    .ofType(LoginActions.LoginSuccess).pipe(
+      switchMap((action) => {
+        return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
+      }), map((results: any[]) => {
+        let cmpUniqueName = '';
+        let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
+        let companies = results[1] as BaseResponse<CompanyResponse[], string>;
+        let currencies = results[2] as BaseResponse<ICurrencyResponse[], string>;
+        if (currencies.body && currencies.status === 'success') {
+          this.store.dispatch(this.SetCurrencyInStore(currencies.body));
+        }
+        if (companies.body && companies.body.length === 0) {
+          this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+          this._router.navigate(['/pages/new-user']);
+          return {type: 'EmptyAction'};
+        } else {
+          if (stateDetail.body && stateDetail.status === 'success') {
+            this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
+            cmpUniqueName = stateDetail.body.companyUniqueName;
+            if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+              return this.finalThingTodo(stateDetail, companies);
+            } else {
+              // old user fail safe scenerio
+              return this.doSameStuffs(companies);
+            }
           } else {
-            // old user fail safe scenerio
+            /**
+             * if user is new and signed up by shared entity
+             * find the entity and redirect user according to terms.
+             * shared entities [GROUP, COMPANY, ACCOUNT]
+             */
             return this.doSameStuffs(companies);
           }
-        } else {
-          /**
-          * if user is new and signed up by shared entity
-          * find the entity and redirect user according to terms.
-          * shared entities [GROUP, COMPANY, ACCOUNT]
-          */
-          return this.doSameStuffs(companies);
         }
-      }
-    });
+      }),);
 
   @Effect()
   public logoutSuccess$: Observable<Action> = this.actions$
-    .ofType(LoginActions.LogOut)
-    .map((action: CustomActions) => {
-      this._router.navigate(['/login']);
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.LogOut).pipe(
+      map((action: CustomActions) => {
+        this._router.navigate(['/login']);
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public verifyMobile$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyMobileRequest)
-    .switchMap((action: CustomActions) =>
-      this.auth.VerifyOTP(action.payload as VerifyMobileModel)
-    )
-    .map(response => this.VerifyMobileResponce(response));
+    .ofType(LoginActions.VerifyMobileRequest).pipe(
+      switchMap((action: CustomActions) =>
+        this.auth.VerifyOTP(action.payload as VerifyMobileModel)
+      ),
+      map(response => this.VerifyMobileResponce(response)),);
 
   @Effect()
   public verifyMobileResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyMobileResponce)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-      if (response.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
-      }
-      return this.LoginSuccess();
-    });
+    .ofType(LoginActions.VerifyMobileResponce).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+        if (response.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.LoginSuccess();
+      }));
 
   @Effect()
   public verifyTwoWayAuth$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyTwoWayAuthRequest)
-    .switchMap((action: CustomActions) =>
-      this.auth.VerifyOTP(action.payload as VerifyMobileModel)
-    )
-    .map(response => this.VerifyTwoWayAuthResponse(response));
+    .ofType(LoginActions.VerifyTwoWayAuthRequest).pipe(
+      switchMap((action: CustomActions) =>
+        this.auth.VerifyOTP(action.payload as VerifyMobileModel)
+      ),
+      map(response => this.VerifyTwoWayAuthResponse(response)),);
 
   @Effect()
   public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyTwoWayAuthResponse)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-      if (response.status === 'error') {
-        this._toaster.errorToast(response.message, response.code);
-        return { type: 'EmptyAction' };
-      }
-      return this.LoginSuccess();
-    });
+    .ofType(LoginActions.VerifyTwoWayAuthResponse).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+        if (response.status === 'error') {
+          this._toaster.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.LoginSuccess();
+      }));
 
   @Effect()
   public GoogleElectronLogin$: Observable<Action> = this.actions$
-    .ofType(LoginActions.GoogleLoginElectron)
-    .switchMap((action: CustomActions) => {
-      return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', {
-        headers: action.payload,
-        responseType: 'json'
-      }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
-    })
-    .map(data => {
-      if (data.status === 'error') {
-        this._toaster.errorToast(data.message, data.code);
-        return { type: 'EmptyAction' };
-      }
-      // return this.LoginSuccess();
-      return this.signupWithGoogleResponse(data);
-    });
+    .ofType(LoginActions.GoogleLoginElectron).pipe(
+      switchMap((action: CustomActions) => {
+        return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', {
+          headers: action.payload,
+          responseType: 'json'
+        }).pipe(map(p => p as BaseResponse<VerifyEmailResponseModel, string>));
+      }),
+      map(data => {
+        if (data.status === 'error') {
+          this._toaster.errorToast(data.message, data.code);
+          return {type: 'EmptyAction'};
+        }
+        // return this.LoginSuccess();
+        return this.signupWithGoogleResponse(data);
+      }),);
 
   @Effect()
   public LinkedInElectronLogin$: Observable<Action> = this.actions$
-    .ofType(LoginActions.LinkedInLoginElectron)
-    .switchMap((action: CustomActions) => {
-      let args: any = { headers: {} };
-      args.headers['cache-control'] = 'no-cache';
-      args.headers['Content-Type'] = 'application/json';
-      args.headers['Accept'] = 'application/json';
-      args.headers['Access-Token'] = action.payload;
-      args.headers = new HttpHeaders(args.headers);
-      return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', {
-        headers: args.headers,
-        responseType: 'json'
-      }).map(p => p as BaseResponse<VerifyEmailResponseModel, string>);
-    })
-    .map(data => {
-      if (data.status === 'error') {
-        this._toaster.errorToast(data.message, data.code);
-        return { type: 'EmptyAction' };
-      }
-      // return this.LoginSuccess();
-      return this.signupWithGoogleResponse(data);
-    });
+    .ofType(LoginActions.LinkedInLoginElectron).pipe(
+      switchMap((action: CustomActions) => {
+        let args: any = {headers: {}};
+        args.headers['cache-control'] = 'no-cache';
+        args.headers['Content-Type'] = 'application/json';
+        args.headers['Accept'] = 'application/json';
+        args.headers['Access-Token'] = action.payload;
+        args.headers = new HttpHeaders(args.headers);
+        return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', {
+          headers: args.headers,
+          responseType: 'json'
+        }).pipe(map(p => p as BaseResponse<VerifyEmailResponseModel, string>));
+      }),
+      map(data => {
+        if (data.status === 'error') {
+          this._toaster.errorToast(data.message, data.code);
+          return {type: 'EmptyAction'};
+        }
+        // return this.LoginSuccess();
+        return this.signupWithGoogleResponse(data);
+      }),);
 
   @Effect()
   public ClearSession$: Observable<Action> = this.actions$
-    .ofType(LoginActions.ClearSession)
-    .switchMap((action: CustomActions) => {
-      return this.auth.ClearSession();
-    }).map(data => {
-      return this.LogOut();
-    });
+    .ofType(LoginActions.ClearSession).pipe(
+      switchMap((action: CustomActions) => {
+        return this.auth.ClearSession();
+      }), map(data => {
+        return this.LogOut();
+      }),);
 
   @Effect()
   public CHANGE_COMPANY$: Observable<Action> = this.actions$
-    .ofType(CompanyActions.CHANGE_COMPANY)
-    .switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload))
-    .map(response => {
-      if (response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) {
-        //
-        let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
-        dummyResponse.body = new StateDetailsResponse();
-        dummyResponse.body.companyUniqueName = response.request;
-        dummyResponse.body.lastState = 'home';
-        dummyResponse.status = 'success';
-        return this.ChangeCompanyResponse(dummyResponse);
-      }
-      if (response.body.companyUniqueName) {
-        if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
-          this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-            this._router.navigate([response.body.lastState]);
-          });
-        } else {
-          if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
-              let path = [];
-              let parament = {};
-              this.activatedRoute.firstChild.firstChild.url.take(1).subscribe(p => {
-                if (p.length > 0) {
-                  path = [p[0].path];
-                  parament = { queryParams: p[0].parameters };
-                }
-              });
-              if (path.length > 0 && parament) {
-                this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                  if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
-                    this._router.navigate([path[0]], parament);
-                  } else {
-                    this._router.navigate(['home']);
+    .ofType(CompanyActions.CHANGE_COMPANY).pipe(
+      switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
+      map(response => {
+        if (response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) {
+          //
+          let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
+          dummyResponse.body = new StateDetailsResponse();
+          dummyResponse.body.companyUniqueName = response.request;
+          dummyResponse.body.lastState = 'home';
+          dummyResponse.status = 'success';
+          return this.ChangeCompanyResponse(dummyResponse);
+        }
+        if (response.body.companyUniqueName) {
+          if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
+            this._router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
+              this._router.navigate([response.body.lastState]);
+            });
+          } else {
+            if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
+              if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+                let path = [];
+                let parament = {};
+                this.activatedRoute.firstChild.firstChild.url.pipe(take(1)).subscribe(p => {
+                  if (p.length > 0) {
+                    path = [p[0].path];
+                    parament = {queryParams: p[0].parameters};
                   }
                 });
+                if (path.length > 0 && parament) {
+                  this._router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
+                    if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
+                      this._router.navigate([path[0]], parament);
+                    } else {
+                      this._router.navigate(['home']);
+                    }
+                  });
+                }
               }
             }
           }
         }
-      }
 
-      return this.ChangeCompanyResponse(response);
-    });
+        return this.ChangeCompanyResponse(response);
+      }),);
 
   @Effect()
   public ChangeCompanyResponse$: Observable<Action> = this.actions$
-    .ofType(CompanyActions.CHANGE_COMPANY_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        // get groups with accounts for general use
-        this.store.dispatch(this._generalAction.getGroupWithAccounts());
-        this.store.dispatch(this._generalAction.getFlattenAccount());
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(CompanyActions.CHANGE_COMPANY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          // get groups with accounts for general use
+          this.store.dispatch(this._generalAction.getGroupWithAccounts());
+          this.store.dispatch(this._generalAction.getFlattenAccount());
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public addNewMobile$: Observable<Action> = this.actions$
-    .ofType(LoginActions.AddNewMobileNo)
-    .switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload))
-    .map(response => this.AddNewMobileNoResponce(response));
+    .ofType(LoginActions.AddNewMobileNo).pipe(
+      switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload)),
+      map(response => this.AddNewMobileNoResponce(response)),);
 
   @Effect()
   public addNewMobileResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.AddNewMobileNoResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        this._toaster.successToast('You will receive a verification code on your mobile shortly.');
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.AddNewMobileNoResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          this._toaster.successToast('You will receive a verification code on your mobile shortly.');
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public verifyAddNewMobile$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyAddNewMobileNo)
-    .switchMap((action: CustomActions) =>
-      this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
-    )
-    .map(response => this.VerifyAddNewMobileNoResponce(response));
+    .ofType(LoginActions.VerifyAddNewMobileNo).pipe(
+      switchMap((action: CustomActions) =>
+        this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
+      ),
+      map(response => this.VerifyAddNewMobileNoResponce(response)),);
 
   @Effect()
   public verifyAddNewMobileResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.VerifyAddNewMobileNoResponse)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<string, VerifyMobileModel> = action.payload;
-      if (response.status === 'error') {
-        this._toaster.errorToast(response.message, response.code);
-        return { type: 'EmptyAction' };
-      }
-      this._toaster.successToast(response.body);
-      return this.FetchUserDetails();
-    });
+    .ofType(LoginActions.VerifyAddNewMobileNoResponse).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<string, VerifyMobileModel> = action.payload;
+        if (response.status === 'error') {
+          this._toaster.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        this._toaster.successToast(response.body);
+        return this.FetchUserDetails();
+      }));
 
   @Effect()
   public FectchUserDetails$: Observable<Action> = this.actions$
-    .ofType(LoginActions.FetchUserDetails)
-    .switchMap((action: CustomActions) => this.auth.FetchUserDetails())
-    .map(response => this.FetchUserDetailsResponse(response));
+    .ofType(LoginActions.FetchUserDetails).pipe(
+      switchMap((action: CustomActions) => this.auth.FetchUserDetails()),
+      map(response => this.FetchUserDetailsResponse(response)),);
 
   @Effect()
   public FectchUserDetailsResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.FetchUserDetailsResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.FetchUserDetailsResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public SubscribedCompanies$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SubscribedCompanies)
-    .switchMap((action: CustomActions) => this.auth.GetSubScribedCompanies())
-    .map(response => this.SubscribedCompaniesResponse(response));
+    .ofType(LoginActions.SubscribedCompanies).pipe(
+      switchMap((action: CustomActions) => this.auth.GetSubScribedCompanies()),
+      map(response => this.SubscribedCompaniesResponse(response)),);
 
   @Effect()
   public AddBalance$: Observable<Action> = this.actions$
-    .ofType(LoginActions.AddBalance)
-    .switchMap((action: CustomActions) => this.auth.AddBalance(action.payload))
-    .map(response => this.AddBalanceResponse(response));
+    .ofType(LoginActions.AddBalance).pipe(
+      switchMap((action: CustomActions) => this.auth.AddBalance(action.payload)),
+      map(response => this.AddBalanceResponse(response)),);
 
   @Effect()
   public AddBalanceResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.AddBalanceResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.AddBalanceResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public ReportInvalidJSON$: Observable<Action> = this.actions$
-    .ofType('REPORT_INVALID_JSON')
-    .switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload))
-    .map((res) => {
-      return {type: 'EmptyAction'};
-    });
+    .ofType('REPORT_INVALID_JSON').pipe(
+      switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload)),
+      map((res) => {
+        return {type: 'EmptyAction'};
+      }),);
 
   @Effect()
   public SignupWithPasswdRequest$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithPasswdRequest)
-    .switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload))
-    .map(response => this.SignupWithPasswdResponse(response));
+    .ofType(LoginActions.SignupWithPasswdRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload)),
+      map(response => this.SignupWithPasswdResponse(response)),);
 
   @Effect()
   public SignupWithPasswdResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithPasswdResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        this._toaster.successToast(action.payload.body);
-        // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-        // this._router.navigate(['/pages/new-user']);
-        return { type: 'EmptyAction' };
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.SignupWithPasswdResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          this._toaster.successToast(action.payload.body);
+          // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+          // this._router.navigate(['/pages/new-user']);
+          return {type: 'EmptyAction'};
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public LoginWithPasswdRequest$: Observable<Action> = this.actions$
-    .ofType(LoginActions.LoginWithPasswdRequest)
-    .switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload))
-    .map(response => this.LoginWithPasswdResponse(response));
+    .ofType(LoginActions.LoginWithPasswdRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload)),
+      map(response => this.LoginWithPasswdResponse(response)),);
 
   @Effect()
   public LoginWithPasswdResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.LoginWithPasswdResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        return this.LoginSuccess();
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.LoginWithPasswdResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          return this.LoginSuccess();
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public forgotPasswordRequest$: Observable<Action> = this.actions$
-    .ofType(LoginActions.forgotPasswordRequest)
-    .switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload))
-    .map(response => this.forgotPasswordResponse(response));
+    .ofType(LoginActions.forgotPasswordRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload)),
+      map(response => this.forgotPasswordResponse(response)),);
 
   @Effect()
   public forgotPasswordResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.forgotPasswordResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        // return this.LoginSuccess();
-        this._toaster.successToast(action.payload.body);
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.forgotPasswordResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          // return this.LoginSuccess();
+          this._toaster.successToast(action.payload.body);
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public resetPasswordRequest$: Observable<Action> = this.actions$
-    .ofType(LoginActions.resetPasswordRequest)
-    .switchMap((action: CustomActions) => this.auth.resetPassword(action.payload))
-    .map(response => this.resetPasswordResponse(response));
+    .ofType(LoginActions.resetPasswordRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.resetPassword(action.payload)),
+      map(response => this.resetPasswordResponse(response)),);
 
   @Effect()
   public resetPasswordResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.resetPasswordResponse)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'success') {
-        // return this.LoginSuccess();
-        this._toaster.successToast(action.payload.body);
-      } else {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-      }
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.resetPasswordResponse).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+          // return this.LoginSuccess();
+          this._toaster.successToast(action.payload.body);
+        } else {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   @Effect()
   public renewSession$: Observable<Action> = this.actions$
-    .ofType(LoginActions.renewSessionRequest)
-    .switchMap((action: CustomActions) => this.auth.renewSession())
-    .map(response => this.renewSessionResponse(response));
+    .ofType(LoginActions.renewSessionRequest).pipe(
+      switchMap((action: CustomActions) => this.auth.renewSession()),
+      map(response => this.renewSessionResponse(response)),);
 
   @Effect()
   public renewSessionResponse$: Observable<Action> = this.actions$
-    .ofType(LoginActions.renewSessionResponse)
-    .map((action: CustomActions) => {
-      return { type: 'EmptyAction' };
-    });
+    .ofType(LoginActions.renewSessionResponse).pipe(
+      map((action: CustomActions) => {
+        return {type: 'EmptyAction'};
+      }));
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -970,6 +971,6 @@ export class LoginActions {
     this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
     this._router.navigate([stateDetail.body.lastState]);
-    return { type: 'EmptyAction' };
+    return {type: 'EmptyAction'};
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'branch-header',
@@ -25,6 +25,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 })
 export class BranchHeaderComponent implements OnInit, OnDestroy {
   public branchAsideMenuState: string = 'out';
+
   constructor(private _store: Store<AppState>) {
     this._store.select(s => s.inventory.showBranchScreenSidebar).subscribe(bool => {
       this.toggleBranchAsidePane();
@@ -38,7 +39,7 @@ export class BranchHeaderComponent implements OnInit, OnDestroy {
   public toggleBodyClass() {
     if (this.branchAsideMenuState === 'in') {
       document.querySelector('body').classList.add('fixed');
-    }else {
+    } else {
       document.querySelector('body').classList.remove('fixed');
     }
   }

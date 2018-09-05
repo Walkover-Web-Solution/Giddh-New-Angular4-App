@@ -13,14 +13,17 @@
     <div class="row">
       <div class="col-xs-2 form-group">
         <label>Period</label>
-        <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-          (applyDaterangepicker)="selectedDate($event)" class="form-control" />
+        <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions"
+               (hideDaterangepicker)="selectedDate($event)"
+               (applyDaterangepicker)="selectedDate($event)" class="form-control"/>
       </div>
       <div class="pull-left form-group">
         <label class="d-block"> &nbsp; </label>
         <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button>
         <button type="button" class="btn btn-success" (click)="go()">GO</button>
-        <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' : 'Expand All'}}</button>
+        <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+          'Expand All'}}
+        </button>
       </div>
       <div class="pull-right form-group">
         <button type="button" class="btn btn-default" (click)="exportDaybook()">Export</button>
@@ -42,20 +45,21 @@
 
       <table class="tb-head table basic">
         <thead>
-          <tr>
-            <th class="col-xs-1">Date</th>
-            <th class="col-xs-3">Particular</th>
-            <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
-            <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
-            <th class="col-xs-2 text-right">Debit Amt</th>
-            <th class="col-xs-2 text-right">Credit Amt</th>
-          </tr>
+        <tr>
+          <th class="col-xs-1">Date</th>
+          <th class="col-xs-3">Particular</th>
+          <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
+          <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
+          <th class="col-xs-2 text-right">Debit Amt</th>
+          <th class="col-xs-2 text-right">Credit Amt</th>
+        </tr>
         </thead>
       </table>
 
       <div>
         <!-- loop over entries -->
-        <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries" (click)="entry.isExpanded = !entry.isExpanded">
+        <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries"
+                 (click)="entry.isExpanded = !entry.isExpanded">
           <div class="row">
             <div class="col-xs-1 group">{{ entry.entryDate }}</div>
             <div class="col-xs-3 group">{{ entry.particular.name }}
@@ -92,8 +96,10 @@
     </div>
 
     <div class=" mrT2 text-center">
-      <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}} Transactions | {{(daybookData$ | async)?.totalPages}} Pages </small> 
-      <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages </small> 
+      <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}} Transactions
+        | {{(daybookData$ | async)?.totalPages}} Pages
+      </small>
+      <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages</small>
     </div>
 
     <!-- pagination -->
@@ -110,7 +116,8 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
+                                    (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
     </div>
   </div>
 </div>
@@ -118,10 +125,10 @@
 
 <!-- export ladger popup -->
 <div bsModal #exportDaybookModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <export-daybook (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
-      </div>
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <export-daybook (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
     </div>
+  </div>
 </div>
 <!-- ./ export ladger popup -->

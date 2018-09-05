@@ -1,3 +1,6 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
@@ -6,7 +9,6 @@ import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { TaxResponse } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
-import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
@@ -19,7 +21,6 @@ import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
@@ -131,17 +132,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
               private _settingsDiscountAction: SettingsDiscountActions) {
     this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
-    this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
-    this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
-    this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).takeUntil(this.destroyed$);
-    this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).takeUntil(this.destroyed$);
-    this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).takeUntil(this.destroyed$);
+    this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).pipe(takeUntil(this.destroyed$));
+    this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).pipe(takeUntil(this.destroyed$));
+    this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).pipe(takeUntil(this.destroyed$));
+    this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).pipe(takeUntil(this.destroyed$));
+    this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
 
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
-    this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).takeUntil(this.destroyed$);
-    this.discountList$ = this.store.select(s => s.settings.discount.discountList).takeUntil(this.destroyed$);
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+    this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).pipe(takeUntil(this.destroyed$));
+    this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
@@ -189,25 +190,25 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           }
         }
         return arr;
-      })).takeUntil(this.destroyed$);
-    this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress).takeUntil(this.destroyed$);
-    this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).takeUntil(this.destroyed$);
-    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).takeUntil(this.destroyed$);
-    this.groupList$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
-    this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).takeUntil(this.destroyed$);
-    this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).takeUntil(this.destroyed$);
-    this.companyTaxes$ = this.store.select(state => state.company.taxes).takeUntil(this.destroyed$);
-    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen).takeUntil(this.destroyed$);
-    this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
-    this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).takeUntil(this.destroyed$);
+      })).pipe(takeUntil(this.destroyed$));
+    this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress).pipe(takeUntil(this.destroyed$));
+    this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).pipe(takeUntil(this.destroyed$));
+    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).pipe(takeUntil(this.destroyed$));
+    this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+    this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).pipe(takeUntil(this.destroyed$));
+    this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
+    this.companyTaxes$ = this.store.select(state => state.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen).pipe(takeUntil(this.destroyed$));
+    this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).pipe(takeUntil(this.destroyed$));
+    this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
 
     // account-add component's property
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
-    this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
-    this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+    this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).pipe(takeUntil(this.destroyed$));
+    this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
   }
@@ -221,7 +222,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
 
       if (a && this.breadcrumbUniquePath[1]) {
-        this.isDiscountableAccount$ = Observable.of(this.breadcrumbUniquePath[1] === 'sundrydebtors');
+        this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
         this.discountAccountForm.patchValue({discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined});
       }
     });
@@ -281,9 +282,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       if (a) {
         this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
         if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
-          this.showGroupLedgerExportButton$ = Observable.of(true);
+          this.showGroupLedgerExportButton$ = observableOf(true);
         } else {
-          this.showGroupLedgerExportButton$ = Observable.of(false);
+          this.showGroupLedgerExportButton$ = observableOf(false);
         }
         // this.taxGroupForm.get('taxes').reset();
         // let showAddForm: boolean = null;
@@ -376,7 +377,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public loadAccountData() {
     let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
 
     this.accountService.GetFlattenAccounts().subscribe(a => {
       let accounts: IOption[] = [];
@@ -389,13 +390,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           accounts.splice(accountIndex, 1);
         }
       }
-      this.accounts$ = Observable.of(accounts);
+      this.accounts$ = observableOf(accounts);
     });
   }
 
   public shareAccount() {
     let activeAcc;
-    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
     let accObject = new ShareAccountRequest();
     accObject.role = 'view_only';
     accObject.user = this.shareAccountForm.controls['userEmail'].value;
@@ -410,7 +411,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public moveAccount() {
     let activeAcc;
-    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
 
     let grpObject = new AccountMoveRequest();
     grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
@@ -423,14 +424,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public unShareGroup(val) {
     let activeGrp;
-    this.activeGroup$.take(1).subscribe(p => activeGrp = p);
+    this.activeGroup$.pipe(take(1)).subscribe(p => activeGrp = p);
 
     this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
   }
 
   public unShareAccount(val) {
     let activeAcc;
-    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
     this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
 
@@ -458,7 +459,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public isRootLevelGroupFunc(uniqueName: string) {
-    this.groupList$.take(1).subscribe(list => {
+    this.groupList$.pipe(take(1)).subscribe(list => {
       for (let grp of list) {
         if (grp.uniqueName === uniqueName) {
           this.isRootLevelGroup = true;
@@ -496,7 +497,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public taxHierarchy() {
     let activeAccount: AccountResponseV2 = null;
     let activeGroup: GroupResponse = null;
-    this.store.take(1).subscribe(s => {
+    this.store.pipe(take(1)).subscribe(s => {
       if (s.groupwithaccounts) {
         activeAccount = s.groupwithaccounts.activeAccount;
         activeGroup = s.groupwithaccounts.activeGroup;
@@ -537,7 +538,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public applyTax() {
     let activeAccount: AccountResponseV2 = null;
     let activeGroup: GroupResponse = null;
-    this.store.take(1).subscribe(s => {
+    this.store.pipe(take(1)).subscribe(s => {
       if (s.groupwithaccounts) {
         activeAccount = s.groupwithaccounts.activeAccount;
         activeGroup = s.groupwithaccounts.activeGroup;
@@ -547,7 +548,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let data: ApplyTaxRequest = new ApplyTaxRequest();
       data.isAccount = true;
       data.taxes = [];
-      this.activeAccountTaxHierarchy$.take(1).subscribe((t) => {
+      this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
         if (t) {
           t.inheritedTaxes.forEach(tt => {
             tt.applicableTaxes.forEach(ttt => {
@@ -584,7 +585,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public applyDiscount() {
     //
     let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(s => {
+    this.activeAccount$.pipe(take(1)).subscribe(s => {
       if (s) {
         activeAccount = s;
       }
@@ -598,7 +599,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public removeDiscount() {
     let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(s => {
+    this.activeAccount$.pipe(take(1)).subscribe(s => {
       if (s) {
         activeAccount = s;
       }
@@ -649,7 +650,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public deleteMergedAccount() {
     let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
     let obj = new AccountUnMergeRequest();
     obj.uniqueNames = [this.selectedAccountForDelete];
     this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
@@ -678,7 +679,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public mergeAccounts() {
     let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
     let finalData: AccountMergeRequest[] = [];
     if (this.selectedaccountForMerge.length) {
       this.selectedaccountForMerge.map((acc) => {
@@ -706,7 +707,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public moveMergeAccountTo() {
     let activeAccount: AccountResponseV2 = null;
-    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
     let obj = new AccountUnMergeRequest();
     obj.uniqueNames = [this.setAccountForMove];
     obj.moveTo = this.selectedAccountForMove;
@@ -735,7 +736,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public deleteAccount() {
     let activeAccUniqueName = null;
-    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
+    this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
 
     let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
 
@@ -753,7 +754,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public hideGroupExportModal(response: any) {
     this.groupExportLedgerModal.hide();
-    this.activeGroupUniqueName$.take(1).subscribe((grpUniqueName: string) => {
+    this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
       if (response !== 'close') {
         this.groupExportLedgerQueryRequest.type = response.type;
         this.groupExportLedgerQueryRequest.format = response.fileType;

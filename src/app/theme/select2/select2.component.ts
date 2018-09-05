@@ -1,21 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  Renderer,
-  SimpleChanges,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Select2OptionData } from './select2.interface';
@@ -64,15 +47,14 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
   public element: JQuery = undefined;
   public check: boolean = false;
   public style: string = `CSS`;
-
-  constructor(public renderer: Renderer, public cd: ChangeDetectorRef) {
-  }
-
   // tslint:disable-next-line:no-empty
   public onChangeCb: (_: any) => void = (e) => {
   }
   // tslint:disable-next-line:no-empty
   public onTouchedCb: () => void = () => {
+  }
+
+  constructor(public renderer: Renderer, public cd: ChangeDetectorRef) {
   }
 
   public writeValue(value: any): void {

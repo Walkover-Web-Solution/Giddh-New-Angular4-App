@@ -1,6 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, SimpleChanges, OnChanges } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
@@ -8,7 +10,6 @@ import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.servi
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { AppState } from 'app/store';
-import { Observable } from 'rxjs';
 import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
 
 @Component({
@@ -32,14 +33,14 @@ export class GstTemplateGComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companyAddress: string = '';
-  public companySetting$: Observable<any> = Observable.of(null);
+  public companySetting$: Observable<any> = observableOf(null);
   public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private settingsProfileActions: SettingsProfileActions) {
+              private settingsProfileActions: SettingsProfileActions) {
     //
-    this.companySetting$ = this.store.select(s => s.settings.profile).takeUntil(this.destroyed$);
+    this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -52,6 +53,7 @@ export class GstTemplateGComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
       this.columnsVisibled = 0;
@@ -89,6 +91,7 @@ export class GstTemplateGComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
   }
+
   public onClickSection(sectionName: string) {
     if (!this.isPreviewMode) {
       this.sectionName.emit(sectionName);

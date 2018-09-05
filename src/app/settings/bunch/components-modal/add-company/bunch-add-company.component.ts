@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SettingsBunchService } from '../../../../services/settings.bunch.service';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap';
 
 @Component({
@@ -27,8 +27,8 @@ export class BunchAddCompanyModalComponent implements OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder,
-  private _toaster: ToasterService,
-  private _settingsBunchService: SettingsBunchService,
+              private _toaster: ToasterService,
+              private _settingsBunchService: SettingsBunchService,
   ) {
 
   }
@@ -48,7 +48,7 @@ export class BunchAddCompanyModalComponent implements OnChanges, OnDestroy {
    */
   public save() {
     let dataToSend = [];
-    _.forEach(this.companiesList, function(obj) {
+    _.forEach(this.companiesList, function (obj) {
       if (obj.isSelected) {
         dataToSend.push(obj.uniqueName);
       }

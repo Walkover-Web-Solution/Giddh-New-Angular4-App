@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 })
 export class TextCaseChangeDirective implements OnInit {
   @Input() public control: FormControl;
+
   constructor(private el: ElementRef) {
     //
   }

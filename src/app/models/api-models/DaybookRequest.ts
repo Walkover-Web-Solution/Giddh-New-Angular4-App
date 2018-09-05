@@ -8,6 +8,7 @@ export class DaybookQueryRequest {
   public type: string = 'admin-condensed';
   public sort: 'asc' | 'desc' = 'asc';
 }
+
 export interface DayBookRequestModel {
   amountLessThan: boolean;
   includeAmount: boolean;
@@ -22,6 +23,7 @@ export interface DayBookRequestModel {
   vouchers: any[];
   inventory: Inventory;
 }
+
 export interface Inventory {
   includeInventory: boolean;
   inventories: any[];

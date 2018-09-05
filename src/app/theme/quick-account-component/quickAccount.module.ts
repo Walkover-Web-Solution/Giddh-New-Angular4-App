@@ -20,7 +20,7 @@ import { LaddaModule } from 'angular2-ladda';
     LaddaModule
   ],
   declarations: [QuickAccountComponent],
-  entryComponents: [ QuickAccountComponent ]
+  entryComponents: [QuickAccountComponent]
 })
 
 export class QuickAccountModule {

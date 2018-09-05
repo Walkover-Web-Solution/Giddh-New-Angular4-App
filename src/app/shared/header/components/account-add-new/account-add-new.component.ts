@@ -1,3 +1,6 @@
+import { Observable, of as observableOf } from 'rxjs';
+
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -5,7 +8,6 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { Observable } from 'rxjs/Observable';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
 import { CompanyService } from '../../../../services/companyService.service';
@@ -67,15 +69,15 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
 
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
-    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
-    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
-    { value: 'SEZ', label: 'SEZ' }
+    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
+    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
+    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
+    {value: 'SEZ', label: 'SEZ'}
   ];
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
-  public currencySource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
+  public currencySource$: Observable<IOption[]> = observableOf([]);
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   public moreGstDetailsVisible: boolean = false;
@@ -84,46 +86,46 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
-  public companyCountry: string = '';  
+  public companyCountry: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
-    this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
-    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+              private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
+    this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
       // console.log('state Called');
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
-      this.statesSource$ = Observable.of(states);
+      this.statesSource$ = observableOf(states);
     }, (err) => {
       // console.log(err);
     });
 
-    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
+          currencies.push({label: d.code, value: d.code});
         });
       }
-      this.currencySource$ = Observable.of(currencies);
+      this.currencySource$ = observableOf(currencies);
     });
 
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
+      this.countryPhoneCode.push({value: c.value, label: c.value});
     });
 
-    this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
+    this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());
     });
   }
@@ -175,15 +177,15 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
       }
     });
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
       if (a) {
-        this.companiesList$.take(1).subscribe(companies => {
+        this.companiesList$.pipe(take(1)).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
         });
       }
     });
 
-    this.store.select(s => s.session).takeUntil(this.destroyed$).subscribe((session) => {
+    this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
       let companyUniqueName: string;
       if (session.companyUniqueName) {
         companyUniqueName = _.cloneDeep(session.companyUniqueName);
@@ -205,7 +207,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.addAccountForm.get('name').valueChanges.debounceTime(100).subscribe(name => {
+    this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
       let val: string = name;
       val = uniqueNameInvalidStringReplace(val);
       if (val) {
@@ -213,15 +215,15 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.isAccountNameAvailable$.subscribe(a => {
           if (a !== null && a !== undefined) {
             if (a) {
-              this.addAccountForm.patchValue({ uniqueName: val });
+              this.addAccountForm.patchValue({uniqueName: val});
             } else {
               let num = 1;
-              this.addAccountForm.patchValue({ uniqueName: val + num });
+              this.addAccountForm.patchValue({uniqueName: val + num});
             }
           }
         });
       } else {
-        this.addAccountForm.patchValue({ uniqueName: '' });
+        this.addAccountForm.patchValue({uniqueName: ''});
       }
     });
   }
@@ -256,7 +258,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{ value: '', disabled: false }],
+      hsnNumber: [{value: '', disabled: false}],
       sacNumber: [{value: '', disabled: false}],
       accountBankDetails: this._fb.array([
         this._fb.group({
@@ -265,8 +267,8 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
           ifsc: ['']
         })
       ]),
-    closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
-    closingBalanceTriggerAmountType: ['CREDIT']
+      closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+      closingBalanceTriggerAmountType: ['CREDIT']
     });
   }
 
@@ -274,7 +276,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{ value: '', disabled: false }],
+      stateCode: [{value: '', disabled: false}],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
@@ -349,7 +351,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (gstVal.length >= 2) {
-      this.statesSource$.take(1).subscribe(state => {
+      this.statesSource$.pipe(take(1)).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
         statesEle.setDisabledState(false);
         // gstForm.get('stateCode').disable();

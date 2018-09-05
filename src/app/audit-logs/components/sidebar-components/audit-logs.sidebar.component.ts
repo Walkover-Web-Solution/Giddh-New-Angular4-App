@@ -1,3 +1,6 @@
+import { of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import { LogsRequest } from '../../../models/api-models/Logs';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -9,8 +12,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers
 import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
@@ -41,8 +42,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.bsConfig.showWeekNumbers = false;
 
     this.vm = new AuditLogsSidebarVM();
-    this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
-    this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
+    this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).pipe(takeUntil(this.destroyed$));
+    this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.vm.selectedCompany = this.store.select(state => {
       if (!state.session.companies) {
         return;
@@ -50,33 +51,33 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       return state.session.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.vm.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
       }
-    }).takeUntil(this.destroyed$);
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+    }).pipe(takeUntil(this.destroyed$));
+    this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
           accounts.push({label: d.name, value: d.uniqueName});
         });
-        this.vm.accounts$ = Observable.of(accounts);
+        this.vm.accounts$ = observableOf(accounts);
       }
     });
     let selectedCompany: CompanyResponse = null;
     let loginUser: UserDetails = null;
-    this.vm.selectedCompany.take(1).subscribe((c) => selectedCompany = c);
-    this.vm.user$.take(1).subscribe((c) => loginUser = c);
-    this._companyService.getComapnyUsers().takeUntil(this.destroyed$).subscribe(data => {
+    this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
+    this.vm.user$.pipe(take(1)).subscribe((c) => loginUser = c);
+    this._companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         let users: IOption[] = [];
         data.body.map((d) => {
           users.push({label: d.userName, value: d.userUniqueName, additional: d});
         });
         this.vm.canManageCompany = true;
-        this.vm.users$ = Observable.of(users);
+        this.vm.users$ = observableOf(users);
       } else {
         this.vm.canManageCompany = false;
       }
@@ -91,7 +92,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         accountList.map((d: any) => {
           groups.push({label: d.name, value: d.uniqueName});
         });
-        this.vm.groups$ = Observable.of(groups);
+        this.vm.groups$ = observableOf(groups);
       }
     });
     this.vm.reset();

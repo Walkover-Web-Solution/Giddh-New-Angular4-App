@@ -1,5 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'layout-main',
@@ -12,11 +11,15 @@ import { Observable } from 'rxjs/Observable';
 })
 export class LayoutComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor() {
+  }
+
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     // console.log('layout');
   }
+
   // tslint:disable-next-line:no-empty
-  public ngAfterViewInit() { }
+  public ngAfterViewInit() {
+  }
 }

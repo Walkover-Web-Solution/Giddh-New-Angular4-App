@@ -12,7 +12,7 @@ import { CreateInvoiceHeaderComponent } from './components/header/create.header.
 import { CreateInvoiceStepsComponent } from './components/nav/create.steps.component';
 import { ContenteditableDirective } from 'ng-contenteditable';
 import { CreateHttpService } from './create-http-service';
-import { CollapseModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, CollapseModule } from 'ngx-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
 import { SampleTemplateComponent } from './components/invoice/templates/sample/sample.template.component';
 
@@ -45,4 +45,5 @@ import { SampleTemplateComponent } from './components/invoice/templates/sample/s
     CreateHttpService
   ]
 })
-export class CreateModule { }
+export class CreateModule {
+}

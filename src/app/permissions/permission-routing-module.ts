@@ -19,7 +19,7 @@ const PERMISSION_ROUTES: Routes = [
     path: '',
     component: PermissionComponent,
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'list' },
+      {path: '', pathMatch: 'full', redirectTo: 'list'},
       {
         path: 'list',
         component: PermissionListComponent,

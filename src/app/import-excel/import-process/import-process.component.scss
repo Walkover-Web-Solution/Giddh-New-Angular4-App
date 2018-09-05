@@ -1,42 +1,42 @@
 table {
-    table-layout: fixed;
+  table-layout: fixed;
 }
 
-.basic>thead>tr>th {
-    // overflow: hidden;
-    width: 140px;
+.basic > thead > tr > th {
+  // overflow: hidden;
+  width: 140px;
 }
 
-.basic>thead>tr>th>.heads div:first-child {
-    max-width: 75%;
-    float: left;
+.basic > thead > tr > th > .heads div:first-child {
+  max-width: 75%;
+  float: left;
 }
 
 .data_overview {
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: scroll;
-    min-height: 300px;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: scroll;
+  min-height: 300px;
 }
 
 .dropdown-menu {
-    max-height: 200px;
-    overflow-y: scroll;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .dropdown-menu li a {
-    padding: 6px 10px;
-    color: rgba(0, 0, 0, 0.8);
+  padding: 6px 10px;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .action_btn {
-    right: 15px;
+  right: 15px;
 }
 
 .edit_column {
-    opacity: 0.3;
+  opacity: 0.3;
 }
 
-.basic>thead>tr>th:hover .edit_column {
-    opacity: 1;
+.basic > thead > tr > th:hover .edit_column {
+  opacity: 1;
 }

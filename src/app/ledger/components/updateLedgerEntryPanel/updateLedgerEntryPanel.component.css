@@ -1,14 +1,14 @@
 .pItem {
-    padding: 0 4px;
+  padding: 0 4px;
 }
 
-.ledgHead.entry-popup table td.select2-ledger>sh-select {
-    position: initial;
-    margin-top: 1px;
+.ledgHead.entry-popup table td.select2-ledger > sh-select {
+  position: initial;
+  margin-top: 1px;
 }
 
 table.width100 {
-    position: relative
+  position: relative
 }
 
 .currency_type {

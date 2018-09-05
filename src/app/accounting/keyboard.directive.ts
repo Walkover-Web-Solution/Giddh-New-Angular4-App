@@ -10,9 +10,11 @@ export class OnReturnDirective {
   private activeIndx: number = null;
   private fieldToActivate: any = null;
   private selectedField;
+
   constructor(private _el: ElementRef) {
     this.el = this._el;
   }
+
   // @HostListener('keydown', ['$event']) public onKeyDown(e) {
   //     if ((e.which === 13 || e.keyCode === 13)) {
   //         console.log('e.srcElement.nextElementSibling is :', e.srcElement.nextElementSibling);
@@ -25,7 +27,8 @@ export class OnReturnDirective {
   //         return;
   //     }
   // }
-  @HostListener('keydown', ['$event']) public onKeyDown(e: any) {
+  @HostListener('keydown', ['$event'])
+  public onKeyDown(e: any) {
 
     if ((e.which === 13 || e.keyCode === 13) || (e.which === 8 || e.keyCode === 8) || (e.which === 32 || e.keyCode === 32)) {
       const selectedEle = e.target;
@@ -41,7 +44,7 @@ export class OnReturnDirective {
         if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
           // detect by or to
           const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
-          const rowEntryType =  activatedRow[0].children[0].children[0].value;
+          const rowEntryType = activatedRow[0].children[0].children[0].value;
           if (rowEntryType === 'by') {
             target = allElements[indx + 4];
           } else if (rowEntryType === 'to') {
@@ -112,7 +115,7 @@ export class OnReturnDirective {
         let target = allElements[indx - 1];
 
         const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
-        const rowEntryType =  activatedRow[0].children[0].children[0].value;
+        const rowEntryType = activatedRow[0].children[0].children[0].value;
 
         if (allElements[indx].classList.contains('debit-credit')) {
           if (rowEntryType === 'by') {
@@ -134,10 +137,10 @@ export class OnReturnDirective {
         }
 
         // if (selectedEle.value === '') {
-          // e.preventDefault();
-          // if (target) {
-          //   target.focus();
-          // }
+        // e.preventDefault();
+        // if (target) {
+        //   target.focus();
+        // }
         // }
       } else if (e.which === 32 || e.keyCode === 32) {
         const target = allElements[indx];

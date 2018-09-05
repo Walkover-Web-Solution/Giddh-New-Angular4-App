@@ -1,5 +1,5 @@
-import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem, IChildGroups, ICbAccount, IBankAccount } from '../interfaces/dashboard.interface';
-import { IForwardBalance, IClosingBalance } from '../interfaces/ledger.interface';
+import { IBankAccount, ICbAccount, IChildGroups, IDashboardCbMainItem, IGroupHistoryGroups, IPeriodBalances } from '../interfaces/dashboard.interface';
+import { IClosingBalance, IForwardBalance } from '../interfaces/ledger.interface';
 
 /**
  * Model for Audit Dashboard api request

@@ -1,13 +1,13 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { GroupService } from '../../services/group.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 import { ModalDirective } from 'ngx-bootstrap';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -54,15 +54,15 @@ export class DiscountComponent implements OnInit, OnDestroy {
               private _groupService: GroupService, private store: Store<AppState>) {
     this.getFlattenAccounts();
 
-    this.discountList$ = this.store.select(s => s.settings.discount.discountList).takeUntil(this.destroyed$);
-    this.isDiscountListInProcess$ = this.store.select(s => s.settings.discount.isDiscountListInProcess).takeUntil(this.destroyed$);
-    this.isDiscountCreateInProcess$ = this.store.select(s => s.settings.discount.isDiscountCreateInProcess).takeUntil(this.destroyed$);
-    this.isDiscountCreateSuccess$ = this.store.select(s => s.settings.discount.isDiscountCreateSuccess).takeUntil(this.destroyed$);
-    this.isDiscountUpdateInProcess$ = this.store.select(s => s.settings.discount.isDiscountUpdateInProcess).takeUntil(this.destroyed$);
-    this.isDiscountUpdateSuccess$ = this.store.select(s => s.settings.discount.isDiscountUpdateSuccess).takeUntil(this.destroyed$);
-    this.isDeleteDiscountInProcess$ = this.store.select(s => s.settings.discount.isDeleteDiscountInProcess).takeUntil(this.destroyed$);
-    this.isDeleteDiscountSuccess$ = this.store.select(s => s.settings.discount.isDeleteDiscountSuccess).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+    this.isDiscountListInProcess$ = this.store.select(s => s.settings.discount.isDiscountListInProcess).pipe(takeUntil(this.destroyed$));
+    this.isDiscountCreateInProcess$ = this.store.select(s => s.settings.discount.isDiscountCreateInProcess).pipe(takeUntil(this.destroyed$));
+    this.isDiscountCreateSuccess$ = this.store.select(s => s.settings.discount.isDiscountCreateSuccess).pipe(takeUntil(this.destroyed$));
+    this.isDiscountUpdateInProcess$ = this.store.select(s => s.settings.discount.isDiscountUpdateInProcess).pipe(takeUntil(this.destroyed$));
+    this.isDiscountUpdateSuccess$ = this.store.select(s => s.settings.discount.isDiscountUpdateSuccess).pipe(takeUntil(this.destroyed$));
+    this.isDeleteDiscountInProcess$ = this.store.select(s => s.settings.discount.isDeleteDiscountInProcess).pipe(takeUntil(this.destroyed$));
+    this.isDeleteDiscountSuccess$ = this.store.select(s => s.settings.discount.isDeleteDiscountSuccess).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
 
   }
 
@@ -82,7 +82,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
       this.deleteRequest = null;
     });
 
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
+    this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         this.toggleAccountAsidePane();
         this.getFlattenAccounts();

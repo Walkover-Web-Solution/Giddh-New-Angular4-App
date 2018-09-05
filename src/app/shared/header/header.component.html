@@ -1,486 +1,529 @@
 <header class="clearfix header-container">
 
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid pdL0">
-            <ul class="nav navbar-nav">
-                <li class="hamburger_menu cp" dropdown (isOpenChange)="sideBarStateChange($event)" [isOpen]="sideMenu.isopen">
-                    <a dropdownToggle href (click)="$event.preventDefault()">
-                        <i class="glyphicon glyphicon-menu-hamburger"></i>
-                    </a>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid pdL0">
+      <ul class="nav navbar-nav">
+        <li class="hamburger_menu cp" dropdown (isOpenChange)="sideBarStateChange($event)" [isOpen]="sideMenu.isopen">
+          <a dropdownToggle href (click)="$event.preventDefault()">
+            <i class="glyphicon glyphicon-menu-hamburger"></i>
+          </a>
 
-                    <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-                        <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-                            <li [checkPermission]="['MENU', 'DASHBOARD']">
-                                <a [routerLink]="['/home']">
-                                    <span class="navico-dashboard"></span>
-                                    <span class="label">Dashboard</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
+          <ul id="" class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
+                               auto-height [scrollIndicators]="true">
+              <li [checkPermission]="['MENU', 'DASHBOARD']">
+                <a [routerLink]="['/home']">
+                  <span class="navico-dashboard"></span>
+                  <span class="label">Dashboard</span>
+                </a>
+              </li>
+              <li class="divider"></li>
 
-                            <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
-                            <a [routerLink]="['/pages/sales']">
-                                <span class="navico-sales"></span>
-                                <span class="label">Contacts</span>
-                            </a>
-                        </li> -->
-                            <li [checkPermission]="['MENU', 'INVOICE']">
-                                <a [routerLink]="['/pages/sales']">
-                                    <span class="navico-sales"></span>
-                                    <span class="label">Sales</span>
-                                </a>
-                            </li>
-                            <!-- <li>
-                                <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
-                                    <span class="navico-sales"></span>
-                                    <span class="label">Purchase</span>
-                                </a>
-                            </li> -->
-                            <li [checkPermission]="['MENU', 'INVOICE']">
-                                <a [routerLink]="['/pages/invoice']">
-                                    <span class="navico-invoice"></span>
-                                    <span class="label">Invoice</span>
-                                </a>
-                            </li>
-                            <!-- *ngIf="userIsCompanyUser" -->
-                            <li [checkPermission]="['MENU', 'LEDGER']">
-                                <a [routerLink]="['/pages/accounting-voucher']">
-                                    <span class="navico-journal"></span>
-                                    <span class="label">Journal Voucher</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li [checkPermission]="['MENU', 'LEDGER']">
-                                <a [routerLink]="['/pages/daybook']">
-                                    <span class="navico-daybook"></span>
-                                    <span class="label">Daybook</span>
-                                </a>
-                            </li>
+              <!-- <li [tooltip]="'Contacts'" [placement]="'right'">
+              <a [routerLink]="['/pages/sales']">
+                  <span class="navico-sales"></span>
+                  <span class="label">Contacts</span>
+              </a>
+          </li> -->
+              <li [checkPermission]="['MENU', 'INVOICE']">
+                <a [routerLink]="['/pages/sales']">
+                  <span class="navico-sales"></span>
+                  <span class="label">Sales</span>
+                </a>
+              </li>
+              <!-- <li>
+                  <a [routerLink]="['/pages/purchase/create']" [checkPermission]="['MENU', 'INVOICE']">
+                      <span class="navico-sales"></span>
+                      <span class="label">Purchase</span>
+                  </a>
+              </li> -->
+              <li [checkPermission]="['MENU', 'INVOICE']">
+                <a [routerLink]="['/pages/invoice']">
+                  <span class="navico-invoice"></span>
+                  <span class="label">Invoice</span>
+                </a>
+              </li>
+              <!-- *ngIf="userIsCompanyUser" -->
+              <li [checkPermission]="['MENU', 'LEDGER']">
+                <a [routerLink]="['/pages/accounting-voucher']">
+                  <span class="navico-journal"></span>
+                  <span class="label">Journal Voucher</span>
+                </a>
+              </li>
+              <li class="divider"></li>
+              <li [checkPermission]="['MENU', 'LEDGER']">
+                <a [routerLink]="['/pages/daybook']">
+                  <span class="navico-daybook"></span>
+                  <span class="label">Daybook</span>
+                </a>
+              </li>
 
-                            <li [checkPermission]="['MENU', 'REPORT']">
-                                <a [routerLink]="['trial-balance-and-profit-loss']">
-                                    <span class="navico-tbpl"></span>
-                                    <span class="label">TB, P&L and B/S</span>
-                                </a>
-                            </li>
+              <li [checkPermission]="['MENU', 'REPORT']">
+                <a [routerLink]="['trial-balance-and-profit-loss']">
+                  <span class="navico-tbpl"></span>
+                  <span class="label">TB, P&L and B/S</span>
+                </a>
+              </li>
 
-                            <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
-                                <a [routerLink]="['audit-logs']">
-                                    <span class="navico-log"></span>
-                                    <span class="label">Audit Logs</span>
-                                </a>
-                            </li>
-                            <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
-                                <a [routerLink]="['/pages/purchase/invoice']">
-                                    <span class="navico-tax"></span>
-                                    <span class="label">Taxes</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
+              <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
+                <a [routerLink]="['audit-logs']">
+                  <span class="navico-log"></span>
+                  <span class="label">Audit Logs</span>
+                </a>
+              </li>
+              <li [checkPermission]="['MENU', 'SETTINGS']"
+                  *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                <a [routerLink]="['/pages/purchase/invoice']">
+                  <span class="navico-tax"></span>
+                  <span class="label">Taxes</span>
+                </a>
+              </li>
+              <li class="divider"></li>
 
-                            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                                <a [routerLink]="['/inventory']">
-                                    <span class="navico-inventory"></span>
-                                    <span class="label">Inventory</span>
-                                </a>
-                            </li>
-                            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                                <a [routerLink]="['manufacturing']">
-                                    <span class="navico-manufacturing"></span>
-                                    <span class="label">Manufacturing</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
+              <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                <a [routerLink]="['/inventory']">
+                  <span class="navico-inventory"></span>
+                  <span class="label">Inventory</span>
+                </a>
+              </li>
+              <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                <a [routerLink]="['manufacturing']">
+                  <span class="navico-manufacturing"></span>
+                  <span class="label">Manufacturing</span>
+                </a>
+              </li>
+              <li class="divider"></li>
 
-                            <li [checkPermission]="['MENU', 'SEARCH']">
-                                <a [routerLink]="['search']">
-                                    <span class="navico-search"></span>
-                                    <span class="label">Search</span>
-                                </a>
-                            </li>
-                            <li class="dmLi" [hidden]="!userIsSuperUser">
-                                <a [routerLink]="['permissions']">
-                                    <span class="navico-permission"></span>
-                                    <span class="label">Permissions</span>
-                                </a>
-                            </li>
-                            <li [checkPermission]="['MENU', 'SETTINGS']">
-                                <a [routerLink]="['/pages/settings']">
-                                    <span class="navico-setting"></span>
-                                    <span class="label">Settings</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a [routerLink]="['/pages/contact']">
-                                    <span class="navico-daybook"></span>
-                                    <span class="label">Contacts</span>
-                                </a>
-                            </li>
-                            <!-- <li>
-                              <a [routerLink]="['/pages/carriedoversales']">
-                                  <span class="navico-carried"></span>
-                                  <span class="label">CarriedOverSales</span>
-                              </a>
-                            </li> -->
+              <li [checkPermission]="['MENU', 'SEARCH']">
+                <a [routerLink]="['search']">
+                  <span class="navico-search"></span>
+                  <span class="label">Search</span>
+                </a>
+              </li>
+              <li class="dmLi" [hidden]="!userIsSuperUser">
+                <a [routerLink]="['permissions']">
+                  <span class="navico-permission"></span>
+                  <span class="label">Permissions</span>
+                </a>
+              </li>
+              <li [checkPermission]="['MENU', 'SETTINGS']">
+                <a [routerLink]="['/pages/settings']">
+                  <span class="navico-setting"></span>
+                  <span class="label">Settings</span>
+                </a>
+              </li>
+              <li>
+                <a [routerLink]="['/pages/contact']">
+                  <span class="navico-daybook"></span>
+                  <span class="label">Contacts</span>
+                </a>
+              </li>
+              <!-- <li>
+                <a [routerLink]="['/pages/carriedoversales']">
+                    <span class="navico-carried"></span>
+                    <span class="label">CarriedOverSales</span>
+                </a>
+              </li> -->
 
 
-                            <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
-                                <a href="">
-                                    <span class="navico-recurring"></span>
-                                    <span class="label">Recurring Entry</span>
-                                </a>
-                            </li>
-                            <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
-                                <a href="">
-                                    <span class="navico-report"></span>
-                                    <span class="label">Reports</span>
-                                </a>
-                            </li>
-                        -->
-                        </perfect-scrollbar>
-                    </ul>
-                    <ul [hidden]="true" *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
-                        <li>
-                            <div>
-                                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-                                    <ul class="dshUl clearfix list-inline ddMaxHeight">
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'DASHBOARD']">
-                                            <a [routerLink]="['home']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Dashboard</div>
-                                                        <div class="subTitle">Your
-                                                            <b>Company Summary</b> at one place.</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'SETTINGS']">
-                                            <a [routerLink]="['/pages/settings']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Settings</div>
-                                                        <div class="subTitle">Manage your company settings.</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <!-- *ngIf="userIsCompanyUser" -->
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'LEDGER']">
-                                            <a [routerLink]="['/pages/daybook']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Daybook</div>
-                                                        <div class="subTitle">All Recent Transactions</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
-                                            <a [routerLink]="['/pages/sales']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Sales</div>
-                                                        <div class="subTitle">Generate sales invoice</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi trialB" *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
-                                            <a [routerLink]="['/pages/accounting-voucher']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">ACCOUNTING VOUCHERS</div>
-                                                        <div class="subTitle">Create Accounting Vouchers</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi" [checkPermission]="['MENU', 'REPORT']">
-                                            <a [routerLink]="['trial-balance-and-profit-loss']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">TB/P&amp;L</div>
-                                                        <div class="subTitle">Trial Balance/ Profit and Loss</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi" [checkPermission]="['MENU', 'INVOICE']">
-                                            <a [routerLink]="['/pages/invoice']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Invoice</div>
-                                                        <div class="subTitle">Generate & Download Invoice</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                                            <a [routerLink]="['/inventory']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Inventory</div>
-                                                        <div class="subTitle">Manage Inventory</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                                            <a [routerLink]="['manufacturing']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Manufacturing</div>
-                                                        <div class="subTitle">Manufacture product</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi trialB" [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
-                                            <a [routerLink]="['/pages/purchase/invoice']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Taxes</div>
-                                                        <div class="subTitle">Goods and Services Tax</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <!-- <li class="dmLi" [checkPermission]="['MENU', 'RECURRING_ENTRY']">
-                                                <a href="">
-                                                  <div class="media">
-                                                    <div class="media-body">
-                                                      <div class="title">Recurring Entry</div>
-                                                      <div class="subTitle">Add and Edit Recurring Entries</div>
-                                                    </div>
-                                                  </div>
-                                                </a>
-                                              </li>
-                                              <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
-                                                <a href="">
-                                                  <div class="media">
-                                                    <div class="media-body">
-                                                      <div class="title">Reports</div>
-                                                      <div class="subTitle">Generate and view Business Reports</div>
-                                                    </div>
-                                                  </div>
-                                                </a>
-                                              </li>
-                                            -->
-                                        <li class="dmLi" ui-sref="audit-logs" [checkPermission]="['MENU', 'AUDIT_LOGS']">
-                                            <a [routerLink]="['audit-logs']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Audit Logs</div>
-                                                        <div class="subTitle">View all Logs</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="dmLi" ui-sref="search" [checkPermission]="['MENU', 'SEARCH']">
-                                            <a [routerLink]="['search']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Search</div>
-                                                        <div class="subTitle">View all your creditors</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <!-- <li class="dmLi" [hidden]="!userIsSuperUser">
-                                            <a [routerLink]="['permissions']">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <div class="title">Permissions</div>
-                                                        <div class="subTitle">Add and manage Roles</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li> -->
-                                    </ul>
-                                </perfect-scrollbar>
+              <!-- <li [checkPermission]="['MENU', 'RECURRING_ENTRY']">
+                  <a href="">
+                      <span class="navico-recurring"></span>
+                      <span class="label">Recurring Entry</span>
+                  </a>
+              </li>
+              <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
+                  <a href="">
+                      <span class="navico-report"></span>
+                      <span class="label">Reports</span>
+                  </a>
+              </li>
+          -->
+            </perfect-scrollbar>
+          </ul>
+          <ul [hidden]="true" *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
+            <li>
+              <div>
+                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
+                                   auto-height [scrollIndicators]="true">
+                  <ul class="dshUl clearfix list-inline ddMaxHeight">
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'DASHBOARD']">
+                      <a [routerLink]="['home']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Dashboard</div>
+                            <div class="subTitle">Your
+                              <b>Company Summary</b> at one place.
                             </div>
-                        </li>
-                    </ul>
-                </li>
-                <!-- books search -->
-                <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
-                    <div class="ledger_search form-inline">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
-                                <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-                                    <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'SETTINGS']">
+                      <a [routerLink]="['/pages/settings']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Settings</div>
+                            <div class="subTitle">Manage your company settings.</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <!-- *ngIf="userIsCompanyUser" -->
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'LEDGER']">
+                      <a [routerLink]="['/pages/daybook']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Daybook</div>
+                            <div class="subTitle">All Recent Transactions</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
+                      <a [routerLink]="['/pages/sales']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Sales</div>
+                            <div class="subTitle">Generate sales invoice</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" *ngIf="userIsCompanyUser" [checkPermission]="['MENU', 'LEDGER']">
+                      <a [routerLink]="['/pages/accounting-voucher']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">ACCOUNTING VOUCHERS</div>
+                            <div class="subTitle">Create Accounting Vouchers</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi" [checkPermission]="['MENU', 'REPORT']">
+                      <a [routerLink]="['trial-balance-and-profit-loss']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">TB/P&amp;L</div>
+                            <div class="subTitle">Trial Balance/ Profit and Loss</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi" [checkPermission]="['MENU', 'INVOICE']">
+                      <a [routerLink]="['/pages/invoice']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Invoice</div>
+                            <div class="subTitle">Generate & Download Invoice</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                      <a [routerLink]="['/inventory']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Inventory</div>
+                            <div class="subTitle">Manage Inventory</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                      <a [routerLink]="['manufacturing']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Manufacturing</div>
+                            <div class="subTitle">Manufacture product</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'SETTINGS']"
+                        *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                      <a [routerLink]="['/pages/purchase/invoice']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Taxes</div>
+                            <div class="subTitle">Goods and Services Tax</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <!-- <li class="dmLi" [checkPermission]="['MENU', 'RECURRING_ENTRY']">
+                            <a href="">
+                              <div class="media">
+                                <div class="media-body">
+                                  <div class="title">Recurring Entry</div>
+                                  <div class="subTitle">Add and Edit Recurring Entries</div>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
+                            <a href="">
+                              <div class="media">
+                                <div class="media-body">
+                                  <div class="title">Reports</div>
+                                  <div class="subTitle">Generate and view Business Reports</div>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        -->
+                    <li class="dmLi" ui-sref="audit-logs" [checkPermission]="['MENU', 'AUDIT_LOGS']">
+                      <a [routerLink]="['audit-logs']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Audit Logs</div>
+                            <div class="subTitle">View all Logs</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi" ui-sref="search" [checkPermission]="['MENU', 'SEARCH']">
+                      <a [routerLink]="['search']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Search</div>
+                            <div class="subTitle">View all your creditors</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <!-- <li class="dmLi" [hidden]="!userIsSuperUser">
+                        <a [routerLink]="['permissions']">
+                            <div class="media">
+                                <div class="media-body">
+                                    <div class="title">Permissions</div>
+                                    <div class="subTitle">Add and manage Roles</div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </a>
+                    </li> -->
+                  </ul>
+                </perfect-scrollbar>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <!-- books search -->
+        <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
+          <div class="ledger_search form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts"
+                       (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl"
+                       [value]="accountSearchValue">
+                <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups"
+                     class="input-group-addon cp" placement="right">
+                  <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }"
+                        aria-hidden="false"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="pd1">
+            <button id="AddManage" type="button" class="btn isActive btn-sm" [checkPermission]="['MENU', 'MANAGE']"
+                    (click)="showManageGroupsModal()">Manage Groups & A/c
+            </button>
+          </div>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
+        <li [hidden]="isTodaysDateSelected">
+          <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
+        </li>
+        <li [hidden]="isTodaysDateSelected">
+          <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
+                 (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1"/>
+        </li>
+        <li [hidden]="!isTodaysDateSelected" class="mrT cp" (click)="openDateRangePicker();">
+          <label class="d-block text-right btn-link">Today</label>
+          <label>{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
+        </li>
+        <!-- <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1" (click)="jumpToToday();">Go back to Today</button> </li>
+          <li *ngIf="!isTodaysDateSelected">
+              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
+          </li>
+          <li *ngIf="isTodaysDateSelected"  class="cursor-pointer">
+              <label style="padding-top:15px;">{{moment(datePickerOptions.startDate).format('DD-MM-YYYY')}}</label>
+          </li> -->
+        <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
+          <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
+            <span class="icon-dropdown grey"></span>
+            <div class="cText text-right">
+              <span class="cName">{{ (selectedCompany | async)?.name }}</span>
+              <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
+            </div>
+          </a>
+          <ul id="companyList" class="company-list dropdown-menu" role="menu" *dropdownMenu>
+            <li class="create-company clearfix" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
+              <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">
+                Create Company
+              </button>
+              <button id="refreshCompanyBtn" class="btn btn-default btn-sm pull-right"
+                      (click)="refreshCompanies($event)">
+                <i class="glyphicon glyphicon-refresh"
+                   [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+              </button>
+            </li>
+            <li style="padding:0px;">
+              <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
+                <li class="cmp" *ngFor="let cmp of companies$ | async"
+                    [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                    (click)="changeCompany(cmp.uniqueName)">
+                  <span tooltip-placement="right">{{ cmp.name }}</span>
+                  <i class="deleteCmp"
+                     *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
+                     class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                 </li>
-                <li>
-                    <div class="pd1">
-                        <button id="AddManage" type="button" class="btn isActive btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
-                    </div>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
-                <li [hidden]="isTodaysDateSelected">
-                    <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
-                </li>
-                <li [hidden]="isTodaysDateSelected">
-                    <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
-                </li>
-                <li [hidden]="!isTodaysDateSelected" class="mrT cp" (click)="openDateRangePicker();">
-                    <label class="d-block text-right btn-link">Today</label>
-                    <label>{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                </li>
-                <!-- <li *ngIf="!isTodaysDateSelected"> <button class="btn btn-link mrT1" (click)="jumpToToday();">Go back to Today</button> </li>
-                  <li *ngIf="!isTodaysDateSelected">
-                      <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
-                  </li>
-                  <li *ngIf="isTodaysDateSelected"  class="cursor-pointer">
-                      <label style="padding-top:15px;">{{moment(datePickerOptions.startDate).format('DD-MM-YYYY')}}</label>
-                  </li> -->
-                <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
-                    <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
-                        <span class="icon-dropdown grey"></span>
-                        <div class="cText text-right">
-                            <span class="cName">{{ (selectedCompany | async)?.name }}</span>
-                            <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
-                        </div>
-                    </a>
-                    <ul id="companyList" class="company-list dropdown-menu" role="menu" *dropdownMenu>
-                        <li class="create-company clearfix" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
-                            <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
-                            <button id="refreshCompanyBtn" class="btn btn-default btn-sm pull-right" (click)="refreshCompanies($event)">
-                                <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                            </button>
-                        </li>
-                        <li style="padding:0px;">
-                            <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
-                                <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-                                    <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li dropdown [isOpen]="userMenu.isopen" [tooltip]="(user$ | async)?.email" [placement]="'left'">
-                    <a href (click)="$event.preventDefault()" id="user-dropdown" dropdownToggle>
-                {{userName | uppercase}}
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li dropdown [isOpen]="userMenu.isopen" [tooltip]="(user$ | async)?.email" [placement]="'left'">
+          <a href (click)="$event.preventDefault()" id="user-dropdown" dropdownToggle>
+            {{userName | uppercase}}
+          </a>
+          <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+            <li>
+              <a [routerLink]="['user-details/profile']" class="oh"><span class="user_circle pull-left"
+                                                                          *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span>
+                <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img
+                  src="{{userAvatar}}" alt=""/></span>
+                <div class="pull-left userName_wrap ellp">{{ userFullName }} <br/>
+                  <small class="grey_clr">Profile</small>
+                </div>
               </a>
-                    <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
-                        <li>
-                            <a [routerLink]="['user-details/profile']" class="oh"><span class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span> <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}" alt="" /></span> <div class="pull-left userName_wrap ellp">{{ userFullName }} <br/> <small class="grey_clr">Profile</small></div></a>
-                        </li>
-                        <li role="separator" class="divider" style="width:100%"></li>
-                        <li>
-                            <a [routerLink]="['user-details']">API</a>
-                        </li>
-                        <!-- not available now
-                        <li>
-                            <a [routerLink]="['user-details']">Billing</a>
-                        </li>
-                        -->
-                        <li>
-                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
-                        </li>
-                        <li>
-                            <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
-                        </li>
-                        <li>
-                            <a href="http://faq.giddh.com" target="_blank">Help</a>
-                        </li>
-                        <!-- <li>
-                            <a target="_Blank" href="https://docs.giddh.com/">Documentation</a>
-                        </li> -->
-                        <!-- <li>
-                            <a class="pull-left" href="javascript:void(0)">
-                                <span class="pull-left">Switch User</span>
-                                <span class="on-btn pull-left"></span>
-                            </a>
-                        </li> -->
-                        <li role="separator" class="divider" style="width:100%"></li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="logout()">Logout</a>
-                        </li>
-                        <li role="separator" class="divider" style="width:100%"></li>
-                        <li class="app_list">
-                            <ul>
-                                <h6>Downloads</h6>
-                                <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i class="fa fa-android"></i> Android</a></li>
-                                <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i class="fa fa-apple"></i> ios</a></li>
-                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
-                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
-                                <!-- <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app-{{apkVersion}}.tar.gz" target="_blank" title="linux app"><i class="fa fa-linux"></i> Linux</a></li> -->
-                            </ul>
-                        </li>
-                        <li role="separator" class="divider" style="width:100%"></li>
-                        <li class="app_list">
-                            <ul>
+            </li>
+            <li role="separator" class="divider" style="width:100%"></li>
+            <li>
+              <a [routerLink]="['user-details']">API</a>
+            </li>
+            <!-- not available now
+            <li>
+                <a [routerLink]="['user-details']">Billing</a>
+            </li>
+            -->
+            <li>
+              <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
+            </li>
+            <li>
+              <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
+            </li>
+            <li>
+              <a href="http://faq.giddh.com" target="_blank">Help</a>
+            </li>
+            <!-- <li>
+                <a target="_Blank" href="https://docs.giddh.com/">Documentation</a>
+            </li> -->
+            <!-- <li>
+                <a class="pull-left" href="javascript:void(0)">
+                    <span class="pull-left">Switch User</span>
+                    <span class="on-btn pull-left"></span>
+                </a>
+            </li> -->
+            <li role="separator" class="divider" style="width:100%"></li>
+            <li>
+              <a href="javascript:void(0)" (click)="logout()">Logout</a>
+            </li>
+            <li role="separator" class="divider" style="width:100%"></li>
+            <li class="app_list">
+              <ul>
+                <h6>Downloads</h6>
+                <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank"
+                       title="android app"><i class="fa fa-android"></i> Android</a></li>
+                <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
+                  class="fa fa-apple"></i> ios</a></li>
+                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg"
+                       target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe"
+                       target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                <!-- <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-app-{{apkVersion}}.tar.gz" target="_blank" title="linux app"><i class="fa fa-linux"></i> Linux</a></li> -->
+              </ul>
+            </li>
+            <li role="separator" class="divider" style="width:100%"></li>
+            <li class="app_list">
+              <ul>
 
-                                <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
-                                <li class="text-right bdrL"><a [routerLink]="['/onboarding']">Get Started</a></li>
-                            </ul>
-                        </li>
-                        <!-- <li role="separator" class="divider" style="width:100%"></li>
-                        <li>
-                            <a href="javascript:void(0)">v1.2.23 : view release notes</a>
-                        </li> -->
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+                <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                <li class="text-right bdrL"><a [routerLink]="['/onboarding']">Get Started</a></li>
+              </ul>
+            </li>
+            <!-- <li role="separator" class="divider" style="width:100%"></li>
+            <li>
+                <a href="javascript:void(0)">v1.2.23 : view release notes</a>
+            </li> -->
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups"
+                     [search]='accountSearchValue' [flyAccounts]="flyAccounts | async"
+                     (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
-    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
-        <div class="modal-content fullScreenMy">
-            <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
-            </ng-template>
-        </div>
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy"
+     role="dialog" (onShown)="onShown()">
+  <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+    <div class="modal-content fullScreenMy">
+      <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
+      </ng-template>
     </div>
+  </div>
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
-            </ng-template>
-        </div>
+<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+     role="dialog" (onHidden)="onHide()">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+      </ng-template>
     </div>
+  </div>
 </div>
 
 <!--add company new modal  -->
-<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
-            </ng-template>
-        </div>
+<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+     role="dialog" (onHidden)="onHide()">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
+      </ng-template>
     </div>
+  </div>
 </div>
 
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody"
+                     (cancelCallBack)="hideDeleteCompanyModal($event)"
+                     (successCallBack)="deleteCompany($event)"></confirm-modal>
     </div>
+  </div>
 </div>
 <!--CMD + K modal  -->
-<div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
-    <div class="modal-dialog modal-small">
-        <div class="modal-content">
-            <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40" [forceClearReactive]="forceClear$ | async" [showClear]="false" (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation"
-                placeholder="Search for page..." [options]="navigationOptionList" [ItemHeight]="33" class="form-group"></sh-select>
-            <div *ngIf="navigationModalVisible" class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
-            </div>
-        </div>
+<div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog"
+     (onHide)="onNavigationHide($event)">
+  <div class="modal-dialog modal-small">
+    <div class="modal-content">
+      <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40"
+                 [forceClearReactive]="forceClear$ | async" [showClear]="false"
+                 (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation"
+                 placeholder="Search for page..." [options]="navigationOptionList" [ItemHeight]="33"
+                 class="form-group"></sh-select>
+      <div *ngIf="navigationModalVisible" class="shortcuts">
+        <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp;
+        to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+      </div>
     </div>
+  </div>
 </div>

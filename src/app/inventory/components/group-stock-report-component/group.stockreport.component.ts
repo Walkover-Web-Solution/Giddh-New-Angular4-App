@@ -1,58 +1,62 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'Greater Than' },
-  { label: 'Less Than', value: 'Less than' },
-  { label: 'Greater Than or Equals', value: 'Greater than or Equals' },
-  { label: 'Less Than or Equals', value: 'Less than or Equals' },
-  { label: 'Equals', value: 'Equals' }
+  {label: 'Greater Than', value: 'Greater Than'},
+  {label: 'Less Than', value: 'Less than'},
+  {label: 'Greater Than or Equals', value: 'Greater than or Equals'},
+  {label: 'Less Than or Equals', value: 'Less than or Equals'},
+  {label: 'Equals', value: 'Equals'}
 ];
 
 const ENTITY_FILTER = [
-  { label: 'Inwards', value: 'inwards' },
-  { label: 'Outwards', value: 'outwards' },
-  { label: 'Opening Stock', value: 'Opening Stock' },
-  { label: 'Closing Stock', value: 'Closing Stock' }
+  {label: 'Inwards', value: 'inwards'},
+  {label: 'Outwards', value: 'outwards'},
+  {label: 'Opening Stock', value: 'Opening Stock'},
+  {label: 'Closing Stock', value: 'Closing Stock'}
 ];
 
 const VALUE_FILTER = [
-  { label: 'Quantity', value: 'quantity' },
-  { label: 'Value', value: 'Value' }
+  {label: 'Quantity', value: 'quantity'},
+  {label: 'Value', value: 'Value'}
 ];
 
 @Component({
   selector: 'invetory-group-stock-report',  // <home></home>
   templateUrl: './group.stockreport.component.html',
   styles: [`
-  .bdrT {
-    border-color: #ccc;
-  }
-  :host ::ng-deep .fb__1-container {
-    justify-content: flex-start;
-  }
-  :host ::ng-deep .fb__1-container .form-group {
-    margin-right: 10px;
-    margin-bottom:0;
-  }
-  :host ::ng-deep .fb__1-container .date-range-picker {
-    min-width: 150px;
-  }
+    .bdrT {
+      border-color: #ccc;
+    }
+
+    :host ::ng-deep .fb__1-container {
+      justify-content: flex-start;
+    }
+
+    :host ::ng-deep .fb__1-container .form-group {
+      margin-right: 10px;
+      margin-bottom: 0;
+    }
+
+    :host ::ng-deep .fb__1-container .date-range-picker {
+      min-width: 150px;
+    }
   `]
 })
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -120,18 +124,18 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private router: Router,
     private fb: FormBuilder,
     private inventoryAction: InventoryAction) {
-    this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).takeUntil(this.destroyed$);
+    this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$));
     this.GroupStockReportRequest = new GroupStockReportRequest();
-    this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).takeUntil(this.destroyed$);
-    this.activeGroup$.takeUntil(this.destroyed$).subscribe(a => {
+    this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
       if (a) {
         const stockGroup = _.cloneDeep(a);
         const stockList = [];
         this.activeGroupName = stockGroup.name;
         stockGroup.stocks.forEach((stock) => {
-          stockList.push({ label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName });
+          stockList.push({label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName});
         });
-        this.stockList$ = Observable.of(stockList);
+        this.stockList$ = observableOf(stockList);
       }
     });
   }
@@ -160,9 +164,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       }
     });
 
-    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
-    this.entityFilterDropDown$ = Observable.of(ENTITY_FILTER);
-    this.valueFilterDropDown$ = Observable.of(VALUE_FILTER);
+    this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
+    this.entityFilterDropDown$ = observableOf(ENTITY_FILTER);
+    this.valueFilterDropDown$ = observableOf(VALUE_FILTER);
   }
 
   public getGroupReport(resetPage: boolean) {
@@ -183,7 +187,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public ngAfterViewInit() {
-    this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
+    this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
       if (!a) {
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
@@ -235,6 +239,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
   }
 }

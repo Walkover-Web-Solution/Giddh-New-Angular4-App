@@ -1,303 +1,361 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
-    <form class="">
-        <div class="row">
-            <div class="form-group col-xs-2">
-                <label>GSTR Form</label>
-                <div class="btn-group btn-block" dropdown>
-                    <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
-                            <span *ngIf="!selectedGstrType.name">-- Select GSTR --</span>
-                            <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span>
-                            <span class="pull-right">
+  <form class="">
+    <div class="row">
+      <div class="form-group col-xs-2">
+        <label>GSTR Form</label>
+        <div class="btn-group btn-block" dropdown>
+          <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
+            <span *ngIf="!selectedGstrType.name">-- Select GSTR --</span>
+            <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span>
+            <span class="pull-right">
                     <i class="fa fa-caret-down"></i>
                   </span>
-                        </button>
-                    <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                        <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
-                            {{item.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
-                <div class="row">
-                    <label>Month</label>
-                    <div class="input-group">
-                        <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
+          </button>
+          <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+            <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
+              {{item.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;"
+           [hidden]="!selectedGstrType.name">
+        <div class="row">
+          <label>Month</label>
+          <div class="input-group">
+            <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')"
+                   (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+            <span class="input-group-btn">
+                          <button type="button" class="btn btn-default"
+                                  (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
                             <i class="glyphicon glyphicon-calendar"></i>
                           </button>
                         </span>
-                    </div>
-                    <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <ul class="my-dropdown-menu calendar-dropdown">
-                            <li>
-                                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false" [minMode]="'month'"></datepicker>
-                            </li>
-                            <li class="pd1 clearfix pdT pdB">
+          </div>
+          <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <ul class="my-dropdown-menu calendar-dropdown">
+              <li>
+                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
+                            [(ngModel)]="selectedDateForGSTR1"
+                            (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false"
+                            [minMode]="'month'"></datepicker>
+              </li>
+              <li class="pd1 clearfix pdT pdB">
                                 <span class="btn-group pull-left">
-                                  <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
-                                  <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
+                                  <button type="button" class="btn btn-xs btn-primary mrR"
+                                          (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                  <button type="button" class="btn btn-xs btn-success"
+                                          (click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
-                <label>Email <i class='fa fa-info-circle' tooltip-placement="top" tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
-            </div>
-            <!-- comment by mustafa for GSTR2
-                <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
-                    <label>Report</label>
-                    <div class="btn-group btn-block" dropdown>
-                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-             </button>
-                        <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                            <li class="cp" *ngFor="let item of purchaseReportOptions">
-                                {{item.name}}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                -->
-            <!-- hide due to unused
-                <div class="form-group inline" *ngIf="selectedGstrType.name">
-                    <br />
-                   <button [disabled]="!selectedGstrType.name || selectedGstrType.name =='GSTR1'" class="btn btn-success">GO</button>
-    
-                </div>
-            -->
-            <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
-                <label class="d-block">&nbsp;</label>
-                <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
-                    <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
-                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File {{ selectedGstrType.name }}
-                                <span class="pull-right mrL4">
+                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
+        <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
+                        tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
+        <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off"
+               placeholder="Email address"/>
+      </div>
+      <!-- comment by mustafa for GSTR2
+          <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
+              <label>Report</label>
+              <div class="btn-group btn-block" dropdown>
+                  <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+       </button>
+                  <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                      <li class="cp" *ngFor="let item of purchaseReportOptions">
+                          {{item.name}}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          -->
+      <!-- hide due to unused
+          <div class="form-group inline" *ngIf="selectedGstrType.name">
+              <br />
+             <button [disabled]="!selectedGstrType.name || selectedGstrType.name =='GSTR1'" class="btn btn-success">GO</button>
+
+          </div>
+      -->
+      <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
+        <label class="d-block">&nbsp;</label>
+        <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
+          <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
+            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File {{
+              selectedGstrType.name }}
+              <span class="pull-right mrL4">
                     <i class="fa fa-caret-down"></i>
                   </span>
-                            </button>
-                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet</li>
-                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet</li>
-                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With Detail Sheet</li>
-                            <!-- <li class="cp dd-options">Use JIOGST API</li> -->
-                            <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
-                        </ul>
-                    </div>
-                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading... </small>
-                </div>
-            </div>
-            <!-- hide due to unused -->
-            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
-                <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i> Jio GST</button> 
-                <span style="margin: 5px 10px;" class="pull-right">OR</span>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax Pro</button>
-            </div>
-
+            </button>
+            <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
+              <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'"
+                  (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet
+              </li>
+              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'"
+                  (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet
+              </li>
+              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'"
+                  (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'"
+                  (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'"
+                  (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email
+                Sheet
+              </li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With
+                Detail Sheet
+              </li>
+              <!-- <li class="cp dd-options">Use JIOGST API</li> -->
+              <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
+            </ul>
+          </div>
+          <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading...</small>
         </div>
-    </form>
-    <!-- Top filter end  -->
+      </div>
+      <!-- hide due to unused -->
+      <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
+          class="fa fa-cog" aria-hidden="true"></i> Jio GST
+        </button>
+        <span style="margin: 5px 10px;" class="pull-right">OR</span>
+        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i
+          class="fa fa-cog" aria-hidden="true"></i> Tax Pro
+        </button>
+      </div>
 
-    <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
-    <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
-        <div class="row">
-            <h1 class="section_title">
-                <strong>Purchase Report </strong>
-                <small>(To file your GST return, all missing data needs to be filled properly)</small>
-            </h1>
-        </div>
     </div>
+  </form>
+  <!-- Top filter end  -->
 
-    <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
-        <!-- filter -->
-        <div class="col-xs-12">
-            <div class="row">
-                <form class="col-xs-10">
-                    <div class="row">
-                        <div class="form-group col-xs-2">
-                            <div class="row">
-                                <label>Date Range</label>
-                                <br>
-                                <input type="text" name="dateInput" daterangepicker (selected)="selectedDate($event, mainInput)" [options]="datePickerOptions" class="form-control date-range-picker" />
-                            </div>
-                        </div>
+  <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
+  <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
+    <div class="row">
+      <h1 class="section_title">
+        <strong>Purchase Report </strong>
+        <small>(To file your GST return, all missing data needs to be filled properly)</small>
+      </h1>
+    </div>
+  </div>
 
-                        <div class="form-group col-xs-2">
-                            <label>Other Filters</label>
+  <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
+    <!-- filter -->
+    <div class="col-xs-12">
+      <div class="row">
+        <form class="col-xs-10">
+          <div class="row">
+            <div class="form-group col-xs-2">
+              <div class="row">
+                <label>Date Range</label>
+                <br>
+                <input type="text" name="dateInput" daterangepicker (selected)="selectedDate($event, mainInput)"
+                       [options]="datePickerOptions" class="form-control date-range-picker"/>
+              </div>
+            </div>
 
-                            <div class="btn-group btn-block" dropdown>
-                                <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> Filter
-                                        <span class="select_drop pull-right mrT1">
+            <div class="form-group col-xs-2">
+              <label>Other Filters</label>
+
+              <div class="btn-group btn-block" dropdown>
+                <button dropdownToggle type="button" data-toggle="dropdown"
+                        class="form-control text-left btn-block dropdown-toggle"> Filter
+                  <span class="select_drop pull-right mrT1">
                         <i class="fa fa-caret-down"></i>
                       </span>
-                                    </button>
-                                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                                    <li *ngFor="let item of otherFilters">
-                                        <label>
-                                                <input type="checkbox"> {{item.name}}</label>
-                                    </li>
-                                </ul>
-                            </div>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                  <li *ngFor="let item of otherFilters">
+                    <label>
+                      <input type="checkbox"> {{item.name}}</label>
+                  </li>
+                </ul>
+              </div>
 
-                        </div>
-                        <div class="form-group inline" *ngIf="selectedGstrType">
-                            <br />
-                            <button type="button" class="btn btn-success">GO</button>
-                            <a class="btn btn-link">Reset</a>
-                        </div>
-                        <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="!generateInvoiceArr.length">Generate <br />Purchase Invoice</button>
-                    </div>
-                </form>
-
-                <!-- search form  -->
-                <form class="col-xs-2 pull-right search-form">
-                    <br />
-                    <div class="row">
-                        <div class="input-group col-xs-12 pull-right">
-                            <span class="input-group-btn"><i class="glyphicon glyphicon-search"></i></span>
-                            <input type="text" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox class="form-control" placeholder="Search">
-                        </div>
-                        <!-- /input-group -->
-                    </div>
-                </form>
             </div>
-        </div>
-        <!-- filter end  -->
+            <div class="form-group inline" *ngIf="selectedGstrType">
+              <br/>
+              <button type="button" class="btn btn-success">GO</button>
+              <a class="btn btn-link">Reset</a>
+            </div>
+            <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="!generateInvoiceArr.length">
+              Generate <br/>Purchase Invoice
+            </button>
+          </div>
+        </form>
 
-        <!-- table  -->
-        <table class="table basic table-bordered">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Date</th>
-                    <th>Particulars</th>
-                    <th>Account</th>
-                    <th>
+        <!-- search form  -->
+        <form class="col-xs-2 pull-right search-form">
+          <br/>
+          <div class="row">
+            <div class="input-group col-xs-12 pull-right">
+              <span class="input-group-btn"><i class="glyphicon glyphicon-search"></i></span>
+              <input type="text" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox class="form-control"
+                     placeholder="Search">
+            </div>
+            <!-- /input-group -->
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- filter end  -->
+
+    <!-- table  -->
+    <table class="table basic table-bordered">
+      <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Date</th>
+        <th>Particulars</th>
+        <th>Account</th>
+        <th>
                         <span (click)="sortInvoicesBy('gstin')" class="cursor-pointer">GSTIN
                   <i class="fa fa-sort" aria-hidden="true"></i>
                 </span>
-                    </th>
-                    <th>
+        </th>
+        <th>
                         <span (click)="sortInvoicesBy('invoiceNo')" class="cursor-pointer">Invoice No.
                   <i class="fa fa-sort" aria-hidden="true"></i>
                 </span>
-                    </th>
-                    <th>Voucher No.</th>
-                    <th>Entry</th>
-                    <th class="text-right">Taxable Value</th>
-                    <!-- <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th> -->
-                    <th class="text-right">IGST</th>
-                    <th class="text-right">CGST</th>
-                    <th class="text-right">SGST</th>
-                    <th class="text-right">UTGST</th>
-                    <th class="text-right">GSTR2</th>
-                    <th class="text-right">ITC</th>
-                    <th class="text-right">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let invoice of allPurchaseInvoices.items; let i = index">
-                    <td class="text-center">
-                        <input type="checkbox" (click)="generateInvoice(invoice, $event);" [disabled]="invoice.entryType !== 'reverse charge' || invoice.invoiceGenerated || invoice.taxes[0]" />
-                    </td>
-                    <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
-                    <td>
-                        <input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
-                        <!-- <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small> -->
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'" />
-                    </td>
-                    <td>{{invoice.voucherNo}}</td>
-                    <td class="select text-center">
-                        <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">
-                                    <option value="" [selected]="invoice.invoiceNumber">None selected</option>
-                                    <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
-                                    <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber">
-                                        Reverse Charge</option>
-                                </select>
-                            <span class="select_drop">
+        </th>
+        <th>Voucher No.</th>
+        <th>Entry</th>
+        <th class="text-right">Taxable Value</th>
+        <!-- <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th> -->
+        <th class="text-right">IGST</th>
+        <th class="text-right">CGST</th>
+        <th class="text-right">SGST</th>
+        <th class="text-right">UTGST</th>
+        <th class="text-right">GSTR2</th>
+        <th class="text-right">ITC</th>
+        <th class="text-right">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let invoice of allPurchaseInvoices.items; let i = index">
+        <td class="text-center">
+          <input type="checkbox" (click)="generateInvoice(invoice, $event);"
+                 [disabled]="invoice.entryType !== 'reverse charge' || invoice.invoiceGenerated || invoice.taxes[0]"/>
+        </td>
+        <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
+        <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
+        <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
+        <td>
+          <input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn"
+                 disabled="true"/>
+          <!-- <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small> -->
+        </td>
+        <td>
+          <input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber"
+                 [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'"/>
+        </td>
+        <td>{{invoice.voucherNo}}</td>
+        <td class="select text-center">
+          <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
+            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp"
+                    (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);"
+                    [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">
+              <option value="" [selected]="invoice.invoiceNumber">None selected</option>
+              <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15">
+                Composite
+              </option>
+              <option value="reverse charge"
+                      *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber">
+                Reverse Charge
+              </option>
+            </select>
+            <span class="select_drop">
                     <i class="fa fa-caret-down"></i>
                   </span>
-                        </div>
-                        <button *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
+          </div>
+          <button
+            *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)"
+            (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s
+          </button>
 
-                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
-                            [autoClose]="false">
-                            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" [disabled]="selectedRowIndex != i">
-                                    {{dropdownHeading}}
-                                    <span class="select_drop pull-right mrT1">
+          <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()"
+               (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)"
+               *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
+               [autoClose]="false">
+            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle"
+                    [disabled]="selectedRowIndex != i">
+              {{dropdownHeading}}
+              <span class="select_drop pull-right mrT1">
                       <i class="fa fa-caret-down"></i>
                     </span>
-                                </button>
-                            <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
-                                <!-- <li>
-                                        <label>
-                                    <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
-                                </label>
-                                    </li> -->
-                                <li *ngFor="let tax of allTaxes; let idx = index">
-                                    <label> {{ invoice.taxes[0] }}
-                                            <!--(click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"  -->
-                                            <input type="checkbox" name="invoiceTax" class="invoiceTax" (click)="selectTax($event, tax, i)" [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]"> {{ tax.name}}
-                                        </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-right">{{invoice.taxableValue}}</td>
-                    <!-- <td class="form-group" *ngIf="isReverseChargeSelected">
-    
-                    </td> -->
-                    <td class="text-right">{{invoice.igstAmount}}</td>
-                    <td class="text-right">{{invoice.cgstAmount}}</td>
-                    <td class="text-right">{{invoice.sgstAmount}}</td>
-                    <td class="text-right">{{invoice.utgstAmount}}</td>
-                    <td class="text-center">
-                        <input type="checkbox" (click)="updateOncheck(invoice, 'sendToGstr2', $event.target.checked);" [(ngModel)]="invoice.sendToGstr2" [disabled]="!editMode || (selectedRowIndex != i && editMode)" />
-                    </td>
-                    <td class="text-center">
-                        <input type="checkbox" (click)="updateOncheck(invoice, 'availItc', $event.target.checked);" [(ngModel)]="invoice.availItc" [disabled]="!editMode || (selectedRowIndex != i && editMode)" />
-                    </td>
-                    <td class="text-center ico-btn">
-                        <button class="btn btn-xs" type="button" [disabled]="" *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)="editRow(i)">
-                                <i aria-hidden="true" class="fa fa-pencil"></i>
-                            </button>
-                        <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)" *ngIf="selectedRowIndex == i && editMode">
-                                <i aria-hidden="true" class="fa fa-check"></i>
-                            </button>
-                    </td>
-                </tr>
+            </button>
+            <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
+              <!-- <li>
+                      <label>
+                  <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
+              </label>
+                  </li> -->
+              <li *ngFor="let tax of allTaxes; let idx = index">
+                <label> {{ invoice.taxes[0] }}
+                  <!--(click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"  -->
+                  <input type="checkbox" name="invoiceTax" class="invoiceTax" (click)="selectTax($event, tax, i)"
+                         [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]"> {{
+                  tax.name}}
+                </label>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td class="text-right">{{invoice.taxableValue}}</td>
+        <!-- <td class="form-group" *ngIf="isReverseChargeSelected">
 
-            </tbody>
-            <tbody *ngIf="allPurchaseInvoices.count === 0">
-                <tr>
-                    <td colspan="16" class="text-center empty_table">
-                        <h1>No Record Found !!</h1>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        </td> -->
+        <td class="text-right">{{invoice.igstAmount}}</td>
+        <td class="text-right">{{invoice.cgstAmount}}</td>
+        <td class="text-right">{{invoice.sgstAmount}}</td>
+        <td class="text-right">{{invoice.utgstAmount}}</td>
+        <td class="text-center">
+          <input type="checkbox" (click)="updateOncheck(invoice, 'sendToGstr2', $event.target.checked);"
+                 [(ngModel)]="invoice.sendToGstr2" [disabled]="!editMode || (selectedRowIndex != i && editMode)"/>
+        </td>
+        <td class="text-center">
+          <input type="checkbox" (click)="updateOncheck(invoice, 'availItc', $event.target.checked);"
+                 [(ngModel)]="invoice.availItc" [disabled]="!editMode || (selectedRowIndex != i && editMode)"/>
+        </td>
+        <td class="text-center ico-btn">
+          <button class="btn btn-xs" type="button" [disabled]=""
+                  *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)="editRow(i)">
+            <i aria-hidden="true" class="fa fa-pencil"></i>
+          </button>
+          <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)"
+                  *ngIf="selectedRowIndex == i && editMode">
+            <i aria-hidden="true" class="fa fa-check"></i>
+          </button>
+        </td>
+      </tr>
 
-        <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
-        <div class="center-block text-center" *ngIf="allPurchaseInvoices.count > 0">
-            <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
-            </pagination>
-        </div>
+      </tbody>
+      <tbody *ngIf="allPurchaseInvoices.count === 0">
+      <tr>
+        <td colspan="16" class="text-center empty_table">
+          <h1>No Record Found !!</h1>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
+    <div class="center-block text-center" *ngIf="allPurchaseInvoices.count > 0">
+      <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5"
+                  class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
+      </pagination>
     </div>
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-    <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+  </div>
+  <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+  <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState"
+                      [@slideInOut]="accountAsideMenuState"
+                      (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>

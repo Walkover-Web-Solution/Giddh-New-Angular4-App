@@ -13,6 +13,7 @@
     <span class="caret"></span>
   </button>
   <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <li role="menuitem" *ngFor="let pg of dropDownPages" (click)="changePage(pg)"><a class="dropdown-item cp">{{ pg.name }}</a></li>
+    <li role="menuitem" *ngFor="let pg of dropDownPages" (click)="changePage(pg)"><a class="dropdown-item cp">{{ pg.name
+      }}</a></li>
   </ul>
 </div>

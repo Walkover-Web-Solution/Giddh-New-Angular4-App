@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
@@ -10,9 +11,10 @@ import { Store } from '@ngrx/store';
 export class PermissionComponent implements OnInit {
   constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
   }
+
   public ngOnInit(): void {
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'permissions';

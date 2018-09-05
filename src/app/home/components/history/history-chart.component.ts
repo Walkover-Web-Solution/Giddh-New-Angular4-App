@@ -1,8 +1,8 @@
+import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { Observable } from 'rxjs/Observable';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { AppState } from '../../../store/roots';
@@ -42,9 +42,10 @@ export class HistoryChartComponent implements OnInit {
   private profitLossData = [];
   private profitLossDataLY = [];
   private AllSeries: IndividualSeriesOptionsExtension[];
+
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
+    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
 
     this.AllSeries = [{
       name: 'Expense',
@@ -72,16 +73,24 @@ export class HistoryChartComponent implements OnInit {
       visible: (this.showProfitLoss && this.showLastYear)
     }];
   }
+
   public hardRefresh() {
     this.refresh = true;
     this.fetchChartData();
   }
+
   public fetchChartData() {
     this.requestInFlight = true;
     this.ApiToCALL = [];
-    if (this.showExpense && (!(this.expenseData && this.expenseData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
-    if (this.showRevenue && (!(this.revenueData && this.revenueData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
-    if (this.showProfitLoss && (!(this.profitLossData && this.profitLossData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
+    if (this.showExpense && (!(this.expenseData && this.expenseData.length > 0) || this.refresh)) {
+      this.ApiToCALL.push(API_TO_CALL.EXPENCE);
+    }
+    if (this.showRevenue && (!(this.revenueData && this.revenueData.length > 0) || this.refresh)) {
+      this.ApiToCALL.push(API_TO_CALL.REVENUE);
+    }
+    if (this.showProfitLoss && (!(this.profitLossData && this.profitLossData.length > 0) || this.refresh)) {
+      this.ApiToCALL.push(API_TO_CALL.PL);
+    }
 
     if (this.activeFinancialYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
@@ -90,9 +99,15 @@ export class HistoryChartComponent implements OnInit {
     }
 
     this.ApiToCALL = [];
-    if (this.showExpense && this.showLastYear && (!(this.expenseDataLY && this.expenseDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
-    if (this.showRevenue && this.showLastYear && (!(this.revenueDataLY && this.revenueDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
-    if (this.showProfitLoss && this.showLastYear && (!(this.profitLossDataLY && this.profitLossDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
+    if (this.showExpense && this.showLastYear && (!(this.expenseDataLY && this.expenseDataLY.length > 0) || this.refresh)) {
+      this.ApiToCALL.push(API_TO_CALL.EXPENCE);
+    }
+    if (this.showRevenue && this.showLastYear && (!(this.revenueDataLY && this.revenueDataLY.length > 0) || this.refresh)) {
+      this.ApiToCALL.push(API_TO_CALL.REVENUE);
+    }
+    if (this.showProfitLoss && this.showLastYear && (!(this.profitLossDataLY && this.profitLossDataLY.length > 0) || this.refresh)) {
+      this.ApiToCALL.push(API_TO_CALL.PL);
+    }
     if (this.lastFinancialYear && this.showLastYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
@@ -100,6 +115,7 @@ export class HistoryChartComponent implements OnInit {
     }
     this.refresh = false;
   }
+
   public generateCharts() {
     _.each(this.AllSeries, (p) => {
       if (p.name === 'Expense') {
@@ -158,6 +174,7 @@ export class HistoryChartComponent implements OnInit {
       series: this.AllSeries.filter(p => p.visible)
     };
   }
+
   public toggle(str: string) {
     let ApiToCALL: API_TO_CALL[] = [];
     if (str === 'Profit/Loss') {
@@ -170,11 +187,13 @@ export class HistoryChartComponent implements OnInit {
     this.ShowLastYear();
     this.fetchChartData();
   }
+
   public LyToggle() {
     this.showLastYear = !this.showLastYear;
     this.ShowLastYear();
     this.fetchChartData();
   }
+
   public ShowLastYear() {
     this.AllSeries = [{
       name: 'Expense',
@@ -202,6 +221,7 @@ export class HistoryChartComponent implements OnInit {
       visible: (this.showProfitLoss && this.showLastYear)
     }];
   }
+
   public ngOnInit() {
     //
     this.companies$.subscribe(c => {
@@ -209,7 +229,7 @@ export class HistoryChartComponent implements OnInit {
         let activeCompany: CompanyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
-        this.activeCompanyUniqueName$.take(1).subscribe(a => {
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
           if (activeCompany) {
@@ -240,8 +260,8 @@ export class HistoryChartComponent implements OnInit {
         // this.fetchChartData();
       }
     });
-    this.comparisionChartData
-      .skipWhile(p => (isNullOrUndefined(p)))
+    this.comparisionChartData.pipe(
+      skipWhile(p => (isNullOrUndefined(p))))
       .subscribe(p => {
         this.expenseData = (p.ExpensesActiveYearYearly);
         this.expenseDataLY = (p.ExpensesLastYearYearly);

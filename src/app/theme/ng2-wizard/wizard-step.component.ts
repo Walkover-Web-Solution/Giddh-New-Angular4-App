@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'wizard-step',
   template:
-  `
+    `
     <div [hidden]="!isActive">
       <ng-content></ng-content>
     </div>
@@ -21,19 +21,21 @@ export class WizardStepComponent {
   @Output() public onComplete: EventEmitter<any> = new EventEmitter<any>();
 
   public isDisabled: boolean = true;
-  private _isActive: boolean = false;
 
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor() {
+  }
+
+  private _isActive: boolean = false;
+
+  get isActive(): boolean {
+    return this._isActive;
+  }
 
   @Input('isActive')
   set isActive(isActive: boolean) {
     this._isActive = isActive;
     this.isDisabled = false;
-  }
-
-  get isActive(): boolean {
-    return this._isActive;
   }
 
 }

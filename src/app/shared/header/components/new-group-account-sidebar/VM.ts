@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { INameUniqueName } from '../../../../models/api-models/Inventory';
@@ -23,6 +24,7 @@ export class GroupAccountSidebarVM {
   constructor(private _cdRef: ChangeDetectorRef, private store: Store<AppState>) {
 
   }
+
   public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
     this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
     this.columns.push(new ColumnGroupsAccountVM(item));
@@ -86,7 +88,7 @@ export class GroupAccountSidebarVM {
             this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
             let newCol = fCol.Items.find(j => j.uniqueName === resp.queryString.parentUniqueName);
             let grpsBck: GroupsWithAccountsResponse[];
-            this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+            this.store.select(s => s.general.groupswithaccounts).pipe(take(1)).subscribe(s => grpsBck = s);
 
             let listBckup = this.activeGroupFromGroupListBackup(grpsBck, resp.queryString.parentUniqueName, null);
             if (listBckup) {
@@ -243,6 +245,7 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
   public Items: IGroupOrAccount[];
   public SelectedItem: IGroupOrAccount;
   public IsCreateNewBtnShowable: boolean = false;
+
   // tslint:disable-next-line:no-empty
   constructor(grp: IGroupsWithAccounts) {
     if (grp) {
@@ -257,8 +260,8 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
       this.groups = grp.groups;
       let grps = this.groups || [];
       let accs = this.accounts || [];
-      let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-      let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+      let grps2 = grps.map(p => ({...p, isGroup: true} as IGroupOrAccount));
+      let accs2 = accs.map(p => ({...p, isGroup: false} as IGroupOrAccount));
 
       this.Items = [...grps2, ...accs2] as IGroupOrAccount[];
     }

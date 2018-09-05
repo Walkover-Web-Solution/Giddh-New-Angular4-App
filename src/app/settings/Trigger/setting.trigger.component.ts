@@ -1,10 +1,11 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyActions } from '../../actions/company.actions';
@@ -77,9 +78,9 @@ export class SettingTriggerComponent implements OnInit {
   public filterList: IOption[] = filterType;
   public actionList: IOption[] = actionType;
   public scopeList: IOption[] = scopeList;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
-  public forceClearEntityList$: Observable<IForceClear> = Observable.of({status: false});
-  public forceClearFilterList$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public forceClearEntityList$: Observable<IForceClear> = observableOf({status: false});
+  public forceClearFilterList$: Observable<IForceClear> = observableOf({status: false});
   public entityOptions$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -100,9 +101,9 @@ export class SettingTriggerComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.store.select(p => p.settings.triggers).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.triggers).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
-        this.forceClear$ = Observable.of({status: true});
+        this.forceClear$ = observableOf({status: true});
         this.availableTriggers = _.cloneDeep(o);
       }
     });
@@ -115,7 +116,7 @@ export class SettingTriggerComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$).subscribe((groups) => {
+    this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$)).subscribe((groups) => {
       if (groups) {
         let groupsRes: IOption[] = [];
         groups.map(d => {
@@ -125,7 +126,7 @@ export class SettingTriggerComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies) => {
+    this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies) => {
       if (companies) {
         let companiesRes: IOption[] = [];
         companies.map(d => {
@@ -225,7 +226,7 @@ export class SettingTriggerComponent implements OnInit {
   public getFlattenAccounts(value) {
     let query = value || '';
     // get flattern accounts
-    this._accountService.GetFlattenAccounts(query, '').debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
+    this._accountService.GetFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$),).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
@@ -245,19 +246,19 @@ export class SettingTriggerComponent implements OnInit {
   }
 
   public onEntityTypeSelected(ev) {
-    this.forceClearEntityList$ = Observable.of({status: true});
+    this.forceClearEntityList$ = observableOf({status: true});
     if (ev.value === 'account') {
-      this.entityOptions$ = Observable.of(this.accounts);
+      this.entityOptions$ = observableOf(this.accounts);
     } else if (ev.value === 'group') {
-      this.entityOptions$ = Observable.of(this.groups);
+      this.entityOptions$ = observableOf(this.groups);
     } else if (ev.value === 'company') {
-      this.entityOptions$ = Observable.of(this.companies);
+      this.entityOptions$ = observableOf(this.companies);
     }
   }
 
   public onResetEntityType() {
     this.newTriggerObj.entityType = '';
-    this.forceClearEntityList$ = Observable.of({status: true});
+    this.forceClearEntityList$ = observableOf({status: true});
   }
 
   /**
@@ -266,10 +267,10 @@ export class SettingTriggerComponent implements OnInit {
   public onSelectScope(event) {
     if (event.value === 'closing balance') {
       this.onSelectClosingBalance();
-      if ( (this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountLessThan')) {
+      if ((this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountLessThan')) {
         return;
       } else {
-        this.forceClearFilterList$ = Observable.of({status: true});
+        this.forceClearFilterList$ = observableOf({status: true});
       }
     } else {
       this.filterList = filterType;
@@ -278,8 +279,8 @@ export class SettingTriggerComponent implements OnInit {
 
   public onSelectClosingBalance() {
     this.filterList = [
-        {label: 'Amount Greater Than', value: 'amountGreaterThan'},
-        {label: 'Amount Less Than', value: 'amountLessThan'},
+      {label: 'Amount Greater Than', value: 'amountGreaterThan'},
+      {label: 'Amount Less Than', value: 'amountLessThan'},
     ];
   }
 

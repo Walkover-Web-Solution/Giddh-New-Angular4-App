@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -22,10 +23,10 @@ export class SettingsTriggersService {
   public GetTriggers(): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + TRIGGER_API.GET.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(this.config.apiUrl + TRIGGER_API.GET.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, ''));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')),);
   }
 
   /**
@@ -34,11 +35,11 @@ export class SettingsTriggersService {
   public CreateTrigger(model): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + TRIGGER_API.POST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + TRIGGER_API.POST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
   }
 
   /**
@@ -47,11 +48,11 @@ export class SettingsTriggersService {
   public UpdateTrigger(model: any, triggerUniqueName: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + TRIGGER_API.PUT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', encodeURIComponent(triggerUniqueName)), model).map((res) => {
+    return this._http.put(this.config.apiUrl + TRIGGER_API.PUT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', encodeURIComponent(triggerUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
   }
 
   /**
@@ -60,10 +61,10 @@ export class SettingsTriggersService {
   public DeleteTrigger(triggerUniqueName: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + TRIGGER_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', encodeURIComponent(triggerUniqueName))).map((res) => {
+    return this._http.delete(this.config.apiUrl + TRIGGER_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', encodeURIComponent(triggerUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = triggerUniqueName;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, triggerUniqueName));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, triggerUniqueName)),);
   }
 }

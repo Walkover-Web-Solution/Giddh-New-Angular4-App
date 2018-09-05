@@ -1,12 +1,13 @@
-import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class SettingsTaxesService {
@@ -24,11 +25,11 @@ export class SettingsTaxesService {
   public CreateTax(model): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
   }
 
   /**
@@ -37,11 +38,11 @@ export class SettingsTaxesService {
   public UpdateTax(model, taxUniqueName: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName, model).map((res) => {
+    return this._http.put(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName, model).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)),);
   }
 
   /**
@@ -50,10 +51,10 @@ export class SettingsTaxesService {
   public DeleteTax(taxUniqueName: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName).map((res) => {
+    return this._http.delete(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = taxUniqueName;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, taxUniqueName));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, taxUniqueName)),);
   }
 }

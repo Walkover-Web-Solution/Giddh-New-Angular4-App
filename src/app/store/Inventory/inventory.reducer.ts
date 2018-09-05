@@ -525,14 +525,14 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       return Object.assign({}, state, {moveStockSuccess: false});
     case InventoryActionsConst.MoveStockResponse:
       let moveStockResp: BaseResponse<string, string> = action.payload;
-        groupArray = _.cloneDeep(state.groupsWithStocks);
-        removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup.uniqueName, moveStockResp.queryString.stockUniqueName, null);
-        return Object.assign({}, state, {
-          groupsWithStocks: groupArray,
-          activeStock: null,
-          activeStockUniqueName: null,
-          moveStockSuccess: true
-        });
+      groupArray = _.cloneDeep(state.groupsWithStocks);
+      removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup.uniqueName, moveStockResp.queryString.stockUniqueName, null);
+      return Object.assign({}, state, {
+        groupsWithStocks: groupArray,
+        activeStock: null,
+        activeStockUniqueName: null,
+        moveStockSuccess: true
+      });
     /*
      *Custom Stock Units...
      * */
@@ -578,10 +578,10 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
     case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE:
       let resStockUnit: BaseResponse<StockDetailResponse, string> = action.payload;
       if (resStockUnit.status === 'success') {
-        return Object.assign({}, state, { isStockNameAvailable: false});
+        return Object.assign({}, state, {isStockNameAvailable: false});
       } else {
         if (resStockUnit.code === 'NOT_FOUND') {
-          return Object.assign({}, state, { isStockUnitCodeAvailable: true});
+          return Object.assign({}, state, {isStockUnitCodeAvailable: true});
         }
         return state;
       }
@@ -601,9 +601,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
 
     //  region branch
     case InventoryActionsConst.ShowBranchScreen:
-      return Object.assign({}, state, { showBranchScreen: action.payload });
+      return Object.assign({}, state, {showBranchScreen: action.payload});
     case InventoryActionsConst.ShowBranchScreenSideBar:
-      return Object.assign({}, state, { showBranchScreenSidebar: action.payload });
+      return Object.assign({}, state, {showBranchScreenSidebar: action.payload});
     //  endregion
     default:
       return state;

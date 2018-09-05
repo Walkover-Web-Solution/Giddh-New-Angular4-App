@@ -1,7 +1,8 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { map, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store/roots';
@@ -76,6 +77,57 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   @ViewChild('messageBox') public messageBox: ElementRef;
   public searchRequest$: Observable<SearchRequest>;
   public isAllChecked: boolean = false;
+  // CSV Headers
+  public getCSVHeader = () => [
+    'Name',
+    'UniqueName',
+    'Opening Bal.',
+    'O/B Type',
+    'DR Total',
+    'CR Total',
+    'Closing Bal.',
+    'C/B Type',
+    'Parent']
+  // Rounding numbers
+  public roundNum = (data, places) => {
+    data = Number(data);
+    data = data.toFixed(places);
+    return data;
+  }
+  private selectedItems: string[] = [];
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  /**
+   * TypeScript public modifiers
+   */
+  constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
+    this.searchResponse$ = this.store.select(p => p.search.value);
+    // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
+    this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
+      return _.cloneDeep(p).map(j => {
+        j.isSelected = false;
+        return j;
+      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    }));
+    this.searchLoader$ = this.store.select(p => p.search.searchLoader);
+    this.search$ = this.store.select(p => p.search.search);
+    this.searchRequest$ = this.store.select(p => p.search.searchRequest);
+    this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(p => this.companyUniqueName = p);
+  }
+
+  private _sortReverse: boolean;
+
+  public get sortReverse(): boolean {
+    return this._sortReverse;
+  }
+
+  // reversing sort
+  public set sortReverse(value: boolean) {
+    this._sortReverse = value;
+    this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+  }
+
+  private _sortType: string;
 
   public get sortType(): string {
     return this._sortType;
@@ -87,47 +139,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.sortReverse = this._sortReverse;
   }
 
-  public get sortReverse(): boolean {
-    return this._sortReverse;
-  }
-
-  // reversing sort
-  public set sortReverse(value: boolean) {
-    this._sortReverse = value;
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
-  }
-
-  private _sortReverse: boolean;
-  private _sortType: string;
-  private selectedItems: string[] = [];
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  /**
-   * TypeScript public modifiers
-   */
-  constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
-    this.searchResponse$ = this.store.select(p => p.search.value);
-    // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-    this.searchResponseFiltered$ = this.searchResponse$.map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = false;
-        return j;
-      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    });
-    this.searchLoader$ = this.store.select(p => p.search.searchLoader);
-    this.search$ = this.store.select(p => p.search.search);
-    this.searchRequest$ = this.store.select(p => p.search.searchRequest);
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(p => this.companyUniqueName = p);
-  }
-
   public ngOnInit() {
     //
     this.sortType = 'name';
   }
 
   public toggleSelectAll(selectAll: boolean) {
-    this.searchResponseFiltered$.take(1).subscribe(p => {
-      this.searchResponseFiltered$ =  Observable.of(_.cloneDeep(p).map(j => {
+    this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
+      this.searchResponseFiltered$ = observableOf(_.cloneDeep(p).map(j => {
         j.isSelected = _.cloneDeep(selectAll);
         return j;
       }));
@@ -149,12 +168,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Filter data of table By Filters
   public filterData(searchQuery: SearchDataSet[]) {
-    this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+    this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
       return _.cloneDeep(p).map(j => {
         j.isSelected = false;
         return j;
       }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    });
+    }));
     searchQuery.forEach((query, indx) => {
       if (indx === 0) {
         this.searchAndFilter(query, this.searchResponse$);
@@ -222,25 +241,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
   }
 
-  // CSV Headers
-  public getCSVHeader = () => [
-    'Name',
-    'UniqueName',
-    'Opening Bal.',
-    'O/B Type',
-    'DR Total',
-    'CR Total',
-    'Closing Bal.',
-    'C/B Type',
-    'Parent']
-
-  // Rounding numbers
-  public roundNum = (data, places) => {
-    data = Number(data);
-    data = data.toFixed(places);
-    return data;
-  }
-
   // Save CSV File with data from Table...
   public createCSV() {
     let blob;
@@ -256,7 +256,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     title = title.replace(/.$/, '');
     title += '\r\n';
     row = '';
-    this.searchResponseFiltered$.take(1).subscribe(p => p.forEach((data) => {
+    this.searchResponseFiltered$.pipe(take(1)).subscribe(p => p.forEach((data) => {
       if (data.name.indexOf(',')) {
         data.name.replace(',', '');
       }
@@ -326,7 +326,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     //   });
     // });
 
-    await this.searchResponseFiltered$.take(1).subscribe(p => {
+    await this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
       accountsUnqList = [];
       p.forEach((item: AccountFlat) => {
         if (item.isSelected) {
@@ -338,7 +338,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // accountsUnqList = _.uniq(this.selectedItems);
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
-    this.searchRequest$.take(1).subscribe(p => {
+    this.searchRequest$.pipe(take(1)).subscribe(p => {
       if (isNullOrUndefined(p)) {
         return;
       }

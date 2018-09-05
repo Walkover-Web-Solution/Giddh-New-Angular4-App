@@ -1,8 +1,8 @@
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 a.active {
-    background-color: gray;
+  background-color: gray;
 }

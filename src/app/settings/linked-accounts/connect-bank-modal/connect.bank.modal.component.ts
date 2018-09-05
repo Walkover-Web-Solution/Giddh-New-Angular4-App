@@ -1,11 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { decimalDigits } from '../../../shared/helpers';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -59,24 +58,24 @@ export class ConnectBankModalComponent implements OnChanges {
               private _toaster: ToasterService
   ) {
     this.dataSource = (text$: Observable<any>): Observable<any> => {
-      return text$
-        .debounceTime(300)
-        .distinctUntilChanged()
-        .switchMap((term: string) => {
+      return text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term: string) => {
           if (term.startsWith(' ', 0)) {
             return [];
           }
-          return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).catch(e => {
+          return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).pipe(catchError(e => {
             return [];
-          });
-        })
-        .map((res) => {
+          }));
+        }),
+        map((res) => {
           if (res.status === 'success') {
             let data = res.body.provider;
             this.dataSourceBackup = res;
             return data;
           }
-        });
+        }),);
     };
 
     this.loginForm = this._fb.group({

@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit, AfterViewChecked, Input, Output, EventEmitter } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
-import { Scope, IRoleCommonResponseAndRequest, Permission } from '../../../models/api-models/Permission';
+import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
 import * as _ from '../../../lodash-optimized';
-import { NewRoleClass, NewPermissionObj, IPage, IPageStr } from '../../permission.utility';
-import { Observable } from 'rxjs/Observable';
+import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'app/services/toaster.service';
 
 @Component({
@@ -30,22 +30,22 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
   public addUpdateRoleInProcess$: Observable<boolean>;
 
   constructor(private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private store: Store<AppState>,
-    private _location: Location,
-    private permissionActions: PermissionActions,
-    private _toaster: ToasterService
+              private activatedRoute: ActivatedRoute,
+              private store: Store<AppState>,
+              private _location: Location,
+              private permissionActions: PermissionActions,
+              private _toaster: ToasterService
   ) {
 
-    this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
+    this.store.select(p => p.permission).pipe(takeUntil(this.destroyed$)).subscribe((permission) => {
       this.allRoles = _.cloneDeep(permission.roles);
-      this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
+      this.singlePageForFreshStart = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'super_admin';
       });
-      this.adminPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
+      this.adminPageObj = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'admin';
       });
-      this.viewPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
+      this.viewPageObj = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'view';
       });
       this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
@@ -53,7 +53,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
       this.newRole = permission.newRole;
       this.pageList = permission.pages;
     });
-    this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).takeUntil(this.destroyed$);
+    this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnDestroy() {
@@ -133,9 +133,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
   public getScopeDataReadyForAPI(data): Scope[] {
     let arr: Scope[];
     arr = _.forEach(data.scopes, (page: Scope) => {
-      _.remove(page.permissions, (o: Permission) => !o.isSelected );
+      _.remove(page.permissions, (o: Permission) => !o.isSelected);
     });
-    return _.filter(arr, (o: Scope) => o.permissions.length > 0 );
+    return _.filter(arr, (o: Scope) => o.permissions.length > 0);
   }
 
   public addNewRole(): any {
@@ -171,7 +171,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
   public generateUIFromExistedRole() {
     let pRole: string = this.newRole.uniqueName;
-    let res = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
+    let res = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
       return o.uniqueName === pRole;
     });
     if (res) {
@@ -296,7 +296,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
   public toggleItems(pageName: string, event: any) {
     let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
     if (res) {
-      _.map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false );
+      _.map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false);
     }
   }
 

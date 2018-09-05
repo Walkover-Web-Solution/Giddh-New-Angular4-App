@@ -1,3 +1,4 @@
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
@@ -5,23 +6,24 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
-import { Observable } from 'rxjs/Observable';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
   templateUrl: './download-or-send-mail.component.html',
   styles: [`
-    .dropdown-menu{
+    .dropdown-menu {
       width: 400px;
     }
-    .dropdown-menu .form-group{
+
+    .dropdown-menu .form-group {
       padding: 20px;
       margin-bottom: 0
     }
-    .dropdown-menu.open{
+
+    .dropdown-menu.open {
       display: block
     }
   `]
@@ -54,22 +56,22 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>, private _invoiceActions: InvoiceActions
   ) {
-    this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged(),);
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
+    this.store.select(p => p.invoice.invoiceData).pipe(takeUntil(this.destroyed$)).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
         this.showEditButton = o.uniqueName ? true : false;
         this.base64Data = o.dataPreview;
         this.showPdfWrap = true;
         let str = 'data:application/pdf;base64,' + o.dataPreview;
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
-      }else {
+      } else {
         this.showPdfWrap = false;
       }
     });
-    this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((o: any) => {
+    this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o && o.invoiceSettings) {
         this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
       } else {
@@ -93,7 +95,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
    * onDownloadInvoice
    */
   public onDownloadInvoice() {
-    this.downloadOrSendMailEvent.emit({ action: 'download', emails: null });
+    this.downloadOrSendMailEvent.emit({action: 'download', emails: null});
   }
 
   /**
@@ -106,7 +108,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     }
     let emailList = email.split(',');
     if (Array.isArray(emailList)) {
-      this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
+      this.downloadOrSendMailEvent.emit({action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType});
       this.showEmailTextarea = false;
     } else {
       this._toasty.errorToast('Invalid email(s).');
@@ -123,7 +125,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     }
     let numberList = numbers.split(',');
     if (Array.isArray(numberList)) {
-      this.downloadOrSendMailEvent.emit({ action: 'send_sms', numbers: numberList });
+      this.downloadOrSendMailEvent.emit({action: 'send_sms', numbers: numberList});
       this.showEmailTextarea = false;
     }
   }

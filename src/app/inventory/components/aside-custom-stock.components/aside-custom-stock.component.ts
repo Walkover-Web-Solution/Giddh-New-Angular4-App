@@ -1,17 +1,13 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
-import * as _ from '../../lodash-optimized';
-import { ViewChild } from '@angular/core/src/metadata/di';
-import { ElementRef } from '@angular/core/src/linker/element_ref';
-import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'aside-custom-stock',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -20,10 +16,12 @@ import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
       width: 580px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -32,10 +30,12 @@ import { ViewContainerRef } from '@angular/core/src/linker/view_container_ref';
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 580px;
       background: #fff;
@@ -54,7 +54,7 @@ export class AsideCustomStockComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>
   ) {
-    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).takeUntil(this.destroyed$);
+    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -70,7 +70,9 @@ export class AsideCustomStockComponent implements OnInit, OnDestroy {
   public closeAsidePane(event?) {
     this.closeAsideEvent.emit();
     this.asideClose = true;
-    setTimeout(() => {this.asideClose = false; }, 500);
+    setTimeout(() => {
+      this.asideClose = false;
+    }, 500);
   }
 
   public ngOnDestroy() {

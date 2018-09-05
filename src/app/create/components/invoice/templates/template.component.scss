@@ -1,9 +1,11 @@
 h4 {
   font-size: 18px;
 }
+
 .bdrD {
   border-bottom: 2px dotted #000;
 }
+
 .lh42 {
   line-height: 42px;
 }
@@ -16,16 +18,18 @@ h4 {
 :host {
   display: block;
 }
+
 .invoice_area {
   max-width: 8.3in;
   float: left;
 }
+
 .invoice_sidebar {
   float: left;
   margin-left: 30px;
-  .form-group{
+  .form-group {
     margin-bottom: 20px;
-    .form-control{
+    .form-control {
       background: #fff !important;
       border: 1px solid #d6d6d6;
       border-radius: 2px !important;
@@ -140,10 +144,9 @@ h4 {
   .mrB1 {
     margin-bottom: 10px;
   }
- 
- 
+
   .bdrB {
-    border-bottom: 1px solid$color_storm_dust_approx;
+    border-bottom: 1px solid $color_storm_dust_approx;
   }
   .pdRL3 {
     padding-right: 30px !important;
@@ -191,38 +194,39 @@ h4 {
   border-left: 1px solid $color_punch_approx !important;
 }
 
-
-.inv_header{
-  background:#FFF8EB;
-  h1{
-      font-size:20px;
-      color:#333333;
-      font-family: 'LatoWeb';
-      padding:0;
-      border-bottom:1px solid #333333;
-      display:inline-block;
-      margin:28px 0;
+.inv_header {
+  background: #FFF8EB;
+  h1 {
+    font-size: 20px;
+    color: #333333;
+    font-family: 'LatoWeb';
+    padding: 0;
+    border-bottom: 1px solid #333333;
+    display: inline-block;
+    margin: 28px 0;
   }
-  span{
-      color:#E14D26;
-      border-bottom:1px solid #E14D26;
-      display:inline-block;
-      font-family: 'LatoWeb';
-      font-size:20px;
-      line-height:21px;
-      padding:0;
-      margin:28px 0 28px 2px;
+  span {
+    color: #E14D26;
+    border-bottom: 1px solid #E14D26;
+    display: inline-block;
+    font-family: 'LatoWeb';
+    font-size: 20px;
+    line-height: 21px;
+    padding: 0;
+    margin: 28px 0 28px 2px;
 
   }
 }
-.head_inv{
-  font-size:16px;
-  color:#333;
-  padding:7px 0;
-  border-bottom:1px solid #BFBFBF;
-  margin-top:20px;
+
+.head_inv {
+  font-size: 16px;
+  color: #333;
+  padding: 7px 0;
+  border-bottom: 1px solid #BFBFBF;
+  margin-top: 20px;
 }
-.mb20{
-  margin-bottom:20px;
+
+.mb20 {
+  margin-bottom: 20px;
 }
 

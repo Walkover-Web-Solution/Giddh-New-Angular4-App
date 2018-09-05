@@ -5,8 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 
@@ -42,10 +41,12 @@ export class StockListComponent implements OnInit, OnDestroy {
   public Groups: IGroupsWithStocksHierarchyMinItem;
   public stockUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
     this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
   }
+
   public ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
@@ -57,10 +58,12 @@ export class StockListComponent implements OnInit, OnDestroy {
       // this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name']);
     }
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public OpenStock(item, e: Event) {
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
@@ -80,6 +83,6 @@ export class StockListComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside( { isOpen, isGroup, isUpdate }));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
   }
 }

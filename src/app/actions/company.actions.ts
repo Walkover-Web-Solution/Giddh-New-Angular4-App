@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+import { map, switchMap, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse } from '../models/api-models/Company';
@@ -9,7 +10,6 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'app/services/general.service';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
@@ -45,82 +45,89 @@ export class CompanyActions {
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
-    .ofType(CompanyActions.CREATE_COMPANY)
-    .switchMap((action: CustomActions) => this._companyService.CreateCompany(action.payload))
-    .map(response => this.CreateCompanyResponse(response));
+    .ofType(CompanyActions.CREATE_COMPANY).pipe(
+      switchMap((action: CustomActions) => this._companyService.CreateCompany(action.payload)),
+      map(response => this.CreateCompanyResponse(response)),);
 
   @Effect()
   public createCompanyResponse$: Observable<Action> = this.action$
-    .ofType(CompanyActions.CREATE_COMPANY_RESPONSE)
-    .map((action: CustomActions) => {
-      let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      }
-      this._toasty.successToast('Company created successfully', 'Success');
-      // set newly created company as active company
-
-      // check if new uer has created first company then set newUserLoggedIn false
-      let isNewUser = false;
-      this.store.select(s => s.session.userLoginState).take(1).subscribe(s => {
-        isNewUser = s === 2;
-      });
-      //
-      if (isNewUser) {
-        this.store.dispatch({
-          type: 'SetLoginStatus',
-          payload: 1
-        });
-      }
-
-      let stateDetailsObj = new StateDetailsRequest();
-      stateDetailsObj.companyUniqueName = response.request.uniqueName;
-      if (!response.request.isBranch) {
-        /**
-         * if user is signed up on their own take him to sales module
-         */
-        if (this._generalService.user.isNewUser) {
-          // stateDetailsObj.lastState = 'sales';
-          stateDetailsObj.lastState = isNewUser ? 'welcome' : 'sales';
-        } else {
-          stateDetailsObj.lastState = 'home';
+    .ofType(CompanyActions.CREATE_COMPANY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
         }
-        this.store.dispatch(this.SetStateDetails(stateDetailsObj));
-      }
-      return this.RefreshCompanies();
-    });
+        this._toasty.successToast('Company created successfully', 'Success');
+        // set newly created company as active company
+
+        // check if new uer has created first company then set newUserLoggedIn false
+        let isNewUser = false;
+        this.store.select(s => s.session.userLoginState).pipe(take(1)).subscribe(s => {
+          isNewUser = s === 2;
+        });
+        //
+        if (isNewUser) {
+          this.store.dispatch({
+            type: 'SetLoginStatus',
+            payload: 1
+          });
+        }
+
+        let stateDetailsObj = new StateDetailsRequest();
+        stateDetailsObj.companyUniqueName = response.request.uniqueName;
+        if (!response.request.isBranch) {
+          /**
+           * if user is signed up on their own take him to sales module
+           */
+          if (this._generalService.user.isNewUser) {
+            // stateDetailsObj.lastState = 'sales';
+            stateDetailsObj.lastState = isNewUser ? 'welcome' : 'sales';
+          } else {
+            stateDetailsObj.lastState = 'home';
+          }
+          this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+        }
+        return this.RefreshCompanies();
+      }));
   @Effect()
   public RefreshCompanies$: Observable<Action> = this.action$
-    .ofType(CompanyActions.REFRESH_COMPANIES)
-    .switchMap((action: CustomActions) => this._companyService.CompanyList())
-    .map(response => {
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      }
-      return this.RefreshCompaniesResponse(response);
-    });
+    .ofType(CompanyActions.REFRESH_COMPANIES).pipe(
+      switchMap((action: CustomActions) => this._companyService.CompanyList()),
+      map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.RefreshCompaniesResponse(response);
+      }),);
 
   @Effect()
   public RefreshCompaniesResponse$: Observable<CustomActions> = this.action$
-    .ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE)
-    .map((action: CustomActions) => {
-      let response: BaseResponse<CompanyResponse[], string> = action.payload;
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      }
-      // check if user have companies
-      if (response.body.length) {
-        let activeCompanyName = null;
-        this.store.select(s => s.session.companyUniqueName).take(1).subscribe(a => activeCompanyName = a);
+    .ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let response: BaseResponse<CompanyResponse[], string> = action.payload;
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        // check if user have companies
+        if (response.body.length) {
+          let activeCompanyName = null;
+          this.store.select(s => s.session.companyUniqueName).pipe(take(1)).subscribe(a => activeCompanyName = a);
 
-        if (activeCompanyName) {
-          let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
-          if (companyIndex > -1) {
-            // if active company find no action needed
-            return {type: 'EmptyAction'};
+          if (activeCompanyName) {
+            let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
+            if (companyIndex > -1) {
+              // if active company find no action needed
+              return {type: 'EmptyAction'};
+            } else {
+              // if no active company active next company from companies list
+              return {
+                type: 'CHANGE_COMPANY',
+                payload: response.body[0].uniqueName
+              };
+            }
           } else {
             // if no active company active next company from companies list
             return {
@@ -129,110 +136,103 @@ export class CompanyActions {
             };
           }
         } else {
-          // if no active company active next company from companies list
+          //  if no companies available open create new company popup
           return {
-            type: 'CHANGE_COMPANY',
-            payload: response.body[0].uniqueName
-          };
+            type: 'SetLoginStatus',
+            payload: 2
+          } as CustomActions;
         }
-      } else {
-        //  if no companies available open create new company popup
-        return {
-          type: 'SetLoginStatus',
-          payload: 2
-        } as CustomActions;
-      }
-    });
+      }));
 
   @Effect()
   public GetStateDetails$: Observable<Action> = this.action$
-    .ofType(CompanyActions.GET_STATE_DETAILS)
-    .switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload))
-    .map(response => {
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      }
-      return this.GetStateDetailsResponse(response);
-    });
+    .ofType(CompanyActions.GET_STATE_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
+      map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.GetStateDetailsResponse(response);
+      }),);
 
   @Effect()
   public SetStateDetails$: Observable<Action> = this.action$
-    .ofType(CompanyActions.SET_STATE_DETAILS)
-    .switchMap((action: CustomActions) => this._companyService.setStateDetails(action.payload))
-    .map(response => {
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      }
-      return this.SetStateDetailsResponse(response);
-    });
+    .ofType(CompanyActions.SET_STATE_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._companyService.setStateDetails(action.payload)),
+      map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.SetStateDetailsResponse(response);
+      }),);
 
   @Effect()
   public GetApplicationDate$: Observable<Action> = this.action$
-    .ofType(CompanyActions.GET_APPLICATION_DATE)
-    .switchMap((action: CustomActions) => this._companyService.getApplicationDate())
-    .map(response => {
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      }
-      return this.SeApplicationDateResponse(response);
-    });
+    .ofType(CompanyActions.GET_APPLICATION_DATE).pipe(
+      switchMap((action: CustomActions) => this._companyService.getApplicationDate()),
+      map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.SeApplicationDateResponse(response);
+      }),);
 
   @Effect()
   public SetApplicationDate$: Observable<Action> = this.action$
-    .ofType(CompanyActions.SET_APPLICATION_DATE)
-    .switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload))
-    .map(response => {
-      if (response.status === 'error') {
-        this._toasty.errorToast(response.message, response.code);
-        return {type: 'EmptyAction'};
-      } else if (response.status === 'success') {
-        this._toasty.successToast('Application date updated successfully.', 'Success');
-        return this.SeApplicationDateResponse(response);
-      }
-    });
+    .ofType(CompanyActions.SET_APPLICATION_DATE).pipe(
+      switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload)),
+      map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        } else if (response.status === 'success') {
+          this._toasty.successToast('Application date updated successfully.', 'Success');
+          return this.SeApplicationDateResponse(response);
+        }
+      }),);
 
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
-    .ofType(CompanyActions.DELETE_COMPANY)
-    .switchMap((action: CustomActions) => this._companyService.DeleteCompany(action.payload))
-    .map(response => {
-      return this.DeleteCompanyResponse(response);
-    });
+    .ofType(CompanyActions.DELETE_COMPANY).pipe(
+      switchMap((action: CustomActions) => this._companyService.DeleteCompany(action.payload)),
+      map(response => {
+        return this.DeleteCompanyResponse(response);
+      }),);
 
   @Effect()
   public DeleteCompanyResponse$: Observable<Action> = this.action$
-    .ofType(CompanyActions.DELETE_COMPANY_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
+    .ofType(CompanyActions.DELETE_COMPANY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {type: 'EmptyAction'};
+        } else {
+          this._toasty.successToast(action.payload.body, 'success');
+        }
+        this.store.dispatch(this.RefreshCompanies());
         return {type: 'EmptyAction'};
-      } else {
-        this._toasty.successToast(action.payload.body, 'success');
-      }
-      this.store.dispatch(this.RefreshCompanies());
-      return {type: 'EmptyAction'};
-    });
+      }));
 
   @Effect()
   public CompanyTax$: Observable<Action> = this.action$
-    .ofType(CompanyActions.GET_TAX)
-    .switchMap((action: CustomActions) => this._companyService.getComapnyTaxes())
-    .map(response => {
-      return this.getTaxResponse(response);
-    });
+    .ofType(CompanyActions.GET_TAX).pipe(
+      switchMap((action: CustomActions) => this._companyService.getComapnyTaxes()),
+      map(response => {
+        return this.getTaxResponse(response);
+      }),);
 
   @Effect()
   public CompanyTaxResponse$: Observable<Action> = this.action$
-    .ofType(CompanyActions.GET_TAX_RESPONSE)
-    .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      }
-      return {type: 'EmptyAction'};
-    });
+    .ofType(CompanyActions.GET_TAX_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
 
   constructor(
     private action$: Actions,

@@ -41,46 +41,30 @@ export interface ChangeEvent {
 })
 export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
-  get width(): any {
-    let el = this.element.nativeElement;
-    let viewWidth = el.clientWidth - this.scrollbarWidth;
-    return viewWidth;
-  }
-
   @Input()
   public items: IOption[] = [];
   @Input() public selectedValues: any[];
-
   @Input()
   public scrollbarWidth: number;
-
   @Input()
   public scrollbarHeight: number;
-
   @Input()
   public childWidth: number;
-
   @Input()
   public childHeight: number;
   @Input() public NoFoundMsgHeight: number;
   @Input() public NoFoundLinkHeight: number;
   @Input() public noResultLinkEnabled: boolean;
-
   @Output()
   public update: EventEmitter<any[]> = new EventEmitter<any[]>();
-
   @Output()
   public change: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
-
   @Output()
   public start: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
-
   @Output()
   public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
-
   @ViewChild('content', {read: ElementRef})
   public contentElementRef: ElementRef;
-
   public onScrollListener: any;
   public topPadding: number;
   public scrollHeight: number;
@@ -89,6 +73,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   public startupLoop: boolean = true;
 
   constructor(private element: ElementRef, private renderer: Renderer) {
+  }
+
+  get width(): any {
+    let el = this.element.nativeElement;
+    let viewWidth = el.clientWidth - this.scrollbarWidth;
+    return viewWidth;
   }
 
   public ngOnInit() {

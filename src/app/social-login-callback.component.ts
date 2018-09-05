@@ -8,12 +8,12 @@ import { AuthService } from 'ng2-ui-auth';
   `
 })
 export class SocialLoginCallbackComponent implements OnInit {
-  constructor( private auth: AuthService) {
+  constructor(private auth: AuthService) {
     //
   }
 
   public ngOnInit() {
     // console.log(this.auth.getPayload());
-}
+  }
 
 }

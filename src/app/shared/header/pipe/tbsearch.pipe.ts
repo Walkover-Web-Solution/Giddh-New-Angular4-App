@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform, NgZone } from '@angular/core';
+import { NgZone, Pipe, PipeTransform } from '@angular/core';
 
 import * as _ from '../../../lodash-optimized';
-import { ChildGroup, Account } from '../../../models/api-models/Search';
+import { ChildGroup } from '../../../models/api-models/Search';
 
 @Pipe({
   // tslint:disable-next-line:pipe-naming
@@ -14,10 +14,12 @@ export class TbsearchPipe implements PipeTransform {
    *
    */
   public srch: string;
+
   constructor(private zone: NgZone
   ) {
     //
   }
+
   public transform(input: any, search: string): any {
     if (!_.isUndefined(search)) {
       this.srch = search.toLowerCase();
@@ -55,6 +57,7 @@ export class TbsearchPipe implements PipeTransform {
       }
     }
   }
+
   public search(input: ChildGroup, s: string, allIncluded: boolean = false) {
     if (input) {
       let hasAnyVisible = false;
@@ -106,6 +109,7 @@ export class TbsearchPipe implements PipeTransform {
     }
     return input;
   }
+
   public resetSearch(input: ChildGroup[]) {
     if (input) {
       for (let grp of input) {
@@ -115,6 +119,7 @@ export class TbsearchPipe implements PipeTransform {
       }
     }
   }
+
   public resetGroup(input: ChildGroup) {
     if (input) {
       for (let grp of input.childGroups) {
@@ -131,6 +136,7 @@ export class TbsearchPipe implements PipeTransform {
     }
     return input;
   }
+
   public checkIndex(src: string, str: string) {
     if (src.replace(' ', '').toLowerCase().indexOf(str.replace(' ', '').toLowerCase()) !== -1) {
       return true;

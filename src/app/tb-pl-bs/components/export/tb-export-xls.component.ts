@@ -29,13 +29,14 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
 
   public showTbXls: boolean;
   public imgPath: string = '';
+
   constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
 
   }
 
   public downloadTbXls(value: string) {
     // console.log(this.trialBalanceRequest);
-    let request = { ...this.trialBalanceRequest, export: value } as TrialBalanceExportExcelRequest;
+    let request = {...this.trialBalanceRequest, export: value} as TrialBalanceExportExcelRequest;
     this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
     return false;
   }

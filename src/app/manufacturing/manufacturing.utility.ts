@@ -1,4 +1,3 @@
-
 export class MfStockSearchRequestClass {
   public product: string;
   public searchOperation: string;

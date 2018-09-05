@@ -1,182 +1,176 @@
 * {
-    border: 0;
-    box-sizing: content-box;
-    color: #262626;
-    font-family: inherit;
-    font-size: 12px;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-decoration: none;
-    vertical-align: top;
+  border: 0;
+  box-sizing: content-box;
+  color: #262626;
+  font-family: inherit;
+  font-size: 12px;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  vertical-align: top;
 }
 
 .mrT20 {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .mrT60 {
-    margin-top: 60px;
+  margin-top: 60px;
 }
-
 
 /* heading */
 
 #Template2 header h1 {
-    /* color: #df4927; */
-    font-size: 16px;
-    font-weight: bold;
+  /* color: #df4927; */
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #Template2 header h2 {
-    /* color: #df4927; */
-    font-weight: bold;
-    font-size: 18px;
+  /* color: #df4927; */
+  font-weight: bold;
+  font-size: 18px;
 }
-
 
 /* table */
 
 #Template2 table {
-    font-size: 93%;
-    table-layout: fixed;
-    width: 100%;
+  font-size: 93%;
+  table-layout: fixed;
+  width: 100%;
 }
 
-#Template2 table {}
+#Template2 table {
+}
 
 #Template2 .item th,
 #Template2 tfoot tr td {
-    background: rgba(223, 73, 39, 0.05);
-    border: 0;
-    font-weight: bold;
+  background: rgba(223, 73, 39, 0.05);
+  border: 0;
+  font-weight: bold;
 }
-
 
 /* page */
 
 #Template2 {
-    font: 14px/1 'Open Sans', sans-serif;
-    overflow: auto;
+  font: 14px/1 'Open Sans', sans-serif;
+  overflow: auto;
 }
-
 
 /* padding: 0.5in; */
 
 #Template2 {
-    background: #999;
-    cursor: default;
+  background: #999;
+  cursor: default;
 }
 
 #Template2 body {
-    box-sizing: border-box;
-    margin: 0 auto;
-    overflow: hidden;
-    padding: 0.1in;
+  box-sizing: border-box;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0.1in;
 }
-
 
 /* width: 8.5in; */
 
 #Template2 body {
-    background: #FFF;
-    border-radius: 1px;
-    box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+  background: #FFF;
+  border-radius: 1px;
+  box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
 }
-
 
 /* header */
 
 #Template2 header {
-    margin: 0 0 1em;
-    background: #f2f2f2;
-    padding: 0.23in 0.23in 0.03in
+  margin: 0 0 1em;
+  background: #f2f2f2;
+  padding: 0.23in 0.23in 0.03in
 }
 
 #Template2 header:after {
-    clear: both;
-    content: "";
-    display: table;
+  clear: both;
+  content: "";
+  display: table;
 }
 
 .pull-right tr td {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 #Template2 header .numDetail label {
-    width: 50px;
-    float: left;
+  width: 50px;
+  float: left;
 }
 
 #Template2 .meta {
-    padding: 0 0.23in 0.03in;
-    margin-bottom: 10px;
+  padding: 0 0.23in 0.03in;
+  margin-bottom: 10px;
 }
 
 #Template2 .meta tbody tr td,
 #Template2 .meta tbody tr th {
-    border: 0;
-    padding: 5px 0;
+  border: 0;
+  padding: 5px 0;
 }
 
 #Template2 .meta tbody tr th {
-    background: none;
-    border: 0;
-    padding: 0;
-    text-align: left;
-    color: #262626;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  color: #262626;
 }
 
-#Template2 .meta tbody tr td>table tr td {
-    padding: 2px 0;
-    line-height: 1.3rem;
+#Template2 .meta tbody tr td > table tr td {
+  padding: 2px 0;
+  line-height: 1.3rem;
 }
 
-#Template2 .meta tbody tr td:nth-child(2)>table tbody tr td {
-    background: #f2f2f2;
-    padding: 0 10px;
-    line-height: 2rem;
-    margin: 4px 0;
-    display: -webkit-box;
+#Template2 .meta tbody tr td:nth-child(2) > table tbody tr td {
+  background: #f2f2f2;
+  padding: 0 10px;
+  line-height: 2rem;
+  margin: 4px 0;
+  display: -webkit-box;
 }
 
 #Template2 header figure {
-    float: left;
-    font-style: normal;
-    line-height: 1.25;
-    margin: 0 0 0.3em 0;
+  float: left;
+  font-style: normal;
+  line-height: 1.25;
+  margin: 0 0 0.3em 0;
 }
 
 #Template2 header figure p {
-    margin: 0 0 0.25em;
+  margin: 0 0 0.25em;
 }
 
 #Template2 header span,
 header img {
-    display: block;
-    float: right;
+  display: block;
+  float: right;
 }
 
 #Template2 header span {
-    margin: 0 0 1em 1em;
-    max-height: 25%;
-    max-width: 60%;
-    position: relative;
+  margin: 0 0 1em 1em;
+  max-height: 25%;
+  max-width: 60%;
+  position: relative;
 }
 
 #Template2 header img {
-    max-height: 100%;
-    max-width: 100%;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 #Template2 header table tr td {
-    border: 0;
-    padding: 4px 0;
+  border: 0;
+  padding: 4px 0;
 }
-
 
 /* article */
 
@@ -184,191 +178,187 @@ header img {
 article address,
 table.meta,
 table.inventory {
-    margin: 0 0 3em;
+  margin: 0 0 3em;
 }
 
 #Template2 article:after {
-    clear: both;
-    content: "";
-    display: table;
+  clear: both;
+  content: "";
+  display: table;
 }
 
 #Template2 article h1 {
-    clip: rect(0 0 0 0);
-    position: absolute;
+  clip: rect(0 0 0 0);
+  position: absolute;
 }
 
 #Template2 article address {
-    float: left;
-    font-weight: bold;
+  float: left;
+  font-weight: bold;
 }
 
 .text-right {
-    text-align: right;
+  text-align: right;
 }
-
 
 /* table items */
 
 #Template2 table.item {
-    clear: both;
-    width: 100%;
-    table-layout: auto;
+  clear: both;
+  width: 100%;
+  table-layout: auto;
 }
 
 #Template2 table.item th,
 #Template2 table.item tfoot td {
-    text-align: right;
-    padding: 14px 7px;
-    line-height: 1.2rem;
-    vertical-align: middle;
+  text-align: right;
+  padding: 14px 7px;
+  line-height: 1.2rem;
+  vertical-align: middle;
 }
 
 #Template2 table.item tr th:nth-child(2) {
-    text-align: left;
+  text-align: left;
 }
 
 #Template2 table.item tfoot td {
-    padding-right: 7px;
+  padding-right: 7px;
 }
 
 #Template2 table.item td {
-    border-radius: 0;
-    padding: 7px;
-    border-top: 1px solid rgba(89, 89, 89, 0.6);
-    text-align: right;
-    line-height: 1.2rem;
-    vertical-align: middle;
+  border-radius: 0;
+  padding: 7px;
+  border-top: 1px solid rgba(89, 89, 89, 0.6);
+  text-align: right;
+  line-height: 1.2rem;
+  vertical-align: middle;
 }
 
 #Template2 table.item td p {
-    color: #595959;
+  color: #595959;
 }
 
 #Template2 table.item td:nth-child(1) {
-    width: 26%;
+  width: 26%;
 }
 
 #Template2 table.item td:nth-child(2) {
-    width: 38%;
-    text-align: left;
+  width: 38%;
+  text-align: left;
 }
 
 #Template2 table.item td:nth-child(3) {
-    text-align: right;
-    width: 12%;
+  text-align: right;
+  width: 12%;
 }
 
 #Template2 table.item td:nth-child(4) {
-    text-align: right;
-    width: 12%;
+  text-align: right;
+  width: 12%;
 }
 
 #Template2 table.item td:nth-child(5) {
-    text-align: right;
-    width: 12%;
+  text-align: right;
+  width: 12%;
 }
-
 
 /* table balance */
 
 #Template2 table.balance {
-    width: 75%;
-    float: right;
-    margin: 20px 7px;
+  width: 75%;
+  float: right;
+  margin: 20px 7px;
 }
 
 #Template2 table.balance th,
 #Template2 table.balance td {
-    width: 50%;
-    text-align: right;
-    padding: 4px;
+  width: 50%;
+  text-align: right;
+  padding: 4px;
 }
-
 
 /* aside */
 
 #Template2 aside h1 {
-    border: none;
-    border-width: 0 0 1px;
-    margin: 0 0 1em;
+  border: none;
+  border-width: 0 0 1px;
+  margin: 0 0 1em;
 }
 
 #Template2 aside h1 {
-    border-color: #999;
-    border-bottom-style: solid;
+  border-color: #999;
+  border-bottom-style: solid;
 }
-
 
 /*footer*/
 
 #Template2 footer {
-    border-top: 2px solid;
-    padding: 15px 0;
-    margin: 8px 0 0;
-    background: #fff;
+  border-top: 2px solid;
+  padding: 15px 0;
+  margin: 8px 0 0;
+  background: #fff;
 }
 
 #Template2 aside {
-    line-height: 1.5rem;
+  line-height: 1.5rem;
 }
 
 #Template2 .subfooter {
-    padding: 0 20px;
+  padding: 0 20px;
 }
 
 #Template2 .subfooter hr {
-    width: 100%;
-    border-bottom: 1px solid #000;
-    margin: 3px 0;
+  width: 100%;
+  border-bottom: 1px solid #000;
+  margin: 3px 0;
 }
 
 #Template2 .subfooter h4 {
-    font-size: 17px;
-    /* color: #df4927; */
-    margin: 10px 0 0
+  font-size: 17px;
+  /* color: #df4927; */
+  margin: 10px 0 0
 }
 
 #Template2 strong,
 #Template2 .strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #Template2 .disabled-area {
-    position: relative;
-    float: left;
-    width: 100%;
-    margin-bottom: 10px;
+  position: relative;
+  float: left;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 #Template2 .disabled-area:after {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed #808080;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  background: rgba(204, 204, 204, 0.5);
+  border: 1px dashed #808080;
 }
 
 #Template2 .edit-template {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 4px;
-    height: 15px;
-    z-index: 1;
-    background: #fff;
-    width: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px;
+  height: 15px;
+  z-index: 1;
+  background: #fff;
+  width: 20px;
 }
 
 #Template2 .edit-template i {
-    background: url(/assets/images/edit-ico.svg) no-repeat;
-    width: 15px;
-    position: absolute;
-    right: 1px;
-    background-size: contain;
-    height: 12px;
+  background: url(/assets/images/edit-ico.svg) no-repeat;
+  width: 15px;
+  position: absolute;
+  right: 1px;
+  background-size: contain;
+  height: 12px;
 }

@@ -26,6 +26,7 @@ export class ExportLedgerComponent implements OnInit {
   public emailTypeDetail: string;
   public emailData: string = '';
   public withInvoiceNumber: boolean = false;
+
   constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService) {
     //
   }
@@ -44,7 +45,7 @@ export class ExportLedgerComponent implements OnInit {
   public exportLedger() {
     let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
     let exportRequest = new ExportLedgerRequest();
-    exportRequest.format =  this.exportAs;
+    exportRequest.format = this.exportAs;
     exportRequest.sort = this.order;
     exportRequest.type = this.emailTypeSelected;
     const body = _.cloneDeep(this.advanceSearchRequest);
