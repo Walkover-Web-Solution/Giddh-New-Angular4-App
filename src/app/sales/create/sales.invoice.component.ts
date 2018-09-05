@@ -269,7 +269,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public ngOnInit() {
     this.getAllFlattenAc();
     // get selected company for autofill country
-    this.companyUniqueName$.pipe(takeUntil(this.destroyed$), distinctUntilChanged(),).subscribe((company) => {
+    this.companyUniqueName$.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((company) => {
       this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies: CompanyResponse[]) => {
         this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
         if (this.activeCompany && this.activeCompany.country) {
@@ -1049,7 +1049,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
-    entry.taxSum = _.sumBy(entry.taxes, function (o) {
+    entry.taxSum = _.sumBy(entry.taxes,  (o) => {
       return o.amount;
     });
   }
@@ -1094,7 +1094,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function (o) {
+    entry.discountSum = _.sumBy(entry.discounts,  (o) => {
       return o.amount;
     });
   }

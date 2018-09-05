@@ -117,7 +117,8 @@
     "electron-oauth": "2.4.3",
     "electron-updater": "2.21.10",
     "jquery": "3.2.1",
-    "rxjs-compat": "^6.3.2"
+    "rxjs-compat": "^6.3.2",
+    "is-cidr": "^2.0.6"
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.7.5",

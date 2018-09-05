@@ -12,7 +12,8 @@
     "packages": true,
     ".github": true,
     ".awcache": true,
-    "node_modules_electron": true
+    "node_modules_electron": true,
+    "config/old Files": true
   },
   "typescript.tsdk": "node_modules/typescript/lib/",
   "search.exclude": {
