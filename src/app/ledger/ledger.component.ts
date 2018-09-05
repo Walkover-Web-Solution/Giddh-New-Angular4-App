@@ -141,7 +141,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // aside menu properties
   public asideMenuState: string = 'out';
   public createStockSuccess$: Observable<boolean>;
-
+  public needToShowLoader: boolean = true;
   public entryUniqueNamesForBulkAction: string[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -187,6 +187,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
+    this.needToShowLoader = false;
     let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
     let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
 
@@ -342,8 +343,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (params['accountUniqueName']) {
         // this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
-        this.showLoader = false; // need to enable loder
-        // this.ledgerSearchTerms.nativeElement.value = '';
+        this.needToShowLoader = true;
+        // this.showLoader = false; // need to enable loder
+        if (this.ledgerSearchTerms) {
+          this.ledgerSearchTerms.nativeElement.value = '';
+        }
         this.resetBlankTransaction();
         // this.datePickerOptions = {
         //   locale: {
@@ -396,7 +400,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     this.isTransactionRequestInProcess$.subscribe((s: boolean) => {
-      this.showLoader = _.clone(s);
+      if (this.needToShowLoader) {
+        this.showLoader = _.clone(s);
+      } else {
+        this.showLoader = false;
+      }
       // if (!s && this.showLoader) {
       //   this.showLoader = false;
       // }
@@ -492,6 +500,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (acc) {
         // need to clear selected entries when account changes
         this.entryUniqueNamesForBulkAction = [];
+        this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
@@ -513,6 +522,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       .subscribe(term => {
         this.advanceSearchRequest.q = term;
         this.advanceSearchRequest.page = 0;
+        this.needToShowLoader = false;
         this.getTransactionData();
       });
 
@@ -931,6 +941,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public search(term: string): void {
+    this.ledgerSearchTerms.nativeElement.value = term;
     this.searchTermStream.next(term);
   }
 
