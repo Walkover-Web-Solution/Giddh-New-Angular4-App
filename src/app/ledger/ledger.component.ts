@@ -1,7 +1,7 @@
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { animate, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, state, style, transition, trigger, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -44,6 +44,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'ledger',
@@ -434,7 +435,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
-      if (data[0] && data[1]) {let accountDetails: AccountResponse = data[0];
+      if (data[0] && data[1]) {
+        let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
@@ -615,8 +617,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchRequest = null;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-    moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
-    this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+      moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+      this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
   }
 
   public toggleTransactionType(event: string) {

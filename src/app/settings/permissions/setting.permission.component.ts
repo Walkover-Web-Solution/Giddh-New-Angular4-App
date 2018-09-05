@@ -3,7 +3,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { PermissionActions } from '../../actions/permission/permission.action';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
