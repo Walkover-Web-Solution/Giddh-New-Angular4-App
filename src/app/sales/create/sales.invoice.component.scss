@@ -475,3 +475,9 @@ ng-select.splSales {
     background: #f4f5f8;
     transform: rotate(-90deg) translateY(-50%);
 }
+
+#invoiceFile {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+}
