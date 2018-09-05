@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { UserDetailsRoutingModule } from './userDetails.routing.module';
 import { UserDetailsComponent } from './userDetails.component';
-import { UiSwitchModule } from 'angular2-ui-switch';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { LaddaModule } from 'angular2-ladda';
@@ -29,7 +28,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UserDetailsRoutingModule,
     TabsModule,
     AlertModule,
-    UiSwitchModule,
     LaddaModule,
     PerfectScrollbarModule,
     DurationModule,

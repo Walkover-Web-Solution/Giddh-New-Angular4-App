@@ -1,3 +1,4 @@
+import { environment } from 'environments/environment';
 export const Configuration = {
   AppUrl,
   ApiUrl,
