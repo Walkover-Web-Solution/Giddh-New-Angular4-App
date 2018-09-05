@@ -58,6 +58,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public countrySource: IOption[] = [];
   public statesSourceCompany: IOption[] = [];
   public keyDownSubject$: Subject<any> = new Subject<any>();
+  public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -133,6 +134,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       .takeUntil(this.destroyed$)
       .subscribe((event: any) => {
         this.patchProfile({[event.target.name]: event.target.value});
+      });
+
+    this.gstKeyDownSubject$
+      .debounceTime(3000)
+      .distinctUntilChanged()
+      .takeUntil(this.destroyed$)
+      .subscribe((event: any) => {
+        this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
       });
   }
 
@@ -239,7 +248,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       profileObj.gstDetails[indx].addressList[0].stateName = '';
       this.companyProfileObj = profileObj;
 
-      this.checkGstDetails();
+      // this.checkGstDetails();
     }
   }
 
@@ -278,7 +287,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     }
     this.companyProfileObj = profileObj;
-    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+    this.checkGstDetails();
   }
 
   public setGstAsDefault(indx, ev) {
@@ -315,7 +324,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
-        this.checkGstDetails(ele);
+        // this.checkGstDetails();
       }
     } else {
       ele.classList.remove('error-box');
@@ -331,6 +340,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     if (stateCode <= 37) {
       if (stateCode < 10 && stateCode !== 0) {
         stateCode = (stateCode < 10) ? '0' + stateCode.toString() : stateCode.toString();
+      } else if (stateCode === 0) {
+        stateCode = '';
       }
       this.companyProfileObj.gstDetails[index].addressList[0].stateCode = stateCode.toString();
     } else {
@@ -418,57 +429,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  public keyDownEventOfForm(event: any) {
-    if (event && event.target) {
-      let end$ = new Subject();
-      Observable.fromEvent(event.target, 'keydown')
-        .debounceTime(3000)
-        .distinctUntilChanged()
-        .filter((e: any) => {
-          return e.target.name;
-        })
-        .map((e: any) => e.target.value)
-        .do(v => console.log(v))
-        .takeUntil(end$)
-        .subscribe((val: string) => {
-          // this.patchProfile({[event.target.name]: val});
-          end$.next(true);
-        });
-      return true;
-    }
-  }
-
   public changeEventOfForm(key: string) {
     this.patchProfile({[key]: this.companyProfileObj[key]});
   }
 
-  public checkGstDetails(ele?: HTMLInputElement) {
-    if (this.companyProfileObj.gstDetails.length > 0) {
-
-      let obj = {gstDetails: this.companyProfileObj.gstDetails};
-      // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
-      for (let entry of this.companyProfileObj.gstDetails) {
-        if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
-          obj.gstDetails = _.without(this.companyProfileObj.gstDetails, entry);
-        }
-      }
-
-      if (ele) {
-        let end$ = new Subject();
-        Observable.fromEvent(ele, 'keydown')
-          .debounceTime(3000)
-          .distinctUntilChanged()
-          .takeUntil(end$)
-          .subscribe(s => {
-            this.patchProfile({gstDetails: obj.gstDetails});
-            end$.next(true);
-          });
-
-        ele.dispatchEvent(new Event('keydown', {bubbles: true}));
-      } else {
-        this.patchProfile({gstDetails: obj.gstDetails});
-      }
-    }
+  public checkGstDetails() {
+    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
   }
 
   public patchProfile(obj) {
