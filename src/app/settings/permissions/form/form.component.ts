@@ -1,7 +1,7 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'app/lodash-optimized';
 import isCidr from 'is-cidr';
-import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Input, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';

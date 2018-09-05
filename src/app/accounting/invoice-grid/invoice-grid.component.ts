@@ -12,7 +12,7 @@ import { AccountService } from './../../services/account.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, transition, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ComponentFactoryResolver, trigger, state, style, animate } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ViewChildren, QueryList, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ComponentFactoryResolver } from '@angular/core';
 import { Location } from '@angular/common';
 import { createSelector } from 'reselect';
 import { Observable } from 'rxjs/Observable';
@@ -29,6 +29,7 @@ import { QuickAccountComponent } from '../../theme/quick-account-component/quick
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 const TransactionsType = [
   { label: 'By', value: 'Debit' },
