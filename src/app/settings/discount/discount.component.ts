@@ -1,4 +1,4 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -9,6 +9,7 @@ import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ModalDirective } from 'ngx-bootstrap';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'setting-discount',

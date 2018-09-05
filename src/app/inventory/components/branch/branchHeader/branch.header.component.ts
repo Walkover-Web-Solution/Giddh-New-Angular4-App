@@ -1,6 +1,7 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'branch-header',
