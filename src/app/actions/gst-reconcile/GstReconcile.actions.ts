@@ -79,7 +79,7 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoiceRequest(period: string, action: string, page: string, count: string): CustomActions {
+  public GstReconcileInvoiceRequest(period: string, action: string, page: string, count: string = '10'): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
       payload: {period, action, page, count}

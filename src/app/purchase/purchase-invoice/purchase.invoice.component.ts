@@ -128,8 +128,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public gstAuthenticated$: Observable<boolean>;
   public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
   public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
-  public gstNotFoundOnMatchedData$: Observable<ReconcileActionState>;
-  public gstNotFoundOnPartiallyMatchedData$: Observable<ReconcileActionState>;
+  public gstMatchedData$: Observable<ReconcileActionState>;
+  public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -172,8 +172,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).takeUntil(this.destroyed$);
     this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).takeUntil(this.destroyed$);
     this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).takeUntil(this.destroyed$);
-    this.gstNotFoundOnMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).takeUntil(this.destroyed$);
-    this.gstNotFoundOnPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).takeUntil(this.destroyed$);
+    this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).takeUntil(this.destroyed$);
+    this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -593,6 +593,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     let paginationRequest = new CommonPaginatedRequest();
     paginationRequest.page = _.cloneDeep(event.page);
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
+  }
+
+  public reconcilePageChanged(event: any, action: string) {
+    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest('', action, event.page));
   }
 
   /**
