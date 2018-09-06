@@ -8,7 +8,7 @@ const local = {
 };
 const test = {
   errlyticsNeeded: 'false',
-  errlyticsKey: '""',
+  errlyticsKey: '',
   isElectron: 'false',
   AppUrl: 'http://test.giddh.com/',
   ApiUrl: 'http://apitest.giddh.com/',
@@ -16,9 +16,9 @@ const test = {
 };
 const prod = {
   errlyticsNeeded: 'true',
-  errlyticsKey: JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
+  errlyticsKey: 'eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA',
   isElectron: 'false',
-  AppUrl: 'https://giddh.com/"',
+  AppUrl: 'https://giddh.com/',
   ApiUrl: 'https://api.giddh.com/',
   APP_FOLDER: 'app/'
 };
