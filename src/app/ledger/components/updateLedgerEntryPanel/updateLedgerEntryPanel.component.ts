@@ -578,12 +578,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     });
   }
 
-  public downloadInvoice(invoiceName: string, e: Event) {
+  public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let downloadRequest = new DownloadLedgerRequest();
     downloadRequest.invoiceNumber = [invoiceName];
+    downloadRequest.voucherType = voucherType;
 
     this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
       if (d.status === 'success') {

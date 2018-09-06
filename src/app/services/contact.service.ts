@@ -16,7 +16,7 @@ export class ContactService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   public payNow(body: PayNowRequest): Observable<BaseResponse<any, any>> {
@@ -28,9 +28,10 @@ export class ContactService {
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, body, ''));
   }
 
-  public GetContacts(groupUniqueName: string, pageNumber: number, refresh: string): Observable<BaseResponse<any, string>> {
+  public GetContacts(groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page&count=20&refresh=:refresh'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':page', pageNumber.toString()).replace(':refresh', refresh)).map((res) => {
+    return this._http.get(this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page&count=:count&refresh=:refresh'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
+    .replace(':count', count.toString()).replace(':page', pageNumber.toString()).replace(':refresh', refresh)).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
@@ -49,7 +50,7 @@ export class ContactService {
   public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let description = comment;
-    return this._http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName), {description}).map((res) => {
+    return this._http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName), { description }).map((res) => {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
