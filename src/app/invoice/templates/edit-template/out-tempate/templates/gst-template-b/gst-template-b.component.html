@@ -26,7 +26,7 @@
                                 </figure>
                             </td>
                             <td class="text-right vmiddle">
-                                <figure class="col-xs-12"><img [src]="logoSrc" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' /></figure>
+                                <figure class="col-xs-12"><img [src]="logoSrc" alt="" class="max-width-180" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' /></figure>
                             </td>
                         </tr>
                     </tbody>
@@ -75,6 +75,7 @@
                 <thead>
                     <tr>
                         <th *ngIf="fieldsAndVisibility.table.sNo?.display" data-thead="sno" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : '#'}}</th>
+                        <th *ngIf="fieldsAndVisibility.table.date?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : 'Date'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.item?.display" data-thead="item" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" data-thead="hsn" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.taxes?.display" data-thead="taxes" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.taxes?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label : 'Tax'}}(₹)</th>
@@ -95,6 +96,7 @@
                 <tbody>
                     <tr>
                         <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
+                        <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
                         <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Transactional Route</td>
                         <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">123456</td>
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display">18%</td>
@@ -104,6 +106,7 @@
                     </tr>
                     <tr>
                         <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
+                        <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
                         <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Operational Route</td>
                         <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">345632</td>
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display">10%</td>
