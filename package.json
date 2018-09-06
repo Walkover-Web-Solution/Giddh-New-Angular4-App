@@ -54,7 +54,7 @@
     "server:local": "cross-env BUILD_AOT=1 envFileSuffix=local definePluginEnv=local npm run webpackDev --aot",
     "server:dev": "cross-env BUILD_AOT=1  envFileSuffix=dev definePluginEnv=dev npm run webpackDev --aot",
     "server:test": "cross-env BUILD_AOT=0  envFileSuffix=test definePluginEnv=test npm run webpackDev ",
-    "server:prod": "http-server dist -p 3000 -c-1 --cors",
+    "server:dist": "http-server dist -p 3000 -c-1 --cors",
     "server": "npm run server:local",
     "start:hmr": "npm run server:dev:hmr",
     "start": "npm run server:local",

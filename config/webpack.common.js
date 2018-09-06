@@ -24,7 +24,7 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
-  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {});
+  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, buildUtils.DEFAULT_METADATA.definePluginObject, options.metadata || {});
   const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
   const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
 
@@ -45,7 +45,7 @@ module.exports = function (options) {
     'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
     'process.env.HMR': METADATA.HMR,
     'process.env.isElectron': JSON.stringify(false)
-  }, METADATA.definePluginObject, { process: { env: METADATA.definePluginObject } })))
+  }, METADATA.definePluginObject, {process: {env: METADATA.definePluginObject}})))
   return {
     /**
      * The entry point for the bundle
@@ -185,15 +185,26 @@ module.exports = function (options) {
        * See: https://webpack.js.org/plugins/define-plugin/
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-      new webpack.DefinePlugin(Object.assign({
+      new webpack.DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
+        'isElectron': JSON.stringify(false),
+        'errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'APP_FOLDER':JSON.stringify(METADATA.definePluginObject.APP_FOLDER),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
-        'process.env.isElectron': JSON.stringify(false)
-      }, METADATA.definePluginObject, { process: { env: METADATA.definePluginObject } })),
+        'process.env.isElectron': JSON.stringify(false),
+        'process.env.errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'process.env.errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'process.env.AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'process.env.ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'process.env.APP_FOLDER': JSON.stringify(METADATA.definePluginObject.APP_FOLDER)
+      }),
 
       /**
        * Plugin: CommonsChunkPlugin
@@ -229,10 +240,10 @@ module.exports = function (options) {
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
       new CopyWebpackPlugin([
-        { from: 'src/assets', to: 'assets' },
-        { from: 'src/meta' }
-      ],
-        isProd ? { ignore: ['mock-data/**/*'] } : undefined
+          {from: 'src/assets', to: 'assets'},
+          {from: 'src/meta'}
+        ],
+        isProd ? {ignore: ['mock-data/**/*']} : undefined
       ),
 
       /*
@@ -261,12 +272,12 @@ module.exports = function (options) {
       }),
 
       /**
-      * Plugin: ScriptExtHtmlWebpackPlugin
-      * Description: Enhances html-webpack-plugin functionality
-      * with different deployment options for your scripts including:
-      *
-      * See: https://github.com/numical/script-ext-html-webpack-plugin
-      */
+       * Plugin: ScriptExtHtmlWebpackPlugin
+       * Description: Enhances html-webpack-plugin functionality
+       * with different deployment options for your scripts including:
+       *
+       * See: https://github.com/numical/script-ext-html-webpack-plugin
+       */
       new ScriptExtHtmlWebpackPlugin({
         sync: /inline|polyfills|vendor/,
         defaultAttribute: 'async',
