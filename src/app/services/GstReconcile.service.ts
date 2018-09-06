@@ -8,7 +8,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 
 @Injectable()
 export class GstReconcileService {
@@ -50,19 +50,22 @@ export class GstReconcileService {
       .catch((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, ''));
   }
 
-  public GstReconcileGetInvoices(period: string): Observable<BaseResponse<string, string>> {
+  public GstReconcileGetInvoices(period: string, action: string, page: string, count: string): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     return this._http.get(this.config.apiUrl + GST_RECONCILE_API.GET_INVOICES
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':period', encodeURIComponent(period))
+      .replace(':action', encodeURIComponent(action))
+      .replace(':page', encodeURIComponent(page))
+      .replace(':count', encodeURIComponent(count))
     )
       .map((res) => {
-        let data: BaseResponse<string, string> = res;
-        data.queryString = period;
+        let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+        data.queryString = {period, action, page, count};
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, ''));
   }
 }
