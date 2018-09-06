@@ -122,6 +122,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showBankDetail: boolean = false;
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
+  public isDebtorCreditor: boolean = false;
   @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -283,8 +284,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
         if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
           this.showGroupLedgerExportButton$ = observableOf(true);
+          this.isDebtorCreditor = true;
         } else {
           this.showGroupLedgerExportButton$ = observableOf(false);
+          this.isDebtorCreditor = false;
         }
         // this.taxGroupForm.get('taxes').reset();
         // let showAddForm: boolean = null;

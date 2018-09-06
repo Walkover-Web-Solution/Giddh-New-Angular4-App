@@ -15,6 +15,7 @@ import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { Subject } from 'rxjs';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -58,6 +59,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public dataSourceBackup: any;
   public countrySource: IOption[] = [];
   public statesSourceCompany: IOption[] = [];
+  public keyDownSubject$: Subject<any> = new Subject<any>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -125,6 +127,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           return data;
         }));
     };
+
+    this.keyDownSubject$
+      .debounceTime(3000)
+      .distinctUntilChanged()
+      .do(v => console.log(v.target))
+      .takeUntil(this.destroyed$)
+      .subscribe((event: any) => {
+        this.patchProfile({[event.target.name]: event.target.value});
+      });
   }
 
   public getInitialProfileData() {
@@ -136,7 +147,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+    this.store.select(p => p.settings.profile).pipe(distinctUntilChanged(),takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
         let profileObj = _.cloneDeep(o);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
@@ -346,6 +357,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       if (ele.value.match(panNumberRegExp)) {
         ele.classList.remove('error-box');
         this.isPANValid = true;
+        this.patchProfile({panNumber: ele.value});
       } else {
         this.isPANValid = false;
         this._toasty.errorToast('Invalid PAN number');

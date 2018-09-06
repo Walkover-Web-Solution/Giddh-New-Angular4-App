@@ -18,6 +18,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   public _searchRequest: SearchRequest;
+  public pageChangeEvent: any;
+  public filterEventQuery: any;
 
   public get searchRequest(): SearchRequest {
     return this._searchRequest;
@@ -27,7 +29,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   public set searchRequest(search: SearchRequest) {
     this.searchRequestEmitter.emit(search);
     this._searchRequest = search;
-    // console.log(search);
   }
 
   public ngOnInit() {
@@ -42,5 +43,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.store.dispatch(this._searchActions.ResetSearchState());
+  }
+
+  public paginationChanged(ev) {
+    this.pageChangeEvent = ev;
+  }
+
+  public FilterByAPIEvent(ev) {
+    this.filterEventQuery = ev;
   }
 }
