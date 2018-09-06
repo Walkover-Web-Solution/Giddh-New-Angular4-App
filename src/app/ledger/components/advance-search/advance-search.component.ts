@@ -18,7 +18,7 @@ import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { BsDaterangepickerDirective, BsDaterangepickerConfig } from 'ngx-bootstrap';
+import { BsDaterangepickerConfig, BsDaterangepickerDirective } from 'ngx-bootstrap';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
