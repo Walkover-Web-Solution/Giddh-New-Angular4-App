@@ -3,14 +3,14 @@
  */
 const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /**
  * Used to merge webpack configs
-*/
+ */
 const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
-*/
+ */
 const commonConfig = require('./webpack.common.js');
 
 /**
@@ -20,7 +20,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
 
 
 function getUglifyOptions(supportES2015) {
@@ -57,7 +56,7 @@ module.exports = function (env) {
   // set environment suffix so these environments are loaded.
   METADATA.envFileSuffix = process.env.envFileSuffix;
 
-  return webpackMerge(commonConfig({ env: ENV, metadata: METADATA }), {
+  return webpackMerge(commonConfig({env: ENV, metadata: METADATA}), {
     mode: 'production',
     devtool: 'cheap-source-map',
     /**
@@ -155,8 +154,10 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css' }),
-      new HashedModuleIdsPlugin()
+      new MiniCssExtractPlugin({filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css'}),
+      new HashedModuleIdsPlugin(),
+      // new BundleAnalyzerPlugin({generateStatsFile: true}),
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
 
     /**
