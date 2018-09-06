@@ -78,7 +78,7 @@
     </div>
   </div>
 
-  <table class="table basic c-border table-bordered">
+  <table class="table basic table-bordered">
     <thead>
     <tr>
       <th colspan="3" class="text-center">Total</th>
@@ -122,44 +122,49 @@
         {{(carriedData$ | async)?.newSales.uniqueCount}}
       </th>
       <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"
-          style="vertical-align: top!important;">
+          style="vertical-align: top!important; margin: 0px; padding: 0px;">
         <table [style.width.%]="100">
           <tr>
-            <td [style.width.%]="15">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
-            <td [style.width.%]="25">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[0]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[0]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[1]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8">{{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[1]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[2]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[2]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[3]?.total}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[3]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[3]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[3]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[3]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[3]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[3]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[3]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[4]?.total}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[4]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[4]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[4]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[4]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[4]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[4]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[4]?.month}}</td>
           </tr>
-          <tr style="height: 22px;"></tr>
+          <tr>
+            <td [style.width.%]="12.5" class="pad-8"></td>
+            <td [style.width.%]="12.5" class="pad-8"></td>
+            <td [style.width.%]="39" class="pad-8"></td>
+            <td [style.width.%]="36" class="pad-8"></td>
+          </tr>
           <tr style="border-top: 1px solid gainsboro;">
-            <td [style.width.%]="15">{{ crdTotal }}</td>
-            <td [style.width.%]="25"> {{ invTotal }}</td>
-            <td [style.width.%]="35"></td>
-            <td [style.width.%]="25">Total</td>
+            <td [style.width.%]="12.5" class="pad-8">{{ crdTotal }}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{ invTotal }}</td>
+            <td [style.width.%]="39" class="pad-8"></td>
+            <td [style.width.%]="36" class="pad-8">Total</td>
           </tr>
         </table>
       </th>
@@ -188,32 +193,37 @@
         {{(carriedData$ | async)?.newSales.uniqueCount}}
       </th>
       <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"
-          style="vertical-align: top!important;">
+          style="vertical-align: top!important; margin: 0px; padding: 0px;">
         <table [style.width.%]="100">
           <tr>
-            <td [style.width.%]="15">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
-            <td [style.width.%]="25">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[0]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[0]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[1]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[1]?.uniqueCount}}</td>
+            <td [style.width.%]="36" class="pad-8"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
-            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[2]?.uniqueCount}}</td>
-            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
+            <td [style.width.%]="12.5" class="pad-8"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
+            <td [style.width.%]="39" class="pad-8">{{(carriedData$ | async)?.carriedSales[2]?.uniqueCount}}</td>
+            <td [style.width.%]="26" class="pad-8"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
           </tr>
-          <tr style="height: 22px;"></tr>
+          <tr>
+            <td [style.width.%]="12.5" class="pad-8"></td>
+            <td [style.width.%]="12.5" class="pad-8"></td>
+            <td [style.width.%]="39" class="pad-8"></td>
+            <td [style.width.%]="36" class="pad-8"></td>
+          </tr>
           <tr style="border-top: 1px solid gainsboro;">
-            <td [style.width.%]="15">{{ crdTotal }}</td>
-            <td [style.width.%]="25"> {{ invTotal }}</td>
-            <td [style.width.%]="35"></td>
-            <td [style.width.%]="25">Total</td>
+            <td [style.width.%]="12.5">{{ crdTotal }}</td>
+            <td [style.width.%]="12.5"> {{ invTotal }}</td>
+            <td [style.width.%]="39"></td>
+            <td [style.width.%]="36">Total</td>
           </tr>
         </table>
       </th>
