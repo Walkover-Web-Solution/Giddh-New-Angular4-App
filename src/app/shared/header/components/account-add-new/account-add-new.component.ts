@@ -65,6 +65,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public isHsnSacEnabledAcc: boolean = false;
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
+  @Input() public isDebtorCreditor: boolean = false;
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;

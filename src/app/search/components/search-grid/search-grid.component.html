@@ -21,7 +21,7 @@
             <input type="checkbox" (change)="toggleSelectAll(isAllChecked)" [(ngModel)]="isAllChecked">
           </div>
         </th>
-        <th>#</th>
+        <!-- <th>#</th> -->
         <th>
           <div (click)="sortType = 'name'; sortReverse = !sortReverse">
             Name
@@ -76,8 +76,9 @@
       </thead>
       <tbody>
       <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-        <td><input type="checkbox" (change)="toggleSelection(item)" [(ngModel)]="item.isSelected"></td>
-        <td>{{i+1}}</td>
+        <!-- [(ngModel)]="item.isSelected" -->
+        <td><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection(item)"></td>
+        <!-- <td>{{i+1}}</td> -->
         <td>{{item.name}}</td>
         <td>{{item.uniqueName}}</td>
         <td>{{item.parent}}</td>
@@ -104,6 +105,15 @@
         </td>
       </tr>
       </tbody>
+      <tfoot>
+        <tr>
+            <td colspan="100%">
+                <div class="alC">
+                    <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
     </table>
   </section>
   <!-- end pd div -->

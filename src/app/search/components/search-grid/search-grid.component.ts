@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { map, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store/roots';
@@ -18,6 +18,10 @@ import { ToasterService } from '../../../services/toaster.service';
   templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {
+
+  @Output() public pageChangeEvent: EventEmitter<any> = new EventEmitter(null);
+  @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
+
   public moment = moment;
   public companyUniqueName: string;
   public searchResponse$: Observable<AccountFlat[]>;
@@ -94,28 +98,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     data = data.toFixed(places);
     return data;
   }
-  private selectedItems: string[] = [];
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  /**
-   * TypeScript public modifiers
-   */
-  constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
-    this.searchResponse$ = this.store.select(p => p.search.value);
-    // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-    this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = false;
-        return j;
-      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    }));
-    this.searchLoader$ = this.store.select(p => p.search.searchLoader);
-    this.search$ = this.store.select(p => p.search.search);
-    this.searchRequest$ = this.store.select(p => p.search.searchRequest);
-    this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(p => this.companyUniqueName = p);
-  }
-
-  private _sortReverse: boolean;
 
   public get sortReverse(): boolean {
     return this._sortReverse;
@@ -124,23 +106,44 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // reversing sort
   public set sortReverse(value: boolean) {
     this._sortReverse = value;
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
   }
 
+  // pagination related
+  public page: number;
+  public totalPages: number;
+
+  public selectedItems: string[] = [];
+
+  private _sortReverse: boolean;
   private _sortType: string;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  public get sortType(): string {
-    return this._sortType;
-  }
+  /**
+   * TypeScript public modifiers
+   */
+  constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
+    this.searchResponse$ = this.store.select(p => p.search.value);
+    this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
+    // this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
+    //   console.log('the p iss now :', p);
+    //   return _.cloneDeep(p).map(j => {
+    //     j.isSelected = false;
+    //     return j;
+    //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    // }));
+    this.searchLoader$ = this.store.select(p => p.search.searchLoader);
+    this.search$ = this.store.select(p => p.search.search);
+    this.searchRequest$ = this.store.select(p => p.search.searchRequest);
+    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(p => this.companyUniqueName = p);
 
-  // sorting by sortype
-  public set sortType(value: string) {
-    this._sortType = value;
-    this.sortReverse = this._sortReverse;
+    this.store.select(p => p.search.searchPaginationInfo).subscribe((info) => {
+      this.page = info.page;
+      this.totalPages = info.totalPages;
+    });
   }
 
   public ngOnInit() {
-    //
     this.sortType = 'name';
   }
 
@@ -148,6 +151,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
       this.searchResponseFiltered$ = observableOf(_.cloneDeep(p).map(j => {
         j.isSelected = _.cloneDeep(selectAll);
+        let indexOfEntry = this.selectedItems.indexOf(j.uniqueName);
+        if (j.isSelected && indexOfEntry === -1) {
+          this.selectedItems.push(j.uniqueName);
+        } else {
+          this.selectedItems.splice(indexOfEntry, 1);
+        }
         return j;
       }));
     });
@@ -168,19 +177,75 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Filter data of table By Filters
   public filterData(searchQuery: SearchDataSet[]) {
-    this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = false;
-        return j;
-      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    }));
-    searchQuery.forEach((query, indx) => {
-      if (indx === 0) {
-        this.searchAndFilter(query, this.searchResponse$);
-      } else {
-        this.searchAndFilter(query, this.searchResponseFiltered$);
+
+    let queryForApi = {
+      openingBalance: null,
+      openingBalanceGreaterThan: false,
+      openingBalanceLessThan: false,
+      openingBalanceEqual: true,
+      // openingBalanceType: 'String (DEBIT / CREDIT)',
+      closingBalance: null,
+      closingBalanceGreaterThan: false,
+      closingBalanceLessThan: false,
+      closingBalanceEqual: true,
+      // closingBalanceType: 'String (DEBIT / CREDIT)',
+      creditTotal: null,
+      creditTotalGreaterThan: false,
+      creditTotalLessThan: false,
+      creditTotalEqual: true,
+      debitTotal: null,
+      debitTotalGreaterThan: false,
+      debitTotalLessThan: false,
+      debitTotalEqual: true
+    };
+
+    searchQuery.forEach((query: SearchDataSet) => {
+      switch (query.queryType) {
+        case 'openingBalance':
+          queryForApi['openingBalance'] = query.amount,
+          queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'closingBalance':
+          queryForApi['closingBalance'] = query.amount,
+          queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'creditTotal':
+          queryForApi['creditTotal'] = query.amount,
+          queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'debitTotal':
+          queryForApi['debitTotal'] = query.amount,
+          queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
       }
     });
+
+    console.log('the new queryForApi is :', queryForApi);
+
+    this.FilterByAPIEvent.emit(queryForApi);
+
+    // Old logic (filter data on UI)
+    // this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+    //   return _.cloneDeep(p).map(j => {
+    //     j.isSelected = false;
+    //     return j;
+    //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    // });
+    // searchQuery.forEach((query, indx) => {
+    //   if (indx === 0) {
+    //     this.searchAndFilter(query, this.searchResponse$);
+    //   } else {
+    //     this.searchAndFilter(query, this.searchResponseFiltered$);
+    //   }
+    // });
   }
 
   public searchAndFilter(query, searchIn) {
@@ -239,6 +304,25 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     if (!isFiltered) {
       this.searchResponseFiltered$ = this.searchResponse$;
     }
+  }
+
+  // CSV Headers
+  public getCSVHeader = () => [
+    'Name',
+    'UniqueName',
+    'Opening Bal.',
+    'O/B Type',
+    'DR Total',
+    'CR Total',
+    'Closing Bal.',
+    'C/B Type',
+    'Parent']
+
+  // Rounding numbers
+  public roundNum = (data, places) => {
+    data = Number(data);
+    data = data.toFixed(places);
+    return data;
   }
 
   // Save CSV File with data from Table...
@@ -308,10 +392,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   }
 
   public toggleSelection(item: AccountFlat) {
-    if (item.isSelected) {
+    let indexOfEntry = this.selectedItems.indexOf(item.uniqueName);
+    if (indexOfEntry === -1) {
       this.selectedItems.push(item.uniqueName);
     } else {
-      this.selectedItems = this.selectedItems.filter(p => p !== item.uniqueName);
+      this.selectedItems.splice(indexOfEntry, 1);
     }
   }
 
@@ -361,5 +446,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       }
     });
     this.mailModal.hide();
+  }
+
+  public pageChanged(ev) {
+    this.pageChangeEvent.emit(ev);
+    this.isAllChecked = false;
   }
 }
