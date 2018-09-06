@@ -15,29 +15,19 @@
   "license": "MIT",
   "scripts": {
     "rebuild": "electron-rebuild",
-    "build:aot": "npm run build:aot:prod",
-    "build:aot:renderer": "npm run build:aot:prod",
-    "build:dev": "npm run clean:dist && npm run webpack -- --config config/webpack.dev.js --progress --profile",
-    "build:dev:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.dev.js --progress --profile",
-    "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
-    "build:prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
-    "build:test": "npm run clean:dist && npm run webpack -- --config config/webpack.test-build.js  --progress --profile --bail",
-    "build:test:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.test-build.js  --progress --profile --bail",
-    "build:prod:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
-    "build:aot:prod": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
-    "build:aot:test": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.test-build.js  --progress --profile --bail",
-    "build:aot:dev": "cross-env BUILD_AOT=1 npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.dev.js  --progress --profile --bail",
-    "build:aot:local": "cross-env BUILD_AOT=1 npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.dev.js  --progress --profile --bail",
-    "build:aot:stage": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
-    "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=0 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
-    "build:aot:test:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.test-build.js  --progress --profile --bail",
-    "build:stage": "npm run clean:dist && npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
-    "build:stage:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
-    "build:aot:stage:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
 
-    "build": "npm run build:aot:local",
+    "build-dev": "npm run clean:dist && npm run webpack -- --config config/webpack.dev.js --progress --profile",
+    "build-prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js --progress --profile --bail --prod --aot",
+    "build-rendered-prod": "npm run clean:dist && npm run webpack -- --config config/webpack.dev.js --progress --profile",
 
-    "build:renderer": "npm run build:dev:renderer",
+    "build-dev:local": "cross-env BUILD_AOT=1 envFileSuffix=local definePluginEnv=local npm run build-dev --aot --prod",
+    "build-prod:local": "cross-env BUILD_AOT=1 envFileSuffix=local definePluginEnv=local npm run build-prod --aot --prod",
+    "build-dev:test": "cross-env BUILD_AOT=1 envFileSuffix=test definePluginEnv=test npm run build-dev --aot --prod",
+    "build-prod:test": "cross-env BUILD_AOT=1 envFileSuffix=test definePluginEnv=test npm run build-prod --aot --prod",
+    "build-dev:test": "cross-env BUILD_AOT=1 envFileSuffix=prod definePluginEnv=prod npm run build-dev --aot --prod",
+    "build-prod:test": "cross-env BUILD_AOT=1 envFileSuffix=prod definePluginEnv=prod npm run build-prod --aot --prod",
+
+
     "clean:build": "rimraf dist dev compiled *.temp.json",
     "clean:dev": "rimraf dev",
     "clean:dll": "npm run rimraf -- dll",
@@ -46,8 +36,6 @@
     "clean:packages": "npm run rimraf -- packages",
     "clean:install": "npm set progress=false && npm install",
     "clean": "npm cache clean --force && npm run rimraf -- node_modules doc coverage dist compiled dll",
-
-
     "install-app-deps": "node ./config/install-app-deps",
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
@@ -57,33 +45,22 @@
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
     "package:windows": "rimraf packages/win/* && npm run build:aot:prod:renderer  && npm run build:main:prod && cross-env AWS_ACCESS_KEY_ID=key_id AWS_SECRET_ACCESS_KEY=access_key electron-builder build  --win --ia32 --x64 ",
-
     "postinstall": "node ./config/install-app-deps",
     "postversion": "git push && git push --tags",
-
     "prep:dev": "ncp node_modules_electron dev",
     "prep:dist": "ncp node_modules_electron dist && rimraf dist/yarn.lock",
     "rimraf": "rimraf",
-
-    "server:dev:hmr": "npm run server:dev -- --hotOnly  --hot --inline",
-    "server:aot:dev": "cross-env BUILD_AOT=1 npm run server:dev",
-
-    "webpackDev":"npm run webpack-dev-server -- --config config/webpack.dev.js --open --progress --profile --watch  --content-base src/",
-    "server:local": "cross-env BUILD_AOT=1 envFileSuffix=local definePluginEnv=local npm run webpackDev --aot --",
+    "webpackDev": "npm run webpack-dev-server -- --config config/webpack.dev.js --open --progress --profile --hot --hotOnly --watch  --content-base src/",
+    "server:local": "cross-env BUILD_AOT=1 envFileSuffix=local definePluginEnv=local npm run webpackDev --aot",
     "server:dev": "cross-env BUILD_AOT=1  envFileSuffix=dev definePluginEnv=dev npm run webpackDev --aot",
     "server:test": "cross-env BUILD_AOT=0  envFileSuffix=test definePluginEnv=test npm run webpackDev ",
     "server:prod": "http-server dist -p 3000 -c-1 --cors",
-    "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
-    "server": "npm run server:dev",
-
+    "server": "npm run server:local",
     "start:hmr": "npm run server:dev:hmr",
     "start": "npm run server:local",
-    "start:aot": "npm run server:aot:dev",
     "start:electron": "npm run clean:dev && npm run prep:dev && node ./config/electron-dev",
     "start:main:dev": "webpack --config config/webpack.electron.js --env.live --progress --profile --watch",
     "build:main:prod": "webpack --config config/webpack.electron.js --env --progress --profile",
-
-    "test": "npm run lint && karma start",
     "tslint": "tslint",
     "typedoc": "typedoc",
     "version": "npm run build",
@@ -112,6 +89,7 @@
     "is-cidr": "^2.0.6"
   },
   "devDependencies": {
+    "mini-css-extract-plugin": "^0.4.2",
     "@angular-devkit/build-optimizer": "^0.7.5",
     "@angular/animations": "^6.1.6",
     "@angular/common": "^6.1.6",
