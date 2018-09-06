@@ -1,4 +1,4 @@
-import { fromEvent as observableFromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { fromEvent as observableFromEvent, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -15,7 +15,6 @@ import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Subject } from 'rxjs';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -32,8 +31,8 @@ export interface IGstObj {
   animations: [
     trigger('fadeInAndSlide', [
       transition(':enter', [
-        style({ opacity: '0', marginTop: '100px' }),
-        animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
+        style({opacity: '0', marginTop: '100px'}),
+        animate('.1s ease-out', style({opacity: '1', marginTop: '20px'})),
       ]),
     ]),
   ],
@@ -73,15 +72,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   ) {
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
     });
     this.stateStream$.subscribe((data) => {
       if (data) {
         this.stateResponse = _.cloneDeep(data);
         data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-          this.statesInBackground.push({ label: `${d.name}`, value: d.code });
-          this.statesSourceCompany.push({ label: `${d.name}`, value: `${d.name}` });
+          this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          this.statesInBackground.push({label: `${d.name}`, value: d.code});
+          this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
       this.statesSource$ = observableOf(this.states);
@@ -93,7 +92,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
+          currencies.push({label: d.code, value: d.code});
         });
       }
       this.currencySource$ = observableOf(currencies);
@@ -129,10 +128,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     };
 
     this.keyDownSubject$
-      .debounceTime(3000)
-      .distinctUntilChanged()
-      .do(v => console.log(v.target))
-      .takeUntil(this.destroyed$)
+      .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         this.patchProfile({[event.target.name]: event.target.value});
       });
@@ -147,7 +143,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings.profile).pipe(distinctUntilChanged(),takeUntil(this.destroyed$)).subscribe((o) => {
+    this.store.select(p => p.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
         let profileObj = _.cloneDeep(o);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
@@ -279,7 +275,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     }
     this.companyProfileObj = profileObj;
-    this.patchProfile({ gstDetails: this.companyProfileObj.gstDetails });
+    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
   }
 
   public setGstAsDefault(indx, ev) {
@@ -409,13 +405,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
-      this.patchProfile({ country: this.companyProfileObj.country });
+      this.patchProfile({country: this.companyProfileObj.country});
     }
   }
 
   public selectState(event) {
     if (event) {
-      this.patchProfile({ state: this.companyProfileObj.state });
+      this.patchProfile({state: this.companyProfileObj.state});
     }
   }
 
@@ -430,7 +426,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }),
         map((e: any) => e.target.value))
         .subscribe((val: string) => {
-          this.patchProfile({ [event.target.name]: val });
+          this.patchProfile({[event.target.name]: val});
           event.preventDefault();
         });
       return true;
@@ -438,13 +434,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public changeEventOfForm(key: string) {
-    this.patchProfile({ [key]: this.companyProfileObj[key] });
+    this.patchProfile({[key]: this.companyProfileObj[key]});
   }
 
   public checkGstDetails(ele?: HTMLInputElement) {
     if (this.companyProfileObj.gstDetails.length > 0) {
 
-      let obj = { gstDetails: this.companyProfileObj.gstDetails };
+      let obj = {gstDetails: this.companyProfileObj.gstDetails};
       // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
       for (let entry of this.companyProfileObj.gstDetails) {
         if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
@@ -458,12 +454,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           distinctUntilChanged(),
           takeUntil(this.destroyed$))
           .subscribe(s => {
-            this.patchProfile({ gstDetails: obj.gstDetails });
+            this.patchProfile({gstDetails: obj.gstDetails});
           });
 
-        ele.dispatchEvent(new Event('keydown', { bubbles: true }));
+        ele.dispatchEvent(new Event('keydown', {bubbles: true}));
       } else {
-        this.patchProfile({ gstDetails: obj.gstDetails });
+        this.patchProfile({gstDetails: obj.gstDetails});
       }
     }
   }
@@ -476,7 +472,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.dataSourceBackup.forEach(item => {
       if (item.city === e.item) {
         this.companyProfileObj.country = item.country;
-        this.patchProfile({ city: this.companyProfileObj.city });
+        this.patchProfile({city: this.companyProfileObj.city});
         // set country and state values
         // try {
         //   item.address_components.forEach(address => {

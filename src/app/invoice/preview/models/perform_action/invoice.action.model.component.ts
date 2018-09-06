@@ -1,4 +1,4 @@
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
@@ -11,7 +11,6 @@ import { IFlattenAccountsResultItem } from '../../../../models/interfaces/flatte
 import { Store } from '../../../../../../node_modules/@ngrx/store';
 import { AppState } from '../../../../store';
 import { createSelector } from '../../../../../../node_modules/reselect';
-import { ReplaySubject } from '../../../../../../node_modules/rxjs/ReplaySubject';
 import { IForceClear } from '../../../../models/api-models/Sales';
 import { TagRequest } from '../../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../../actions/settings/tag/settings.tag.actions';

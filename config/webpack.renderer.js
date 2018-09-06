@@ -26,7 +26,7 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
-  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {
+  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, buildUtils.DEFAULT_METADATA.definePluginObject, options.metadata || {
     baseUrl: '',
     isElectron: true
   });
@@ -41,6 +41,7 @@ module.exports = function (options) {
     tsConfigPath: METADATA.tsConfigPath,
     mainPath: entry.main
   });
+  console.log('Define Plugin : ---', JSON.stringify(METADATA));
   return {
     /**
      * The entry point for the bundle
@@ -161,19 +162,10 @@ module.exports = function (options) {
           test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
           use: 'file-loader'
         }
-
       ],
 
     },
 
-    // optimization: {
-    //   namedModules: true,
-    //   splitChunks: {
-    //     chunks: "all"
-    //   },
-    //   runtimeChunk: true,
-    //   concatenateModules: true
-    // },
 
     /**
      * Add additional plugins to the compiler.
@@ -199,18 +191,18 @@ module.exports = function (options) {
         'isElectron': JSON.stringify(true),
         'errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
         'errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
-        'AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'AppUrl': JSON.stringify('./'),
         'ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
-        'APP_FOLDER':JSON.stringify(METADATA.definePluginObject.APP_FOLDER),
+        'APP_FOLDER': JSON.stringify(''),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
         'process.env.isElectron': JSON.stringify(true),
         'process.env.errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
         'process.env.errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
-        'process.env.AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
-        'process.env.ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl)
-        'process.env.APP_FOLDER': JSON.stringify(METADATA.definePluginObject.APP_FOLDER)
+        'process.env.AppUrl': JSON.stringify('./'),
+        'process.env.ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'process.env.APP_FOLDER': JSON.stringify('')
       }),
       // new webpack.DefinePlugin(Object.assign({
       //   'ENV': JSON.stringify(METADATA.ENV),

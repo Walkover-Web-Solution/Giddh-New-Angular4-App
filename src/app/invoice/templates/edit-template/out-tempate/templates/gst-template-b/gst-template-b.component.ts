@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { from, Observable, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
@@ -10,7 +10,6 @@ import { TemplateContentUISectionVisibility } from '../../../../../../services/i
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
 import { AppState } from 'app/store';
-
 
 @Component({
   selector: 'gst-template-b',
@@ -31,7 +30,7 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
-  public companySetting$: Observable<any> = Observable.from(null);
+  public companySetting$: Observable<any> = from(null);
   public companyAddress: string = '';
   public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

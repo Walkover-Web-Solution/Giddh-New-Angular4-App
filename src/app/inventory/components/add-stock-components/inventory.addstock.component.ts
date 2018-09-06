@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 
 import { distinct, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
@@ -49,10 +49,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   @Input() public addStock: boolean = false;
 
   public stockListDropDown$: Observable<IOption[]>;
-  public stockUnitsDropDown$: Observable<IOption[]> = observableOf(null);
+  public stockUnitsDropDown$: Observable<IOption[]> = of(null);
   public purchaseAccountsDropDown$: Observable<IOption[]>;
   public salesAccountsDropDown$: Observable<IOption[]>;
-  public needForceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public needForceClear$: Observable<IForceClear> = of({status: false});
 
   @ViewChild('formDiv') public formDiv: ElementRef;
   public formDivBoundingRect: Subject<any> = new Subject<any>();
@@ -76,9 +76,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public selectedGroup: IOption;
   public activeGroup: any;
   public editLinkedStockIdx: any = null;
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
-  public forceClearStock$: Observable<IForceClear> = observableOf({status: false});
-  public forceClearStockUnit$: Observable<IForceClear> = observableOf({status: false});
+  public forceClear$: Observable<IForceClear> = of({status: false});
+  public forceClearStock$: Observable<IForceClear> = of({status: false});
+  public forceClearStockUnit$: Observable<IForceClear> = of({status: false});
   public disableStockButton: boolean = false;
   public createGroupSuccess$: Observable<boolean>;
   public showOtherDetails: boolean;
@@ -110,7 +110,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let unitArr = units.map(unit => {
           return {label: `${unit.name} (${unit.code})`, value: unit.code};
         });
-        this.stockUnitsDropDown$ = observableOf(unitArr);
+        this.stockUnitsDropDown$ = of(unitArr);
       }
     });
 
@@ -231,7 +231,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         data.body.results.map(d => {
           purchaseAccounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
         });
-        this.purchaseAccountsDropDown$ = observableOf(purchaseAccounts);
+        this.purchaseAccountsDropDown$ = of(purchaseAccounts);
       }
     });
 
@@ -242,7 +242,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         data.body.results.map(d => {
           salesAccounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
         });
-        this.salesAccountsDropDown$ = observableOf(salesAccounts);
+        this.salesAccountsDropDown$ = of(salesAccounts);
       }
     });
 
@@ -565,10 +565,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public resetStockForm() {
-    this.needForceClear$ = Observable.of({status: true});
-    this.forceClear$ = observableOf({status: true});
-    this.forceClearStock$ = observableOf({status: true});
-    this.forceClearStockUnit$ = observableOf({status: true});
+    this.needForceClear$ = of({status: true});
+    this.forceClear$ = of({status: true});
+    this.forceClearStock$ = of({status: true});
+    this.forceClearStockUnit$ = of({status: true});
     let activeStock: StockDetailResponse = null;
     this.activeStock$.pipe(take(1)).subscribe((a) => activeStock = a);
 
@@ -787,7 +787,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         this.flattenDATA(data.body.results, flattenData);
-        this.groupsData$ = observableOf(flattenData);
+        this.groupsData$ = of(flattenData);
       }
     });
   }
@@ -864,7 +864,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
     let rawArr = control.getRawValue();
-    _.forEach(rawArr,  (o, i) => {
+    _.forEach(rawArr, (o, i) => {
       if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
         rawArr = _.without(rawArr, o);
         control.removeAt(i);
@@ -896,7 +896,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     if (s.addStock && s.addStock.currentValue) {
       if (this.addStockForm) {
         this.addStockForm.reset();
-        this.needForceClear$ = Observable.of({status: true});
+        this.needForceClear$ = of({status: true});
         this.addStockForm.controls['parentGroup'].enable();
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
@@ -912,7 +912,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
         this.isUpdatingStockForm = false;
         this.companyTaxesList$.subscribe(a => {
-          _.forEach(a,  (o) => {
+          _.forEach(a, (o) => {
             o.isChecked = false;
           });
         });
@@ -943,7 +943,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let e: any = {target: {checked: true}};
     let common = this.companyTaxesList$.subscribe(a => {
       _.filter(a, (tax) => {
-        _.find(taxes,  (unq) => {
+        _.find(taxes, (unq) => {
           if (unq === tax.uniqueName) {
             return taxToMap.push(tax);
           }

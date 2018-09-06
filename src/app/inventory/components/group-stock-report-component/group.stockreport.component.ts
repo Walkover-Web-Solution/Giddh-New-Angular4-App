@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Rx';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';

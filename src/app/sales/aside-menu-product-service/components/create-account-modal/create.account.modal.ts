@@ -4,8 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { ReplaySubject } from 'rxjs/Rx';
+import { Observable, ReplaySubject } from 'rxjs';
 import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { SalesActions } from '../../../../actions/sales/sales.action';
