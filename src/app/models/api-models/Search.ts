@@ -88,6 +88,7 @@ export interface SearchRequest {
   fromDate: string;
   toDate: string;
   refresh: boolean;
+  page: number;
 }
 
 export class SearchDataSet {

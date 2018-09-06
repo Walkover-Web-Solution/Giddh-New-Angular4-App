@@ -45,7 +45,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT)));
+    this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
     // get activeFinancialYear and lastFinancialYear
     this.companies$.subscribe(c => {
       if (c) {
@@ -102,8 +102,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
   public fetchChartData() {
     this.requestInFlight = true;
+    this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
     // this.ApiToCALL = [];
-
     this.refresh = false;
   }
 

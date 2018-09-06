@@ -72,6 +72,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public updateAccountIsSuccess$: Observable<boolean>;
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
+  @Input() public isDebtorCreditor: boolean = false;
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -97,6 +98,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,

@@ -23,7 +23,7 @@ export class SearchActions {
     .ofType(SearchActions.SEARCH_REQUEST).pipe(
       switchMap((action: CustomActions) => {
         return this._searchService.Search(action.payload).pipe(
-          map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
+          map((r) => this.validateResponse<any, SearchRequest>(r, {
             type: SearchActions.SEARCH_RESPONSE,
             payload: r
           }, true, {
@@ -38,10 +38,10 @@ export class SearchActions {
     private _searchService: SearchService) {
   }
 
-  public GetStocksReport(request: SearchRequest): CustomActions {
+  public GetStocksReport(request: SearchRequest, searchReqBody: any): CustomActions {
     return {
       type: SearchActions.SEARCH_REQUEST,
-      payload: request
+      payload: { request, searchReqBody }
     };
   }
 

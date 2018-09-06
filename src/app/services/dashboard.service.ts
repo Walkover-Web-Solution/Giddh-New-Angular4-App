@@ -90,10 +90,10 @@ export class DashboardService {
     }), catchError((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '')));
   }
 
-  public GetRationAnalysis(date: string): Observable<BaseResponse<BankAccountsResponse[], string>> {
+  public GetRationAnalysis(date: string, refresh): Observable<BaseResponse<BankAccountsResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + DASHBOARD_API.RATIO_ANALYSIS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':date', date)).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + DASHBOARD_API.RATIO_ANALYSIS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':date', date).replace(':refresh', refresh)).pipe(map((res) => {
       let data: BaseResponse<BankAccountsResponse[], string> = res;
       data.request = date;
       return data;

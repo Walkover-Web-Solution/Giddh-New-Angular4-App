@@ -2,6 +2,7 @@ import { combineLatest as observableCombineLatest, Observable, of as observableO
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild, HostListener, EventEmitter } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -37,6 +38,9 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader/index';
+import { LEDGER_API } from '../../services/apiurls/ledger.api';
+import { Configuration } from '../../app.constant';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -198,9 +202,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public voucherNumber: string;
   public depositAccountUniqueName: string;
   public dropdownisOpen: boolean = false;
+  public fileUploadOptions: UploaderOptions;
 
   public stockTaxList = []; // New
-
+  public uploadInput: EventEmitter<UploadInput>;
+  public sessionKey$: Observable<string>;
+  public companyName$: Observable<string>;
+  public isFileUploading: boolean = false;
+  public selectedFileName: string = '';
+  public file: any = null;
+  public isSalesInvoice: boolean = true;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -239,6 +250,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
 
     // bind countries
     contriesWithCodes.map(c => {
@@ -428,6 +441,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
+
+    this.uploadInput = new EventEmitter<UploadInput>();
+    this.fileUploadOptions = { concurrency: 0 };
   }
 
   public assignDates() {
@@ -459,6 +475,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public pageChanged(val: string, label: string) {
     this.selectedPage = val;
     this.selectedPageLabel = label;
+    if (this.selectedPage === 'Sales') {
+      this.isSalesInvoice = true;
+    } else {
+      this.isSalesInvoice = false;
+    }
     this.makeCustomerList();
     this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
     // this.toggleActionText = this.selectedPage;
@@ -1175,6 +1196,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public ngOnChanges(s: SimpleChanges) {
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
       this.pageChanged('Purchase', 'Purchase');
+      this.isSalesInvoice = false;
     }
   }
 
@@ -1236,5 +1258,48 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         return txn.rate = o.rate;
       }
     });
+  }
+
+  public onUploadOutput(output: UploadOutput): void {
+    if (output.type === 'allAddedToQueue') {
+      let sessionKey = null;
+      let companyUniqueName = null;
+      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
+      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      const event: UploadInput = {
+        type: 'uploadAll',
+        url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+        method: 'POST',
+        fieldName: 'file',
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
+      };
+      this.uploadInput.emit(event);
+    } else if (output.type === 'start') {
+      this.isFileUploading = true;
+      // this._loaderService.show();
+    } else if (output.type === 'done') {
+      // this._loaderService.hide();
+      if (output.file.response.status === 'success') {
+        this.isFileUploading = false;
+        // this.blankLedger.attachedFile = output.file.response.body.uniqueName;
+        // this.blankLedger.attachedFileName = output.file.response.body.name;
+        this._toasty.successToast('file uploaded successfully');
+      } else {
+        this.isFileUploading = false;
+        // this.blankLedger.attachedFile = '';
+        // this.blankLedger.attachedFileName = '';
+        this._toasty.errorToast(output.file.response.message);
+      }
+    }
+  }
+
+  public onFileChange(file: FileList) {
+    this.file = file.item(0);
+    if (this.file) {
+      this.selectedFileName = this.file.name;
+    } else {
+      this.selectedFileName = '';
+    }
   }
 }
