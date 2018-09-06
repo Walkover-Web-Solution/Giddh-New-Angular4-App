@@ -59,16 +59,16 @@ export class GstReconcileActions {
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _reconcileService: GstReconcileService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _reconcileService: GstReconcileService) {
     //
   }
 
   public GstReconcileOtpRequest(userName: string): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST,
-      payload: {userName}
+      payload: { userName }
     };
   }
 
@@ -79,10 +79,10 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoicePeriodRequest(period: string): CustomActions {
+  public GstReconcileInvoicePeriodRequest(period: string, action: string, page: string, count: string): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_PERIOD_REQUEST,
-      payload: {period}
+      payload: { period }
     };
   }
 
@@ -96,7 +96,7 @@ export class GstReconcileActions {
   public GstReconcileVerifyOtpRequest(model: VerifyOtpRequest): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST,
-      payload: {model}
+      payload: { model }
     };
   }
 
