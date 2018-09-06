@@ -95,6 +95,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
    */
   public createTemplate() {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    let copiedTemplate = _.cloneDeep(data);
     if (data.name) {
       data = this.newLineToBR(data);
       data.sections[0].content[0].label = '';
@@ -103,6 +104,8 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
         data.sections[1].content[8].field = 'taxableValue';
       }
+      data.copyFrom = copiedTemplate.uniqueName;
+      delete data['uniqueName'];
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
@@ -125,7 +128,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     if (data.name) {
       data.updatedAt = null;
       data.updatedBy = null;
-      data.copyFrom = 'gst_template_a'; // this should be dynamic
+      // data.copyFrom = 'gst_template_a'; // this should be dynamic
       data.sections[0].content[3].label = '';
       data.sections[0].content[0].label = '';
       data.sections[1].content[8].field = 'taxes';
