@@ -165,8 +165,18 @@
             <div>
               <reconcileDesign [data]="(gstNotFoundOnPortalData$ | async)?.data">
               </reconcileDesign>
+
+              <ng-container *ngIf="(gstNotFoundOnGiddhData$ | async)?.count > 0">
+                <pagination [maxSize]="5"
+                            [totalItems]="40"
+                            [itemsPerPage]="10"
+                            class="pagination-sm"
+                            (pageChanged)="reconcilePageChanged($event, 'NOT_ON_PORTAL')"
+                            [boundaryLinks]="true"
+                            [rotate]="false"></pagination>
+              </ng-container>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="(gstNotFoundOnPortalData$ | async)?.count === 0">
               <h3 class="text-center">NO DATA</h3>
             </div>
           </tab>
@@ -174,8 +184,18 @@
             <div>
               <reconcileDesign [data]="(gstNotFoundOnGiddhData$ | async)?.data">
               </reconcileDesign>
+
+              <ng-container *ngIf="(gstNotFoundOnGiddhData$ | async)?.count > 0">
+                <pagination [maxSize]="5"
+                            [totalItems]="0"
+                            [itemsPerPage]="10"
+                            class="pagination-sm"
+                            (pageChanged)="reconcilePageChanged($event, 'NOT_ON_GIDDH')"
+                            [boundaryLinks]="true"
+                            [rotate]="false"></pagination>
+              </ng-container>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="(gstNotFoundOnGiddhData$ | async)?.count === 0">
               <h3 class="text-center">NO DATA</h3>
             </div>
 
@@ -263,8 +283,20 @@
                 </tr>
                 </tbody>
               </table>
-            </div>
 
+              <ng-container *ngIf="(gstPartiallyMatchedData$ | async)?.count > 0">
+                <pagination [maxSize]="5"
+                            [totalItems]="0"
+                            [itemsPerPage]="10"
+                            class="pagination-sm"
+                            (pageChanged)="reconcilePageChanged($event, 'PARTIALLY_MATCHED')"
+                            [boundaryLinks]="true"
+                            [rotate]="false"></pagination>
+              </ng-container>
+            </div>
+            <div class="row" *ngIf="(gstPartiallyMatchedData$ | async)?.count === 0">
+              <h3 class="text-center">NO DATA</h3>
+            </div>
 
           </tab>
           <tab heading="Matched (0)">
@@ -290,14 +322,23 @@
 
                 </tbody>
               </table>
+
+              <ng-container *ngIf="(gstMatchedData$ | async)?.count > 0">
+                <pagination [maxSize]="5"
+                            [totalItems]="0"
+                            [itemsPerPage]="10"
+                            class="pagination-sm"
+                            (pageChanged)="reconcilePageChanged($event, 'MATCHED')"
+                            [boundaryLinks]="true"
+                            [rotate]="false"></pagination>
+              </ng-container>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="(gstMatchedData$ | async)?.count === 0">
               <h3 class="text-center">NO DATA</h3>
             </div>
 
 
           </tab>
-
         </tabset>
 
 
