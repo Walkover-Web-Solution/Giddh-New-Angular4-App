@@ -1,6 +1,6 @@
 {
   "name": "giddh",
-  "version": "6.5.12",
+  "version": "6.5.13",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -63,7 +63,7 @@
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
     "node": "node",
-    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -mwl --x64 --publish always",
+    "release": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key electron-builder build  -m --x64 --publish never",
     "package": "npm run clean:packages && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  -mw --x64",
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder  build  --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  electron-builder build  --macos --x64",
@@ -110,13 +110,14 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
+    "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
     "configstore": "3.1.1",
     "electron-is-dev": "0.3.0",
     "electron-log": "2.2.14",
     "electron-oauth": "2.4.3",
+    "electron-updater": "2.21.10",
     "jquery": "3.2.1",
-    "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
-    "electron-updater": "2.21.10"
+    "mime": "^2.3.1"
   },
   "devDependencies": {
     "electron-builder-squirrel-windows": "^20.15.0",
@@ -130,7 +131,6 @@
     "moment": "2.22.0",
     "builder-util": "^5.11.4",
     "electron-publisher-s3": "20.15.0",
-
     "ng-contenteditable": "1.0.5",
     "ng4-social-login": "1.3.3",
     "angular2-ui-switch": "git+https://github.com/daominhsangvn/angular2-ui-switch",
@@ -177,7 +177,7 @@
     "css-loader": "0.28.4",
     "devtron": "1.4.0",
     "electron": "1.8.4",
-    "electron-builder": "20.15.1",
+    "electron-builder": "20.20.4",
     "electron-connect": "0.6.2",
     "electron-connect-webpack-plugin": "0.1.1",
     "electron-devtools-installer": "2.2.3",
@@ -273,7 +273,8 @@
       "target": [
         "dmg",
         "zip"
-      ]
+      ],
+      "type": "development"
     },
     "linux": {
       "target": [
@@ -288,7 +289,7 @@
         "nsis-web",
         "zip"
       ],
-      "certificateSubjectName":"Walkover Technologies Pvt Ltd"
+      "certificateSubjectName": "Walkover Technologies Pvt Ltd"
     },
     "nsis": {
       "oneClick": true,
