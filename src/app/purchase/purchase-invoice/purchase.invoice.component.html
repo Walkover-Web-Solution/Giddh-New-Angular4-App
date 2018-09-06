@@ -1,55 +1,43 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
-    <form class="">
+  <form class="">
+    <div class="row">
+      <div class="form-group col-xs-2">
+        <label>GSTR Form</label>
+        <div class="btn-group btn-block" dropdown>
+          <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> <span *ngIf="!selectedGstrType.name">-- Select GSTR--</span> <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span> <span class="pull-right"> <i class="fa fa-caret-down"></i> </span> </button>
+          <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+            <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions"> {{item.name}} </li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
         <div class="row">
-            <div class="form-group col-xs-2">
-                <label>GSTR Form</label>
-                <div class="btn-group btn-block" dropdown>
-                    <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
-                            <span *ngIf="!selectedGstrType.name">-- Select GSTR --</span>
-                            <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span>
-                            <span class="pull-right">
-                    <i class="fa fa-caret-down"></i>
-                  </span>
-                        </button>
-                    <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                        <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
-                            {{item.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
-                <div class="row">
-                    <label>Month</label>
-                    <div class="input-group">
-                        <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                          </button>
-                        </span>
-                    </div>
-                    <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <ul class="my-dropdown-menu calendar-dropdown">
-                            <li>
-                                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false" [minMode]="'month'"></datepicker>
-                            </li>
-                            <li class="pd1 clearfix pdT pdB">
-                                <span class="btn-group pull-left">
-                                  <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
-                                  <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
-                                </span>
-                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
-                <label>Email <i class='fa fa-info-circle' tooltip-placement="top" tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
-            </div>
-            <!-- comment by mustafa for GSTR2
+          <label>Month</label>
+          <div class="input-group">
+            <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+            <span class="input-group-btn">
+            <button type="button" class="btn btn-default" (click)="showGSTR1DatePicker = !showGSTR1DatePicker"> <i class="glyphicon glyphicon-calendar"></i> </button>
+            </span> </div>
+          <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <ul class="my-dropdown-menu calendar-dropdown">
+              <li>
+                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false" [minMode]="'month'"></datepicker>
+              </li>
+              <li class="pd1 clearfix pdT pdB"> <span class="btn-group pull-left">
+                <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
+                </span> 
+                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> --> 
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
+        <label>Email <i class='fa fa-info-circle' tooltip-placement="top" tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
+        <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
+      </div>
+      <!-- comment by mustafa for GSTR2
                 <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
                     <label>Report</label>
                     <div class="btn-group btn-block" dropdown>
@@ -62,243 +50,410 @@
                         </ul>
                     </div>
                 </div>
-                -->
-            <!-- hide due to unused
+                --> 
+      <!-- hide due to unused
                 <div class="form-group inline" *ngIf="selectedGstrType.name">
                     <br />
                    <button [disabled]="!selectedGstrType.name || selectedGstrType.name =='GSTR1'" class="btn btn-success">GO</button>
     
                 </div>
             -->
-            <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
-                <label class="d-block">&nbsp;</label>
-                <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
-                    <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
-                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File {{ selectedGstrType.name }}
-                                <span class="pull-right mrL4">
-                    <i class="fa fa-caret-down"></i>
-                  </span>
-                            </button>
-                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet</li>
-                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet</li>
-                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet</li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With Detail Sheet</li>
-                            <!-- <li class="cp dd-options">Use JIOGST API</li> -->
-                            <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
-                        </ul>
-                    </div>
-                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading... </small>
-                </div>
-            </div>
-            <!-- hide due to unused -->
-            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
-                <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i> Jio GST</button> 
-                <span style="margin: 5px 10px;" class="pull-right">OR</span>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax Pro</button>
-            </div>
-
-        </div>
-    </form>
-    <!-- Top filter end  -->
-
-    <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
-    <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
-        <div class="row">
-            <h1 class="section_title">
-                <strong>Purchase Report </strong>
-                <small>(To file your GST return, all missing data needs to be filled properly)</small>
-            </h1>
-        </div>
+      <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
+        <label class="d-block">&nbsp;</label>
+        <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
+          <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
+            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File {{ selectedGstrType.name }} <span class="pull-right mrL4"> <i class="fa fa-caret-down"></i> </span> </button>
+            <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
+              <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet</li>
+              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet</li>
+              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet</li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST</li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro</li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet</li>
+              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With Detail Sheet</li>
+              <!-- <li class="cp dd-options">Use JIOGST API</li> --> 
+              <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
+            </ul>
+          </div>
+          <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading... </small> </div>
+      </div>
+      <!-- hide due to unused -->
+      <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i> Jio GST</button>
+        <span style="margin: 5px 10px;" class="pull-right">OR</span>
+        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax Pro</button>
+      </div>
     </div>
-
-    <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
-        <!-- filter -->
-        <div class="col-xs-12">
-            <div class="row">
-                <form class="col-xs-10">
-                    <div class="row">
-                        <div class="form-group col-xs-2">
-                            <div class="row">
-                                <label>Date Range</label>
-                                <br>
-                                <input type="text" name="dateInput" daterangepicker (selected)="selectedDate($event, mainInput)" [options]="datePickerOptions" class="form-control date-range-picker" />
-                            </div>
-                        </div>
-
-                        <div class="form-group col-xs-2">
-                            <label>Other Filters</label>
-
-                            <div class="btn-group btn-block" dropdown>
-                                <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> Filter
-                                        <span class="select_drop pull-right mrT1">
-                        <i class="fa fa-caret-down"></i>
-                      </span>
-                                    </button>
-                                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                                    <li *ngFor="let item of otherFilters">
-                                        <label>
-                                                <input type="checkbox"> {{item.name}}</label>
-                                    </li>
-                                </ul>
-                            </div>
-
-                        </div>
-                        <div class="form-group inline" *ngIf="selectedGstrType">
-                            <br />
-                            <button type="button" class="btn btn-success">GO</button>
-                            <a class="btn btn-link">Reset</a>
-                        </div>
-                        <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="!generateInvoiceArr.length">Generate <br />Purchase Invoice</button>
-                    </div>
-                </form>
-
-                <!-- search form  -->
-                <form class="col-xs-2 pull-right search-form">
-                    <br />
-                    <div class="row">
-                        <div class="input-group col-xs-12 pull-right">
-                            <span class="input-group-btn"><i class="glyphicon glyphicon-search"></i></span>
-                            <input type="text" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox class="form-control" placeholder="Search">
-                        </div>
-                        <!-- /input-group -->
-                    </div>
-                </form>
+  </form>
+  <!-- Top filter end  --> 
+  
+  <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
+  <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
+    <div class="row">
+      <h1 class="section_title"> <strong>Purchase Report </strong> <small>(To file your GST return, all missing data needs to be filled properly)</small> </h1>
+    </div>
+  </div>
+  <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'"> 
+    <!-- filter -->
+    <div class="col-xs-12">
+      <div class="row">
+        <form class="col-xs-10">
+          <div class="row">
+            <div class="form-group col-xs-2">
+              <div class="row">
+                <label>Date Range</label>
+                <br>
+                <input type="text" name="dateInput" daterangepicker (selected)="selectedDate($event, mainInput)" [options]="datePickerOptions" class="form-control date-range-picker" />
+              </div>
             </div>
-        </div>
-        <!-- filter end  -->
-
-        <!-- table  -->
-        <table class="table basic table-bordered">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Date</th>
-                    <th>Particulars</th>
-                    <th>Account</th>
-                    <th>
-                        <span (click)="sortInvoicesBy('gstin')" class="cursor-pointer">GSTIN
-                  <i class="fa fa-sort" aria-hidden="true"></i>
-                </span>
-                    </th>
-                    <th>
-                        <span (click)="sortInvoicesBy('invoiceNo')" class="cursor-pointer">Invoice No.
-                  <i class="fa fa-sort" aria-hidden="true"></i>
-                </span>
-                    </th>
-                    <th>Voucher No.</th>
-                    <th>Entry</th>
-                    <th class="text-right">Taxable Value</th>
-                    <!-- <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th> -->
-                    <th class="text-right">IGST</th>
-                    <th class="text-right">CGST</th>
-                    <th class="text-right">SGST</th>
-                    <th class="text-right">UTGST</th>
-                    <th class="text-right">GSTR2</th>
-                    <th class="text-right">ITC</th>
-                    <th class="text-right">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let invoice of allPurchaseInvoices.items; let i = index">
-                    <td class="text-center">
-                        <input type="checkbox" (click)="generateInvoice(invoice, $event);" [disabled]="invoice.entryType !== 'reverse charge' || invoice.invoiceGenerated || invoice.taxes[0]" />
-                    </td>
-                    <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
-                    <td>
-                        <input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
-                        <!-- <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small> -->
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'" />
-                    </td>
-                    <td>{{invoice.voucherNo}}</td>
-                    <td class="select text-center">
-                        <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">
-                                    <option value="" [selected]="invoice.invoiceNumber">None selected</option>
-                                    <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
-                                    <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber">
-                                        Reverse Charge</option>
-                                </select>
-                            <span class="select_drop">
-                    <i class="fa fa-caret-down"></i>
-                  </span>
-                        </div>
-                        <button *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
-
-                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
+            <div class="form-group col-xs-2">
+              <label>Other Filters</label>
+              <div class="btn-group btn-block" dropdown>
+                <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> Filter <span class="select_drop pull-right mrT1"> <i class="fa fa-caret-down"></i> </span> </button>
+                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                  <li *ngFor="let item of otherFilters">
+                    <label>
+                      <input type="checkbox">
+                      {{item.name}}</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="form-group inline" *ngIf="selectedGstrType"> <br />
+              <button type="button" class="btn btn-success">GO</button>
+              <a class="btn btn-link">Reset</a> </div>
+            <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="!generateInvoiceArr.length">Generate <br />
+            Purchase Invoice</button>
+          </div>
+        </form>
+        
+        <!-- search form  -->
+        <form class="col-xs-2 pull-right search-form">
+          <br />
+          <div class="row">
+            <div class="input-group col-xs-12 pull-right"> <span class="input-group-btn"><i class="glyphicon glyphicon-search"></i></span>
+              <input type="text" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox class="form-control" placeholder="Search">
+            </div>
+            <!-- /input-group --> 
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- filter end  --> 
+    
+    <!-- table  -->
+    <table class="table basic table-bordered">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Date</th>
+          <th>Particulars</th>
+          <th>Account</th>
+          <th> <span (click)="sortInvoicesBy('gstin')" class="cursor-pointer">GSTIN <i class="fa fa-sort" aria-hidden="true"></i> </span> </th>
+          <th> <span (click)="sortInvoicesBy('invoiceNo')" class="cursor-pointer">Invoice No. <i class="fa fa-sort" aria-hidden="true"></i> </span> </th>
+          <th>Voucher No.</th>
+          <th>Entry</th>
+          <th class="text-right">Taxable Value</th>
+          <!-- <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th> -->
+          <th class="text-right">IGST</th>
+          <th class="text-right">CGST</th>
+          <th class="text-right">SGST</th>
+          <th class="text-right">UTGST</th>
+          <th class="text-right">GSTR2</th>
+          <th class="text-right">ITC</th>
+          <th class="text-right">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let invoice of allPurchaseInvoices.items; let i = index">
+          <td class="text-center"><input type="checkbox" (click)="generateInvoice(invoice, $event);" [disabled]="invoice.entryType !== 'reverse charge' || invoice.invoiceGenerated || invoice.taxes[0]" /></td>
+          <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
+          <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
+          <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
+          <td><input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
+            
+            <!-- <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small> --></td>
+          <td><input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'" /></td>
+          <td>{{invoice.voucherNo}}</td>
+          <td class="select text-center"><div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
+              <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">
+                <option value="" [selected]="invoice.invoiceNumber">None selected</option>
+                <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
+                <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber"> Reverse Charge</option>
+              </select>
+              <span class="select_drop"> <i class="fa fa-caret-down"></i> </span> </div>
+            <button *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
+            <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
                             [autoClose]="false">
-                            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" [disabled]="selectedRowIndex != i">
-                                    {{dropdownHeading}}
-                                    <span class="select_drop pull-right mrT1">
-                      <i class="fa fa-caret-down"></i>
-                    </span>
-                                </button>
-                            <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
-                                <!-- <li>
+              <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" [disabled]="selectedRowIndex != i"> {{dropdownHeading}} <span class="select_drop pull-right mrT1"> <i class="fa fa-caret-down"></i> </span> </button>
+              <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
+                <!-- <li>
                                         <label>
                                     <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
                                 </label>
                                     </li> -->
-                                <li *ngFor="let tax of allTaxes; let idx = index">
-                                    <label> {{ invoice.taxes[0] }}
-                                            <!--(click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"  -->
-                                            <input type="checkbox" name="invoiceTax" class="invoiceTax" (click)="selectTax($event, tax, i)" [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]"> {{ tax.name}}
-                                        </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-right">{{invoice.taxableValue}}</td>
-                    <!-- <td class="form-group" *ngIf="isReverseChargeSelected">
+                <li *ngFor="let tax of allTaxes; let idx = index">
+                  <label> {{ invoice.taxes[0] }} 
+                    <!--(click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"  -->
+                    <input type="checkbox" name="invoiceTax" class="invoiceTax" (click)="selectTax($event, tax, i)" [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]">
+                    {{ tax.name}} </label>
+                </li>
+              </ul>
+            </div></td>
+          <td class="text-right">{{invoice.taxableValue}}</td>
+          <!-- <td class="form-group" *ngIf="isReverseChargeSelected">
     
                     </td> -->
-                    <td class="text-right">{{invoice.igstAmount}}</td>
-                    <td class="text-right">{{invoice.cgstAmount}}</td>
-                    <td class="text-right">{{invoice.sgstAmount}}</td>
-                    <td class="text-right">{{invoice.utgstAmount}}</td>
-                    <td class="text-center">
-                        <input type="checkbox" (click)="updateOncheck(invoice, 'sendToGstr2', $event.target.checked);" [(ngModel)]="invoice.sendToGstr2" [disabled]="!editMode || (selectedRowIndex != i && editMode)" />
-                    </td>
-                    <td class="text-center">
-                        <input type="checkbox" (click)="updateOncheck(invoice, 'availItc', $event.target.checked);" [(ngModel)]="invoice.availItc" [disabled]="!editMode || (selectedRowIndex != i && editMode)" />
-                    </td>
-                    <td class="text-center ico-btn">
-                        <button class="btn btn-xs" type="button" [disabled]="" *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)="editRow(i)">
-                                <i aria-hidden="true" class="fa fa-pencil"></i>
-                            </button>
-                        <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)" *ngIf="selectedRowIndex == i && editMode">
-                                <i aria-hidden="true" class="fa fa-check"></i>
-                            </button>
-                    </td>
-                </tr>
-
-            </tbody>
-            <tbody *ngIf="allPurchaseInvoices.count === 0">
-                <tr>
-                    <td colspan="16" class="text-center empty_table">
-                        <h1>No Record Found !!</h1>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
-        <div class="center-block text-center" *ngIf="allPurchaseInvoices.count > 0">
-            <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
-            </pagination>
-        </div>
+          <td class="text-right">{{invoice.igstAmount}}</td>
+          <td class="text-right">{{invoice.cgstAmount}}</td>
+          <td class="text-right">{{invoice.sgstAmount}}</td>
+          <td class="text-right">{{invoice.utgstAmount}}</td>
+          <td class="text-center"><input type="checkbox" (click)="updateOncheck(invoice, 'sendToGstr2', $event.target.checked);" [(ngModel)]="invoice.sendToGstr2" [disabled]="!editMode || (selectedRowIndex != i && editMode)" /></td>
+          <td class="text-center"><input type="checkbox" (click)="updateOncheck(invoice, 'availItc', $event.target.checked);" [(ngModel)]="invoice.availItc" [disabled]="!editMode || (selectedRowIndex != i && editMode)" /></td>
+          <td class="text-center ico-btn"><button class="btn btn-xs" type="button" [disabled]="" *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)="editRow(i)"> <i aria-hidden="true" class="fa fa-pencil"></i> </button>
+            <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)" *ngIf="selectedRowIndex == i && editMode"> <i aria-hidden="true" class="fa fa-check"></i> </button></td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="allPurchaseInvoices.count === 0">
+        <tr>
+          <td colspan="16" class="text-center empty_table"><h1>No Record Found !!</h1></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
+    <div class="center-block text-center" *ngIf="allPurchaseInvoices.count > 0">
+      <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"> </pagination>
     </div>
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-    <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+  </div>
+  <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+  <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
     </div>-->
+<div class="return-body scroll-y noscroll-x body fill scroll-part">
+  <div class="row">
+    <div class="col-md-9 main-wrapper">
+      <div class="return-content"> <span class="btn-toolbar  pull-right">
+        <button class="btn btn-primary ember-view"> View Summary </button>
+        </span>
+        <div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg-md text-middle">
+          <path d="M423.6 11.9H88.4c-15.7 0-28.5 12.8-28.5 28.5v431.2c0 15.7 12.8 28.5 28.5 28.5h335.2c15.7 0 28.5-12.8 28.5-28.5V40.4c0-15.7-12.8-28.5-28.5-28.5zm8.5 459.7c0 4.7-3.8 8.5-8.5 8.5H88.4c-4.7 0-8.5-3.8-8.5-8.5V40.4c0-4.7 3.8-8.5 8.5-8.5h335.2c4.7 0 8.5 3.8 8.5 8.5v431.2z"></path>
+          <path d="M349 115H158c-5.5 0-10 4.5-10 10s4.5 10 10 10h191c5.5 0 10-4.5 10-10s-4.5-10-10-10zm0 96H158c-5.5 0-10 4.5-10 10s4.5 10 10 10h191c5.5 0 10-4.5 10-10s-4.5-10-10-10zm-103 96h-88c-5.5 0-10 4.5-10 10s4.5 10 10 10h88c5.5 0 10-4.5 10-10s-4.5-10-10-10z"></path>
+          </svg>
+          <div class="return-top text-middle">
+            <div style="margin: 7px auto;" class="font-xlarge"><b>GSTR 3B SUMMARY</b> <!----> </div>
+            <!----> </div>
+        </div>
+      </div>
+      <div class="return-content "> <span class="btn-toolbar pull-right"> <a href="#" class="btn btn-primary ember-view"> View Summary </a> </span>
+        <div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon gstr-icon text-middle">
+          <path fill="#010101" d="M229.2 353.1c-24.3 0-44.1 19.8-44.1 44.1s19.8 44.1 44.1 44.1 44.1-19.8 44.1-44.1-19.8-44.1-44.1-44.1zm0 69.2c-13.8 0-25.1-11.2-25.1-25.1 0-13.8 11.2-25.1 25.1-25.1 13.8 0 25.1 11.2 25.1 25.1 0 13.8-11.3 25.1-25.1 25.1zm183.9-69.2c-24.3 0-44.1 19.8-44.1 44.1s19.8 44.1 44.1 44.1 44.1-19.8 44.1-44.1-19.8-44.1-44.1-44.1zm0 69.2c-13.8 0-25.1-11.2-25.1-25.1 0-13.8 11.2-25.1 25.1-25.1 13.8 0 25.1 11.2 25.1 25.1 0 13.8-11.3 25.1-25.1 25.1zm62.3-272.9c-1.8-2-4.3-3.1-7-3.1H250c-5.3 0-9.5 4.3-9.5 9.5 0 5.3 4.3 9.5 9.5 9.5h208.1l-8.5 105.5c-1.5 18.4-17.1 32.9-35.7 32.9H216.5c-9.4 0-17.9-6-21.1-14.8 0-.1 0-.1-.1-.2l-80.7-212c-1.4-3.7-4.9-6.1-8.9-6.1H43.6c-5.3 0-9.5 4.3-9.5 9.5 0 5.3 4.3 9.5 9.5 9.5h55.6l78.3 205.8c5.9 16.4 21.6 27.3 39 27.3H414c28.4 0 52.4-22.1 54.6-50.4l9.3-115.8c.2-2.5-.7-5.1-2.5-7.1z"></path>
+          </svg>
+          <div class="return-top text-middle">
+            <div style="margin: 7px auto;" class="font-xlarge"> <b class="text-middle">GSTR-1 (July - 2017)</b> &nbsp;&nbsp; <span class="label text-uppercase return-filed "> Filed </span> </div>
+            <p class="text-muted"> Details of outward supplies of goods and services </p>
+          </div>
+        </div>
+        <div class="content-graph">
+          <div class="sales-colm ember-view">
+            <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
+            <div class="line"></div>
+            <div class="count"><a><span class="font-xxxlarge"><b> 1 </b></span> <span>Transactions</span></a></div>
+          </div>
+          <div class="sales-colm ember-view">
+            <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
+            <div class="line"></div>
+            <div class="count"><a><span class="font-xxxlarge"><b>0</b></span><span>&nbsp;Transactions</span></a></div>
+            <!----></div>
+          <div class="sales-colm">
+            <div class="text-muted font-xs"><b class="text-uppercase"> Filed on </b></div>
+            <div class="line line-gradient"></div>
+            <div style="padding-top: 7px;" class="font-xlarge"> 04/09/2018 </div>
+          </div>
+        </div>
+      </div>
+      <div class="return-content "> <span class="btn-toolbar  pull-right"> <!---->
+        <button id="ember1214" class="btn btn-default ember-view"> Categorize Now </button>
+        <a href="#" class="btn btn-primary ember-view"> File Now </a> </span>
+        <div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon gstr-icon text-middle">
+          <path fill="none" d="M309.8 99.7c0-29.7-24.1-53.8-53.8-53.8-29.7 0-53.8 24.1-53.8 53.8v27.4h107.7V99.7zm-116.7 45.6h-71.5v320.8h268.8V145.3H193.1zm10.1 60.5c-8.2 0-14.9-6.7-14.9-14.9S195 176 203.2 176s14.9 6.7 14.9 14.9-6.6 14.9-14.9 14.9zm130.9-14.9c0 8.2-6.7 14.9-14.9 14.9s-14.9-6.7-14.9-14.9S311 176 319.2 176c8.3 0 14.9 6.6 14.9 14.9z"></path>
+          <path fill="#010101" d="M396.7 127.1H328v-26.5c0-39.6-31.6-72.5-71.2-72.9-40-.4-72.7 32-72.7 72v27.4h-68.7c-6.5 0-11.8 5.3-11.8 11.8v333.4c0 6.5 5.3 11.8 11.8 11.8h281.4c6.5 0 11.8-5.3 11.8-11.8V139c-.1-6.6-5.4-11.9-11.9-11.9zM202.2 99.7c0-29.7 24.1-53.8 53.8-53.8 29.7 0 53.8 24.1 53.8 53.8v27.4H202.2V99.7zm188.2 366.4H121.6V145.3h268.8v320.8z"></path>
+          <circle fill="#010101" cx="203.2" cy="190.9" r="14.9"></circle>
+          <circle fill="#010101" cx="319.2" cy="190.9" r="14.9"></circle>
+          </svg>
+          <div class="return-top text-middle">
+            <div style="margin: 7px auto;" class="font-xlarge"> <b>GSTR-2 (July - 2017)</b> <!----> </div>
+            <p class="text-muted"> Details of inward supplies of goods and services </p>
+          </div>
+        </div>
+        <div class="content-graph gstr2-push-disabled">
+          <div class="purchase-colm ember-view">
+            <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
+            <div class="line"></div>
+            <div class="count"><a><span class="font-xxxlarge"><b> 3 </b></span> <span>&nbsp;Transactions</span></a></div>
+          </div>
+          <div class="purchase-colm ember-view">
+            <div class="text-muted text-uppercase font-xs"><b>Uncategorized</b></div>
+            <div class="line"></div>
+            <div class="count"><a><span class="font-xxxlarge"><b>39</b></span> <span>&nbsp;Transactions</span></a></div>
+          </div>
+          <div class="purchase-colm ember-view">
+            <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
+            <div class="line"></div>
+            <div class="count"><a><span class="font-xxxlarge"><b>0</b></span><span>&nbsp;Transactions</span></a></div>
+            <!----></div>
+          <div class="purchase-colm">
+            <div class="text-muted font-xs"><b class="text-uppercase"> Filing due on </b></div>
+            <div class="line line-gradient"></div>
+            <div style="padding-top: 7px;" class="font-xlarge"> 31/01/2018 </div>
+          </div>
+          <div style="margin: 35px 0px 0;" class="text-overdue ss"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
+            <path d="M437.2 74.8C388.8 26.4 324.4-.2 256-.2c-68.4 0-132.8 26.7-181.2 75.1C26.4 123.2-.2 187.6-.2 256c0 68.4 26.7 132.8 75.1 181.2 48.4 48.4 112.7 75.1 181.2 75.1 68.4 0 132.8-26.7 181.2-75.1s75.1-112.7 75.1-181.2c-.2-68.4-26.8-132.8-75.2-181.2z"></path>
+            <path fill="#FFF" d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z"></path>
+            </svg> <i style="margin-left: 5px;" class="text-middle">We've temporarily disabled the GSTR-2 push option in Zoho Books as GSTN has disabled it.</i></div>
+        </div>
+      </div>
+      <div class="return-content content-disabled"> <span class="btn-toolbar  pull-right">
+        <button type="button" class="btn btn-primary">File Now</button>
+        </span>
+        <div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg-md text-middle">
+          <path d="M344.4 116.1c-33.5 0-64.3 11.8-88.4 31.5-24.1-19.7-54.9-31.5-88.4-31.5-77.1 0-139.9 62.8-139.9 139.9 0 77.1 62.8 139.9 139.9 139.9 77.1 0 139.9-62.8 139.9-139.9 0-38.2-15.4-72.9-40.3-98.2 21.3-16.7 48.1-26.7 77.1-26.7 68.9 0 124.9 56 124.9 124.9s-56 124.9-124.9 124.9c-16 0-31.5-3-46.3-8.8-3.8-1.5-8.2.3-9.7 4.2-1.5 3.8.3 8.2 4.2 9.7 16.5 6.6 33.9 9.9 51.8 9.9 77.1 0 139.9-62.8 139.9-139.9.1-77.1-62.7-139.9-139.8-139.9zM167.6 380.9c-68.9 0-124.9-56-124.9-124.9s56-124.9 124.9-124.9c29.1 0 55.9 10 77.1 26.7-24.9 25.3-40.3 59.9-40.3 98.2 0 23.3 5.8 46.3 16.9 66.7 2 3.6 6.5 5 10.2 3 3.6-2 5-6.5 3-10.2-9.9-18.1-15.1-38.7-15.1-59.5 0-34.4 14-65.6 36.5-88.2 22.6 22.6 36.5 53.8 36.5 88.2.1 68.9-55.9 124.9-124.8 124.9z"></path>
+          </svg>
+          <div class="return-top text-middle">
+            <div style="margin: 7px auto;" class="font-xlarge"><b>Final Return for July - 2017 (GSTR-3)</b> </div>
+          </div>
+        </div>
+      </div>
+      <div class="return-content content-disabled">
+        <button type="button" class="btn btn-primary btn-toolbar  pull-right">Record Payment</button>
+        <div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg-md text-middle">
+          <path d="M256 56.8C146.2 56.8 56.8 146.2 56.8 256c0 109.8 89.3 199.2 199.2 199.2 109.8 0 199.2-89.3 199.2-199.2 0-109.8-89.4-199.2-199.2-199.2zm0 383.4c-101.5 0-184.2-82.6-184.2-184.2S154.5 71.8 256 71.8 440.2 154.5 440.2 256 357.5 440.2 256 440.2z"></path>
+          <path d="M330.5 183.5c0-4.1-3.4-7.5-7.5-7.5H195c-4.1 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5h38c.2 0 .3.1.5.1 17.4 1.9 31.6 11.4 37.3 23.9H195c-4.1 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5h78.3c-1.8 19-21.9 34-46.3 34h-24.3c-3 0-5.7 1.8-6.9 4.5-1.2 2.7-.7 5.9 1.3 8.1l80.1 88.1c1.5 1.6 3.5 2.5 5.6 2.5 1.8 0 3.6-.6 5-2 3.1-2.8 3.3-7.5.5-10.6L219.6 279h7.4c32.8 0 59.7-21.7 61.4-49H323c4.1 0 7.5-3.4 7.5-7.5s-3.4-7.5-7.5-7.5h-36.3c-2.7-9.2-8.3-17.4-16.1-24H323c4.1 0 7.5-3.4 7.5-7.5z"></path>
+          </svg>
+          <div class="return-top text-middle">
+            <div style="margin: 7px auto;" class="font-xlarge"><b>Tax Payments</b></div>
+            <p class="text-muted">Record Your Tax Payments</p>
+          </div>
+        </div>
+        <div class="content-graph">
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;After filing your returns, you can make payment through the GST portal and record it here.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 notification">
+      <div style="margin-bottom: 18px;"> <a href="#" target="_blank" rel="noreferrer noopener" class="filing-demo-video">
+        <div class="text-middle video-thumbnail"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 68 45" class="icon text-middle">
+          <image overflow="visible" width="68" height="45" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAAAtCAMAAAAgNj0SAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ bWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6 eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0 NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJo dHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlw dGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAv IiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RS ZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpD cmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFu Y2VJRD0ieG1wLmlpZDo1RDBEQURFRkE1RUMxMUU0QkJGREQ4RUIzMUY2RUJERSIgeG1wTU06RG9j dW1lbnRJRD0ieG1wLmRpZDo1RDBEQURGMEE1RUMxMUU0QkJGREQ4RUIzMUY2RUJERSI+IDx4bXBN TTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjVEMERBREVEQTVFQzExRTRC QkZERDhFQjMxRjZFQkRFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjVEMERBREVFQTVFQzEx RTRCQkZERDhFQjMxRjZFQkRFIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4 bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+GkRtfAAAAYBQTFRF4u7y7Ozs8/n5+/z9t9Pq7u7u rMzm597d8fP1qamp5ubm6uja0tLS9fb5ysrKZ6ba6Ojo8vT29/Ty+Pb15OnrxMTE3urx7fH1+Pj4 8u7t+vr6sLCwoaGhzs7O5OTkra2t7erm7Onp/Pz+4uLi/Pz77O/n+vj16+rs1NTU7fDzt7e39vf1 9PLynJyc9ff36eXm8/Dvi7nif7Hdt8/m8/Pz/P7+4ufm8/b3/f799PX3+Pr9/v38r8/n+fn77+/v +fr6pqam/Pv87fX36/T36Ojq6efp8vHy6fP16+zt5OTm9fX19/f39PT08PDw6+vr8fHx/v796urq 9vb2/v3+n5+f8fDw7e3t9fT09vX25OTj6enp9fX08fDx6urr6evr6+vq8/P009/f3dfT+/v47e7u 7u7tqMnh6+zr+fr5+vn5+/n63d3d8fHyxsfH9PX10czL9fT12dTM8fLx5ubk9fb13+DhcKvb+fn5 8vLy+/v7/Pz8srKy/f39////mZmZ/v7+ZNuFvAAABPtJREFUeNqsVgtb00gUNa1FGmq3CkospSyP VQTii3EJVgLqitKZJH0xatWV1X3vsm/NpE4mf907kz5oaVf8Pk+/Ns85vXPunXPn1PvPgFPvU5fO fP3Vl67reY7NyicFodRGyPVyT14vK5LX301MvF1kBiYGj9HyP4K8TzWbYI3pl//+E0hq5Vr5+RMC wEGQB8h3gpOhBR+8CyS25lbd7wliyPex7xvY59GnIMwDSVXXi0UXMUYMTXdpVadBeFKCivzxgcRz HIcRxiCSKGi1IEjeUWYAHD6dx3Vu8YXkbQlDRtLUi00mgWEevbFDBADkg7Ze95JLQeLBgweP7t+X mtiepzggEiAZGXpgGH4LXoCIZPqwFS0kTl0EPAISCKRKuiSjgV3XwSGEqq4MBMdkIgEz2lCaUJud gAT+XhHE021nRn4xkLzUny1WR5DQ7ExDiMZMlsaD46/URwktL6NwVWqScqgzlCS1IoQozM0V4LBC y3I6PjYM3IZhGCnqx5GUCZQsIgSRAZJlU6QznjzzMmlhZpwU84P+2ne8PFckKEWZrFPcJamU5G8W xnVzxTOmyHb06JYNKNOKScoeZVsyxtWgQ1KXcYhC9Whc1YJYHl72igRp7is1na2Id0FNs8n70DRN yo+hTYKc3OIzRtDvbCuK6lFFPYlWREZS6qT3fkasDIw/QuK5Gr3iOgxtRSFAKlCnIs3hqiXMQ9zR IEgLrU8T3pvOgaPr1ZyuQYqNv3CN/AIkxgUxi3GZMJnjTL49KiOy/cIqyRXJ5PkbNy7dOA/49Sl1 XlAsV/ecyCHm2baQ2PktltATM32SqrrlkSRJnJuamvp2I5HYCCBhJatSiayoUZDPg5qIMaer/y40 +gLJx/ORJHclfhwbGzs9DSpEYaUS3tkQaZiNz7Ho4IIclxZ9/hL0NHn37ubNW18Abl2EWxaYVXhn WqQJsgk3uiSH8v05MXR5A8npu+vr62Njd2UkQGKVeIUnGwVeAg/rkLyvcsh+VGgMrGs1HyKFXdP1 3Pz8vLeaj1NcguTOCCbPfUWRXgxDWT6OmDlea1GIJAnZd/YBa5PbxjUD7eJK2KoditnNs5sbjkrx 5rVNWFYWVFt2WNkjVbH/5sDwm/+Qn9n1eZuS2+HSuT2xc3V8fPwqFNvVaTi5ZkH0aUFHkjCXalpV 88j2+JmJN0lIPsQOZZ9Mcr53wLk8giB1KPtoFAlxmnt67uCArW0nJy+XQqgSaUim2VvEai08M037 uGV2SNjjpvty9wChbSWs8uIwBCtwwzbkHWUFg7J2Sf5YY4QcKHv0a9goP38DZf8UG4fCnK0Zyg6h 2UhTGmxmrd50vik+LBZtwjzHL9uO9/inGtTPPiO1WVPsZHOEeIxKe1w+5iUt3iVJaT+ABUMvZj4P WktBsBDxe2qda8qo02ll1Knjkh4hqf23ijFhqOv2lnWPH2sZfAiC+DWkenFT112EPNZ1e55snQBB vhcJda80H1LU13esk+wrOs4mSWzqulUnbl48+rQNTpek2nSv651I4u0NWEo/RnDH06kBCaP2/ou4 jQawfYDkh9bZcbmHgz4CNktq5fKIVt9zNre4+NaVewvis1TKAbsK69NTejPXfAWKS+Rc/H/TUS2D tTc5LB+120A9ObhJ+jhJG/FOSfYkqz4kFcPRJiGoDWjo6n4l4qVekxs9vkMiN36fAR8EGACTOtW+ Av0TwwAAAABJRU5ErkJggg=="></image>
+          </svg> </div>
+        <div class="text-middle video-desc">
+          <div class="font-medium"> How do I file GSTR-1? </div>
+          <span class="label label-default"> 5:06 </span></div>
+        </a><a href="#" target="_blank" rel="noreferrer noopener" class="filing-demo-video">
+        <div class="text-middle video-thumbnail"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 68 45" class="icon text-middle">
+          <image overflow="visible" width="68" height="45" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAAAtCAMAAAAgNj0SAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ bWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6 eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0 NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJo dHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlw dGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAv IiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RS ZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpD cmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFu Y2VJRD0ieG1wLmlpZDo1RDBEQURFRkE1RUMxMUU0QkJGREQ4RUIzMUY2RUJERSIgeG1wTU06RG9j dW1lbnRJRD0ieG1wLmRpZDo1RDBEQURGMEE1RUMxMUU0QkJGREQ4RUIzMUY2RUJERSI+IDx4bXBN TTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjVEMERBREVEQTVFQzExRTRC QkZERDhFQjMxRjZFQkRFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjVEMERBREVFQTVFQzEx RTRCQkZERDhFQjMxRjZFQkRFIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4 bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+GkRtfAAAAYBQTFRF4u7y7Ozs8/n5+/z9t9Pq7u7u rMzm597d8fP1qamp5ubm6uja0tLS9fb5ysrKZ6ba6Ojo8vT29/Ty+Pb15OnrxMTE3urx7fH1+Pj4 8u7t+vr6sLCwoaGhzs7O5OTkra2t7erm7Onp/Pz+4uLi/Pz77O/n+vj16+rs1NTU7fDzt7e39vf1 9PLynJyc9ff36eXm8/Dvi7nif7Hdt8/m8/Pz/P7+4ufm8/b3/f799PX3+Pr9/v38r8/n+fn77+/v +fr6pqam/Pv87fX36/T36Ojq6efp8vHy6fP16+zt5OTm9fX19/f39PT08PDw6+vr8fHx/v796urq 9vb2/v3+n5+f8fDw7e3t9fT09vX25OTj6enp9fX08fDx6urr6evr6+vq8/P009/f3dfT+/v47e7u 7u7tqMnh6+zr+fr5+vn5+/n63d3d8fHyxsfH9PX10czL9fT12dTM8fLx5ubk9fb13+DhcKvb+fn5 8vLy+/v7/Pz8srKy/f39////mZmZ/v7+ZNuFvAAABPtJREFUeNqsVgtb00gUNa1FGmq3CkospSyP VQTii3EJVgLqitKZJH0xatWV1X3vsm/NpE4mf907kz5oaVf8Pk+/Ns85vXPunXPn1PvPgFPvU5fO fP3Vl67reY7NyicFodRGyPVyT14vK5LX301MvF1kBiYGj9HyP4K8TzWbYI3pl//+E0hq5Vr5+RMC wEGQB8h3gpOhBR+8CyS25lbd7wliyPex7xvY59GnIMwDSVXXi0UXMUYMTXdpVadBeFKCivzxgcRz HIcRxiCSKGi1IEjeUWYAHD6dx3Vu8YXkbQlDRtLUi00mgWEevbFDBADkg7Ze95JLQeLBgweP7t+X mtiepzggEiAZGXpgGH4LXoCIZPqwFS0kTl0EPAISCKRKuiSjgV3XwSGEqq4MBMdkIgEz2lCaUJud gAT+XhHE021nRn4xkLzUny1WR5DQ7ExDiMZMlsaD46/URwktL6NwVWqScqgzlCS1IoQozM0V4LBC y3I6PjYM3IZhGCnqx5GUCZQsIgSRAZJlU6QznjzzMmlhZpwU84P+2ne8PFckKEWZrFPcJamU5G8W xnVzxTOmyHb06JYNKNOKScoeZVsyxtWgQ1KXcYhC9Whc1YJYHl72igRp7is1na2Id0FNs8n70DRN yo+hTYKc3OIzRtDvbCuK6lFFPYlWREZS6qT3fkasDIw/QuK5Gr3iOgxtRSFAKlCnIs3hqiXMQ9zR IEgLrU8T3pvOgaPr1ZyuQYqNv3CN/AIkxgUxi3GZMJnjTL49KiOy/cIqyRXJ5PkbNy7dOA/49Sl1 XlAsV/ecyCHm2baQ2PktltATM32SqrrlkSRJnJuamvp2I5HYCCBhJatSiayoUZDPg5qIMaer/y40 +gLJx/ORJHclfhwbGzs9DSpEYaUS3tkQaZiNz7Ho4IIclxZ9/hL0NHn37ubNW18Abl2EWxaYVXhn WqQJsgk3uiSH8v05MXR5A8npu+vr62Njd2UkQGKVeIUnGwVeAg/rkLyvcsh+VGgMrGs1HyKFXdP1 3Pz8vLeaj1NcguTOCCbPfUWRXgxDWT6OmDlea1GIJAnZd/YBa5PbxjUD7eJK2KoditnNs5sbjkrx 5rVNWFYWVFt2WNkjVbH/5sDwm/+Qn9n1eZuS2+HSuT2xc3V8fPwqFNvVaTi5ZkH0aUFHkjCXalpV 88j2+JmJN0lIPsQOZZ9Mcr53wLk8giB1KPtoFAlxmnt67uCArW0nJy+XQqgSaUim2VvEai08M037 uGV2SNjjpvty9wChbSWs8uIwBCtwwzbkHWUFg7J2Sf5YY4QcKHv0a9goP38DZf8UG4fCnK0Zyg6h 2UhTGmxmrd50vik+LBZtwjzHL9uO9/inGtTPPiO1WVPsZHOEeIxKe1w+5iUt3iVJaT+ABUMvZj4P WktBsBDxe2qda8qo02ll1Knjkh4hqf23ijFhqOv2lnWPH2sZfAiC+DWkenFT112EPNZ1e55snQBB vhcJda80H1LU13esk+wrOs4mSWzqulUnbl48+rQNTpek2nSv651I4u0NWEo/RnDH06kBCaP2/ou4 jQawfYDkh9bZcbmHgz4CNktq5fKIVt9zNre4+NaVewvis1TKAbsK69NTejPXfAWKS+Rc/H/TUS2D tTc5LB+120A9ObhJ+jhJG/FOSfYkqz4kFcPRJiGoDWjo6n4l4qVekxs9vkMiN36fAR8EGACTOtW+ Av0TwwAAAABJRU5ErkJggg=="></image>
+          </svg> </div>
+        <div class="text-middle video-desc">
+          <div class="font-medium"> How do I file GSTR-2? </div>
+          <span class="label label-default"> 8.01 </span></div>
+        </a><a href="#" target="_blank" rel="noreferrer noopener" class="filing-demo-video">
+        <div class="text-middle video-thumbnail"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 68 45" class="icon text-middle">
+          <image overflow="visible" width="68" height="45" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAAAtCAMAAAAgNj0SAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ bWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6 eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0 NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJo dHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlw dGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAv IiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RS ZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpD cmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFu Y2VJRD0ieG1wLmlpZDo1RDBEQURFRkE1RUMxMUU0QkJGREQ4RUIzMUY2RUJERSIgeG1wTU06RG9j dW1lbnRJRD0ieG1wLmRpZDo1RDBEQURGMEE1RUMxMUU0QkJGREQ4RUIzMUY2RUJERSI+IDx4bXBN TTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjVEMERBREVEQTVFQzExRTRC QkZERDhFQjMxRjZFQkRFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjVEMERBREVFQTVFQzEx RTRCQkZERDhFQjMxRjZFQkRFIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4 bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+GkRtfAAAAYBQTFRF4u7y7Ozs8/n5+/z9t9Pq7u7u rMzm597d8fP1qamp5ubm6uja0tLS9fb5ysrKZ6ba6Ojo8vT29/Ty+Pb15OnrxMTE3urx7fH1+Pj4 8u7t+vr6sLCwoaGhzs7O5OTkra2t7erm7Onp/Pz+4uLi/Pz77O/n+vj16+rs1NTU7fDzt7e39vf1 9PLynJyc9ff36eXm8/Dvi7nif7Hdt8/m8/Pz/P7+4ufm8/b3/f799PX3+Pr9/v38r8/n+fn77+/v +fr6pqam/Pv87fX36/T36Ojq6efp8vHy6fP16+zt5OTm9fX19/f39PT08PDw6+vr8fHx/v796urq 9vb2/v3+n5+f8fDw7e3t9fT09vX25OTj6enp9fX08fDx6urr6evr6+vq8/P009/f3dfT+/v47e7u 7u7tqMnh6+zr+fr5+vn5+/n63d3d8fHyxsfH9PX10czL9fT12dTM8fLx5ubk9fb13+DhcKvb+fn5 8vLy+/v7/Pz8srKy/f39////mZmZ/v7+ZNuFvAAABPtJREFUeNqsVgtb00gUNa1FGmq3CkospSyP VQTii3EJVgLqitKZJH0xatWV1X3vsm/NpE4mf907kz5oaVf8Pk+/Ns85vXPunXPn1PvPgFPvU5fO fP3Vl67reY7NyicFodRGyPVyT14vK5LX301MvF1kBiYGj9HyP4K8TzWbYI3pl//+E0hq5Vr5+RMC wEGQB8h3gpOhBR+8CyS25lbd7wliyPex7xvY59GnIMwDSVXXi0UXMUYMTXdpVadBeFKCivzxgcRz HIcRxiCSKGi1IEjeUWYAHD6dx3Vu8YXkbQlDRtLUi00mgWEevbFDBADkg7Ze95JLQeLBgweP7t+X mtiepzggEiAZGXpgGH4LXoCIZPqwFS0kTl0EPAISCKRKuiSjgV3XwSGEqq4MBMdkIgEz2lCaUJud gAT+XhHE021nRn4xkLzUny1WR5DQ7ExDiMZMlsaD46/URwktL6NwVWqScqgzlCS1IoQozM0V4LBC y3I6PjYM3IZhGCnqx5GUCZQsIgSRAZJlU6QznjzzMmlhZpwU84P+2ne8PFckKEWZrFPcJamU5G8W xnVzxTOmyHb06JYNKNOKScoeZVsyxtWgQ1KXcYhC9Whc1YJYHl72igRp7is1na2Id0FNs8n70DRN yo+hTYKc3OIzRtDvbCuK6lFFPYlWREZS6qT3fkasDIw/QuK5Gr3iOgxtRSFAKlCnIs3hqiXMQ9zR IEgLrU8T3pvOgaPr1ZyuQYqNv3CN/AIkxgUxi3GZMJnjTL49KiOy/cIqyRXJ5PkbNy7dOA/49Sl1 XlAsV/ecyCHm2baQ2PktltATM32SqrrlkSRJnJuamvp2I5HYCCBhJatSiayoUZDPg5qIMaer/y40 +gLJx/ORJHclfhwbGzs9DSpEYaUS3tkQaZiNz7Ho4IIclxZ9/hL0NHn37ubNW18Abl2EWxaYVXhn WqQJsgk3uiSH8v05MXR5A8npu+vr62Njd2UkQGKVeIUnGwVeAg/rkLyvcsh+VGgMrGs1HyKFXdP1 3Pz8vLeaj1NcguTOCCbPfUWRXgxDWT6OmDlea1GIJAnZd/YBa5PbxjUD7eJK2KoditnNs5sbjkrx 5rVNWFYWVFt2WNkjVbH/5sDwm/+Qn9n1eZuS2+HSuT2xc3V8fPwqFNvVaTi5ZkH0aUFHkjCXalpV 88j2+JmJN0lIPsQOZZ9Mcr53wLk8giB1KPtoFAlxmnt67uCArW0nJy+XQqgSaUim2VvEai08M037 uGV2SNjjpvty9wChbSWs8uIwBCtwwzbkHWUFg7J2Sf5YY4QcKHv0a9goP38DZf8UG4fCnK0Zyg6h 2UhTGmxmrd50vik+LBZtwjzHL9uO9/inGtTPPiO1WVPsZHOEeIxKe1w+5iUt3iVJaT+ABUMvZj4P WktBsBDxe2qda8qo02ll1Knjkh4hqf23ijFhqOv2lnWPH2sZfAiC+DWkenFT112EPNZ1e55snQBB vhcJda80H1LU13esk+wrOs4mSWzqulUnbl48+rQNTpek2nSv651I4u0NWEo/RnDH06kBCaP2/ou4 jQawfYDkh9bZcbmHgz4CNktq5fKIVt9zNre4+NaVewvis1TKAbsK69NTejPXfAWKS+Rc/H/TUS2D tTc5LB+120A9ObhJ+jhJG/FOSfYkqz4kFcPRJiGoDWjo6n4l4qVekxs9vkMiN36fAR8EGACTOtW+ Av0TwwAAAABJRU5ErkJggg=="></image>
+          </svg> </div>
+        <div class="text-middle video-desc">
+          <div class="font-medium"> Learn about GSTR-3B filing </div>
+          <span class="label label-default"> 8:35 </span></div>
+        </a> </div>
+      <hr>
+      <div style="padding-bottom: 20px;">
+        <div id="ember1226" class="ember-view">
+          <div class="filing-due-date"><span>Filing Dates for July returns</span>
+            <div class="return-details">
+              <table>
+                <colgroup>
+                <col>
+                <col style="background-color: #e8f5ff; width: 50%;">
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <td> GSTR-1 </td>
+                    <td> 10/01/2018 </td>
+                  </tr>
+                  <tr>
+                    <td> GSTR-2 </td>
+                    <td> 31/01/2018 </td>
+                  </tr>
+                  <tr>
+                    <td> GSTR-3 </td>
+                    <td> 31/01/2018 </td>
+                  </tr>
+                  <tr>
+                    <td> GSTR-3B </td>
+                    <td> 20/08/2017 </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="filing-due-date"><span>Filing Dates for August returns</span>
+            <div class="return-details">
+              <table>
+                <colgroup>
+                <col>
+                <col style="background-color: #e8f5ff; width: 50%;">
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <td> GSTR-1 </td>
+                    <td> 10/01/2018 </td>
+                  </tr>
+                  <tr>
+                    <td> GSTR-2 </td>
+                    <td> 31/01/2018 </td>
+                  </tr>
+                  <tr>
+                    <td> GSTR-3 </td>
+                    <td> 31/01/2018 </td>
+                  </tr>
+                  <tr>
+                    <td> GSTR-3B </td>
+                    <td> 20/09/2017 </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="notify-title">RECENT ACTIVITY</span>
+      <div class="activity-graph">
+        <div class="notify">
+          <div class="notify-circle pull-left"></div>
+          <div class="notify-content">
+            <div class="text-muted font-xs">17/08/2017</div>
+            <h4 class="font-normal">GSTR-2  Return generated for July - 2017</h4>
+            <label class="font-xs text-muted"><strong>- Alok Gangrade</strong></label>
+          </div>
+        </div>
+        <div class="notify">
+          <div class="notify-circle pull-left"></div>
+          <div class="notify-content">
+            <div class="text-muted font-xs">17/08/2017</div>
+            <h4 class="font-normal">GSTR-1  Return generated for July - 2017</h4>
+            <label class="font-xs text-muted"><strong>- Alok Gangrade</strong></label>
+          </div>
+        </div>
+      </div>
+      <div><span class="notify-title">RELATED TIPS</span>
+        <ul class="faq-list font-small">
+          <li><a href="#" target="_blank">When should I file my GST returns every month?</a></li>
+          <li><a href="#" target="_blank">What is GSTR-1?</a></li>
+          <li><a href="#" target="_blank">How do I push the transactions?</a></li>
+          <li><a href="#" target="_blank">How do I file GSTR-1?</a></li>
+        </ul>
+        <!-- In all cases month is temporarily entered. Should be obtained from the server--> </div>
+    </div>
+  </div>
+</div>
