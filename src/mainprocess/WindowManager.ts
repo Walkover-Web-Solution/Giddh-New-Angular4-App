@@ -1,5 +1,5 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
-import AppUpdater from './AppUpdater';
+import AppUpdaterV1 from './AppUpdater';
 import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
@@ -9,7 +9,22 @@ import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOption
 export const WINDOW_NAVIGATED = 'windowNavigated';
 
 export default class WindowManager {
-  private appUpdater: AppUpdater = null;
+
+  public static saveWindowState(window: BrowserWindow, descriptor: WindowItem): void {
+    if (window.isMaximized()) {
+      delete descriptor.width;
+      delete descriptor.height;
+      delete descriptor.x;
+      delete descriptor.y;
+    } else {
+      const bounds = window.getBounds();
+      descriptor.width = bounds.width;
+      descriptor.height = bounds.height;
+      descriptor.x = bounds.x;
+      descriptor.y = bounds.y;
+    }
+  }
+  private appUpdater: AppUpdaterV1 = null;
   private stateManager = new StateManager();
   private windows: BrowserWindow[] = [];
 
@@ -35,21 +50,6 @@ export default class WindowManager {
         }
       }
     });
-  }
-
-  public static saveWindowState(window: BrowserWindow, descriptor: WindowItem): void {
-    if (window.isMaximized()) {
-      delete descriptor.width;
-      delete descriptor.height;
-      delete descriptor.x;
-      delete descriptor.y;
-    } else {
-      const bounds = window.getBounds();
-      descriptor.width = bounds.width;
-      descriptor.height = bounds.height;
-      descriptor.x = bounds.x;
-      descriptor.y = bounds.y;
-    }
   }
 
   public openWindows(): void {
@@ -94,7 +94,7 @@ export default class WindowManager {
     }
 
     // tslint:disable-next-line:no-unused-expression
-    this.appUpdater = new AppUpdater();
+    this.appUpdater = new AppUpdaterV1();
   }
 
   public focusFirstWindow(): void {

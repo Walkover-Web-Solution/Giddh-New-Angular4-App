@@ -1,4 +1,4 @@
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
@@ -9,7 +9,6 @@ import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
-import { ReplaySubject } from 'rxjs/Rx';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';

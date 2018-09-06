@@ -27,24 +27,7 @@ function supportES2015(tsConfigPath) {
 
 function GetEnvPlugin(env) {
   let environment = environments[env];
-
-  console.log(JSON.stringify(environment));
   return environment;
-  // let plugin = new DefinePlugin({
-  //   'ENV': JSON.stringify(METADATA.ENV),
-  //   'HMR': METADATA.HMR,
-  //   'isElectron': false,
-  //   'errlyticsNeeded': env.errlyticsNeeded,
-  //   'errlyticsKey': env.errlyticsKey,
-  //   'AppUrl': JSON.stringify(env.AppUrl),
-  //   'ApiUrl': JSON.stringify(env.ApiUrl),
-  //   'APP_FOLDER': JSON.stringify(env.APP_FOLDER),
-  //   'process.env': {
-  //     'ENV': JSON.stringify(METADATA.ENV),
-  //     'NODE_ENV': JSON.stringify(METADATA.ENV),
-  //     'HMR': METADATA.HMR
-  //   }
-  // }),
 }
 
 function readTsConfig(tsConfigPath) {

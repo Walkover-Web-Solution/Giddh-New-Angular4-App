@@ -1,8 +1,8 @@
-import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
+import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -29,20 +29,20 @@ export class SearchService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     const request = reqPayload.request;
     return this._http.post(this.config.apiUrl + SEARCH_API.SEARCH
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupName', encodeURIComponent(request.groupName))
-        .replace(':count', encodeURIComponent('15'))
-        .replace(':from', encodeURIComponent(request.fromDate))
-        .replace(':to', encodeURIComponent(request.toDate))
-        .replace(':refresh', String(request.refresh))
-        .replace(':page', String(request.page)),
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupName', encodeURIComponent(request.groupName))
+      .replace(':count', encodeURIComponent('15'))
+      .replace(':from', encodeURIComponent(request.fromDate))
+      .replace(':to', encodeURIComponent(request.toDate))
+      .replace(':refresh', String(request.refresh))
+      .replace(':page', String(request.page)),
       reqPayload.searchReqBody)
-      .map((res) => {
-        res.body.groupName = request.groupName;
-        res.body.page = request.page;
-        return res;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e));
+      .pipe(map((res) => {
+          res.body.groupName = request.groupName;
+          res.body.page = request.page;
+          return res;
+        }),
+        catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)));
   }
 
 }

@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
-import { ReplaySubject } from 'rxjs/Rx';
+import { ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 

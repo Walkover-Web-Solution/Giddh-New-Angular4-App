@@ -6,11 +6,11 @@ const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
 /**
  * Used to merge webpack configs
-*/
+ */
 const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
-*/
+ */
 const commonConfig = require('./webpack.renderer.js');
 
 /**
@@ -21,7 +21,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 function getUglifyOptions(supportES2015) {
   const uglifyCompressOptions = {
@@ -30,6 +29,7 @@ function getUglifyOptions(supportES2015) {
     // See https://github.com/webpack/webpack/issues/2899#issuecomment-317425926.
     passes: 3         /* buildOptimizer */
   };
+
   return {
     ecma: supportES2015 ? 6 : 5,
     warnings: false,    // TODO verbose based on option?
@@ -46,7 +46,7 @@ function getUglifyOptions(supportES2015) {
 module.exports = function (env) {
   const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
-  const AppUrl = 'localhost';
+  const AppUrl = './';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     baseUrl: '',
     host: process.env.HOST || 'localhost',
@@ -61,10 +61,8 @@ module.exports = function (env) {
 
   // set environment suffix so these environments are loaded.
   METADATA.envFileSuffix = process.env.envFileSuffix;
-  return webpackMerge(commonConfig({ env: ENV, metadata: METADATA }), {
-    mode: 'production',
-    devtool: 'cheap-source-map',
-    /**
+  return webpackMerge(commonConfig({env: ENV, metadata: METADATA}), {
+    mode: 'production', /**
      * Options affecting the output of the compilation.
      *
      * See: http://webpack.github.io/docs/configuration.html#output
@@ -124,15 +122,7 @@ module.exports = function (env) {
           test: /\.scss$/,
           use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
           include: [helpers.root('src', 'styles')]
-        },
-        // {
-        //   test: /\.js$/,
-        //   loader: '@angular-devkit/build-optimizer/webpack-loader',
-        //   options: {
-        //     sourceMap: false
-        //   }
-        // }
-
+        }
       ]
 
     },
@@ -165,18 +155,18 @@ module.exports = function (env) {
      */
     plugins: [
 
-      new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css' }),
+      new MiniCssExtractPlugin({filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css'}),
       new HashedModuleIdsPlugin(),
 
       /**
-         * Plugin: DefinePlugin
-         * Description: Define free variables.
-         * Useful for having development builds with debug logging or adding global constants.
-         *
-         * Environment helpers
-         *
-         * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-         */
+       * Plugin: DefinePlugin
+       * Description: Define free variables.
+       * Useful for having development builds with debug logging or adding global constants.
+       *
+       * Environment helpers
+       *
+       * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+       */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
       // new webpack.DefinePlugin({
       //   'ENV': JSON.stringify(METADATA.ENV),
@@ -206,7 +196,7 @@ module.exports = function (env) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
        *
        * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-      //  */
+       //  */
       // new UglifyJsPlugin({
       //   uglifyOptions: getUglifyOptions(supportES2015)
       // })

@@ -23,3 +23,11 @@ export const DEFAULT_TOASTER_OPTIONS = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
+export let IS_ELECTRON_WA = isElectron;
+export let APP_URL_WA = AppUrl;
+export let APP_FOLDER_WA = APP_FOLDER;
+if (typeof isElectron === 'undefined') {
+  IS_ELECTRON_WA = true;
+  APP_URL_WA = './';
+  APP_FOLDER_WA = '';
+}

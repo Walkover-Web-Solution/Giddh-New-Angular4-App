@@ -249,8 +249,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
-    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
-    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
     // bind countries
     contriesWithCodes.map(c => {
@@ -1263,8 +1263,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
       let companyUniqueName = null;
-      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
-      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+      this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),

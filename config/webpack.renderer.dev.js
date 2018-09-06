@@ -13,7 +13,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 /**
  * Webpack Plugins
  */
-const ERRLYTICS_KEY_DEV = '';
+
 /**
  * Webpack configuration
  *
@@ -34,7 +34,7 @@ module.exports = function (options) {
     isElectron: true,
     AOT: options.AOT,
     errlyticsNeeded: false,
-    errlyticsKey: ERRLYTICS_KEY_DEV,
+    errlyticsKey: '',
     AppUrl: AppUrl,
   });
 
@@ -140,13 +140,7 @@ module.exports = function (options) {
       //   'process.env.isElectron': JSON.stringify(true)
       // }, METADATA.definePluginObject, {process: {env: {...METADATA.definePluginObject, isElectron: true}}})),
 
-      new HtmlWebpackPlugin({
-        template: 'src/index.html',
-        title: METADATA.title,
-        chunksSortMode: 'dependency',
-        metadata: METADATA,
-        inject: 'body'
-      }),
+
 
       new webpack.LoaderOptionsPlugin({
         debug: true,

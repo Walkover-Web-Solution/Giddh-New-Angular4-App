@@ -1,7 +1,7 @@
 import { autoUpdater } from 'electron-updater';
 
 let updater;
-export default class AppUpdater {
+export default class AppUpdaterV1 {
   public isUpdateDownloaded: boolean = false;
 
   constructor() {

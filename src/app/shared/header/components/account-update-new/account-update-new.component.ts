@@ -1,9 +1,8 @@
-import { of as observableOf } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
