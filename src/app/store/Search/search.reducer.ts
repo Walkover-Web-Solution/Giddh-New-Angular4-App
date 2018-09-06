@@ -1,4 +1,4 @@
-import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
+import { AccountFlat, SearchDataSet, SearchRequest } from '../../models/api-models/Search';
 import { SearchActions } from '../../actions/search.actions';
 import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';

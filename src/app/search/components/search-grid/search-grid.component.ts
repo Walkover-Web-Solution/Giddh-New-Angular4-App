@@ -1,6 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment/moment';
@@ -12,6 +10,7 @@ import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'search-grid',  // <home></home>
@@ -89,7 +88,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // reversing sort
   public set sortReverse(value: boolean) {
     this._sortReverse = value;
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
+    this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
   }
 
   // pagination related
@@ -118,7 +117,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(p => this.companyUniqueName = p);
+    this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(p => this.companyUniqueName = p);
 
     this.store.select(p => p.search.searchPaginationInfo).subscribe((info) => {
       this.page = info.page;

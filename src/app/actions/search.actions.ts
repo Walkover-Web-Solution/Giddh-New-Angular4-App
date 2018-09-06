@@ -8,7 +8,7 @@ import { ToasterService } from '../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { SearchService } from '../services/search.service';
-import { SearchRequest, SearchResponse } from '../models/api-models/Search';
+import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';

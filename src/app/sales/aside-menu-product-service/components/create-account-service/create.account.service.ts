@@ -1,4 +1,4 @@
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import * as _ from '../../../../lodash-optimized';
@@ -7,7 +7,6 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { SalesActions } from '../../../../actions/sales/sales.action';

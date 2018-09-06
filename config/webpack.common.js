@@ -37,15 +37,7 @@ module.exports = function (options) {
     tsConfigPath: METADATA.tsConfigPath,
     mainPath: entry.main
   });
-  console.log('Define Plugin : ---', JSON.stringify(Object.assign({
-    'ENV': JSON.stringify(METADATA.ENV),
-    'HMR': METADATA.HMR,
-    'AOT': METADATA.AOT,
-    'process.env.ENV': JSON.stringify(METADATA.ENV),
-    'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
-    'process.env.HMR': METADATA.HMR,
-    'process.env.isElectron': JSON.stringify(false)
-  }, METADATA.definePluginObject, {process: {env: METADATA.definePluginObject}})))
+  console.log('Define Plugin : ---', JSON.stringify(METADATA));
   return {
     /**
      * The entry point for the bundle
@@ -194,7 +186,7 @@ module.exports = function (options) {
         'errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
         'AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
         'ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
-        'APP_FOLDER':JSON.stringify(METADATA.definePluginObject.APP_FOLDER),
+        'APP_FOLDER': JSON.stringify(METADATA.definePluginObject.APP_FOLDER),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
