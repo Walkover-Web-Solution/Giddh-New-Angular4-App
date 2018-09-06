@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS } from './GstReconcile.const';
-import { VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -44,31 +44,31 @@ export class GstReconcileActions {
     });
 
   @Effect() private GstReconcileInvoicePeriodRequest$: Observable<Action> = this.action$
-    .ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_PERIOD_REQUEST)
+    .ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST)
     .switchMap((action: CustomActions) => {
 
-      return this._reconcileService.GstReconcileGetInvoices(action.payload.period)
-        .map((response: BaseResponse<string, string>) => {
+      return this._reconcileService.GstReconcileGetInvoices(action.payload.period, action.payload.action, action.payload.page, action.payload.count)
+        .map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
           if (response.status === 'success') {
-            this._toasty.successToast(response.body);
+            // this._toasty.successToast('su');
           } else {
             this._toasty.errorToast(response.message);
           }
-          return this.GstReconcileInvoicePeriodResponse(response);
+          return this.GstReconcileInvoiceResponse(response);
         });
     });
 
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _reconcileService: GstReconcileService) {
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _reconcileService: GstReconcileService) {
     //
   }
 
   public GstReconcileOtpRequest(userName: string): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST,
-      payload: { userName }
+      payload: {userName}
     };
   }
 
@@ -79,16 +79,16 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoicePeriodRequest(period: string, action: string, page: string, count: string): CustomActions {
+  public GstReconcileInvoiceRequest(period: string, action: string, page: string, count: string): CustomActions {
     return {
-      type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_PERIOD_REQUEST,
-      payload: { period }
+      type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
+      payload: {period, action, page, count}
     };
   }
 
-  public GstReconcileInvoicePeriodResponse(response: BaseResponse<string, string>): CustomActions {
+  public GstReconcileInvoiceResponse(response: BaseResponse<GstReconcileInvoiceResponse, string>): CustomActions {
     return {
-      type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_PERIOD_RESPONSE,
+      type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE,
       payload: response
     };
   }
@@ -96,7 +96,7 @@ export class GstReconcileActions {
   public GstReconcileVerifyOtpRequest(model: VerifyOtpRequest): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST,
-      payload: { model }
+      payload: {model}
     };
   }
 

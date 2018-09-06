@@ -20,6 +20,7 @@ import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../mode
 import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { Observable } from 'rxjs';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -124,6 +125,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public pageChnageState: boolean = false;
   public userEmail: string = '';
   public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
+  public gstAuthenticated$: Observable<boolean>;
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -163,13 +165,13 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.RefreshCompanies());
       }
     });
+    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
 
     let paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     paginationRequest.page = 1;
-
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
     this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.purchaseInvoices && o.purchaseInvoices.items) {
@@ -190,6 +192,13 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.gstAuthenticated$.subscribe(s => {
+      if (!s) {
+        this.toggleSettingAsidePane(null, 'RECONCILE');
+      } else {
+        //  means user logged in gst portal
+      }
+    });
   }
 
   public selectedDate(value: any, dateInput: any) {
@@ -244,9 +253,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public onSelectGstrOption(gstrType) {
     this.selectedGstrType = gstrType;
-
-    if (gstrType === 'RECONCILE') {
-      // this.store.dispatch(this._reconcileActions.GstReconcileInvoicePeriodRequest(''));
+    if (gstrType.name === 'GSTR2') {
+      this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest('072018', 'MATCHED', '1', '10'));
     }
   }
 
