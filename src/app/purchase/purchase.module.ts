@@ -13,13 +13,14 @@ import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { TabsModule } from 'ngx-bootstrap';
+import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 
 /**
  * Created by kunalsaxena on 9/1/17.
  */
 
 @NgModule({
-  declarations: [PurchaseInvoiceComponent, PurchaseComponent, AsideMenuPurchaseInvoiceSettingComponent],
+  declarations: [PurchaseInvoiceComponent, PurchaseComponent, AsideMenuPurchaseInvoiceSettingComponent, ReconcileDesignComponent],
   imports: [
     PurchaseRoutingModule,
     CollapseModule,

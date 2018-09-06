@@ -17,10 +17,10 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/map';
 import { AccountService } from '../../services/account.service';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
-import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import { Observable } from 'rxjs';
+import { ReconcileActionState } from '../../store/GstReconcile/GstReconcile.reducer';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -126,6 +126,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public userEmail: string = '';
   public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
   public gstAuthenticated$: Observable<boolean>;
+  public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnMatchedData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnPartiallyMatchedData$: Observable<ReconcileActionState>;
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -166,6 +170,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       }
     });
     this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).takeUntil(this.destroyed$);
+    this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).takeUntil(this.destroyed$);
+    this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).takeUntil(this.destroyed$);
+    this.gstNotFoundOnMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).takeUntil(this.destroyed$);
+    this.gstNotFoundOnPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
