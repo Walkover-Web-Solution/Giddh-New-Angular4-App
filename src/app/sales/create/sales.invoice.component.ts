@@ -887,6 +887,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   txn.sacNumber = txn.stockDetails.sacNumber;
                   txn.hsnOrSac = 'sac';
                 }
+
+                if (!selectedAcc.additional.stock && o.hsnNumber) {
+                  txn.hsnNumber = o.hsnNumber;
+                  txn.hsnOrSac = 'hsn';
+                }
+                if (!selectedAcc.additional.stock && o.sacNumber) {
+                  txn.sacNumber = o.sacNumber;
+                  txn.hsnOrSac = 'sac';
+                }
                 return txn;
               } else {
                 txn.isStockTxn = false;
