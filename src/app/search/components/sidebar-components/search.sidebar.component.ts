@@ -1,13 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
-import { SimpleChange } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import * as _ from '../../../lodash-optimized';
 import { Store } from '@ngrx/store';
-
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Component, OnDestroy, OnInit, Input, OnChanges } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';

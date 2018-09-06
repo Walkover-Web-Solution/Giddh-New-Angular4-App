@@ -1,11 +1,11 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { isNullOrUndefined } from 'util';
 import { saveAs } from 'file-saver';
 import * as _ from '../../../lodash-optimized';
@@ -81,23 +81,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   @ViewChild('messageBox') public messageBox: ElementRef;
   public searchRequest$: Observable<SearchRequest>;
   public isAllChecked: boolean = false;
-  // CSV Headers
-  public getCSVHeader = () => [
-    'Name',
-    'UniqueName',
-    'Opening Bal.',
-    'O/B Type',
-    'DR Total',
-    'CR Total',
-    'Closing Bal.',
-    'C/B Type',
-    'Parent']
-  // Rounding numbers
-  public roundNum = (data, places) => {
-    data = Number(data);
-    data = data.toFixed(places);
-    return data;
-  }
 
   public get sortReverse(): boolean {
     return this._sortReverse;
@@ -141,6 +124,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       this.page = info.page;
       this.totalPages = info.totalPages;
     });
+  }
+
+  public set sortType(value: string) {
+    this._sortType = value;
+    this.sortReverse = this._sortReverse;
   }
 
   public ngOnInit() {
@@ -203,27 +191,27 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       switch (query.queryType) {
         case 'openingBalance':
           queryForApi['openingBalance'] = query.amount,
-          queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
         case 'closingBalance':
           queryForApi['closingBalance'] = query.amount,
-          queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
         case 'creditTotal':
           queryForApi['creditTotal'] = query.amount,
-          queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
         case 'debitTotal':
           queryForApi['debitTotal'] = query.amount,
-          queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
       }
     });

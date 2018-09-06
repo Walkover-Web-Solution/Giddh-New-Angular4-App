@@ -1,14 +1,13 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild, HostListener, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { AccountDetailsClass, FakeDiscountItem, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
 import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
@@ -38,7 +37,7 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader/index';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../services/apiurls/ledger.api';
 import { Configuration } from '../../app.constant';
 
@@ -443,7 +442,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
   }
 
   public assignDates() {
@@ -1070,7 +1069,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
-    entry.taxSum = _.sumBy(entry.taxes,  (o) => {
+    entry.taxSum = _.sumBy(entry.taxes, (o) => {
       return o.amount;
     });
   }
@@ -1115,7 +1114,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts,  (o) => {
+    entry.discountSum = _.sumBy(entry.discounts, (o) => {
       return o.amount;
     });
   }
@@ -1271,8 +1270,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
