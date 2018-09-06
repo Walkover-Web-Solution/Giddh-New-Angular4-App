@@ -21,6 +21,9 @@ import { NgForm } from '@angular/forms';
   .h-25px{
     height: 25px;
   }
+    .c-border tr th{
+      border: 1px solid black !important;
+    }
   `]
 })
 
