@@ -8,7 +8,7 @@ import { GeneralActions } from '../../../../actions/general/general.actions';
 import { LoginActions } from '../../../../actions/login.action';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { AuthService } from 'ng-social-login-module';
+import { AuthService } from '../../../../theme/ng-social-login-module/index';
 import { GeneralService } from '../../../../services/general.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { AppState } from '../../../../store';

@@ -9,7 +9,7 @@ import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng-social-login-module';
+import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from '../theme/ng-social-login-module/index';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
