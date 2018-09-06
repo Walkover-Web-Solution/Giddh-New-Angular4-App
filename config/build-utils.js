@@ -13,7 +13,8 @@ const DEFAULT_METADATA = {
   WATCH: helpers.hasProcessFlag('watch'),
   tsConfigPath: 'tsconfig.webpack.json',
   envFileSuffix: process.env.envFileSuffix,
-  definePluginObject: GetEnvPlugin(process.env.definePluginEnv || 'local')
+  definePluginObject: GetEnvPlugin(process.env.definePluginEnv || 'local'),
+  isElectron: helpers.hasNpmFlag('electron')
 };
 
 function supportES2015(tsConfigPath) {
@@ -23,6 +24,7 @@ function supportES2015(tsConfigPath) {
   }
   return supportES2015['supportES2015'];
 }
+
 function GetEnvPlugin(env) {
   let environment = environments[env];
 
@@ -44,6 +46,7 @@ function GetEnvPlugin(env) {
   //   }
   // }),
 }
+
 function readTsConfig(tsConfigPath) {
   const configResult = ts.readConfigFile(tsConfigPath, ts.sys.readFile);
   return ts.parseJsonConfigFileContent(configResult.config, ts.sys,
@@ -92,7 +95,7 @@ function ngcWebpackSetup(prod, metadata) {
   }
   console.log('govinda : prod ', prod)
   const buildOptimizer = prod;
-  const sourceMap = true; // TODO: apply based on tsconfig value?
+  const sourceMap = !prod; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
     skipCodeGeneration: !metadata.AOT,
     sourceMap
@@ -128,10 +131,10 @@ function ngcWebpackSetup(prod, metadata) {
       // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
       // Removing this will cause deprecation warnings to appear.
       test: /[\/\\]@angular[\/\\]core[\/\\].+\.js$/,
-      parser: { system: true },
+      parser: {system: true},
     },
     ...buildOptimizer
-      ? [{ test: /\.js$/, use: [buildOptimizerLoader] }]
+      ? [{test: /\.js$/, use: [buildOptimizerLoader]}]
       : []
   ];
 

@@ -197,13 +197,31 @@ module.exports = function (options) {
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
         'isElectron': JSON.stringify(true),
-        'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'APP_FOLDER':JSON.stringify(METADATA.definePluginObject.APP_FOLDER),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
         'process.env.isElectron': JSON.stringify(true),
-        'process.env.AppUrl': JSON.stringify(METADATA.AppUrl),
+        'process.env.errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'process.env.errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'process.env.AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'process.env.ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl)
+        'process.env.APP_FOLDER': JSON.stringify(METADATA.definePluginObject.APP_FOLDER)
       }),
+      // new webpack.DefinePlugin(Object.assign({
+      //   'ENV': JSON.stringify(METADATA.ENV),
+      //   'HMR': METADATA.HMR,
+      //   'AOT': METADATA.AOT,
+      //   'isElectron': JSON.stringify(true),
+      //   'process.env.ENV': JSON.stringify(METADATA.ENV),
+      //   'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+      //   'process.env.HMR': METADATA.HMR,
+      //   'process.env.isElectron': JSON.stringify(true)
+      // }, METADATA.definePluginObject, {process: {env: {...METADATA.definePluginObject, isElectron: true}}})),
 
       /**
        * Plugin: CommonsChunkPlugin
@@ -240,9 +258,9 @@ module.exports = function (options) {
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
       new CopyWebpackPlugin([{
-            from: 'src/assets',
-            to: 'assets'
-          },
+          from: 'src/assets',
+          to: 'assets'
+        },
           {
             from: 'src/meta'
           }
@@ -264,7 +282,7 @@ module.exports = function (options) {
         template: 'src/index.html',
         title: METADATA.title,
         chunksSortMode: function (a, b) {
-          const entryPoints = ["inline","polyfills","sw-register","styles","vendor","main"];
+          const entryPoints = ["inline", "polyfills", "sw-register", "styles", "vendor", "main"];
           return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0]);
         },
         metadata: METADATA,
