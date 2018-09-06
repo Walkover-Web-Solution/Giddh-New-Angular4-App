@@ -41,13 +41,26 @@ import { HighlightModule } from 'app/shared/helpers/pipes/highlightPipe/highligh
 import { DigitsOnlyModule } from 'app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 
+const getGoogleCredentials = (baseHref: string) => {
+  if (baseHref === 'https://giddh.com/' || isElectron) {
+    return {
+      GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+    };
+  } else {
+    return {
+      GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+    };
+  }
+};
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+    // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+    provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
   },
   {
     id: LinkedinLoginProvider.PROVIDER_ID,

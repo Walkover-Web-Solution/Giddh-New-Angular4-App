@@ -1,6 +1,6 @@
 {
   "name": "giddh",
-  "version": "6.5.12",
+  "version": "6.5.13",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -228,7 +228,8 @@
       "target": [
         "dmg",
         "zip"
-      ]
+      ],
+      "type": "development"
     },
     "linux": {
       "target": [
