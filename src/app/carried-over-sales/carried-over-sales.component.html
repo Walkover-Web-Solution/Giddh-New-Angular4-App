@@ -7,32 +7,44 @@
         <div class="pull-left">
           <div class="form-group mrR1 max500">
             <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear"
-                       #SelectYear="ngModel" [options]="yearOptions" required ></sh-select>
-           <div class="h-25px" style="color: red;"> <div *ngIf="SelectYear.invalid">please select year</div></div>
+                       #SelectYear="ngModel" [options]="yearOptions" required></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectYear.invalid">please select year</div>
+            </div>
           </div>
 
 
           <div class="form-group mrR1 max500">
             <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType" [(ngModel)]="selectedType"
-                       #SelectType="ngModel" [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
-            <div class="h-25px" style="color: red;"><div *ngIf="SelectType.invalid">please select type</div></div>
+                       #SelectType="ngModel" [options]="GetTypeOptions" required
+                       (selected)="ChangingValue($event)"></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectType.invalid">please select type</div>
+            </div>
           </div>
 
           <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
             <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth" [(ngModel)]="selectedmonth"
-                       #SelectMonth="ngModel" [options]="monthOptions" required ></sh-select>
-            <div class="h-25px" style="color: red;"><div *ngIf="SelectMonth.invalid">please select month</div></div>
+                       #SelectMonth="ngModel" [options]="monthOptions" required></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectMonth.invalid">please select month</div>
+            </div>
           </div>
 
           <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
-            <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater"
-                       #SelectQuater="ngModel" [options]="quaterOptions" required ></sh-select>
-          <div class="h-25px" style="color: red;">  <div *ngIf="SelectQuater.invalid">please select quater</div></div>
+            <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater"
+                       [(ngModel)]="selectedQuater"
+                       #SelectQuater="ngModel" [options]="quaterOptions" required></sh-select>
+            <div class="h-25px" style="color: red;">
+              <div *ngIf="SelectQuater.invalid">please select quater</div>
+            </div>
           </div>
           <div class="btn-group">
-           <div> <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
-             Go
-           </button></div>
+            <div>
+              <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
+                Go
+              </button>
+            </div>
             <div class="h-25px"></div>
           </div>
         </div>
@@ -66,26 +78,29 @@
     </div>
   </div>
 
-  <table class="table basic table-bordered">
+  <table class="table basic c-border table-bordered">
     <thead>
     <tr>
-      <th colspan="2">Total</th>
-      <th colspan="4">{{columnName}}(New Customer)</th>
-      <th>Carried</th>
+      <th colspan="3" class="text-center">Total</th>
+      <th colspan="3" class="text-center">{{columnName}}(New Customer)</th>
+      <th colspan="4" class="text-center">Carried</th>
     </tr>
     <tr>
-      <th [style.width.%]="10">Amt</th>
+      <th [style.width.%]="5">Amt</th>
       <th [style.width.%]="10">Inv Count</th>
-      <th [style.width.%]="20">Amt</th>
+      <th [style.width.%]="15">Customer Count</th>
+      <th [style.width.%]="5">Amt</th>
       <th [style.width.%]="10">Inv</th>
-      <th [style.width.%]="10">Amt</th>
-      <th [style.width.%]="10">Inv</th>
-      <th [style.width.%]="20">Month</th>
+      <th [style.width.%]="15">Customer Count</th>
+      <th [style.width.%]="5">Amt</th>
+      <th [style.width.%]="5">Inv</th>
+      <th [style.width.%]="15">Customer Count</th>
+      <th [style.width.%]="15">Month</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngIf="selectedType==='month'">
-      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="5" style="vertical-align: top!important;">
         {{(carriedData$ |
         async)?.totalSales.total}}
       </th>
@@ -93,53 +108,65 @@
         {{(carriedData$ |
         async)?.totalSales.invoiceCount}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="20" style="vertical-align: top!important;">
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="15" style="vertical-align: top!important;">
+        {{(carriedData$ | async)?.totalSales.uniqueCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="5" style="vertical-align: top!important;">
         {{(carriedData$ | async)?.newSales.total}}
       </th>
       <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">
         {{(carriedData$ |
         async)?.newSales.invoiceCount}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3"
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="15" style="vertical-align: top!important;">
+        {{(carriedData$ | async)?.newSales.uniqueCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"
           style="vertical-align: top!important;">
         <table [style.width.%]="100">
           <tr>
-            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
-            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
+            <td [style.width.%]="15">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
+            <td [style.width.%]="25">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[0]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
+            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[1]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
+            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[2]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[3]?.total}}</td>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[3]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[3]?.month}}</td>
+            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[3]?.total}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[3]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[3]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[3]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[4]?.total}}</td>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[4]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[4]?.month}}</td>
+            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[4]?.total}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[4]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[4]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[4]?.month}}</td>
           </tr>
           <tr style="height: 22px;"></tr>
           <tr style="border-top: 1px solid gainsboro;">
-            <td [style.width.%]="30">{{ crdTotal }}</td>
-            <td [style.width.%]="30"> {{ invTotal }}</td>
-            <td [style.width.%]="40">Total</td>
+            <td [style.width.%]="15">{{ crdTotal }}</td>
+            <td [style.width.%]="25"> {{ invTotal }}</td>
+            <td [style.width.%]="35"></td>
+            <td [style.width.%]="25">Total</td>
           </tr>
         </table>
       </th>
     </tr>
 
     <tr *ngIf="selectedType==='quater'">
-      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="10" style="vertical-align: top!important;">
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="5" style="vertical-align: top!important;">
         {{(carriedData$ |
         async)?.totalSales.total}}
       </th>
@@ -147,36 +174,46 @@
         {{(carriedData$ |
         async)?.totalSales.invoiceCount}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="20" style="vertical-align: top!important;">
+      <th [hidden]="!(carriedData$ | async)?.totalSales" [style.width.%]="15" style="vertical-align: top!important;">
+        {{(carriedData$ | async)?.totalSales.uniqueCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="5" style="vertical-align: top!important;">
         {{(carriedData$ | async)?.newSales.total}}
       </th>
       <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="10" style="vertical-align: top!important;">
         {{(carriedData$ |
         async)?.newSales.invoiceCount}}
       </th>
-      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="3"
+      <th [hidden]="!(carriedData$ | async)?.newSales" [style.width.%]="15" style="vertical-align: top!important;">
+        {{(carriedData$ | async)?.newSales.uniqueCount}}
+      </th>
+      <th [hidden]="!(carriedData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"
           style="vertical-align: top!important;">
         <table [style.width.%]="100">
           <tr>
-            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
-            <td [style.width.%]="30">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
+            <td [style.width.%]="15">{{(carriedData$ | async)?.carriedSales[0]?.total}}</td>
+            <td [style.width.%]="25">{{(carriedData$ | async)?.carriedSales[0]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[0]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[0]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
+            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[1]?.total}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[1]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[1]?.month}}</td>
           </tr>
           <tr>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
-            <td [style.width.%]="30"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
-            <td [style.width.%]="40"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
+            <td [style.width.%]="15"> {{(carriedData$ | async)?.carriedSales[2]?.total}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.invoiceCount}}</td>
+            <td [style.width.%]="35">{{(carriedData$ | async)?.carriedSales[2]?.uniqueCount}}</td>
+            <td [style.width.%]="25"> {{(carriedData$ | async)?.carriedSales[2]?.month}}</td>
           </tr>
           <tr style="height: 22px;"></tr>
           <tr style="border-top: 1px solid gainsboro;">
-            <td [style.width.%]="30">{{ crdTotal }}</td>
-            <td [style.width.%]="30"> {{ invTotal }}</td>
-            <td [style.width.%]="40">Total</td>
+            <td [style.width.%]="15">{{ crdTotal }}</td>
+            <td [style.width.%]="25"> {{ invTotal }}</td>
+            <td [style.width.%]="35"></td>
+            <td [style.width.%]="25">Total</td>
           </tr>
         </table>
       </th>
