@@ -10,7 +10,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { LetterTemplateComponent } from './components/invoice/templates/letter/letter.template.component';
 import { CreateInvoiceHeaderComponent } from './components/header/create.header.component';
 import { CreateInvoiceStepsComponent } from './components/nav/create.steps.component';
-import { ContenteditableDirective } from 'ng-contenteditable';
+import { ContenteditableModule } from 'ng-contenteditable';
 import { CreateHttpService } from './create-http-service';
 import { BsDatepickerModule, CollapseModule } from 'ngx-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
@@ -28,6 +28,7 @@ import { SampleTemplateComponent } from './components/invoice/templates/sample/s
     ElementViewChildModule,
     CollapseModule,
     BsDatepickerModule.forRoot(),
+    ContenteditableModule
   ],
   declarations: [
     CreateInvoiceComponent,
@@ -35,7 +36,6 @@ import { SampleTemplateComponent } from './components/invoice/templates/sample/s
     CreateInvoiceStepsComponent,
     CreateInvoiceHeaderComponent,
     LetterTemplateComponent,
-    ContenteditableDirective,
     SampleTemplateComponent
   ],
   entryComponents: [
