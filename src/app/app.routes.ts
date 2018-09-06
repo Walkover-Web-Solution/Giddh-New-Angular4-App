@@ -16,7 +16,7 @@ import { NotFoundComponent } from './404/404-component';
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: '404', component: NotFoundComponent },
+  {path: '404', component: NotFoundComponent},
   {path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
   {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated]},
   {path: 'signup', loadChildren: './signup/signup.module#SignupModule'},
@@ -46,6 +46,7 @@ export const ROUTES: Routes = [
   {path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full'},
   {path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
+  {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
@@ -74,6 +75,7 @@ export const ROUTES: Routes = [
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
       {path: 'carriedoversales', loadChildren: './carried-over-sales/carried-over-sales.module#CarriedOverSalesModule'},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},

@@ -1,11 +1,15 @@
 import { RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
 
 export interface InvoiceSetting {
-    invoiceSettings: InvoiceISetting;
-    proformaSettings: InvoiceISetting;
-    webhooks: InvoiceWebhooks[];
-    razorPayform?: RazorPayDetailsResponse;
+  invoiceSettings: InvoiceISetting;
+  proformaSettings: InvoiceISetting;
+  webhooks: InvoiceWebhooks[];
+  razorPayform?: RazorPayDetailsResponse;
   companyCashFreeSettings?: CashFreeSetting;
+  companyEmailSettings?: {
+    sendThroughSendGmail: boolean,
+    sendThroughSendgrid: boolean
+  };
 }
 
 export class InvoiceISetting {
@@ -26,7 +30,7 @@ export class InvoiceISetting {
     public enableNarrationOnInvAndVoucher: boolean;
     public sendInvLinkOnSms: boolean;
     public smsContent: string;
-
+    public sendThroughSendGmail: boolean;
 }
 export interface InvoiceWebhooks {
     entity: string;
