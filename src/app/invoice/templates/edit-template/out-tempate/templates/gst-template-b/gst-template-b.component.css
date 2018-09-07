@@ -137,7 +137,7 @@
 
 #template2 .subfooter {
     margin-top: 100px;
-    padding: 0 10px;
+    padding: 0 25px;
     float: left;
 }
 
@@ -278,7 +278,7 @@
 }
 
 th[data-thead="sno"] {
-    width: 20px;
+    width: 40px;
 }
 
 img {

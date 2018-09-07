@@ -183,12 +183,12 @@
 
 /* article */
 
-#Template2 article,
+/* #Template2 article,
 article address,
 table.meta,
 table.inventory {
     margin: 0 0 3em;
-}
+} */
 
 #Template2 article:after {
     clear: both;
@@ -211,7 +211,7 @@ table.inventory {
 }
 
 .text-left {
-    text-align: left;
+    text-align: left !important;
 }
 
 
@@ -231,9 +231,6 @@ table.inventory {
     vertical-align: middle;
 }
 
-#Template2 table.item tr th:nth-child(2) {
-    text-align: left;
-}
 
 #Template2 table.item tfoot td {
     padding-right: 7px;
@@ -258,7 +255,7 @@ table.inventory {
 #Template2 table.balance {
     width: 75%;
     float: right;
-    margin: 20px 7px;
+    margin: 0px 7px 80px;
 }
 
 #Template2 table.balance th,
@@ -287,7 +284,7 @@ table.inventory {
 
 #Template2 footer {
     border-top: 2px solid;
-    padding: 15px 0;
+    padding: 10px 0;
     margin: 8px 0 0;
     background: #fff;
 }
