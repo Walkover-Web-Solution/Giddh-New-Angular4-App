@@ -49,6 +49,16 @@ const discountInitialState: DiscountState = {
   isDiscountUpdateSuccess: false
 };
 
+export interface AmazonState {
+  isSellerSuccess: boolean;
+  isSellerUpdated: boolean;
+}
+
+const AmazonInititalState: AmazonState = {
+  isSellerSuccess: false,
+  isSellerUpdated: false
+};
+
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
@@ -63,12 +73,15 @@ export interface SettingsState {
   triggers: any;
   discount: DiscountState;
   refreshCompany: boolean;
+  amazonState: AmazonState;
   isGmailIntegrated: boolean;
+  profileRequest: boolean;
 }
 
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
+  profileRequest: false,
   updateProfileSuccess: false,
   updateProfileInProgress: false,
   linkedAccounts: {},
@@ -80,6 +93,7 @@ export const initialState: SettingsState = {
   triggers: null,
   discount: discountInitialState,
   refreshCompany: false,
+  amazonState: AmazonInititalState,
   isGmailIntegrated: false
 };
 
@@ -145,28 +159,35 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
+
+    // region profile
+
     case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
+        newState.profileRequest = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return {...state, updateProfileInProgress: true};
     }
     case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = _.cloneDeep(response.body);
         newState.updateProfileSuccess = true;
+        newState.profileRequest = true;
         return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
-        updateProfileSuccess: true
+        updateProfileSuccess: true,
+        profileRequest: true
       });
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE: {
       newState.updateProfileSuccess = false;
       newState.updateProfileInProgress = true;
+      newState.profileRequest = false;
       return Object.assign({}, state, newState);
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
@@ -175,14 +196,16 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         newState.profile = _.cloneDeep(response.body);
         newState.updateProfileSuccess = true;
         newState.updateProfileInProgress = false;
+        newState.profileRequest = true;
         return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
         updateProfileSuccess: false,
-        updateProfileInProgress: false
+        updateProfileInProgress: false,
+        profileRequest: true
       });
     }
-
+    // endregion
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS: {
       newState.linkedAccounts.isBankAccountsInProcess = true;
       return Object.assign({}, state, newState);
@@ -491,6 +514,57 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
           discountList: state.discount.discountList.filter(d => d.uniqueName !== action.payload)
         })
       });
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE: {
+      let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (AmazonSellerRes.status === 'success') {
+        newState.integration.amazonSeller = AmazonSellerRes.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER: {
+      return Object.assign({}, state, {
+        amazonState: {
+          isSellerSuccess: false,
+        }
+      });
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE: {
+      let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (AmazonSellerRes.status === 'success') {
+        newState.amazonState.isSellerSuccess = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER: {
+      return Object.assign({}, state, {
+        amazonState: {
+          isSellerUpdated: false,
+        }
+      });
+    }
+
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE: {
+      let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (AmazonSellerRes.status === 'success') {
+        // debugger;
+        let seller = state.integration.amazonSeller.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
+        newState.integration.amazonSeller[seller] = _.cloneDeep(AmazonSellerRes.body);
+        newState.amazonState.isSellerUpdated = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE: {
+      let deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
+      if (deleteAmazonSellerRes.status === 'success') {
+        let st = newState.integration.amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
+        newState.integration.amazonSeller.splice(st, 1);
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
     case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
