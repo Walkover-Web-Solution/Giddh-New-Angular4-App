@@ -150,7 +150,7 @@
                                placement="bottom" (change)="checkGstDetails()"/>
                       </div>
                       <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control"
-                             (keyup)="setChildState(gstNumberField, i)" #gstNumberField
+                             (keyup)="setChildState(gstNumberField, i);gstKeyDownSubject$.next($event)" #gstNumberField
                              (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber"
                              name="newgstNumber+{{i}}"
                       />
@@ -176,7 +176,7 @@
                 <label>Address</label><br>
                 <textarea rows="4" type="text" placeholder="Address" class="form-control"
                           [(ngModel)]="gst.addressList[0].address" #gstAddressField
-                          name="newaddress+{{i}}" (blur)="checkGstDetails(gstAddressField)"></textarea>
+                          name="newaddress+{{i}}" (keydown)="gstKeyDownSubject$.next($event)"></textarea>
               </div>
             </div>
           </div>
@@ -191,6 +191,7 @@
     </div>
 
     <div class="clearfix">
+      <!--<button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">-->
       <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
         Update
       </button>
