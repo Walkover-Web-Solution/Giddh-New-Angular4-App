@@ -24,6 +24,7 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
+  console.log("govinda:  is prod", isProd);
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, buildUtils.DEFAULT_METADATA.definePluginObject, options.metadata || {});
   const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
   const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
@@ -152,14 +153,6 @@ module.exports = function (options) {
 
     },
 
-    // optimization: {
-    //   namedModules: true,
-    //   splitChunks: {
-    //     chunks: "all"
-    //   },
-    //   runtimeChunk: true,
-    //   concatenateModules: true
-    // },
 
     /**
      * Add additional plugins to the compiler.
