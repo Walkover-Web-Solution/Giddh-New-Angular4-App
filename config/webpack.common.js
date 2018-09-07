@@ -24,7 +24,7 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
-  console.log("govinda:  is prod", isProd);
+  // console.log("govinda:  is prod", isProd);
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, buildUtils.DEFAULT_METADATA.definePluginObject, options.metadata || {});
   const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
   const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
@@ -38,7 +38,7 @@ module.exports = function (options) {
     tsConfigPath: METADATA.tsConfigPath,
     mainPath: entry.main
   });
-  console.log('Define Plugin : ---', JSON.stringify(METADATA));
+  // console.log('Define Plugin : ---', JSON.stringify(METADATA));
   return {
     /**
      * The entry point for the bundle
