@@ -25,9 +25,9 @@
                                         <tr [hidden]="!fieldsAndVisibility.header.gstin?.display">
                                             <td><strong>{{fieldsAndVisibility.header.gstin?.label}}</strong> {{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}</td>
                                         </tr>
-                                        <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
+                                        <!-- <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
                                             <td><strong>{{fieldsAndVisibility.header.pan?.label}}</strong> {{companyPAN ? companyPAN : 'AAACW9768L'}}</td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </td>
@@ -96,21 +96,23 @@
                     </tr>
                     <tr>
 
-                        <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display">&nbsp;</td>
-                        <!--<td>-->
-                        <!--&lt;!&ndash;<p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{(this.inputTemplate.dueDate?.length > 0) ? this.inputTemplate.dueDate : 'Due Date'}}</strong></p>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<p>30/06/2017</p>&ndash;&gt;-->
-                        <!--</td>-->
+                        <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display">&nbsp;</td> -->
+                        <td>
+                            <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                <p><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></p>
+                                <p>30/06/2017</p>
+                            </ng-container>
+                        </td>
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                             <p><strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label : 'GSTIN'}}</strong></p>
-                            <p>{{companyGSTIN}}</p>
+                            <p>22BBBBBB000A1Z0</p>
                         </td>
                         <td *ngIf="(fieldsAndVisibility.header.billingAddress?.display && !fieldsAndVisibility.header.billingGstin?.display) || !fieldsAndVisibility.header.billingAddress?.display">
                             <p>&nbsp;</p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
                             <p><strong>{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}</strong></p>
-                            <p>{{companyGSTIN}}</p>
+                            <p>22BBBBBB000A1Z0</p>
                         </td>
                     </tr>
                 </tbody>
@@ -239,11 +241,13 @@
                 <table cellpadding="0" cellspacing="0" class="subfooter">
                     <tbody>
                         <tr>
-                            <td *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                <h2>Notes</h2>
-                                <p *ngIf="fieldsAndVisibility.footer.message1?.display" style="margin-bottom: 15px;">
-                                    <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</span>
-                                </p>
+                            <td>
+                                <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                    <h2>Notes</h2>
+                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display" style="margin-bottom: 15px;">
+                                        <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</span>
+                                    </p>
+                                </ng-container>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
                             <td>&nbsp;</td>
