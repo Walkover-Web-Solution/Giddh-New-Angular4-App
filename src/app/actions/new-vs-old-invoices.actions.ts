@@ -2,48 +2,48 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
-import { CarriedOverSalesService } from '../services/carried-over-sales.service';
+import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { ToasterService } from '../services/toaster.service';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CarriedOverSalesRequest, CarriedOverSalesResponse } from '../models/api-models/carried-over-sales';
+import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 
 @Injectable()
-export class CarriedOverSalesActions {
-  public static GET_CARRIED_SALES_REQUEST = 'GET_CARRIED_SALES_REQUEST';
-  public static GET_CARRIED_SALES_RESPONSE = 'GET_CARRIED_SALES_RESPONSE';
+export class NewVsOldInvoicesActions {
+  public static GET_NEW_VS_OLD_INVOICE_REQUEST = 'GET_NEW_VS_OLD_INVOICE_REQUEST';
+  public static GET_NEW_VS_OLD_INVOICE_RESPONSE = 'GET_NEW_VS_OLD_INVOICE_RESPONSE';
   public static GET_NULL = 'GET_NULL';
 
   @Effect()
-  private getCarriedOverSalesResponse$: Observable<Action> = this.action$
-    .ofType(CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST)
+  private getNewVsOldInvoicesResponse$: Observable<Action> = this.action$
+    .ofType(NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_REQUEST)
     .switchMap((action: CustomActions) => {
-      return this._carriedService.GetCarriedOverSales(action.payload.queryRequest)
-        .map((r) => this.validateResponse<CarriedOverSalesResponse, string>(r, {
-          type: CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE,
+      return this._NewVsOldInvoicesService.GetNewVsOldInvoices(action.payload.queryRequest)
+        .map((r) => this.validateResponse<NewVsOldInvoicesResponse, string>(r, {
+          type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE,
           payload: r.body
         }, true, {
-          type: CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE,
+          type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE,
           payload: null
         }));
     });
 
-  constructor(private action$: Actions, private _carriedService: CarriedOverSalesService,
+  constructor(private action$: Actions, private _NewVsOldInvoicesService: NewVsOldInvoicesService,
               private _toasty: ToasterService, private store: Store<AppState>, private _generalService: GeneralService) {
   }
 
-  public GetCarriedOverSalesRequest(queryRequest: CarriedOverSalesRequest): CustomActions {
+  public GetNewVsOldInvoicesRequest(queryRequest: NewVsOldInvoicesRequest): CustomActions {
     return {
-      type: CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST,
+      type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_REQUEST,
       payload: {queryRequest}
     };
   }
 
   public GetResponseNull(): CustomActions {
     return {
-      type: CarriedOverSalesActions.GET_NULL
+      type: NewVsOldInvoicesActions.GET_NULL
     };
   }
 
