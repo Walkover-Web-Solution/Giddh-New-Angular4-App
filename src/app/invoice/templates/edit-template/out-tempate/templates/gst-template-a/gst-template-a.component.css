@@ -15,8 +15,10 @@
 }
 
 .max-width-180 {
-    max-width: 180px !important;
+    /* max-width: 180px; */
 }
+
+
 /* heading */
 
 #default header h1 {
@@ -130,6 +132,7 @@
     font-style: normal;
     line-height: 1.25;
     margin: 0 0 0.3em 0;
+    width: 100%;
 }
 
 #default header figure p {
@@ -152,6 +155,8 @@ header img {
 #default header img {
     max-height: 100%;
     max-width: 180px;
+    float: left;
+    margin-bottom: 10px;
 }
 
 #default header table tr td {
@@ -184,6 +189,10 @@ header img {
 
 .text-right {
     text-align: right;
+}
+
+.text-left {
+    text-align: left;
 }
 
 
@@ -384,12 +393,12 @@ strong {
 }
 
 .edit-template i {
-    background: url(/assets/images/edit-ico.svg) no-repeat;
-    width: 15px;
+    background: url('data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMS4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ2OS4zMzEgNDY5LjMzMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDY5LjMzMSA0NjkuMzMxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCI+CjxnPgoJPHBhdGggZD0iTTQzOC45MzEsMzAuNDAzYy00MC40LTQwLjUtMTA2LjEtNDAuNS0xNDYuNSwwbC0yNjguNiwyNjguNWMtMi4xLDIuMS0zLjQsNC44LTMuOCw3LjdsLTE5LjksMTQ3LjQgICBjLTAuNiw0LjIsMC45LDguNCwzLjgsMTEuM2MyLjUsMi41LDYsNCw5LjUsNGMwLjYsMCwxLjIsMCwxLjgtMC4xbDg4LjgtMTJjNy40LTEsMTIuNi03LjgsMTEuNi0xNS4yYy0xLTcuNC03LjgtMTIuNi0xNS4yLTExLjYgICBsLTcxLjIsOS42bDEzLjktMTAyLjhsMTA4LjIsMTA4LjJjMi41LDIuNSw2LDQsOS41LDRzNy0xLjQsOS41LTRsMjY4LjYtMjY4LjVjMTkuNi0xOS42LDMwLjQtNDUuNiwzMC40LTczLjMgICBTNDU4LjUzMSw0OS45MDMsNDM4LjkzMSwzMC40MDN6IE0yOTcuNjMxLDYzLjQwM2w0NS4xLDQ1LjFsLTI0NS4xLDI0NS4xbC00NS4xLTQ1LjFMMjk3LjYzMSw2My40MDN6IE0xNjAuOTMxLDQxNi44MDNsLTQ0LjEtNDQuMSAgIGwyNDUuMS0yNDUuMWw0NC4xLDQ0LjFMMTYwLjkzMSw0MTYuODAzeiBNNDI0LjgzMSwxNTIuNDAzbC0xMDcuOS0xMDcuOWMxMy43LTExLjMsMzAuOC0xNy41LDQ4LjgtMTcuNWMyMC41LDAsMzkuNyw4LDU0LjIsMjIuNCAgIHMyMi40LDMzLjcsMjIuNCw1NC4yQzQ0Mi4zMzEsMTIxLjcwMyw0MzYuMTMxLDEzOC43MDMsNDI0LjgzMSwxNTIuNDAzeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=') no-repeat;
+    width: 17px;
     position: absolute;
     right: 1px;
-    background-size: contain;
-    height: 12px;
+    background-size: 14px;
+    height: 18px;
 }
 
 footer p {
