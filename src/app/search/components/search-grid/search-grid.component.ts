@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment/moment';
@@ -11,7 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take } from 'rxjs/operators';
-import { of } from 'rxjs';
+
 @Component({
   selector: 'search-grid',  // <home></home>
   templateUrl: './search-grid.component.html'
@@ -149,7 +149,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 
   public toggleSelectAll(ev) {
     let isAllChecked = ev.target.checked;
@@ -347,7 +346,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       };
 
       this._companyServices.downloadCSV(request).subscribe((res) => {
-        this.searchLoader$ = Observable.of(false);
+        this.searchLoader$ = of(false);
         if (res.status === 'success') {
           let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
           return saveAs(blobData, `${p.groupName}.csv`);
@@ -401,7 +400,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   // Add Selected Value to Message Body
@@ -510,7 +509,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             };
             this.selectedItems = [];
             this.isAllChecked = false;
-        });
+          });
       }
     });
     this.mailModal.hide();
