@@ -12,7 +12,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { TabsModule } from 'ngx-bootstrap';
+import { AlertModule, TabsModule } from 'ngx-bootstrap';
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 
 /**
@@ -32,7 +32,9 @@ import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/rec
     HighlightModule,
     TooltipModule,
     ClickOutsideModule,
-    TabsModule
+    TabsModule,
+    AlertModule
   ]
 })
-export class PurchaseModule { }
+export class PurchaseModule {
+}
