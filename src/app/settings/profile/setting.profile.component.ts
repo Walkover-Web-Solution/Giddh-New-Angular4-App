@@ -38,7 +38,7 @@ export interface IGstObj {
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
-  public companyProfileObj: any = null;
+  public companyProfileObj: any = {};
   public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public currencySource$: Observable<IOption[]> = Observable.of([]);
@@ -154,9 +154,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
-        let profileObj = _.cloneDeep(o);
+    this.store.select(p => p.settings).distinctUntilKeyChanged('profileRequest').takeUntil(this.destroyed$).subscribe((o) => {
+      if (o.profileRequest) {
+        let profileObj = _.cloneDeep(o.profile);
         console.log('profile updated ', profileObj.contactNo);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);

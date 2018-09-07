@@ -64,11 +64,13 @@ export interface SettingsState {
   discount: DiscountState;
   refreshCompany: boolean;
   isGmailIntegrated: boolean;
+  profileRequest: boolean;
 }
 
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
+  profileRequest: false,
   updateProfileSuccess: false,
   updateProfileInProgress: false,
   linkedAccounts: {},
@@ -145,28 +147,35 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
+
+    // region profile
+
     case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
+        newState.profileRequest = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return {...state, updateProfileInProgress: true};
     }
     case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = _.cloneDeep(response.body);
         newState.updateProfileSuccess = true;
+        newState.profileRequest = true;
         return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
-        updateProfileSuccess: true
+        updateProfileSuccess: true,
+        profileRequest: true
       });
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE: {
       newState.updateProfileSuccess = false;
       newState.updateProfileInProgress = true;
+      newState.profileRequest = false;
       return Object.assign({}, state, newState);
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
@@ -175,14 +184,16 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         newState.profile = _.cloneDeep(response.body);
         newState.updateProfileSuccess = true;
         newState.updateProfileInProgress = false;
+        newState.profileRequest = true;
         return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
         updateProfileSuccess: false,
-        updateProfileInProgress: false
+        updateProfileInProgress: false,
+        profileRequest: true
       });
     }
-
+    // endregion
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS: {
       newState.linkedAccounts.isBankAccountsInProcess = true;
       return Object.assign({}, state, newState);
