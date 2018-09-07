@@ -76,8 +76,8 @@ function ngcWebpackSetup(prod, metadata) {
   if (!metadata) {
     metadata = DEFAULT_METADATA;
   }
-  console.log('govinda : prod ', prod);
-  console.log('govinda : AOT ', metadata.AOT);
+  // console.log('govinda : prod ', prod);
+  // console.log('govinda : AOT ', metadata.AOT);
   const buildOptimizer = prod;
   const sourceMap = false; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
