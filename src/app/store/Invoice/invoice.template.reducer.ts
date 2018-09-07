@@ -203,7 +203,7 @@ export const initialState: CustomTemplateState = {
         content: [
           {
             display: true,
-            label: 'S no.',
+            label: '#',
             field: 'sNo',
             width: '10'
           },
