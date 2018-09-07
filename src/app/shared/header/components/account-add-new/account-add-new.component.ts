@@ -63,6 +63,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public isHsnSacEnabledAcc: boolean = false;
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
+  @Input() public isDebtorCreditor: boolean = false;
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
@@ -84,7 +85,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public companyCurrency: string;
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
-  public companyCountry: string = '';  
+  public companyCountry: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,

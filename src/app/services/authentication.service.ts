@@ -325,6 +325,6 @@ export class AuthenticationService {
   }
 
   public saveGmailAuthCode(data) {
-    return this._http.post('http://apitest.giddh.com/users/generate-mail-token', data);
+    return this._http.post(this.config.apiUrl + 'users/generate-mail-token', data);
   }
 }

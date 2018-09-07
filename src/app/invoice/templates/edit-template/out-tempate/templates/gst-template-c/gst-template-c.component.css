@@ -14,7 +14,17 @@
     vertical-align: top;
 }
 
+.mrT20 {
+    margin-top: 20px;
+}
 
+.mrT60 {
+    margin-top: 60px;
+}
+
+.max-width-180 {
+    max-width: 180px !important;
+}
 /* heading */
 
 #Template2 header h1 {
@@ -213,6 +223,7 @@ table.inventory {
     text-align: right;
     padding: 14px 7px;
     line-height: 1.2rem;
+    vertical-align: middle;
 }
 
 #Template2 table.item tr th:nth-child(2) {
@@ -229,6 +240,7 @@ table.inventory {
     border-top: 1px solid rgba(89, 89, 89, 0.6);
     text-align: right;
     line-height: 1.2rem;
+    vertical-align: middle;
 }
 
 #Template2 table.item td p {
@@ -319,6 +331,46 @@ table.inventory {
     margin: 10px 0 0
 }
 
-strong {
+#Template2 strong,
+#Template2 .strong {
     font-weight: bold;
+}
+
+#Template2 .disabled-area {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#Template2 .disabled-area:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    background: rgba(204, 204, 204, 0.5);
+    border: 1px dashed #808080;
+}
+
+#Template2 .edit-template {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px;
+    height: 15px;
+    z-index: 1;
+    background: #fff;
+    width: 20px;
+}
+
+#Template2 .edit-template i {
+    background: url(/assets/images/edit-ico.svg) no-repeat;
+    width: 15px;
+    position: absolute;
+    right: 1px;
+    background-size: contain;
+    height: 12px;
 }

@@ -1,12 +1,11 @@
-import { Component, Input, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import * as moment from 'moment';
-import { AccountResponse } from '../../../models/api-models/Account';
 import { CompanyImportExportFileTypes } from '../../../models/interfaces/companyImportExport.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { CompanyImportExportActions } from '../../../actions/company-import-export/company-import-export.actions';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'company-import-export-form-component',
@@ -64,7 +63,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
   public isExportSuccess$: Observable<boolean>;
   public isImportInProcess$: Observable<boolean>;
   public isImportSuccess$: Observable<boolean>;
-  public destroyed$: Subject<boolean> = new Subject();
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>, private _companyImportExportActions: CompanyImportExportActions) {
     this.isExportInProcess$ = this._store.select(s => s.companyImportExport.exportRequestInProcess).takeUntil(this.destroyed$);
@@ -76,7 +75,13 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.isExportSuccess$.subscribe(s => {
       if (s) {
-        this.backPressed.emit();
+        this.backButtonPressed();
+      }
+    });
+
+    this.isImportSuccess$.subscribe(s => {
+      if (s) {
+        this.backButtonPressed();
       }
     });
   }
@@ -102,7 +107,12 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  public backButtonPressed() {
+    this.backPressed.emit(true);
+  }
+
   public ngOnDestroy(): void {
+    this._store.dispatch(this._companyImportExportActions.ResetCompanyImportExportState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

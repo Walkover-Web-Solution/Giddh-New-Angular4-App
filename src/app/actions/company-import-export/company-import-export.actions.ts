@@ -54,22 +54,24 @@ export class CompanyImportExportActions {
 
       if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
         return this._companyImportExportService.ImportRequest(action.payload.file)
-          .map((r) => this.validateResponse<string, string>(r, {
-            type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE,
-            payload: r
-          }, true, {
-            type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE,
-            payload: r
-          }));
+          .map((r: BaseResponse<string, string>) => {
+            if (r.status === 'success') {
+              this._toasty.successToast(r.body);
+            } else {
+              this._toasty.errorToast(r.message);
+            }
+            return this.ImportResponse(r);
+          });
       } else {
         return this._companyImportExportService.ImportLedgersRequest(action.payload.file)
-          .map((r) => this.validateResponse<string, string>(r, {
-            type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE,
-            payload: r
-          }, true, {
-            type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE,
-            payload: r
-          }));
+          .map((r: BaseResponse<string, string>) => {
+            if (r.status === 'success') {
+              this._toasty.successToast(r.body);
+            } else {
+              this._toasty.errorToast(r.message);
+            }
+            return this.ImportResponse(r);
+          });
       }
     });
 
@@ -101,9 +103,10 @@ export class CompanyImportExportActions {
     };
   }
 
-  public ImportResponse(): CustomActions {
+  public ImportResponse(response: BaseResponse<any, string>): CustomActions {
     return {
-      type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE
+      type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_RESPONSE,
+      payload: response
     };
   }
 
