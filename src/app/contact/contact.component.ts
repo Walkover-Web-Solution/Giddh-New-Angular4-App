@@ -73,20 +73,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
+  public dueAmountReportRequest: DueAmountReportQueryRequest;
   public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
   public cashFreeAvailableBalance: number;
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
   public totalDueOptions: IOption[] = [{label: 'greater then', value: '0'}, {label: 'less then', value: '1'}, {label: 'equal to', value: '2'}];
-  public includeName: boolean = false;
-  public totalDueAmount: number = 0;
-  public totalDueSelectedOption: string = '0';
-  public names: any = [];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
-  public agingDropDownoptions$: Observable<AgingDropDownoptions>;
-  public agingDropDownoptions: AgingDropDownoptions;
-  public setDueRangeOpen$: Observable<boolean>;
   public payoutObj: CashfreeClass = new CashfreeClass();
+  public dueAmountReportData$: Observable<DueAmountReportResponse>;
   public showFieldFilter = {
     name: true,
     due_amount: true,
@@ -102,8 +97,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-  public dueAmountReportRequest: DueAmountReportQueryRequest;
-  public dueAmountReportData$: Observable<DueAmountReportResponse>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private createAccountIsSuccess$: Observable<boolean>;
 
@@ -114,12 +107,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _dashboardService: DashboardService,
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
-    private _agingReportActions: AgingReportActions,
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver) {
-    this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).takeUntil(this.destroyed$);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-    this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).takeUntil(this.destroyed$);
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
       // console.log('flattenAccountsStream$');
@@ -135,40 +125,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  public pageChangedDueReport(event: any): void {
-    this.dueAmountReportRequest.page = event.page;
-    this.go();
-  }
-
-  public go() {
-    let req = {};
-    if (this.totalDueSelectedOption === '0') {
-      req = {
-        totalDueAmountGreaterThan: true,
-        totalDueAmountLessThan: false,
-        totalDueAmountEqualTo: false
-      };
-    } else if (this.totalDueSelectedOption === '1') {
-      req = {
-        totalDueAmountGreaterThan: false,
-        totalDueAmountLessThan: true,
-        totalDueAmountEqualTo: false
-      };
-    } else if (this.totalDueSelectedOption === '2') {
-      req = {
-        totalDueAmountGreaterThan: false,
-        totalDueAmountLessThan: false,
-        totalDueAmountEqualTo: true
-      };
-    }
-    req = Object.assign(req, {totalDueAmount: this.totalDueAmount, includeName: this.includeName, names: this.names});
-    // totalDueAmount: number;
-    // includeName: boolean;
-    // name: string[];
-    // debugger;
-    this.store.dispatch(this._agingReportActions.GetDueReport(req as DueAmountReportRequest, this.dueAmountReportRequest));
-  }
-
   public ngOnInit() {
 
     // this.filterDropDownList.placement = 'left';
@@ -178,10 +134,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'contact';
-    this.agingDropDownoptions$.subscribe(p => {
-      this.agingDropDownoptions = _.cloneDeep(p);
-      this.go();
-    });
+
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getAccounts('sundrydebtors', null, null, 'true');
@@ -216,10 +169,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     //
   }
 
-  public resetMe() {
-    this.dueAmountReportRequest.page = 0;
-  }
-
   public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.activeTab = tabName;
     if (tabName !== 'aging') {
@@ -227,7 +176,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.getSundrydebtorsAccounts();
       // this.go();
-      this.store.dispatch(this._agingReportActions.GetDueRange());
     }
   }
 
@@ -431,8 +379,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     // }
   }
 
-  public openAgingDropDown() {
-    this.store.dispatch(this._agingReportActions.OpenDueRange());
+  public pageChangedDueReport(event: any): void {
+    this.dueAmountReportRequest.page = event.page;
   }
 
   public loadPaginationComponent(s) {
