@@ -167,9 +167,23 @@ export class CompanyService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + COMPANY_API.SEND_EMAIL
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':from', encodeURIComponent(request.params.from))
-      .replace(':to', encodeURIComponent(request.params.to))
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+        .replace(':from', encodeURIComponent(request.params.from))
+        .replace(':to', encodeURIComponent(request.params.to))
+      , request.data).pipe(map((res) => {
+      return res;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
+  }
+
+  public downloadCSV(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+        .replace(':from', encodeURIComponent(request.params.from))
+        .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
@@ -179,9 +193,11 @@ export class CompanyService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + COMPANY_API.SEND_SMS
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':from', encodeURIComponent(request.params.from))
-      .replace(':to', encodeURIComponent(request.params.to))
+
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+        .replace(':from', encodeURIComponent(request.params.from))
+        .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));

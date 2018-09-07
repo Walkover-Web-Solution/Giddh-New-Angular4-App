@@ -14,36 +14,11 @@
         </div>
 
 
-        <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
-          <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)"/>
-        </div>
-        <div class="form-group mrR1 max250" *ngIf="activeTab === 'aging'" style="width: 100px">
-          <label class="mr-b-5">Name</label>
-          <div class="checkbox square-switch">
-            <input type="checkbox" id="includeName" [(ngModel)]="includeName" (change)="resetMe()"/>
-            <label for="includeName">
-              <span class="p-t-10" *ngIf="includeName">Include</span>
-              <span class="pull-right" *ngIf="!includeName">Exclude</span>
-            </label>
-          </div>
-        </div>
 
-        <div class="form-group mrR1 max500 search-input" *ngIf="activeTab === 'aging'">
-          <sh-select placeholder="Search customer" [multiple]='true' name="names" [(ngModel)]="names"
-                     [options]="sundryDebtorsAccountsForAgingReport" (change)="resetMe()"></sh-select>
-        </div>
+                <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
+                    <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)" />
+                </div>
 
-        <div class="form-group mrR1 max120 select-option" *ngIf="activeTab === 'aging'">
-          <label class="mr-b-5">Total Due</label>
-          <sh-select placeholder="Link Account" name="totalDue" [(ngModel)]="totalDueSelectedOption"
-                     [options]="totalDueOptions" (change)="resetMe()"></sh-select>
-        </div>
-
-        <div class="form-group" *ngIf="activeTab === 'aging'">
-          <label class="mr-b-5 d-block">Number</label>
-          <input type="text" placeholder="Number" class="form-control max70" [(ngModel)]="totalDueAmount"
-                 (change)="resetMe()" digitsOnlyDirective/>
-        </div>
 
         <div class="btn-group plus-btn">
           <button *ngIf="activeTab == 'customer'" class="btn btn-link" style="margin-right: 5px"
@@ -55,72 +30,52 @@
           </button>
         </div>
 
-        <div class="form-group go-btn" *ngIf="activeTab === 'aging'">
-          <label class="d-block"></label>
-          <button class="btn btn-success" type="button" (click)="go()">Go</button>
+
+            </div>
+            <div class="pull-right dis">
+                <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
+                    <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
+                </div>
+              <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
+                <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']" >Aging Report </button>
+
+
+                <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+                    <i dropdownToggle class="icon-options pd cp fs20"></i>
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" />Amt. Due
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-      </div>
-      <div class="pull-right dis">
-        <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
-          <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')"
-                  [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers
-          </button>
-        </div>
-        <button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')"
-                *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report
-        </button>
-
-
-        <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown
-             [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
-             [placement]="'left'">
-          <i dropdownToggle class="icon-options pd cp fs20"></i>
-          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name"/> Name</a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile"/> Mobile No.</a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email"/> Email Id</a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state"/> State</a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance"/>Amt.
-                Due
-              </a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
-            </li>
-            <li role="menuitem">
-              <a class="dropdown-item">
-                <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment"/> Comment</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="mrL1 mrT2" *ngIf="activeTab === 'aging'">
-          <div (click)="openAgingDropDown()">
-            <label class="pd1">Total due Today </label>
-            <i class="fa fa-angle-down" aria-hidden="true"></i>
-          </div>
-          <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                          (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
-        </div>
-
-
-      </div>
     </div>
   </div>
 
@@ -258,25 +213,6 @@
       </tr>
     </ng-container>
 
-    <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
-      <tr>
-        <td colspan="7" class="text-center empty_table">
-          <h1>No Record Found !!</h1>
-        </td>
-      </tr>
-    </ng-container>
-    </tbody>
-
-    <tfoot *ngIf="(dueAmountReportData$ | async)?.results?.length">
-    <tr>
-      <td colspan="100%">
-        <div class="alC" style="text-align: center;">
-          <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
-        </div>
-      </td>
-    </tr>
-    </tfoot>
-  </table>
 </div>
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
