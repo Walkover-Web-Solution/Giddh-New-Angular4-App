@@ -438,6 +438,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public patchProfile(obj) {
+    for (let member in obj) {
+      if (obj[member] === null) {
+        obj[member] = '';
+      }
+    }
     this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
   }
 
