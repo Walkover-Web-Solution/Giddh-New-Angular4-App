@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700|Roboto:400,500i,700" rel="stylesheet">
 <ng-container [ngSwitch]="inputTemplate.templateType">
     <!-- GET TEMPLATE A -->
     <!-- *ngSwitchCase="'gst_template_a'"   -->
@@ -20,9 +21,20 @@
         [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
     </gst-template-d>
 
+
     <!-- GET TEMPLATE E -->
     <gst-template-e *ngSwitchCase="'gst_template_e'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
         [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
     </gst-template-e>
+
+    <!-- GET TEMPLATE F -->
+    <gst-template-f *ngSwitchCase="'gst_template_f'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
+        [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
+    </gst-template-f>
+
+    <!-- GET TEMPLATE G -->
+    <gst-template-g *ngSwitchCase="'gst_template_g'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
+        [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
+    </gst-template-g>
 
 </ng-container>

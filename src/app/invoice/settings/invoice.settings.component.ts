@@ -115,6 +115,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
           this.getRazorPayDetailResponse = true;
         }
 
+        if (setting.companyEmailSettings) {
+          this.invoiceSetting.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
+        } else {
+          this.invoiceSetting.sendThroughGmail = false;
+        }
+
         if (this.invoiceSetting.lockDate) {
           this.isLockDateSet = true;
           this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
@@ -182,6 +188,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.formToSave = _.cloneDeep(this.settingResponse);
         this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
         this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
+        this.formToSave.companyEmailSettings = {
+          sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
+          sendThroughSendgrid: false
+        };
+        delete this.formToSave.sendThroughGmail;
         delete this.formToSave.razorPayform; // delete razorPay before sending form
 
         if (this.formToSave.invoiceSettings.lockDate && this.isLockDateSet) {
