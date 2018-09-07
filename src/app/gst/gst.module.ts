@@ -11,13 +11,14 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { GstPageBComponent } from './gst-page-b/gst-page-b.component';
 
 /**
  * Created by kunalsaxena on 9/1/17.
  */
 
 @NgModule({
-  declarations: [GstPagesComponent, GstComponent],
+  declarations: [GstPagesComponent, GstPageBComponent, GstComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,

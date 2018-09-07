@@ -4,21 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { GstPagesComponent } from './gst-pages/gst-pages.component';
+import { GstPageBComponent } from './gst-page-b/gst-page-b.component';
 
 /**
  * Created by kunalsaxena on 9/1/17.
  */
 
 const GST_ROUTES: Routes = [
-  {
-    path: '',
-    canActivate: [NeedsAuthentication],
-    component: GstPagesComponent,
-    children: [
-      { path: '', redirectTo: 'gst', pathMatch: 'full' },
-      { path: 'gst', component: GstPagesComponent },
-    ]
-  }
+  { path: 'gst', component: GstPagesComponent },
+  { path: 'gst-page-b', component: GstPageBComponent }
 ];
 
 @NgModule({
