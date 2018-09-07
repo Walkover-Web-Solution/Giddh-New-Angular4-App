@@ -5,77 +5,67 @@
       <div class="pull-left header-left">
 
         <div class="form-group" *ngIf="activeTab !== 'aging'">
-          <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')"
-                  [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers
-          </button>
-          <button class="btn btn-sm btn-default" (click)="setActiveTab('vendor', 'sundrycreditors')"
-                  [ngClass]="{'isActive': activeTab === 'vendor', 'btn-default': activeTab !== 'vendor'}">Vendor
-          </button>
+          <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
+          <button class="btn btn-sm btn-default" (click)="setActiveTab('vendor', 'sundrycreditors')" [ngClass]="{'isActive': activeTab === 'vendor', 'btn-default': activeTab !== 'vendor'}">Vendor</button>
         </div>
 
 
-
-                <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
-                    <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)" />
-                </div>
-
+        <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
+          <input type="text" placeholder="Search" class="form-control" (keyup)="search($event)" />
+        </div>
 
         <div class="btn-group plus-btn">
-          <button *ngIf="activeTab == 'customer'" class="btn btn-link" style="margin-right: 5px"
-                  (click)="openAddAndManage('customer')">+
+          <button *ngIf="activeTab == 'customer'" class="btn btn-link" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
             Add Customer
           </button>
           <button *ngIf="activeTab == 'vendor'" class="btn btn-link " (click)="openAddAndManage('vendor')">+
-            Add Vendor
-          </button>
+            Add Vendor</button>
         </div>
 
-
-            </div>
-            <div class="pull-right dis">
-                <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
-                    <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
-                </div>
-              <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
-                <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']" >Aging Report </button>
-
-
-                <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
-                    <i dropdownToggle class="icon-options pd cp fs20"></i>
-                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" />Amt. Due
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+      </div>
+      <div class="pull-right dis">
+        <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
+          <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
         </div>
+        <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
+        <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']" >Aging Report </button>
+
+
+        <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+          <i dropdownToggle class="icon-options pd cp fs20"></i>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" />Amt. Due
+              </a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item">
+                <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -106,8 +96,7 @@
             {{account.comment}}
           </ng-container>
           <ng-container *ngIf="updateCommentIdx === idx">
-            <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment"
-                      (blur)="updateComment(account)"></textarea>
+            <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment" (blur)="updateComment(account)"></textarea>
           </ng-container>
 
         </td>
@@ -135,8 +124,7 @@
             {{account.comment}}
           </ng-container>
           <ng-container *ngIf="updateCommentIdx === idx">
-            <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment"
-                      (blur)="updateComment(account)"></textarea>
+            <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment" (blur)="updateComment(account)"></textarea>
           </ng-container>
 
         </td>
@@ -144,8 +132,7 @@
         <td>
           <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay
           </button>
-          <button *ngIf="!cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Add
-            Cashfree
+          <button *ngIf="!cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Add Cashfree
           </button>
         </td>
       </tr>
@@ -157,25 +144,17 @@
     </ng-container>
     </tbody>
     <tfoot>
-    <tr
-      *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
+    <tr *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
       <td colspan="100%">
         <div class="alC">
-          <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages"
-                      [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
-                      [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                      (pageChanged)="pageChanged($event)"></pagination>
+          <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
       </td>
     </tr>
-    <tr
-      *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
+    <tr *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
       <td colspan="100%">
         <div class="alC">
-          <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages"
-                      [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
-                      [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                      (pageChanged)="pageChanged($event)"></pagination>
+          <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
       </td>
     </tr>
@@ -184,41 +163,10 @@
   <ng-container>
 
   </ng-container>
-  <table class="table basic table-bordered" *ngIf="activeTab == 'aging'">
-    <thead>
-    <tr>
-      <th [style.width.%]="20">Customer Name</th>
-      <th [style.width.%]="14">Total Due</th>
-      <th [style.width.%]="10">Future Due</th>
-      <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
-      <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async
-        )?.fifth)}} Days
-      </th>
-      <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async
-        )?.sixth)}} Days
-      </th>
-      <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
-    </tr>
-    </thead>
-    <tbody>
-    <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
-      <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-        <td>{{ entry.name }}</td>
-        <td> {{ entry.totalDueAmount }}</td>
-        <td>{{ entry.futureDueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[0].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[1].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[2].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[3].dueAmount }}</td>
-      </tr>
-    </ng-container>
-
 </div>
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [class]="accountAsideMenuState"
-                    [@slideInOut]="accountAsideMenuState"
-                    (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+<aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
 
 <!-- Pay now modal -->
 <div bsModal #payNowModal="bs-modal" class="modal fade" role="dialog">
@@ -242,8 +190,7 @@
               <input #amountBox type="number" class="form-control">
             </div>
             <div>
-              <button [disabled]="!amountBox.value" type="submit" class="btn btn-md btn-success btn-block"
-                      (click)="onConfirmation(amountBox.value)">Pay
+              <button [disabled]="!amountBox.value" type="submit" class="btn btn-md btn-success btn-block" (click)="onConfirmation(amountBox.value)">Pay
               </button>
             </div>
           </form>
@@ -265,8 +212,7 @@
                 <label>Client Id
                   <span class="required">*</span>
                 </label>
-                <input class="form-control" type="text" placeholder="Client Id" name="payoutForm.userName"
-                       [(ngModel)]="payoutObj.userName" required autocomplete="off">
+                <input class="form-control" type="text" placeholder="Client Id" name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required autocomplete="off">
               </div>
             </div>
             <div class="form-group col-xs-12">
@@ -274,22 +220,18 @@
                 <label>Client Secret Key
                   <span class="required">*</span>
                 </label>
-                <input class="form-control" type="password" placeholder="Client Secret key" name="payoutForm.password"
-                       [(ngModel)]="payoutObj.password" required autocomplete="off">
+                <input class="form-control" type="password" placeholder="Client Secret key" name="payoutForm.password" [(ngModel)]="payoutObj.password" required autocomplete="off">
               </div>
             </div>
             <div class="form-group col-xs-12">
               <div class="row">
                 <label>Link Account</label>
-                <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj"
-                           [options]="bankAccounts$ | async"
-                           (selected)="selectCashfreeAccount($event, payoutObj)"></sh-select>
+                <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, payoutObj)"></sh-select>
               </div>
             </div>
             <div class="form-group col-xs-12">
               <div class="row">
-                <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment"/>
-                Automatic capture on payment
+                <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" /> Automatic capture on payment
               </div>
             </div>
             <input type="submit" class="btn btn-success" value="Save">
