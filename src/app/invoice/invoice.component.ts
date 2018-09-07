@@ -38,8 +38,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
   public isRecurringSelected: boolean = false;
+  public showInvoiceNav: boolean = true;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>,
               private companyActions: CompanyActions,
               private router: Router
@@ -57,15 +59,20 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     this.router.events.takeUntil(this.destroyed$).subscribe((event: any) => {
       // console.log('router.event');
-      if (event && event.url && event.url.includes('recurring')) {
-        this.isRecurringSelected = true;
-      } else {
-        this.isRecurringSelected = false;
-      }
+      // debugger;
+      // if (event && event.url && event.url.includes('preview')) {
+      //   this.showInvoiceNav = true;
+      // } else {
+      //   this.showInvoiceNav = false;
+      // }
     });
-    if (this.router.routerState.snapshot.url.includes('recurring')) {
-      this.isRecurringSelected = true;
-    }
+    // if (this.router.routerState.snapshot.url.includes('preview')) {
+    //   this.showInvoiceNav = true;
+    // }
+  }
+
+  public pageChanged(page: string) {
+    this.showInvoiceNav = page === 'preview';
   }
 
   public ngOnDestroy() {

@@ -39,13 +39,13 @@
                <input required [style.width.px]="70" class="form-control" formControlName="amount" type="text"
                placeholder="amount" decimalDigitsDirective [DecimalPlaces]="2"/>
                </span>
-              <span class="custom-select pos-rel form-group"
-                    *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance'  || !item.value.queryType">
-                  <select class="form-control" formControlName="balType">
-                     <option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}</option>
-                  </select>
-                  <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                            </span>
+              <!--By and To: Not required in paginated API -->
+              <!-- <span class="custom-select pos-rel form-group" *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance'  || !item.value.queryType">
+                <select class="form-control" formControlName="balType">
+                  <option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}</option>
+                </select>
+                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+              </span> -->
               <label *ngIf="searchDataSet.controls.length > 1 && !l" class="condition_tag">and</label>
               <!-- <label *ngIf="i === 1 && searchDataSet.controls.length > 2" class="condition_tag">and</label>
               <label *ngIf="i === 2 && searchDataSet.controls.length > 3" class="condition_tag">and</label> -->

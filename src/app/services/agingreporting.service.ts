@@ -14,8 +14,8 @@ export class AgingreportingService implements OnInit {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-    private _generalService: GeneralService,
-    @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+              private _generalService: GeneralService,
+              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
@@ -33,6 +33,7 @@ export class AgingreportingService implements OnInit {
       })
       .catch((e) => this.errorHandler.HandleCatch<string, DueRangeRequest>(e, model, {}));
   }
+
   public GetDueDaysRange(): Observable<BaseResponse<string[], string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
@@ -45,7 +46,6 @@ export class AgingreportingService implements OnInit {
 
   public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    debugger;
     if (this.companyUniqueName) {
       return this._http.post(
         this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -60,7 +60,7 @@ export class AgingreportingService implements OnInit {
           data.request = model;
           data.queryString = queryRequest;
           return data;
-        }).catch((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest));;
+        }).catch((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest));
     } else {
       return observable.empty();
     }

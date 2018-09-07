@@ -116,9 +116,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
 
         if (setting.companyEmailSettings) {
-          this.invoiceSetting.sendThroughSendGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughSendGmail);
+          this.invoiceSetting.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
         } else {
-          this.invoiceSetting.sendThroughSendGmail = false;
+          this.invoiceSetting.sendThroughGmail = false;
         }
 
         if (this.invoiceSetting.lockDate) {
@@ -189,10 +189,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
         this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
         this.formToSave.companyEmailSettings = {
-          sendThroughSendGmail: _.cloneDeep(form.sendThroughSendGmail) ? _.cloneDeep(form.sendThroughSendGmail) : false,
+          sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
           sendThroughSendgrid: false
         };
-        delete this.formToSave.sendThroughSendGmail;
+        delete this.formToSave.sendThroughGmail;
         delete this.formToSave.razorPayform; // delete razorPay before sending form
 
         if (this.formToSave.invoiceSettings.lockDate && this.isLockDateSet) {

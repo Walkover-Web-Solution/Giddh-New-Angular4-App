@@ -14,6 +14,7 @@ import { UploaderOptions } from 'ngx-uploader/index';
 import { Configuration } from './../../../../../app.constant';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
+import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -43,8 +44,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     style: 'regular',
     styles: ['regular']
   });
+    // 'Sans-Serif', 'Open Sans', 'Lato'
 
-  public _presetFonts = ['Sans-Serif', 'Open Sans', 'Lato'];
+  public _presetFonts = [
+    { label: 'Open Sans', value: 'Open Sans'},
+    { label: 'Sans-Serif', value: 'Sans-Serif'},
+    { label: 'Lato', value: 'Lato'}
+    ];
   public presetFonts = this._presetFonts;
 
   public formData: FormData;
@@ -181,8 +187,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   /**
    * onFontSelect
    */
-  public onFontSelect(font: Font) {
-    this.onValueChange('font', font.family);
+  public onFontSelect(font: IOption) {
+    this.onValueChange('font', font.value);
   }
 
   /**

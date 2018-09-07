@@ -170,7 +170,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.isUniversalDateApplicable = true;
         this.getInvoices();
       }
-    })).subscribe();
+    })).takeUntil(this.destroyed$).subscribe();
   }
   public loadDownloadOrSendMailComponent() {
     let transactionData = null;

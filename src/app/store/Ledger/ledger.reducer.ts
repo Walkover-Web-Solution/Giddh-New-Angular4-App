@@ -87,6 +87,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     return Object.assign({}, state, {
       transactionInprogress: false
     });
+    case LEDGER.ADVANCE_SEARCH:
+      return Object.assign({}, state, { transactionInprogress: true });
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {

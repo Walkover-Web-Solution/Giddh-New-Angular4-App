@@ -9,6 +9,7 @@ export class DueAmountReportQueryRequest {
   public sortBy: 'name' | 'totalDueAmount' = 'name';
   public sort: 'asc' | 'desc' = 'asc';
 }
+
 export interface DueAmountReportRequest {
   totalDueAmountGreaterThan: boolean;
   totalDueAmountLessThan: boolean;
@@ -39,4 +40,8 @@ export interface DueAmountReportResponse {
   size: number;
 }
 
-export interface AgingDropDownoptions { fourth: number; fifth: number; sixth: number; }
+export interface AgingDropDownoptions {
+  fourth: number;
+  fifth: number;
+  sixth: number;
+}
