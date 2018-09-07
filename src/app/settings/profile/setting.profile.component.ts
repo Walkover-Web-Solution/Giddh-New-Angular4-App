@@ -1,6 +1,6 @@
-import { fromEvent as observableFromEvent, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, take, takeUntil, distinctUntilKeyChanged } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -135,9 +135,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       });
 
     this.gstKeyDownSubject$
-      .debounceTime(3000)
-      .distinctUntilChanged()
-      .takeUntil(this.destroyed$)
+      .pipe(debounceTime(3000)
+        , distinctUntilChanged()
+        , takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
       });
