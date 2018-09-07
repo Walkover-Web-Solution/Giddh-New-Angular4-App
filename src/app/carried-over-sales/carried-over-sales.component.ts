@@ -21,6 +21,9 @@ import { NgForm } from '@angular/forms';
   .h-25px{
     height: 25px;
   }
+    .pad-8{
+      padding: 8px;
+    }
   `]
 })
 
