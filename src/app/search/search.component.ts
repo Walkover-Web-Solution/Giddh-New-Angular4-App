@@ -13,12 +13,13 @@ import { CompanyActions } from '../actions/company.actions';
 export class SearchComponent implements OnInit, OnDestroy {
   public searchRequestEmitter = new EventEmitter<SearchRequest>();
   public _searchRequest: SearchRequest;
+  public pageChangeEvent: any;
+  public filterEventQuery: any;
 
   @Input()
   public set searchRequest(search: SearchRequest) {
     this.searchRequestEmitter.emit(search);
     this._searchRequest = search;
-    // console.log(search);
   }
 
   public get searchRequest(): SearchRequest {
@@ -40,5 +41,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.store.dispatch(this._searchActions.ResetSearchState());
+  }
+
+  public paginationChanged(ev) {
+    this.pageChangeEvent = ev;
+  }
+
+  public FilterByAPIEvent(ev) {
+    this.filterEventQuery = ev;
   }
 }

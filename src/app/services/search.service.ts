@@ -23,14 +23,22 @@ export class SearchService {
   /**
    * get GetStocksReport
    */
-  public Search(request: SearchRequest): Observable<BaseResponse<SearchResponse[], SearchRequest>> {
+  public Search(reqPayload: { request: SearchRequest, searchReqBody: any }): Observable<BaseResponse<SearchResponse[], SearchRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + SEARCH_API.SEARCH
+    const request = reqPayload.request;
+    return this._http.post(this.config.apiUrl + SEARCH_API.SEARCH
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupName', encodeURIComponent(request.groupName)),
-      {from: request.fromDate, to: request.toDate, refresh: request.refresh})
+        .replace(':groupName', encodeURIComponent(request.groupName))
+        .replace(':count', encodeURIComponent('15'))
+        .replace(':from', encodeURIComponent(request.fromDate))
+        .replace(':to', encodeURIComponent(request.toDate))
+        .replace(':refresh', String(request.refresh))
+        .replace(':page', String(request.page)),
+      reqPayload.searchReqBody)
       .map((res) => {
+        res.body.groupName = request.groupName;
+        res.body.page = request.page;
         return res;
       })
       .catch((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e));

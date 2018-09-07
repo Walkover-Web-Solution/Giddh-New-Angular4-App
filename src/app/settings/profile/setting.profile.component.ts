@@ -9,12 +9,11 @@ import { CompanyService } from '../../services/companyService.service';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
-import { Select2OptionData } from '../../theme/select2';
 import { States } from '../../models/api-models/Company';
-import { setTimeout } from 'timers';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
+import { Subject } from 'rxjs';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -31,13 +30,13 @@ export interface IGstObj {
   animations: [
     trigger('fadeInAndSlide', [
       transition(':enter', [
-        style({ opacity: '0', marginTop: '100px' }),
-        animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
+        style({opacity: '0', marginTop: '100px'}),
+        animate('.1s ease-out', style({opacity: '1', marginTop: '20px'})),
       ]),
     ]),
   ],
 })
-export class SettingProfileComponent  implements OnInit, OnDestroy {
+export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public companyProfileObj: any = null;
   public stateStream$: Observable<States[]>;
@@ -58,6 +57,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   public dataSourceBackup: any;
   public countrySource: IOption[] = [];
   public statesSourceCompany: IOption[] = [];
+  public keyDownSubject$: Subject<any> = new Subject<any>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -71,15 +71,15 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
   ) {
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     contriesWithCodes.map(c => {
-          this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-        });
+      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+    });
     this.stateStream$.subscribe((data) => {
       if (data) {
         this.stateResponse = _.cloneDeep(data);
         data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-          this.statesInBackground.push({ label: `${d.name}`, value: d.code });
-          this.statesSourceCompany.push({ label: `${d.name}`, value: `${d.name}` });
+          this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          this.statesInBackground.push({label: `${d.name}`, value: d.code});
+          this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -91,7 +91,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
+          currencies.push({label: d.code, value: d.code});
         });
       }
       this.currencySource$ = Observable.of(currencies);
@@ -125,6 +125,15 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
           return data;
         });
     };
+
+    this.keyDownSubject$
+      .debounceTime(3000)
+      .distinctUntilChanged()
+      .do(v => console.log(v.target))
+      .takeUntil(this.destroyed$)
+      .subscribe((event: any) => {
+        this.patchProfile({[event.target.name]: event.target.value});
+      });
   }
 
   public getInitialProfileData() {
@@ -136,9 +145,10 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((o) => {
       if (o) {
         let profileObj = _.cloneDeep(o);
+        console.log('profile updated ', profileObj.contactNo);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
         }
@@ -228,6 +238,8 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
     if (selectedState && selectedState.value) {
       profileObj.gstDetails[indx].addressList[0].stateName = '';
       this.companyProfileObj = profileObj;
+
+      this.checkGstDetails();
     }
   }
 
@@ -266,6 +278,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       }
     }
     this.companyProfileObj = profileObj;
+    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
   }
 
   public setGstAsDefault(indx, ev) {
@@ -302,6 +315,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
+        this.checkGstDetails(ele);
       }
     } else {
       ele.classList.remove('error-box');
@@ -342,6 +356,7 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
       if (ele.value.match(panNumberRegExp)) {
         ele.classList.remove('error-box');
         this.isPANValid = true;
+        this.patchProfile({panNumber: ele.value});
       } else {
         this.isPANValid = false;
         this._toasty.errorToast('Invalid PAN number');
@@ -393,19 +408,78 @@ export class SettingProfileComponent  implements OnInit, OnDestroy {
         this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
+      this.patchProfile({country: this.companyProfileObj.country});
     }
   }
 
   public selectState(event) {
     if (event) {
-      //
+      this.patchProfile({state: this.companyProfileObj.state});
     }
+  }
+
+  public keyDownEventOfForm(event: any) {
+    if (event && event.target) {
+      let end$ = new Subject();
+      Observable.fromEvent(event.target, 'keydown')
+        .debounceTime(3000)
+        .distinctUntilChanged()
+        .filter((e: any) => {
+          return e.target.name;
+        })
+        .map((e: any) => e.target.value)
+        .do(v => console.log(v))
+        .takeUntil(end$)
+        .subscribe((val: string) => {
+          // this.patchProfile({[event.target.name]: val});
+          end$.next(true);
+        });
+      return true;
+    }
+  }
+
+  public changeEventOfForm(key: string) {
+    this.patchProfile({[key]: this.companyProfileObj[key]});
+  }
+
+  public checkGstDetails(ele?: HTMLInputElement) {
+    if (this.companyProfileObj.gstDetails.length > 0) {
+
+      let obj = {gstDetails: this.companyProfileObj.gstDetails};
+      // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
+      for (let entry of this.companyProfileObj.gstDetails) {
+        if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
+          obj.gstDetails = _.without(this.companyProfileObj.gstDetails, entry);
+        }
+      }
+
+      if (ele) {
+        let end$ = new Subject();
+        Observable.fromEvent(ele, 'keydown')
+          .debounceTime(3000)
+          .distinctUntilChanged()
+          .takeUntil(end$)
+          .subscribe(s => {
+            this.patchProfile({gstDetails: obj.gstDetails});
+            end$.next(true);
+          });
+
+        ele.dispatchEvent(new Event('keydown', {bubbles: true}));
+      } else {
+        this.patchProfile({gstDetails: obj.gstDetails});
+      }
+    }
+  }
+
+  public patchProfile(obj) {
+    this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
     this.dataSourceBackup.forEach(item => {
       if (item.city === e.item) {
         this.companyProfileObj.country = item.country;
+        this.patchProfile({city: this.companyProfileObj.city});
         // set country and state values
         // try {
         //   item.address_components.forEach(address => {

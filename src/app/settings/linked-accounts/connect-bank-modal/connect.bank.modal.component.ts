@@ -12,24 +12,27 @@ import { ToasterService } from '../../../services/toaster.service';
   selector: 'connect-bank-modal',
   templateUrl: './connect.bank.modal.component.html',
   styles: [`iframe {
-              width: 100%;
-              height: 400px;
-          }
-          .connect-page .page-title {
-                margin-top: 0;
-          }
-          .provider_ico {
-            margin-right: 10px;
-            max-width: 16px;
-            max-height: 16px;
-            float: left;
-            object-fit: contain;
-          }
-          .provider_ico img {
-            width: 100%;
-            height: auto;
-          }
-          `]
+    width: 100%;
+    height: 400px;
+  }
+
+  .connect-page .page-title {
+    margin-top: 0;
+  }
+
+  .provider_ico {
+    margin-right: 10px;
+    max-width: 16px;
+    max-height: 16px;
+    float: left;
+    object-fit: contain;
+  }
+
+  .provider_ico img {
+    width: 100%;
+    height: auto;
+  }
+  `]
 })
 
 export class ConnectBankModalComponent implements OnChanges {
@@ -51,9 +54,9 @@ export class ConnectBankModalComponent implements OnChanges {
   public cancelRequest: boolean = false;
 
   constructor(public sanitizer: DomSanitizer,
-    private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
-    private _fb: FormBuilder,
-    private _toaster: ToasterService
+              private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
+              private _fb: FormBuilder,
+              private _toaster: ToasterService
   ) {
     this.dataSource = (text$: Observable<any>): Observable<any> => {
       return text$
@@ -95,11 +98,13 @@ export class ConnectBankModalComponent implements OnChanges {
       this.getIframeUrl(this.iframeSrc);
     }
   }
+
   public getIframeUrl(path) {
     if (!this.url) {
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(path);
     }
   }
+
   public onCancel() {
     this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
@@ -139,9 +144,10 @@ export class ConnectBankModalComponent implements OnChanges {
       name: [''],
       maxLength: [''],
       type: [''],
-      value: [''],
+      value: [null],
       isOptional: [false],
-      valueEditable: [true]
+      valueEditable: [true],
+      option: []
     });
   }
 
@@ -182,6 +188,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
       if (a && a.status === 'success') {
         let response = _.cloneDeep(a.body.loginForm[0]);
+        debugger;
         this.loginForm.patchValue({
           id: response.id,
           forgotPasswordUrL: response.forgotPasswordUrL,
@@ -231,9 +238,9 @@ export class ConnectBankModalComponent implements OnChanges {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
         if (!validateProvider && !this.cancelRequest) {
-            setTimeout(() => {
-              this.getBankSyncStatus(providerId);
-            }, 10000);
+          setTimeout(() => {
+            this.getBankSyncStatus(providerId);
+          }, 10000);
         }
       }
     });
@@ -244,12 +251,12 @@ export class ConnectBankModalComponent implements OnChanges {
    */
   public validateProviderResponse(provider) {
     let status = provider.status.toLowerCase();
-      if (status === 'success' || status === 'failed') {
-        this.bankSyncInProgress = false;
-        return true;
-      } else {
-        return false;
-      }
+    if (status === 'success' || status === 'failed') {
+      this.bankSyncInProgress = false;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

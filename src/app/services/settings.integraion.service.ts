@@ -278,5 +278,11 @@ export class SettingsIntegrationService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
+  public GetGmailIntegrationStatus(): Observable<BaseResponse<any, any>> {
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS).map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e));
+  }
 
 }

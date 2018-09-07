@@ -370,7 +370,7 @@ export class HomeActions {
 
     .ofType(HOME.GET_RATIO_ANALYSIS)
     .switchMap((action: CustomActions) => {
-      return this._dashboardService.GetRationAnalysis(action.payload);
+      return this._dashboardService.GetRationAnalysis(action.payload.date, action.payload.refresh);
     }).map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
       type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
       payload: res
@@ -474,10 +474,10 @@ export class HomeActions {
     };
   }
 
-  public getRatioAnalysis(date: string) {
+  public getRatioAnalysis(date: string, refresh: boolean) {
     return {
       type: HOME.GET_RATIO_ANALYSIS,
-      payload: date
+      payload: { date, refresh }
     };
   }
 

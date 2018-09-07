@@ -1,4 +1,4 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, ComponentFactoryResolver, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -10,12 +10,15 @@ import { Router } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { createSelector } from 'reselect';
 import * as _ from 'lodash';
+import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportResponse, DueAmountReportRequest } from '../models/api-models/Contact';
+import { AgingReportActions } from '../actions/aging-report.actions';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -35,6 +38,14 @@ export interface PayNowRequest {
     .dropdown-menu > li > a {
       padding: 2px 10px;
     }
+
+    .dis {
+      display: flex;
+    }
+
+    .pd1 {
+      padding: 5px;
+    }
   `],
   animations: [
     trigger('slideInOut', [
@@ -50,23 +61,27 @@ export interface PayNowRequest {
   ]
 })
 
-export class ContactComponent implements OnInit, OnDestroy {
+export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public CustomerType = CustomerType;
   public flattenAccounts: any = [];
   public sundryDebtorsAccountsBackup: any = {};
+  public sundryDebtorsAccountsForAgingReport: IOption[] = [];
   public sundryDebtorsAccounts$: Observable<any>;
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
-  public activeTab: string = 'customer';
+  public activeTab: 'customer' | 'aging' | 'vendor' = 'customer';
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
+  public dueAmountReportRequest: DueAmountReportQueryRequest;
   public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
   public cashFreeAvailableBalance: number;
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
+  public totalDueOptions: IOption[] = [{label: 'greater then', value: '0'}, {label: 'less then', value: '1'}, {label: 'equal to', value: '2'}];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public payoutObj: CashfreeClass = new CashfreeClass();
+  public dueAmountReportData$: Observable<DueAmountReportResponse>;
   public showFieldFilter = {
     name: true,
     due_amount: true,
@@ -81,7 +96,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-
+  @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private createAccountIsSuccess$: Observable<boolean>;
 
@@ -92,19 +107,27 @@ export class ContactComponent implements OnInit, OnDestroy {
     private _dashboardService: DashboardService,
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
-    private _companyActions: CompanyActions) {
+    private _companyActions: CompanyActions,
+    private componentFactoryResolver: ComponentFactoryResolver) {
+    this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
     this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
       // console.log('flattenAccountsStream$');
       return s;
     })).takeUntil(this.destroyed$);
     // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
-
+    this.store.select(s => s.agingreport.data).takeUntil(this.destroyed$).subscribe((data) => {
+      if (data && data.results) {
+        this.dueAmountReportRequest.page = data.page;
+        this.loadPaginationComponent(data);
+      }
+      this.dueAmountReportData$ = Observable.of(data);
+    });
   }
 
   public ngOnInit() {
 
-    this.filterDropDownList.placement = 'left';
+    // this.filterDropDownList.placement = 'left';
 
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -142,9 +165,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setActiveTab(tabName: 'customer' | 'vendor', type: string) {
+  public ngOnChanges(c: SimpleChanges) {
+    //
+  }
+
+  public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.activeTab = tabName;
-    this.getAccounts(type, null, null, 'true');
+    if (tabName !== 'aging') {
+      this.getAccounts(type, null, null, 'true');
+    } else {
+      this.getSundrydebtorsAccounts();
+      // this.go();
+    }
   }
 
   public search(ev: any) {
@@ -246,7 +278,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.updateCommentIdx = null;
       }
     } else {
-      let canDelete  = this.canDeleteComment(account.uniqueName);
+      let canDelete = this.canDeleteComment(account.uniqueName);
       if (canDelete) {
         this.deleteComment(account.uniqueName);
       } else {
@@ -275,9 +307,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   public canDeleteComment(accountUniqueName) {
     let account;
     if (this.activeTab === 'customer') {
-      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     } else {
-      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any ) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     }
     if (account.comment) {
       account.comment = '';
@@ -293,9 +329,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   public canUpdateComment(accountUniqueName, comment) {
     let account;
     if (this.activeTab === 'customer') {
-      account = _.find(this.sundryDebtorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     } else {
-      account = _.find(this.sundryCreditorsAccountsBackup.results, function(o: any) { return o.uniqueName === accountUniqueName; });
+      account = _.find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
+        return o.uniqueName === accountUniqueName;
+      });
     }
     if (account.comment !== comment) {
       account.comment = comment;
@@ -321,15 +361,58 @@ export class ContactComponent implements OnInit, OnDestroy {
    * updateInList
    */
   public updateInList(accountUniqueName, comment) {
-    if (this.activeTab === 'customer'){
+    if (this.activeTab === 'customer') {
       //
     }
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string) {
+  public closeAgingDropDownop(options: AgingDropDownoptions) {
+    // this.agingDropDownoptions = options;
+    // if (this.agingDropDownoptions.fourth >= (this.agingDropDownoptions.fifth || this.agingDropDownoptions.sixth)) {
+    //   this.showToaster();
+    // }
+    // if ((this.agingDropDownoptions.fifth >= this.agingDropDownoptions.sixth) || (this.agingDropDownoptions.fifth <= this.agingDropDownoptions.fourth)) {
+    //   this.showToaster();
+    // }
+    // if (this.agingDropDownoptions.sixth <= (this.agingDropDownoptions.fourth || this.agingDropDownoptions.fifth)) {
+    //   this.showToaster();
+    // }
+  }
+
+  public pageChangedDueReport(event: any): void {
+    this.dueAmountReportRequest.page = event.page;
+  }
+
+  public loadPaginationComponent(s) {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+    if (this.paginationChild && this.paginationChild.viewContainerRef) {
+      let viewContainerRef = this.paginationChild.viewContainerRef;
+      viewContainerRef.remove();
+
+      let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+      viewContainerRef.insert(componentInstanceView.hostView);
+
+      let componentInstance = componentInstanceView.instance as PaginationComponent;
+      componentInstance.totalItems = s.count * s.totalPages;
+      componentInstance.itemsPerPage = s.count;
+      componentInstance.maxSize = 5;
+      componentInstance.writeValue(s.page);
+      componentInstance.boundaryLinks = true;
+      componentInstance.pageChanged.subscribe(e => {
+        this.pageChangedDueReport(e);
+      });
+    }
+  }
+
+  private showToaster() {
+    this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
+  }
+
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20) {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh).subscribe((res) => {
+    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
@@ -341,6 +424,14 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
           this.sundryCreditorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
         }
+      }
+    });
+  }
+
+  private getSundrydebtorsAccounts(count: number = 200000) {
+    this._contactService.GetContacts('sundrydebtors', 1, 'false', count).subscribe((res) => {
+      if (res.status === 'success') {
+        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
       }
     });
   }

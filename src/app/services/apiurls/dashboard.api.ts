@@ -6,5 +6,5 @@ export const DASHBOARD_API = {
   BANK_ACCOUNTS: 'company/:companyUniqueName/ebanks', // Get call
   REFRESH_BANK_ACCOUNT: 'company/:companyUniqueName/login/:loginId/token/refresh', // get call
   RECONNECT_BANK_ACCOUNT: 'company/:companyUniqueName/login/:loginId/token/reconnect',
-  RATIO_ANALYSIS: 'company/:companyUniqueName/calculateRatios?date=:date'
+  RATIO_ANALYSIS: 'company/:companyUniqueName/calculateRatios?date=:date&refresh=:refresh'
 };

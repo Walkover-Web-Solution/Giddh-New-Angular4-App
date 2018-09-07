@@ -6,6 +6,10 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 export class OnReturnDirective {
   @Input() public onReturn: string;
   private el: ElementRef;
+  private clickCount: number = 0;
+  private activeIndx: number = null;
+  private fieldToActivate: any = null;
+  private selectedField;
   constructor(private _el: ElementRef) {
     this.el = this._el;
   }
@@ -23,14 +27,34 @@ export class OnReturnDirective {
   // }
   @HostListener('keydown', ['$event']) public onKeyDown(e: any) {
 
-    if ((e.which === 13 || e.keyCode === 13) || (e.which === 8 || e.keyCode === 8)) {
+    if ((e.which === 13 || e.keyCode === 13) || (e.which === 8 || e.keyCode === 8) || (e.which === 32 || e.keyCode === 32)) {
       const selectedEle = e.target;
       const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
       const nodeList = Array.from(allElements);
       const indx = nodeList.findIndex((ele) => ele === selectedEle);
+
       // nodeList[indx + 1].focus();
       if (e.which === 13 || e.keyCode === 13) {
-        const target = allElements[indx + 1];
+
+        let target = allElements[indx + 1];
+
+        if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
+          // detect by or to
+          const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+          const rowEntryType =  activatedRow[0].children[0].children[0].value;
+          if (rowEntryType === 'by') {
+            target = allElements[indx + 4];
+          } else if (rowEntryType === 'to') {
+            target = allElements[indx + 5];
+          }
+        } else if (allElements[indx].classList.contains('stock-field') && this.selectedField !== allElements[indx]) {
+          this.selectedField = allElements[indx];
+        } else if (target.classList.contains('debit-credit')) {
+          target = allElements[indx + 2];
+        } else if (allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
+          target = allElements[indx + 2];
+        }
+
         // let attrArray = [];
         // for (let i = 0, atts = target.attributes, n = atts.length, arr = []; i < n; i++) {
         //   attrArray.push(atts[i].nodeName);
@@ -41,17 +65,84 @@ export class OnReturnDirective {
         // } else {
         //   alert('ele without directive');
         // }
+
         if (target) {
+
+          // if (this.activeIndx === indx) {
+          //   this.clickCount++;
+          //   if (this.clickCount > 1) {
+          //     const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+          //     const rowEntryType =  activatedRow[0].children[0].children[0].value;
+          //     let fieldToActivate;
+          //     if (rowEntryType === 'by') {
+          //       fieldToActivate = activatedRow[0].children[2].children[0];
+          //     } else {
+          //       fieldToActivate = activatedRow[0].children[3].children[0];
+          //     }
+          //     if (this.fieldToActivate === fieldToActivate) {
+          //       target.focus();
+          //     } else {
+          //       if (fieldToActivate.disabled) {
+          //         const disabledFieldIndx = nodeList.findIndex((ele) => ele === fieldToActivate);
+          //         allElements[disabledFieldIndx + 1].focus();
+          //       }
+          //       fieldToActivate.focus();
+          //       this.clickCount = 0;
+          //       this.fieldToActivate = fieldToActivate;
+          //     }
+          //     // console.log('lastChild is :', activatedRow[0].lastChild());
+          //   }
+          // } else {
+          //   this.activeIndx = indx;
+          //   this.clickCount = 0;
+          // }
+
+          if (target.value === 'NaN') {
+            target.value = '';
+          }
+          // if (target.disabled) {
+          //   const disabledFieldIndx = nodeList.findIndex((ele) => ele === target);
+          //   allElements[disabledFieldIndx + 1].focus();
+          // }
           target.focus();
         }
 
       } else if (e.which === 8 || e.keyCode === 8) {
-        const target = allElements[indx - 1];
-        if (selectedEle.value === '') {
-          e.preventDefault();
-          if (target) {
-            target.focus();
+
+        let target = allElements[indx - 1];
+
+        const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+        const rowEntryType =  activatedRow[0].children[0].children[0].value;
+
+        if (allElements[indx].classList.contains('debit-credit')) {
+          if (rowEntryType === 'by') {
+            target = allElements[indx - 4];
+          } else if (rowEntryType === 'to') {
+            target = allElements[indx - 5];
           }
+        } else if (allElements[indx].classList.contains('byTo')) {
+          if (target.disabled) {
+            target = allElements[indx - 2];
+          }
+        } else if (allElements[indx - 1] && allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
+          target = allElements[indx - 2];
+        }
+
+        if (target && e.target.value.length === e.target.selectionEnd) {
+          e.preventDefault();
+          target.focus();
+        }
+
+        // if (selectedEle.value === '') {
+          // e.preventDefault();
+          // if (target) {
+          //   target.focus();
+          // }
+        // }
+      } else if (e.which === 32 || e.keyCode === 32) {
+        const target = allElements[indx];
+        if (target) {
+          target.value = '';
         }
       }
 

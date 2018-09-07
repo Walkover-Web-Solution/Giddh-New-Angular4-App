@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { Font } from 'ngx-font-picker/dist';
 import { humanizeBytes, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -14,6 +14,7 @@ import { UploaderOptions } from 'ngx-uploader/index';
 import { Configuration } from './../../../../../app.constant';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
+import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -29,8 +30,9 @@ export class TemplateDesignUISectionVisibility {
   styleUrls: ['design.filters.component.css']
 })
 
-export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
+export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public design: boolean;
+  @Input() public mode: string = 'create';
   public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
   public logoAttached: boolean = false;
@@ -42,8 +44,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     style: 'regular',
     styles: ['regular']
   });
+    // 'Sans-Serif', 'Open Sans', 'Lato'
 
-  public _presetFonts = ['Arial', 'Serif', 'Helvetica', 'Sans-Serif', 'Open Sans', 'Roboto Slab'];
+  public _presetFonts = [
+    { label: 'Open Sans', value: 'Open Sans'},
+    { label: 'Sans-Serif', value: 'Sans-Serif'},
+    { label: 'Lato', value: 'Lato'}
+    ];
   public presetFonts = this._presetFonts;
 
   public formData: FormData;
@@ -57,7 +64,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public isFileUploadInProgress: boolean = false;
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
-  private sampleTemplates: CustomTemplateResponse[];
+  public sampleTemplates: CustomTemplateResponse[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -118,7 +125,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             }
           }
         });
-
+        // debugger;
         this._invoiceUiDataService.setFieldsAndVisibility(op);
       }
     });
@@ -152,14 +159,19 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     let template;
     if (fieldName === 'uniqueName') { // change whole template
       const allSampleTemplates = _.cloneDeep(this.sampleTemplates);
-      const selectedTemplate = this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value);
+      const selectedTemplate = _.cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value));
       template = selectedTemplate ? selectedTemplate : _.cloneDeep(this.customTemplate);
+      if (this.mode === 'update' && selectedTemplate) {
+          template.uniqueName = _.cloneDeep(this.customTemplate.uniqueName);
+          template.name = _.cloneDeep(this.customTemplate.name);
+      }
     } else { // change specific field
       template = _.cloneDeep(this.customTemplate);
       template[fieldName] = value;
     }
+    template.copyFrom = _.cloneDeep(value);
 
-    this._invoiceUiDataService.setCustomTemplate(template);
+    this._invoiceUiDataService.setCustomTemplate(_.cloneDeep(template));
   }
 
   /**
@@ -175,8 +187,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   /**
    * onFontSelect
    */
-  public onFontSelect(font: Font) {
-    this.onValueChange('font', font.family);
+  public onFontSelect(font: IOption) {
+    this.onValueChange('font', font.value);
   }
 
   /**
@@ -226,7 +238,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
       data.logoUniqueName = logoUniqueName;
       data.updatedAt = null;
       data.updatedBy = null;
-      data.copyFrom = 'gst_template_a';
+      // data.copyFrom = 'gst_template_a';
       data.sections[0].content[3].label = '';
       data.sections[0].content[0].label = '';
       data.sections[1].content[8].field = 'taxes';
@@ -342,5 +354,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     // this._invoiceUiDataService.customTemplate.unsubscribe();
     // this.destroyed$.next(true);
     // this.destroyed$.complete();
+  }
+
+  public ngOnChanges(s) {
+    // console.log(s);
   }
 }
