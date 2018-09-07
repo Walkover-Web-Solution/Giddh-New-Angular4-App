@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -16,7 +16,7 @@ import { CustomTemplateResponse } from '../../../../../../models/api-models/Invo
   encapsulation: ViewEncapsulation.Native
 })
 
-export class GstTemplateCComponent implements OnInit, OnDestroy {
+export class GstTemplateCComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public fieldsAndVisibility: any = null;
   @Input() public isPreviewMode: boolean = false;
@@ -29,6 +29,7 @@ export class GstTemplateCComponent implements OnInit, OnDestroy {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
+  public columnsVisibled: number;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -44,6 +45,49 @@ export class GstTemplateCComponent implements OnInit, OnDestroy {
     if (!this.isPreviewMode) {
       this.sectionName.emit(sectionName);
     }
+  }
+
+  /**
+   * ngOnChanges
+   */
+  public ngOnChanges(changes: SimpleChanges) {
+
+    if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
+      this.columnsVisibled = 0;
+      if (changes.fieldsAndVisibility.currentValue.table) {
+        // if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
+        //   this.columnsVisibled++;
+        // }
+        if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.quantity && changes.fieldsAndVisibility.currentValue.table.quantity.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
+          this.columnsVisibled++;
+        }
+      }
+    }
+
   }
 
   public ngOnDestroy() {
