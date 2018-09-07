@@ -8,8 +8,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule, ModalModule, PaginationModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { CarriedOverSalesComponent } from './carried-over-sales.component';
-import { CarriedOverSalesRoutingModule } from './carried-over-sales.routing.module';
+import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
+import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -18,14 +18,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   declarations: [
-    CarriedOverSalesComponent
+    NewVsOldInvoicesComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ElementViewChildModule,
-    CarriedOverSalesRoutingModule,
+    NewVsOldInvoicesRoutingModule,
     LaddaModule,
     ShSelectModule,
     TabsModule,
@@ -39,6 +39,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   providers: []
 })
 
-export class CarriedOverSalesModule {
+export class NewVsOldInvoicesModule {
 
 }
