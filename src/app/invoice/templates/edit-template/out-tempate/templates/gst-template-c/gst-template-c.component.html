@@ -142,6 +142,7 @@
                 <thead>
                     <tr>
                         <th *ngIf="fieldsAndVisibility.table.hsnSac?.display">HSN/SAC</th>
+                        <th *ngIf="fieldsAndVisibility.table.date?.display" colspan="2">Date</th>
                         <th *ngIf="fieldsAndVisibility.table.item?.display" colspan="2">Item</th>
                         <th *ngIf="fieldsAndVisibility.table.quantity?.display">Qty.</th>
                         <th *ngIf="fieldsAndVisibility.table.rate?.display">Rate/ Item (₹)</th>
@@ -156,6 +157,7 @@
 
                     <tr>
                         <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">123456</td>
+                        <td *ngIf="fieldsAndVisibility.table.date?.display">20/04/2018</td>
                         <td *ngIf="fieldsAndVisibility.table.item?.display" colspan="2">Dummy Product Edition 2</td>
                         <td *ngIf="fieldsAndVisibility.table.quantity?.display">10 No.</td>
                         <td *ngIf="fieldsAndVisibility.table.rate?.display">1000.00</td>
@@ -171,6 +173,7 @@
                     </tr>
                     <tr>
                         <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">123456</td>
+                        <td *ngIf="fieldsAndVisibility.table.date?.display">20/04/2018</td>
                         <td *ngIf="fieldsAndVisibility.table.item?.display" colspan="2">Dummy Product Edition 2</td>
                         <td *ngIf="fieldsAndVisibility.table.quantity?.display">10 No.</td>
                         <td *ngIf="fieldsAndVisibility.table.rate?.display">1000.00</td>
