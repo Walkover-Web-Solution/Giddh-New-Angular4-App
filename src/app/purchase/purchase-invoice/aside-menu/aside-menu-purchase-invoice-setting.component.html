@@ -70,10 +70,10 @@
       </form>
 
       <!--reconcile-->
-      <form class="form-group" *ngIf="selectedService === 'RECONCILE'">
+      <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === 'RECONCILE'">
         <div class="row">
 
-          <ng-container *ngIf="!(reconcileOtpSuccess$ | async)" >
+          <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
             <div class="col-xs-6">
               <div class="form-group">
                 <label for="tax_pro_username">Username:</label>
@@ -81,34 +81,29 @@
                        [(ngModel)]="reconcileForm.uid">
               </div>
             </div>
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label for="reconcile_gst_number">GSTIN:</label>
-                <input autocomplete="off" type="text" name="gstin" class="form-control" id="reconcile_gst_number"
-                       [(ngModel)]="reconcileForm.gstin">
-              </div>
-            </div>
           </ng-container>
 
           <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
-          <div class="col-xs-6" *ngIf="reconcileOtpSuccess$ | async">
-            <div class="form-group">
-              <label for="reconcile_otp">OTP:</label>
-              <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp"
-                     [(ngModel)]="reconcileForm.otp">
+            <div class="col-xs-6" *ngIf="reconcileOtpSuccess$ | async">
+              <div class="form-group">
+                <label for="reconcile_otp">OTP:</label>
+                <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp"
+                       [(ngModel)]="reconcileForm.otp">
+              </div>
             </div>
-          </div>
           </ng-container>
         </div>
 
         <div class="row">
           <div class="col-xs-12 mrT1">
             <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
-                    *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async">Submit
+                    *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
+            [disabled]="!reconcileForm.uid">Submit
             </button>
 
             <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
-                    *ngIf="(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpVerifyInProcess$ | async">Submit
+                    *ngIf="(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpVerifyInProcess$ | async"
+                    [disabled]="!reconcileForm.otp">Submit
             </button>
 
             <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>

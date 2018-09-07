@@ -38,7 +38,8 @@
               <li>
                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
                             [(ngModel)]="selectedDateForGSTR1"
-                            (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker" [showWeeks]="false"
+                            (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)"
+                            [showWeeks]="false"
                             [minMode]="'month'"></datepicker>
               </li>
               <li class="pd1 clearfix pdT pdB">
@@ -159,6 +160,12 @@
   <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
     <!-- filter -->
     <div class="col-xs-12">
+
+      <alert type="info" [dismissible]="true" *ngIf="(gstFoundOnGiddh$ | async) === false">
+        <strong>Warning!</strong> GST No, Not found for this company. Please update the GSTIN by updating company
+        setting profile
+      </alert>
+
       <div class="row">
         <tabset #staticTabs id="c-tab">
           <tab heading="{{'Missing in GSTN (' + (gstNotFoundOnPortalData$ | async)?.count + ')' }}">
@@ -168,8 +175,8 @@
 
               <ng-container *ngIf="(gstNotFoundOnGiddhData$ | async)?.count > 0">
                 <pagination [maxSize]="5"
-                            [totalItems]="40"
-                            [itemsPerPage]="10"
+                            [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data.totalItems"
+                            [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data.count"
                             class="pagination-sm"
                             (pageChanged)="reconcilePageChanged($event, 'NOT_ON_PORTAL')"
                             [boundaryLinks]="true"
@@ -187,8 +194,8 @@
 
               <ng-container *ngIf="(gstNotFoundOnGiddhData$ | async)?.count > 0">
                 <pagination [maxSize]="5"
-                            [totalItems]="0"
-                            [itemsPerPage]="10"
+                            [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data.totalItems"
+                            [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data.count"
                             class="pagination-sm"
                             (pageChanged)="reconcilePageChanged($event, 'NOT_ON_GIDDH')"
                             [boundaryLinks]="true"
@@ -286,8 +293,8 @@
 
               <ng-container *ngIf="(gstPartiallyMatchedData$ | async)?.count > 0">
                 <pagination [maxSize]="5"
-                            [totalItems]="0"
-                            [itemsPerPage]="10"
+                            [totalItems]="(gstPartiallyMatchedData$ | async)?.data.totalItems"
+                            [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data.count"
                             class="pagination-sm"
                             (pageChanged)="reconcilePageChanged($event, 'PARTIALLY_MATCHED')"
                             [boundaryLinks]="true"
@@ -325,8 +332,8 @@
 
               <ng-container *ngIf="(gstMatchedData$ | async)?.count > 0">
                 <pagination [maxSize]="5"
-                            [totalItems]="0"
-                            [itemsPerPage]="10"
+                            [totalItems]="(gstMatchedData$ | async)?.data.totalItems"
+                            [itemsPerPage]="(gstMatchedData$ | async)?.data.count"
                             class="pagination-sm"
                             (pageChanged)="reconcilePageChanged($event, 'MATCHED')"
                             [boundaryLinks]="true"

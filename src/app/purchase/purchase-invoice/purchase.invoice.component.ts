@@ -21,6 +21,7 @@ import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import { Observable } from 'rxjs';
 import { ReconcileActionState } from '../../store/GstReconcile/GstReconcile.reducer';
+import { AlertConfig } from 'ngx-bootstrap/alert';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -49,7 +50,13 @@ const fileGstrOptions = [
   selector: 'invoice-purchase',
   templateUrl: './purchase.invoice.component.html',
   styleUrls: ['purchase.invoice.component.css'],
-  providers: [{provide: BsDropdownConfig, useValue: {autoClose: true}}],
+  providers: [
+    {
+      provide: BsDropdownConfig, useValue: {autoClose: true},
+    },
+    {
+      provide: AlertConfig, useValue: {}
+    }],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -126,6 +133,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public userEmail: string = '';
   public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
   public gstAuthenticated$: Observable<boolean>;
+  public gstFoundOnGiddh$: Observable<boolean>;
   public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
   public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
   public gstMatchedData$: Observable<ReconcileActionState>;
@@ -170,6 +178,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       }
     });
     this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).takeUntil(this.destroyed$);
+    this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).takeUntil(this.destroyed$);
     this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).takeUntil(this.destroyed$);
     this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).takeUntil(this.destroyed$);
     this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).takeUntil(this.destroyed$);
@@ -262,7 +271,17 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public onSelectGstrOption(gstrType) {
     this.selectedGstrType = gstrType;
     if (gstrType.name === 'GSTR2') {
-      this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest('072018', 'MATCHED', '1', '10'));
+      this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
+        this.moment(this.selectedDateForGSTR1).format('MMYYYY'), 'NOT_ON_PORTAL', '1', '10')
+      );
+    }
+  }
+
+  public monthChanged(selectedDateForGSTR1) {
+    if (this.selectedGstrType.name === 'GSTR2') {
+      this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
+        this.moment(selectedDateForGSTR1).format('MMYYYY'), 'NOT_ON_PORTAL', '1', '10')
+      );
     }
   }
 

@@ -11,6 +11,7 @@ export interface GstReconcileState {
   isGstReconcileVerifyOtpInProcess: boolean;
   isGstReconcileVerifyOtpSuccess: boolean;
   gstAuthenticated: boolean;
+  gstFoundOnGiddh: boolean;
   gstReconcileData: GstReconcileDataState;
 }
 
@@ -42,6 +43,7 @@ const initialState: GstReconcileState = {
   isGstReconcileVerifyOtpInProcess: false,
   isGstReconcileVerifyOtpSuccess: false,
   gstAuthenticated: true,
+  gstFoundOnGiddh: true,
   gstReconcileData: gstReconcileDataInitialState
 };
 
@@ -90,6 +92,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
       if (response.status === 'success') {
         newState.isGstReconcileInvoiceSuccess = true;
         newState.gstAuthenticated = true;
+        newState.gstFoundOnGiddh = true;
         let gstData = newState.gstReconcileData;
         switch (response.queryString.action) {
           case 'NOT_ON_GIDDH':
@@ -97,38 +100,42 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
               count: response.body.notFoundOnGiddh,
               data: response.body.details
             };
+            break;
           case 'NOT_ON_PORTAL':
             gstData.notFoundOnPortal = {
               count: response.body.notFoundOnPortal,
               data: response.body.details
             };
+            break;
           case 'MATCHED':
             gstData.matched = {
               count: response.body.matched,
               data: response.body.details
             };
+            break;
           case 'PARTIALLY_MATCHED':
             gstData.partiallyMatched = {
               count: response.body.partiallyMatched,
               data: response.body.details
             };
+            break;
         }
       } else {
         if (response.code === 'GST_AUTH_ERROR') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstAuthenticated = false;
-          //  false
+          newState.gstFoundOnGiddh = true;
+        } else if (response.code === 'GSTIN_NOT_FOUND') {
+          newState.isGstReconcileInvoiceSuccess = false;
+          newState.gstFoundOnGiddh = false;
+          newState.gstAuthenticated = true;
         } else {
           newState.isGstReconcileInvoiceSuccess = true;
           newState.gstAuthenticated = true;
-          // true
+          newState.gstFoundOnGiddh = true;
         }
       }
       return newState;
-    // {
-    //     // isGstReconcileInvoiceInProcess: false,
-    //     // isGstReconcileInvoiceSuccess: action.payload.status === 'success'
-    //   };
     default:
       return state;
   }
