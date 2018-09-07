@@ -58,7 +58,7 @@
             <div class="clearfix">
                 <h3>Customer Details</h3>
                 <div *ngIf="fieldsAndVisibility.header.customerName" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[9].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Customer Name</div>
-                <div *ngIf="fieldsAndVisibility.header.attentionTo" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[24].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Attention To</div>
+                <div *ngIf="fieldsAndVisibility.header.attentionTo" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[24].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked *ngIf="customTemplate.templateType !== 'gst_template_a'" /> Attention To</div>
 
                 <div *ngIf="fieldsAndVisibility.header.customerEmail" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[10].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Email ID</div>
                 <div *ngIf="fieldsAndVisibility.header.customerMobileNumber" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[11].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Mobile Number</div>
