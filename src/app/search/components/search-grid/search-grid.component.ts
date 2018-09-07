@@ -11,7 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take } from 'rxjs/operators';
-
+import { of } from 'rxjs';
 @Component({
   selector: 'search-grid',  // <home></home>
   templateUrl: './search-grid.component.html'
@@ -100,6 +100,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   private _sortReverse: boolean;
   private _sortType: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private checkboxInfo: any = {
+    selectedPage: 1
+  };
 
   /**
    * TypeScript public modifiers
@@ -132,29 +135,41 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.sortType = 'name';
+    this.searchRequest$.subscribe((req) => {
+      if (req && req.groupName) {
+        if (!this.checkboxInfo.selectedGroup) {
+          this.checkboxInfo.selectedGroup = req.groupName;
+        } else if (this.checkboxInfo.selectedGroup !== req.groupName) {
+          this.checkboxInfo = {
+            selectedPage: 1
+          };
+          this.selectedItems = [];
+          this.isAllChecked = false;
+        }
+      }
+    });
   }
 
-  public toggleSelectAll(selectAll: boolean) {
+
+  public toggleSelectAll(ev) {
+    let isAllChecked = ev.target.checked;
+    this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
+
     this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-      this.searchResponseFiltered$ = observableOf(_.cloneDeep(p).map(j => {
-        j.isSelected = _.cloneDeep(selectAll);
-        let indexOfEntry = this.selectedItems.indexOf(j.uniqueName);
-        if (j.isSelected && indexOfEntry === -1) {
-          this.selectedItems.push(j.uniqueName);
-        } else {
+      let entries = _.cloneDeep(p);
+      this.isAllChecked = isAllChecked;
+
+      entries.forEach((entry) => {
+        let indexOfEntry = this.selectedItems.indexOf(entry.uniqueName);
+        if (isAllChecked) {
+          if (indexOfEntry === -1) {
+            this.selectedItems.push(entry.uniqueName);
+          }
+        } else if (indexOfEntry > -1) {
           this.selectedItems.splice(indexOfEntry, 1);
         }
-        return j;
-      }));
+      });
     });
-
-    // this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => {
-    //   return _.cloneDeep(p).map(j => {
-    //     j.isSelected = selectAll;
-    //     console.log('the J is :', j);
-    //     return j;
-    //   });
-    // });
   }
 
   public ngOnDestroy() {
@@ -214,8 +229,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
           break;
       }
     });
-
-    console.log('the new queryForApi is :', queryForApi);
 
     this.FilterByAPIEvent.emit(queryForApi);
 
@@ -314,31 +327,81 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Save CSV File with data from Table...
   public createCSV() {
-    let blob;
-    let csv;
-    let header;
-    let row;
-    let title;
-    header = this.getCSVHeader();
-    title = '';
-    header.forEach((head) => {
-      return title += head + ',';
-    });
-    title = title.replace(/.$/, '');
-    title += '\r\n';
-    row = '';
-    this.searchResponseFiltered$.pipe(take(1)).subscribe(p => p.forEach((data) => {
-      if (data.name.indexOf(',')) {
-        data.name.replace(',', '');
+
+    // New logic (download CSV from API)
+    this.searchLoader$ = of(true);
+    this.searchRequest$.pipe(take(1)).subscribe(p => {
+      if (isNullOrUndefined(p)) {
+        return;
       }
-      row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalanceType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalanceType + ',' + data.parent;
-      return row += '\r\n';
-    }));
-    csv = title + row;
-    blob = new Blob([csv], {
-      type: 'application/octet-binary'
+      let request: BulkEmailRequest = {
+        data: {
+          message: this.messageBody.msg,
+          accounts: [],
+        },
+        params: {
+          from: p.fromDate,
+          to: p.toDate,
+          groupUniqueName: p.groupName
+        }
+      };
+
+      this._companyServices.downloadCSV(request).subscribe((res) => {
+        this.searchLoader$ = Observable.of(false);
+        if (res.status === 'success') {
+          let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+          return saveAs(blobData, `${p.groupName}.csv`);
+        }
+      });
+
     });
-    return saveAs(blob, 'demo' + '.csv');
+    // Old logic (Create CSV on UI)
+    // let blob;
+    // let csv;
+    // let header;
+    // let row;
+    // let title;
+    // header = this.getCSVHeader();
+    // title = '';
+    // header.forEach((head) => {
+    //   return title += head + ',';
+    // });
+    // title = title.replace(/.$/, '');
+    // title += '\r\n';
+    // row = '';
+    // this.searchResponseFiltered$.take(1).subscribe(p => p.forEach((data) => {
+    //   if (data.name.indexOf(',')) {
+    //     data.name.replace(',', '');
+    //   }
+    //   row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalanceType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalanceType + ',' + data.parent;
+    //   return row += '\r\n';
+    // }));
+    // csv = title + row;
+    // blob = new Blob([csv], {
+    //   type: 'application/octet-binary'
+    // });
+    // return saveAs(blob, 'demo' + '.csv');
+  }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, { type: contentType });
   }
 
   // Add Selected Value to Message Body
@@ -378,12 +441,15 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.mailModal.show();
   }
 
-  public toggleSelection(item: AccountFlat) {
+  public toggleSelection(ev, item: AccountFlat) {
+    let isChecked = ev.target.checked;
     let indexOfEntry = this.selectedItems.indexOf(item.uniqueName);
-    if (indexOfEntry === -1) {
+    if (isChecked && indexOfEntry === -1) {
       this.selectedItems.push(item.uniqueName);
     } else {
       this.selectedItems.splice(indexOfEntry, 1);
+      this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
+      this.isAllChecked = false;
     }
   }
 
@@ -417,26 +483,42 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       let request: BulkEmailRequest = {
         data: {
           message: this.messageBody.msg,
-          accounts: accountsUnqList,
+          accounts: this.selectedItems,
         },
         params: {
           from: p.fromDate,
-          to: p.toDate
+          to: p.toDate,
+          groupUniqueName: p.groupName
         }
       };
       if (this.messageBody.btn.set === 'Send Email') {
         return this._companyServices.sendEmail(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
+          .subscribe((r) => {
+            r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+            this.checkboxInfo = {
+              selectedPage: 1
+            };
+            this.selectedItems = [];
+            this.isAllChecked = false;
+          });
       } else if (this.messageBody.btn.set === 'Send Sms') {
         return this._companyServices.sendSms(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
+          .subscribe((r) => {
+            r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+            this.checkboxInfo = {
+              selectedPage: 1
+            };
+            this.selectedItems = [];
+            this.isAllChecked = false;
+        });
       }
     });
     this.mailModal.hide();
   }
 
   public pageChanged(ev) {
+    this.checkboxInfo.selectedPage = ev.page;
     this.pageChangeEvent.emit(ev);
-    this.isAllChecked = false;
+    this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
   }
 }
