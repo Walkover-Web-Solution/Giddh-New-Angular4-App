@@ -296,7 +296,7 @@ header img {
     width: 100%;
     line-height: 20px;
     text-align: center;
-    height: 30px;
+    height: 26px;
     position: relative;
 }
 
@@ -316,7 +316,7 @@ header img {
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
-    line-height: 40px;
+    line-height: 24px;
     vertical-align: middle;
     z-index: 0;
     left: 0;
