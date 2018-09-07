@@ -8,7 +8,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, AmazonSellerClass } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/customActions';
 
 @Injectable()
@@ -332,6 +332,77 @@ export class SettingsIntegrationActions {
     });
 
   @Effect()
+  public AddAmazonSeller$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.AddAmazonSeller(action.payload))
+    .map(response => this.AddAmazonSellerResponse(response));
+
+  @Effect()
+  public AddAmazonSellerResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body, '');
+      }
+      return {type: 'EmptyAction'};
+    });
+
+  @Effect()
+  public UpdateAmazonSeller$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAmazonSeller(action.payload))
+    .map(response => this.UpdateAmazonSellerResponse(response));
+
+  @Effect()
+  public UpdateAmazonSellerResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast('Seller Updated Successfully', '');
+      }
+      return {type: 'EmptyAction'};
+    });
+
+  @Effect()
+  public DeleteAmazonSeller$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAmazonSeller(action.payload))
+    .map(response => this.DeleteAmazonSellerResponse(response));
+
+  @Effect()
+  public DeleteAmazonSellerResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        // console.log(data);
+        this.toasty.successToast(data.body, '');
+      }
+      return {type: 'EmptyAction'};
+    });
+
+  @Effect()
+  public GetAmazonSellers$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetAmazonSeller())
+    .map(response => this.GetAmazonSellersResponse(response));
+
+  @Effect()
+  public GetAmazonSellersResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      return {type: 'EmptyAction'};
+    });
+  @Effect()
   public GetGmailIntegrationStatus$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS)
     .switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus())
@@ -558,6 +629,60 @@ export class SettingsIntegrationActions {
     };
   }
 
+  public GetAmazonSellers(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER,
+    };
+  }
+
+  public GetAmazonSellersResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE,
+      payload: models
+    };
+  }
+
+  public AddAmazonSeller(models: AmazonSellerClass[]): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER,
+      payload: models
+    };
+  }
+
+  public AddAmazonSellerResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE,
+      payload: models
+    };
+  }
+
+  public UpdateAmazonSeller(request: AmazonSellerClass): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER,
+      payload: request
+    };
+  }
+
+  public UpdateAmazonSellerResponse(models): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE,
+      payload: models
+    };
+  }
+
+  public DeleteAmazonSeller(sellerId): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER,
+      payload: sellerId
+    };
+  }
+
+  public DeleteAmazonSellerResponse(response): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE,
+      payload: response
+    };
+  }
   public GetGmailIntegrationStatus(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS

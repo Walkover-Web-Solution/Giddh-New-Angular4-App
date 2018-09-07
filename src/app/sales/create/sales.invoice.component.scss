@@ -475,3 +475,16 @@ ng-select.splSales {
     background: #f4f5f8;
     transform: rotate(-90deg) translateY(-50%);
 }
+
+#invoiceFile {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+}
+
+.custom-file-label {
+    height: 60px;
+    max-width: 330px;
+    text-align: center;
+    line-height: 45px;
+}

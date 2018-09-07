@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
@@ -17,6 +17,10 @@ import { ToasterService } from '../../../services/toaster.service';
   templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {
+
+  @Output() public pageChangeEvent: EventEmitter<any> = new EventEmitter(null);
+  @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
+
   public moment = moment;
   public companyUniqueName: string;
   public searchResponse$: Observable<AccountFlat[]>;
@@ -97,39 +101,77 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
   }
 
+  // pagination related
+  public page: number;
+  public totalPages: number;
+
+  public selectedItems: string[] = [];
+
   private _sortReverse: boolean;
   private _sortType: string;
-  private selectedItems: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private checkboxInfo: any = {
+    selectedPage: 1
+  };
 
   /**
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
     this.searchResponse$ = this.store.select(p => p.search.value);
-    // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-    this.searchResponseFiltered$ = this.searchResponse$.map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = false;
-        return j;
-      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    });
+    this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
+    // this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+    //   console.log('the p iss now :', p);
+    //   return _.cloneDeep(p).map(j => {
+    //     j.isSelected = false;
+    //     return j;
+    //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    // });
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
     this.store.select(p => p.session.companyUniqueName).take(1).subscribe(p => this.companyUniqueName = p);
+
+    this.store.select(p => p.search.searchPaginationInfo).subscribe((info) => {
+      this.page = info.page;
+      this.totalPages = info.totalPages;
+    });
   }
 
   public ngOnInit() {
-    //
     this.sortType = 'name';
+    this.searchRequest$.subscribe((req) => {
+      if (req && req.groupName) {
+        if (!this.checkboxInfo.selectedGroup) {
+          this.checkboxInfo.selectedGroup = req.groupName;
+        } else if (this.checkboxInfo.selectedGroup !== req.groupName) {
+          this.checkboxInfo = {
+            selectedPage: 1
+          };
+          this.selectedItems = [];
+          this.isAllChecked = false;
+        }
+      }
+    });
   }
 
-  public toggleSelectAll(selectAll: boolean) {
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = selectAll;
-        return j;
+  public toggleSelectAll(ev) {
+    let isAllChecked = ev.target.checked;
+    this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
+
+    this.searchResponseFiltered$.take(1).subscribe(p => {
+      let entries = _.cloneDeep(p);
+      this.isAllChecked = isAllChecked;
+
+      entries.forEach((entry) => {
+        let indexOfEntry = this.selectedItems.indexOf(entry.uniqueName);
+        if (isAllChecked) {
+          if (indexOfEntry === -1) {
+            this.selectedItems.push(entry.uniqueName);
+          }
+        } else if (indexOfEntry > -1) {
+          this.selectedItems.splice(indexOfEntry, 1);
+        }
       });
     });
   }
@@ -141,19 +183,73 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Filter data of table By Filters
   public filterData(searchQuery: SearchDataSet[]) {
-    this.searchResponseFiltered$ = this.searchResponse$.map(p => {
-      return _.cloneDeep(p).map(j => {
-        j.isSelected = false;
-        return j;
-      }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    });
-    searchQuery.forEach((query, indx) => {
-      if (indx === 0) {
-        this.searchAndFilter(query, this.searchResponse$);
-      } else {
-        this.searchAndFilter(query, this.searchResponseFiltered$);
+
+    let queryForApi = {
+      openingBalance: null,
+      openingBalanceGreaterThan: false,
+      openingBalanceLessThan: false,
+      openingBalanceEqual: true,
+      // openingBalanceType: 'String (DEBIT / CREDIT)',
+      closingBalance: null,
+      closingBalanceGreaterThan: false,
+      closingBalanceLessThan: false,
+      closingBalanceEqual: true,
+      // closingBalanceType: 'String (DEBIT / CREDIT)',
+      creditTotal: null,
+      creditTotalGreaterThan: false,
+      creditTotalLessThan: false,
+      creditTotalEqual: true,
+      debitTotal: null,
+      debitTotalGreaterThan: false,
+      debitTotalLessThan: false,
+      debitTotalEqual: true
+    };
+
+    searchQuery.forEach((query: SearchDataSet) => {
+      switch (query.queryType) {
+        case 'openingBalance':
+          queryForApi['openingBalance'] = query.amount,
+          queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'closingBalance':
+          queryForApi['closingBalance'] = query.amount,
+          queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'creditTotal':
+          queryForApi['creditTotal'] = query.amount,
+          queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'debitTotal':
+          queryForApi['debitTotal'] = query.amount,
+          queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+          queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+          queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
       }
     });
+
+    this.FilterByAPIEvent.emit(queryForApi);
+
+    // Old logic (filter data on UI)
+    // this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+    //   return _.cloneDeep(p).map(j => {
+    //     j.isSelected = false;
+    //     return j;
+    //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
+    // });
+    // searchQuery.forEach((query, indx) => {
+    //   if (indx === 0) {
+    //     this.searchAndFilter(query, this.searchResponse$);
+    //   } else {
+    //     this.searchAndFilter(query, this.searchResponseFiltered$);
+    //   }
+    // });
   }
 
   public searchAndFilter(query, searchIn) {
@@ -235,31 +331,80 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Save CSV File with data from Table...
   public createCSV() {
-    let blob;
-    let csv;
-    let header;
-    let row;
-    let title;
-    header = this.getCSVHeader();
-    title = '';
-    header.forEach((head) => {
-      return title += head + ',';
-    });
-    title = title.replace(/.$/, '');
-    title += '\r\n';
-    row = '';
-    this.searchResponseFiltered$.take(1).subscribe(p => p.forEach((data) => {
-      if (data.name.indexOf(',')) {
-        data.name.replace(',', '');
+    // New logic (download CSV from API)
+    this.searchLoader$ = Observable.of(true);
+    this.searchRequest$.take(1).subscribe(p => {
+      if (isNullOrUndefined(p)) {
+        return;
       }
-      row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalanceType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalanceType + ',' + data.parent;
-      return row += '\r\n';
-    }));
-    csv = title + row;
-    blob = new Blob([csv], {
-      type: 'application/octet-binary'
+      let request: BulkEmailRequest = {
+        data: {
+          message: this.messageBody.msg,
+          accounts: [],
+        },
+        params: {
+          from: p.fromDate,
+          to: p.toDate,
+          groupUniqueName: p.groupName
+        }
+      };
+
+      this._companyServices.downloadCSV(request).subscribe((res) => {
+        this.searchLoader$ = Observable.of(false);
+        if (res.status === 'success') {
+          let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+          return saveAs(blobData, `${p.groupName}.csv`);
+        }
+      });
+
     });
-    return saveAs(blob, 'demo' + '.csv');
+    // Old logic (Create CSV on UI)
+    // let blob;
+    // let csv;
+    // let header;
+    // let row;
+    // let title;
+    // header = this.getCSVHeader();
+    // title = '';
+    // header.forEach((head) => {
+    //   return title += head + ',';
+    // });
+    // title = title.replace(/.$/, '');
+    // title += '\r\n';
+    // row = '';
+    // this.searchResponseFiltered$.take(1).subscribe(p => p.forEach((data) => {
+    //   if (data.name.indexOf(',')) {
+    //     data.name.replace(',', '');
+    //   }
+    //   row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalanceType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalanceType + ',' + data.parent;
+    //   return row += '\r\n';
+    // }));
+    // csv = title + row;
+    // blob = new Blob([csv], {
+    //   type: 'application/octet-binary'
+    // });
+    // return saveAs(blob, 'demo' + '.csv');
+  }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, { type: contentType });
   }
 
   // Add Selected Value to Message Body
@@ -299,16 +444,20 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.mailModal.show();
   }
 
-  public toggleSelection(item: AccountFlat) {
-    if (item.isSelected) {
+  public toggleSelection(ev, item: AccountFlat) {
+    let isChecked = ev.target.checked;
+    let indexOfEntry = this.selectedItems.indexOf(item.uniqueName);
+    if (isChecked && indexOfEntry === -1) {
       this.selectedItems.push(item.uniqueName);
     } else {
-      this.selectedItems = this.selectedItems.filter(p => p !== item.uniqueName);
+      this.selectedItems.splice(indexOfEntry, 1);
+      this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
+      this.isAllChecked = false;
     }
   }
 
   // Send Email/Sms for Accounts
-  public send() {
+  public async send() {
     let accountsUnqList = [];
     // this.searchResponseFiltered$.take(1).subscribe(p => {
     //   p.map(i => {
@@ -317,7 +466,17 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     //     }
     //   });
     // });
-    accountsUnqList = _.uniq(this.selectedItems);
+
+    await this.searchResponseFiltered$.take(1).subscribe(p => {
+      accountsUnqList = [];
+      p.forEach((item: AccountFlat) => {
+        if (item.isSelected) {
+          accountsUnqList.push(item.uniqueName);
+        }
+      });
+    });
+
+    // accountsUnqList = _.uniq(this.selectedItems);
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
     this.searchRequest$.take(1).subscribe(p => {
@@ -327,21 +486,42 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       let request: BulkEmailRequest = {
         data: {
           message: this.messageBody.msg,
-          accounts: accountsUnqList,
+          accounts: this.selectedItems,
         },
         params: {
           from: p.fromDate,
-          to: p.toDate
+          to: p.toDate,
+          groupUniqueName: p.groupName
         }
       };
       if (this.messageBody.btn.set === 'Send Email') {
         return this._companyServices.sendEmail(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
+          .subscribe((r) => {
+            r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+            this.checkboxInfo = {
+              selectedPage: 1
+            };
+            this.selectedItems = [];
+            this.isAllChecked = false;
+          });
       } else if (this.messageBody.btn.set === 'Send Sms') {
         return this._companyServices.sendSms(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
+          .subscribe((r) => {
+            r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+            this.checkboxInfo = {
+              selectedPage: 1
+            };
+            this.selectedItems = [];
+            this.isAllChecked = false;
+        });
       }
     });
     this.mailModal.hide();
+  }
+
+  public pageChanged(ev) {
+    this.checkboxInfo.selectedPage = ev.page;
+    this.pageChangeEvent.emit(ev);
+    this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
   }
 }

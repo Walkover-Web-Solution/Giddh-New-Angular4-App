@@ -3,7 +3,7 @@
     box-sizing: content-box;
     color: #262626;
     font-family: inherit;
-    font-size: inherit;
+    font-size: 12px;
     font-style: inherit;
     font-weight: inherit;
     line-height: inherit;
@@ -14,17 +14,25 @@
     vertical-align: top;
 }
 
+.strong {
+    font-weight: bold;
+}
+
+.max-width-180 {
+    max-width: 180px !important;
+}
 
 /* NOTE:  comment padding, max-width, border in #template3 css for java */
 
 #template3 {
-    font: 12px/1 'Open Sans', sans-serif;
-    overflow: auto;
+    font: 14px/1 'Open Sans', sans-serif;
+    /*overflow: auto;*/
     background: #fff;
     border: 1px solid #bfbfbf;
     max-width: 8.3in;
     width: 100%;
     margin: 0 auto;
+    overflow: hidden;
     /* padding: 20px; */
 }
 
@@ -97,7 +105,6 @@
 }
 
 #template3 .product-table {
-    background: #f1eae8;
     position: relative;
     padding: 0 20px;
     padding-bottom: 10px;
@@ -126,11 +133,11 @@
 }
 
 #template3 .inwords {
-    color: #939393
+    color: #7d7d7d;
 }
 
 #template3 .item tbody tr td {
-    padding: 3px 0;
+    padding: 8px;
 }
 
 #template3 .item tfoot tr:last-child th {
@@ -159,6 +166,7 @@
 
 #template3 .bdrB {
     border-bottom: 1px solid#666;
+    margin-bottom: 10px;
 }
 
 #template3 .subfooter {
@@ -169,6 +177,7 @@
 #template3 .subfooter h1 {
     font-size: 24px;
     margin: 10px 0 0;
+    font-weight: 700;
 }
 
 #template3 .subfooter .normal {
@@ -204,14 +213,14 @@
     color: #df4927;
 }
 
-.disabled-area {
+#template3 .disabled-area {
     position: relative;
     float: left;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
-.disabled-area:after {
+#template3 .disabled-area:after {
     content: ' ';
     position: absolute;
     top: 0;
@@ -235,4 +244,29 @@
 #Template-footer {
     float: left;
     width: 100%;
+}
+
+#template3 .sub-total th {
+    padding: 6px 0px !important;
+    border-bottom: 1px solid #666666 !important;
+}
+
+#template3 .edit-template {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px;
+    height: 15px;
+    z-index: 1;
+    background: #fff;
+    width: 20px;
+}
+
+#template3 .edit-template i {
+    background: url(/assets/images/edit-ico.svg) no-repeat;
+    width: 15px;
+    position: absolute;
+    right: 1px;
+    background-size: contain;
+    height: 12px;
 }

@@ -33,6 +33,7 @@ import { SalesTaxListComponent } from 'app/sales/tax-list/sales.tax.list.compone
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { NgUploaderModule } from 'ngx-uploader';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -72,7 +73,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     QuickAccountModule.forRoot(),
     BsDropdownModule,
     AsideMenuRecurringEntryModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    NgUploaderModule
   ],
   exports: [
     TooltipModule,

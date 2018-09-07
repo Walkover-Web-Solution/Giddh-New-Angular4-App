@@ -45,7 +45,11 @@ export function companyImportExportReducer(state: CompanyImportExportState = ini
         importRequestInProcess: false,
         importRequestSuccess: action.payload.status === 'success'
       };
-  }
 
-  return state;
+    case COMPANY_IMPORT_EXPORT_ACTIONS.COMPANY_IMPORT_EXPORT_RESET:
+      return initialState;
+
+    default:
+      return state;
+  }
 }

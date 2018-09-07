@@ -14,7 +14,9 @@
     vertical-align: top;
 }
 
-
+.max-width-180 {
+    max-width: 180px !important;
+}
 /* heading */
 
 #default header h1 {
@@ -25,6 +27,7 @@
 #default header h2 {
     /* color: #df4927; */
     font-size: 18px;
+    font-weight: bold;
 }
 
 
@@ -93,7 +96,7 @@
 
 #default .meta {
     padding: 0 0.23in 0.03in;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 
 #default .meta tbody tr td,
@@ -148,12 +151,12 @@ header img {
 
 #default header img {
     max-height: 100%;
-    max-width: 100%;
+    max-width: 180px;
 }
 
 #default header table tr td {
     border: 0;
-    padding: 4px 0;
+    /* padding: 4px 0; */
 }
 
 
@@ -224,7 +227,7 @@ header img {
 }
 
 #default table.balance {
-    width: 75%;
+    width: 85%;
     float: right;
     margin: 0px 7px 40px;
 }
@@ -233,7 +236,7 @@ header img {
 #default table.balance td {
     width: 50%;
     text-align: right;
-    padding: 4px;
+    padding: 0 2px;
 }
 
 
@@ -255,7 +258,7 @@ header img {
 
 #default footer {
     border-top: 2px solid;
-    padding: 15px 0;
+    padding: 10px;
     margin: 8px 0 0;
     background: #fff;
 }
@@ -377,11 +380,16 @@ strong {
     height: 15px;
     z-index: 1;
     background: #fff;
+    width: 20px;
 }
 
 .edit-template i {
-    color: #000;
-    font: normal normal normal 14px/1 FontAwesome;
+    background: url(/assets/images/edit-ico.svg) no-repeat;
+    width: 15px;
+    position: absolute;
+    right: 1px;
+    background-size: contain;
+    height: 12px;
 }
 
 footer p {
