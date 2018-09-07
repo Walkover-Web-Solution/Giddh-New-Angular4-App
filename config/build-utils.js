@@ -8,7 +8,7 @@ const DEFAULT_METADATA = {
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
   HMR: helpers.hasProcessFlag('hot'),
-  AOT: process.env.BUILD_AOT || helpers.hasNpmFlag('aot'),
+  AOT: (process.env.BUILD_AOT === 1) || helpers.hasNpmFlag('aot'),
   E2E: !!process.env.BUILD_E2E,
   WATCH: helpers.hasProcessFlag('watch'),
   tsConfigPath: 'tsconfig.webpack.json',
@@ -76,9 +76,10 @@ function ngcWebpackSetup(prod, metadata) {
   if (!metadata) {
     metadata = DEFAULT_METADATA;
   }
-  console.log('govinda : prod ', prod)
+  console.log('govinda : prod ', prod);
+  console.log('govinda : AOT ', metadata.AOT);
   const buildOptimizer = prod;
-  const sourceMap = !prod; // TODO: apply based on tsconfig value?
+  const sourceMap = false; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
     skipCodeGeneration: !metadata.AOT,
     sourceMap

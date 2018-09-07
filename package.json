@@ -49,7 +49,7 @@
     "prep:dist": "ncp node_modules_electron dist && rimraf dist/yarn.lock",
     "rimraf": "rimraf",
     "webpackDev": "npm run webpack-dev-server -- --config config/webpack.dev.js --open --progress --profile --hot --hotOnly --watch  --content-base src/",
-    "server:local": "cross-env BUILD_AOT=1 envFileSuffix=local definePluginEnv=local npm run webpackDev --aot",
+    "server:local": "cross-env BUILD_AOT=0 envFileSuffix=local definePluginEnv=local npm run webpackDev",
     "server:dev": "cross-env BUILD_AOT=1  envFileSuffix=dev definePluginEnv=dev npm run webpackDev --aot",
     "server:test": "cross-env BUILD_AOT=0  envFileSuffix=test definePluginEnv=test npm run webpackDev ",
     "server:dist": "http-server dist -p 3000 -c-1 --cors",

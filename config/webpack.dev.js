@@ -33,7 +33,7 @@ module.exports = function (options) {
     metadata: METADATA
   }), {
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'cheap-module-eval-source-map',
     /**
      * Options affecting the output of the compilation.
      *
@@ -104,7 +104,11 @@ module.exports = function (options) {
       ]
 
     },
-
+    optimization: {
+      removeAvailableModules: false,
+      removeEmptyChunks: false,
+      splitChunks: false,
+    },
     plugins: [
       /**
        * Plugin LoaderOptionsPlugin (experimental)
