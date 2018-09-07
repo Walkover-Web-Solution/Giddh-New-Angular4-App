@@ -5,7 +5,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, AmazonSellerClass } from '../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -243,42 +243,44 @@ export class SettingsIntegrationService {
   public GetAmazonSeller(): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<any, any> = res;
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass[]>(e));
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+      map((res) => {
+        let data: BaseResponse<any, any> = res;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass[]>(e)));
   }
 
   public AddAmazonSeller(model: AmazonSellerClass[]): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<any, any[]> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass[]>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass[]>(e, model)));
   }
 
   public UpdateAmazonSeller(model: AmazonSellerClass): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let sellerId = model.sellerId;
-    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId), model).map((res) => {
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId), model).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = model;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass>(e, model));
+    }), catchError((e) => this.errorHandler.HandleCatch<string, AmazonSellerClass>(e, model)));
   }
 
   public DeleteAmazonSeller(sellerId): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId)).map((res) => {
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId)).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = {sellerId};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
+
   public GetGmailIntegrationStatus(): Observable<BaseResponse<any, any>> {
     return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
