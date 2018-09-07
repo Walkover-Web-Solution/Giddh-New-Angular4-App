@@ -19,10 +19,14 @@ import * as fromSettings from './Settings/Settings.reducer';
 import * as fromSales from './Sales/sales.reducer';
 import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
 import * as fromDayBook from './Daybook/daybook.reducer';
+import * as fromCarriedOverSales from './CarriedOverSales/carried-over-sales.reducer';
 import * as fromUserSession from './General/session.reducer';
 import * as fromImportExcel from './import-excel/import-excel.reducer';
 import * as fromInventoryInOut from './Inventory-in-out/inventory-in-out.reducer';
+import * as fromAgingReport from './AgingReport/aging-report.reducer';
 import * as fromInventoryBranchTransfer from './InventoryBranchTransfer/InventoryBranchTransfer.reducer';
+import * as fromCompanyImportExport from './CompanyImportExport/companyImportExport';
+import * as fromReceipt from './Invoice/Receipt/receipt.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -52,6 +56,10 @@ export interface AppState {
   importExcel: fromImportExcel.ImportExcelState;
   inventoryInOutState: fromInventoryInOut.InventoryInOutState;
   inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferState;
+  carriedOverSales: fromCarriedOverSales.CarriedOverSalesState;
+  agingreport: fromAgingReport.AgingReportState;
+  companyImportExport: fromCompanyImportExport.CompanyImportExportState;
+  receipt: fromReceipt.ReceiptState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -80,5 +88,9 @@ export const reducers: ActionReducerMap<AppState> = {
   userLoggedInSessions: fromUserSession.SessionReducer,
   inventoryInOutState: fromInventoryInOut.InventoryInOutReducer,
   importExcel: fromImportExcel.importExcelReducer,
-  inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer
+  inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer,
+  carriedOverSales: fromCarriedOverSales.carriedOverSalesReduce,
+  agingreport: fromAgingReport.agingReportReducer,
+  companyImportExport: fromCompanyImportExport.companyImportExportReducer,
+  receipt: fromReceipt.Receiptreducer
 };

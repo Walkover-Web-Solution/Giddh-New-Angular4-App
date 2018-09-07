@@ -129,7 +129,6 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
-    // debugger;
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }
 

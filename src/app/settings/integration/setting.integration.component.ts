@@ -52,6 +52,7 @@ export class SettingIntegrationComponent implements OnInit {
   public amazonSellerForm: FormGroup;
   public amazonEditItemIdx: number;
   public amazonSellerRes: AmazonSellerClass[];
+  public isGmailIntegrated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private isSellerAdded: Observable<boolean> = Observable.of(false);
@@ -70,9 +71,12 @@ export class SettingIntegrationComponent implements OnInit {
     this.gmailAuthCodeUrl$ = Observable.of(this.gmailAuthCodeStaticUrl);
     this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).takeUntil(this.destroyed$);
     this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).takeUntil(this.destroyed$);
+    this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).takeUntil(this.destroyed$).subscribe((o) => {
       // set sms form data
@@ -408,7 +412,7 @@ export class SettingIntegrationComponent implements OnInit {
       return 'http://dev.giddh.com/app/pages/settings?tab=integration';
     } else if (baseHref.indexOf('test.giddh.com') > -1) {
       return 'http://test.giddh.com/app/pages/settings?tab=integration';
-    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+    } else if (baseHref.indexOf('stage.giddh.com') > -1) {
       return 'http://stage.giddh.com/app/pages/settings?tab=integration';
     } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
       return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';

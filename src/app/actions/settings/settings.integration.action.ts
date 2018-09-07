@@ -402,6 +402,11 @@ export class SettingsIntegrationActions {
       let data: BaseResponse<any, any> = response.payload;
       return {type: 'EmptyAction'};
     });
+  @Effect()
+  public GetGmailIntegrationStatus$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS)
+    .switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus())
+    .map(response => this.GetGmailIntegrationStatusResponse(response));
 
   constructor(private action$: Actions,
     private toasty: ToasterService,
@@ -675,6 +680,18 @@ export class SettingsIntegrationActions {
   public DeleteAmazonSellerResponse(response): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE,
+      payload: response
+    };
+  }
+  public GetGmailIntegrationStatus(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS
+    };
+  }
+
+  public GetGmailIntegrationStatusResponse(response): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE,
       payload: response
     };
   }

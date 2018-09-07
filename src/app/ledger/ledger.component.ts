@@ -44,6 +44,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 
 @Component({
   selector: 'ledger',
@@ -140,7 +141,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // aside menu properties
   public asideMenuState: string = 'out';
   public createStockSuccess$: Observable<boolean>;
-
+  public needToShowLoader: boolean = true;
   public entryUniqueNamesForBulkAction: string[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -186,6 +187,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
+    this.needToShowLoader = false;
     let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
     let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
 
@@ -341,8 +343,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (params['accountUniqueName']) {
         // this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
-        this.showLoader = false; // need to enable loder
-        // this.ledgerSearchTerms.nativeElement.value = '';
+        this.needToShowLoader = true;
+        // this.showLoader = false; // need to enable loder
+        if (this.ledgerSearchTerms) {
+          this.ledgerSearchTerms.nativeElement.value = '';
+        }
         this.resetBlankTransaction();
         // this.datePickerOptions = {
         //   locale: {
@@ -394,10 +399,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.isTransactionRequestInProcess$.subscribe(s => {
-      if (!s && this.showLoader) {
+    this.isTransactionRequestInProcess$.subscribe((s: boolean) => {
+      if (this.needToShowLoader) {
+        this.showLoader = _.clone(s);
+      } else {
         this.showLoader = false;
       }
+      // if (!s && this.showLoader) {
+      //   this.showLoader = false;
+      // }
     });
 
     this.lc.transactionData$.subscribe((lt: any) => {
@@ -433,7 +443,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
-      if (data[0] && data[1]) {let accountDetails: AccountResponse = data[0];
+      if (data[0] && data[1]) {
+        let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+        if (data[1]) {
+          stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
+        }
+        let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
@@ -445,14 +460,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-            accountDetails.stocks.map(as => {
-              // stock entry
-              accountsArray.push({
-                value: uuid.v4(),
-                label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, {stock: as})
-              });
-            });
+            // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
+              if (stockListFormFlattenAccount) {
+                stockListFormFlattenAccount.stocks.map(as => {
+                  // stock entry
+                  accountsArray.push({
+                    value: uuid.v4(),
+                    label: acc.name + '(' + as.uniqueName + ')',
+                    additional: Object.assign({}, acc, {stock: as})
+                  });
+                });
+              }
           });
         } else {
           // stocks from account itself
@@ -480,6 +498,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
+        // need to clear selected entries when account changes
+        this.entryUniqueNamesForBulkAction = [];
+        this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
@@ -501,6 +522,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       .subscribe(term => {
         this.advanceSearchRequest.q = term;
         this.advanceSearchRequest.page = 0;
+        this.needToShowLoader = false;
         this.getTransactionData();
       });
 
@@ -654,12 +676,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public downloadInvoice(invoiceName: string, e: Event) {
+  public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
     this.lc.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let downloadRequest = new DownloadLedgerRequest();
     downloadRequest.invoiceNumber = [invoiceName];
+    downloadRequest.voucherType = voucherType;
 
     this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
       if (d.status === 'success') {
@@ -918,6 +941,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public search(term: string): void {
+    this.ledgerSearchTerms.nativeElement.value = term;
     this.searchTermStream.next(term);
   }
 
