@@ -105,14 +105,14 @@
     line-height: 19px;
 }
 
-#template3 .product-table {
+#template3 .product-table, #template3 .tax-table {
     position: relative;
     padding: 0 20px;
     padding-bottom: 10px;
 }
 
 #template3 .item thead tr th {
-    padding: 15px 5px 10px 0;
+    padding: 10px 8px 0;
     border-bottom: 1px solid #666666;
     /* line-height: 1.2rem; */
     font-weight: bold;
@@ -143,8 +143,7 @@
 
 #template3 .item tfoot tr:last-child th {
     border-top: 1px solid #666666;
-    padding: 14px 0px;
-    line-height: 1.2rem;
+    padding: 6px 8px;
     vertical-align: middle
 }
 
@@ -183,7 +182,8 @@
 
 #template3 .subfooter .normal {
     font-size: 12px;
-    vertical-align: baseline
+    vertical-align: baseline;
+    font-weight: 100;
 }
 
 #template3 .vmiddle {
@@ -191,7 +191,7 @@
 }
 
 #template3 .note {
-    margin-top: 20px;
+    margin-top: 10px;
     padding-left: 15px;
 }
 
