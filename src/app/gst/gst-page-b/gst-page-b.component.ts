@@ -13,7 +13,10 @@ export class GstPageBComponent {
   }
 
   public ngOnInit() {
-		//
+		
+		
+		
+		
 	}
 
 }
