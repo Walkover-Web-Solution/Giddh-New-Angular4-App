@@ -20,7 +20,7 @@
         }
         
         #template-header {
-            padding: 15px 15px 0;
+            padding: 15px 30px 0;
             width: auto;
         }
         
@@ -93,7 +93,8 @@
             font-size: 34px;
             float: right;
             font-weight: bold;
-            display: flex;
+            /* display: flex; */
+            line-height: normal;
         }
         
         #royal .mrL2 {
@@ -220,7 +221,7 @@
         
         #royal .subfooter {
             margin-top: 100px;
-            padding: 0 20px;
+            padding: 0 30px;
         }
         
         #royal .subfooter h1 {
