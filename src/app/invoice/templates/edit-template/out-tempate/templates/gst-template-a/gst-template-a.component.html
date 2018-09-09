@@ -144,7 +144,7 @@
                                 <strong>{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label
                                     : 'GSTIN'}}</strong>
                             </p>
-                            <p>22BBBBBB000A1Z0</p>
+                            <p>11AAAAAA000Z0A1</p>
                         </td>
                     </tr>
                 </tbody>
@@ -233,7 +233,7 @@
                             <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
-                                <p>@10%</p>
+                                <p>@5%</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                         </tr>
@@ -247,7 +247,7 @@
                             <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
-                                <p>@10%</p>
+                                <p>@18%</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                         </tr>
@@ -278,26 +278,26 @@
                 <table class="balance">
                     <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
                         <th>
-                            <strong>{{fieldsAndVisibility.footer.taxableAmount?.label}}</strong>
+                            <strong>{{fieldsAndVisibility.footer.taxableAmount?.label}} (INR)</strong>
                         </th>
                         <td>
-                            <strong>(INR) 49300.00.00</strong>
+                            <strong>49300.00.00</strong>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
                         <th>
-                            <strong>{{fieldsAndVisibility.footer.totalTax?.label}}</strong>
+                            <strong>{{fieldsAndVisibility.footer.totalTax?.label}} (INR)</strong>
                         </th>
                         <td>
-                            <strong>(INR) 5920.00</strong>
+                            <strong>5920.00</strong>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
                         <th>
-                            <strong>{{fieldsAndVisibility.footer.grandTotal?.label}}</strong>
+                            <strong>{{fieldsAndVisibility.footer.grandTotal?.label}} (INR)</strong>
                         </th>
                         <td>
-                            <strong>(INR) 54230.00</strong>
+                            <strong>54230.00</strong>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">

@@ -55,7 +55,7 @@
                                     <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
                                         <td>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                             : 'Invoice No.'}}</td>
-                                        <td>20170623</td>
+                                        <td>20170623-1</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -105,7 +105,7 @@
                                                 <strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
                                                     : 'GSTIN'}}</strong>
                                             </labeL>
-                                            <p>22BBBBBB000A1Z0</p>
+                                            <p>11AAAAAA000Z0A1</p>
                                         </ng-container>
                                     </td>
                                     <td *ngIf="fieldsAndVisibility.header.shippingGstin?.display && fieldsAndVisibility.header.shippingAddress?.display">
@@ -223,7 +223,7 @@
                             <p>@10%</p>
                         </td> -->
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display">970.00
-                            <p>@10%</p>
+                            <p>@5%</p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display">11000344640.00</td>
                     </tr>
@@ -239,7 +239,7 @@
                             <p>@10%</p>
                         </td> -->
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display">970.00
-                            <p>@10%</p>
+                            <p>@5%</p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display">11000344640.00</td>
                     </tr>
@@ -264,21 +264,21 @@
         </a>
         <table class="balance strong">
             <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-                <th>Taxable Amount</th>
+                <th>Taxable Amount (INR)</th>
                 <td>
-                    <span>(INR) 30100.00</span>
+                    <span>30100.00</span>
                 </td>
             </tr>
             <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
-                <th>Total Tax*</th>
+                <th>Total Tax* (INR)</th>
                 <td>
-                    <span>(INR) 5920.00</span>
+                    <span>5920.00</span>
                 </td>
             </tr>
             <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
-                <th>Invoice Total</th>
+                <th>Invoice Total (INR)</th>
                 <td>
-                    <span>(INR) 36020.00</span>
+                    <span>36020.00</span>
                 </td>
             </tr>
             <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
