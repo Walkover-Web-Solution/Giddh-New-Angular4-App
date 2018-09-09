@@ -46,7 +46,7 @@
                         <figure>
                             <p>
                                 <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
-                                    : 'Number'}}: 201770323-64</span>
+                                    : 'Number'}}: 20170822-1</span>
                                 <span class="mrL2">{{fieldsAndVisibility.header.invoiceDate?.label ? fieldsAndVisibility.header.invoiceDate?.label
                                     : 'Date'}}: 22/08/2017</span>
                             </p>
@@ -71,7 +71,7 @@
                             <br /> 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingGstin?.display">
                             <strong>{{fieldsAndVisibility.header.billingGstin?.label ? fieldsAndVisibility.header.billingGstin?.label
-                                : 'GSTIN'}}: 22BBBBBB000A1Z0</strong>
+                                : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
                         </p>
                     </td>
                     <td style="padding-top: 20px;">
@@ -79,7 +79,7 @@
                             <strong>Shipping Detail:</strong>
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.shippingDate?.display">{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
-                            : 'Ship Date'}}: 30/06/2017</p>
+                            : 'Ship Date'}}: 30/07/2017</p>
                         <p *ngIf="fieldsAndVisibility.header.shippedVia?.display">{{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                             : 'Ship Via'}}: FedEx</p>
                         <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">{{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
@@ -88,7 +88,7 @@
 
                     <!-- <td colspan="1"></td> -->
                     <td class="total-amount">
-                        <h2 class="amt secondry_clr" *ngIf="fieldsAndVisibility.table.total?.display">945/-</h2>
+                        <h2 class="amt secondry_clr" *ngIf="fieldsAndVisibility.table.total?.display">37750.00/-</h2>
                     </td>
                 </tr>
             </tbody>
@@ -108,12 +108,11 @@
                     <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
                     <th [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">{{(fieldsAndVisibility.table.quantity?.label?.length > 0) ? fieldsAndVisibility.table.quantity?.label
                         : 'Qty.'}}</th>
-
+                    <th [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">{{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}}</th>
                     <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">{{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label
                         : 'Disc.'}}</th>
                     <!-- <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Value'}}</th> -->
                     <th [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">Tax Rate</th>
-                    <th [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">{{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}}</th>
                     <th [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">{{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}</th>
                 </tr>
             </thead>
@@ -121,27 +120,27 @@
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
                     <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
-                    <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
-                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456</td>
+                    <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
+                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456 (H)</td>
                     <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
                     <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
                     <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">@10%
                     </td>
-                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                 </tr>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
                     <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
-                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456</td>
+                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">456321 (S)</td>
                     <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
                     <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
-                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">@10%
+                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">@5%
                     </td>
-                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
                 </tr>
             </tbody>
@@ -192,14 +191,14 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-left">12345678</td>
+                    <td class="text-left">123456 (H)</td>
                     <td>10000.00</td>
                     <td>
-                        <p>@9%</p>
+                        <p>@5%</p>
                     </td>
                     <td>900.00</td>
                     <td>
-                        <p>@9%</p>
+                        <p>@5%</p>
                     </td>
                     <td>900.00</td>
                 </tr>
