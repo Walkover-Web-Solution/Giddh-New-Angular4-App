@@ -22,7 +22,7 @@
                                 <figure>
                                     <p>
                                         <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
-                                            : 'Number'}}: 201770323-64</span>
+                                            : 'Number'}}: 20170822-1</span>
                                         <span [ngClass]="{'mrL2': fieldsAndVisibility.header.invoiceNumber?.display}" *ngIf="fieldsAndVisibility.header.invoiceDate?.display">{{(fieldsAndVisibility.header.invoiceDate?.label.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
                                             : 'Date'}}: 22/08/2017</span>
                                     </p>
@@ -35,8 +35,8 @@
                             </td>
                             <td class="text-right vmiddle">
                                 <figure class="col-xs-12">
-                                    <img [src]="logoSrc" alt="" class="max-width-180" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}"
-                                        [hidden]='!showLogo' />
+                                    <img [src]="logoSrc" alt="" class="max-width-180" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo'
+                                    />
                                 </figure>
                             </td>
                         </tr>
@@ -52,15 +52,16 @@
                                 <strong>{{(fieldsAndVisibility.header.billingAddress?.label.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                     : 'Billing Address'}}</strong>
                             </p>
-                            <p>Green Soft Solutions 24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                            <p>Green Soft Solutions</p>
+                            <p>24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
                             <p>
                                 <strong>{{(fieldsAndVisibility.header.billingGstin?.label.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
-                                    : 'GSTIN'}}: {{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}</strong>
+                                    : 'GSTIN'}}: '11AAAAAA000Z0A1'</strong>
                             </p>
                         </td>
                         <td colspan="2"></td>
                         <td class="text-right vmiddle total-amount">
-                            <h2 class="">945/-</h2>
+                            <h2 class="">37750.00/-</h2>
                         </td>
                     </tr>
                 </tbody>
@@ -116,12 +117,14 @@
                         <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" data-thead="hsn" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label
                             : 'HSN/SAC'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.taxes?.display" data-thead="taxes" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.taxes?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label :
-                            'Tax'}}</th>
+                            'Tax'}}
+                        </th>
                         <th *ngIf="fieldsAndVisibility.table.quantity?.display" data-thead="qty" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.quantity?.label?.length > 0) ? fieldsAndVisibility.table.quantity?.label
                             : 'Qty.'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.rate?.display" data-thead="rate" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.total?.display" data-thead="total" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label :
-                            'Total'}}</th>
+                            'Total'}}
+                        </th>
                     </tr>
                     <!-- <tr>
                         <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">{{(fieldsAndVisibility.table.sNo?.label.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}</th>
@@ -138,7 +141,7 @@
                         <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
                         <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
                         <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Transactional Route</td>
-                        <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">123456</td>
+                        <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">123456 (H)</td>
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display">18%</td>
                         <td *ngIf="fieldsAndVisibility.table.quantity?.display">5</td>
                         <td *ngIf="fieldsAndVisibility.table.rate?.display">5000.00</td>
@@ -148,7 +151,7 @@
                         <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
                         <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
                         <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Operational Route</td>
-                        <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">345632</td>
+                        <td *ngIf="fieldsAndVisibility.table.hsnSac?.display">454848 (H)</td>
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display">10%</td>
                         <td *ngIf="fieldsAndVisibility.table.quantity?.display">3</td>
                         <td *ngIf="fieldsAndVisibility.table.rate?.display">2500.00</td>
@@ -271,7 +274,8 @@
                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
                 <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress
-                    }}</p>
+                    }}
+                </p>
             </footer>
         </div>
 
