@@ -137,6 +137,23 @@
         </div>
 
         <div class="col-xs-12">
+          <div class="row">
+            <div class="col-xs-5">
+              <label for="">Show cancelled entries</label>
+            </div>
+            <div class="col-xs-7">
+              <div class="row">
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <input type="checkbox" formControlName="cancelledEntries">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12">
           <div class="form-group toggle-btn mrB">
             <label class="cp" (click)="toggleOtherDetails()">
               <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other Details
