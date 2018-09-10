@@ -89,11 +89,19 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
       let response: BaseResponse<GstReconcileInvoiceResponse, string> = action.payload;
       let newState = _.cloneDeep(state);
       newState.isGenerateOtpInProcess = false;
+
       if (response.status === 'success') {
         newState.isGstReconcileInvoiceSuccess = true;
         newState.gstAuthenticated = true;
         newState.gstFoundOnGiddh = true;
+
         let gstData = newState.gstReconcileData;
+
+        gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+        gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+        gstData.matched.count = response.body.matched;
+        gstData.partiallyMatched.count = response.body.partiallyMatched;
+
         switch (response.queryString.action) {
           case 'NOT_ON_GIDDH':
             gstData.notFoundOnGiddh = {
@@ -120,7 +128,9 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
             };
             break;
         }
+
       } else {
+
         if (response.code === 'GST_AUTH_ERROR') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstAuthenticated = false;
@@ -134,8 +144,12 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
           newState.gstAuthenticated = true;
           newState.gstFoundOnGiddh = true;
         }
+
       }
       return newState;
+
+    case GST_RECONCILE_ACTIONS.RESET_GST_RECONCILE_STATE:
+      return initialState;
     default:
       return state;
   }

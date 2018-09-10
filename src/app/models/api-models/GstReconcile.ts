@@ -15,7 +15,7 @@ export interface GstReconcileInvoiceResult {
   cgst: number;
   igst?: any;
   cess: number;
-  account: INameUniqueName;
+  accountName: string;
 }
 
 export interface GstReconcileInvoiceResponse {

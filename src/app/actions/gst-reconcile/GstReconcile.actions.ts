@@ -106,4 +106,10 @@ export class GstReconcileActions {
       payload: response
     };
   }
+
+  public ResetGstReconcileState() {
+    return {
+      type: GST_RECONCILE_ACTIONS.RESET_GST_RECONCILE_STATE
+    };
+  }
 }

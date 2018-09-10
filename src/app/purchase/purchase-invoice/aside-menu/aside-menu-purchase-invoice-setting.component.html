@@ -92,13 +92,23 @@
               </div>
             </div>
           </ng-container>
+
+          <ng-container>
+            <div class="col-xs-6" *ngIf="defaultGstNumber">
+              <div class="form-group">
+                <label for="reconcile_otp">GSTN:</label>
+                <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_gstn"
+                       [value]="defaultGstNumber" [disabled]="true">
+              </div>
+            </div>
+          </ng-container>
         </div>
 
         <div class="row">
           <div class="col-xs-12 mrT1">
             <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
                     *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
-            [disabled]="!reconcileForm.uid">Submit
+                    [disabled]="!reconcileForm.uid">Submit
             </button>
 
             <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"

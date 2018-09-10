@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Input, OnChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AppState } from '../../../store';
@@ -51,6 +51,7 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
 
   @Input() public selectedService: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
 
   public jioGstForm: any = {};
   public taxProForm: any = {};
@@ -61,6 +62,7 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
   public reconcileOtpSuccess$: Observable<boolean>;
   public reconcileOtpVerifyInProcess$: Observable<boolean>;
   public reconcileOtpVerifySuccess$: Observable<boolean>;
+  public defaultGstNumber: string = null;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -76,11 +78,18 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
     this.reconcileOtpSuccess$ = this.store.select(p => p.gstReconcile.isGenerateOtpSuccess).takeUntil(this.destroyed$);
     this.reconcileOtpVerifyInProcess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess).takeUntil(this.destroyed$);
     this.reconcileOtpVerifySuccess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess).takeUntil(this.destroyed$);
+
+    this.store.select(s => s.settings.profile).subscribe(pro => {
+      if (pro && pro.gstDetails) {
+        // debugger;
+      }
+    });
   }
 
   public ngOnInit() {
     this.reconcileOtpVerifySuccess$.subscribe(s => {
       if (s) {
+        this.fireReconcileRequest.emit(true);
         this.closeAsidePane(null);
       }
     });
