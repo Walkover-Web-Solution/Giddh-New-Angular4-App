@@ -1,7 +1,7 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { BsDropdownConfig } from 'ngx-bootstrap';
+import { BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
 import * as  moment from 'moment/moment';
 import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
@@ -71,6 +71,8 @@ const fileGstrOptions = [
   ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
+  @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: PaginationComponent;
+
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
   public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
   public allTaxes: ITaxResponse[] = [];
@@ -132,6 +134,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public pageChnageState: boolean = false;
   public userEmail: string = '';
   public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
+  public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
   public gstAuthenticated$: Observable<boolean>;
   public gstFoundOnGiddh$: Observable<boolean>;
   public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
@@ -178,6 +181,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.RefreshCompanies());
       }
     });
+    this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).takeUntil(this.destroyed$);
     this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).takeUntil(this.destroyed$);
     this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).takeUntil(this.destroyed$);
     this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).takeUntil(this.destroyed$);
