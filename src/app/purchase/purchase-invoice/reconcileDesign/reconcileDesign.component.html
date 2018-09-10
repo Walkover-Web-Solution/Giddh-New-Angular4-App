@@ -20,53 +20,53 @@
     <td><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></td>
     <td>
       <div>
-        <span>06AACCG0527D128 </span>
-        <span style="font-size: 12PX;color: gray;display: block">(3265654521)</span></div>
+        <span>{{ item.ctin }} </span>
+      </div>
     </td>
     <td>
-      <div>yogesh</div>
+      <div>{{ item.accountName }}</div>
 
     </td>
     <td>
-      <div>1549141</div>
+      <div>{{ item.invoiceNumber }}</div>
 
     </td>
     <td>
-      <div>31/05/18</div>
+      <div>{{ item.invoiceDate }}</div>
 
 
     </td>
     <td>
       <div>
-        madhya pradesh (23)
+        {{ item.placeOfSupply }} (23)
       </div>
 
 
     </td>
     <td class="text-right">
-      <div>₹ 1555555</div>
+      <div>₹ {{ item.taxableAmount }}</div>
 
 
     </td>
     <td class="text-right">
-      <div>₹ 1659565</div>
+      <div>₹ {{ item.igst }}</div>
 
     </td>
     <td class="text-right">
-      <div>₹ 0.00</div>
-
-
-    </td>
-    <td class="text-right">
-      <div>₹ 0.00</div>
+      <div>₹ {{ item.cgst }}</div>
 
 
     </td>
     <td class="text-right">
-      <div>₹ 0.00</div>
+      <div>₹ {{ item.sgst }}</div>
+
+
     </td>
     <td class="text-right">
-      <div>₹ 85155555</div>
+      <div>₹ {{ item.cess }}</div>
+    </td>
+    <td class="text-right">
+      <div>₹ {{ item.grandTotal }}</div>
     </td>
   </tr>
   </tbody>
