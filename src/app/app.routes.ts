@@ -47,6 +47,7 @@ export const ROUTES: Routes = [
   {path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full'},
   {path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
+  {path: 'gst', redirectTo: 'pages/gst', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
   {
@@ -77,6 +78,7 @@ export const ROUTES: Routes = [
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
       {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule'},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      {path: 'gst', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
