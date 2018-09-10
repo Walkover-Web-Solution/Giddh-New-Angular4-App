@@ -173,6 +173,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
       tags: this.fb.array([]),
       particulars: [[]],
       vouchers: [[]],
+      cancelledEntries: [false],
       inventory: this.fb.group({
         includeInventory: true,
         inventories: [[]],
