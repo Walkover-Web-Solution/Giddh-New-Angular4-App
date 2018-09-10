@@ -138,6 +138,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
   public gstMatchedData$: Observable<ReconcileActionState>;
   public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
+  public reconcileActiveTab: string = 'NOT_ON_PORTAL';
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -271,17 +272,13 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public onSelectGstrOption(gstrType) {
     this.selectedGstrType = gstrType;
     if (gstrType.name === 'GSTR2') {
-      this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-        this.moment(this.selectedDateForGSTR1).format('MMYYYY'), 'NOT_ON_PORTAL', '1', '10')
-      );
+      this.fireGstReconcileRequest('NOT_ON_PORTAL');
     }
   }
 
   public monthChanged(selectedDateForGSTR1) {
     if (this.selectedGstrType.name === 'GSTR2') {
-      this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-        this.moment(selectedDateForGSTR1).format('MMYYYY'), 'NOT_ON_PORTAL', '1', '10')
-      );
+      this.fireGstReconcileRequest(this.reconcileActiveTab, selectedDateForGSTR1);
     }
   }
 
@@ -564,6 +561,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     if (this.intervalId && this.intervalId._state === 'running') {
       this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
     }
+    this.store.dispatch(this._reconcileActions.ResetGstReconcileState());
   }
 
   /**
@@ -614,8 +612,13 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
   }
 
+  public reconcileTabChanged(action: string) {
+    this.reconcileActiveTab = action;
+    this.fireGstReconcileRequest(action);
+  }
+
   public reconcilePageChanged(event: any, action: string) {
-    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest('', action, event.page));
+    this.fireGstReconcileRequest(action, this.selectedDateForGSTR1, event.page);
   }
 
   /**
@@ -688,5 +691,11 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     } else {
       this.toasty.errorToast('GST number not found.');
     }
+  }
+
+  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1) {
+    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
+      this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString())
+    );
   }
 }

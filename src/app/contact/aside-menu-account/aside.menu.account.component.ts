@@ -13,7 +13,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 @Component({
   selector: 'aside-menu-account',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -22,10 +22,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       width: 480px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -34,10 +36,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 480px;
     }
