@@ -88,7 +88,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
     case GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE:
       let response: BaseResponse<GstReconcileInvoiceResponse, string> = action.payload;
       let newState = _.cloneDeep(state);
-      newState.isGenerateOtpInProcess = false;
+      newState.isGstReconcileInvoiceInProcess = false;
 
       if (response.status === 'success') {
         newState.isGstReconcileInvoiceSuccess = true;

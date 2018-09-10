@@ -180,6 +180,7 @@
                               [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
                               [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
                               class="pagination-sm"
+                              #pgGstNotFoundOnPortal
                               (pageChanged)="reconcilePageChanged($event, 'NOT_ON_PORTAL')"
                               [boundaryLinks]="true"
                               [rotate]="false"></pagination>
@@ -202,6 +203,7 @@
                               [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
                               [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
                               class="pagination-sm"
+                              #pgGstNotFoundOnGiddh
                               (pageChanged)="reconcilePageChanged($event, 'NOT_ON_GIDDH')"
                               [boundaryLinks]="true"
                               [rotate]="false"></pagination>
@@ -298,7 +300,8 @@
                 </tbody>
               </table>
 
-              <ng-container *ngIf="(gstPartiallyMatchedData$ | async)?.count > 0">
+              <ng-container
+                *ngIf="(gstPartiallyMatchedData$ | async)?.count > 0">
                 <div style="display: flex;justify-content: center">
                   <pagination [maxSize]="5"
                               [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
@@ -340,7 +343,8 @@
                 </tbody>
               </table>
 
-              <ng-container *ngIf="(gstMatchedData$ | async)?.count > 0">
+              <ng-container
+                *ngIf="(gstMatchedData$ | async)?.count > 0">
                 <div style="display: flex;justify-content: center">
                   <pagination [maxSize]="5"
                               [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
