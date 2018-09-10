@@ -1,4 +1,4 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, ComponentFactoryResolver, OnDestroy, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
@@ -22,6 +22,7 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.ac
 import { Observable } from 'rxjs';
 import { ReconcileActionState } from '../../store/GstReconcile/GstReconcile.reducer';
 import { AlertConfig } from 'ngx-bootstrap/alert';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -71,7 +72,10 @@ const fileGstrOptions = [
   ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
-  @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: PaginationComponent;
+  @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
+  @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
+  @ViewChild('pgPartiallyMatched') public pgPartiallyMatched: ElementViewContainerRef;
+  @ViewChild('pgMatched') public pgMatched: ElementViewContainerRef;
 
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
   public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
@@ -155,7 +159,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private companyActions: CompanyActions,
     private purchaseInvoiceService: PurchaseInvoiceService,
     private accountService: AccountService,
-    private _reconcileActions: GstReconcileActions
+    private _reconcileActions: GstReconcileActions,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.purchaseInvoiceObject.TaxList = [];
     this.purchaseInvoiceRequestObject.entryUniqueName = [];
@@ -212,6 +217,22 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       if (o.taxes && o.taxes.length) {
         this.allTaxes = _.cloneDeep(o.taxes);
       }
+    });
+
+    this.gstNotFoundOnGiddhData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s);
+    });
+
+    this.gstNotFoundOnPortalData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s);
+    });
+
+    this.gstPartiallyMatchedData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s);
+    });
+
+    this.gstMatchedData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s);
     });
 
     this.gstAuthenticated$.subscribe(s => {
@@ -701,5 +722,43 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
       this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString())
     );
+  }
+
+  public loadReconcilePaginationComponent(s: ReconcileActionState) {
+
+    if (s.count === 0) {
+      return;
+    }
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+    let viewContainerRef = null;
+    switch (this.reconcileActiveTab) {
+      case 'NOT_ON_GIDDH':
+        viewContainerRef = this.pgGstNotFoundOnGiddh.viewContainerRef;
+        break;
+      case 'NOT_ON_PORTAL':
+        viewContainerRef = this.pgGstNotFoundOnPortal.viewContainerRef;
+        break;
+      case 'MATCHED':
+        viewContainerRef = this.pgMatched.viewContainerRef;
+        break;
+      case 'PARTIALLY_MATCHED':
+        viewContainerRef = this.pgPartiallyMatched.viewContainerRef;
+        break;
+    }
+
+    viewContainerRef.remove();
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as PaginationComponent;
+
+    componentInstance.totalItems = s.data.totalItems;
+    componentInstance.itemsPerPage = s.data.count;
+    componentInstance.maxSize = 5;
+    componentInstance.writeValue(s.data.page);
+    componentInstance.boundaryLinks = true;
+    componentInstance.pageChanged.subscribe(e => {
+      this.reconcilePageChanged(e, this.reconcileActiveTab);
+    });
   }
 }

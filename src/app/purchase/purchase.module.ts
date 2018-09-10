@@ -5,7 +5,7 @@ import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.co
 import { PurchaseComponent } from './purchase.component';
 import { AsideMenuPurchaseInvoiceSettingComponent } from './purchase-invoice/aside-menu/aside-menu-purchase-invoice-setting.component';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -14,6 +14,7 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AlertModule, TabsModule } from 'ngx-bootstrap';
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -33,7 +34,11 @@ import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/rec
     TooltipModule,
     ClickOutsideModule,
     TabsModule,
-    AlertModule
+    AlertModule,
+    ElementViewChildModule
+  ],
+  entryComponents: [
+    PaginationComponent
   ]
 })
 export class PurchaseModule {
