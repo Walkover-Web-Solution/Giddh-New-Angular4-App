@@ -174,18 +174,16 @@
               <reconcileDesign [data]="(gstNotFoundOnPortalData$ | async)?.data">
               </reconcileDesign>
 
-              <ng-container *ngIf="(gstNotFoundOnPortalData$ | async)?.count > 0">
-                <div style="display: flex;justify-content: center">
-                  <pagination [maxSize]="5"
-                              [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
-                              [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
-                              class="pagination-sm"
-                              #pgGstNotFoundOnPortal
-                              (pageChanged)="reconcilePageChanged($event, 'NOT_ON_PORTAL')"
-                              [boundaryLinks]="true"
-                              [rotate]="false"></pagination>
-                </div>
-              </ng-container>
+              <div style="display: flex;justify-content: center" element-view-container-ref
+                   #pgGstNotFoundOnPortal="elementviewcontainerref">
+                <!--<pagination [maxSize]="5"-->
+                <!--[totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"-->
+                <!--[itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"-->
+                <!--class="pagination-sm"-->
+                <!--(pageChanged)="reconcilePageChanged($event, 'NOT_ON_PORTAL')"-->
+                <!--[boundaryLinks]="true"-->
+                <!--[rotate]="false"></pagination>-->
+              </div>
             </div>
             <div class="row" *ngIf="(gstNotFoundOnPortalData$ | async)?.count === 0">
               <h3 class="text-center">NO DATA</h3>
@@ -197,18 +195,16 @@
               <reconcileDesign [data]="(gstNotFoundOnGiddhData$ | async)?.data">
               </reconcileDesign>
 
-              <ng-container *ngIf="(gstNotFoundOnGiddhData$ | async)?.count > 0">
-                <div style="display: flex;justify-content: center">
-                  <pagination [maxSize]="5"
-                              [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
-                              [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
-                              class="pagination-sm"
-                              #pgGstNotFoundOnGiddh
-                              (pageChanged)="reconcilePageChanged($event, 'NOT_ON_GIDDH')"
-                              [boundaryLinks]="true"
-                              [rotate]="false"></pagination>
-                </div>
-              </ng-container>
+              <div style="display: flex;justify-content: center"
+                   element-view-container-ref #pgGstNotFoundOnGiddh="elementviewcontainerref">
+                <!--<pagination [maxSize]="5"-->
+                <!--[totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"-->
+                <!--[itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"-->
+                <!--class="pagination-sm"-->
+                <!--(pageChanged)="reconcilePageChanged($event, 'NOT_ON_GIDDH')"-->
+                <!--[boundaryLinks]="true"-->
+                <!--[rotate]="false"></pagination>-->
+              </div>
             </div>
             <div class="row" *ngIf="(gstNotFoundOnGiddhData$ | async)?.count === 0">
               <h3 class="text-center">NO DATA</h3>
@@ -300,18 +296,16 @@
                 </tbody>
               </table>
 
-              <ng-container
-                *ngIf="(gstPartiallyMatchedData$ | async)?.count > 0">
-                <div style="display: flex;justify-content: center">
-                  <pagination [maxSize]="5"
-                              [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
-                              [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
-                              class="pagination-sm"
-                              (pageChanged)="reconcilePageChanged($event, 'PARTIALLY_MATCHED')"
-                              [boundaryLinks]="true"
-                              [rotate]="false"></pagination>
-                </div>
-              </ng-container>
+              <div style="display: flex;justify-content: center"
+                   element-view-container-ref #pgPartiallyMatched="elementviewcontainerref">
+                <!--<pagination [maxSize]="5"-->
+                <!--[totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"-->
+                <!--[itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"-->
+                <!--class="pagination-sm"-->
+                <!--(pageChanged)="reconcilePageChanged($event, 'PARTIALLY_MATCHED')"-->
+                <!--[boundaryLinks]="true"-->
+                <!--[rotate]="false"></pagination>-->
+              </div>
             </div>
             <div class="row" *ngIf="(gstPartiallyMatchedData$ | async)?.count === 0">
               <h3 class="text-center">NO DATA</h3>
@@ -345,14 +339,15 @@
 
               <ng-container
                 *ngIf="(gstMatchedData$ | async)?.count > 0">
-                <div style="display: flex;justify-content: center">
-                  <pagination [maxSize]="5"
-                              [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
-                              [itemsPerPage]="(gstMatchedData$ | async)?.data?.count"
-                              class="pagination-sm"
-                              (pageChanged)="reconcilePageChanged($event, 'MATCHED')"
-                              [boundaryLinks]="true"
-                              [rotate]="false"></pagination>
+                <div style="display: flex;justify-content: center"
+                     element-view-container-ref #pgMatched="elementviewcontainerref">
+                  <!--<pagination [maxSize]="5"-->
+                  <!--[totalItems]="(gstMatchedData$ | async)?.data?.totalItems"-->
+                  <!--[itemsPerPage]="(gstMatchedData$ | async)?.data?.count"-->
+                  <!--class="pagination-sm"-->
+                  <!--(pageChanged)="reconcilePageChanged($event, 'MATCHED')"-->
+                  <!--[boundaryLinks]="true"-->
+                  <!--[rotate]="false"></pagination>-->
                 </div>
               </ng-container>
             </div>
