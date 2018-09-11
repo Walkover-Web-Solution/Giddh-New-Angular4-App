@@ -1,13 +1,14 @@
-import { AfterViewInit, animate, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, state, style, transition, trigger, ViewChild, HostListener, EventEmitter } from '@angular/core';
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
-import { cloneDeep, forEach } from '../../lodash-optimized';
+import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AppState } from '../../store';
 import { AccountDetailsClass, FakeDiscountItem, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
-import { Observable } from 'rxjs/Observable';
 import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -35,7 +36,8 @@ import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader/index';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../services/apiurls/ledger.api';
 import { Configuration } from '../../app.constant';
 
@@ -152,7 +154,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public invFormData: VoucherClass;
   public customerAcList$: Observable<IOption[]>;
   public bankAccounts$: Observable<IOption[]>;
-  public salesAccounts$: Observable<IOption[]> = Observable.of(null);
+  public salesAccounts$: Observable<IOption[]> = observableOf(null);
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public asideMenuStateForRecurringEntry: string = 'out';
@@ -170,7 +172,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public newlyCreatedAc$: Observable<INameUniqueName>;
   public newlyCreatedStockAc$: Observable<INameUniqueName>;
   public countrySource: IOption[] = [];
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = false;
   public toggleFieldForSales: boolean = true;
@@ -179,7 +181,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   // modals related
   public modalConfig = {
     animated: true,
@@ -236,19 +238,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   ) {
 
     this.invFormData = new VoucherClass();
-    this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-    this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
-    this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
-    this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
+    this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
-    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
-    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
     // bind countries
     contriesWithCodes.map(c => {
@@ -256,14 +258,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
 
     // bind state sources
-    this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
+    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
           arr.push({label: `${d.name}`, value: d.code});
         });
       }
-      this.statesSource$ = Observable.of(arr);
+      this.statesSource$ = observableOf(arr);
     });
   }
 
@@ -279,8 +281,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public ngOnInit() {
     this.getAllFlattenAc();
     // get selected company for autofill country
-    this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
-      this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
+    this.companyUniqueName$.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((company) => {
+      this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies: CompanyResponse[]) => {
         this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
         if (this.activeCompany && this.activeCompany.country) {
           this.invFormData.accountDetails.country.countryName = this.activeCompany.country;
@@ -296,9 +298,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
 
     // get tax list and assign values to local vars
-    this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
+    this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
       if (o) {
-        this.companyTaxesList$ = Observable.of(o);
+        this.companyTaxesList$ = observableOf(o);
         _.map(this.theadArrReadOnly, (item: IContentCommon) => {
           // show tax label
           if (item.label === 'Tax') {
@@ -307,12 +309,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           return item;
         });
       } else {
-        this.companyTaxesList$ = Observable.of([]);
+        this.companyTaxesList$ = observableOf([]);
       }
     });
 
     // listen for new add account utils
-    this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
+    this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((o: INameUniqueName) => {
       if (o && this.accountAsideMenuState === 'in') {
         let item: IOption = {
           label: o.name,
@@ -324,7 +326,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     });
 
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
+    this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o && this.accountAsideMenuState === 'in') {
         this.toggleAccountAsidePane();
       }
@@ -390,9 +392,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }
       });
       this.makeCustomerList();
-      this.bankAccounts$ = Observable.of(_.orderBy(bankaccounts, 'label'));
+      this.bankAccounts$ = observableOf(_.orderBy(bankaccounts, 'label'));
 
-      this.bankAccounts$.takeUntil(this.destroyed$).subscribe((acc) => {
+      this.bankAccounts$.pipe(takeUntil(this.destroyed$)).subscribe((acc) => {
         if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
           if (acc) {
             if (acc.length > 0) {
@@ -405,7 +407,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       });
 
       // listen for newly added stock and assign value
-      Observable.combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+      observableCombineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
         let o = resp[0];
         let acData = resp[1];
         if (o && acData) {
@@ -437,10 +439,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
-    })).takeUntil(this.destroyed$).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
   }
 
   public assignDates() {
@@ -461,11 +463,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public makeCustomerList() {
     // sales case || Credit Note
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
-      this.customerAcList$ = Observable.of(_.orderBy(this.sundryDebtorsAcList, 'label'));
-      this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForDeb, 'label'));
+      this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
+      this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));
     } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
-      this.customerAcList$ = Observable.of(_.orderBy(this.sundryCreditorsAcList, 'label'));
-      this.salesAccounts$ = Observable.of(_.orderBy(this.prdSerAcListForCred, 'label'));
+      this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
+      this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
   }
 
@@ -501,7 +503,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public getStateCode(type: string, statesEle: SelectComponent) {
     let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
     if (gstVal.length >= 2) {
-      this.statesSource$.take(1).subscribe(st => {
+      this.statesSource$.pipe(take(1)).subscribe(st => {
         let s = st.find(item => item.value === gstVal.substr(0, 2));
         if (s) {
           this.invFormData.accountDetails[type].stateCode = s.value;
@@ -526,7 +528,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = false;
-    this.forceClear$ = Observable.of({status: true});
+    this.forceClear$ = observableOf({status: true});
     this.isCustomerSelected = false;
   }
 
@@ -658,7 +660,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.selectedPage;
 
-    this.salesService.generateGenericItem(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+    this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
         // reset form and other
         this.resetInvoiceForm(f);
@@ -770,7 +772,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    */
   public generateGrandTotal(txns: SalesTransactionItemClass[]) {
     return txns.reduce((pv, cv) => {
-        return cv.total ? pv + cv.total : pv;
+      return cv.total ? pv + cv.total : pv;
     }, 0);
   }
 
@@ -815,10 +817,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: any): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
-      this.salesAccounts$.take(1).subscribe(idata => {
+      this.salesAccounts$.pipe(take(1)).subscribe(idata => {
         idata.map(fa => {
           if (fa.value === selectedAcc.value) {
-            this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
+            this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
@@ -920,7 +922,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
           let appTaxes = [];
-          this.activeAccount$.take(1).subscribe(acc => {
+          this.activeAccount$.pipe(take(1)).subscribe(acc => {
             if (acc && acc.applicableTaxes) {
               acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
               this.stockTaxList = appTaxes;
@@ -1074,11 +1076,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-      txn.total = Number(txn.getTransactionTotal(tax, entry));
-      this.txnChangeOccurred();
-      entry.taxSum = _.sumBy(entry.taxes, function(o) {
-        return o.amount;
-      });
+    txn.total = Number(txn.getTransactionTotal(tax, entry));
+    this.txnChangeOccurred();
+    entry.taxSum = _.sumBy(entry.taxes, (o) => {
+      return o.amount;
+    });
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
@@ -1089,7 +1091,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     entry.taxList = arr;
     entry.taxes = [];
     if (this.selectedTaxes.length > 0) {
-      this.companyTaxesList$.take(1).subscribe(data => {
+      this.companyTaxesList$.pipe(take(1)).subscribe(data => {
         data.map((item: any) => {
           if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
             let o: IInvoiceTax = {
@@ -1121,7 +1123,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, function(o) {
+    entry.discountSum = _.sumBy(entry.discounts, (o) => {
       return o.amount;
     });
   }
@@ -1192,7 +1194,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public resetCustomerName(event) {
     // console.log(event);
     if (!event.target.value) {
-      this.forceClear$ = Observable.of({status: true});
+      this.forceClear$ = observableOf({status: true});
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
       this.invFormData.accountDetails.uniqueName = 'cash';
@@ -1246,10 +1248,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    */
   public prepareUnitArr(unitArr) {
     let unitArray = [];
-      _.forEach(unitArr, (item) => {
-        unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
-      });
-      return unitArray;
+    _.forEach(unitArr, (item) => {
+      unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+    });
+    return unitArray;
   }
 
   /**
@@ -1270,15 +1272,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
       let companyUniqueName = null;
-      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
-      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+      this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {

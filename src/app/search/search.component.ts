@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
@@ -12,9 +13,17 @@ import { CompanyActions } from '../actions/company.actions';
 })
 export class SearchComponent implements OnInit, OnDestroy {
   public searchRequestEmitter = new EventEmitter<SearchRequest>();
+
+  constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
+  }
+
   public _searchRequest: SearchRequest;
   public pageChangeEvent: any;
   public filterEventQuery: any;
+
+  public get searchRequest(): SearchRequest {
+    return this._searchRequest;
+  }
 
   @Input()
   public set searchRequest(search: SearchRequest) {
@@ -22,16 +31,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._searchRequest = search;
   }
 
-  public get searchRequest(): SearchRequest {
-    return this._searchRequest;
-  }
-
-  constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
-  }
-
   public ngOnInit() {
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'search';

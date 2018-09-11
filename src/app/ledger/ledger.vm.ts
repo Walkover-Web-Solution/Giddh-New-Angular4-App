@@ -1,5 +1,5 @@
 import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -229,7 +229,7 @@ export class LedgerVM {
         });
         this.bankTransactionsData.push(item);
       });
-    }else {
+    } else {
       this.bankTransactionsData = [];
       this.showEledger = false;
     }

@@ -1,135 +1,151 @@
-<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
+<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate
+      class="form-inline input-grp-dateRangePicker pr">
 
-    <div class="form-group mrR1">
-        <label class="d-block">Account</label>
-        <div class="ng-select-wrap">
-            <sh-select name="accountUniqueName" [options]="accounts$ | async" [(ngModel)]="invoiceSearchRequest.accountUniqueName" [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
-                <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
-                    </a>
-                </ng-template>
-            </sh-select>
-        </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Account</label>
+    <div class="ng-select-wrap">
+      <sh-select name="accountUniqueName" [options]="accounts$ | async"
+                 [(ngModel)]="invoiceSearchRequest.accountUniqueName" [placeholder]="'Select Account'"
+                 [notFoundLink]="false" [multiple]="false" [ItemHeight]="67"
+                 [useInBuiltFilterForIOptionTypeItems]="true">
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{ option.label }}</div>
+            <div class="item_unq">{{ option.value }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
     </div>
+  </div>
 
-    <div class="form-group mrR1">
-        <label class="d-block">Description</label>
-        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
+  <div class="form-group mrR1">
+    <label class="d-block">Description</label>
+    <input type="text" class="form-control" name="description" placeholder="By description"
+           [(ngModel)]="invoiceSearchRequest.description">
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Count</label>
+    <sh-select placeholder="Select" name="count" [(ngModel)]="invoiceSearchRequest.count" [options]="counts"
+               [ItemHeight]="33"></sh-select>
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">Amount</label>
+    <div class="custom-select pos-rel">
+      <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy"
+                 [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
     </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Count</label>
-        <sh-select placeholder="Select" name="count" [(ngModel)]="invoiceSearchRequest.count" [options]="counts" [ItemHeight]="33"></sh-select>
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">&nbsp;</label>
+    <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.balanceDue"
+           placeholder="By amount">
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">From - To</label>
+    <div class="input-group">
+      <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control"
+             [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker
+             [bsConfig]="bsConfig" required>
     </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Amount</label>
-        <div class="custom-select pos-rel">
-            <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
-        </div>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">&nbsp;</label>
-        <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.balanceDue" placeholder="By amount">
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">From - To</label>
-        <div class="input-group">
-            <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required>
-        </div>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">&nbsp;</label>
-        <button class="btn btn-success btn-sm">GO</button>
-    </div>
+  </div>
+  <div class="form-group mrR1">
+    <label class="d-block">&nbsp;</label>
+    <button class="btn btn-success btn-sm">GO</button>
+  </div>
 </form>
 
 <div class="no-data mrT2" *ngIf="!invoiceData">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
 </div>
 
 <div class="no-data" *ngIf="invoiceData && invoiceData.results.length === 0">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
+  <h1>No entries found within given criteria.</h1>
+  <h1>Do search with some other dates</h1>
 </div>
 
 <table class="table basic table-bordered mrT2" *ngIf="invoiceData && invoiceData.results.length > 0">
-    <thead class="t-h-bg1">
-        <tr>
-            <th>#</th>
-            <th>Due Date</th>
-            <th>Invoice Number</th>
-            <th>account</th>
-            <th>Date</th>
-            <th>Total amount</th>
-            <th>Balance Due</th>
-            <th>Action to perform</th>
-            <th>Status</th>
-            <th class="text-center">Delete</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <td colspan="100%">
-                <div class="alC">
-                    <pagination [totalItems]="invoiceData.totalPages" [(ngModel)]="invoiceData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                </div>
-            </td>
-        </tr>
-    </tfoot>
-    <tbody>
-        <tr *ngFor="let item of invoiceData.results; let i = index">
-            <td>{{ i + 1}}</td>
-            <td>{{item.dueDate ? item.dueDate : '-' }} </td>
-            <td>
-                <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.invoiceNumber}}</a>
-            </td>
-            <td>{{item.account.name}}</td>
-            <td>{{item.invoiceDate}}</td>
-            <td>{{item.grandTotal}}</td>
-            <td>{{item.balanceDue}}</td>
-            <td>
-                <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
-            </td>
-            <td>{{item.balanceStatus}}</td>
-            <td class="text-center">
-                <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
-            </td>
-        </tr>
-    </tbody>
+  <thead class="t-h-bg1">
+  <tr>
+    <th>#</th>
+    <th>Due Date</th>
+    <th>Invoice Number</th>
+    <th>account</th>
+    <th>Date</th>
+    <th>Total amount</th>
+    <th>Balance Due</th>
+    <th>Action to perform</th>
+    <th>Status</th>
+    <th class="text-center">Delete</th>
+  </tr>
+  </thead>
+  <tfoot>
+  <tr>
+    <td colspan="100%">
+      <div class="alC">
+        <pagination [totalItems]="invoiceData.totalPages" [(ngModel)]="invoiceData.page" [maxSize]="5"
+                    class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                    (pageChanged)="pageChanged($event)"></pagination>
+      </div>
+    </td>
+  </tr>
+  </tfoot>
+  <tbody>
+  <tr *ngFor="let item of invoiceData.results; let i = index">
+    <td>{{ i + 1}}</td>
+    <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+    <td>
+      <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.invoiceNumber}}</a>
+    </td>
+    <td>{{item.account.name}}</td>
+    <td>{{item.invoiceDate}}</td>
+    <td>{{item.grandTotal}}</td>
+    <td>{{item.balanceDue}}</td>
+    <td>
+      <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)"
+                 [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
+    </td>
+    <td>{{item.balanceStatus}}</td>
+    <td class="text-center">
+      <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
+    </td>
+  </tr>
+  </tbody>
 </table>
 <!-- Delete invoice confirmation model -->
 <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
-        </div>
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice"
+                                      (confirmDeleteEvent)="deleteConfirmedInvoice()"
+                                      (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
     </div>
+  </div>
 </div>
 <!-- Perform action on invoice model -->
 <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
-        </div>
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <perform-action-on-invoice-model
+        (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
     </div>
+  </div>
 </div>
 <!-- Download or Send Invoice on mail -->
 <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
-            </div>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- modal dialog -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-    <div class="modal-dialog gray modal-liquid">
-        <div class="modal-content">
-            <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
-        </div>
+  <div class="modal-dialog gray modal-liquid">
+    <div class="modal-content">
+      <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
     </div>
+  </div>
 </div>

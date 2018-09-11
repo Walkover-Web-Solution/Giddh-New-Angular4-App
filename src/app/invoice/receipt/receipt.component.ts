@@ -1,3 +1,6 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -7,11 +10,9 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
-import { Observable } from 'rxjs/Observable';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -80,8 +81,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.receiptSearchRequest.page = 1;
     this.receiptSearchRequest.count = 25;
     this.receiptSearchRequest.entryTotalBy = '';
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-    this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).takeUntil(this.destroyed$);
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -93,10 +94,10 @@ export class ReceiptComponent implements OnInit, OnDestroy {
           accounts.push({label: item.name, value: item.uniqueName});
         }
       });
-      this.accounts$ = Observable.of(orderBy(accounts, 'label'));
+      this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.data).takeUntil(this.destroyed$).subscribe((o: ReciptResponse) => {
+    this.store.select(p => p.receipt.data).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
       if (o) {
         this.receiptData = _.cloneDeep(o);
       } else {
