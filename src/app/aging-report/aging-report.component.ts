@@ -8,9 +8,10 @@ import { AgingReportActions } from '../actions/aging-report.actions';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
 import { ContactService } from '../services/contact.service';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'aging-report',
@@ -29,7 +30,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
     }
   `]
 })
-export class AgingReportComponent implements OnInit{
+export class AgingReportComponent implements OnInit {
   public totalDueSelectedOption: string = '0';
   public totalDueAmount: number = 0;
   public includeName: boolean = false;
@@ -50,15 +51,15 @@ export class AgingReportComponent implements OnInit{
     private router: Router, private _agingReportActions: AgingReportActions,
     private _contactService: ContactService,
     private componentFactoryResolver: ComponentFactoryResolver) {
-    this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).takeUntil(this.destroyed$);
+    this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-    this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).takeUntil(this.destroyed$);
-    this.store.select(s => s.agingreport.data).takeUntil(this.destroyed$).subscribe((data) => {
+    this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
+    this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
         this.loadPaginationComponent(data);
       }
-      this.dueAmountReportData$ = Observable.of(data);
+      this.dueAmountReportData$ = of(data);
     });
   }
 

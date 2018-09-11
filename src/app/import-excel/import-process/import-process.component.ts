@@ -26,6 +26,11 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   @Input() public entity: string;
   public editHeaderIdx: number = null;
   public dataModel: DataModel[];
+
+  constructor() {
+    //
+  }
+
   private _importData: ImportExcelRequestData;
 
   public get importData(): ImportExcelRequestData {
@@ -37,10 +42,6 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     this.prepareDataModel(value);
     // this.prepareData(value);
     this._importData = value;
-  }
-
-  constructor() {
-    //
   }
 
   public ngOnInit() {

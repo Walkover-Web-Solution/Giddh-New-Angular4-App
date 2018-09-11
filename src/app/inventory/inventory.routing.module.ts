@@ -16,13 +16,13 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
         children: [
           // { path: '', pathMatch: 'full', redirectTo: 'add-stock' },
           // { path: 'add-group', pathMatch: 'full', component: InventoryUpdateGroupComponent },
-          { path: 'add-group/:groupUniqueName', pathMatch: 'full', component: InventoryUpdateGroupComponent },
+          {path: 'add-group/:groupUniqueName', pathMatch: 'full', component: InventoryUpdateGroupComponent},
           // { path: 'add-stock', pathMatch: 'full', component: InventoryAddStockComponent },
-          { path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent },
-          { path: 'add-group/:groupUniqueName/stock-report/:stockUniqueName', component: InventoryStockReportComponent },
-          { path: 'group/:groupUniqueName/stock-report', component: InventoryGroupStockReportComponent },
-          { path: 'custom-stock', component: InventoryCustomStockComponent },
-          { path: '', pathMatch: 'full', component: InventoryWelcomeComponent }
+          {path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent},
+          {path: 'add-group/:groupUniqueName/stock-report/:stockUniqueName', component: InventoryStockReportComponent},
+          {path: 'group/:groupUniqueName/stock-report', component: InventoryGroupStockReportComponent},
+          {path: 'custom-stock', component: InventoryCustomStockComponent},
+          {path: '', pathMatch: 'full', component: InventoryWelcomeComponent}
         ]
       }
 
@@ -30,4 +30,5 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
   ],
   exports: [RouterModule]
 })
-export class InventoryRoutingModule { }
+export class InventoryRoutingModule {
+}

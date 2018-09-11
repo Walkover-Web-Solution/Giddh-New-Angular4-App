@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, SimpleChanges, OnChanges, OnInit, Output, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { IFlattenGroupsAccountsDetail, IFlattenGroupsAccountItem, IFlattenGroupsAccountsDetailItem } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
+import { IFlattenGroupsAccountItem, IFlattenGroupsAccountsDetail, IFlattenGroupsAccountsDetailItem } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { FlyAccountsActions } from '../../../../actions/fly-accounts.actions';
 import * as _ from '../../../../lodash-optimized';
 
@@ -34,7 +34,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef) {
     this.store.select(state => {
       return state.flyAccounts.flattenGroupsAccounts;
-    }).takeUntil(this.destroyed$).subscribe(p => {
+    }).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       this.flatAccountWGroupsList = _.cloneDeep(p);
       this.Items = _.flatten(_.map(this.flatAccountWGroupsList, (g: IFlattenGroupsAccountsDetail): IFlattenGroupsAccountItem[] => {
         let r: IFlattenGroupsAccountItem[] = [{
@@ -92,12 +92,13 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
       // this.toggleAccounts(this._noGroups);
       // this._noGroups = true;
     });
-    this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
+    this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).pipe(takeUntil(this.destroyed$));
 
     this.companyList$ = this.store.select(state => {
       return state.session.companies;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
   }
+
   public ngOnChanges(s: SimpleChanges) {
     if (s.noGroups && !s.noGroups.firstChange && s.noGroups.currentValue !== s.noGroups.previousValue) {
       this.toggleNoGroups(s.noGroups.currentValue);
@@ -109,13 +110,15 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
       this.toggleNoGroups(s.noGroups.currentValue);
     }
   }
+
   public ngOnInit() {
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(a => {
       if (a && a !== '') {
         this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
       }
     });
   }
+
   public searchAccount(s: string) {
     this.Items = _.cloneDeep(this.ItemsSRC);
     if (s === '') {
@@ -144,6 +147,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
       this.cd.detectChanges();
     }
   }
+
   public toggleNoGroups(noGroups: boolean) {
     // this.flatAccountWGroupsList.forEach(p => {
     //   p.isOpen = noGroups;
@@ -183,12 +187,14 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public getSize(item: IFlattenGroupsAccountItem, index) {
     if (item.isGroup) {
       return 37;
     }
     return 32;
   }
+
   public toggleGroup(group: IFlattenGroupsAccountItem, index, event: Event) {
     event.preventDefault();
     event.stopPropagation();

@@ -67,11 +67,13 @@ interface IAccount {
   email: string;
   mobileNumber: string;
 }
+
 interface IUser {
   name: string;
   email: string;
   uniqueName: string;
 }
+
 interface IOld {
   openingBalance: string;
   openingBalanceDate: string;

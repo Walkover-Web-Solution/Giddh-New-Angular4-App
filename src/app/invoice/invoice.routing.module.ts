@@ -18,7 +18,7 @@ import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.com
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 
 import { FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
-import { NgUploaderModule } from 'ngx-uploader';
+import { NgxUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
@@ -101,7 +101,7 @@ const INVOICE_ROUTES: Routes = [
     InvoiceTemplatesModule,
     FontPickerModule,
     BsDatepickerModule.forRoot(),
-    NgUploaderModule,
+    NgxUploaderModule,
     SelectModule,
     LaddaModule,
     ShSelectModule,

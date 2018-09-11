@@ -9,6 +9,7 @@ export interface DayBookResponseModel {
   creditTotal: number;
   debitTotal: number;
 }
+
 export interface Entry {
   uniqueName: string;
   voucherName: string;
@@ -21,11 +22,13 @@ export interface Entry {
   debitAmount?: number;
   isExpanded?: boolean;
 }
+
 export interface OtherTransaction {
   particular: Particular;
   amount: number;
   type: string;
 }
+
 export interface Particular {
   uniqueName: string;
   name: string;

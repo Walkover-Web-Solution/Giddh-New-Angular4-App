@@ -11,7 +11,7 @@ export interface IFlattenGroupsAccountsDetailItem {
   name?: string;
   uniqueName?: string;
   amount?: number;
-  discounts?: any[];  
+  discounts?: any[];
 }
 
 export interface IFlattenGroupsAccountsDetail extends IFlattenGroupsAccountsDetailItem {

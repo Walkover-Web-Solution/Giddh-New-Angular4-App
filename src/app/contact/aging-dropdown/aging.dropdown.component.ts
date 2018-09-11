@@ -1,3 +1,4 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
@@ -36,21 +37,25 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
   @Input() public options: AgingDropDownoptions;
   public setDueRangeRequestInFlight$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private _toasty: ToasterService, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
     //
-    this.setDueRangeRequestInFlight$ = this.store.select(s => s.agingreport.setDueRangeRequestInFlight).takeUntil(this.destroyed$);
+    this.setDueRangeRequestInFlight$ = this.store.select(s => s.agingreport.setDueRangeRequestInFlight).pipe(takeUntil(this.destroyed$));
 
   }
 
   public ngOnInit() {
     //
   }
+
   public ngOnDestroy() {
     // this.closeEvent.emit(this.options);
   }
+
   public closeAgingDropDown() {
     this.store.dispatch(this._agingReportActions.CloseDueRange());
   }
+
   public saveAgingDropdown() {
     let valid = true;
     if (this.options.fourth >= (this.options.fifth || this.options.sixth)) {
@@ -66,9 +71,10 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
       valid = false;
     }
     if (valid) {
-      this.store.dispatch(this._agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
+      this.store.dispatch(this._agingReportActions.CreateDueRange({range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()]}));
     }
   }
+
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }

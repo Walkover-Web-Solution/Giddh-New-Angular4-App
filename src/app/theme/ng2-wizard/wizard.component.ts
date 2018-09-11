@@ -1,10 +1,10 @@
-import { Component, Output, EventEmitter, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, EventEmitter, Output, QueryList } from '@angular/core';
 import { WizardStepComponent } from './wizard-step.component';
 
 @Component({
   selector: 'form-wizard',
   template:
-  `<div class="card">
+    `<div class="card">
     <div class="card-block">
       <ng-content></ng-content>
     </div>
@@ -34,20 +34,18 @@ export class WizardComponent implements AfterContentInit {
   public wizardSteps: QueryList<WizardStepComponent>;
 
   @Output() public onStepChanged: EventEmitter<WizardStepComponent> = new EventEmitter<WizardStepComponent>();
-  private _steps: WizardStepComponent[] = [];
-  private _isCompleted: boolean = false;
 
   // tslint:disable-next-line:no-empty
-  constructor() { }
-
-  public ngAfterContentInit() {
-    this.wizardSteps.forEach(step => this._steps.push(step));
-    this.steps[0].isActive = true;
+  constructor() {
   }
+
+  private _steps: WizardStepComponent[] = [];
 
   get steps(): WizardStepComponent[] {
     return this._steps.filter(step => !step.hidden);
   }
+
+  private _isCompleted: boolean = false;
 
   get isCompleted(): boolean {
     return this._isCompleted;
@@ -75,6 +73,11 @@ export class WizardComponent implements AfterContentInit {
 
   get hasPrevStep(): boolean {
     return this.activeStepIndex > 0;
+  }
+
+  public ngAfterContentInit() {
+    this.wizardSteps.forEach(step => this._steps.push(step));
+    this.steps[0].isActive = true;
   }
 
   public goToStep(step: WizardStepComponent): void {

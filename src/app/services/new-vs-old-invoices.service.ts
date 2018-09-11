@@ -1,3 +1,4 @@
+import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -28,11 +29,11 @@ export class NewVsOldInvoicesService implements OnInit {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':type', queryRequest.type.toString())
       .replace(':value', queryRequest.value.toString()))
-      .map((res) => {
+      .pipe(map((res) => {
         let data: BaseResponse<NewVsOldInvoicesResponse, string> = res;
         data.queryString = queryRequest;
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<NewVsOldInvoicesResponse, string>(e, null, queryRequest));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<NewVsOldInvoicesResponse, string>(e, null, queryRequest)));
   }
 }

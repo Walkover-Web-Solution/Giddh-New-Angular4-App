@@ -11,9 +11,9 @@ import { MfReportComponent } from './report/mf.report.component';
       {
         path: '', component: ManufacturingComponent, canActivate: [NeedsAuthentication],
         children: [
-          { path: '', redirectTo: 'report', pathMatch: 'full' },
-          { path: 'report', component: MfReportComponent },
-          { path: 'edit', component: MfEditComponent }
+          {path: '', redirectTo: 'report', pathMatch: 'full'},
+          {path: 'report', component: MfReportComponent},
+          {path: 'edit', component: MfEditComponent}
 
           // { path: 'add-group', pathMatch: 'full', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication] },
           // { path: 'add-group/:groupUniqueName', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication], },
@@ -27,4 +27,5 @@ import { MfReportComponent } from './report/mf.report.component';
   ],
   exports: [RouterModule]
 })
-export class ManufacturingRoutingModule { }
+export class ManufacturingRoutingModule {
+}

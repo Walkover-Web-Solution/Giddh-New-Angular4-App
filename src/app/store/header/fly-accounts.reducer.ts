@@ -24,14 +24,14 @@ export const initialState: FlyAccountsState = {
 export function FlyAccountsReducer(state = initialState, action: CustomActions): FlyAccountsState {
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST:
-      return Object.assign({}, state, { isFlyAccountInProcess: true });
+      return Object.assign({}, state, {isFlyAccountInProcess: true});
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE:
       return Object.assign({}, state, {isFlyAccountInProcess: false, flattenGroupsAccounts: prepare(action.payload ? action.payload.results : [])});
     case FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP:
-      return Object.assign({}, state, { flattenGroupsAccounts: prepare([]) });
+      return Object.assign({}, state, {flattenGroupsAccounts: prepare([])});
     default: {
       return state;
     }

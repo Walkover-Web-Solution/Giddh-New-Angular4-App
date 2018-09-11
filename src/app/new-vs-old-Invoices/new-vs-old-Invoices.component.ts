@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { NewVsOldInvoicesActions } from '../actions/new-vs-old-invoices.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { NgForm } from '@angular/forms';
 
