@@ -205,7 +205,7 @@
           </div>
         </div>
         <div class="pull-right">
-          <label class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
+          <label class="upload_div" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
             <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
                    [uploadInput]="uploadInput"
                    (uploadOutput)="onUploadOutput($event)">
