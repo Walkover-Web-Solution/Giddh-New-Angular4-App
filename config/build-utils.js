@@ -78,7 +78,7 @@ function ngcWebpackSetup(prod, metadata) {
   }
   // console.log('govinda : prod ', prod);
   // console.log('govinda : AOT ', metadata.AOT);
-  const buildOptimizer = prod;
+  const buildOptimizer = prod && metadata.AOT;
   const sourceMap = false; // TODO: apply based on tsconfig value?
   const ngcWebpackPluginOptions = {
     skipCodeGeneration: !metadata.AOT,
@@ -109,7 +109,7 @@ function ngcWebpackSetup(prod, metadata) {
   const loaders = [
     {
       test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-      use: metadata.AOT && buildOptimizer ? [buildOptimizerLoader, '@ngtools/webpack'] : ['@ngtools/webpack']
+      use: buildOptimizer ? [ buildOptimizerLoader, '@ngtools/webpack' ] : [ '@ngtools/webpack' ]
     },
     {
       // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
