@@ -41,7 +41,6 @@ import { LaddaModule } from 'angular2-ladda/module/module';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { LoaderComponent } from './loader/loader.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { ActionModule } from './actions/action.module';
 import { DecoratorsModule } from './decorators/decorators.module';
@@ -53,11 +52,11 @@ import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { IS_ELECTRON_WA } from './app.constant';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  {provide: APP_BASE_HREF, useValue: isElectron ? './' : AppUrl + APP_FOLDER}
+  {provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER}
   // { provide: APP_BASE_HREF, useValue: './' }
 ];
 
@@ -142,7 +141,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, {useHash: isElectron, preloadingStrategy: PreloadAllModules}),
+    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: PreloadAllModules}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     // StoreRouterConnectingModule,
     // StoreDevtoolsModule.instrument({

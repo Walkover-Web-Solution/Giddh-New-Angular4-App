@@ -1,6 +1,7 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger, ViewChild, ComponentFactoryResolver, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, ComponentFactoryResolver, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
@@ -16,9 +17,10 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { createSelector } from 'reselect';
 import * as _ from 'lodash';
-import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportResponse, DueAmountReportRequest } from '../models/api-models/Contact';
+import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../models/api-models/Contact';
 import { AgingReportActions } from '../actions/aging-report.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -109,19 +111,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver) {
+
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+
     this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
       // console.log('flattenAccountsStream$');
       return s;
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
     // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
-    this.store.select(s => s.agingreport.data).takeUntil(this.destroyed$).subscribe((data) => {
+    this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
         this.loadPaginationComponent(data);
       }
-      this.dueAmountReportData$ = Observable.of(data);
+      this.dueAmountReportData$ = observableOf(data);
     });
   }
 
@@ -130,7 +134,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     // this.filterDropDownList.placement = 'left';
 
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'contact';
@@ -139,7 +143,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     this.getAccounts('sundrydebtors', null, null, 'true');
 
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
+    this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         this.toggleAccountAsidePane();
         this.getAccounts('sundrydebtors', null, null, 'true');
@@ -160,7 +164,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
-        this.bankAccounts$ = Observable.of(accounts);
+        this.bankAccounts$ = observableOf(accounts);
       }
     });
   }
@@ -182,9 +186,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public search(ev: any) {
     let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
     if (this.activeTab === 'customer') {
-      this.sundryDebtorsAccounts$ = Observable.of(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
+      this.sundryDebtorsAccounts$ = observableOf(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
     } else {
-      this.sundryCreditorsAccounts$ = Observable.of(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
+      this.sundryCreditorsAccounts$ = observableOf(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
     }
   }
 
@@ -416,13 +420,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
-          this.sundryDebtorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
+          this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
           // if (requestedFrom !== 'pagination') {
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
-          this.sundryCreditorsAccounts$ = Observable.of(_.cloneDeep(res.body.results));
+          this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
         }
       }
     });

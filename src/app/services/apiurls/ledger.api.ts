@@ -1,4 +1,3 @@
-
 const UNIVERSAL_URI_LEDGER = 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/';
 
 export const LEDGER_API = {

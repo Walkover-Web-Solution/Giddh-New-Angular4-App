@@ -1,12 +1,13 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../../../services/inventory.service';
 import { INameUniqueName, StockGroupRequest, StockGroupResponse } from '../../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
@@ -25,7 +26,7 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
   // public
   public isAddStockGroupInProcess: boolean = false;
   public addStockGroupForm: FormGroup;
-  public stockGroups$: Observable<IOption[]> = Observable.of([]);
+  public stockGroups$: Observable<IOption[]> = observableOf([]);
   public isGroupNameAvailable$: Observable<boolean>;
 
   // private
@@ -40,7 +41,7 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private _salesActions: SalesActions
   ) {
-    this.isGroupNameAvailable$ = this._store.select(state => state.inventory.isGroupNameAvailable).takeUntil(this.destroyed$);
+    this.isGroupNameAvailable$ = this._store.select(state => state.inventory.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -49,26 +50,26 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
     this.addStockGroupForm = this._fb.group({
       name: [null, [Validators.required]],
       uniqueName: [null, [Validators.required]],
-      parentStockGroupUniqueName: [{ value: null, disabled: true }, [Validators.required]],
+      parentStockGroupUniqueName: [{value: null, disabled: true}, [Validators.required]],
       isSelfParent: [true]
     });
 
     // enable disable parentGroup select
-    this.addStockGroupForm.controls['isSelfParent'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
+    this.addStockGroupForm.controls['isSelfParent'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s) {
         this.addStockGroupForm.controls['parentStockGroupUniqueName'].reset();
         this.addStockGroupForm.controls['parentStockGroupUniqueName'].disable();
       } else {
         this.addStockGroupForm.controls['parentStockGroupUniqueName'].enable();
-        this.addStockGroupForm.setErrors({ groupNameInvalid: true });
+        this.addStockGroupForm.setErrors({groupNameInvalid: true});
       }
     });
 
     // get groups list and assign values
-    this._store.select(state => state.sales.hierarchicalStockGroups).takeUntil(this.destroyed$).subscribe((o) => {
+    this._store.select(state => state.sales.hierarchicalStockGroups).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
-        this.stockGroups$ = Observable.of(o);
-      }else {
+        this.stockGroups$ = observableOf(o);
+      } else {
         this.getStockGroups();
       }
     });
@@ -84,16 +85,16 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
       this.isGroupNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
-            this.addStockGroupForm.patchValue({ uniqueName: val });
+            this.addStockGroupForm.patchValue({uniqueName: val});
           } else {
-            this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+            this.addStockGroupForm.patchValue({uniqueName: val + 1});
           }
         } else {
-          this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+          this.addStockGroupForm.patchValue({uniqueName: val + 1});
         }
       });
-    }else {
-      this.addStockGroupForm.patchValue({ uniqueName: null });
+    } else {
+      this.addStockGroupForm.patchValue({uniqueName: null});
     }
   }
 
@@ -105,7 +106,7 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
   public addStockGroupFormSubmit() {
     this.isAddStockGroupInProcess = true;
     let formObj: StockGroupRequest = this.addStockGroupForm.value;
-    this._inventoryService.CreateStockGroup(formObj).takeUntil(this.destroyed$).subscribe((res) => {
+    this._inventoryService.CreateStockGroup(formObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
       let o: INameUniqueName;
       if (data.status === 'success') {

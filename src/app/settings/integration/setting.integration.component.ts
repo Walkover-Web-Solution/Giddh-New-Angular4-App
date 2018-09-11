@@ -1,13 +1,14 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import { CashfreeClass, EmailKeyClass, RazorPayClass, SmsKeyClass, AmazonSellerClass } from '../../models/api-models/SettingsIntegraion';
-import { Observable } from 'rxjs/Observable';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -19,13 +20,15 @@ export declare const gapi: any;
   selector: 'setting-integration',
   templateUrl: './setting.integration.component.html',
   styles: [`
-    #inlnImg img{
-      max-height:18px;
+    #inlnImg img {
+      max-height: 18px;
     }
-    .fs18{
+
+    .fs18 {
       font-weight: bold;
     }
-    .pdBth20{
+
+    .pdBth20 {
       padding: 0 20px;
     }
   `]
@@ -55,8 +58,8 @@ export class SettingIntegrationComponent implements OnInit {
   public isGmailIntegrated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
-  private isSellerAdded: Observable<boolean> = Observable.of(false);
-  private isSellerUpdate: Observable<boolean> = Observable.of(false);
+  private isSellerAdded: Observable<boolean> = observableOf(false);
+  private isSellerUpdate: Observable<boolean> = observableOf(false);
 
   constructor(
     private router: Router,
@@ -66,19 +69,19 @@ export class SettingIntegrationComponent implements OnInit {
     private toasty: ToasterService,
     private _fb: FormBuilder
   ) {
-    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl));
-    this.gmailAuthCodeUrl$ = Observable.of(this.gmailAuthCodeStaticUrl);
-    this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).takeUntil(this.destroyed$);
-    this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).takeUntil(this.destroyed$);
-    this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).takeUntil(this.destroyed$);
+    this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
+    this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).pipe(takeUntil(this.destroyed$));
+    this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
+    this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
     // getting all page data of integration page
-    this.store.select(p => p.settings.integration).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.integration).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       // set sms form data
       if (o.smsForm) {
         this.smsFormObj = o.smsForm;
@@ -139,8 +142,8 @@ export class SettingIntegrationComponent implements OnInit {
             bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
-        this.accounts$ = Observable.of(accounts);
-        this.bankAccounts$ = Observable.of(accounts);
+        this.accounts$ = observableOf(accounts);
+        this.bankAccounts$ = observableOf(accounts);
       }
     });
 
@@ -158,7 +161,7 @@ export class SettingIntegrationComponent implements OnInit {
 
     this.isSellerUpdate.subscribe(a => {
       if (a) {
-       // console.log('isSellerUpdate', a);
+        // console.log('isSellerUpdate', a);
         this.amazonEditItemIdx = null;
         this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
       }
@@ -179,7 +182,7 @@ export class SettingIntegrationComponent implements OnInit {
   public setDummyData() {
     this.razorPayObj.userName = '';
     this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-    this.razorPayObj.account = { name: null, uniqueName: null };
+    this.razorPayObj.account = {name: null, uniqueName: null};
     this.razorPayObj.autoCapturePayment = true;
   }
 
@@ -331,8 +334,8 @@ export class SettingIntegrationComponent implements OnInit {
   public deleteAmazonSeller(sellerId, idx) {
     let seller = this.amazonSellerRes.findIndex((o) => o.sellerId === sellerId);
     if (seller > -1) {
-          this.store.dispatch(this.settingsIntegrationActions.DeleteAmazonSeller(sellerId));
-          this.removeAmazonSeller(idx);
+      this.store.dispatch(this.settingsIntegrationActions.DeleteAmazonSeller(sellerId));
+      this.removeAmazonSeller(idx);
     } else {
       this.removeAmazonSeller(idx);
     }

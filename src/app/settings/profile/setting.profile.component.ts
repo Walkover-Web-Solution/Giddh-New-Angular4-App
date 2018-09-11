@@ -1,19 +1,20 @@
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+
+import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
-import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { CompanyService } from '../../services/companyService.service';
-import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { States } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
-import { Subject } from 'rxjs';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -40,8 +41,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public companyProfileObj: any = {};
   public stateStream$: Observable<States[]>;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
-  public currencySource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
+  public currencySource$: Observable<IOption[]> = observableOf([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
   public states: IOption[] = [];
@@ -70,7 +71,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private _location: LocationService
   ) {
-    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     contriesWithCodes.map(c => {
       this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
     });
@@ -83,19 +84,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
-      this.statesSource$ = Observable.of(this.states);
+      this.statesSource$ = observableOf(this.states);
     }, (err) => {
       // console.log(err);
     });
 
-    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
           currencies.push({label: d.code, value: d.code});
         });
       }
-      this.currencySource$ = Observable.of(currencies);
+      this.currencySource$ = observableOf(currencies);
     });
   }
 
@@ -103,10 +104,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.initProfileObj();
 
     this.dataSource = (text$: Observable<any>): Observable<any> => {
-      return text$
-        .debounceTime(300)
-        .distinctUntilChanged()
-        .switchMap((term: string) => {
+      return text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term: string) => {
           if (term.startsWith(' ', 0)) {
             return [];
           }
@@ -115,31 +116,28 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             AdministratorLevel: undefined,
             Country: undefined,
             OnlyCity: true
-          }).catch(e => {
+          }).pipe(catchError(e => {
             return [];
-          });
-        })
-        .map((res) => {
+          }));
+        }),
+        map((res) => {
           // let data = res.map(item => item.address_components[0].long_name);
           let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
-        });
+        }));
     };
 
     this.keyDownSubject$
-      .debounceTime(3000)
-      .distinctUntilChanged()
-      .do(v => console.log(v.target))
-      .takeUntil(this.destroyed$)
+      .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         this.patchProfile({[event.target.name]: event.target.value});
       });
 
     this.gstKeyDownSubject$
-      .debounceTime(3000)
-      .distinctUntilChanged()
-      .takeUntil(this.destroyed$)
+      .pipe(debounceTime(3000)
+        , distinctUntilChanged()
+        , takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
       });
@@ -154,10 +152,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings).distinctUntilKeyChanged('profileRequest').takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.profile).pipe(distinctUntilKeyChanged('profileRequest'), takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.profileRequest) {
-        let profileObj = _.cloneDeep(o.profile);
-        console.log('profile updated ', profileObj.contactNo);
+        let profileObj = _.cloneDeep(o);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
         }
@@ -202,7 +199,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         // this.selectState(false);
       }
     });
-    this.store.take(1).subscribe(s => {
+    this.store.pipe(take(1)).subscribe(s => {
       if (s.session.user) {
         this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
       }

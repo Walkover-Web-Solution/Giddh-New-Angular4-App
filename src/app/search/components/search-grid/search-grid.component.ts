@@ -1,16 +1,16 @@
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { isNullOrUndefined } from 'util';
 import { saveAs } from 'file-saver';
 import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'search-grid',  // <home></home>
@@ -81,16 +81,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   public searchRequest$: Observable<SearchRequest>;
   public isAllChecked: boolean = false;
 
-  public get sortType(): string {
-    return this._sortType;
-  }
-
-  // sorting by sortype
-  public set sortType(value: string) {
-    this._sortType = value;
-    this.sortReverse = this._sortReverse;
-  }
-
   public get sortReverse(): boolean {
     return this._sortReverse;
   }
@@ -98,7 +88,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // reversing sort
   public set sortReverse(value: boolean) {
     this._sortReverse = value;
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
+    this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
   }
 
   // pagination related
@@ -120,22 +110,27 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
     this.searchResponse$ = this.store.select(p => p.search.value);
     this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-    // this.searchResponseFiltered$ = this.searchResponse$.map(p => {
+    // this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
     //   console.log('the p iss now :', p);
     //   return _.cloneDeep(p).map(j => {
     //     j.isSelected = false;
     //     return j;
     //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-    // });
+    // }));
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(p => this.companyUniqueName = p);
+    this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(p => this.companyUniqueName = p);
 
     this.store.select(p => p.search.searchPaginationInfo).subscribe((info) => {
       this.page = info.page;
       this.totalPages = info.totalPages;
     });
+  }
+
+  public set sortType(value: string) {
+    this._sortType = value;
+    this.sortReverse = this._sortReverse;
   }
 
   public ngOnInit() {
@@ -159,7 +154,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     let isAllChecked = ev.target.checked;
     this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
 
-    this.searchResponseFiltered$.take(1).subscribe(p => {
+    this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
       let entries = _.cloneDeep(p);
       this.isAllChecked = isAllChecked;
 
@@ -209,27 +204,27 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       switch (query.queryType) {
         case 'openingBalance':
           queryForApi['openingBalance'] = query.amount,
-          queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
         case 'closingBalance':
           queryForApi['closingBalance'] = query.amount,
-          queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
         case 'creditTotal':
           queryForApi['creditTotal'] = query.amount,
-          queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
         case 'debitTotal':
           queryForApi['debitTotal'] = query.amount,
-          queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-          queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
-          queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
           break;
       }
     });
@@ -331,9 +326,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Save CSV File with data from Table...
   public createCSV() {
+
     // New logic (download CSV from API)
-    this.searchLoader$ = Observable.of(true);
-    this.searchRequest$.take(1).subscribe(p => {
+    this.searchLoader$ = of(true);
+    this.searchRequest$.pipe(take(1)).subscribe(p => {
       if (isNullOrUndefined(p)) {
         return;
       }
@@ -350,7 +346,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       };
 
       this._companyServices.downloadCSV(request).subscribe((res) => {
-        this.searchLoader$ = Observable.of(false);
+        this.searchLoader$ = of(false);
         if (res.status === 'success') {
           let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
           return saveAs(blobData, `${p.groupName}.csv`);
@@ -404,7 +400,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   // Add Selected Value to Message Body
@@ -467,7 +463,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     //   });
     // });
 
-    await this.searchResponseFiltered$.take(1).subscribe(p => {
+    await this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
       accountsUnqList = [];
       p.forEach((item: AccountFlat) => {
         if (item.isSelected) {
@@ -479,7 +475,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // accountsUnqList = _.uniq(this.selectedItems);
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
-    this.searchRequest$.take(1).subscribe(p => {
+    this.searchRequest$.pipe(take(1)).subscribe(p => {
       if (isNullOrUndefined(p)) {
         return;
       }
@@ -513,7 +509,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             };
             this.selectedItems = [];
             this.isAllChecked = false;
-        });
+          });
       }
     });
     this.mailModal.hide();

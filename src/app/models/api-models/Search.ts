@@ -102,6 +102,7 @@ export interface BulkEmailRequest {
   params: BulkEmailRequestParams;
   data: BulkEmailRequestData;
 }
+
 export interface BulkEmailRequestData {
   message: string;
   accounts: string[];

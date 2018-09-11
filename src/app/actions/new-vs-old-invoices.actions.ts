@@ -1,6 +1,7 @@
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { ToasterService } from '../services/toaster.service';
@@ -19,16 +20,16 @@ export class NewVsOldInvoicesActions {
   @Effect()
   private getNewVsOldInvoicesResponse$: Observable<Action> = this.action$
     .ofType(NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._NewVsOldInvoicesService.GetNewVsOldInvoices(action.payload.queryRequest)
-        .map((r) => this.validateResponse<NewVsOldInvoicesResponse, string>(r, {
-          type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE,
-          payload: r.body
-        }, true, {
+    .pipe(
+      switchMap((action: CustomActions) => this._NewVsOldInvoicesService.GetNewVsOldInvoices(action.payload.queryRequest)),
+      map((r) => this.validateResponse<NewVsOldInvoicesResponse, string>(r, {
+        type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE,
+        payload: r.body
+      }, true, {
           type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE,
           payload: null
-        }));
-    });
+        }
+      )));
 
   constructor(private action$: Actions, private _NewVsOldInvoicesService: NewVsOldInvoicesService,
               private _toasty: ToasterService, private store: Store<AppState>, private _generalService: GeneralService) {

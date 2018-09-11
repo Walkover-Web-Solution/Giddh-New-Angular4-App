@@ -1,5 +1,5 @@
-import { Validators } from '@angular/forms';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { setTimeout } from 'timers';
@@ -9,7 +9,7 @@ import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
@@ -25,12 +25,12 @@ import { QuickAccountComponent } from '../../theme/quick-account-component/quick
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 
 const TransactionsType = [
-  { label: 'By', value: 'Debit' },
-  { label: 'To', value: 'Credit' },
+  {label: 'By', value: 'Debit'},
+  {label: 'To', value: 'Credit'},
 ];
 
 const CustomShortcode = [
-  { code: 'F9', route: 'purchase' }
+  {code: 'F9', route: 'purchase'}
 ];
 
 @Component({
@@ -112,7 +112,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.watchKeyboardEvent(key);
     });
 
-    this._tallyModuleService.selectedPageInfo.distinctUntilChanged((p, q) => {
+    this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
       if (p && q) {
         return (_.isEqual(p, q));
       }
@@ -120,7 +120,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         return false;
       }
       return true;
-     }).subscribe((d) => {
+    })).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
         setTimeout(() => {
@@ -140,21 +140,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       chequeNumber: ['', [Validators.required]]
     }),
 
-    this._tallyModuleService.requestData.distinctUntilChanged((p, q) => {
-      if (p && q) {
-        return (_.isEqual(p, q));
-      }
-      if ((p && !q) || (!p && q)) {
-        return false;
-      }
-      return true;
-     }).subscribe((data) => {
-      if (data) {
-        this.requestObj = _.cloneDeep(data);
-      }
-    });
+      this._tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
+        if (p && q) {
+          return (_.isEqual(p, q));
+        }
+        if ((p && !q) || (!p && q)) {
+          return false;
+        }
+        return true;
+      })).subscribe((data) => {
+        if (data) {
+          this.requestObj = _.cloneDeep(data);
+        }
+      });
 
-    this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$).subscribe((s: boolean) => {
+    this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.refreshEntry();
@@ -182,7 +182,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (accounts) {
         let accList: IOption[] = [];
         accounts.forEach((acc: IFlattenAccountsResultItem) => {
-          accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+          accList.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc});
         });
         this.flattenAccounts = accList;
         this.inputForList = _.cloneDeep(this.flattenAccounts);
@@ -297,7 +297,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onAccountBlur to hide accountList
    */
   public onAccountBlur(ev) {
-    this.arrowInput = { key: 0 };
+    this.arrowInput = {key: 0};
     // this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
@@ -582,7 +582,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function(obj: any, idx) {
+    _.forEach(transactions, function (obj: any, idx) {
       if (obj && !obj.particular && !obj.amount) {
         transactions = _.without(transactions, obj);
       }
@@ -596,7 +596,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public validateTransaction(transactions) {
     let validEntry = this.removeBlankTransaction(transactions);
     let entryIsValid = true;
-    _.forEach(validEntry, function(obj: any, idx) {
+    _.forEach(validEntry, function (obj: any, idx) {
       if (obj.particular && !obj.amount) {
         obj.amount = 0;
       } else if (obj && !obj.particular) {
@@ -659,14 +659,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
 
       // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-      this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName};
+      this.requestObj.transactions[idx].inventory[i].stock = {name: item.name, uniqueName: item.uniqueName};
       // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
       this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
     }
 
   }
 
-    /**
+  /**
    * changePrice
    */
   public changePrice(idx, val) {
@@ -718,23 +718,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
- public detectKey(ev: KeyboardEvent) {
-   this.keyUpDownEvent = ev;
-  //  if (ev.keyCode === 27) {
-  //   this.deleteRow(this.selectedIdx);
-  //  }
-  //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-  //   this.arrowInput = { key: ev.keyCode };
-  //  }
- }
+  public detectKey(ev: KeyboardEvent) {
+    this.keyUpDownEvent = ev;
+    //  if (ev.keyCode === 27) {
+    //   this.deleteRow(this.selectedIdx);
+    //  }
+    //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
+    //   this.arrowInput = { key: ev.keyCode };
+    //  }
+  }
 
- /**
-  * hideListItems
-  */
- public hideListItems() {
-  // this.showLedgerAccountList = false;
-  // this.showStockList = false;
- }
+  /**
+   * hideListItems
+   */
+  public hideListItems() {
+    // this.showLedgerAccountList = false;
+    // this.showStockList = false;
+  }
 
   public dateEntered() {
     const date = moment(this.journalDate, 'DD-MM-YYYY');
@@ -743,7 +743,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     } else {
       this.displayDay = '';
     }
-}
+  }
+
   /**
    * validateAccount
    */
@@ -792,7 +793,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
       const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
-      this.inventoryService.GetStocks().takeUntil(this.destroyed$).subscribe(data => {
+      this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
         if (data.status === 'success') {
           this.allStocks = _.cloneDeep(data.body.results);
           this.sortStockItems(this.allStocks);
@@ -810,11 +811,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public sortStockItems(ItemArr) {
     let stockAccountArr: IOption[] = [];
     _.forEach(ItemArr, (obj: any) => {
-          stockAccountArr.push({
-            label: `${obj.name} (${obj.uniqueName})`,
-            value: obj.uniqueName,
-            additional: obj
-          });
+      stockAccountArr.push({
+        label: `${obj.name} (${obj.uniqueName})`,
+        value: obj.uniqueName,
+        additional: obj
+      });
     });
     // console.log(stockAccountArr, 'stocks');
     this.stockList = stockAccountArr;
@@ -877,11 +878,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   private refreshAccountListData() {
     this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
-        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
-        if (data.status === 'success') {
-          this._tallyModuleService.setFlattenAccounts(data.body.results);
-        }
-      });
+        this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+          if (data.status === 'success') {
+            this._tallyModuleService.setFlattenAccounts(data.body.results);
+          }
+        });
       }
     });
   }

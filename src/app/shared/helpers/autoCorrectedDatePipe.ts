@@ -1,5 +1,5 @@
 export const createAutoCorrectedDatePipe = (dateFormat = 'mm dd yyyy') => {
-  return function(conformedValue) {
+  return function (conformedValue) {
     const indexesOfPipedChars = [];
     const dateFormatArray = dateFormat.split(/[^dmy]+/);
     const maxValue = {dd: 31, mm: 12, yy: 99, yyyy: 2050};

@@ -1,8 +1,8 @@
+import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -39,9 +39,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.rationResponse$ = this.store.select(p => p.home.RatioAnalysis).takeUntil(this.destroyed$);
+    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+    this.rationResponse$ = this.store.select(p => p.home.RatioAnalysis).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -52,7 +52,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         let activeCompany: CompanyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
-        this.activeCompanyUniqueName$.take(1).subscribe(a => {
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
           if (activeCompany) {
@@ -84,8 +84,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.rationResponse$
-      .skipWhile(p => (isNullOrUndefined(p)))
+    this.rationResponse$.pipe(
+      skipWhile(p => (isNullOrUndefined(p))))
       .subscribe(p => {
         this.ratioObj = p;
         // console.log(p);
@@ -164,7 +164,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       tooltip: {
         headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+          '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
@@ -233,7 +233,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       tooltip: {
         headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+          '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
@@ -302,7 +302,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       tooltip: {
         headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+          '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
@@ -370,7 +370,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
       tooltip: {
         headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-        '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
+          '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true

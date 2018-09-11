@@ -1,17 +1,15 @@
-import { SimpleChange } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import * as _ from '../../../lodash-optimized';
 import { Store } from '@ngrx/store';
-
-import { Component, OnDestroy, OnInit, Input, OnChanges } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
 import { GroupService } from '../../../services/group.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'search-sidebar',  // <home></home>
@@ -74,7 +72,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, public searchActions: SearchActions, private _groupService: GroupService) {
-    this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
+    this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

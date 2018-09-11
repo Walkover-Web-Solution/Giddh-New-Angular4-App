@@ -1,4 +1,3 @@
-import { Action } from '@ngrx/store';
 import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
@@ -167,7 +166,7 @@ export const initialState: CustomTemplateState = {
             width: null
           },
           {
-            display:  true,
+            display: true,
             label: 'Field 2',
             field: 'customField2',
             width: null
@@ -355,7 +354,7 @@ export const initialState: CustomTemplateState = {
 export function InvoiceTemplateReducer(state = initialState, action: CustomActions): CustomTemplateState {
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
       let nextState = _.cloneDeep(state);
@@ -400,10 +399,9 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
       }
       return state;
     }
-    default:
-      {
-        return state;
-      }
+    default: {
+      return state;
+    }
   }
 }
 

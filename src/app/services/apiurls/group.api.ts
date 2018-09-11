@@ -1,4 +1,3 @@
-
 export const GROUP_API = {
   CREATE: 'company/:companyUniqueName/groups',
   UPDATE_GROUP: 'company/:companyUniqueName/groups/:groupUniqueName',
