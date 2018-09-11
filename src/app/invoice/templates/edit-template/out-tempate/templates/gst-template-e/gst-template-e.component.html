@@ -119,60 +119,63 @@
             <tbody>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
-                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
+                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-
+                        2018</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
-                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456 (H)</td>
-                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
+                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 (H)</td>
+                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Kg</td>
                     <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
-                    <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
                     <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
-                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">@10%
+                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">9.00%
                     </td>
-                    <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">2006.00</td>
                 </tr>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
-                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
+                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-
+                        2018</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
-                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">456321 (S)</td>
-                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
-                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
-                    <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 (H)</td>
+                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">1.00
+                        Nos</td>
+                    <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">6000.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
                     <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
-                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">@5%
+                    <td [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">1846.00
                     </td>
-                    <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
+                    <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">7040.00</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th [attr.colspan]="columnsVisibled - 2"></th>
                     <th class="text-right">Sub Total</th>
-                    <th class="text-right">32500.00</th>
+                    <th class="text-right">9046.00</th>
                 </tr>
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
                     <th class="text-right">Discount</th>
-                    <th class="text-right">00.00</th>
+                    <th class="text-right">800.00</th>
                 </tr>
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
                     <th class="text-right">CGST</th>
-                    <th class="text-right">5250.00</th>
+                    <th class="text-right">923.00</th>
                 </tr>
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
                     <th class="text-right">SGST</th>
-                    <th class="text-right">5250.00</th>
+                    <th class="text-right">923.00</th>
                 </tr>
 
                 <tr>
-                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">Thirty Seven Thousand Seven Hundred Fifty Only</th>
+                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">Nine Thousand Forty Six Only</th>
                     <th class="text-right">
                         <strong>Total</strong>
                     </th>
                     <th class="text-right">
-                        <strong>37750.00</strong>
+                        <strong>9046.00</strong>
                     </th>
                 </tr>
             </tfoot>
@@ -191,16 +194,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-left">123456 (H)</td>
-                    <td>10000.00</td>
+                    <td class="text-left">12345 (H)</td>
+                    <td>7200.00</td>
                     <td>
-                        <p>@5%</p>
+                        <p>@9.00%</p>
                     </td>
-                    <td>900.00</td>
+                    <td>9046.00</td>
                     <td>
-                        <p>@5%</p>
+                        <p>@9.00%</p>
                     </td>
-                    <td>900.00</td>
+                    <td>9046.00</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -208,12 +211,12 @@
                     <th colspan="1"></th>
 
                     <th class="text-right">Total
-                        <span style="margin-left:20px;">25550.00</span>
+                        <span style="margin-left:20px;">9046.00</span>
                     </th>
                     <th colspan="1"></th>
-                    <th class="text-right">1525.00</th>
+                    <th class="text-right">9046.00</th>
                     <th colspan="1"></th>
-                    <th class="text-right">1525.00</th>
+                    <th class="text-right">9046.00</th>
                 </tr>
             </tfoot>
         </table>
