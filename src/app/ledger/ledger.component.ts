@@ -143,6 +143,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public createStockSuccess$: Observable<boolean>;
   public needToShowLoader: boolean = true;
   public entryUniqueNamesForBulkAction: string[] = [];
+  public searchText: string = '';
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -345,9 +346,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.accountUnq = params['accountUniqueName'];
         this.needToShowLoader = true;
         // this.showLoader = false; // need to enable loder
-        if (this.ledgerSearchTerms) {
-          this.ledgerSearchTerms.nativeElement.value = '';
-        }
+        // if (this.ledgerSearchTerms) {
+        //   this.ledgerSearchTerms.nativeElement.value = '';
+        // }
+        this.searchText = '';
+        this.searchTermStream.next('');
         this.resetBlankTransaction();
         // this.datePickerOptions = {
         //   locale: {
@@ -941,7 +944,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public search(term: string): void {
-    this.ledgerSearchTerms.nativeElement.value = term;
+    // this.ledgerSearchTerms.nativeElement.value = term;
     this.searchTermStream.next(term);
   }
 
