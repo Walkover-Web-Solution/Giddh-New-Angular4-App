@@ -152,8 +152,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings.profile).pipe(distinctUntilKeyChanged('profileRequest'), takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o.profileRequest) {
+    // distinctUntilKeyChanged('profileRequest')
+    this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+      if (o.profileRequest || 1 === 1) {
         let profileObj = _.cloneDeep(o);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
