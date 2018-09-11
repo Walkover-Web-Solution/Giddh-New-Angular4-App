@@ -64,7 +64,8 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   {label: 'Company Import/Export', value: '/pages/company-import-export'},
   {label: 'New V/S Old Invoices', value: '/pages/carriedoversales'},
   {label: 'GST Module', value: '/pages/gst/gst'},
-  {label: 'GST Module Page 2', value: '/pages/gst/gst-page-b'}
+  {label: 'GST Module Page 2', value: '/pages/gst/gst-page-b'},
+  {label: 'GST Module Page 3', value: '/pages/gst/gst-page-c'}
 ];
 
 @Component({

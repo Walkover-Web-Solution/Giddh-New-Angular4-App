@@ -1,3 +1,4 @@
+import { GstPageCComponent } from './gst-page-c/gst-page-c.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +13,8 @@ import { GstPageBComponent } from './gst-page-b/gst-page-b.component';
 
 const GST_ROUTES: Routes = [
   { path: 'gst', component: GstPagesComponent },
-  { path: 'gst-page-b', component: GstPageBComponent }
+  { path: 'gst-page-b', component: GstPageBComponent },
+  { path: 'gst-page-c', component: GstPageCComponent }
 ];
 
 @NgModule({
