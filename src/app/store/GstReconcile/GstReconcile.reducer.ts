@@ -97,10 +97,10 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
 
         let gstData = newState.gstReconcileData;
 
-        gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
-        gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
-        gstData.matched.count = response.body.matched;
-        gstData.partiallyMatched.count = response.body.partiallyMatched;
+        // gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+        // gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+        // gstData.matched.count = response.body.matched;
+        // gstData.partiallyMatched.count = response.body.partiallyMatched;
 
         switch (response.queryString.action) {
           case 'NOT_ON_GIDDH':

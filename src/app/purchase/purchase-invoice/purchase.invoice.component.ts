@@ -220,19 +220,19 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     });
 
     this.gstNotFoundOnGiddhData$.subscribe(s => {
-      this.loadReconcilePaginationComponent(s);
+      this.loadReconcilePaginationComponent(s, 'NOT_ON_GIDDH');
     });
 
     this.gstNotFoundOnPortalData$.subscribe(s => {
-      this.loadReconcilePaginationComponent(s);
+      this.loadReconcilePaginationComponent(s, 'NOT_ON_PORTAL');
     });
 
     this.gstPartiallyMatchedData$.subscribe(s => {
-      this.loadReconcilePaginationComponent(s);
+      this.loadReconcilePaginationComponent(s, 'PARTIALLY_MATCHED');
     });
 
     this.gstMatchedData$.subscribe(s => {
-      this.loadReconcilePaginationComponent(s);
+      this.loadReconcilePaginationComponent(s, 'MATCHED');
     });
 
     this.gstAuthenticated$.subscribe(s => {
@@ -724,11 +724,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     );
   }
 
-  public loadReconcilePaginationComponent(s: ReconcileActionState) {
+  public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
 
     if (s.count === 0) {
       return;
     }
+
+    if (action !== this.reconcileActiveTab) {
+      return;
+    }
+
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
     let viewContainerRef = null;
     switch (this.reconcileActiveTab) {
