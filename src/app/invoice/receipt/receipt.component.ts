@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { takeUntil } from 'rxjs/operators';
+import { skip, take, takeLast, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -25,6 +25,8 @@ import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReciptDelete
 import { ReceiptService } from '../../services/receipt.service';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
+import { type } from 'os';
+import { Event, NavigationEnd, NavigationStart, ResolveEnd, Router } from '@angular/router';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -62,10 +64,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public startDate: Date;
   public endDate: Date;
   public isGetAllRequestInProcess$: Observable<boolean>;
+  public type: string;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  private routeEvent: Observable<Event>;
 
   constructor(
     private modalService: BsModalService,
@@ -76,8 +80,10 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private _invoiceTemplatesService: InvoiceTemplatesService,
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _receiptService: ReceiptService,
-    private _toasty: ToasterService
+    private _toasty: ToasterService,
+    private router: Router
   ) {
+    this.routeEvent = this.router.events.pipe(takeUntil(this.destroyed$));
     this.receiptSearchRequest.page = 1;
     this.receiptSearchRequest.count = 25;
     this.receiptSearchRequest.entryTotalBy = '';
@@ -86,7 +92,21 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    // Get accounts
+    // Get accountsthis
+    this.routeEvent.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.store.select(p => p.receipt.data).pipe(take(1)).subscribe((o: ReciptResponse) => {
+          this.getInvoiceReceipts(event.url);
+        });
+        // if (event.url === '/pages/invoice/cr-note') {
+        //   this.type = 'credit note';
+        // }
+        // if (event.url === '/pages/invoice/dr-note') {
+        //   this.type = 'debit note';
+        // }
+        // console.log("current url", event.url);
+      }
+    });
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
@@ -153,9 +173,19 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.invoiceReceiptConfirmationModel.hide();
   }
 
-  public getInvoiceReceipts() {
+  public getInvoiceReceipts(url: string = this.router.url) {
+    if (url === '/pages/invoice/cr-note') {
+      this.type = 'credit note';
+    }
+    if (url === '/pages/invoice/dr-note') {
+      this.type = 'debit note';
+    }
+    if (url === '/pages/invoice/receipt') {
+      this.type = 'receipt';
+    }
+
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(
-      this.prepareModelForInvoiceReceiptApi()
+      this.prepareModelForInvoiceReceiptApi(), this.type
     ));
   }
 
