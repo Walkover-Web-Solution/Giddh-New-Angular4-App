@@ -30,7 +30,7 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
-  public companySetting$: Observable<any> = from(null);
+  public companySetting$: Observable<any> = from([]);
   public companyAddress: string = '';
   public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
