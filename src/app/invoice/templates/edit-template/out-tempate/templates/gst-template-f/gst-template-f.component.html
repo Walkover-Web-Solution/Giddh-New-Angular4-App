@@ -54,29 +54,31 @@
                     <td class="pull-right">
                         <table>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display" style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
                                         : 'Invoice Date'}} </td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display" [style.width.px]="45">23/06/2017</td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display" style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                         : 'Invoice No.'}}</td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">201770323-64</td>
-                                </tr>
+                                </tr> -->
 
           </tbody>
         </table>
       </td>
       <td class="pull-right">
-        <table>
+        <table [class.half-table]="!fieldsAndVisibility.header.invoiceDate?.display || !fieldsAndVisibility.header.invoiceNumber?.display">
           <tbody>
           <tr>
+                <!-- style="text-align: right; padding-right: 4px" -->
             <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display"
-                style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceDate?.label?.length >
+                >{{(fieldsAndVisibility.header.invoiceDate?.label?.length>
               0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}
             </td>
             <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">23/06/2017</td>
+            <!-- style="text-align: right; padding-right: 4px" -->
             <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display"
-                style="text-align: right; padding-right: 4px">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
+                >{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
               > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}
             </td>
             <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">201770323-64</td>
@@ -84,14 +86,14 @@
 
           </tbody>
         </table>
-        <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
+        <table class="meta cargoDetail" style="padding: 0px;" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
                         <p *ngIf="fieldsAndVisibility.header.customerName?.display">
                             <strong>Mr. Alok Gangrade</strong>
                         </p>
-                        <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
+                        <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alok@gmail.com</p>
                         <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
                     </td>
                     <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
@@ -113,6 +115,7 @@
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
                     </td>
+                    
                 </tr>
                 <br />
                 <tr>
@@ -327,8 +330,8 @@
         <table class="subfooter" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
             <tbody>
                 <tr>
-                    <td *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
-                        <h1>
+                    <td [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
+                        <h1 *ngIf="fieldsAndVisibility.footer.thanks?.display">
                             <strong [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</strong>
                         </h1>
                     </td>
@@ -482,9 +485,9 @@
          [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
     <tbody>
     <tr>
-      <td *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}"
+      <td [ngStyle]="{ 'color': inputTemplate.templateColor}"
           style="vertical-align: bottom;">
-        <h1><strong [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</strong></h1>
+        <h1 *ngIf="fieldsAndVisibility.footer.thanks?.display"><strong [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</strong></h1>
       </td>
       <td colspan="1"></td>
       <td style="text-align: center;vertical-align: bottom;">
