@@ -1,9 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 
 interface DataModel {
   field: string;
@@ -30,9 +33,11 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   public editHeaderIdx: number = null;
   public dataModel: DataModel[];
   public importRequestIsSuccess: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private router: Router, private _importExcelActions: ImportExcelActions) {
     this.importRequestIsSuccess = this.store.select(s => s.importExcel.importRequestIsSuccess);
+    // this.importRequestIsSuccess = this.store.pipe(takeUntil(this.destroyed$)).subscribe( s => s.importExcel.importRequestIsSuccess);
   }
 
   private _importData: ImportExcelRequestData;
@@ -49,7 +54,12 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public ngOnInit() {
-    //
+    this.importRequestIsSuccess.subscribe(s => {
+      if (s) {
+        this.store.dispatch(this._importExcelActions.resetImportExcelState());
+        this.router.navigate(['/pages/import']);
+      }
+    });
   }
 
   public ngAfterViewInit(): void {
