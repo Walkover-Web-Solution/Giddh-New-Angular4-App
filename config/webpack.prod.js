@@ -58,7 +58,7 @@ module.exports = function (env) {
 
   return webpackMerge(commonConfig({env: ENV, metadata: METADATA}), {
     mode: 'production',
-    devtool: 'cheap-source-map',
+    devtool: 'none',
     /**
      * Options affecting the output of the compilation.
      *
@@ -87,7 +87,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '[file].map',
+      // sourceMapFilename: '[file].map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -137,10 +137,10 @@ module.exports = function (env) {
          * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
         new UglifyJsPlugin({
-          sourceMap: true,
+          sourceMap: false,
           parallel: true,
           cache: helpers.root('webpack-cache/uglify-cache'),
-          uglifyOptions: getUglifyOptions(supportES2015, true)
+          uglifyOptions: getUglifyOptions(supportES2015)
         })
       ],
       splitChunks: {
