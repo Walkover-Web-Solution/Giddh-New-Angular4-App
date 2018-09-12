@@ -38,7 +38,7 @@
     <div class="mrT2 text-right">
       <div class="pos-abs action_btn">
         <button class="btn btn-default" (click)="onBack.emit()">Back</button>
-        <button class="btn btn-success" *ngIf="importRequestIsSuccess" [routerLink]="['/pages/import']" (click)="save()">Import</button>
+        <button class="btn btn-success" [routerLink]="['/pages/import']" (click)="save()">Import</button>
       </div>
     </div>
   </div>
