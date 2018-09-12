@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { skip, take, takeLast, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -25,8 +25,7 @@ import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReciptDelete
 import { ReceiptService } from '../../services/receipt.service';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
-import { type } from 'os';
-import { Event, NavigationEnd, NavigationStart, ResolveEnd, Router } from '@angular/router';
+import { Event, NavigationStart, Router } from '@angular/router';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -162,7 +161,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.invoiceReceiptConfirmationModel.hide();
     let request: ReciptDeleteRequest = {
       invoiceNumber: this.selectedReceipt.voucherNumber,
-      voucherType: 'receipt'
+      voucherType: this.type
     };
     this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(
       request, this.selectedReceipt.account.uniqueName
@@ -250,7 +249,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.selectedReceipt = allReceipts.find((o) => o.uniqueName === uniqueName);
     let dataToSend: DownloadVoucherRequest = {
       voucherNumber: [this.selectedReceipt.voucherNumber],
-      voucherType: 'receipt'
+      voucherType: this.type
     };
 
     this._receiptService.DownloadVoucher(dataToSend, this.selectedReceipt.account.uniqueName)
