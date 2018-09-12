@@ -27,7 +27,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public mappedData: ImportExcelResponseData;
   public dataModel: DataModel[];
   public dataChanged = (excelState: ImportExcelState) => {
-    debugger;
     this.excelState = excelState;
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
       this.step++;
