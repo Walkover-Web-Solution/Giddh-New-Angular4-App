@@ -32,12 +32,8 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   @Input() public entity: string;
   public editHeaderIdx: number = null;
   public dataModel: DataModel[];
-  public importRequestIsSuccess: Observable<boolean>;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private router: Router, private _importExcelActions: ImportExcelActions) {
-    this.importRequestIsSuccess = this.store.select(s => s.importExcel.importRequestIsSuccess);
-    // this.importRequestIsSuccess = this.store.pipe(takeUntil(this.destroyed$)).subscribe( s => s.importExcel.importRequestIsSuccess);
+  constructor(private store: Store<AppState>) {
   }
 
   private _importData: ImportExcelRequestData;
@@ -54,12 +50,6 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public ngOnInit() {
-    this.importRequestIsSuccess.subscribe(s => {
-      if (s) {
-        this.store.dispatch(this._importExcelActions.resetImportExcelState());
-        this.router.navigate(['/pages/import']);
-      }
-    });
   }
 
   public ngAfterViewInit(): void {

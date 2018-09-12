@@ -33,8 +33,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.onNext(excelState.importExcelData);
       this.prepareDataModel(excelState.importExcelData);
     }
+    if(excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess){
+      this._router.navigate(['/pages/import/select']);
+    }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
-  }
+  };
 
   constructor(
     private store: Store<AppState>,
