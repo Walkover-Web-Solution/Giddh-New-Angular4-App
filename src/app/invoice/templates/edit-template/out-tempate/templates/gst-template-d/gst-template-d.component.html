@@ -122,7 +122,7 @@
                 </tr>
                 <tr *ngIf="fieldsAndVisibility.table.discount?.display">
                     <th [attr.colspan]="columnsVisibled -2"></th>
-                    <th class="inwords">Discount</th>
+                    <th class="inwords">{{fieldsAndVisibility.table.discount?.label}}</th>
                     <th class="text-right inwords">800.00</th>
                 </tr>
                 <tr>
@@ -137,7 +137,11 @@
                 </tr>
 
                 <tr>
-                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">Nine Thousand Forty Six Only</th>
+                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">
+                        <span *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                            Nine Thousand Forty Six Only
+                        </span>
+                    </th>
                     <th>
                         <strong>Total</strong>
                     </th>

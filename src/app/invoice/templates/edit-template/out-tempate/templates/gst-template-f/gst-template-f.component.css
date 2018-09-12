@@ -354,3 +354,11 @@ img {
     float: left;
     width: 100%;
 }
+
+
+.half-table {
+  display: block !important;
+}
+.half-table tbody tr td {
+  padding-right: 15px !important;
+}
