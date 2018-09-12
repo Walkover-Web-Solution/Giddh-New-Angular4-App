@@ -1,3 +1,4 @@
+import { GstPageCComponent } from './gst-page-c/gst-page-c.component';
 import { GstPagesComponent } from './gst-pages/gst-pages.component';
 import { GstComponent } from './gst.component';
 import { GstRoutingModule } from './gst.routing.module';
@@ -18,7 +19,7 @@ import { GstPageBComponent } from './gst-page-b/gst-page-b.component';
  */
 
 @NgModule({
-  declarations: [GstPagesComponent, GstPageBComponent, GstComponent],
+  declarations: [GstPagesComponent, GstPageBComponent, GstPageCComponent, GstComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,
