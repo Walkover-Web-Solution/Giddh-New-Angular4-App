@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
 import { ReconcileActionState } from '../../store/GstReconcile/GstReconcile.reducer';
 import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -160,7 +161,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private purchaseInvoiceService: PurchaseInvoiceService,
     private accountService: AccountService,
     private _reconcileActions: GstReconcileActions,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private settingsProfileActions: SettingsProfileActions
   ) {
     this.purchaseInvoiceObject.TaxList = [];
     this.purchaseInvoiceRequestObject.entryUniqueName = [];
@@ -297,6 +299,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public onSelectGstrOption(gstrType) {
     this.selectedGstrType = gstrType;
     if (gstrType.name === 'GSTR2') {
+      this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
       this.fireGstReconcileRequest('NOT_ON_PORTAL');
     }
   }
