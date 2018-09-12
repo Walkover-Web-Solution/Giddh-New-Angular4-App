@@ -40,11 +40,11 @@ export class ReceiptService implements OnInit {
       catchError((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model)));
   }
 
-  public GetAllReceipt(body: InvoiceReceiptFilter): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+  public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET, {
-      page: body.page, count: body.count, from: body.from, to: body.to, type: 'receipt'
+      page: body.page, count: body.count, from: body.from, to: body.to, type: type
     });
 
     return this._http.post(url
