@@ -53,7 +53,7 @@
                                                     : 'Invoice Date'}}</strong>
                                             </td>
                                             <td>
-                                                <p> 10-09-2018 </p>
+                                                <p> 11-09-2017 </p>
                                             </td>
                                         </tr>
                                         <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
@@ -61,7 +61,7 @@
                                                 <strong>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                                     : 'Invoice No.'}}</strong>
                                             </td>
-                                            <td>20180910-1</td>
+                                            <td>20170911-1</td>
                                         </tr>
                                         <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
                                             <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
@@ -128,7 +128,7 @@
                                     <strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label
                                         : 'Due Date'}}</strong>
                                 </p>
-                                <p>10-09-2018                                </p>
+                                <p>10-09-2018 </p>
                             </ng-container>
                         </td>
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
@@ -225,8 +225,8 @@
                     <tbody>
                         <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
-                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09-
-                                2018</td>
+                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
+                            </td>
                             <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
                             <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 (H)</td>
                             <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Kg</td>
@@ -240,12 +240,12 @@
                         </tr>
                         <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
-                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09-
-                                2018</td>
+                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
+                            </td>
                             <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
                             <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 (H)</td>
-                            <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00
-                                Nos</td>
+                            <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
+                            </td>
                             <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">6000.00</td>
                             <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">5500.00</td>
