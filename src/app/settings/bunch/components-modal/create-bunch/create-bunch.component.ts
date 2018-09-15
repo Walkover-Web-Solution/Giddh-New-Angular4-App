@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -19,8 +19,8 @@ export class CreateBunchModalComponent implements OnChanges {
   public addBunchForm: FormGroup;
 
   constructor(private _fb: FormBuilder,
-  private _toaster: ToasterService,
-  private _settingsBunchService: SettingsBunchService,
+              private _toaster: ToasterService,
+              private _settingsBunchService: SettingsBunchService,
   ) {
 
     this.addBunchForm = this._fb.group({
@@ -72,11 +72,11 @@ export class CreateBunchModalComponent implements OnChanges {
    */
   public ngOnChanges(s) {
     if (s && s.mode && s.mode.currentValue === 'update') {
-        this.addBunchForm.patchValue({
-          name: s.formData.currentValue.name,
-          uniqueName: s.formData.currentValue.uniqueName,
-          description: s.formData.currentValue.description
-          });
+      this.addBunchForm.patchValue({
+        name: s.formData.currentValue.name,
+        uniqueName: s.formData.currentValue.uniqueName,
+        description: s.formData.currentValue.description
+      });
     } else {
       this.addBunchForm.reset();
     }

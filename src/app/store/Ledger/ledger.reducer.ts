@@ -53,7 +53,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
   let transaction: BaseResponse<TransactionsResponse, TransactionsRequest>;
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case LEDGER.GET_LEDGER_ACCOUNT:
       return Object.assign({}, state, {
@@ -75,20 +75,20 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         transactionInprogress: true
       });
     case LEDGER.GET_TRANSACTION_RESPONSE:
-    transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
-    if (transaction.status === 'success') {
+      transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
+      if (transaction.status === 'success') {
+        return Object.assign({}, state, {
+          transactionInprogress: false,
+          isAdvanceSearchApplied: false,
+          transcationRequest: transaction.request,
+          transactionsResponse: transaction.body
+        });
+      }
       return Object.assign({}, state, {
-        transactionInprogress: false,
-        isAdvanceSearchApplied: false,
-        transcationRequest: transaction.request,
-        transactionsResponse: transaction.body
+        transactionInprogress: false
       });
-    }
-    return Object.assign({}, state, {
-      transactionInprogress: false
-    });
     case LEDGER.ADVANCE_SEARCH:
-      return Object.assign({}, state, { transactionInprogress: true });
+      return Object.assign({}, state, {transactionInprogress: true});
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
@@ -116,8 +116,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         return Object.assign({}, state, {
           discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
         });
-      }else {
-        return {...state, discountAccountsList: null };
+      } else {
+        return {...state, discountAccountsList: null};
       }
     case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
       return Object.assign({}, state, {

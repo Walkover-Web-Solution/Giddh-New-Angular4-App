@@ -120,15 +120,15 @@ export interface ProfitLossChart {
 }
 
 export interface IBankAccount {
-/*  amount: number;
-  transactionDate: string;
-  loginId: string;
-  reconnect: boolean;
-  accountNumber?: any;
-  currencyCode: string;
-  accountId: number;
-  linkedAccount: INameUniqueName;
-  name: string; */
+  /*  amount: number;
+    transactionDate: string;
+    loginId: string;
+    reconnect: boolean;
+    accountNumber?: any;
+    currencyCode: string;
+    accountId: number;
+    linkedAccount: INameUniqueName;
+    name: string; */
   itemId: number;
   itemAccountId: number;
   siteAccountId: number;
@@ -149,6 +149,7 @@ export interface IBankAccount {
   accountNumber: string;
   visible: boolean;
 }
+
 let cost = {
   // revenue
   revenueActiveYear: [],

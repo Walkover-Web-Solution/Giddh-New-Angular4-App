@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -7,7 +7,7 @@ import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-aside-recurring-entry',

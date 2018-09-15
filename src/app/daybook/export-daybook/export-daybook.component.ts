@@ -1,12 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
-import { saveAs } from 'file-saver';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
-import { ToasterService } from '../../services/toaster.service';
 import { some } from '../../lodash-optimized';
-import { ExportLedgerRequest, MailLedgerRequest } from '../../models/api-models/Ledger';
-import { validateEmail } from '../../shared/helpers/helperFunctions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'export-daybook',
@@ -41,7 +37,7 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
   }
 
   public exportLedger() {
-    this.closeExportDaybookModal.emit({ type: this.emailTypeSelected,  fileType: this.fileType, order: this.order });
+    this.closeExportDaybookModal.emit({type: this.emailTypeSelected, fileType: this.fileType, order: this.order});
   }
 
   public ngOnDestroy() {

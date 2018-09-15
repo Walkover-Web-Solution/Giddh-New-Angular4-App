@@ -193,7 +193,7 @@ export const initialState: HomeState = {
 export function homeReducer(state = initialState, action: CustomActions): HomeState {
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IExpensesChartClosingBalanceResponse;
@@ -516,40 +516,40 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
     // End COMPARISSION CHART API
     // Bank API
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
-      return Object.assign({}, state, { isGetBankAccountsInProcess: true, });
+      return Object.assign({}, state, {isGetBankAccountsInProcess: true,});
     }
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
       let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (bankresponse.status === 'success') {
-        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: bankresponse.body.length === 0 ? 'No data Availble' : null });
+        return Object.assign({}, state, {isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: bankresponse.body.length === 0 ? 'No data Availble' : null});
       }
-      return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
+      return Object.assign({}, state, {isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message});
     }
     case HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT: {
-      return Object.assign({}, state, { isReConnectBankAccount: true });
+      return Object.assign({}, state, {isReConnectBankAccount: true});
     }
     case HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE: {
       let reconnectResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
       if (reconnectResponse.status === 'success') {
-        return Object.assign({}, state, { isReConnectBankAccount: false, ReConnectBankAccount: reconnectResponse.body });
+        return Object.assign({}, state, {isReConnectBankAccount: false, ReConnectBankAccount: reconnectResponse.body});
       }
-      return Object.assign({}, state, { isReConnectBankAccount: false });
+      return Object.assign({}, state, {isReConnectBankAccount: false});
     }
     case HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT: {
-      return Object.assign({}, state, { isRefereshBankAccount: true });
+      return Object.assign({}, state, {isRefereshBankAccount: true});
     }
     case HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE: {
       let refereshResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
       if (refereshResponse.status === 'success') {
-        return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: refereshResponse.body });
+        return Object.assign({}, state, {isRefereshBankAccount: false, RefereshBankAccount: refereshResponse.body});
       }
-      return Object.assign({}, state, { isRefereshBankAccount: false });
+      return Object.assign({}, state, {isRefereshBankAccount: false});
     }
     case HOME.BANK_ACCOUNTS.RESET_RECONNECT_BANK_ACCOUNT: {
-      return Object.assign({}, state, { isReConnectBankAccount: false, ReConnectBankAccount: null });
+      return Object.assign({}, state, {isReConnectBankAccount: false, ReConnectBankAccount: null});
     }
     case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
-      return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
+      return Object.assign({}, state, {isRefereshBankAccount: false, RefereshBankAccount: null});
     }
     case HOME.RESET_HOME_STATE: {
       return initialState;
@@ -682,7 +682,7 @@ const processDataForProfitLoss = plData => {
       nwSeries.push('Yearly Balances');
     });
   }
-  return { monthlyBalances, yearlyBalances };
+  return {monthlyBalances, yearlyBalances};
 };
 
 const processDataForNetworth = plData => {
@@ -703,5 +703,5 @@ const processDataForNetworth = plData => {
       nwSeries.push('Yearly Balances');
     });
   }
-  return { monthlyBalances, yearlyBalances };
+  return {monthlyBalances, yearlyBalances};
 };

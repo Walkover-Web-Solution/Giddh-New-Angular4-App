@@ -1,15 +1,16 @@
+import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { CARRIEDOVERSALES_API } from './apiurls/carried-over-sales.api';
+import { NEWVSOLDINVOICE_API } from './apiurls/new-vs-old-invocies.api';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CarriedOverSalesRequest, CarriedOverSalesResponse } from '../models/api-models/carried-over-sales';
+import { NewVsOldInvoicesResponse, NewVsOldInvoicesRequest } from '../models/api-models/new-vs-old-invoices';
 
 @Injectable()
-export class CarriedOverSalesService implements OnInit {
+export class NewVsOldInvoicesService implements OnInit {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
@@ -22,17 +23,17 @@ export class CarriedOverSalesService implements OnInit {
     //
   }
 
-  public GetCarriedOverSales(queryRequest: CarriedOverSalesRequest): Observable<BaseResponse<CarriedOverSalesResponse, string>> {
+  public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + CARRIEDOVERSALES_API.GET
+    return this._http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':type', queryRequest.type.toString())
       .replace(':value', queryRequest.value.toString()))
-      .map((res) => {
-        let data: BaseResponse<CarriedOverSalesResponse, string> = res;
+      .pipe(map((res) => {
+        let data: BaseResponse<NewVsOldInvoicesResponse, string> = res;
         data.queryString = queryRequest;
         return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<CarriedOverSalesResponse, string>(e, null, queryRequest));
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<NewVsOldInvoicesResponse, string>(e, null, queryRequest)));
   }
 }

@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+import { take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from 'app/services/toaster.service';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
@@ -15,7 +16,6 @@ import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
 import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 
@@ -49,20 +49,21 @@ export class SettingsComponent implements OnInit {
     private _authenticationService: AuthenticationService,
     private _toast: ToasterService
   ) {
-      this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
-      this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).takeUntil(this.destroyed$);
-      this.isCompanyProfileUpdated = false;
-    }
+    this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
+    this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+    this.isCompanyProfileUpdated = false;
+  }
+
   public ngOnInit() {
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'settings';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     // this.selectTab(0);
-    this._route.queryParams.takeUntil(this.destroyed$).subscribe((val) => {
+    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
         this.selectTab(val.tabIndex);
       } else if (val.tab === 'integration' && val.code) {
@@ -71,7 +72,7 @@ export class SettingsComponent implements OnInit {
       }
     });
 
-    this.isUpdateCompanyInProgress$.takeUntil(this.destroyed$).subscribe((yes: boolean) => {
+    this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         this.isCompanyProfileUpdated = true;
       }
@@ -81,9 +82,11 @@ export class SettingsComponent implements OnInit {
   public selectTab(id: number) {
     this.staticTabs.tabs[id].active = true;
   }
+
   public disableEnable() {
-    this.staticTabs.tabs[2].disabled = ! this.staticTabs.tabs[2].disabled;
+    this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
   }
+
   public profileSelected(e) {
     if (e.heading === 'Profile') {
       this.profileComponent.getInitialProfileData();

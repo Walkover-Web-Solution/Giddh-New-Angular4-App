@@ -16,7 +16,7 @@ import { ExportLedgerComponent } from './components/exportLedger/exportLedger.co
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
-import { NgUploaderModule } from 'ngx-uploader';
+import { NgxUploaderModule } from 'ngx-uploader';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -69,7 +69,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     ModalModule,
     TooltipModule,
     PaginationModule,
-    NgUploaderModule,
+    NgxUploaderModule,
     ClipboardModule,
     Daterangepicker,
     LaddaModule,
