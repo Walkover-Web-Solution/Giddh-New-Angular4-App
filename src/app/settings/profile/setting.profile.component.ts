@@ -1,21 +1,20 @@
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+
+import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
-import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { CompanyService } from '../../services/companyService.service';
-import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
-import { Select2OptionData } from '../../theme/select2';
 import { States } from '../../models/api-models/Company';
-import { setTimeout } from 'timers';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
-import { debounceTime, map } from 'rxjs/operators';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -40,10 +39,10 @@ export interface IGstObj {
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
-  public companyProfileObj: any = null;
+  public companyProfileObj: any = {};
   public stateStream$: Observable<States[]>;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
-  public currencySource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
+  public currencySource$: Observable<IOption[]> = observableOf([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
   public states: IOption[] = [];
@@ -59,9 +58,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public dataSourceBackup: any;
   public countrySource: IOption[] = [];
   public statesSourceCompany: IOption[] = [];
+  public keyDownSubject$: Subject<any> = new Subject<any>();
+  public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
-  private intervalRef;
 
   constructor(
     private router: Router,
@@ -71,7 +71,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private _location: LocationService
   ) {
-    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     contriesWithCodes.map(c => {
       this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
     });
@@ -84,19 +84,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
-      this.statesSource$ = Observable.of(this.states);
+      this.statesSource$ = observableOf(this.states);
     }, (err) => {
       // console.log(err);
     });
 
-    this.store.select(s => s.session.currencies).takeUntil(this.destroyed$).subscribe((data) => {
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
           currencies.push({label: d.code, value: d.code});
         });
       }
-      this.currencySource$ = Observable.of(currencies);
+      this.currencySource$ = observableOf(currencies);
     });
   }
 
@@ -104,10 +104,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.initProfileObj();
 
     this.dataSource = (text$: Observable<any>): Observable<any> => {
-      return text$
-        .debounceTime(300)
-        .distinctUntilChanged()
-        .switchMap((term: string) => {
+      return text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term: string) => {
           if (term.startsWith(' ', 0)) {
             return [];
           }
@@ -116,17 +116,31 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             AdministratorLevel: undefined,
             Country: undefined,
             OnlyCity: true
-          }).catch(e => {
+          }).pipe(catchError(e => {
             return [];
-          });
-        })
-        .map((res) => {
+          }));
+        }),
+        map((res) => {
           // let data = res.map(item => item.address_components[0].long_name);
           let data = res.map(item => item.city);
           this.dataSourceBackup = res;
           return data;
-        });
+        }));
     };
+
+    this.keyDownSubject$
+      .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
+      .subscribe((event: any) => {
+        this.patchProfile({[event.target.name]: event.target.value});
+      });
+
+    this.gstKeyDownSubject$
+      .pipe(debounceTime(3000)
+        , distinctUntilChanged()
+        , takeUntil(this.destroyed$))
+      .subscribe((event: any) => {
+        this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+      });
   }
 
   public getInitialProfileData() {
@@ -138,8 +152,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
-    this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
+    // distinctUntilKeyChanged('profileRequest')
+    this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+      if (o.profileRequest || 1 === 1) {
         let profileObj = _.cloneDeep(o);
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
@@ -185,7 +200,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         // this.selectState(false);
       }
     });
-    this.store.take(1).subscribe(s => {
+    this.store.pipe(take(1)).subscribe(s => {
       if (s.session.user) {
         this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
       }
@@ -231,7 +246,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       profileObj.gstDetails[indx].addressList[0].stateName = '';
       this.companyProfileObj = profileObj;
 
-      this.checkGstDetails();
+      // this.checkGstDetails();
     }
   }
 
@@ -270,7 +285,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     }
     this.companyProfileObj = profileObj;
-    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+    this.checkGstDetails();
   }
 
   public setGstAsDefault(indx, ev) {
@@ -307,7 +322,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
-        this.checkGstDetails(ele);
+        // this.checkGstDetails();
       }
     } else {
       ele.classList.remove('error-box');
@@ -323,6 +338,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     if (stateCode <= 37) {
       if (stateCode < 10 && stateCode !== 0) {
         stateCode = (stateCode < 10) ? '0' + stateCode.toString() : stateCode.toString();
+      } else if (stateCode === 0) {
+        stateCode = '';
       }
       this.companyProfileObj.gstDetails[index].addressList[0].stateCode = stateCode.toString();
     } else {
@@ -348,6 +365,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       if (ele.value.match(panNumberRegExp)) {
         ele.classList.remove('error-box');
         this.isPANValid = true;
+        this.patchProfile({panNumber: ele.value});
       } else {
         this.isPANValid = false;
         this._toasty.errorToast('Invalid PAN number');
@@ -409,68 +427,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  public keyDownEventOfForm(event: any) {
-    if (this.intervalRef) {
-      clearTimeout(this.intervalRef);
-    }
-
-    this.intervalRef = setTimeout(() => {
-      this.patchProfile({[event.target.name]: event.target.value});
-    }, 3000);
-
-    // if (event && event.target) {
-    //   Observable.fromEvent(event.target, 'keydown')
-    //     .debounceTime(3000)
-    //     .distinctUntilChanged((x, y) => {
-    //         return x === y;
-    //     })
-    //     .takeUntil(this.destroyed$)
-    //     .filter((e: any) => {
-    //       return e.target.name;
-    //     })
-    //     .map((e: any) => e.target.value)
-    //     .subscribe((val: string) => {
-    //       debugger;
-    //       console.log('the val is...', val);
-    //       this.patchProfile({[event.target.name]: val});
-    //       event.preventDefault();
-    //     });
-    //  return true;
-    // }
-  }
-
   public changeEventOfForm(key: string) {
     this.patchProfile({[key]: this.companyProfileObj[key]});
   }
 
-  public checkGstDetails(ele?: HTMLInputElement) {
-    if (this.companyProfileObj.gstDetails.length > 0) {
-
-      let obj = {gstDetails: this.companyProfileObj.gstDetails};
-      // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
-      for (let entry of this.companyProfileObj.gstDetails) {
-        if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
-          obj.gstDetails = _.without(this.companyProfileObj.gstDetails, entry);
-        }
-      }
-
-      if (ele) {
-        Observable.fromEvent(ele, 'keydown')
-          .debounceTime(3000)
-          .distinctUntilChanged()
-          .takeUntil(this.destroyed$)
-          .subscribe(s => {
-            this.patchProfile({gstDetails: obj.gstDetails});
-          });
-
-        ele.dispatchEvent(new Event('keydown', {bubbles: true}));
-      } else {
-        this.patchProfile({gstDetails: obj.gstDetails});
-      }
-    }
+  public checkGstDetails() {
+    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
   }
 
   public patchProfile(obj) {
+    for (let member in obj) {
+      if (obj[member] === null) {
+        obj[member] = '';
+      }
+    }
     this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
   }
 

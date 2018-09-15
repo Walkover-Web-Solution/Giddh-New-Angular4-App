@@ -13,4 +13,5 @@ import { DaybookComponent } from 'app/daybook/daybook.component';
   ],
   exports: [RouterModule]
 })
-export class DaybookRoutingModule { }
+export class DaybookRoutingModule {
+}

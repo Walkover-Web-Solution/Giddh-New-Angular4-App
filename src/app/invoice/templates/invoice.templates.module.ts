@@ -36,4 +36,5 @@ import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst
     ContentFilterComponent,
   ]
 })
-export class InvoiceTemplatesModule { }
+export class InvoiceTemplatesModule {
+}

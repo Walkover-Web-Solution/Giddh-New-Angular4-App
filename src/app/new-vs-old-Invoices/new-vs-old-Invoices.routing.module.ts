@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CarriedOverSalesComponent } from './carried-over-sales.component';
+import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 
 @NgModule({
   imports: [
     RouterModule.forChild([{
-      path: '', component: CarriedOverSalesComponent, canActivate: [NeedsAuthentication]
+      path: '', component: NewVsOldInvoicesComponent, canActivate: [NeedsAuthentication]
     }])
   ],
   exports: [RouterModule]
 })
 
-export class CarriedOverSalesRoutingModule {
+export class NewVsOldInvoicesRoutingModule {
 }

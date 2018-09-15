@@ -24,7 +24,8 @@ import { GroupUpdateComponent } from './header/components/group-update/group-upd
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
 // social login injection
-import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
+import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module/index';
+// import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { LaddaModule } from 'angular2-ladda';
@@ -40,19 +41,32 @@ import { HighlightModule } from 'app/shared/helpers/pipes/highlightPipe/highligh
 import { DigitsOnlyModule } from 'app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 
+const getGoogleCredentials = (baseHref: string) => {
+  if (baseHref === 'https://giddh.com/' || isElectron) {
+    return {
+      GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+    };
+  } else {
+    return {
+      GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+    };
+  }
+};
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+    // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+    provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
   },
   {
     id: LinkedinLoginProvider.PROVIDER_ID,
     provider: new LinkedinLoginProvider('817roify24ig8g')
   }
-]);
+], false);
 
 export function provideConfig() {
   return SOCIAL_CONFIG || {id: null, providers: []};

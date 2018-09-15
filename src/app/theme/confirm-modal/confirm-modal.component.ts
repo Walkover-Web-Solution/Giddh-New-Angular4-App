@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss']
 })
-export class ConfirmModalComponent  {
+export class ConfirmModalComponent {
   @Input() public title: string = 'Confirm';
   @Input() public body: string = '';
   @Input() public ok: string = 'Yes';
@@ -14,8 +14,10 @@ export class ConfirmModalComponent  {
   @Output() public successCallBack: EventEmitter<any> = new EventEmitter();
 
   @Output() public cancelCallBack: EventEmitter<any> = new EventEmitter();
+
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor() {
+  }
 
   public onSuccess(e: Event) {
     this.successCallBack.emit(e);

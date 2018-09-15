@@ -71,7 +71,7 @@ export interface IManufacturingItemRequest {
   otherExpenses: IOtherExpensesForCreate[];
 }
 
- export interface ILinkedStockForCreate extends IStockItem {
+export interface ILinkedStockForCreate extends IStockItem {
   quantity: number;
   rate?: number;
   amount?: number;

@@ -1,12 +1,14 @@
-import { PermissionDataService, IScope } from './permission-data.service';
-import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
-import * as _ from 'app/lodash-optimized';
-@Directive({ selector: '[checkPermission]' })
+import { IScope, PermissionDataService } from './permission-data.service';
+import { Directive, ElementRef, Input, OnInit, Renderer } from '@angular/core';
+
+@Directive({selector: '[checkPermission]'})
 
 export class CheckPermissionDirective implements OnInit {
   @Input() public checkPermission: string[];
 
-  constructor(public el: ElementRef, public renderer: Renderer, private _permissionDataService: PermissionDataService) {}
+  constructor(public el: ElementRef, public renderer: Renderer, private _permissionDataService: PermissionDataService) {
+  }
+
   public ngOnInit() {
 
     let permissions: IScope[] = this._permissionDataService.getData;

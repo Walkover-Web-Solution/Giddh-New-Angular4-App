@@ -1,3 +1,4 @@
+import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
@@ -5,7 +6,7 @@ import { AppState } from '../../store';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
 import { CustomActions } from '../../store/customActions';
 import { CompanyImportExportService } from '../../services/companyImportExportService';
@@ -17,63 +18,63 @@ import { GeneralService } from '../../services/general.service';
 @Injectable()
 export class CompanyImportExportActions {
   @Effect() private EXPORT_REQUEST$: Observable<Action> = this.action$
-    .ofType(COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST)
-    .switchMap((action: CustomActions) => {
+    .ofType(COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
 
-      if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-        return this._companyImportExportService.ExportRequest()
-          .map((response: BaseResponse<any, string>) => {
-            if (response.status === 'success') {
-              let res = {body: response.body};
-              let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
-              saveAs(blob, this._generalService.companyUniqueName + '.json');
-              this._toasty.successToast('data exported successfully');
-            } else {
-              this._toasty.errorToast(response.message);
-            }
-            return this.ExportResponse(response);
-          });
-      } else {
-        return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to)
-          .map((response: BaseResponse<any, string>) => {
-            if (response.status === 'success') {
-              let res = {body: response.body};
-              let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
-              saveAs(blob, this._generalService.companyUniqueName + '.json');
-            } else {
-              this._toasty.errorToast(response.message);
-            }
-            return this.ExportResponse(response);
-          });
-      }
-    });
+        if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+          return this._companyImportExportService.ExportRequest().pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                let res = {body: response.body};
+                let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
+                saveAs(blob, this._generalService.companyUniqueName + '.json');
+                this._toasty.successToast('data exported successfully');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.ExportResponse(response);
+            }));
+        } else {
+          return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to).pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                let res = {body: response.body};
+                let blob = new Blob([JSON.stringify(res)], {type: 'application/json'});
+                saveAs(blob, this._generalService.companyUniqueName + '.json');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.ExportResponse(response);
+            }));
+        }
+      }));
 
   @Effect() private IMPORT_REQUEST$: Observable<Action> = this.action$
-    .ofType(COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST)
-    .switchMap((action: CustomActions) => {
+    .ofType(COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
 
-      if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-        return this._companyImportExportService.ImportRequest(action.payload.file)
-          .map((r: BaseResponse<string, string>) => {
-            if (r.status === 'success') {
-              this._toasty.successToast(r.body);
-            } else {
-              this._toasty.errorToast(r.message);
-            }
-            return this.ImportResponse(r);
-          });
-      } else {
-        return this._companyImportExportService.ImportLedgersRequest(action.payload.file)
-          .map((r: BaseResponse<string, string>) => {
-            if (r.status === 'success') {
-              this._toasty.successToast(r.body);
-            } else {
-              this._toasty.errorToast(r.message);
-            }
-            return this.ImportResponse(r);
-          });
-      }
-    });
+        if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+          return this._companyImportExportService.ImportRequest(action.payload.file).pipe(
+            map((r: BaseResponse<string, string>) => {
+              if (r.status === 'success') {
+                this._toasty.successToast(r.body);
+              } else {
+                this._toasty.errorToast(r.message);
+              }
+              return this.ImportResponse(r);
+            }));
+        } else {
+          return this._companyImportExportService.ImportLedgersRequest(action.payload.file).pipe(
+            map((r: BaseResponse<string, string>) => {
+              if (r.status === 'success') {
+                this._toasty.successToast(r.body);
+              } else {
+                this._toasty.errorToast(r.message);
+              }
+              return this.ImportResponse(r);
+            }));
+        }
+      }));
 
   constructor(private action$: Actions,
               private _toasty: ToasterService,

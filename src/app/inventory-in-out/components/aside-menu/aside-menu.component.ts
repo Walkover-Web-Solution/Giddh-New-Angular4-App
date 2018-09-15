@@ -1,14 +1,14 @@
-import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges, Input } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryEntry, InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
 import { GeneralService } from '../../../services/general.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 
@@ -87,7 +87,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     // dispatch stockunit request
     this._store.dispatch(this._customStockActions.GetStockUnit());
     this._store.dispatch(this._inventoryUserAction.getAllUsers());
-    this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
+    this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
