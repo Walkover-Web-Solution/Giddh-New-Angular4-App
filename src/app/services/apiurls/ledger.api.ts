@@ -6,6 +6,7 @@ export const LEDGER_API = {
   CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/',
   RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
   UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
+  DELETE_LEDGER_ENTRY: 'company/:companyUniqueName/accounts/:accountUniqueName/entries/' + ':entryUniqueName',
   // ledger utility related mail,share
   MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format', // post call
   // get call
