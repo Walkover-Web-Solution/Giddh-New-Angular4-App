@@ -71,19 +71,20 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public width: number;
   public top: number;
   public left: number;
-
-  private _value: any[] = [];
-
+  public onChange = (_: any) => {
+    //
+  }
+  public onTouched = () => {
+    //
+  }
   private filterInputWidth: number = 1;
   private isDisabled: boolean = false;
-
   private clearClicked: boolean = false;
   // private showTypeAheadInput: boolean = false;
   private selectContainerClicked: boolean = false;
   private focused: boolean = false;
   private optionListClicked: boolean = false;
   private optionClicked: boolean = false;
-
   /** Keys. **/
 
   private KEYS: any = {
@@ -99,11 +100,26 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   constructor(private hostElement: ElementRef) {
   }
 
-  public onChange = (_: any) => {
-    //
+  private _value: any[] = [];
+
+  /** Value. **/
+
+  get value(): string | string[] {
+    return this.multiple ? this._value : this._value[0];
   }
-  public onTouched = () => {
-    //
+
+  set value(v: string | string[]) {
+    if (typeof v === 'undefined' || v === null || v === '') {
+      v = [];
+    } else if (typeof v === 'string') {
+      v = [v];
+    } else if (!Array.isArray(v)) {
+      throw new TypeError('Value must be a string or an array.');
+    }
+
+    this.optionList.value = v;
+    this._value = v;
+    this.updateState();
   }
 
   /** Event handlers. **/
@@ -162,6 +178,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       this.focused = true;
     }
   }
+
   public processMyLogic() {
     if (this.isTypeAheadMode) {
       if (this.optionList.hasSelected) {
@@ -332,26 +349,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   private updateFilterEnabled() {
     this.filterEnabled = this.optionList.options.length >= this.noFilter;
-  }
-
-  /** Value. **/
-
-  get value(): string | string[] {
-    return this.multiple ? this._value : this._value[0];
-  }
-
-  set value(v: string | string[]) {
-    if (typeof v === 'undefined' || v === null || v === '') {
-      v = [];
-    } else if (typeof v === 'string') {
-      v = [v];
-    } else if (!Array.isArray(v)) {
-      throw new TypeError('Value must be a string or an array.');
-    }
-
-    this.optionList.value = v;
-    this._value = v;
-    this.updateState();
   }
 
   private valueChanged() {

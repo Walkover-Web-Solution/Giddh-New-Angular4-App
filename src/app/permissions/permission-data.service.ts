@@ -1,6 +1,5 @@
 import { Store } from '@ngrx/store';
 import { AppState } from './../store/roots';
-import { SessionState } from './../store/authentication/authentication.reducer';
 import { Injectable } from '@angular/core';
 import { createSelector } from 'reselect';
 
@@ -11,14 +10,14 @@ export interface IScope {
 
 @Injectable()
 export class PermissionDataService {
-  private _isUserSuperAdmin: boolean = false;
   private _scopes: IScope[] = [];
+
   constructor(private store: Store<AppState>) {
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
       if (currentCompany && currentCompany.userEntityRoles && currentCompany.userEntityRoles.length) {
         let superAdminIndx = currentCompany.userEntityRoles.findIndex((role) => {
-         return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
+          return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
         });
         let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
         if (!companyEntityIndx) {
@@ -33,13 +32,7 @@ export class PermissionDataService {
     })).subscribe();
   }
 
-  get getData(): IScope[] {
-    return this._scopes;
-  }
-
-  set getData(data: IScope[]) {
-    this._scopes = data;
-  }
+  private _isUserSuperAdmin: boolean = false;
 
   get isUserSuperAdmin(): boolean {
     return this._isUserSuperAdmin;
@@ -47,5 +40,13 @@ export class PermissionDataService {
 
   set isUserSuperAdmin(info: boolean) {
     this._isUserSuperAdmin = info;
+  }
+
+  get getData(): IScope[] {
+    return this._scopes;
+  }
+
+  set getData(data: IScope[]) {
+    this._scopes = data;
   }
 }

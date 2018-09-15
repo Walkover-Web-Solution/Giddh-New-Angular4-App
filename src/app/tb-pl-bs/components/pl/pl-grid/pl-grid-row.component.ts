@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, SimpleChanges, OnChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
@@ -46,9 +46,11 @@ export class PlGridRowComponent implements OnInit, OnChanges {
   @Input() public search: string;
   @Input() public padding: string;
   @Input() public incomeStatement: any;
+
   constructor(private cd: ChangeDetectorRef) {
     //
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
       this.cd.detectChanges();
@@ -57,6 +59,7 @@ export class PlGridRowComponent implements OnInit, OnChanges {
       this.cd.detectChanges();
     }
   }
+
   public ngOnInit() {
     //
   }

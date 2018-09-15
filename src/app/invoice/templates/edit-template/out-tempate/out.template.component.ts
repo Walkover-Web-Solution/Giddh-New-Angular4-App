@@ -1,7 +1,8 @@
+import { take } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
@@ -35,13 +36,13 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     let companies = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.session).take(1).subscribe(ss => {
+    this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
       this.companyUniqueName = ss.companyUniqueName;
     });
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);

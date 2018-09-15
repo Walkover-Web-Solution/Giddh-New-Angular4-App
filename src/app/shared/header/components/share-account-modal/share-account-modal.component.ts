@@ -1,3 +1,4 @@
+import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { ToasterService } from './../../../../services/toaster.service';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
@@ -5,9 +6,8 @@ import { PermissionActions } from '../../../../actions/permission/permission.act
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AccountResponse, AccountSharedWithResponse, ShareAccountRequest, AccountResponseV2 } from '../../../../models/api-models/Account';
+import { Observable, ReplaySubject } from 'rxjs';
+import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import * as _ from 'app/lodash-optimized';
 
@@ -28,9 +28,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private accountActions: AccountsAction, private _toasty: ToasterService, private _permissionActions: PermissionActions) {
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).takeUntil(this.destroyed$);
-    this.allPermissions$ = this.store.select(state => state.permission.permissions).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).pipe(takeUntil(this.destroyed$));
+    this.allPermissions$ = this.store.select(state => state.permission.permissions).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -46,7 +46,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
   }
 
   public async shareAccount() {
-    let activeAccount = await this.activeAccount$.first().toPromise();
+    let activeAccount = await this.activeAccount$.pipe(first()).toPromise();
     let userRole = {
       emailId: this.email,
       entity: 'account',

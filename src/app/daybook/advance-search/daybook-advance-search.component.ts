@@ -1,9 +1,10 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IOption } from 'app/theme/ng-select/option.interface';
@@ -16,13 +17,14 @@ import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' },
-  { label: 'Exclude', value: 'exclude' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'},
+  {label: 'Exclude', value: 'exclude'}
 ];
+
 @Component({
   selector: 'daybook-advance-search-model',
   templateUrl: './daybook-advance-search.component.html'
@@ -33,13 +35,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
   @Input() public startDate: any;
   @Input() public endDate: any;
   @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-  @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent }) public dateRangePickerDir: DaterangePickerComponent;
+  @ViewChild('dateRangePickerDir', {read: DaterangePickerComponent}) public dateRangePickerDir: DaterangePickerComponent;
 
   public advanceSearchObject: DayBookRequestModel = null;
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
   public showChequeDatePicker: boolean = false;
-  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
@@ -126,7 +128,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     });
 
     this.setVoucherTypes();
-    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
+    this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
     this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
   }
@@ -136,13 +138,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     this.store.dispatch(this.inventoryAction.GetStock());
     // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
 
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+    this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ label: d.name, value: d.uniqueName });
+          accounts.push({label: d.name, value: d.uniqueName});
         });
-        this.accounts$ = Observable.of(accounts);
+        this.accounts$ = observableOf(accounts);
       }
     });
 
@@ -152,19 +154,19 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         let units = data.results;
 
         return units.map(unit => {
-          return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
+          return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
         });
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
 
     // Get groups with accounts
-    this._groupService.GetFlattenGroupsAccounts().takeUntil(this.destroyed$).subscribe(data => {
+    this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         let groups: IOption[] = [];
         data.body.results.map(d => {
-          groups.push({ label: d.groupName, value: d.groupUniqueName });
+          groups.push({label: d.groupName, value: d.groupUniqueName});
         });
-        this.groups$ = Observable.of(groups);
+        this.groups$ = observableOf(groups);
       }
     });
   }
@@ -181,7 +183,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
   }
 
   public setVoucherTypes() {
-    this.voucherTypeList = Observable.of([{
+    this.voucherTypeList = observableOf([{
       label: 'Sales',
       value: 'sales'
     }, {

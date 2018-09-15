@@ -88,6 +88,7 @@ export interface SearchRequest {
   fromDate: string;
   toDate: string;
   refresh: boolean;
+  page: number;
 }
 
 export class SearchDataSet {
@@ -101,6 +102,7 @@ export interface BulkEmailRequest {
   params: BulkEmailRequestParams;
   data: BulkEmailRequestData;
 }
+
 export interface BulkEmailRequestData {
   message: string;
   accounts: string[];
@@ -109,4 +111,5 @@ export interface BulkEmailRequestData {
 export interface BulkEmailRequestParams {
   from: string;
   to: string;
+  groupUniqueName: string;
 }

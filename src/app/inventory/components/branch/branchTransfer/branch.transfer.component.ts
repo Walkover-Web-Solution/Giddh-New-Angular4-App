@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -6,12 +7,10 @@ import { Store } from '@ngrx/store';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AppState } from '../../../../store';
 import * as _ from '../../../../lodash-optimized';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SettingsBranchActions } from '../../../../actions/settings/branch/settings.branch.action';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { BranchTransferEntity, ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
-import { Observable } from 'rxjs';
 import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 
 @Component({
@@ -94,6 +93,23 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   public selectedProduct: IStocksItem = null;
   public isBranchCreationInProcess$: Observable<boolean>;
   public isBranchCreationSuccess$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private sidebarAction: SidebarAction) {
+    this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
+    this.initializeForm();
+    this.isBranchCreationInProcess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferInProcess).pipe(takeUntil(this.destroyed$));
+    this.isBranchCreationSuccess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferSuccess).pipe(takeUntil(this.destroyed$));
+
+    this._store.select(state => state.inventoryBranchTransfer.linkedStocks).pipe(takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+      if (branches) {
+        if (branches.results.length) {
+          this.branches = this.linkedStocksVM(branches.results).map(b => ({label: b.name, value: b.uniqueName, additional: b}));
+          this.otherBranches = _.cloneDeep(this.branches);
+        }
+      }
+    });
+  }
 
   public get transferDate(): FormControl {
     return this.form.get('transferDate') as FormControl;
@@ -117,24 +133,6 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
   public get description(): FormControl {
     return this.form.get('description') as FormControl;
-  }
-
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private sidebarAction: SidebarAction) {
-    this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
-    this.initializeForm();
-    this.isBranchCreationInProcess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferInProcess).takeUntil(this.destroyed$);
-    this.isBranchCreationSuccess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferSuccess).takeUntil(this.destroyed$);
-
-    this._store.select(state => state.inventoryBranchTransfer.linkedStocks).takeUntil(this.destroyed$).subscribe((branches: LinkedStocksResponse) => {
-      if (branches) {
-        if (branches.results.length) {
-          this.branches = this.linkedStocksVM(branches.results).map(b => ({label: b.name, value: b.uniqueName, additional: b}));
-          this.otherBranches = _.cloneDeep(this.branches);
-        }
-      }
-    });
   }
 
   public ngOnInit() {

@@ -20,8 +20,12 @@
         }
         
         #template-header {
-            padding: 15px 15px 0;
+            padding: 15px 30px 0;
             width: auto;
+        }
+        
+        .max-width-180 {
+            /* max-width: 180px !important; */
         }
         /* NOTE:  comment padding, max-width, border in #royal css for java */
         
@@ -89,7 +93,8 @@
             font-size: 34px;
             float: right;
             font-weight: bold;
-            display: flex;
+            /* display: flex; */
+            line-height: normal;
         }
         
         #royal .mrL2 {
@@ -115,7 +120,7 @@
         }
         
         #royal .product-table {
-            background: #df49270d;
+            /* background: #df49270d; */
             position: relative;
             /* padding-bottom: 10px; */
         }
@@ -180,18 +185,18 @@
         }
         
         #royal .item thead tr th {
-            padding: 15px 5px 10px 0;
-            border-bottom: 1px solid #666666;
+            padding: 20px 8px 4px;
+            border-bottom: 1px solid #949494;
             line-height: 1.2rem;
             font-weight: bold;
         }
         
         #royal .item tbody tr td {
-            padding: 3px 0;
+            padding: 8px;
         }
         
         #royal .item tfoot tr:last-child th {
-            border-top: 1px solid #666666;
+            border-top: 1px solid #949494;
             padding: 6px;
             line-height: 1.2rem;
             vertical-align: middle
@@ -210,13 +215,13 @@
         }
         
         #royal .bdrB {
-            border-bottom: 1px solid#666;
+            border-bottom: 1px solid#949494;
             margin-bottom: 10px;
         }
         
         #royal .subfooter {
             margin-top: 100px;
-            padding: 0 20px;
+            padding: 0 30px;
         }
         
         #royal .subfooter h1 {
@@ -286,7 +291,7 @@
         #royal .tax-table tbody tr td,
         #royal .tax-table tfoot tr th {
             padding: 6px;
-            border-right: 1px solid #666666;
+            border-right: 1px solid #949494;
         }
         
         table.tax-table.item {
@@ -328,10 +333,17 @@
         }
         
         .edit-template i {
-            background: url(/assets/images/edit-ico.svg) no-repeat;
-            width: 15px;
+            background: url('data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMS4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ2OS4zMzEgNDY5LjMzMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDY5LjMzMSA0NjkuMzMxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCI+CjxnPgoJPHBhdGggZD0iTTQzOC45MzEsMzAuNDAzYy00MC40LTQwLjUtMTA2LjEtNDAuNS0xNDYuNSwwbC0yNjguNiwyNjguNWMtMi4xLDIuMS0zLjQsNC44LTMuOCw3LjdsLTE5LjksMTQ3LjQgICBjLTAuNiw0LjIsMC45LDguNCwzLjgsMTEuM2MyLjUsMi41LDYsNCw5LjUsNGMwLjYsMCwxLjIsMCwxLjgtMC4xbDg4LjgtMTJjNy40LTEsMTIuNi03LjgsMTEuNi0xNS4yYy0xLTcuNC03LjgtMTIuNi0xNS4yLTExLjYgICBsLTcxLjIsOS42bDEzLjktMTAyLjhsMTA4LjIsMTA4LjJjMi41LDIuNSw2LDQsOS41LDRzNy0xLjQsOS41LTRsMjY4LjYtMjY4LjVjMTkuNi0xOS42LDMwLjQtNDUuNiwzMC40LTczLjMgICBTNDU4LjUzMSw0OS45MDMsNDM4LjkzMSwzMC40MDN6IE0yOTcuNjMxLDYzLjQwM2w0NS4xLDQ1LjFsLTI0NS4xLDI0NS4xbC00NS4xLTQ1LjFMMjk3LjYzMSw2My40MDN6IE0xNjAuOTMxLDQxNi44MDNsLTQ0LjEtNDQuMSAgIGwyNDUuMS0yNDUuMWw0NC4xLDQ0LjFMMTYwLjkzMSw0MTYuODAzeiBNNDI0LjgzMSwxNTIuNDAzbC0xMDcuOS0xMDcuOWMxMy43LTExLjMsMzAuOC0xNy41LDQ4LjgtMTcuNWMyMC41LDAsMzkuNyw4LDU0LjIsMjIuNCAgIHMyMi40LDMzLjcsMjIuNCw1NC4yQzQ0Mi4zMzEsMTIxLjcwMyw0MzYuMTMxLDEzOC43MDMsNDI0LjgzMSwxNTIuNDAzeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=') no-repeat;
+            width: 17px;
             position: absolute;
             right: 1px;
-            background-size: contain;
-            height: 12px;
+            background-size: 14px;
+            height: 18px;
+        }
+        
+        img {
+            max-width: 180px;
+        }
+        #royal .product-table tfoot tr th {
+            padding: 0 8px;
         }

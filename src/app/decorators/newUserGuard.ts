@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { VerifyEmailResponseModel } from '../models/api-models/loginModels';
 import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
@@ -7,10 +8,12 @@ import { Store } from '@ngrx/store';
 @Injectable()
 export class NewUserAuthGuard implements CanActivate {
   private user: VerifyEmailResponseModel;
+
   constructor(public _router: Router, private store: Store<AppState>) {
   }
+
   public canActivate() {
-    this.store.take(1).subscribe(s => {
+    this.store.pipe(take(1)).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user;
       }

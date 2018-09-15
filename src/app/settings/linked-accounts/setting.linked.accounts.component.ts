@@ -1,9 +1,10 @@
+import { takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild, Optional, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
@@ -13,9 +14,8 @@ import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-acc
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { GeneralService } from '../../services/general.service';
 
@@ -24,8 +24,8 @@ import { GeneralService } from '../../services/general.service';
   templateUrl: './setting.linked.accounts.component.html',
   styles: [`
     .bank_delete {
-      right:0;
-      bottom:0;
+      right: 0;
+      bottom: 0;
     }
   `]
 })
@@ -60,7 +60,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
     private _generalService: GeneralService
   ) {
-    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
@@ -74,20 +74,20 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       extraParams: ['', Validators.required]
     });
 
-    this.store.select(p => p.settings).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
         // console.log('Found');
         this.ebankAccounts = _.cloneDeep(o.linkedAccounts.bankAccounts);
       }
     });
 
-    this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
       }
     });
 
-    this.store.select(p => p.settings.linkedAccounts.iframeSource).takeUntil(this.destroyed$).subscribe((source) => {
+    this.store.select(p => p.settings.linkedAccounts.iframeSource).pipe(takeUntil(this.destroyed$)).subscribe((source) => {
       if (source) {
         // this.iframeSource = _.clone(source);
         this.connectBankModel.show();
@@ -99,7 +99,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       if (data) {
         let accounts: IOption[] = [];
         data.map(d => {
-          accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
+          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
         });
         this.accounts$ = accounts;
       }
@@ -138,7 +138,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
    * yodleeBank
    */
   public yodleeBank() {
-    this._settingsLinkedAccountsService.GetYodleeToken().takeUntil(this.destroyed$).subscribe(data => {
+    this._settingsLinkedAccountsService.GetYodleeToken().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         if (data.body.user) {
           let token = _.cloneDeep(data.body.user.accessTokens[0]);

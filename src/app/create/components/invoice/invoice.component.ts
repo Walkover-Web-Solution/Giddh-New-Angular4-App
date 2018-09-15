@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log ('CreateInvoiceComponent loaded');
+    console.log('CreateInvoiceComponent loaded');
     this.imgPath = isElectron ? 'assets/images/templates/' : AppUrl + APP_FOLDER + 'assets/images/templates/';
     this._router.navigate(['/create-invoice/invoice/t001']); // Remove this line when you have multiple templates
   }
