@@ -1,14 +1,13 @@
 import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
 import { AccountAsVoucherComponent } from './voucher-grid/voucher-grid.component';
-import { VsForDirective } from './../theme/ng2-vs-for/ng2-vs-for';
 import { SharedModule } from './../shared/shared.module';
 import { AccountAsInvoiceComponent } from './invoice-grid/invoice-grid.component';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule, InjectionToken } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -24,7 +23,6 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { OnReturnDirective } from './keyboard.directive';
-import { InventoryAddStockComponent } from '../inventory/components/add-stock-components/inventory.addstock.component';
 
 @NgModule({
   declarations: [

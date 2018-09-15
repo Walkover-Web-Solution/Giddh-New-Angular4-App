@@ -45,7 +45,8 @@
         <!--account add component-->
 
         <account-add-new *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-            [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount">
+            [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
+            [isDebtorCreditor]="isDebtorCreditor">
         </account-add-new>
 
         <!--account update component-->
@@ -53,7 +54,7 @@
         <!-- <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-update> -->
 
         <account-update-new *ngIf="(activeAccount$ | async)" [activeAccount$]="activeAccount$" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
-            [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"></account-update-new>
+            [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
 
         <!--move account-->
         <div class="col-xs-12 form-group" *ngIf="(activeAccount$ | async)">

@@ -1,9 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
-import { ChildGroup, Account } from '../../../../models/api-models/Search';
+import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'pl-grid',  // <home></home>
@@ -45,12 +44,41 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public padding: string;
   @Input() public expandAll: boolean;
   public moment = moment;
+  // }
+  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
+    _.each(data, (grp: ChildGroup) => {
+      if (grp.isIncludedInSearch) {
+        if (!grp.level1) {
+          if (parentGroups.indexOf(grp.uniqueName) === -1) {
+            grp.isCreated = false;
+            grp.isVisible = isVisible;
+            grp.isOpen = isVisible;
+          } else {
+            grp.isOpen = isVisible;
+          }
+        } else {
+          grp.isOpen = true;
+        }
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
+    });
+  }
+
   constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
   }
+
   public ngOnInit() {
-  //
+    //
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
       //
@@ -92,9 +120,6 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
-  public ngAfterViewInit() {
-    //
-  }
 
   // private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
   //   _.each(data, (grp) => {
@@ -104,30 +129,8 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   //     });
   //     this.toggleVisibility(grp.childGroups, isVisible);
   //   });
-  // }
-  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
-    _.each(data, (grp: ChildGroup) => {
-      if (grp.isIncludedInSearch) {
-        if (!grp.level1) {
-          if (parentGroups.indexOf(grp.uniqueName) === -1) {
-            grp.isCreated = false;
-            grp.isVisible = isVisible;
-            grp.isOpen = isVisible;
-          } else {
-            grp.isOpen = isVisible;
-          }
-        } else {
-          grp.isOpen = true;
-        }
-        _.each(grp.accounts, (acc: Account) => {
-          if (acc.isIncludedInSearch) {
-            acc.isCreated = true;
-            acc.isVisible = isVisible;
-          }
-        });
-        this.toggleVisibility(grp.childGroups, isVisible);
-      }
-    });
+
+  public ngAfterViewInit() {
+    //
   }
 }

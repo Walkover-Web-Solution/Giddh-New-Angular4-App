@@ -1,83 +1,83 @@
 .ddMaxHeight {
-    max-height: 500px;
+  max-height: 500px;
 }
 
 .left_fixed_header {
-    position: absolute;
-    top: 54px;
-    bottom: 0;
-    min-height: 100vh;
-    background: #1a1a1a;
-    width: 46px;
-    transition: width .1s ease;
+  position: absolute;
+  top: 54px;
+  bottom: 0;
+  min-height: 100vh;
+  background: #1a1a1a;
+  width: 46px;
+  transition: width .1s ease;
   padding: 0;
-    padding-bottom: 120px;
+  padding-bottom: 120px;
 }
 
 .left_fixed_header.open,
 .left_fixed_header:hover {
-    width: 210px;
+  width: 210px;
 }
 
 .left_fixed_header li:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .left_fixed_header li {
-    overflow: hidden;
-    position: relative;
+  overflow: hidden;
+  position: relative;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    .left_fixed_header li {
-        display: grid;
-    }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .left_fixed_header li {
+    display: grid;
+  }
 }
 
 .left_fixed_header li a {
-    display: block;
-    padding: 12px 14px;
-    color: #fff;
-    text-transform: uppercase;
-    /* width: 32px; */
+  display: block;
+  padding: 12px 14px;
+  color: #fff;
+  text-transform: uppercase;
+  /* width: 32px; */
 }
 
 .left_fixed_header li a .label {
-    display: table-cell;
-    font-size: 11px;
-    vertical-align: middle;
-    padding-left: 22px;
-    /* opacity: 0; */
-    text-align: left;
+  display: table-cell;
+  font-size: 11px;
+  vertical-align: middle;
+  padding-left: 22px;
+  /* opacity: 0; */
+  text-align: left;
 }
 
 .left_fixed_header.open li a .label {
-    opacity: 1;
+  opacity: 1;
 }
 
 .left_fixed_header li:hover a,
 .left_fixed_header li a:hover span,
 .left_fixed_header li:hover a span {
-    color: #ff5f00;
-    cursor: pointer;
+  color: #ff5f00;
+  cursor: pointer;
 }
 
 .left_fixed_header [class^="navico-"] {
-    font-size: 20px;
-    display: table-cell;
+  font-size: 20px;
+  display: table-cell;
 }
 
 .left_fixed_header .divider {
-    border-bottom: 1px solid #333;
-    padding: 4px 0;
-    height: 0;
-    margin-bottom: 4px;
+  border-bottom: 1px solid #333;
+  padding: 4px 0;
+  height: 0;
+  margin-bottom: 4px;
 }
 
 :host ::ng-deep .tooltip {
-    white-space: nowrap;
-    width: auto !important;
-    max-width: inherit !important;
+  white-space: nowrap;
+  width: auto !important;
+  max-width: inherit !important;
 }
 
 :host ::ng-deep #universal_search .form-control {

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'app/models/api-models/Company';
 import { ITaxList } from 'app/models/api-models/Sales';
-import { findIndex, forEach, indexOf, each, find } from 'app/lodash-optimized';
+import { each, find, findIndex, indexOf } from 'app/lodash-optimized';
 import * as moment from 'moment';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { ITaxDetail } from 'app/models/interfaces/tax.interface';
 
 @Component({
@@ -58,6 +58,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     this.makeTaxList();
     this.distendFn();
   }
+
   public ngOnChanges(changes: SimpleChanges): void {
     if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
       this.makeTaxList();
@@ -114,7 +115,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         item.isDisabled = false;
         return item;
       });
-    }else {
+    } else {
       this.taxList.map((item: ITaxList) => {
         item.isChecked = false;
         item.isDisabled = false;
@@ -125,7 +126,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getIsTaxApplicable(tax: string) {
-    let o: TaxResponse = find(this.taxes, (item: TaxResponse) => item.uniqueName === tax );
+    let o: TaxResponse = find(this.taxes, (item: TaxResponse) => item.uniqueName === tax);
     if (o) {
       return this.isTaxApplicable(o);
     } else {
@@ -186,9 +187,9 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
    */
   private getItemIsCheckedOrNot(uniqueName: string): boolean {
     if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
-      let idx = findIndex(this.taxListAutoRender, (tax: ITaxList) => tax.uniqueName === uniqueName );
+      let idx = findIndex(this.taxListAutoRender, (tax: ITaxList) => tax.uniqueName === uniqueName);
       return (idx !== -1) ? true : false;
-    }else {
+    } else {
       return false;
     }
   }

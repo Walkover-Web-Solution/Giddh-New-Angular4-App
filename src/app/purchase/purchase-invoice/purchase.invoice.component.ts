@@ -1,4 +1,5 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
@@ -7,47 +8,47 @@ import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
 import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
-import 'rxjs/add/operator/distinct';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/map';
+
+
 import { AccountService } from '../../services/account.service';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const otherFiltersOptions = [
-  { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
-  { name: 'GSTIN Filled', uniqueName: 'GSTIN Filled' },
-  { name: 'Invoice Empty', uniqueName: 'Invoice Empty' },
-  { name: 'Invoice Filled', uniqueName: 'Invoice Filled' }
+  {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
+  {name: 'GSTIN Filled', uniqueName: 'GSTIN Filled'},
+  {name: 'Invoice Empty', uniqueName: 'Invoice Empty'},
+  {name: 'Invoice Filled', uniqueName: 'Invoice Filled'}
 ];
 
 const gstrOptions = [
-  { name: 'GSTR1', uniqueName: 'gstr1-excel-export' },
-  { name: 'GSTR2', uniqueName: 'gstr2-excel-export' },
-  { name: 'GSTR3B', uniqueName: 'gstr3-excel-export' }
+  {name: 'GSTR1', uniqueName: 'gstr1-excel-export'},
+  {name: 'GSTR2', uniqueName: 'gstr2-excel-export'},
+  {name: 'GSTR3B', uniqueName: 'gstr3-excel-export'}
 ];
 
 const purchaseReportOptions = [
-  { name: 'Credit Note', uniqueName: 'Credit Note' },
-  { name: 'Debit Note', uniqueName: 'Debit Note' }
+  {name: 'Credit Note', uniqueName: 'Credit Note'},
+  {name: 'Debit Note', uniqueName: 'Debit Note'}
 ];
 
 const fileGstrOptions = [
-  { name: 'Download Sheet', uniqueName: 'Download Sheet' },
-  { name: 'Use JIOGST API', uniqueName: 'Use JIOGST API' }
+  {name: 'Download Sheet', uniqueName: 'Download Sheet'},
+  {name: 'Use JIOGST API', uniqueName: 'Use JIOGST API'}
 ];
 
 @Component({
   selector: 'invoice-purchase',
   templateUrl: './purchase.invoice.component.html',
   styleUrls: ['purchase.invoice.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }],
+  providers: [{provide: BsDropdownConfig, useValue: {autoClose: true}}],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -68,7 +69,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public selectedDateForGSTR1 = {};
   public selectedEntryTypeValue: string = '';
   public moment = moment;
-  public selectedGstrType = { name: '', uniqueName: '' };
+  public selectedGstrType = {name: '', uniqueName: ''};
   public showGSTR1DatePicker: boolean = false;
   public accountAsideMenuState: string = 'out';
   public dropdownHeading: string = 'Select taxes';
@@ -136,6 +137,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private router: Router,
     private location: Location,
@@ -150,12 +152,12 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.purchaseInvoiceRequestObject.entryUniqueName = [];
     this.purchaseInvoiceRequestObject.taxes = [];
     this.selectedDateForGSTR1 = moment();
-    this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
+    this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
       if (c) {
         this.activeCompanyUniqueName = _.cloneDeep(c);
       }
     });
-    this.store.select(p => p.session.companies).take(1).subscribe((c) => {
+    this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
       if (c.length) {
         let companies = this.companies = _.cloneDeep(c);
         if (this.activeCompanyUniqueName) {
@@ -178,7 +180,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     paginationRequest.page = 1;
 
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
-    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.purchaseInvoices && o.purchaseInvoices.items) {
         this.allPurchaseInvoices = _.cloneDeep(o.purchaseInvoices);
         this.allPurchaseInvoicesBackup = _.cloneDeep(o.purchaseInvoices);
@@ -186,12 +188,12 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.isDownloadingFileInProgress = o.isDownloadingFile;
       if (o.invoiceGenerateSuccess) {
         this.generateInvoiceArr = [];
-        let event = { itemsPerPage: 10, page: this.allPurchaseInvoices.page };
+        let event = {itemsPerPage: 10, page: this.allPurchaseInvoices.page};
         this.pageChanged(event);
       }
     });
     this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
-    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.taxes && o.taxes.length) {
         this.allTaxes = _.cloneDeep(o.taxes);
       }
@@ -456,8 +458,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * SelectAllTaxes
-  */
+   * SelectAllTaxes
+   */
   public selectAllTaxes(event) {
     if (event.target.checked) {
       this.purchaseInvoiceObject.isAllTaxSelected = true;
@@ -471,8 +473,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * KeepCountofSelectedOptions
-  */
+   * KeepCountofSelectedOptions
+   */
   public makeCount() {
     let count: number = 0;
     let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
@@ -484,9 +486,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
     return count;
   }
+
   /**
-  * selectTaxOption
-  */
+   * selectTaxOption
+   */
   public selectTax(event, tax, idx) {
     if (event.target.checked) {
       // console.log(tax);
@@ -501,15 +504,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * toggle dropdown heading
-  */
+   * toggle dropdown heading
+   */
   public onDDShown() {
     this.dropdownHeading = 'Selected Taxes';
   }
 
   /**
-  * toggle dropdown heading
-  */
+   * toggle dropdown heading
+   */
   public onDDHidden(uniqueName: string, accountUniqueName: string) {
     let taxUniqueNames: string[] = [];
     this.dropdownHeading = 'Select Taxes';
@@ -596,7 +599,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * COMMENTED DUE TO PHASE-2
    * validateGstin
-  */
+   */
   // public validateGstin(val, idx) {
   //   if (val && val.length === 15) {
   //     let code = val.substr(0, 2);
@@ -635,7 +638,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     } else if (!this.activeCompanyGstNumber) {
       this.toasty.errorToast('No GST Number found for selected company');
     } else {
-      this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet,  this.userEmail));
+      this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
       this.userEmail = '';
     }
   }
@@ -646,10 +649,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public fileJioGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
     let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
-      if (this.activeCompanyGstNumber) {
-        this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber, Via));
-      } else {
-        this.toasty.errorToast('GST number not found.');
-      }
+    if (this.activeCompanyGstNumber) {
+      this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber, Via));
+    } else {
+      this.toasty.errorToast('GST number not found.');
+    }
   }
 }

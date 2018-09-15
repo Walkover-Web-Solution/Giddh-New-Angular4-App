@@ -1,8 +1,3 @@
-import { LoginActions } from '../../actions/login.action';
-import { CompanyActions } from '../../actions/company.actions';
-import { Action, ActionReducer } from '@ngrx/store';
-import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { CustomActions } from '../customActions';
 import { SessionActions } from '../../actions/session.action';
 

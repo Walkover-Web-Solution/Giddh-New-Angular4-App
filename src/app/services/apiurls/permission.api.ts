@@ -1,4 +1,3 @@
-
 let COMMON_URL = 'company/:companyUniqueName/role';
 
 export const PERMISSION_API = {

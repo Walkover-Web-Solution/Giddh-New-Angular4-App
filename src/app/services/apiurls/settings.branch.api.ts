@@ -1,4 +1,3 @@
-
 const COMMON = 'company/:companyUniqueName/';
 
 export const SETTINGS_BRANCH_API = {

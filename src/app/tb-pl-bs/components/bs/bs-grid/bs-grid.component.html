@@ -18,15 +18,15 @@
           <div class="clearfix profitLoss">
             <table class="mrB table basic">
               <thead>
-                <tr>
-                  <th class="col-xs-3 ">Particular</th>
-                  <th class="col-xs-3 text-right">As Of
-                    <span *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'"> {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
-                  </th>
-                  <th class="col-xs-3 text-right">As Of
-                    <span *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'"> {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
-                  </th>
-                </tr>
+              <tr>
+                <th class="col-xs-3 ">Particular</th>
+                <th class="col-xs-3 text-right">As Of
+                  <span *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'"> {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                </th>
+                <th class="col-xs-3 text-right">As Of
+                  <span *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'"> {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
+                </th>
+              </tr>
               </thead>
             </table>
             <!--Grid-->
@@ -47,14 +47,17 @@
 
             <ng-template #groupDetails let-list let-padding="padding">
               <ng-container *ngFor="let grp of list">
-                <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible" bs-grid-row [groupDetail]="grp" [padding]="padding" [search]="search"
-                  [padding]="padding">
-                  <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+                <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible" bs-grid-row
+                         [groupDetail]="grp" [padding]="padding" [search]="search"
+                         [padding]="padding">
+                  <ng-container
+                    *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
                 </section>
               </ng-container>
             </ng-template>
 
-            <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }"></ng-container>
             <!--/Grid-->
             <div class="account top_bar clearfix">
               <div class="col-xs-4  group">
@@ -67,7 +70,7 @@
                 <strong>{{ bsData?.liabTotalEnd | number:'1.2-2' }}</strong>
               </div>
             </div>
-            <hr class="bdrT" />
+            <hr class="bdrT"/>
           </div>
         </div>
 
@@ -89,12 +92,15 @@
               </section>
             </section> -->
             <ng-template #groupDetails let-list let-padding="padding">
-              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row [groupDetail]="grp" [padding]="padding"
-                [search]="search" [padding]="padding">
-                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row
+                       [groupDetail]="grp" [padding]="padding"
+                       [search]="search" [padding]="padding">
+                <ng-container
+                  *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
               </section>
             </ng-template>
-            <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| tbsearch: search, padding: 10 }"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| tbsearch: search, padding: 10 }"></ng-container>
             <!--/Grid-->
           </div>
         </div>
@@ -110,7 +116,7 @@
             <strong>{{ bsData?.assetTotalEnd | number:'1.2-2' }}</strong>
           </div>
         </div>
-        <hr class="bdrT" />
+        <hr class="bdrT"/>
         <!-- end of expenses -->
       </div>
       <!-- end row -->
