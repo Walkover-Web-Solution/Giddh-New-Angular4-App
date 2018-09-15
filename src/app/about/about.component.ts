@@ -1,7 +1,5 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { take } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AppState } from '../store/roots';
@@ -29,9 +27,11 @@ import { CompanyActions } from '../actions/company.actions';
 export class AboutComponent implements OnInit {
 
   public localState: any;
+
   constructor(
     public route: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions
-  ) { }
+  ) {
+  }
 
   public ngOnInit() {
     this.route
@@ -43,12 +43,12 @@ export class AboutComponent implements OnInit {
         this.localState = data.yourData;
       });
 
-      let companyUniqueName = null;
-      this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-      let stateDetailsRequest = new StateDetailsRequest();
-      stateDetailsRequest.companyUniqueName = companyUniqueName;
-      stateDetailsRequest.lastState = 'about';
-      this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'about';
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     /**
      * static data that is bundled
      * var mockData = require('assets/mock-data/mock-data.json');
@@ -57,6 +57,7 @@ export class AboutComponent implements OnInit {
      */
     this.asyncDataWithWebpack();
   }
+
   private asyncDataWithWebpack() {
     /**
      * you can also async load mock data with 'es6-promise-loader'

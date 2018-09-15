@@ -1,3 +1,4 @@
+import { map, switchMap } from 'rxjs/operators';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -5,9 +6,9 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { SearchService } from '../services/search.service';
-import { SearchRequest, SearchResponse } from '../models/api-models/Search';
+import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
@@ -19,17 +20,17 @@ export class SearchActions {
   public static readonly RESET_SEARCH_STATE = 'RESET_SEARCH_STATE';
 
   @Effect() private Search$: Observable<Action> = this.action$
-    .ofType(SearchActions.SEARCH_REQUEST)
-    .switchMap((action: CustomActions) => {
-      return this._searchService.Search(action.payload)
-        .map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
-          type: SearchActions.SEARCH_RESPONSE,
-          payload: r
-        }, true, {
+    .ofType(SearchActions.SEARCH_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._searchService.Search(action.payload).pipe(
+          map((r) => this.validateResponse<any, SearchRequest>(r, {
             type: SearchActions.SEARCH_RESPONSE,
             payload: r
-          }));
-    });
+          }, true, {
+              type: SearchActions.SEARCH_RESPONSE,
+              payload: r
+            })));
+      }));
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
@@ -37,10 +38,10 @@ export class SearchActions {
     private _searchService: SearchService) {
   }
 
-  public GetStocksReport(request: SearchRequest): CustomActions {
+  public GetStocksReport(request: SearchRequest, searchReqBody: any): CustomActions {
     return {
       type: SearchActions.SEARCH_REQUEST,
-      payload: request
+      payload: { request, searchReqBody }
     };
   }
 

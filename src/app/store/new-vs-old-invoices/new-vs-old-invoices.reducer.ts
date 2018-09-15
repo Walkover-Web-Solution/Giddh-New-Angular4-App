@@ -1,26 +1,26 @@
-import { CarriedOverSalesResponse } from '../../models/api-models/carried-over-sales';
+import { NewVsOldInvoicesResponse } from '../../models/api-models/new-vs-old-invoices';
 import { CustomActions } from '../customActions';
-import { CarriedOverSalesActions } from '../../actions/carried-over-sales.actions';
+import { NewVsOldInvoicesActions } from '../../actions/new-vs-old-invoices.actions';
 
-export interface CarriedOverSalesState {
-  data?: CarriedOverSalesResponse;
+export interface NewVsOldInvoiceState {
+  data?: NewVsOldInvoicesResponse;
   showLoader: boolean;
   noData: boolean;
   requestInSuccess: boolean;
 }
 
-export const initialState: CarriedOverSalesState = {
+export const initialState: NewVsOldInvoiceState = {
   data: null,
   noData: true,
   showLoader: false,
   requestInSuccess: false
 };
 
-export function carriedOverSalesReduce(state = initialState, action: CustomActions) {
+export function newVsOldInvoicesReduce(state = initialState, action: CustomActions) {
   switch (action.type) {
-    case CarriedOverSalesActions.GET_CARRIED_SALES_RESPONSE: {
+    case NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE: {
       if (action.payload) {
-        let data: CarriedOverSalesResponse = _.cloneDeep(action.payload) as CarriedOverSalesResponse;
+        let data: NewVsOldInvoicesResponse = _.cloneDeep(action.payload) as NewVsOldInvoicesResponse;
         let noData = false;
         let showLoader = false;
         if (data && data.totalSales && data.newSales && data.carriedSales.length < 1) {
@@ -31,10 +31,10 @@ export function carriedOverSalesReduce(state = initialState, action: CustomActio
         return {...state, showLoader: false, data: null, noData: true, requestInSuccess: true};
       }
     }
-    case CarriedOverSalesActions.GET_CARRIED_SALES_REQUEST: {
+    case NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_REQUEST: {
       return {...state, showLoader: true, requestInSuccess: false};
     }
-    case CarriedOverSalesActions.GET_NULL: {
+    case NewVsOldInvoicesActions.GET_NULL: {
       return {...state, data: null, noData: true};
     }
     default: {

@@ -1,12 +1,7 @@
+import { empty as observableEmpty, Observable } from 'rxjs';
 import { ToasterService } from 'app/services/toaster.service';
 import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
@@ -14,9 +9,14 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
   private isOnline: boolean = navigator.onLine;
 
   constructor(private _toasterService: ToasterService) {
-    window.addEventListener('online', () => { this.isOnline = true; });
-    window.addEventListener('offline', () => { this.isOnline = false; });
+    window.addEventListener('online', () => {
+      this.isOnline = true;
+    });
+    window.addEventListener('offline', () => {
+      this.isOnline = false;
+    });
   }
+
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.isOnline) {
       return next.handle(request);
@@ -24,7 +24,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
       setTimeout(() => {
         this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
       }, 100);
-      return Observable.empty();
+      return observableEmpty();
     }
   }
 }

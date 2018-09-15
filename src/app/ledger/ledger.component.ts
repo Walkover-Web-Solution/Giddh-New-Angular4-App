@@ -1,13 +1,14 @@
+import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { animate, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, state, style, transition, trigger, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadLedgerRequest, IELedgerResponse, TransactionsResponse } from '../models/api-models/Ledger';
-import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
@@ -20,7 +21,6 @@ import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -37,13 +37,14 @@ import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
-import { Subject } from 'rxjs/Subject';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 
 @Component({
   selector: 'ledger',
@@ -140,37 +141,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // aside menu properties
   public asideMenuState: string = 'out';
   public createStockSuccess$: Observable<boolean>;
-
+  public needToShowLoader: boolean = true;
   public entryUniqueNamesForBulkAction: string[] = [];
+  public searchText: string = '';
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-              private invoiceActions: InvoiceActions, private _loaderService: LoaderService) {
+    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
+    private invoiceActions: InvoiceActions, private _loaderService: LoaderService) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
-    this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
-    this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
-    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
-    this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
-    this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
-    this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
-    this.universalDate$ = this.store.select(p => p.session.applicationDate).takeUntil(this.destroyed$);
-    this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).takeUntil(this.destroyed$);
-    this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).takeUntil(this.destroyed$);
+    this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
+    this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
+    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay());
+    this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
+    this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+    this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
+    this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
     // reset redirect state from login action
     this.store.dispatch(this._loginActions.ResetRedirectToledger());
-    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
-    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -186,6 +188,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
+    this.needToShowLoader = false;
     let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
     let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
 
@@ -224,7 +227,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.lc.flattenAccountList.take(1).subscribe(data => {
+    this.lc.flattenAccountList.pipe(take(1)).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
         if (fa.value === e.value) {
@@ -320,9 +323,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = {concurrency: 0};
+    this.fileUploadOptions = { concurrency: 0 };
 
-    Observable.combineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+    observableCombineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
       this.hideEledgerWrap();
       let dateObj = resp[0];
       let params = resp[1];
@@ -341,8 +344,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (params['accountUniqueName']) {
         // this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
-        this.showLoader = false; // need to enable loder
-        // this.ledgerSearchTerms.nativeElement.value = '';
+        this.needToShowLoader = true;
+        // this.showLoader = false; // need to enable loder
+        // if (this.ledgerSearchTerms) {
+        //   this.ledgerSearchTerms.nativeElement.value = '';
+        // }
+        this.searchText = '';
+        this.searchTermStream.next('');
         this.resetBlankTransaction();
         // this.datePickerOptions = {
         //   locale: {
@@ -381,7 +389,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // };
         // set state details
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
@@ -395,7 +403,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     this.isTransactionRequestInProcess$.subscribe((s: boolean) => {
-      this.showLoader = _.clone(s);
+      if (this.needToShowLoader) {
+        this.showLoader = _.clone(s);
+      } else {
+        this.showLoader = false;
+      }
       // if (!s && this.showLoader) {
       //   this.showLoader = false;
       // }
@@ -433,8 +445,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
-      if (data[0] && data[1]) {let accountDetails: AccountResponse = data[0];
+    observableCombineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
+      if (data[0] && data[1]) {
+        let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+        if (data[1]) {
+          stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
+        }
+        let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
@@ -445,42 +462,48 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-            accountDetails.stocks.map(as => {
-              // stock entry
-              accountsArray.push({
-                value: uuid.v4(),
-                label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, {stock: as})
-              });
-            });
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
+              if (stockListFormFlattenAccount) {
+                stockListFormFlattenAccount.stocks.map(as => {
+                  // stock entry
+                  accountsArray.push({
+                    value: uuid.v4(),
+                    label: acc.name + '(' + as.uniqueName + ')',
+                    additional: Object.assign({}, acc, { stock: as })
+                  });
+                });
+              }
           });
         } else {
           // stocks from account itself
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, {stock: as})
+                  additional: Object.assign({}, acc, { stock: as })
                 });
               });
             } else {
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             }
           });
         }
-        this.lc.flattenAccountList = Observable.of(orderBy(accountsArray, 'label'));
+        this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
       }
     });
 
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
+        // need to clear selected entries when account changes
+        this.entryUniqueNamesForBulkAction = [];
+        this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
@@ -496,12 +519,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     //     this.getTransactionData();
     //   });
 
-    this.searchTermStream
-      .debounceTime(700)
-      .distinctUntilChanged()
+    this.searchTermStream.pipe(
+      debounceTime(700),
+      distinctUntilChanged())
       .subscribe(term => {
         this.advanceSearchRequest.q = term;
         this.advanceSearchRequest.page = 0;
+        this.needToShowLoader = false;
         this.getTransactionData();
       });
 
@@ -531,7 +555,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (yesOrNo) {
         this.getTransactionData();
       }
-    })).debounceTime(300).subscribe();
+    })).pipe(debounceTime(300)).subscribe();
 
     this.ledgerBulkActionSuccess$.subscribe((yes: boolean) => {
       if (yes) {
@@ -615,8 +639,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchRequest = null;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-    moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
-    this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+      moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+      this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
   }
 
   public toggleTransactionType(event: string) {
@@ -658,7 +682,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
-    this.lc.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
     let downloadRequest = new DownloadLedgerRequest();
     downloadRequest.invoiceNumber = [invoiceName];
     downloadRequest.voucherType = voucherType;
@@ -731,7 +755,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public showUpdateLedgerModal(txn: ITransactionItem) {
     let transactions: TransactionsResponse = null;
-    this.store.select(t => t.ledger.transactionsResponse).take(1).subscribe(trx => transactions = trx);
+    this.store.select(t => t.ledger.transactionsResponse).pipe(take(1)).subscribe(trx => transactions = trx);
 
     if (transactions) {
       if (txn.isBaseAccount) {
@@ -820,8 +844,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let activeAccount: AccountResponse;
     let groupWithAccountsList: GroupsWithAccountsResponse[];
-    this.lc.activeAccount$.take(1).subscribe(a => activeAccount = a);
-    this.lc.groupsArray$.take(1).subscribe(a => groupWithAccountsList = a);
+    this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
+    this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);
 
     let parent;
     let parentGroup: GroupsWithAccountsResponse;
@@ -856,7 +880,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.hideUpdateLedgerModal();
     });
 
-    this.updateLedgerModal.onHidden.take(1).subscribe(() => {
+    this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
       if (this.showUpdateLedgerForm) {
         this.hideUpdateLedgerModal();
       }
@@ -920,6 +944,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public search(term: string): void {
+    // this.ledgerSearchTerms.nativeElement.value = term;
     this.searchTermStream.next(term);
   }
 
@@ -935,7 +960,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getReconciliation() {
-    this.lc.transactionData$.take(2).subscribe((val) => {
+    this.lc.transactionData$.pipe(take(2)).subscribe((val) => {
       if (val) {
         this.closingBalanceBeforeReconcile = val.closingBalance;
         this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -993,15 +1018,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
       let companyUniqueName = null;
-      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
-      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+      this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join()},
-        headers: {'Session-Id': sessionKey},
+        data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
+        headers: { 'Session-Id': sessionKey },
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -1023,7 +1048,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onSelectInvoiceGenerateOption(isCombined: boolean) {
     this.bulkActionGenerateVoucherModal.hide();
-    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
+    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
   }
 
   public onCancelSelectInvoiceModal() {

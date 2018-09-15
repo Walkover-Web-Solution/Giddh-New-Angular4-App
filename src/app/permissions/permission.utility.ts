@@ -1,4 +1,4 @@
-import { Scope, Permission } from '../models/api-models/Permission';
+import { Permission, Scope } from '../models/api-models/Permission';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 
 export class NewRoleClass {
@@ -8,14 +8,16 @@ export class NewRoleClass {
     public isFixed?: boolean,
     public uniqueName?: string,
     public isUpdateCase?: boolean,
-  ) {  }
+  ) {
+  }
 }
 
 export class NewPermissionObj {
   constructor(
     public code: string,
     public isSelected: boolean
-  ) {  }
+  ) {
+  }
 }
 
 export interface IPageStr {
@@ -23,21 +25,21 @@ export interface IPageStr {
 }
 
 export interface IPage {
-    name: string;
-    isSelected: boolean;
+  name: string;
+  isSelected: boolean;
 }
 
 export interface GetAllPermissionResponse {
-    name: string;
-    scopes: Scope[];
-    isFixed?: boolean;
-    uniqueName?: string;
-    isUpdateCase?: boolean;
+  name: string;
+  scopes: Scope[];
+  isFixed?: boolean;
+  uniqueName?: string;
+  isUpdateCase?: boolean;
 }
 
 export interface Pages {
-    name: string;
-    permissions: Permission[];
+  name: string;
+  permissions: Permission[];
 }
 
 export class NewRoleFormClass implements INewRoleFormObj {
