@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
-import { AsideMenuAccountInContactComponent } from '../contact/aside-menu-account/aside.menu.account.component';
+import { AgingDropdownComponent } from '../contact/aging-dropdown/aging.dropdown.component';
 import { CommonModule } from '@angular/common';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, ModalModule, PaginationModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, PaginationComponent, PaginationModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { CarriedOverSalesComponent } from './carried-over-sales.component';
-import { CarriedOverSalesRoutingModule } from './carried-over-sales.routing.module';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { AgingReportComponent } from './aging-report.component';
+import { AgingReportRoutingModule } from './aging-report.routing.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -18,14 +20,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   declarations: [
-    CarriedOverSalesComponent
+    AgingDropdownComponent,
+    AgingReportComponent
   ],
+  exports: [],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ElementViewChildModule,
-    CarriedOverSalesRoutingModule,
+    AgingReportRoutingModule,
     LaddaModule,
     ShSelectModule,
     TabsModule,
@@ -34,11 +37,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SharedModule,
     SelectModule.forRoot(),
     ModalModule,
-    PaginationModule
+    PaginationModule,
+    ClickOutsideModule,
+    DigitsOnlyModule,
+    ElementViewChildModule
+  ],
+  entryComponents: [
+    PaginationComponent
   ],
   providers: []
 })
-
-export class CarriedOverSalesModule {
+export class AgingReportModule {
 
 }

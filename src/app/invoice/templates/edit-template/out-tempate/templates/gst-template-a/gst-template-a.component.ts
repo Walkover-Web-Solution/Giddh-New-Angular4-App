@@ -1,6 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
@@ -31,19 +33,19 @@ export class GstTemplateAComponent implements OnInit, OnDestroy {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
-  public companySetting$: Observable<any> = Observable.of(null);
+  public companySetting$: Observable<any> = observableOf(null);
   public companyAddress: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions) {
-    this.companySetting$ = this.store.select(s => s.settings.profile).takeUntil(this.destroyed$);
+    this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
     //
   }
 
   public ngOnInit() {
-    this.companySetting$.subscribe( a => {
+    this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);
       } else if (!a) {

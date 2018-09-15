@@ -1,8 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
-import { ChildGroup, Account } from '../../../../models/api-models/Search';
+import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
-import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
 
 @Component({
@@ -18,9 +17,26 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public padding: string;
   public moment = moment;
   @Input() public expandAll: boolean;
+  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    _.each(data, (grp: ChildGroup) => {
+      if (grp.isIncludedInSearch) {
+        grp.isCreated = true;
+        grp.isVisible = isVisible;
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
+    });
+  }
+
   constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
       //
@@ -75,27 +91,12 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
+
   public ngOnInit() {
     //
   }
 
   public ngAfterViewInit() {
     //
-  }
-
-  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    _.each(data, (grp: ChildGroup) => {
-      if (grp.isIncludedInSearch) {
-        grp.isCreated = true;
-        grp.isVisible = isVisible;
-        _.each(grp.accounts, (acc: Account) => {
-          if (acc.isIncludedInSearch) {
-            acc.isCreated = true;
-            acc.isVisible = isVisible;
-          }
-        });
-        this.toggleVisibility(grp.childGroups, isVisible);
-      }
-    });
   }
 }

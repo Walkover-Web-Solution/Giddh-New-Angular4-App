@@ -16,6 +16,7 @@ export interface SalesState {
   newlyCreatedStockAc: any;
   flattenSalesAc: IOption[];
 }
+
 const initialState = {
   invObj: null,
   acDtl: null,
@@ -30,7 +31,7 @@ const initialState = {
 export function salesReducer(state = initialState, action: CustomActions): SalesState {
   switch (action.type) {
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
-        return Object.assign({}, state, initialState);
+      return Object.assign({}, state, initialState);
     }
     case SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE : {
       let res: BaseResponse<AccountResponseV2, string> = action.payload;
@@ -42,7 +43,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       return state;
     }
     case SALES_ACTIONS.RESET_ACCOUNT_DETAILS : {
-      return Object.assign({}, state, { acDtl: null });
+      return Object.assign({}, state, {acDtl: null});
     }
     case SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE : {
       return Object.assign({}, state, {
@@ -54,32 +55,32 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       let purchaseAcList: IOption[] = [];
       if (data.status === 'success') {
         data.body.results.map(d => {
-          purchaseAcList.push({ label: d.name, value: d.uniqueName });
+          purchaseAcList.push({label: d.name, value: d.uniqueName});
         });
       }
-      return Object.assign({}, state, { purchaseAcList });
+      return Object.assign({}, state, {purchaseAcList});
     }
     case SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE : {
       let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = action.payload;
       let salesAcList: IOption[] = [];
       if (data.status === 'success') {
         data.body.results.map(d => {
-          salesAcList.push({ label: d.name, value: d.uniqueName });
+          salesAcList.push({label: d.name, value: d.uniqueName});
         });
       }
-      return Object.assign({}, state, { salesAcList });
+      return Object.assign({}, state, {salesAcList});
     }
     case SALES_ACTIONS.STOCK_GROUP_SUCCESS: {
       let data = action.payload;
-      return Object.assign({}, state, { newlyCreatedGroup: data });
+      return Object.assign({}, state, {newlyCreatedGroup: data});
     }
     case SALES_ACTIONS.STOCK_AC_SUCCESS: {
       let data = action.payload;
-      return Object.assign({}, state, { newlyCreatedStockAc: data });
+      return Object.assign({}, state, {newlyCreatedStockAc: data});
     }
     case SALES_ACTIONS.SALES_FLATTEN_AC_STORED: {
       let data = action.payload;
-      return Object.assign({}, state, { flattenSalesAc: data });
+      return Object.assign({}, state, {flattenSalesAc: data});
     }
     default: {
       return state;

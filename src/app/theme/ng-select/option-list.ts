@@ -9,26 +9,6 @@ export class OptionList {
   // private _filtered: Array<Option>;
   // private _value: Array<string>;
 
-  // v0 and v1 are assumed not to be undefined or null.
-  public static equalValues(v0: string[], v1: string[]): boolean {
-
-    if (v0.length !== v1.length) {
-      return false;
-    }
-
-    let a: string[] = v0.slice().sort();
-    let b: string[] = v1.slice().sort();
-
-    return a.every((v, i) => {
-      return v === b[i];
-    });
-  }
-
-  private _options: Option[];
-  private _highlightedOption: Option = null;
-  private _hasShown: boolean;
-  private _hasSelected: boolean;
-
   constructor(options: IOption[]) {
 
     if (typeof options === 'undefined' || options === null) {
@@ -47,11 +27,15 @@ export class OptionList {
     this.highlight();
   }
 
+  private _options: Option[];
+
   /** Options. **/
 
   get options(): Option[] {
     return this._options;
   }
+
+  private _highlightedOption: Option = null;
 
   /** Highlight. **/
 
@@ -59,9 +43,13 @@ export class OptionList {
     return this._highlightedOption;
   }
 
+  private _hasShown: boolean;
+
   get hasShown(): boolean {
     return this._hasShown;
   }
+
+  private _hasSelected: boolean;
 
   get hasSelected(): boolean {
     return this._hasSelected;
@@ -96,6 +84,21 @@ export class OptionList {
 
   get filteredEnabled(): Option[] {
     return this.options.filter(option => option.shown && !option.disabled);
+  }
+
+  // v0 and v1 are assumed not to be undefined or null.
+  public static equalValues(v0: string[], v1: string[]): boolean {
+
+    if (v0.length !== v1.length) {
+      return false;
+    }
+
+    let a: string[] = v0.slice().sort();
+    let b: string[] = v1.slice().sort();
+
+    return a.every((v, i) => {
+      return v === b[i];
+    });
   }
 
   public getOptionsByValue(value: string): Option[] {

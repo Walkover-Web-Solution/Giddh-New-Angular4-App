@@ -1,8 +1,9 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -10,7 +11,6 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
 import * as _ from '../../../../lodash-optimized';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GeneralService } from 'app/services/general.service';
@@ -22,7 +22,7 @@ import { eventsConst } from 'app/shared/header/components/eventsConst';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked {
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
   public ScrollToElement = false;
   public viewPortItems: IGroupOrAccount[];
   public mc: GroupAccountSidebarVM;
@@ -52,15 +52,15 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef) {
+              private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef) {
     this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
-    this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
-    this.activeGroupUniqueName = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
-    this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-    this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
-    this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
-    this.isDeleteGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isDeleteGroupSuccess).takeUntil(this.destroyed$);
-    this.groupsListBackupStream$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
+    this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.activeGroupUniqueName = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
+    this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+    this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
+    this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+    this.isDeleteGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isDeleteGroupSuccess).pipe(takeUntil(this.destroyed$));
+    this.groupsListBackupStream$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -68,9 +68,11 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       // this.resetData();
     }
   }
+
   public ngAfterViewInit() {
     //
   }
+
   public ngAfterViewChecked() {
     if (this.ScrollToElement) {
       this.columnView.forEach((p, index) => {
@@ -82,21 +84,22 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       this.ScrollToElement = false;
     }
   }
+
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.resetData();
 
-    this._generalServices.eventHandler.takeUntil(this.destroyed$).subscribe(s => {
+    this._generalServices.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       this.mc.handleEvents(s.name, s.payload);
 
       let groups: IGroupsWithAccounts[];
-      this.store.select(state => state.general.groupswithaccounts).take(1).subscribe(grp => groups = grp);
+      this.store.select(state => state.general.groupswithaccounts).pipe(take(1)).subscribe(grp => groups = grp);
 
       let activeGroup: GroupResponse;
-      this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(grp => activeGroup = grp);
+      this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(grp => activeGroup = grp);
 
       let activeAccount;
-      this.store.select(state => state.groupwithaccounts.activeAccount).take(1).subscribe(acc => activeAccount = acc);
+      this.store.select(state => state.groupwithaccounts.activeAccount).pipe(take(1)).subscribe(acc => activeAccount = acc);
 
       // reset search string when you're in search case for move group || move account || merge account
       if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved || s.name === eventsConst.accountMerged) {
@@ -115,7 +118,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
       }
 
-      this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+      this.breadcrumbPathChanged.emit({breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath});
     });
   }
 
@@ -131,8 +134,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       }
       let grps = this.mc.columns[0].groups || [];
       let accs = this.mc.columns[0].accounts || [];
-      let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-      let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+      let grps2 = grps.map(p => ({...p, isGroup: true} as IGroupOrAccount));
+      let accs2 = accs.map(p => ({...p, isGroup: false} as IGroupOrAccount));
       this.mc.columns[0].Items = [...grps2, ...accs2] as IGroupOrAccount[];
       this.mc.columns[0].SelectedItem = this.mc.columns[0].Items.find(p => p.isActive) || this.mc.columns[0].Items.find(p => p.isOpen);
       let col = this.polulateColms(this.mc.columns[0].groups);
@@ -146,7 +149,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       // check if searching in groups and have active group
       if (this.isSearchingGroups) {
         let activeGroup = null;
-        this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(a => activeGroup = a);
+        this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(a => activeGroup = a);
 
         // if (activeGroup) {
         //   for (let m = 0; m < this.mc.columns.length; m++) {
@@ -166,7 +169,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   public polulateColms(grps: IGroupsWithAccounts[]): ColumnGroupsAccountVM {
     let activeGroup = null;
-    this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(a => activeGroup = a);
+    this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(a => activeGroup = a);
 
     if (this.isSearchingGroups) {
       if (grps.length > 0) {
@@ -179,15 +182,23 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             grp.isActive = true;
             newCOL.IsCreateNewBtnShowable = true;
           }
-          if (grp.groups && grp.groups.length > 0) { allGrps.push(...grp.groups); }
+          if (grp.groups && grp.groups.length > 0) {
+            allGrps.push(...grp.groups);
+          }
         }
         if (!activeGroup) {
           for (let grp of grps) {
-            if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); }
+            if (grp.accounts && grp.accounts.length > 0) {
+              allAccount.push(...grp.accounts);
+            }
           }
         } else {
           for (let grp of grps) {
-            if (grp.uniqueName === activeGroup.uniqueName) { if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); } }
+            if (grp.uniqueName === activeGroup.uniqueName) {
+              if (grp.accounts && grp.accounts.length > 0) {
+                allAccount.push(...grp.accounts);
+              }
+            }
           }
         }
         newCOL.groups = [];
@@ -200,8 +211,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         }
         let grps1 = newCOL.groups || [];
         let accs = newCOL.accounts || [];
-        let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-        let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+        let grps2 = grps1.map(p => ({...p, isGroup: true} as IGroupOrAccount));
+        let accs2 = accs.map(p => ({...p, isGroup: false} as IGroupOrAccount));
         newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
         newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
         let col = this.polulateColms(allGrps);
@@ -223,8 +234,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             }
             let grps1 = newCOL.groups || [];
             let accs = newCOL.accounts || [];
-            let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-            let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+            let grps2 = grps1.map(p => ({...p, isGroup: true} as IGroupOrAccount));
+            let accs2 = accs.map(p => ({...p, isGroup: false} as IGroupOrAccount));
             newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
             newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
           }
@@ -247,8 +258,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
               }
               let grps1 = newCOL.groups || [];
               let accs = newCOL.accounts || [];
-              let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-              let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+              let grps2 = grps1.map(p => ({...p, isGroup: true} as IGroupOrAccount));
+              let accs2 = accs.map(p => ({...p, isGroup: false} as IGroupOrAccount));
               newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
               newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
               this.mc.columns.splice(1, 0, newCOL);
@@ -276,13 +287,13 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     // } else {
     if (currentIndex === 0) {
       this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-      this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+      this.breadcrumbPathChanged.emit({breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath});
       this.mc.selectGroup(item, currentIndex, true);
       return;
     }
 
     let grpsBck: GroupsWithAccountsResponse[];
-    this.groupsListBackupStream$.take(1).subscribe(s => grpsBck = s);
+    this.groupsListBackupStream$.pipe(take(1)).subscribe(s => grpsBck = s);
 
     this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
 
@@ -294,19 +305,19 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     this.mc.selectGroup(item, currentIndex, true);
     // }
 
-    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+    this.breadcrumbPathChanged.emit({breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath});
     this.ScrollToRight.emit(true);
     this.ScrollToElement = true;
   }
 
   public onAccountClick(item: any, currentIndex: number) {
     let grpsBck: GroupsWithAccountsResponse[];
-    this.groupsListBackupStream$.take(1).subscribe(s => grpsBck = s);
+    this.groupsListBackupStream$.pipe(take(1)).subscribe(s => grpsBck = s);
 
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
     let parentGrp = this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
-    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+    this.breadcrumbPathChanged.emit({breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath});
     if (parentGrp) {
       if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
         this.mc.columns.splice(currentIndex + 1, 1);
@@ -324,7 +335,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     this.breadcrumbUniqueNamePath = [];
     // if (col.uniqueName) {
     this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+    this.breadcrumbPathChanged.emit({breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath});
     // } else {
     //   let grp = col.groups.find(p => p.isOpen);
     //   if (grp) {
@@ -410,6 +421,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     }
     return result;
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

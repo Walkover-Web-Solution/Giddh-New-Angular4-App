@@ -25,8 +25,9 @@ export class AVAccountListComponent implements OnChanges {
   @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
   @ViewChild('listContainer') public listContainer: ElementRef;
   public math: any = Math;
-  public _rows: IOption[];
   public viewPortItems: IOption[];
+
+  public _rows: IOption[];
 
   @Input() set rows(val: IOption[]) {
     if (this.virtualScrollElm) {

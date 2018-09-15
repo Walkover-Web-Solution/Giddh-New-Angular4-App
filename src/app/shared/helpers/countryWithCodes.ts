@@ -3,6 +3,7 @@ export interface IContriesWithCodes {
   countryName: string;
   countryflag: string;
 }
+
 export const contriesWithCodes: IContriesWithCodes[] = [
   {value: '93', countryName: 'Afghanistan', countryflag: 'AF'},
   {value: '355', countryName: 'Albania', countryflag: 'AL'},
