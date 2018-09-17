@@ -302,6 +302,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   public resetFilters(isFiltered) {
     if (!isFiltered) {
       this.searchResponseFiltered$ = this.searchResponse$;
+      this.FilterByAPIEvent.emit(null);
+      this.pageChangeEvent.emit(1);
     }
   }
 
