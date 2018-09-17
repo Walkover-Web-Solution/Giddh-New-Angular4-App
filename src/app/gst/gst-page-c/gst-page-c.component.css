@@ -561,3 +561,12 @@ tax-engine .table.reconciliations-table thead>tr>th {
 .transactions-overview {
     background: #fff;
 }
+.tax-engine .sub-filter-nav-band ul>li.active>a .count {
+    color: #222;
+}
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #f9f9f9;
+}
+.table-striped>tbody>tr:nth-child(even)>td, .table-striped>tbody>tr:nth-child(even)>th {
+    background-color: #fff;
+}

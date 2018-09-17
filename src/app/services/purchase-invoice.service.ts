@@ -263,7 +263,7 @@ export class PurchaseInvoiceService {
   public SaveTaxPro(model: any): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO.replace(':companyUniqueName', this.companyUniqueName), { gstin: model.gstin, username: model.uid }).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
@@ -273,7 +273,7 @@ export class PurchaseInvoiceService {
   public SaveTaxProWithOTP(model: any): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO_WITH_OTP.replace(':GSTIN', model.gstin).replace(':USERNAME', model.uid).replace(':companyUniqueName', this.companyUniqueName).replace(':OTP', model.otp)).pipe(map((res) => {
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_TAX_PRO_WITH_OTP.replace(':companyUniqueName', this.companyUniqueName), { gstin: model.gstin, username: model.uid, otp: model.otp }).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {};
       return data;
