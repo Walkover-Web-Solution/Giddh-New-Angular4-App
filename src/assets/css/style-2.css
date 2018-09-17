@@ -1909,14 +1909,15 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.modal-backdrop {
+/* by dude */
+/*.modal-backdrop {
     background-color: #808080;
 }
 
-.modal-backdrop.in {
+ .modal-backdrop.in {
     filter: alpha(opacity=80);
     opacity: .8;
-}
+} */
 
 #shareModal .modal-header {
     border-bottom: 0;

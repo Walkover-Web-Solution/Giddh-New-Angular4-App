@@ -515,15 +515,17 @@
      (onHide)="onNavigationHide($event)">
   <div class="modal-dialog modal-small">
     <div class="modal-content">
-      <sh-select *ngIf="navigationModalVisible" #navigationShSelect id="universal_search" [ItemHeight]="40"
+      <ng-container *ngIf="navigationModalVisible">
+        <!-- <sh-select #navigationShSelect id="universal_search" [ItemHeight]="40"
                  [forceClearReactive]="forceClear$ | async" [showClear]="false"
                  (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation"
-                 placeholder="Search for page..." [options]="navigationOptionList" [ItemHeight]="33"
-                 class="form-group"></sh-select>
-      <div *ngIf="navigationModalVisible" class="shortcuts">
-        <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp;
-        to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
-      </div>
+                 placeholder="Search for page..." [options]="(navigationOptionList$ | async)" [ItemHeight]="33"
+                 class="form-group"></sh-select> -->
+        <div class="shortcuts">
+          <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp;
+          to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+        </div>
+    </ng-container>
     </div>
   </div>
 </div>

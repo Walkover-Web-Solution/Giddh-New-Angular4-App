@@ -12,19 +12,26 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
+import { IUlist } from '../../models/interfaces/ulist.interface';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   flattenAccounts: IFlattenAccountsResultItem[];
   states: States[];
   addAndManageClosed: boolean;
+  flattenGroups: IFlattenGroupsAccountsDetail[];
+  combinedList: IUlist[];
 }
 
 const initialState: GeneralState = {
   groupswithaccounts: null,
   flattenAccounts: null,
   states: null,
-  addAndManageClosed: false
+  addAndManageClosed: false,
+  flattenGroups: [],
+  combinedList: []
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -65,6 +72,30 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       }
       return state;
     }
+    // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
+    case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
+      return {...state, combinedList: []};
+    }
+
+    case GENERAL_ACTIONS.SET_COMBINED_LIST: {
+      let data: IUlist[] = action.payload;
+      console.log ('SET_COMBINED_LIST', data.length);
+      return {...state, combinedList: data};
+    }
+
+    case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
+      return {...state, flattenGroups: []};
+    }
+
+    case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
+      let result: BaseResponse<IPaginatedResponse, string> = action.payload;
+      if (result.status === 'success') {
+        return { ...state, flattenGroups: result.body.results };
+      }
+      return state;
+    }
+
+    // END NEW LOGIC
 
     // groups with accounts actions
     case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
