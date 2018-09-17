@@ -2,17 +2,16 @@
 <html lang="en" id="royal">
 
 <head>
-  <title></title>
-  <meta charset="UTF-8">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <title></title>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
-  <style type="text/css">
-    /* reset */
-  </style>
+    <style type="text/css">
+        /* reset */
+    </style>
 </head>
 
-<body
-  [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
@@ -36,9 +35,9 @@
                         </td>
                     </tr>
 
-      </tbody>
-    </table>
-  </header>
+                </tbody>
+            </table>
+        </header>
 
         <table class="meta">
             <tbody>
@@ -47,9 +46,9 @@
                         <figure>
                             <p>
                                 <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
-                                    : 'Number'}}: 20170822-1</span>
+                                    : 'Number'}}: 20170911-1</span>
                                 <span *ngIf="fieldsAndVisibility.header.invoiceDate?.display" [class.mrL2]="fieldsAndVisibility.header.invoiceNumber?.display">{{fieldsAndVisibility.header.invoiceDate?.label ? fieldsAndVisibility.header.invoiceDate?.label
-                                    : 'Date'}}: 22/08/2017</span>
+                                    : 'Date'}}: 11/09/2017</span>
                             </p>
                             <p>
                                 <span *ngIf="fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
@@ -80,7 +79,7 @@
                             <strong>Shipping Detail:</strong>
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.shippingDate?.display">{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
-                            : 'Ship Date'}}: 30/07/2017</p>
+                            : 'Ship Date'}}: 30/09/2018</p>
                         <p *ngIf="fieldsAndVisibility.header.shippedVia?.display">{{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                             : 'Ship Via'}}: FedEx</p>
                         <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">{{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
@@ -120,8 +119,7 @@
             <tbody>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
-                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-
-                        2018</td>
+                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-2017</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
                     <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 (H)</td>
                     <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Kg</td>
@@ -134,12 +132,11 @@
                 </tr>
                 <tr>
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
-                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-
-                        2018</td>
+                    <td [hidden]="!fieldsAndVisibility.table.date?.display" class="text-left">10-09-2017</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
                     <td [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 (H)</td>
-                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">1.00
-                        Nos</td>
+                    <td [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
+                    </td>
                     <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">6000.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
                     <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
