@@ -131,6 +131,7 @@ module.exports = function (options) {
      * See: https://webpack.github.io/docs/webpack-dev-server.html
      */
     devServer: {
+      https:false,
       port: METADATA.port,
       host: METADATA.host,
       hot: METADATA.HMR,
