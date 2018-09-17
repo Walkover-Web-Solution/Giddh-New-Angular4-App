@@ -10,7 +10,7 @@
   <!--end loader-->
 
   <!-- result -->
-  <section class="" *ngIf="!(searchLoader$ | async) && (search$ | async)">
+  <section class="" [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
     <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)"
                    (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()"></search-filter>
     <table class="table table-bordered basic mrT1">
@@ -18,7 +18,8 @@
       <tr>
         <th [style.width.px]="25">
           <div>
-            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked" [(ngModel)]="isAllChecked">
+            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked"
+                   [(ngModel)]="isAllChecked">
           </div>
         </th>
         <!-- <th>#</th> -->
@@ -77,7 +78,8 @@
       <tbody>
       <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
         <!-- [(ngModel)]="item.isSelected" -->
-        <td><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
+        <td><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1"
+                   (change)="toggleSelection($event, item)"></td>
         <!-- <td>{{i+1}}</td> -->
         <td>{{item.name}}</td>
         <td>{{item.uniqueName}}</td>
@@ -106,14 +108,16 @@
       </tr>
       </tbody>
       <tfoot>
-        <tr>
-            <td colspan="100%">
-                <div class="alC">
-                    <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                </div>
-            </td>
-        </tr>
-    </tfoot>
+      <tr>
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm"
+                        [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                        (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
+      </tfoot>
     </table>
   </section>
   <!-- end pd div -->
