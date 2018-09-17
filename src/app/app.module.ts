@@ -53,6 +53,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { IS_ELECTRON_WA } from './app.constant';
+import { UniversalListModule } from './theme/universal-list/universal.list.module';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -138,6 +139,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ActionModule.forRoot(),
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
+    UniversalListModule.forRoot(),
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule,

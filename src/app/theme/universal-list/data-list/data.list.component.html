@@ -1,0 +1,97 @@
+<section
+[clickOutsideEnabled]="true"
+[delayClickOutsideInit]="true"
+[exclude]= "defaultExcludedTags"
+(clickOutside)="handleOutSideClick($event)">
+  <ng-container *ngIf="outsideSearch">
+    <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
+  </ng-container>
+
+  <section
+    #wrapper
+    [class.isVisible]="isOpen"
+    [class.isFlying]="isFlying"
+    class="universal-data-list-wrapper"
+    >
+    <!-- header -->
+    <ng-container *ngIf="!outsideSearch">
+      <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
+    </ng-container>
+    <!-- end header -->
+
+    <ng-container *ngIf="rows && rows.length > 0">
+      <div
+        #mainEle
+        tabindex="0"
+        (keydown)="onKeydownHandlerOfListEle($event)"
+        class="universal-members-list"
+        [style.width.px]="ItemWidth">
+        <ng-container *ngIf="isOpen">
+          <!-- virtual scroll -->
+
+          <ng-container>
+            <universal-virtual-scroll
+            [items]="rows" [childHeight]="ItemHeight"
+            (update)="checkItems($event)"
+            (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
+            [style.max-height.px]="(viewPortItems?.length !== 0) ? ItemHeight * (viewPortItems && (viewPortItems.length < visibleItems ) ? viewPortItems.length : visibleItems) : ItemHeight">
+
+                <div
+                  class="item" *ngFor="let r of viewPortItems"
+                  (mouseenter)="handleMouseEvent($event, r)"
+                  (click)="itemSelected(r)" [ngClass]="{'selected': r.isHilighted, 'active': r.isSelected }">
+                  <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
+
+                    <!-- loading conditional templates -->
+
+                    <ng-container *ngTemplateOutlet="memberTemplate; context:{o: r }"></ng-container>
+
+                  </a>
+                </div>
+
+            </universal-virtual-scroll>
+          </ng-container>
+          <!-- end -->
+        </ng-container>
+      </div>
+    </ng-container>
+    <!--  end main list -->
+    <ng-container *ngIf="rows && rows.length === 0 || !rows">
+      <div #mainEle>
+        <div class="p-2" [style.width.px]="ItemWidth" *ngIf="!dontShowNoResultMsg">
+          <span *ngIf="rows && rows.length === 0">
+            <div class="jumper-results">
+              <p class="block">No matches found. Did you spell it correctly?</p>
+              <ng-container *ngIf="showChannelCreateBtn">
+                <a href="javascript:void(0)" class="btn btn-light create_channel" (click)="newTeamCreationEmitter.emit(searchEle.nativeElement.value)">
+                  Create a channel named #{{searchEle.nativeElement.value | slice:0:21}}
+                </a>
+              </ng-container>
+            </div>
+          </span>
+          <span *ngIf="!rows">Something went wrong</span>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+
+  <!-- end main section -->
+</section>
+
+<!-- member list template -->
+<ng-template #memberTemplate let-user="o">
+  <span class="member-pic">
+    S
+  </span>
+  <span class="member-details mr-auto text-truncate">
+    {{user.name}}
+  </span>
+  <span *ngIf="isMultiple" class="member-action">
+    <div class="icon-check_large_bold"></div>
+  </span>
+</ng-template>
+
+<!-- input box template -->
+<ng-template #searchEleTemplate>
+  <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" class="form-control" (keydown)="handleKeydown($event)" (keyup)="search($event)"/>
+</ng-template>
