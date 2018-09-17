@@ -55,10 +55,9 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   }
 
   public entryClicked(acc) {
-    if (isElectron) {
-      return;
-    }
-    (window as any).open(location.protocol + '//' + location.host + '/pages/ledger/' + acc.uniqueName);
+    let tUrl = location.href.split('/pages');
+    let url = tUrl[0] + '/pages/ledger/' + acc.uniqueName;
+    (window as any).open(url);
   }
 
   public trackByFn(index, item: Account) {
