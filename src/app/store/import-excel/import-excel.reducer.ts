@@ -33,25 +33,12 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       return {...state, importRequestIsSuccess: false, requestState: ImportExcelRequestStates.UploadFileInProgress};
     }
     case IMPORT_EXCEL.UPLOAD_FILE_RESPONSE: {
-      console.log(action);
       let response: BaseResponse<ImportExcelResponseData, string> = action.payload;
-      // if (response.status === 'success') {
-      //   return Object.assign({}, state, {
-      //     importRequestIsSuccess: true,
-      //     requestState: ImportExcelRequestStates.UploadFileSuccess,
-      //     importExcelData: response,
-      //   });
-      // }
-      // return Object.assign({}, state, {
-      //   importRequestIsSuccess: false,
-      //   requestState: ImportExcelRequestStates.UploadFileError
-      // });
-
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.importRequestIsSuccess = true;
         newState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-        newState.importExcelData = response;
+        newState.importExcelData = response.body;
         return Object.assign({}, state, newState);
       }
       return {
@@ -67,6 +54,8 @@ export function importExcelReducer(state = initialState, action: CustomActions):
     case IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE: {
       return {...state, requestState: ImportExcelRequestStates.ProcessImportSuccess};
     }
+    case IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE:
+      return initialState;
     default: {
       return state;
     }
