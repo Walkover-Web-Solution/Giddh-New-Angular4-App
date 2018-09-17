@@ -107,7 +107,7 @@ svg.icon.icon-sm {
     overflow: hidden;
     padding: 0;
     position: static;
-    max-width: 810px;
+    max-width: 835px;
     margin: auto;
 }
 .content-disabled::after {
