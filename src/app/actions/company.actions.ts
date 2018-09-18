@@ -10,6 +10,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'app/services/general.service';
+import { COMMON_ACTIONS } from './common.const';
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
@@ -271,9 +272,16 @@ export class CompanyActions {
   }
 
   public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): CustomActions {
+    this.store.dispatch(this.ResetApplicationData());
     return {
       type: CompanyActions.CREATE_COMPANY_RESPONSE,
       payload: value
+    };
+  }
+
+  public ResetApplicationData(): CustomActions {
+    return {
+      type: COMMON_ACTIONS.RESET_APPLICATION_DATA
     };
   }
 
