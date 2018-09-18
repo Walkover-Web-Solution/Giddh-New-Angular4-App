@@ -50,6 +50,11 @@ export class AppComponent implements AfterViewInit {
       }
       window.scrollTo(0, 0);
     });
+
+    let tUrl = location.href.split('=');
+    if (tUrl[1]) {
+      this.router.navigate([tUrl[1]]);
+    }
   }
 
 }
