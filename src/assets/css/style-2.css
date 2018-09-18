@@ -377,6 +377,7 @@ header .navbar {
     border: 0;
     border-radius: 2px;
     font-size: 14px;
+    margin-right: 8px;
 }
 
 .btn-group-lg>.btn,

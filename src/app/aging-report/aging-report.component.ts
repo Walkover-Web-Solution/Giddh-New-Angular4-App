@@ -37,7 +37,7 @@ export class AgingReportComponent implements OnInit {
   public names: any = [];
   public dueAmountReportRequest: DueAmountReportQueryRequest;
   public sundryDebtorsAccountsForAgingReport: IOption[] = [];
-  public totalDueOptions: IOption[] = [{label: 'greater then', value: '0'}, {label: 'less then', value: '1'}, {label: 'equal to', value: '2'}];
+  public totalDueOptions: IOption[] = [{label: 'greater than', value: '0'}, {label: 'less than', value: '1'}, {label: 'equal to', value: '2'}];
   public setDueRangeOpen$: Observable<boolean>;
   public agingDropDownoptions$: Observable<AgingDropDownoptions>;
   public agingDropDownoptions: AgingDropDownoptions;
