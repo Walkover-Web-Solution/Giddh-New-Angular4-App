@@ -1,4 +1,4 @@
-import { Directive, HostListener, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, ElementRef } from '@angular/core';
 import { WindowRef } from '../../window.object';
 
 @Directive({

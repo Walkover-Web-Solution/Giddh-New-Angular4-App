@@ -14,4 +14,5 @@ import { LedgerComponent } from './ledger.component';
   ],
   exports: [RouterModule]
 })
-export class LedgerRoutingModule { }
+export class LedgerRoutingModule {
+}

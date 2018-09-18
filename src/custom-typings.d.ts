@@ -96,9 +96,9 @@ type FactoryPromise = () => Promise<any>;
 
 type AsyncRoutes = {
   [component: string]: Es6PromiseLoader |
-  Function |
-  FactoryEs6PromiseLoader |
-  FactoryPromise;
+    Function |
+    FactoryEs6PromiseLoader |
+    FactoryPromise;
 };
 
 type IdleCallbacks = Es6PromiseLoader |

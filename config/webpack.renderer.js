@@ -9,30 +9,15 @@ const helpers = require('./helpers');
  *
  * problem with copy-webpack-plugin
  */
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const WebpackInlineManifestPlugin = require('webpack-inline-manifest-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const ngcWebpack = require('ngc-webpack');
-
-
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
+const webpack = require('webpack');
 const buildUtils = require('./build-utils');
-// /**
-//  * Webpack Constants
-//  */
-// const HMR = helpers.hasProcessFlag('hot');
-// const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot');
-// const METADATA = {
-//   title: 'Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software',
-//   baseUrl: '/',
-//   isDevServer: helpers.isWebpackDevServer(),
-//   HMR: HMR,
-//   isElectron: false
-// };
 
 /**
  * Webpack configuration
@@ -41,7 +26,7 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
-  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {
+  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, buildUtils.DEFAULT_METADATA.definePluginObject, options.metadata || {
     baseUrl: '',
     isElectron: true
   });
@@ -56,6 +41,7 @@ module.exports = function (options) {
     tsConfigPath: METADATA.tsConfigPath,
     mainPath: entry.main
   });
+  console.log('Define Plugin : ---', JSON.stringify(METADATA));
   return {
     /**
      * The entry point for the bundle
@@ -127,15 +113,6 @@ module.exports = function (options) {
 
       rules: [
         ...ngcWebpackConfig.loaders,
-        /**
-         * Json loader support for *.json files.
-         *
-         * See: https://github.com/webpack/json-loader
-         */
-        {
-          test: /\.json$/,
-          use: 'json-loader'
-        },
 
         /**
          * To string and css loader support for *.css files (from Angular components)
@@ -185,10 +162,10 @@ module.exports = function (options) {
           test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
           use: 'file-loader'
         }
-
       ],
 
     },
+
 
     /**
      * Add additional plugins to the compiler.
@@ -206,14 +183,37 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-      new DefinePlugin({
+
+      new webpack.DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
+        'isElectron': JSON.stringify(true),
+        'errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'AppUrl': JSON.stringify('./'),
+        'ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'APP_FOLDER': JSON.stringify(''),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
-        'process.env.HMR': METADATA.HMR
+        'process.env.HMR': METADATA.HMR,
+        'process.env.isElectron': JSON.stringify(true),
+        'process.env.errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'process.env.errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'process.env.AppUrl': JSON.stringify('./'),
+        'process.env.ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'process.env.APP_FOLDER': JSON.stringify('')
       }),
+      // new webpack.DefinePlugin(Object.assign({
+      //   'ENV': JSON.stringify(METADATA.ENV),
+      //   'HMR': METADATA.HMR,
+      //   'AOT': METADATA.AOT,
+      //   'isElectron': JSON.stringify(true),
+      //   'process.env.ENV': JSON.stringify(METADATA.ENV),
+      //   'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+      //   'process.env.HMR': METADATA.HMR,
+      //   'process.env.isElectron': JSON.stringify(true)
+      // }, METADATA.definePluginObject, {process: {env: {...METADATA.definePluginObject, isElectron: true}}})),
 
       /**
        * Plugin: CommonsChunkPlugin
@@ -223,22 +223,22 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
        * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
        */
-      new CommonsChunkPlugin({
-        name: 'polyfills',
-        chunks: ['polyfills']
-      }),
+      // new CommonsChunkPlugin({
+      //   name: 'polyfills',
+      //   chunks: ['polyfills']
+      // }),
 
 
-      new CommonsChunkPlugin({
-        minChunks: Infinity,
-        name: 'inline'
-      }),
-      new CommonsChunkPlugin({
-        name: 'main',
-        async: 'common',
-        children: true,
-        minChunks: 2
-      }),
+      // new CommonsChunkPlugin({
+      //   minChunks: Infinity,
+      //   name: 'inline'
+      // }),
+      // new CommonsChunkPlugin({
+      //   name: 'main',
+      //   async: 'common',
+      //   children: true,
+      //   minChunks: 2
+      // }),
 
 
       /**
@@ -250,9 +250,9 @@ module.exports = function (options) {
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
       new CopyWebpackPlugin([{
-            from: 'src/assets',
-            to: 'assets'
-          },
+          from: 'src/assets',
+          to: 'assets'
+        },
           {
             from: 'src/meta'
           }
@@ -326,15 +326,15 @@ module.exports = function (options) {
       new HtmlElementsPlugin({
         headTags: require('./head-config.common')
       }),
-
+      new AngularCompilerPlugin(ngcWebpackConfig.plugin),
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
        * See: https://gist.github.com/sokra/27b24881210b56bbaff7
        */
-      new LoaderOptionsPlugin({}),
+      // new webpack.LoaderOptionsPlugin({}),
 
-      new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
+      // new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
 
       /**
        * Plugin: InlineManifestWebpackPlugin
@@ -342,7 +342,7 @@ module.exports = function (options) {
        *
        * https://github.com/szrenwei/inline-manifest-webpack-plugin
        */
-      new InlineManifestWebpackPlugin(),
+      new WebpackInlineManifestPlugin(),
     ],
 
     /**
@@ -351,6 +351,14 @@ module.exports = function (options) {
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
+    // node: {
+    //   global: true,
+    //   crypto: 'empty',
+    //   process: true,
+    //   module: false,
+    //   clearImmediate: false,
+    //   setImmediate: false
+    // }
     target: 'electron-renderer'
   };
 };

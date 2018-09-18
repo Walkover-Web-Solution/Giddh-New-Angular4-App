@@ -4,7 +4,7 @@ import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -86,6 +86,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     //   this.change();
     // }
   }
+
   /**
    * prepare taxObject as per needed
    */

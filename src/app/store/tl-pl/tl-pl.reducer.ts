@@ -1,9 +1,9 @@
-import { Action } from '@ngrx/store';
 import { TBPlBsActions } from '../../actions/tl-pl.actions';
 import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from '../../lodash-optimized';
 import { ChildGroup } from '../../models/api-models/Search';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 interface TbState {
   data?: AccountDetails;
@@ -59,6 +59,9 @@ export const initialState: TBPlBsState = {
 
 export function tbPlBsReducer(state = initialState, action: CustomActions): TBPlBsState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:
     case TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE: {
       // no payload means error from server
@@ -72,23 +75,28 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         }
         return {
           ...state,
-          tb: { ...state.tb, data, noData, showLoader, exportData: data.groupDetails }
+          tb: {...state.tb, data, noData, showLoader, exportData: data.groupDetails}
         };
       } else {
-        return { ...state, tb: { ...state.tb, showLoader: false, exportData: [], data: null, noData: true } };
+        return {...state, tb: {...state.tb, showLoader: false, exportData: [], data: null, noData: true}};
       }
     }
     case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST:
     case TBPlBsActions.GET_V2_TRIAL_BALANCE_REQUEST: {
-      return { ...state, tb: { ...state.tb, showLoader: true } };
+      return {...state, tb: {...state.tb, showLoader: true}};
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
+
       let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
-      data.dates = _.cloneDeep(state.pl.data.dates);
-      addVisibleFlag(data.incArr);
-      addVisibleFlag(data.expArr);
-      return { ...state, pl: { ...state.pl, showLoader: false, data: { ...state.pl.data, ...data } } };
+      if (data) {
+        data.dates = _.cloneDeep(state.pl.data.dates);
+        addVisibleFlag(data.incArr);
+        addVisibleFlag(data.expArr);
+        return {...state, pl: {...state.pl, showLoader: false, data: {...state.pl.data, ...data}}};
+      }
+
+      return state;
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
@@ -96,7 +104,7 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
       let to = action.payload.to;
       return {
         ...state,
-        pl: { ...state.pl, showLoader: true, data: { ...state.pl.data, dates: { from, to } } }
+        pl: {...state.pl, showLoader: true, data: {...state.pl.data, dates: {from, to}}}
       };
     }
 
@@ -105,7 +113,7 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
       data.dates = _.cloneDeep(state.bs.data.dates);
       addVisibleFlag(data.assets);
       addVisibleFlag(data.liabilities);
-      return { ...state, bs: { ...state.bs, showLoader: false, data: { ...state.bs.data, ...data } } };
+      return {...state, bs: {...state.bs, showLoader: false, data: {...state.bs.data, ...data}}};
     }
 
     case TBPlBsActions.GET_BALANCE_SHEET_REQUEST: {
@@ -113,7 +121,7 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
       let to = action.payload.to;
       return {
         ...state,
-        bs: { ...state.bs, showLoader: true, data: { ...state.bs.data, dates: { from, to } } }
+        bs: {...state.bs, showLoader: true, data: {...state.bs.data, dates: {from, to}}}
       };
     }
     default: {
@@ -243,8 +251,8 @@ const filterProfitLossData = (data, statement) => {
         return filterPlData.incArr[0].childGroups.push(grp);
       case 'expenses':
         if (grp.uniqueName === 'operatingcost') {
-            filterPlData.expArr.push(operatingGrp);
-            return filterPlData.expArr[0].childGroups.push(grp);
+          filterPlData.expArr.push(operatingGrp);
+          return filterPlData.expArr[0].childGroups.push(grp);
         } else {
           filterPlData.expArr.push(otherExpGrp);
           return filterPlData.expArr[1].childGroups.push(grp);
@@ -258,34 +266,38 @@ const filterProfitLossData = (data, statement) => {
 
 const prepareProfitLossData = (data) => {
   // let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
-  let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
-  plData.expenseTotal = calculateTotalExpense(plData.expArr);
-  plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
-  plData.incomeTotal = calculateTotalIncome(plData.incArr);
-  plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
-  plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
-  plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
-  plData.incomeStatment = data.incomeStatment;
-  if (plData.incomeTotal >= plData.expenseTotal) {
-    plData.inProfit = true;
-    // plData.expenseTotal += plData.closingBalance;
+  if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatment) {
+    let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
+    plData.expenseTotal = calculateTotalExpense(plData.expArr);
+    plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
+    plData.incomeTotal = calculateTotalIncome(plData.incArr);
+    plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
+    plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
+    plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
+    plData.incomeStatment = data.incomeStatment;
+    if (plData.incomeTotal >= plData.expenseTotal) {
+      plData.inProfit = true;
+      // plData.expenseTotal += plData.closingBalance;
+    }
+    if (plData.incomeTotal < plData.expenseTotal) {
+      plData.inProfit = false;
+      // plData.incomeTotal += plData.closingBalance;
+    }
+    if (data.closingBalance.type === 'CREDIT') {
+      plData.closingBalanceClass = true;
+    } else {
+      plData.closingBalanceClass = false;
+    }
+    if (data.forwardedBalance.type === 'CREDIT') {
+      plData.frowardBalanceClass = true;
+    } else {
+      plData.frowardBalanceClass = false;
+    }
+    plData.message = data.message;
+    return plData;
   }
-  if (plData.incomeTotal < plData.expenseTotal) {
-    plData.inProfit = false;
-    // plData.incomeTotal += plData.closingBalance;
-  }
-  if (data.closingBalance.type === 'CREDIT' ) {
-    plData.closingBalanceClass = true;
-  } else {
-    plData.closingBalanceClass = false;
-  }
-  if (data.forwardedBalance.type === 'CREDIT' ) {
-    plData.frowardBalanceClass = true;
-  } else {
-    plData.frowardBalanceClass = false;
-  }
-  plData.message = data.message;
-  return plData;
+
+  return;
 };
 
 const calculateTotalIncome = data => {
@@ -421,10 +433,10 @@ const calCulateTotalLiabEnd = data => {
 class ParentGrp {
   public accounts: any[] = [];
   public category: string;
-  public closingBalance: {amount: 0, type: string} = {amount: 0, type: ''};
+  public closingBalance: { amount: 0, type: string } = {amount: 0, type: ''};
   public creditTotal: number = 0;
   public debitTotal: number = 0;
-  public forwardedBalance: {amount: number, type: string} = {amount: 0, type: ''};
+  public forwardedBalance: { amount: number, type: string } = {amount: 0, type: ''};
   public childGroups: any[] = [];
   public groupName: string;
   public uniqueName: string;

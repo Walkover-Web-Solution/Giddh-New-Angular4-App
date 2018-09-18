@@ -1,6 +1,8 @@
 import { CustomActions } from '../customActions';
 import { IMPORT_EXCEL } from '../../actions/import-excel/import-excel.const';
 import { ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { COMMON_ACTIONS } from '../../actions/common.const';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 export enum ImportExcelRequestStates {
   Default,
@@ -14,23 +16,36 @@ export enum ImportExcelRequestStates {
 export interface ImportExcelState {
   requestState: ImportExcelRequestStates;
   importExcelData?: ImportExcelResponseData;
+  importRequestIsSuccess: boolean;
 }
 
 export const initialState: ImportExcelState = {
-  requestState: ImportExcelRequestStates.Default
+  requestState: ImportExcelRequestStates.Default,
+  importRequestIsSuccess: false
 };
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case IMPORT_EXCEL.UPLOAD_FILE_REQUEST: {
-      return {...state, requestState: ImportExcelRequestStates.UploadFileInProgress};
+      return {...state, importRequestIsSuccess: false, requestState: ImportExcelRequestStates.UploadFileInProgress};
     }
     case IMPORT_EXCEL.UPLOAD_FILE_RESPONSE: {
-      console.log(action);
+      let response: BaseResponse<ImportExcelResponseData, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      if (response.status === 'success') {
+        newState.importRequestIsSuccess = true;
+        newState.requestState = ImportExcelRequestStates.UploadFileSuccess;
+        newState.importExcelData = response.body;
+        return Object.assign({}, state, newState);
+      }
       return {
         ...state,
-        requestState: action.payload ? ImportExcelRequestStates.UploadFileSuccess : ImportExcelRequestStates.UploadFileError,
-        importExcelData: action.payload
+        importRequestIsSuccess: false,
+        requestState: ImportExcelRequestStates.UploadFileError,
+        importExcelData: null
       };
     }
     case IMPORT_EXCEL.PROCESS_IMPORT_REQUEST: {
@@ -39,6 +54,8 @@ export function importExcelReducer(state = initialState, action: CustomActions):
     case IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE: {
       return {...state, requestState: ImportExcelRequestStates.ProcessImportSuccess};
     }
+    case IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE:
+      return initialState;
     default: {
       return state;
     }

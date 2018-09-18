@@ -1,15 +1,15 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'ledger-aside-pane',
   templateUrl: './ledgerAsidePane.component.html',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -18,10 +18,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       width: 580px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -30,26 +32,32 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 580px;
       background: #fff;
     }
-    .aside-pane{
+
+    .aside-pane {
       width: 100%;
     }
-    .flexy-child{
+
+    .flexy-child {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    .flexy-child-1{
+
+    .flexy-child-1 {
       flex-grow: 1;
     }
+
     .vmiddle {
       position: absolute;
       top: 50%;
@@ -76,6 +84,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       border: 0;
       border-radius: 0;
     }
+
     .btn-lg {
       min-width: 130px;
     }
@@ -94,7 +103,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _inventorySidebarAction: SidebarAction) {
-    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess);
   }
 

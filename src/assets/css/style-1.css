@@ -1608,7 +1608,9 @@ li:last-child .angular-ui-tree-handle {
 .max350 {
     max-width: 350px;
 }
-
+.max500{
+    max-width: 500px;
+}
 
 /* styles for trial-balance */
 

@@ -72,6 +72,8 @@ export class LedgerResponse {
   public voucherNumber?: string;
   public tagNames?: string[];
   public voucherGenerated?: boolean;
+  public voucherName?: string;
+  public voucherGeneratedType?: string;
 }
 
 /*
@@ -92,6 +94,7 @@ export class MailLedgerRequest {
  */
 export class DownloadLedgerRequest {
   public invoiceNumber: string[];
+  public voucherType: string;
 }
 
 export interface DownloadLedgerAttachmentResponse {

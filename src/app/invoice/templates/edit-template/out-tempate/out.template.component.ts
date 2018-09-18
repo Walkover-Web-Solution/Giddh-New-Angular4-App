@@ -1,10 +1,9 @@
+import { take } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
+import { ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
-import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
 
@@ -27,23 +26,23 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   public companyGSTIN: string;
   public companyPAN: string;
   public fieldsAndVisibility: any;
+  public companyUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
-    private invoiceAction: InvoiceActions,
-    private invoiceTemplatesService: InvoiceTemplatesService,
     private _invoiceUiDataService: InvoiceUiDataService) {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.session).take(1).subscribe(ss => {
+    this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
+      this.companyUniqueName = ss.companyUniqueName;
     });
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -66,7 +65,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       if (template && template.logoUniqueName) {
         this.showLogo = true;
-        this.logoSrc = 'http://apitest.giddh.com/company/abcdeindore152990675954306wuxc/image/' + template.logoUniqueName;
+        this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
       }
       this.inputTemplate = _.cloneDeep(template);
     });
