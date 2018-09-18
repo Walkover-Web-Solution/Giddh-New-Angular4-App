@@ -51,6 +51,7 @@ import { NewVsOldInvoicesService } from './new-vs-old-invoices.service';
 import { CompanyImportExportService } from './companyImportExportService';
 import { AgingreportingService } from './agingreporting.service';
 import { ReceiptService } from './receipt.service';
+import { DbService } from './db.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -109,7 +110,8 @@ export class ServiceModule {
         NewVsOldInvoicesService,
         AgingreportingService,
         CompanyImportExportService,
-        ReceiptService
+        ReceiptService,
+        DbService
       ]
     };
   }

@@ -25,47 +25,48 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../models/api-models/Sales';
 import { IUlist } from '../../models/interfaces/ulist.interface';
-import { sortBy, concat } from '../../lodash-optimized';
+import { sortBy, concat, find } from '../../lodash-optimized';
+import { DbService } from '../../services/db.service';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
-  { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
-  { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
-  { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales'},
-  { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview'},
-  { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate'},
-  { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates'},
-  { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},
-  { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
-  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
-  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
-  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'balance-sheet', tabIndex: 2}},
-  { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs'},
-  { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice'},
-  { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
-  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'},
-  { type: 'MENU', name: 'Search', uniqueName: '/pages/search'},
-  { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list'},
-  { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings'},
-  { type: 'MENU', name: 'Settings > Taxes', uniqueName: '/pages/settings', additional: {tab: 'taxes', tabIndex: 0}},
-  { type: 'MENU', name: 'Settings > Integration', uniqueName: '/pages/settings', additional: {tab: 'integration', tabIndex: 1}},
-  { type: 'MENU', name: 'Settings > Linked Accounts', uniqueName: '/pages/settings', additional: {tab: 'linked-accounts', tabIndex: 2}},
-  { type: 'MENU', name: 'Settings > Profile', uniqueName: '/pages/settings', additional: {tab: 'profile', tabIndex: 3}},
-  { type: 'MENU', name: 'Settings > Financial Year', uniqueName: '/pages/settings', additional: {tab: 'financial-year', tabIndex: 4}},
-  { type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings', additional: {tab: 'permission', tabIndex: 5}},
-  { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
-  { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
-  { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
-  { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact'},
-  { type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
-  { type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
-  { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
-  { type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
-  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
-  { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/carriedoversales'},
-  { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst/gst'},
-  { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b'},
-  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c'}
+  { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
+  { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+  { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales' },
+  { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview' },
+  { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate' },
+  { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates' },
+  { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings' },
+  { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
+  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 } },
+  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
+  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
+  { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
+  { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
+  { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
+  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' },
+  { type: 'MENU', name: 'Search', uniqueName: '/pages/search' },
+  { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list' },
+  { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings' },
+  { type: 'MENU', name: 'Settings > Taxes', uniqueName: '/pages/settings', additional: { tab: 'taxes', tabIndex: 0 } },
+  { type: 'MENU', name: 'Settings > Integration', uniqueName: '/pages/settings', additional: { tab: 'integration', tabIndex: 1 } },
+  { type: 'MENU', name: 'Settings > Linked Accounts', uniqueName: '/pages/settings', additional: { tab: 'linked-accounts', tabIndex: 2 } },
+  { type: 'MENU', name: 'Settings > Profile', uniqueName: '/pages/settings', additional: { tab: 'profile', tabIndex: 3 } },
+  { type: 'MENU', name: 'Settings > Financial Year', uniqueName: '/pages/settings', additional: { tab: 'financial-year', tabIndex: 4 } },
+  { type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings', additional: { tab: 'permission', tabIndex: 5 } },
+  { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
+  { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
+  { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
+  { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
+  { type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out' },
+  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
+  { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
+  { type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding' },
+  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
+  { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
+  { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/carriedoversales' },
+  { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst/gst' },
+  { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
+  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' }
 ];
 
 @Component({
@@ -97,8 +98,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    {name: 'ENGLISH', value: 'en'},
-    {name: 'DUTCH', value: 'nl'}
+    { name: 'ENGLISH', value: 'en' },
+    { name: 'DUTCH', value: 'nl' }
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
@@ -150,9 +151,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = {isopen: false};
-  public userMenu: { isopen: boolean } = {isopen: false};
-  public companyMenu: { isopen: boolean } = {isopen: false};
+  public sideMenu: { isopen: boolean } = { isopen: false };
+  public userMenu: { isopen: boolean } = { isopen: false };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -172,7 +173,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userAvatar: string;
   public navigationOptionList$: Observable<IUlist[]> = observableOf(NAVIGATION_ITEM_LIST);
   public selectedNavigation: string = '';
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   private loggedInUserEmail: string;
@@ -182,19 +183,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor(private loginAction: LoginActions,
-              private socialAuthService: AuthService,
-              private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private groupWithAccountsAction: GroupWithAccountsAction,
-              private router: Router,
-              private flyAccountActions: FlyAccountsActions,
-              private componentFactoryResolver: ComponentFactoryResolver,
-              private cdRef: ChangeDetectorRef,
-              private zone: NgZone,
-              private route: ActivatedRoute,
-              private _generalActions: GeneralActions,
-              private authService: AuthenticationService) {
+  constructor(
+    private loginAction: LoginActions,
+    private socialAuthService: AuthService,
+    private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private router: Router,
+    private flyAccountActions: FlyAccountsActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private cdRef: ChangeDetectorRef,
+    private zone: NgZone,
+    private route: ActivatedRoute,
+    private _generalActions: GeneralActions,
+    private authService: AuthenticationService,
+    private _dbService: DbService,
+  ) {
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -259,6 +263,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+    this.findListFromDb();
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
@@ -321,34 +326,34 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.store.select(p => p.general.flattenGroups).pipe(takeUntil(this.destroyed$)),
       this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
     )
-    .subscribe((resp: any[]) => {
-      let menuList = resp[0];
-      let grpList = resp[1];
-      let acList = resp[2];
-      let combinedList;
-      if (menuList && grpList && acList) {
+      .subscribe((resp: any[]) => {
+        let menuList = resp[0];
+        let grpList = resp[1];
+        let acList = resp[2];
+        let combinedList;
+        if (menuList && grpList && acList) {
 
-        // sort menus by name
-        menuList = sortBy(menuList, ['name']);
+          // sort menus by name
+          menuList = sortBy(menuList, ['name']);
 
-        // modifying grouplist as per ulist requirement
-        grpList.map((item: any) => {
-          item.type = 'GROUP';
-          item.name = item.groupName;
-          item.uniqueName = item.groupUniqueName;
-          delete item.groupName;
-          delete item.groupUniqueName;
-          return item;
-        });
-        // sort group list by name
-        grpList = sortBy(grpList, ['name']);
+          // modifying grouplist as per ulist requirement
+          grpList.map((item: any) => {
+            item.type = 'GROUP';
+            item.name = item.groupName;
+            item.uniqueName = item.groupUniqueName;
+            delete item.groupName;
+            delete item.groupUniqueName;
+            return item;
+          });
+          // sort group list by name
+          grpList = sortBy(grpList, ['name']);
 
-        // sort group list by name
-        acList = sortBy(acList, ['name']);
-        combinedList = concat(menuList, grpList, acList);
-        this.store.dispatch(this._generalActions.setCombinedList(combinedList));
-      }
-    });
+          // sort group list by name
+          acList = sortBy(acList, ['name']);
+          combinedList = concat(menuList, grpList, acList);
+          this.store.dispatch(this._generalActions.setCombinedList(combinedList));
+        }
+      });
     // end logic for cmd+k
   }
 
@@ -400,6 +405,54 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public ngAfterViewChecked() {
     this.cdRef.detectChanges();
+  }
+
+  /**
+   * redirect to route and save page entry into db
+   * @param e event
+   * @param pageName page router url
+   */
+  public analyzeMenus(e: any, pageName: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    // entry in db with confimation
+    this.navigationOptionList$.pipe(take(1))
+    .subscribe((items: IUlist[]) => {
+      let menu: any = {};
+      let o: IUlist = find(items, ['uniqueName', pageName]);
+      if (o) {
+        menu.name = o.name;
+        menu.uniqueName = o.uniqueName;
+      } else {
+        try {
+          menu.name = pageName.split('/pages/')[1].toUpperCase();
+        } catch (error) {
+          menu.name = pageName.toUpperCase();
+        }
+        menu.uniqueName = pageName;
+      }
+      this._dbService.addItem('menus', menu).subscribe(d => {
+        // success
+      }, (err: any) => {
+        // already having entry will write the logic for shuffle
+        // console.log('err', err);
+      });
+    });
+    this.router.navigate([pageName]);
+  }
+
+  public findListFromDb() {
+    combineLatest(
+      this._dbService.getAllItems('menus').pipe(take(1)),
+      this._dbService.getAllItems('groups').pipe(take(1)),
+      this._dbService.getAllItems('accounts').pipe(take(1))
+    )
+    .subscribe((resp: any[]) => {
+      let menuList: IUlist[] = resp[0];
+      let groupList: IUlist[] = resp[1];
+      let acList: IUlist[] = resp[2];
+      console.log ('from DB', resp);
+    });
   }
 
   public showManageGroupsModal() {
@@ -633,7 +686,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.hideNavigationModal();
     if (ev && ev.value) {
       if (ev.additional && ev.additional.tab) {
-        this.router.navigate([ev.value], {queryParams: {tab: ev.additional.tab, tabIndex: ev.additional.tabIndex}});
+        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
       } else {
         this.router.navigate([ev.value]);
       }
@@ -647,13 +700,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private showNavigationModal() {
-    this.forceClear$ = observableOf({status: false});
+    this.forceClear$ = observableOf({ status: false });
     this.navigationModalVisible = true;
     this.navigationModal.show();
   }
 
   private hideNavigationModal() {
-    this.forceClear$ = observableOf({status: true});
+    this.forceClear$ = observableOf({ status: true });
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();
