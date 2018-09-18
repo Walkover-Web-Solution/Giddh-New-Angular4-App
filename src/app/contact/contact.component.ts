@@ -80,7 +80,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public cashFreeAvailableBalance: number;
   public payoutForm: CashfreeClass;
   public bankAccounts$: Observable<IOption[]>;
-  public totalDueOptions: IOption[] = [{label: 'greater then', value: '0'}, {label: 'less then', value: '1'}, {label: 'equal to', value: '2'}];
+  public totalDueOptions: IOption[] = [{label: 'greater than', value: '0'}, {label: 'less than', value: '1'}, {label: 'equal to', value: '2'}];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public payoutObj: CashfreeClass = new CashfreeClass();
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
