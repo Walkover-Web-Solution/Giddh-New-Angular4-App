@@ -1,7 +1,5 @@
-import { app, Menu, MenuItemConstructorOptions } from 'electron';
-import { app, BrowserWindow, ipcMain, Menu, shell, MenuItemConstructorOptions, Tray, BrowserWindowConstructorOptions } from 'electron';
-import { AppSignal } from './electronEventSignals';
-import WindowManager, { WINDOW_NAVIGATED } from './WindowManager';
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
+import WindowManager from './WindowManager';
 import { checkForUpdates } from './AppUpdater';
 
 export default function setMenu() {
