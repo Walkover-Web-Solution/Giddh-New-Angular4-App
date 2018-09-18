@@ -55,8 +55,7 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   }
 
   public entryClicked(acc) {
-    let tUrl = location.href.split('/pages');
-    let url = tUrl[0] + '/pages/ledger/' + acc.uniqueName;
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
     (window as any).open(url);
   }
 
