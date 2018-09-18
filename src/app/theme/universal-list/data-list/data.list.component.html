@@ -41,11 +41,15 @@
                   (mouseenter)="handleMouseEvent($event, r)"
                   (click)="itemSelected(r)" [ngClass]="{'selected': r.isHilighted, 'active': r.isSelected }">
                   <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
-
-                    <!-- loading conditional templates -->
-
-                    <ng-container *ngTemplateOutlet="memberTemplate; context:{o: r }"></ng-container>
-
+                    <span class="member-pic">
+                      {{r.type}}
+                    </span>
+                    <span class="member-details mr-auto text-truncate">
+                      {{r.name}}
+                    </span>
+                    <span *ngIf="isMultiple" class="member-action">
+                      <div class="icon-check_large_bold"></div>
+                    </span>
                   </a>
                 </div>
 
@@ -78,20 +82,7 @@
   <!-- end main section -->
 </section>
 
-<!-- member list template -->
-<ng-template #memberTemplate let-user="o">
-  <span class="member-pic">
-    S
-  </span>
-  <span class="member-details mr-auto text-truncate">
-    {{user.name}}
-  </span>
-  <span *ngIf="isMultiple" class="member-action">
-    <div class="icon-check_large_bold"></div>
-  </span>
-</ng-template>
-
 <!-- input box template -->
 <ng-template #searchEleTemplate>
-  <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" class="form-control" (keydown)="handleKeydown($event)" (keyup)="search($event)"/>
+  <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" (keydown)="handleKeydown($event)" (keyup)="search($event)"/>
 </ng-template>

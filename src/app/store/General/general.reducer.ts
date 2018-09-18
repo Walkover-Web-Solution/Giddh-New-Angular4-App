@@ -23,6 +23,7 @@ export interface GeneralState {
   addAndManageClosed: boolean;
   flattenGroups: IFlattenGroupsAccountsDetail[];
   combinedList: IUlist[];
+  smartList: IUlist[];
 }
 
 const initialState: GeneralState = {
@@ -31,7 +32,8 @@ const initialState: GeneralState = {
   states: null,
   addAndManageClosed: false,
   flattenGroups: [],
-  combinedList: []
+  combinedList: [],
+  smartList: []
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -73,13 +75,21 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       return state;
     }
     // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
+    case GENERAL_ACTIONS.RESET_SMART_LIST: {
+      return {...state, smartList: []};
+    }
+
+    case GENERAL_ACTIONS.SET_SMART_LIST: {
+      let data: IUlist[] = action.payload;
+      return {...state, smartList: data};
+    }
+
     case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
       return {...state, combinedList: []};
     }
 
     case GENERAL_ACTIONS.SET_COMBINED_LIST: {
       let data: IUlist[] = action.payload;
-      console.log ('SET_COMBINED_LIST', data.length);
       return {...state, combinedList: data};
     }
 

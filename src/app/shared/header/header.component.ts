@@ -94,7 +94,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
 
-  public smartList$: Observable<IUlist>;
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
@@ -469,9 +468,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let groupList: IUlist[] = resp[1];
       let acList: IUlist[] = resp[2];
       // slicing due to we only need to show 10 result at first sight
-      let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 5));
-      this.smartList$ = observableOf(combined);
-      console.log (this.smartList$);
+      let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 4));
+      this.store.dispatch(this._generalActions.setSmartList(combined));
     });
   }
 
@@ -702,18 +700,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // });
   }
 
-  public onNavigationSelected(ev: IOption) {
+  public onNavigationSelected(event: any) {
+    console.log (event);
     this.hideNavigationModal();
-    if (ev && ev.value) {
-      if (ev.additional && ev.additional.tab) {
-        this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
-      } else {
-        this.router.navigate([ev.value]);
-      }
-    }
+    // if (ev && ev.value) {
+    //   if (ev.additional && ev.additional.tab) {
+    //     this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
+    //   } else {
+    //     this.router.navigate([ev.value]);
+    //   }
+    // }
   }
 
   public onNavigationHide(ev) {
+    console.log ('onNavigationHide', ev);
     if (this.navigationModalVisible) {
       this.hideNavigationModal();
     }

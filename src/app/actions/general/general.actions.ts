@@ -131,4 +131,16 @@ export class GeneralActions {
       type: GENERAL_ACTIONS.RESET_COMBINED_LIST
     };
   }
+
+  public setSmartList(model: IUlist[]): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.SET_SMART_LIST,
+      payload: model
+    };
+  }
+  public resetSmartList(): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.RESET_SMART_LIST
+    };
+  }
 }

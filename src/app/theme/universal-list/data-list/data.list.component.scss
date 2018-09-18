@@ -6,6 +6,20 @@
       cursor: pointer;
     }
   }
+  .searchEle {
+    padding: 1.25rem 2rem;
+    width: 100%;
+    outline: none;
+    border-radius: 6px;
+    border: none;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: initial;
+    &.open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
 }
 .universal-data-list-wrapper {
   background-color: white;

@@ -416,10 +416,19 @@
   </div>
 </div>
 <!--CMD + K modal  -->
-<div bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
+<div [config]="{keyboard: true}" bsModal #navigationModal="bs-modal" class="modal universal_modal" role="dialog" (onHide)="onNavigationHide($event)">
   <div class="modal-dialog modal-small">
-    <div class="modal-content">
+    <div class="modal-content" #mdl>
       <ng-container *ngIf="navigationModalVisible">
+          <universal-data-list
+          [isFlying]="false"
+          [listOfTagsWhichHasToExclude]= "'.modal-content'"
+          (selectedItemEmitter)="onNavigationSelected($event)"
+          [parentEle]="mdl"
+          [isOpen] ="true"
+          [setParentWidth]="true"
+          [searchBoxPlaceholder]="'Search for...'"
+          [isMultiple]="false"></universal-data-list>
         <!-- <sh-select #navigationShSelect id="universal_search" [ItemHeight]="40"
                  [forceClearReactive]="forceClear$ | async" [showClear]="false"
                  (selected)="onNavigationSelected($event);" name="navigation" [(ngModel)]="selectedNavigation"

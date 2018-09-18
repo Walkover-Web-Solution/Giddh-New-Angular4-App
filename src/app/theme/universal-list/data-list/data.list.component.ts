@@ -6,8 +6,12 @@ import {
 } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { findIndex, cloneDeep } from '../../../lodash-optimized';
+import { IUlist } from '../../../models/interfaces/ulist.interface';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { takeUntil, take } from 'rxjs/operators';
 
 const KEYS: any = {
   BACKSPACE: 8,
@@ -82,15 +86,50 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private keys: any = KEYS;
   constructor(
+    private _store: Store<AppState>,
     private renderer: Renderer,
     private zone: NgZone,
     private winRef: WindowRefService,
     private universalSearchService: UniversalSearchService
-  ) {}
+  ) {
+  }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public ngOnInit() {
+
+    // listen to smart list
+    this._store.select(p => p.general.smartList).pipe(take(1))
+    .subscribe((data: IUlist[]) => {
+      console.log ('bingo smartlist', data);
+      // init rows
+      this.setValueInRow(data);
+    });
+
+    // set excluded tags
+    if (this.listOfTagsWhichHasToExclude) {
+      this.defaultExcludedTags = `${this.defaultExcludedTags}, ${this.listOfTagsWhichHasToExclude}`;
+    }
+
+    // due to view init issue using timeout
+    setTimeout(() => {
+      // set position conditionally
+      if (this.wrapper && this.placement === 'bottom') {
+        if (this.parentEle) {
+          let box: any = this.parentEle.getBoundingClientRect();
+          let pos = this.winRef.nativeWindow.innerHeight - box.bottom;
+          pos = (pos < box.height) ? box.height : pos;
+          this.setParentWidthFunc();
+          this.renderer.setElementStyle(this.wrapper.nativeElement, 'bottom', `${pos}px`);
+        } else {
+          this.renderer.setElementStyle(this.wrapper.nativeElement, 'bottom', '0');
+        }
+      }
+    }, 0);
+
   }
 
   // handle mouse event
@@ -111,34 +150,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // get initialized on init and return selected item
   public handleHighLightedItemEvent(item: any) {
     // do the thing
-  }
-
-  public ngOnInit() {
-
-    // set excluded tags
-    if (this.listOfTagsWhichHasToExclude) {
-      this.defaultExcludedTags = `${this.defaultExcludedTags}, ${this.listOfTagsWhichHasToExclude}`;
-    }
-
-    // init rows
-    this.updateRows();
-
-    // due to view init issue using timeout
-    setTimeout(() => {
-      // set position conditionally
-      if (this.wrapper && this.placement === 'bottom') {
-        if (this.parentEle) {
-          let box: any = this.parentEle.getBoundingClientRect();
-          let pos = this.winRef.nativeWindow.innerHeight - box.bottom;
-          pos = (pos < box.height) ? box.height : pos;
-          this.setParentWidthFunc();
-          this.renderer.setElementStyle(this.wrapper.nativeElement, 'bottom', `${pos}px`);
-        } else {
-          this.renderer.setElementStyle(this.wrapper.nativeElement, 'bottom', '0');
-        }
-      }
-    }, 0);
-
   }
 
   // to hide dropdown on outside click
@@ -233,11 +244,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    * @param changes
    */
   public ngOnChanges(changes: SimpleChanges) {
-    // when data is filtered from outside handle
-    if ('usersList' in changes && !changes.usersList.firstChange) {
-      this.updateRowsViaSearch(changes.usersList.currentValue);
-    }
-
     // listen for force auto focus
     if ('forceSetAutoFocus' in changes && changes.forceSetAutoFocus.currentValue) {
       this.setFocusOnList(this.forcekey);
@@ -266,11 +272,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.setFocusOnList();
       }
       this.doingUIErrands();
-
-      // set element value
-      if (!this.isMultiple && this.botValue) {
-        this.searchEle.nativeElement.value = this.botValue;
-      }
     }, 0);
   }
 
@@ -383,15 +384,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     this.rowsClone = [];
     this.rowsClone = cloneDeep(val);
     this.rows = cloneDeep(val);
-  }
-
-  /**
-   * used by on init of component
-   * assign data conditionally
-   * TEAM, EMOJI, HYBRID = TEAM_AND_PERSON, PERSON
-   */
-  public updateRows() {
-    // this.setValueInRow(this.hybridList);
   }
 
   public handleClose(idx: number) {
