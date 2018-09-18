@@ -131,24 +131,28 @@ module.exports = function (options) {
      * See: https://webpack.github.io/docs/webpack-dev-server.html
      */
     devServer: {
-      https:false,
+      https: false,
+      watchContentBase: true,
       port: METADATA.port,
       host: METADATA.host,
-      hot: METADATA.HMR,
+      hot: true,
+      hotOnly: true,
+      quiet: false,
       public: METADATA.PUBLIC,
       historyApiFallback: true,
       watchOptions: {
         // if you're using Docker you may need this
         // aggregateTimeout: 300,
         // poll: 1000,
-        ignored: /node_modules/
+        ignored: /node_modules/,
+        poll: true
       },
       /**
        * Here you can access the Express app object and add your own custom middleware to it.
        *
        * See: https://webpack.github.io/docs/webpack-dev-server.html
        */
-      before: function(app) {
+      before: function (app) {
         // For example, to define custom handlers for some paths:
         // app.get('/some/path', function(req, res) {
         //   res.json({ custom: 'response' });
