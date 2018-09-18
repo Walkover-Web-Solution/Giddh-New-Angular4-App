@@ -52,8 +52,8 @@
                         <p>This is a system generated
                             <strong [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                 : 'Invoice No.'}} #20170911-1</strong>
-                            <span *ngIf="fieldsAndVisibility.header.dueDate?.display">due on July 15, 2017</span>
-                            <strong *ngIf="fieldsAndVisibility.header.companyName?.display">for Green Soft Solutions </strong>
+                            <span *ngIf="fieldsAndVisibility.header.dueDate?.display"> due on July 15, 2017</span>
+                            <strong *ngIf="fieldsAndVisibility.header.companyName?.display"> for Green Soft Solutions </strong>
                             <span>at 24 Building Name, 3rd Floor, 15 A.B. Road, Indore (M.P.) 452000</span>
                             <span>[{{fieldsAndVisibility.header.gstin?.label}}: 11AAAAAA000Z0A1]</span>
                             and the total amount is
