@@ -98,7 +98,12 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
       if (changes['pageChangeEvent'].firstChange || (!changes['pageChangeEvent'].previousValue || changes['pageChangeEvent'].currentValue.page !== changes['pageChangeEvent'].previousValue.page)) {
         let page = changes.pageChangeEvent.currentValue.page;
         this.paginationPageNumber = page;
-        this.getClosingBalance(false, null, page);
+        if (this.filterEventQuery) {
+          this.getClosingBalance(false, null, this.paginationPageNumber, this.filterEventQuery);
+        } else {
+          this.getClosingBalance(false, null, page);
+        }
+
       }
     }
 
