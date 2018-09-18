@@ -1,15 +1,15 @@
 .primary_color {
-    color: #d35f29 !important;
+  color: #d35f29 !important;
 }
 
 .ledger-panel {
-    overflow: visible;
+  overflow: visible;
 }
 
 .ledger-panel table tbody tr td a {
-    color: #333;
+  color: #333;
 }
 
 .pItem {
-    padding: 0 4px;
+  padding: 0 4px;
 }

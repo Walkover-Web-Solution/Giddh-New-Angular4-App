@@ -1,36 +1,32 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import * as moment from 'moment/moment';
-import { ToasterService } from '../../services/toaster.service';
-import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { ModalDirective, BsDropdownConfig } from 'ngx-bootstrap';
+import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
 import { CompanyAddComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
-import { Observable } from 'rxjs/Observable';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
 export const IsyncData = [
-  { label: 'Debtors', value: 'debtors' },
-  { label: 'Creditors', value: 'creditors' },
-  { label: 'Inventory', value: 'inventory' },
-  { label: 'Taxes', value: 'taxes' },
-  { label: 'Bank', value: 'bank' }
+  {label: 'Debtors', value: 'debtors'},
+  {label: 'Creditors', value: 'creditors'},
+  {label: 'Inventory', value: 'inventory'},
+  {label: 'Taxes', value: 'taxes'},
+  {label: 'Bank', value: 'bank'}
 ];
 
 @Component({
   selector: 'setting-branch',
   templateUrl: './branch.component.html',
   styleUrls: ['./branch.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+  providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
 })
 
 export class BranchComponent implements OnInit, OnDestroy {
@@ -44,7 +40,7 @@ export class BranchComponent implements OnInit, OnDestroy {
   public companies$: Observable<CompanyResponse[]>;
   public branches$: Observable<CompanyResponse[]>;
   public selectedCompanies: string[] = [];
-  public isAllSelected$: Observable<boolean> = Observable.of(false);
+  public isAllSelected$: Observable<boolean> = observableOf(false);
   public confirmationMessage: string = '';
   public parentCompanyName: string = null;
   public selectedBranch: string = null;
@@ -58,7 +54,7 @@ export class BranchComponent implements OnInit, OnDestroy {
     private settingsProfileActions: SettingsProfileActions
   ) {
 
-    this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o && !_.isEmpty(o)) {
         let companyInfo = _.cloneDeep(o);
         this.currentBranch = companyInfo.name;
@@ -77,9 +73,9 @@ export class BranchComponent implements OnInit, OnDestroy {
               branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList && gst.addressList[0] && gst.addressList[0].isDefault)];
             }
           });
-          this.branches$ =  Observable.of(_.orderBy(branches.results, 'name'));
+          this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
         } else if (branches.results.length === 0) {
-          this.branches$ =  Observable.of(null);
+          this.branches$ = observableOf(null);
         }
       }
       if (companies && companies.length && branches) {
@@ -98,14 +94,18 @@ export class BranchComponent implements OnInit, OnDestroy {
             }
           });
         });
-        this.companies$ = Observable.of(_.orderBy(companiesWithSuperAdminRole, 'name'));
+        this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
       }
       if (parentCompany) {
-        setTimeout(() => { this.parentCompanyName = parentCompany.name; }, 10);
+        setTimeout(() => {
+          this.parentCompanyName = parentCompany.name;
+        }, 10);
       } else {
-        setTimeout(() => { this.parentCompanyName = null; }, 10);
+        setTimeout(() => {
+          this.parentCompanyName = null;
+        }, 10);
       }
-    })).takeUntil(this.destroyed$).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
 
   }
 
@@ -155,7 +155,7 @@ export class BranchComponent implements OnInit, OnDestroy {
   }
 
   public hideAddBranchModal() {
-    this.isAllSelected$ = Observable.of(false);
+    this.isAllSelected$ = observableOf(false);
     this.selectedCompanies = [];
     this.branchModal.hide();
   }
@@ -163,7 +163,7 @@ export class BranchComponent implements OnInit, OnDestroy {
   public selectAllCompanies(ev) {
     this.selectedCompanies = [];
     if (ev.target.checked) {
-      this.companies$.take(1).subscribe((companies) => {
+      this.companies$.pipe(take(1)).subscribe((companies) => {
         _.each(companies, (company) => {
           this.selectedCompanies.push(company.uniqueName);
         });
@@ -185,7 +185,7 @@ export class BranchComponent implements OnInit, OnDestroy {
   }
 
   public createBranches() {
-    let dataToSend = { childCompanyUniqueNames: this.selectedCompanies };
+    let dataToSend = {childCompanyUniqueNames: this.selectedCompanies};
     this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
     this.hideAddBranchModal();
   }
@@ -211,11 +211,11 @@ export class BranchComponent implements OnInit, OnDestroy {
   }
 
   private isAllCompaniesSelected() {
-    this.companies$.take(1).subscribe((companies) => {
+    this.companies$.pipe(take(1)).subscribe((companies) => {
       if (companies.length === this.selectedCompanies.length) {
-        this.isAllSelected$ = Observable.of(true);
+        this.isAllSelected$ = observableOf(true);
       } else {
-        this.isAllSelected$ = Observable.of(false);
+        this.isAllSelected$ = observableOf(false);
       }
     });
   }

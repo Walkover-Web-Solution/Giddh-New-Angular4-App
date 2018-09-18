@@ -1,16 +1,14 @@
-import { Component, EventEmitter, OnInit, Output, Input, OnChanges, OnDestroy } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
-import * as _ from '../../lodash-optimized';
+import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from 'app/actions/inventory/inventory.actions';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'aside-inventory-stock-group',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -19,10 +17,12 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
       width: 580px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -31,26 +31,32 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 580px;
       background: #fff;
     }
-    .aside-pane{
+
+    .aside-pane {
       width: 100%;
     }
-    .flexy-child{
+
+    .flexy-child {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    .flexy-child-1{
+
+    .flexy-child-1 {
       flex-grow: 1;
     }
+
     .vmiddle {
       position: absolute;
       top: 50%;
@@ -93,15 +99,15 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     private store: Store<AppState>,
     private inventoryAction: InventoryAction
   ) {
-    this.openGroupAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).takeUntil(this.destroyed$);
-    this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).takeUntil(this.destroyed$);
-    this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).takeUntil(this.destroyed$);
-    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
-    this.removeStockSuccess$ = this.store.select(s => s.inventory.deleteStockSuccess).takeUntil(this.destroyed$);
-    this.removeGroupSuccess$ = this.store.select(s => s.inventory.deleteGroupSuccess).takeUntil(this.destroyed$);
-    this.UpdateStockSuccess$ = this.store.select(s => s.inventory.UpdateStockSuccess).takeUntil(this.destroyed$);
-    this.UpdateGroupSuccess$ = this.store.select(s => s.inventory.UpdateGroupSuccess).takeUntil(this.destroyed$);
-    this.MoveStockSuccess$ = this.store.select(s => s.inventory.moveStockSuccess).takeUntil(this.destroyed$);
+    this.openGroupAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).pipe(takeUntil(this.destroyed$));
+    this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
+    this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.removeStockSuccess$ = this.store.select(s => s.inventory.deleteStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.removeGroupSuccess$ = this.store.select(s => s.inventory.deleteGroupSuccess).pipe(takeUntil(this.destroyed$));
+    this.UpdateStockSuccess$ = this.store.select(s => s.inventory.UpdateStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.UpdateGroupSuccess$ = this.store.select(s => s.inventory.UpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
+    this.MoveStockSuccess$ = this.store.select(s => s.inventory.moveStockSuccess).pipe(takeUntil(this.destroyed$));
 
   }
 
@@ -143,31 +149,31 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     this.removeStockSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
-        }
+      }
     });
 
     this.removeGroupSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
-        }
+      }
     });
 
     this.UpdateStockSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
-        }
+      }
     });
 
     this.UpdateGroupSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
-        }
+      }
     });
 
     this.MoveStockSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
-        }
+      }
     });
 
   }
@@ -193,8 +199,8 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(false));
       this.closeAsideEvent.emit();
-      let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
-      this.store.dispatch(this.inventoryAction.ManageInventoryAside( objToSend ));
+      let objToSend = {isOpen: false, isGroup: false, isUpdate: false};
+      this.store.dispatch(this.inventoryAction.ManageInventoryAside(objToSend));
     }
   }
 

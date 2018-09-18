@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -7,7 +7,7 @@ import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-aside-recurring-entry',
@@ -59,6 +59,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
   public form: FormGroup;
   public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
   @Input() public voucherNumber: string;
+  @Input() public voucherType?: string;
   @Input() public mode: 'create' | 'update' = 'create';
   @Input() public invoice: RecurringInvoice;
   @Output() public closeAsideEvent: EventEmitter<RecurringInvoice> = new EventEmitter(true);
@@ -157,6 +158,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
       const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
       const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
       const invoiceModel: RecurringInvoice = {...this.invoice, ...this.form.value, cronEndDate, nextCronDate};
+      if (this.voucherType) {
+        invoiceModel.voucherType = this.voucherType;
+      }
       if (this.mode === 'update') {
         this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
       } else {

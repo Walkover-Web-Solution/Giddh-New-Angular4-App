@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { Font } from 'ngx-font-picker/dist';
-import { humanizeBytes, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
+import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
-import { ReplaySubject } from 'rxjs/Rx';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../../../../services/toaster.service';
 import { INVOICE_API } from '../../../../../services/apiurls/invoice';
-import { Observable } from 'rxjs/Observable';
-import { UploaderOptions } from 'ngx-uploader/index';
 import { Configuration } from './../../../../../app.constant';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
+import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -29,8 +29,9 @@ export class TemplateDesignUISectionVisibility {
   styleUrls: ['design.filters.component.css']
 })
 
-export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
+export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public design: boolean;
+  @Input() public mode: string = 'create';
   public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
   public logoAttached: boolean = false;
@@ -42,14 +43,19 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     style: 'regular',
     styles: ['regular']
   });
+  // 'Sans-Serif', 'Open Sans', 'Lato'
 
-  public _presetFonts = ['Arial', 'Serif', 'Helvetica', 'Sans-Serif', 'Open Sans', 'Roboto Slab'];
+  public _presetFonts = [
+    {label: 'Open Sans', value: 'Open Sans'},
+    {label: 'Sans-Serif', value: 'Sans-Serif'},
+    {label: 'Lato', value: 'Lato'}
+  ];
   public presetFonts = this._presetFonts;
 
   public formData: FormData;
   public files: UploadFile[] = [];
   public uploadInput: EventEmitter<UploadInput>;
-  public fileUploadOptions: UploaderOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
+  public fileUploadOptions: UploaderOptions = {concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg']};
   public humanizeBytes: any;
   public dragOver: boolean;
   public imagePreview: any;
@@ -57,7 +63,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public isFileUploadInProgress: boolean = false;
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
-  private sampleTemplates: CustomTemplateResponse[];
+  public sampleTemplates: CustomTemplateResponse[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -70,16 +76,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     let companies = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.session).take(1).subscribe(ss => {
+    this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
     });
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
 
-    this.store.select(s => s.invoiceTemplate.sampleTemplates).take(2).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
+    this.store.select(s => s.invoiceTemplate.sampleTemplates).pipe(take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
       this.sampleTemplates = _.cloneDeep(sampleTemplates);
     });
 
@@ -89,8 +95,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     // this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
     this.humanizeBytes = humanizeBytes;
-    this.sessionId$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
-    this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -118,7 +124,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             }
           }
         });
-
+        // debugger;
         this._invoiceUiDataService.setFieldsAndVisibility(op);
       }
     });
@@ -152,14 +158,19 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     let template;
     if (fieldName === 'uniqueName') { // change whole template
       const allSampleTemplates = _.cloneDeep(this.sampleTemplates);
-      const selectedTemplate = this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value);
+      const selectedTemplate = _.cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value));
       template = selectedTemplate ? selectedTemplate : _.cloneDeep(this.customTemplate);
+      if (this.mode === 'update' && selectedTemplate) {
+        template.uniqueName = _.cloneDeep(this.customTemplate.uniqueName);
+        template.name = _.cloneDeep(this.customTemplate.name);
+      }
     } else { // change specific field
       template = _.cloneDeep(this.customTemplate);
       template[fieldName] = value;
     }
+    template.copyFrom = _.cloneDeep(value);
 
-    this._invoiceUiDataService.setCustomTemplate(template);
+    this._invoiceUiDataService.setCustomTemplate(_.cloneDeep(template));
   }
 
   /**
@@ -175,8 +186,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   /**
    * onFontSelect
    */
-  public onFontSelect(font: Font) {
-    this.onValueChange('font', font.family);
+  public onFontSelect(font: IOption) {
+    this.onValueChange('font', font.value);
   }
 
   /**
@@ -226,7 +237,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
       data.logoUniqueName = logoUniqueName;
       data.updatedAt = null;
       data.updatedBy = null;
-      data.copyFrom = 'gst_template_a';
+      // data.copyFrom = 'gst_template_a';
       data.sections[0].content[3].label = '';
       data.sections[0].content[0].label = '';
       data.sections[1].content[8].field = 'taxes';
@@ -260,13 +271,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public startUpload(): void {
     let sessionId = null;
     let companyUniqueName = null;
-    this.sessionId$.take(1).subscribe(a => sessionId = a);
-    this.companyUniqueName$.take(1).subscribe(a => companyUniqueName = a);
+    this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
+    this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
     const event: UploadInput = {
       type: 'uploadAll',
       url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
       method: 'POST',
-      headers: { 'Session-Id': sessionId },
+      headers: {'Session-Id': sessionId},
     };
 
     this.uploadInput.emit(event);
@@ -293,15 +304,15 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   }
 
   public cancelUpload(id: string): void {
-    this.uploadInput.emit({ type: 'cancel', id });
+    this.uploadInput.emit({type: 'cancel', id});
   }
 
   public removeFile(id: string): void {
-    this.uploadInput.emit({ type: 'remove', id });
+    this.uploadInput.emit({type: 'remove', id});
   }
 
   public removeAllFiles(): void {
-    this.uploadInput.emit({ type: 'removeAll' });
+    this.uploadInput.emit({type: 'removeAll'});
   }
 
   public toogleLogoVisibility(show?: boolean): void {
@@ -342,5 +353,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     // this._invoiceUiDataService.customTemplate.unsubscribe();
     // this.destroyed$.next(true);
     // this.destroyed$.complete();
+  }
+
+  public ngOnChanges(s) {
+    // console.log(s);
   }
 }

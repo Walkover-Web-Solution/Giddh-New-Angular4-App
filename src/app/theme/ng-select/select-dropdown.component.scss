@@ -1,6 +1,6 @@
 select-dropdown {
   font-size: 14px;
-  >div {
+  > div {
     background-color: #fff;
     border: 1px solid #ccc;
     border-top: none;
@@ -28,7 +28,7 @@ select-dropdown {
           padding: 6px;
           cursor: pointer;
           user-select: none;
-          &.message{
+          &.message {
             cursor: default;
           }
         }

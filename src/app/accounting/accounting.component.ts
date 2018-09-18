@@ -1,14 +1,13 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { AccountService } from 'app/services/account.service';
 import { TallyModuleService } from './tally-service';
-import { KeyboardService } from 'app/accounting/keyboard.service';
-import { Router } from '@angular/router';
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { AccountResponse } from '../models/api-models/Account';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
+import { SidebarAction } from '../actions/inventory/sidebar.actions';
 
 export const PAGE_SHORTCUT_MAPPING = [
   {
@@ -92,22 +91,24 @@ export class AccountingComponent implements OnInit, OnDestroy {
   public selectedPage: string = 'journal';
   public flattenAccounts: any = [];
   public openDatePicker: boolean = false;
-  public openCreateAccountPopup: boolean = false;
+  public openCreateAccountPopupInVoucher: boolean = false;
+  public openCreateAccountPopupInInvoice: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private _router: Router,
-    private _keyboardService: KeyboardService,
-    private _tallyModuleService: TallyModuleService,
-    private _accountService: AccountService) {
-      this._tallyModuleService.selectedPageInfo.subscribe((d) => {
-        if (d) {
-          this.gridType = d.gridType;
-          this.selectedPage = d.page;
-        }
-      });
+              private companyActions: CompanyActions,
+              // private _router: Router,
+              // private _keyboardService: KeyboardService,
+              private _tallyModuleService: TallyModuleService,
+              private _accountService: AccountService,
+              private sidebarAction: SidebarAction) {
+    this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+      if (d) {
+        this.gridType = d.gridType;
+        this.selectedPage = d.page;
+      }
+    });
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -133,16 +134,26 @@ export class AccountingComponent implements OnInit, OnDestroy {
     } else if (event.altKey && event.which === 73) { // Alt + I
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
-          this._tallyModuleService.setVoucher({
-            page: selectedPage.page,
-            uniqueName: selectedPage.uniqueName,
-            gridType: 'invoice'
-          });
+        this._tallyModuleService.setVoucher({
+          page: selectedPage.page,
+          uniqueName: selectedPage.uniqueName,
+          gridType: 'invoice'
+        });
       } else {
         return;
       }
     } else if (event.altKey && event.which === 67) { // Alt + C
-      this.openCreateAccountPopup = !this.openCreateAccountPopup;
+      if (this.gridType === 'voucher') {
+        this.openCreateAccountPopupInVoucher = true;
+        this.openCreateAccountPopupInInvoice = false;
+      } else if (this.gridType === 'invoice') {
+        this.openCreateAccountPopupInVoucher = false;
+        this.openCreateAccountPopupInInvoice = true;
+      }
+      setTimeout(() => {
+        this.openCreateAccountPopupInVoucher = false;
+        this.openCreateAccountPopupInInvoice = false;
+      }, 100);
     } else {
       let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
         if (event.altKey) {
@@ -158,25 +169,28 @@ export class AccountingComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   public ngOnInit(): void {
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'accounting';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.store.select(p => p.session.companyUniqueName).take(1).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(a => {
       if (a && a !== '') {
-        this._accountService.GetFlattenAccounts('', '', '').takeUntil(this.destroyed$).subscribe(data => {
-        if (data.status === 'success') {
-          this.flattenAccounts = data.body.results;
-          this._tallyModuleService.setFlattenAccounts(data.body.results);
-        }
-      });
+        this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+          if (data.status === 'success') {
+            this.flattenAccounts = data.body.results;
+            this._tallyModuleService.setFlattenAccounts(data.body.results);
+          }
+        });
       }
     });
+
+    this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
   }
 
   /**

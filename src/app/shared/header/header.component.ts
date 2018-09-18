@@ -1,23 +1,23 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { AuthService } from '../../theme/ng-social-login-module/index';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { setTimeout } from 'timers';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
-import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
@@ -30,36 +30,42 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 export const NAVIGATION_ITEM_LIST: IOption[] = [
   {label: 'Dashboard', value: '/pages/home'},
   {label: 'Journal Voucher', value: '/pages/accounting-voucher'},
-  { label: 'Sales', value: '/pages/sales' },
-  { label: 'Invoice', value: '/pages/invoice/preview' },
-  { label: 'Invoice > Generate', value: '/pages/invoice/generate' },
-  { label: 'Invoice > Templates', value: '/pages/invoice/templates' },
-  { label: 'Invoice > Settings', value: '/pages/invoice/settings' },
-  { label: 'Daybook', value: '/pages/daybook' },
-  { label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 }  },
-  { label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 }  },
-  { label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 }  },
-  { label: 'Audit Logs', value: '/pages/audit-logs' },
-  { label: 'Taxes', value: '/pages/purchase/invoice' },
-  { label: 'Inventory', value: '/pages/inventory' },
-  { label: 'Manufacturing', value: '/pages/manufacturing/report' },
-  { label: 'Search', value: '/pages/search' },
-  { label: 'Permissions', value: '/pages/permissions/list' },
-  { label: 'Settings', value: '/pages/settings' },
-  { label: 'Settings > Taxes', value: '/pages/settings', additional: { tab: 'taxes', tabIndex: 0 } },
-  { label: 'Settings > Integration', value: '/pages/settings', additional: { tab: 'integration', tabIndex: 1 } },
-  { label: 'Settings > Linked Accounts', value: '/pages/settings', additional: { tab: 'linked-accounts', tabIndex: 2 } },
-  { label: 'Settings > Profile', value: '/pages/settings', additional: { tab: 'profile', tabIndex: 3 } },
-  { label: 'Settings > Financial Year', value: '/pages/settings', additional: { tab: 'financial-year', tabIndex: 4 } },
-  { label: 'Settings > Permission', value: '/pages/settings', additional: { tab: 'permission', tabIndex: 5 } },
-  { label: 'Settings > Branch', value: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
-  { label: 'Settings > Tag', value: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
-  { label: 'Settings > Trigger', value: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
-  { label: 'Contact', value: '/pages/contact' },
-  // { label: 'Inventory In/Out', value: '/pages/inventory-in-out' },
-  { label: 'Import', value: '/pages/import' },
-  { label: 'Settings > Group', value: '/pages/settings', additional: { tab: 'Group', tabIndex: 9 } },
-  { label: 'Onboarding', value: '/onboarding' },
+  {label: 'Sales', value: '/pages/sales'},
+  {label: 'Invoice', value: '/pages/invoice/preview'},
+  {label: 'Invoice > Generate', value: '/pages/invoice/generate'},
+  {label: 'Invoice > Templates', value: '/pages/invoice/templates'},
+  {label: 'Invoice > Settings', value: '/pages/invoice/settings'},
+  {label: 'Daybook', value: '/pages/daybook'},
+  {label: 'Trial Balance', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
+  {label: 'Profit & Loss', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
+  {label: 'Balance Sheet', value: '/pages/trial-balance-and-profit-loss', additional: {tab: 'balance-sheet', tabIndex: 2}},
+  {label: 'Audit Logs', value: '/pages/audit-logs'},
+  {label: 'Taxes', value: '/pages/purchase/invoice'},
+  {label: 'Inventory', value: '/pages/inventory'},
+  {label: 'Manufacturing', value: '/pages/manufacturing/report'},
+  {label: 'Search', value: '/pages/search'},
+  {label: 'Permissions', value: '/pages/permissions/list'},
+  {label: 'Settings', value: '/pages/settings'},
+  {label: 'Settings > Taxes', value: '/pages/settings', additional: {tab: 'taxes', tabIndex: 0}},
+  {label: 'Settings > Integration', value: '/pages/settings', additional: {tab: 'integration', tabIndex: 1}},
+  {label: 'Settings > Linked Accounts', value: '/pages/settings', additional: {tab: 'linked-accounts', tabIndex: 2}},
+  {label: 'Settings > Profile', value: '/pages/settings', additional: {tab: 'profile', tabIndex: 3}},
+  {label: 'Settings > Financial Year', value: '/pages/settings', additional: {tab: 'financial-year', tabIndex: 4}},
+  {label: 'Settings > Permission', value: '/pages/settings', additional: {tab: 'permission', tabIndex: 5}},
+  {label: 'Settings > Branch', value: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
+  {label: 'Settings > Tag', value: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
+  {label: 'Settings > Trigger', value: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
+  {label: 'Contact', value: '/pages/contact'},
+  {label: 'Inventory In/Out', value: '/pages/inventory-in-out'},
+  {label: 'Import', value: '/pages/import'},
+  {label: 'Settings > Group', value: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
+  {label: 'Onboarding', value: '/onboarding'},
+  {label: 'Purchase Invoice ', value: '/pages/purchase/create'},
+  {label: 'Company Import/Export', value: '/pages/company-import-export'},
+  {label: 'New V/S Old Invoices', value: '/pages/new-vs-old-invoices'},
+  {label: 'GST Module', value: '/pages/gst/gst'},
+  {label: 'GST Module Page 2', value: '/pages/gst/gst-page-b'},
+  {label: 'GST Module Page 3', value: '/pages/gst/gst-page-c'}
 ];
 
 @Component({
@@ -133,7 +139,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
         moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
       ],
-      'Last Fiancial Year': [
+      'Last Financial Year': [
         moment(),
         moment()
       ],
@@ -167,7 +173,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userAvatar: string;
   public navigationOptionList: IOption[] = NAVIGATION_ITEM_LIST;
   public selectedNavigation: string = '';
-  public forceClear$: Observable<IForceClear> = Observable.of({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   private loggedInUserEmail: string;
@@ -194,23 +200,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
 
-    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
 
     this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
       if (user) {
         this.loggedInUserEmail = user.user.email;
         return user.user;
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
 
-    this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).takeUntil(this.destroyed$);
+    this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
 
-    this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).takeUntil(this.destroyed$);
+    this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
       if (companies && companies.length) {
         return _.orderBy(companies, 'name');
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
@@ -240,18 +246,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         this.userIsSuperUser = true;
       }
+      if (selectedCmp) {
+        this.activeFinancialYear = selectedCmp.activeFinancialYear;
+      }
 
+      if (selectedCmp) {
+        this.activeFinancialYear = selectedCmp.activeFinancialYear;
+      }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
-    })).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => p.session.userLoginState).distinctUntilChanged().takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
+    this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
     //
-    this.user$.subscribe((u) => {
+    this.user$.pipe(take(1)).subscribe((u) => {
       if (u) {
         let userEmail = u.email;
         // this.getUserAvatar(userEmail);
@@ -270,14 +282,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.userName = u.name[0] + u.name[1];
           this.userFullName = name;
         }
+
+        this.store.dispatch(this.loginAction.renewSession());
       }
     });
 
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
-    this.accountSearchControl.valueChanges
-      .debounceTime(300)
+    this.accountSearchControl.valueChanges.pipe(
+      debounceTime(300))
       .subscribe((newValue) => {
         this.accountSearchValue = newValue;
         if (newValue.length > 0) {
@@ -286,7 +300,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.filterAccounts(newValue);
       });
 
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().takeUntil(this.destroyed$).subscribe(a => {
+    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
       if (a && a !== '') {
         this.zone.run(() => {
           this.filterAccounts('');
@@ -368,7 +382,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public hideManageGroupsModal() {
-    this.store.select(c => c.session.lastState).take(1).subscribe((s: string) => {
+    this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
       if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
         this.store.dispatch(this._generalActions.addAndManageClosed());
       }
@@ -427,10 +441,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       // check if logged in via social accounts
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
-        // debugger;
         if (val) {
           this.socialAuthService.signOut().then(() => {
-            // debugger;
             this.store.dispatch(this.loginAction.ClearSession());
             this.store.dispatch(this.loginAction.socialLogoutAttempt());
           }).catch((err) => {
@@ -522,11 +534,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (data && data.picker) {
 
       if (data.picker.chosenLabel === 'This Financial Year to Date') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('day');
+        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
       }
-      if (data.picker.chosenLabel === 'Last Fiancial Year') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts).startOf('year').subtract(1, 'year');
-        data.picker.endDate = moment(this.activeFinancialYear.financialYearStarts).endOf('year').subtract(1, 'year');
+      if (data.picker.chosenLabel === 'Last Financial Year') {
+        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year');
+        data.picker.endDate = moment(_.clone(this.activeFinancialYear.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year');
       }
       this.isTodaysDateSelected = false;
       let dates = {
@@ -600,14 +612,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.navigationOptionList.forEach((ele) => {
       ele.isHilighted = false;
     });
-    this.forceClear$ = Observable.of({status: false});
+    this.forceClear$ = observableOf({status: false});
     this.navigationModalVisible = true;
     this.navigationModal.show();
     setTimeout(() => this.navigationShSelect.show(''), 200);
   }
 
   private hideNavigationModal() {
-    this.forceClear$ = Observable.of({status: true});
+    this.forceClear$ = observableOf({status: true});
     this.selectedNavigation = '';
     this.navigationModalVisible = false;
     this.navigationModal.hide();

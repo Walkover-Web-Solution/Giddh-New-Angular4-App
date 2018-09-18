@@ -1,4 +1,3 @@
-
 export const LOGIN_API = {
   // SignupWithPassword: 'signup',
   SignupWithPassword: 'v2/signup',
@@ -24,5 +23,6 @@ export const LOGIN_API = {
   UPDATE_SESSION: 'users/:userEmail/increment-session',
   DELETE_ALL_SESSION: 'users/:userEmail/sessions',
   FORGOT_PASSWORD: 'users/:userEmail/forgot-password',
-  RESET_PASSWORD: 'reset-password'
+  RESET_PASSWORD: 'reset-password',
+  RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
 };

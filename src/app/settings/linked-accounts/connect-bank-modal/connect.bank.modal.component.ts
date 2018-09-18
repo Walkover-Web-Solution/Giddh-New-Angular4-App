@@ -1,35 +1,37 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { decimalDigits } from '../../../shared/helpers';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'connect-bank-modal',
   templateUrl: './connect.bank.modal.component.html',
   styles: [`iframe {
-              width: 100%;
-              height: 400px;
-          }
-          .connect-page .page-title {
-                margin-top: 0;
-          }
-          .provider_ico {
-            margin-right: 10px;
-            max-width: 16px;
-            max-height: 16px;
-            float: left;
-            object-fit: contain;
-          }
-          .provider_ico img {
-            width: 100%;
-            height: auto;
-          }
-          `]
+    width: 100%;
+    height: 400px;
+  }
+
+  .connect-page .page-title {
+    margin-top: 0;
+  }
+
+  .provider_ico {
+    margin-right: 10px;
+    max-width: 16px;
+    max-height: 16px;
+    float: left;
+    object-fit: contain;
+  }
+
+  .provider_ico img {
+    width: 100%;
+    height: auto;
+  }
+  `]
 })
 
 export class ConnectBankModalComponent implements OnChanges {
@@ -48,6 +50,7 @@ export class ConnectBankModalComponent implements OnChanges {
   public loginForm: FormGroup;
   public bankSyncInProgress: boolean;
   public apiInInterval: any;
+  public cancelRequest: boolean = false;
 
   constructor(public sanitizer: DomSanitizer,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
@@ -55,24 +58,24 @@ export class ConnectBankModalComponent implements OnChanges {
     private _toaster: ToasterService
   ) {
     this.dataSource = (text$: Observable<any>): Observable<any> => {
-      return text$
-        .debounceTime(300)
-        .distinctUntilChanged()
-        .switchMap((term: string) => {
+      return text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term: string) => {
           if (term.startsWith(' ', 0)) {
             return [];
           }
-          return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).catch(e => {
+          return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).pipe(catchError(e => {
             return [];
-          });
-        })
-        .map((res) => {
+          }));
+        }),
+        map((res) => {
           if (res.status === 'success') {
             let data = res.body.provider;
             this.dataSourceBackup = res;
             return data;
           }
-        });
+        }));
     };
 
     this.loginForm = this._fb.group({
@@ -94,11 +97,13 @@ export class ConnectBankModalComponent implements OnChanges {
       this.getIframeUrl(this.iframeSrc);
     }
   }
+
   public getIframeUrl(path) {
     if (!this.url) {
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(path);
     }
   }
+
   public onCancel() {
     this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
@@ -106,7 +111,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this.step = 1;
     this.selectedProvider = {};
     this.bankSyncInProgress = false;
-    // clearInterval(this.apiInInterval);
+    this.cancelRequest = true;
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -114,7 +119,7 @@ export class ConnectBankModalComponent implements OnChanges {
       if (e.item) {
         this.selectedProvider = e.item;
       }
-    }, 400);
+    }, 20);
   }
 
   // initial rowArray controls
@@ -138,9 +143,10 @@ export class ConnectBankModalComponent implements OnChanges {
       name: [''],
       maxLength: [''],
       type: [''],
-      value: [''],
+      value: [null],
       isOptional: [false],
-      valueEditable: [true]
+      valueEditable: [true],
+      option: []
     });
   }
 
@@ -167,6 +173,10 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public onSelectProvider() {
+    const inputRowControls = this.loginForm.controls['row'] as FormArray;
+    if (inputRowControls.controls.length > 1) {
+      inputRowControls.controls = inputRowControls.controls.splice(1);
+    }
     this.getProviderLoginForm(this.selectedProvider.id);
   }
 
@@ -204,6 +214,7 @@ export class ConnectBankModalComponent implements OnChanges {
         this._toaster.successToast(res.body);
         let providerId = res.body.replace(/[^0-9]+/ig, '');
         if (providerId) {
+          this.cancelRequest = false;
           this.getBankSyncStatus(providerId);
         } else {
           this.onCancel();
@@ -224,12 +235,10 @@ export class ConnectBankModalComponent implements OnChanges {
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
-        if (!validateProvider) {
-            setTimeout(() => {
-              this.getBankSyncStatus(providerId);
-            }, 10000);
-        } else {
-          this.onCancel();
+        if (!validateProvider && !this.cancelRequest) {
+          setTimeout(() => {
+            this.getBankSyncStatus(providerId);
+          }, 10000);
         }
       }
     });
@@ -240,12 +249,20 @@ export class ConnectBankModalComponent implements OnChanges {
    */
   public validateProviderResponse(provider) {
     let status = provider.status.toLowerCase();
-      if (status === 'success' || status === 'failed') {
-        this.bankSyncInProgress = false;
-        return true;
-      } else {
-        return false;
-      }
+    if (status === 'success' || status === 'failed') {
+      this.bankSyncInProgress = false;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * resetBankForm
+   */
+  public resetBankForm() {
+    this.step = 1;
+    this.selectedProvider = {};
   }
 
 }

@@ -1,10 +1,10 @@
-import { Action } from '@ngrx/store';
 import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../actions/invoice/invoice.const';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface CustomTemplateState {
   sampleTemplates: CustomTemplateResponse[];
@@ -166,7 +166,7 @@ export const initialState: CustomTemplateState = {
             width: null
           },
           {
-            display:  true,
+            display: true,
             label: 'Field 2',
             field: 'customField2',
             width: null
@@ -202,7 +202,7 @@ export const initialState: CustomTemplateState = {
         content: [
           {
             display: true,
-            label: 'S no.',
+            label: '#',
             field: 'sNo',
             width: '10'
           },
@@ -353,6 +353,9 @@ export const initialState: CustomTemplateState = {
 
 export function InvoiceTemplateReducer(state = initialState, action: CustomActions): CustomTemplateState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
       let nextState = _.cloneDeep(state);
       let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
@@ -396,10 +399,9 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
       }
       return state;
     }
-    default:
-      {
-        return state;
-      }
+    default: {
+      return state;
+    }
   }
 }
 

@@ -1,3 +1,4 @@
+import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 
 import { ToasterService } from './../../../../services/toaster.service';
@@ -5,12 +6,11 @@ import { PermissionActions } from '../../../../actions/permission/permission.act
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { GroupResponse, GroupSharedWithResponse, ShareGroupRequest } from '../../../../models/api-models/Group';
+import { GroupResponse } from '../../../../models/api-models/Group';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import * as _ from 'app/lodash-optimized';
 
 @Component({
@@ -29,14 +29,14 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _toasty: ToasterService, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction,  private _permissionActions: PermissionActions) {
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
-    this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).takeUntil(this.destroyed$);
-    this.allPermissions$ = this.store.select(state => state.permission.permissions).takeUntil(this.destroyed$);
-}
+  constructor(private _toasty: ToasterService, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction, private _permissionActions: PermissionActions) {
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).pipe(takeUntil(this.destroyed$));
+    this.allPermissions$ = this.store.select(state => state.permission.permissions).pipe(takeUntil(this.destroyed$));
+  }
 
   public ngOnInit() {
-      this.store.dispatch(this._permissionActions.GetAllPermissions());
+    this.store.dispatch(this._permissionActions.GetAllPermissions());
   }
 
   public getGroupSharedWith() {
@@ -48,7 +48,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
   }
 
   public async shareGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
+    let activeGrp = await this.activeGroup$.pipe(first()).toPromise();
     let userRole = {
       emailId: this.email,
       entity: 'group',
