@@ -52,7 +52,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public stockUnitsDropDown$: Observable<IOption[]> = of(null);
   public purchaseAccountsDropDown$: Observable<IOption[]>;
   public salesAccountsDropDown$: Observable<IOption[]>;
-  public needForceClear$: Observable<IForceClear> = of({status: false});
 
   @ViewChild('formDiv') public formDiv: ElementRef;
   public formDivBoundingRect: Subject<any> = new Subject<any>();
@@ -565,7 +564,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public resetStockForm() {
-    this.needForceClear$ = of({status: true});
     this.forceClear$ = of({status: true});
     this.forceClearStock$ = of({status: true});
     this.forceClearStockUnit$ = of({status: true});
@@ -896,7 +894,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     if (s.addStock && s.addStock.currentValue) {
       if (this.addStockForm) {
         this.addStockForm.reset();
-        this.needForceClear$ = of({status: true});
+        this.forceClear$ = of({status: true});
         this.addStockForm.controls['parentGroup'].enable();
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
