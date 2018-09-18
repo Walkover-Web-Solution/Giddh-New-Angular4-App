@@ -11,6 +11,7 @@ import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
@@ -28,6 +29,9 @@ const initialState: GeneralState = {
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
   switch (action.type) {
+    case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+      return Object.assign({}, state, initialState);
+    }
     case 'EmptyAction': {
       return state;
     }
@@ -78,7 +82,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
       let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
       if (activeGrpData.status === 'success') {
-        Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+        Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
         return {
@@ -325,7 +329,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
 };
 
 const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-  aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+                           aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
   if (result) {
     return result;
   }

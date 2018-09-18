@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, Input } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'welcome-inventory',  // <home></home>

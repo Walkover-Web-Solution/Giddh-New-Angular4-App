@@ -1,18 +1,23 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import * as _ from '../../../../lodash-optimized';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
+import { Observable } from '../../../../../../../../node_modules/rxjs';
+import { AppState } from 'app/store';
+import * as _ from 'lodash';
+import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 
 @Component({
   selector: 'gst-template-a',
   templateUrl: './gst-template-a.component.html',
-  styleUrls: ['./gst-template-a.component.css']
+  styleUrls: ['./gst-template-a.component.css'],
+  encapsulation: ViewEncapsulation.Native
 })
 
 export class GstTemplateAComponent implements OnInit, OnDestroy {
@@ -28,14 +33,25 @@ export class GstTemplateAComponent implements OnInit, OnDestroy {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
-
+  public companySetting$: Observable<any> = observableOf(null);
+  public companyAddress: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor() {
+  constructor(
+    private store: Store<AppState>,
+    private settingsProfileActions: SettingsProfileActions) {
+    this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
     //
   }
 
   public ngOnInit() {
+    this.companySetting$.subscribe(a => {
+      if (a && a.address) {
+        this.companyAddress = _.cloneDeep(a.address);
+      } else if (!a) {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+      }
+    });
     //
   }
 

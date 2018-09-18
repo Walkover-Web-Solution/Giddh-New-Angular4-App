@@ -1,6 +1,5 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
-import * as path from 'path';
-import AppUpdater from './AppUpdater';
+import AppUpdaterV1 from './AppUpdater';
 import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
@@ -10,7 +9,7 @@ import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOption
 export const WINDOW_NAVIGATED = 'windowNavigated';
 
 export default class WindowManager {
-  private appUpdater: AppUpdater = null;
+
   public static saveWindowState(window: BrowserWindow, descriptor: WindowItem): void {
     if (window.isMaximized()) {
       delete descriptor.width;
@@ -25,8 +24,10 @@ export default class WindowManager {
       descriptor.y = bounds.y;
     }
   }
+  private appUpdater: AppUpdaterV1 = null;
   private stateManager = new StateManager();
   private windows: BrowserWindow[] = [];
+
   constructor() {
     app.on('window-all-closed', () => {
       // restore default set of windows
@@ -67,20 +68,19 @@ export default class WindowManager {
       const options: BrowserWindowConstructorOptions = {
         // to avoid visible maximizing
         show: false,
-        webPreferences: {
-        }
+        webPreferences: {}
       };
 
       let isMaximized = true;
       if (descriptor.width != null && descriptor.height != null) {
         options.width = descriptor.width;
         options.height = descriptor.height;
-        // isMaximized = false;
+        isMaximized = false;
       }
       if (descriptor.x != null && descriptor.y != null) {
         options.x = descriptor.x;
         options.y = descriptor.y;
-        // isMaximized = false;
+        isMaximized = false;
       }
 
       const window = new BrowserWindowElectron(options);
@@ -94,7 +94,7 @@ export default class WindowManager {
     }
 
     // tslint:disable-next-line:no-unused-expression
-    this.appUpdater = new AppUpdater();
+    this.appUpdater = new AppUpdaterV1();
   }
 
   public focusFirstWindow(): void {
@@ -106,14 +106,15 @@ export default class WindowManager {
       window.focus();
     }
   }
+
   private registerWindowEventHandlers(window: BrowserWindow, descriptor: WindowItem): void {
     window.on('close', () => {
-      // WindowManager.saveWindowState(window, descriptor);
+      WindowManager.saveWindowState(window, descriptor);
       const url = window.webContents.getURL();
       if (!isUrlInvalid(url)) {
         descriptor.url = url;
       }
-      // this.stateManager.save();
+      this.stateManager.save();
     });
     window.on('closed', (event: WindowEvent) => {
       const index = this.windows.indexOf(event.sender);

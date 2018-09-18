@@ -10,7 +10,6 @@ import { IPagination } from '../interfaces/paginatedResponse.interface';
 import { OtherSalesItemClass, SalesEntryClass } from './Sales';
 import { INameUniqueName } from './Inventory';
 
-
 export interface IInvoiceResult {
   companyName: string;
   uniqueName: string;
@@ -22,6 +21,7 @@ export interface IInvoiceResult {
   account: INameUniqueName;
   balanceDue: number;
   isSelected?: boolean;
+  dueDate?: string;
 }
 
 export interface IGetAllInvoicesResponse extends IPagination {
@@ -55,6 +55,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public accountUniqueName?: string;
   public balanceDue?: string;
   public entryTotalBy?: string;
+  public invoiceNumber?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -456,6 +457,7 @@ export class CustomTemplateResponse {
   public copyFrom?: string; // done
   public logoUniqueName?: string;
   public templateType?: string;
+  public type?: string;
 }
 
 export class Esignature {

@@ -14,13 +14,6 @@ export interface IFormatable {
 export class DataFormatter {
   public accounts: Account[] = [];
   public groups: ChildGroup[] = [];
-
-  constructor(private exportData: ChildGroup[],
-              private selectedCompany: CompanyResponse,
-              private recType: RecTypePipe) {
-
-  }
-
   public formatDataGroupWise = (): string => {
     let csv;
     let header;
@@ -49,7 +42,6 @@ export class DataFormatter {
     csv += `\r\nTotal,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
     return csv;
   }
-
   public formatDataAccountWise = (formatable: IFormatable): void => {
     let createCsv;
     let total;
@@ -99,7 +91,6 @@ export class DataFormatter {
     data.push(this.suffixRecordType(total.cb));
     formatable.setFooter(data);
   }
-
   public formatDataCondensed = (formatable: IFormatable): void => {
     let total;
     total = {
@@ -159,7 +150,6 @@ export class DataFormatter {
     data.push(this.suffixRecordType(total.cb));
     formatable.setFooter(data);
   }
-
   public calculateTotal = (group: ChildGroup, total: Total): Total => {
     if (group.forwardedBalance.type === 'DEBIT') {
       total.ob = total.ob + group.forwardedBalance.amount;
@@ -175,9 +165,7 @@ export class DataFormatter {
     total.dr += group.debitTotal;
     return total;
   }
-
   private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
-
   private suffixRecordType = (balance: number): string => {
     if (balance < 0) {
       balance = balance * -1;
@@ -185,6 +173,12 @@ export class DataFormatter {
     } else {
       return `${balance} Dr`;
     }
+  }
+
+  constructor(private exportData: ChildGroup[],
+              private selectedCompany: CompanyResponse,
+              private recType: RecTypePipe) {
+
   }
 
   private truncate(value: string, wordWise: boolean, max: number, tail?: string) {

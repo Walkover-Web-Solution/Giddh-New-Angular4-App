@@ -27,27 +27,42 @@ function defaultWindows() {
 }
 
 export class StateManager {
-  // private store = new ConfigStore('Gidhh-unofficial', { windows: defaultWindows() });
+  private store = new ConfigStore('Gidhh-unofficial', {windows: defaultWindows()});
 
   private data: Config;
 
   constructor() {
-    // if (os.platform() === 'darwin') {
-    //   this.store.path = path.join(os.homedir(), 'Library', 'Preferences', 'org.walkover.giddh' + (isDev() ? '-dev' : '') + '.json');
-    // }
+    if (os.platform() === 'darwin') {
+      this.store.path = path.join(os.homedir(), 'Library', 'Preferences', 'org.walkover.giddh' + (isDev() ? '-dev' : '') + '.json');
+    }
   }
 
   public restoreWindows(): void {
     console.log(DEFAULT_URL);
-    let data: Config = { windows: [] };
+    let data = this.getOrLoadData();
     data.windows = defaultWindows();
-    // this.store.all = data;
+    this.store.all = data;
   }
 
   public getWindows(): WindowItem[] {
-    return defaultWindows();
+    return this.getOrLoadData().windows;
   }
 
+  public save(): void {
+    const data = this.data;
+    if (data != null) {
+      this.store.all = data;
+    }
+  }
+
+  private getOrLoadData(): Config {
+    let data = this.data;
+    if (data == null) {
+      data = this.store.all;
+      this.data = data;
+    }
+    return data;
+  }
   public save(): void {
     const data = this.data;
     if (data != null) {

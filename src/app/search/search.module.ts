@@ -1,3 +1,4 @@
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -29,6 +30,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
   ],
   providers: [],
   imports: [
+    PaginationModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
