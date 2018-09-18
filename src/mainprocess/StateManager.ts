@@ -63,20 +63,6 @@ export class StateManager {
     }
     return data;
   }
-  public save(): void {
-    const data = this.data;
-    if (data != null) {
-      // this.store.all = data;
-    }
-  }
-  private getOrLoadData(): Config {
-    let data = this.data;
-    if (data == null) {
-      // data = this.store.all;
-      this.data = data;
-    }
-    return data;
-  }
 }
 
 interface Config {
