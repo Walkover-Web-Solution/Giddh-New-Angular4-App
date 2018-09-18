@@ -16,6 +16,7 @@ import { userLoginStateEnum } from '../store/authentication/authentication.reduc
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { DOCUMENT } from '@angular/platform-browser';
 import { ToasterService } from '../services/toaster.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'login',
@@ -56,6 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isResetPasswordInSuccess$: Observable<boolean>;
   public showForgotPassword: boolean = false;
   public forgotStep: number = 0;
+  public apkVersion: string;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -70,7 +72,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private loginAction: LoginActions,
     private authService: AuthService,
     @Inject(DOCUMENT) private document: Document,
-    private _toaster: ToasterService
+    private _toaster: ToasterService,
+    private _authService: AuthenticationService
   ) {
     this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -128,6 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    this.getElectronAppVersion();
     this.document.body.classList.remove('unresponsive');
     this.generateRandomBanner();
     this.mobileVerifyForm = this._fb.group({
@@ -405,5 +409,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.resetPasswordForm.reset();
     this.forgotStep = 1;
     this.userUniqueKey = null;
+  }
+
+  private getElectronAppVersion() {
+    this._authService.GetElectronAppVersion().subscribe((res: string) => {
+      let version = res.split('files')[0];
+      let versNum = version.split(' ')[1];
+      this.apkVersion = versNum;
+    });
   }
 }
