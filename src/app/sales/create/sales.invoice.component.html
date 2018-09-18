@@ -164,7 +164,7 @@
 
 
                         
-                                            <div class="pull-right">
+                                            <div class="pull-right" *ngIf="selectedPageLabel === 'Purchase'">
                     <label class="upload_div" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
             <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
               (uploadOutput)="onUploadOutput($event)">
