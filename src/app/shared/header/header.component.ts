@@ -94,6 +94,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
 
+  public smartList$: Observable<IUlist>;
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
@@ -348,6 +349,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // sort group list by name
           grpList = sortBy(grpList, ['name']);
 
+          // uncomment below to make few entries in db
+          /**
+          grpList.forEach((item, index) => {
+            if (index < 11) {
+              this._dbService.addItem('groups', item);
+            }
+          });
+
+          acList.forEach((item, index) => {
+            if (index < 11) {
+              this._dbService.addItem('accounts', item);
+            }
+          });
+          */
+
           // sort group list by name
           acList = sortBy(acList, ['name']);
           combinedList = concat(menuList, grpList, acList);
@@ -421,8 +437,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let menu: any = {};
       let o: IUlist = find(items, ['uniqueName', pageName]);
       if (o) {
-        menu.name = o.name;
-        menu.uniqueName = o.uniqueName;
+        menu = o;
       } else {
         try {
           menu.name = pageName.split('/pages/')[1].toUpperCase();
@@ -430,9 +445,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu.name = pageName.toUpperCase();
         }
         menu.uniqueName = pageName;
+        menu.type = 'MENU';
       }
       this._dbService.addItem('menus', menu).subscribe(d => {
-        // success
+        this.findListFromDb();
       }, (err: any) => {
         // already having entry will write the logic for shuffle
         // console.log('err', err);
@@ -448,10 +464,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this._dbService.getAllItems('accounts').pipe(take(1))
     )
     .subscribe((resp: any[]) => {
+      console.log ('from DB', resp);
       let menuList: IUlist[] = resp[0];
       let groupList: IUlist[] = resp[1];
       let acList: IUlist[] = resp[2];
-      console.log ('from DB', resp);
+      // slicing due to we only need to show 10 result at first sight
+      let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 5));
+      this.smartList$ = observableOf(combined);
+      console.log (this.smartList$);
     });
   }
 

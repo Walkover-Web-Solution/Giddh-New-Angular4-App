@@ -18,8 +18,8 @@ class AppDatabase extends Dexie {
   constructor() {
     super('_giddh');
     this.version(1).stores({
-      menus: 'uniqueName,name,additional',
-      groups: 'uniqueName,name,parentGroups',
+      menus: 'uniqueName,name,additional,type',
+      groups: 'uniqueName,name,parentGroups,type',
       accounts: 'uniqueName,name,parentGroups'
     });
     // directly on retrieved database objects.

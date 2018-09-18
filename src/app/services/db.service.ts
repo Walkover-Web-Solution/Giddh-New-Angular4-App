@@ -25,7 +25,4 @@ export class DbService {
   public removeItem(entity: string, id: number): Observable<number> {
     return from(GIDDH_DB.removeItemById(entity, id));
   }
-  // GIDDH_DB.addOrg(o).then(key => {
-  //   console.log (key);
-  // }).catch(err => console.log (err));
 }
