@@ -24,30 +24,63 @@ export class UniversalSearchService {
    * @param arr chunk of data
    * return the filtered data of starts with array and includes array.
    */
-  public filterBy(term: string, arr: any[]): any[] {
+  public filterBy(term: string, arr: any[], conditions?: any): any[] {
     let array = cloneDeep(arr);
-    let filteredArr: any[] = [];
+
+    if (conditions) {
+      //
+    } else {
+      let filtered: any[] = [];
+      let sorted: any[] = [];
+      // get filtered result
+      filtered = this.performIncludesFilter(array, term);
+      // sort data now
+      sorted = this.performStartsWithFilter(filtered, term);
+      // return this.sortFinalResultByType(concat(u, n));
+      return sorted;
+    }
+  }
+
+  // sort by category
+  private sortFinalResultByType(arr: any[]) {
+    let menus: any[] = [];
+    let groups: any[] = [];
+    console.log(arr);
+    let acArr: any[] = arr.filter(item => {
+      if (item.type) {
+        if (item.type === 'MENU') {
+          menus.push(item);
+        } else if (item.type === 'GROUP') {
+          groups.push(item);
+        }
+      } else {
+        return item;
+      }
+    });
+    console.log (menus, groups);
+    return concat([], acArr);
+  }
+
+  // filtering data for own usage
+  private performIncludesFilter(arr: any, term: string) {
+    return arr.filter((item: any) => includes(item['uniqueName'].toLocaleLowerCase(), term) || includes(item['name'].toLocaleLowerCase(), term));
+  }
+
+  //
+  private performStartsWithFilter(arr, term) {
     let startsWithArr: any[];
     let includesArr: any[] = [];
-    // get filtered result
-    filteredArr = this.doFilter(array, 'name', term);
-    // sort data now
-    startsWithArr  = filteredArr.filter((item: any) => {
-      if (startsWith(item.name.toLocaleLowerCase(), term)) {
+    startsWithArr  = arr.filter((item: any) => {
+      if (
+        startsWith(item['uniqueName'].toLocaleLowerCase(), term) || startsWith(item['name'].toLocaleLowerCase(), term)
+      ) {
         return item;
       } else {
         includesArr.push(item);
       }
     });
-    startsWithArr = CustomSorting.getSortedUsers(startsWithArr, 'name');
-    includesArr = CustomSorting.getSortedUsers(includesArr, 'uniqueName');
+    // startsWithArr = CustomSorting.getSortedUsers(startsWithArr, key);
+    // includesArr = CustomSorting.getSortedUsers(includesArr, key);
     return concat(startsWithArr, includesArr);
-  }
-
-  // filtering data for own usage
-  private doFilter(arr: any, key: string, term: string) {
-    return arr.filter((item: any) => {
-      return includes(item[key].toLocaleLowerCase(), term);
-    });
   }
 }

@@ -6,12 +6,12 @@ import {
 } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
-import { ReplaySubject, Observable } from 'rxjs';
-import { findIndex, cloneDeep } from '../../../lodash-optimized';
+import { ReplaySubject } from 'rxjs';
+import { findIndex, cloneDeep, remove } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { takeUntil, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 const KEYS: any = {
   BACKSPACE: 8,
@@ -79,11 +79,13 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // for setting value in bot input
   @Input() public botValue: string;
 
+  public listOfSelectedGroups: IUlist[];
   public rows: any[] = null;
   public rowsClone: any[] = [];
   public viewPortItems: any[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private keys: any = KEYS;
+  private rawSmartComboList: IUlist[] = [];
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
@@ -99,6 +101,12 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   public ngOnInit() {
+
+    // listen to smart list
+    this._store.select(p => p.general.smartCombinedList).pipe(take(1))
+    .subscribe((data: IUlist[]) => {
+      this.rawSmartComboList = data;
+    });
 
     // listen to smart list
     this._store.select(p => p.general.smartList).pipe(take(1))
@@ -258,7 +266,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     let key = (e.which) ? e.which : e.keyCode;
     // prevent caret movement
     if (this.isOpen && ( key === this.keys.UP || key === this.keys.DOWN || key === this.keys.RIGHT || key === this.keys.LEFT)) {
-      event.preventDefault();
+      e.preventDefault();
       let item = this.virtualScrollElem.directionToll(key);
       if (item) {
         this.refreshToll(item, key);
@@ -267,15 +275,16 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     if (this.isOpen && ( key === this.keys.ENTER)) {
       e.preventDefault();
+      e.stopPropagation();
       this.captureValueFromList();
     }
 
-    // closing list on
+    // closing list on esc press
     if (key === this.keys.ESC && this.isOpen) {
       e.preventDefault();
-      // e.stopPropagation();
-      this.isOpen = false;
-      this.searchEle.nativeElement.value = null;
+      e.stopPropagation();
+      // this.isOpen = false;
+      // this.searchEle.nativeElement.value = null;
     }
   }
 
@@ -285,6 +294,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    * filtering data conditionally according to search term.
    */
   public search(e: any) {
+    let key = e.which || e.keyCode;
+    // preventing search operation on arrows key
+    if (this.isOpen && ( key === this.keys.UP || key === this.keys.DOWN || key === this.keys.RIGHT || key === this.keys.LEFT)) {
+      return;
+    }
     if (e && e.target.value && e.target.value.length > 0) {
       let term = e.target.value.toLowerCase();
       let filteredData: any[] = [];
@@ -294,12 +308,27 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.isOpen = true;
       }
 
+      let d = cloneDeep(this.rawSmartComboList);
+
       // search data conditional
-      filteredData = this.universalSearchService.filterBy(term, this.rowsClone);
+      filteredData = this.universalSearchService.filterBy(term, d);
+      // console.log ('final', filteredData);
 
       this.updateRowsViaSearch(filteredData);
     } else {
-      this.updateRowsViaSearch(cloneDeep(this.rowsClone));
+      // backspace
+      if (this.isOpen && ( key === this.keys.BACKSPACE)) {
+        e.preventDefault();
+        e.stopPropagation();
+        // remove item one by one on pressing backspace like gmail
+        if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+          this.listOfSelectedGroups.pop();
+          // logic search
+          this.updateRowsViaSearch(cloneDeep(this.rowsClone));
+        }
+      } else {
+        this.updateRowsViaSearch(cloneDeep(this.rowsClone));
+      }
     }
     // setting width again due to if no data found.
     // the other block (no result) also have to be liquid
@@ -357,6 +386,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
+  //
+  public removeItemFromSelectedGroups(item: IUlist) {
+    this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+  }
+
   /**
    * get a single row height
    */
@@ -378,7 +412,15 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private emitData(item: IUlist) {
     // emit data in case of direct A/c or Menus
     if (!item.type || (item.type && item.type === 'MENU')) {
-      this.selectedItemEmitter.emit(item);
+      console.log ('emit data', item);
+      // this.selectedItemEmitter.emit(item);
+    } else {
+      try {
+        this.listOfSelectedGroups.push(item);
+      } catch (error) {
+        this.listOfSelectedGroups = [];
+        this.listOfSelectedGroups.push(item);
+      }
     }
 
     /**

@@ -59,7 +59,7 @@
                             <ng-container *ngIf="idx > 0">
                               <span>&nbsp;❯&nbsp;</span>
                             </ng-container>
-                            {{item.uniqueName}}
+                            {{item.name}}
                           </span>
                         </small>
                       </ng-container>
@@ -98,5 +98,15 @@
 
 <!-- input box template -->
 <ng-template #searchEleTemplate>
-  <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" (keydown)="handleKeydown($event)" (keyup)="search($event)"/>
+  <div class="search-wrapper">
+    <span *ngFor="let item of listOfSelectedGroups">
+      <div class="vR">
+        <div class="vN">
+          <div class="vT">{{item.uniqueName}}</div>
+          <div class="vM" (click)="removeItemFromSelectedGroups(item)"></div>
+        </div>
+      </div>
+    </span>
+    <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" (keydown)="handleKeydown($event)" (keyup)="search($event)"/>
+  </div>
 </ng-template>

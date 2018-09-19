@@ -1,23 +1,57 @@
 :host {
-  .badge{
-    cursor: pointer;
-    margin-right:.3rem;
-    [class^="icon-"]{
-      cursor: pointer;
+  .search-wrapper {
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    flex-wrap: wrap!important;
+    .searchEle {
+      outline: none;
+      border: none;
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: initial;
     }
   }
-  .searchEle {
-    padding: 1.25rem 1rem;
-    width: 100%;
-    outline: none;
-    border-radius: 6px;
-    border: none;
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: initial;
-    &.open {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
+  .vR{
+    margin-right: .4rem;
+    vertical-align: baseline;
+    .vN{
+      background-color: white;
+      border: 1px solid #dadce0;
+      border-radius: 10px;
+      height: 20px;
+      line-height: 20px;
+      display: inline-flex;
+      padding-left: 8px;
+      padding-right: 4px;
+      box-sizing: border-box;
+      .vT {
+        font-size: .75rem;
+        letter-spacing: .3px;
+        display: inline-block;
+        color: #222;
+        max-width: 325px;
+        line-height: 16px;
+        max-height: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        direction: ltr;
+      }
+      .vM{
+        height: 16px;
+        opacity: .54;
+        width: 16px;
+        background-image: url(https://www.gstatic.com/images/icons/material/system/1x/close_black_16dp.png);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        margin-left: 4px;
+        vertical-align: top;
+        cursor: pointer;
+        display: inline-block;
+      }
     }
   }
 }
