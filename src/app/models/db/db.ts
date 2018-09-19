@@ -5,6 +5,7 @@ export class UlistDbModel implements IUlist {
   public id: number;
   public name: string;
   public uniqueName: string;
+  public time?: number;
   public parentGroups?: any;
   constructor() {
     //
@@ -18,9 +19,9 @@ class AppDatabase extends Dexie {
   constructor() {
     super('_giddh');
     this.version(1).stores({
-      menus: 'uniqueName,name,additional,type',
-      groups: 'uniqueName,name,parentGroups,type',
-      accounts: 'uniqueName,name,parentGroups'
+      menus: 'uniqueName,name,additional,type,time',
+      groups: 'uniqueName,name,parentGroups,type,time',
+      accounts: 'uniqueName,name,parentGroups,time'
     });
     // directly on retrieved database objects.
     this.menus.mapToClass(UlistDbModel);
@@ -29,7 +30,7 @@ class AppDatabase extends Dexie {
   }
 
   public getAllItems(entity: string): Promise<any[]> {
-    return this[entity].toArray();
+    return this[entity].orderBy('time').reverse().toArray();
   }
 
   public getItemById(entity: string, key: any): Promise<any> {
@@ -41,7 +42,11 @@ class AppDatabase extends Dexie {
   }
 
   public addItem(entity: string, model: any): Promise<number> {
-    return this[entity].add(model);
+    return this[entity].put(model).then((r) => {
+      console.log('then');
+    }).catch((err) => {
+      console.log('db.ts > add > catch:', err);
+    });
   }
 }
 

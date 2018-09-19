@@ -25,4 +25,8 @@ export class DbService {
   public removeItem(entity: string, id: number): Observable<number> {
     return from(GIDDH_DB.removeItemById(entity, id));
   }
+
+  /* public orderByIndex(entity: string, index: string): Observable<number> {
+    return from(GIDDH_DB.orderByIndex(entity, index));
+  } */
 }

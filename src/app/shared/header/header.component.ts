@@ -27,6 +27,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { sortBy, concat, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
+import { DbActions } from '../../actions/db.actions';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -200,6 +201,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _dbService: DbService,
     private modalService: BsModalService,
     private changeDetection: ChangeDetectorRef
+
   ) {
 
     // Reset old stored application date
@@ -439,6 +441,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let o: IUlist = find(items, ['uniqueName', pageName]);
       if (o) {
         menu = o;
+        menu.time = + new Date();
       } else {
         try {
           menu.name = pageName.split('/pages/')[1].toUpperCase();
@@ -447,10 +450,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         menu.uniqueName = pageName;
         menu.type = 'MENU';
+        menu.time = + new Date();
       }
       this._dbService.addItem('menus', menu).subscribe(d => {
         this.findListFromDb();
       }, (err: any) => {
+        // console.log('header.component.ts > addItem > err', err);
         // already having entry will write the logic for shuffle
         // console.log('err', err);
       });
@@ -465,10 +470,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this._dbService.getAllItems('accounts').pipe(take(1))
     )
     .subscribe((resp: any[]) => {
-      console.log ('from DB', resp);
       let menuList: IUlist[] = resp[0];
       let groupList: IUlist[] = resp[1];
       let acList: IUlist[] = resp[2];
+      console.log('list: ', menuList);
       // slicing due to we only need to show 10 result at first sight
       let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 4));
       this.store.dispatch(this._generalActions.setSmartList(combined));
