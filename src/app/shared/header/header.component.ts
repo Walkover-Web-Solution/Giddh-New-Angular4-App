@@ -5,7 +5,7 @@ import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDirective, BsModalService, ModalOptions } from 'ngx-bootstrap';
+import { ModalDirective, BsModalService, ModalOptions, BsModalRef } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -178,6 +178,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
+  private modelRef: BsModalRef;
   /**
    *
    */
@@ -701,15 +702,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // });
   }
 
-  public onNavigationSelected(event: any) {
-    console.log (event);
-    // if (ev && ev.value) {
-    //   if (ev.additional && ev.additional.tab) {
-    //     this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
-    //   } else {
-    //     this.router.navigate([ev.value]);
-    //   }
-    // }
+  public onItemSelected(item: IUlist) {
+    this.modelRef.hide();
+    if (item && item.type === 'MENU') {
+      if (item.additional && item.additional.tab) {
+        this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
+      } else {
+        this.router.navigate([item.uniqueName]);
+      }
+    } else {
+      // direct account scenerio
+      let url = `ledger/${item.uniqueName}`;
+      this.router.navigate([url]);
+    }
   }
 
   private unsubscribe() {
@@ -750,7 +755,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.subscriptions.push(_combine);
     let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
-    this.modalService.show(this.navigationModal, config);
+    this.modelRef = this.modalService.show(this.navigationModal, config);
   }
 
   private getElectronAppVersion() {

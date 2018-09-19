@@ -7,7 +7,7 @@
     }
   }
   .searchEle {
-    padding: 1.25rem 2rem;
+    padding: 1.25rem 1rem;
     width: 100%;
     outline: none;
     border-radius: 6px;
@@ -61,111 +61,44 @@
   a, a:hover {
     text-decoration: none;
   }
-  .universal-members-list {
+  .universal-list-items {
     position: relative;
     overflow: auto;
     &:focus{
       outline: none;
     }
     .item {
-      height: 38px;
+      height: 46px;
       overflow: hidden;
-      padding: 4px;
-      .member-pic{
-        margin-right: 10px;
+      padding: 0 1rem;
+      a{
+        height: 46px;
       }
-      .member-action {
-        width: 30px;
-        color: white;
-        opacity: 0;
+      .item-icon{
+        margin-right: 1rem;
+        color: #666666;
       }
-      .member-details{
-        max-width: 150px;
-        color: #444;
-      }
-      .member-status{
-        position: relative;
-        &.online:before {
-          color: green;
-          content: "\e506";
+      .item-details{
+        font-size: 13px;
+        color: #666666;
+        small{
+          font-size: 11px;
         }
-        &:before {
-          color: #444;
-          content: "\e506";
-          font-family: 'icomoon';
-          font-size: 1.25rem;
-          width: 20px;
-          opacity: 0.64;
-          text-align: center;
-          display: inline-block;
-          margin-left: -4px;
+        .brdcrmb{
+          max-width: 150px;
+          overflow: hidden;
         }
       }
       // hover effect
       &.selected{
         background-color: #298fca;
-        .member-details{
+        .item-details{
           color: white;
+          small{
+            color: white;
+          }
         }
       }
-      &.active {
-        .member-action {
-          opacity: 10;
-          color: #298fca;
-        }
-      }
-      &.selected.active{
-        .member-action {
-          color: white;
-        }
-      }
-    }
-    .item.teamList {
-      padding: 0;
-      &::before {
-        margin-left: -10px;
-        width: 27px;
-      }
-      a {
-        color: #2c2d30;
-        height: 38px;
-        span:first-child{
-          padding: 0 0.625rem 0 2rem;
-          line-height:1rem;
-        }
-        .hash:before{
-          content: '#'
-        }
-        .lock:before {
-          font-family: 'icomoon';
-          content: "\e568";
-          font-size: 1.25rem;
-          margin-left: -6px;
-        }
-        .mytask:before {
-          font-family: 'icomoon';
-          content: "\e903";
-          margin-left: -4px;
-        }
-      }
-      // hover and selection effect
-      &.selected, &.selected.active{
-        a,  a > span:first-child {
-          color: white;
-        }
-      }
-    }
-  }
-}
-
-
-.inline-items{
-  .chat-bot-menu-item {
-    display: inline-block;
-    padding: 7px 10px;
-    text-align: center;
-    &.selected{
-      background-color: #298fca;
     }
   }
 }

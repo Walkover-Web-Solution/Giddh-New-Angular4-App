@@ -62,7 +62,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // ui related
   @Input() public isOpen: boolean = false;
   @Input() public isMultiple: boolean = false;
-  @Input() public ItemHeight: number = 38;
+  @Input() public ItemHeight: number = 46;
   @Input() public ItemWidth: number = 300;
   // to search bar
   @Input() public searchBoxPlaceholder: string = 'Search...';
@@ -99,8 +99,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   public ngOnInit() {
-
-    console.log ('onInit', this.parentEle);
 
     // listen to smart list
     this._store.select(p => p.general.smartList).pipe(take(1))
@@ -377,9 +375,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
-  private emitData(data: any | any[], forceHide: boolean = true) {
-    // data type will be ITeamResponse | any[]
-    this.selectedItemEmitter.emit(data);
+  private emitData(item: IUlist) {
+    // emit data in case of direct A/c or Menus
+    if (!item.type || (item.type && item.type === 'MENU')) {
+      this.selectedItemEmitter.emit(item);
+    }
 
     /**
      * conditional set value in input box
@@ -399,8 +399,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       // }
     // }
 
-    if (forceHide) {
-      this.hide();
-    }
+    // if (forceHide) {
+    //   this.hide();
+    // }
   }
 }

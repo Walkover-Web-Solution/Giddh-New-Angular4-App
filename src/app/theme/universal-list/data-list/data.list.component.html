@@ -21,7 +21,7 @@
         #mainEle
         tabindex="0"
         (keydown)="onKeydownHandlerOfListEle($event)"
-        class="universal-members-list"
+        class="universal-list-items"
         [style.width.px]="ItemWidth">
         <ng-container *ngIf="isOpen">
           <!-- virtual scroll -->
@@ -38,15 +38,32 @@
                   (mouseenter)="handleMouseEvent($event, r)"
                   (click)="itemSelected(r)" [ngClass]="{'selected': r.isHilighted, 'active': r.isSelected }">
                   <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
-                    <span class="member-pic">
-                      {{r.type}}
-                    </span>
-                    <span class="member-details mr-auto text-truncate">
-                      {{r.name}}
-                    </span>
-                    <span *ngIf="isMultiple" class="member-action">
-                      <div class="icon-check_large_bold"></div>
-                    </span>
+                    <div class="item-icon">
+                      <ng-container [ngSwitch]="r.type">
+                        <ng-container *ngSwitchCase="'MENU'">
+                          <span class="glyphicon glyphicon-menu-hamburger"></span>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'GROUP'">
+                          <span class="glyphicon glyphicon-book"></span>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <small>A/c</small>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                    <div class="item-details flex-grow-1">
+                      <p>{{r.name}}</p>
+                      <ng-container *ngIf="r.parentGroups">
+                        <small>
+                          <span *ngFor="let item of r.parentGroups; let idx = index">
+                            <ng-container *ngIf="idx > 0">
+                              <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                            {{item.uniqueName}}
+                          </span>
+                        </small>
+                      </ng-container>
+                    </div>
                   </a>
                 </div>
 
