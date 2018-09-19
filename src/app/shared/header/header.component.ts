@@ -1,11 +1,11 @@
-import { Observable, of as observableOf, ReplaySubject, combineLatest } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, combineLatest, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
-  @ViewChild('navigationModal') public navigationModal: ModalDirective; // CMD + K
+  @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
 
   public title: Observable<string>;
@@ -173,12 +173,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userAvatar: string;
   public navigationOptionList$: Observable<IUlist[]> = observableOf(NAVIGATION_ITEM_LIST);
   public selectedNavigation: string = '';
-  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  private subscriptions: Subscription[] = [];
   /**
    *
    */
@@ -198,6 +197,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _generalActions: GeneralActions,
     private authService: AuthenticationService,
     private _dbService: DbService,
+    private modalService: BsModalService,
+    private changeDetection: ChangeDetectorRef
   ) {
 
     // Reset old stored application date
@@ -702,7 +703,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public onNavigationSelected(event: any) {
     console.log (event);
-    this.hideNavigationModal();
     // if (ev && ev.value) {
     //   if (ev.additional && ev.additional.tab) {
     //     this.router.navigate([ev.value], { queryParams: { tab: ev.additional.tab, tabIndex: ev.additional.tabIndex } });
@@ -712,24 +712,45 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // }
   }
 
-  public onNavigationHide(ev) {
-    console.log ('onNavigationHide', ev);
-    if (this.navigationModalVisible) {
-      this.hideNavigationModal();
-    }
+  private unsubscribe() {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+    this.subscriptions = [];
   }
 
   private showNavigationModal() {
-    this.forceClear$ = observableOf({ status: false });
-    this.navigationModalVisible = true;
-    this.navigationModal.show();
-  }
+    const _combine = combineLatest(
+      this.modalService.onShow,
+      this.modalService.onShown,
+      this.modalService.onHide,
+      this.modalService.onHidden
+    ).subscribe(() => this.changeDetection.markForCheck());
 
-  private hideNavigationModal() {
-    this.forceClear$ = observableOf({ status: true });
-    this.selectedNavigation = '';
-    this.navigationModalVisible = false;
-    this.navigationModal.hide();
+    this.subscriptions.push(
+      this.modalService.onShow.subscribe((reason: string) => {
+        //
+      })
+    );
+    this.subscriptions.push(
+      this.modalService.onShown.subscribe((reason: string) => {
+        //
+      })
+    );
+    this.subscriptions.push(
+      this.modalService.onHide.subscribe((reason: string) => {
+        //
+      })
+    );
+    this.subscriptions.push(
+      this.modalService.onHidden.subscribe((reason: string) => {
+        this.unsubscribe();
+      })
+    );
+
+    this.subscriptions.push(_combine);
+    let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
+    this.modalService.show(this.navigationModal, config);
   }
 
   private getElectronAppVersion() {

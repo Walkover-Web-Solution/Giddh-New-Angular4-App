@@ -2,3 +2,19 @@
 /* This file is for setting global styles  */
 @import 'variables';
 
+// cmdk modal styles
+.modal-dialog.universal_modal{
+  .modal-body{
+    padding: 0;
+  }
+  .shortcuts {
+    background: #f9f9f9;
+    border-top: none;
+    margin: 0;
+    padding: 12px 16px 12px 20px;
+    color: #717274;
+    font-size: 12px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+}

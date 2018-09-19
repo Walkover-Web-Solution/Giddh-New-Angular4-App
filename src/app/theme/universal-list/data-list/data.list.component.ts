@@ -57,15 +57,14 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    * consume comma separated list of tags, classes, ids
    */
   @Input() public listOfTagsWhichHasToExclude: string;
-  @Input() public defaultExcludedTags: string = 'input, button, .searchEle';
+  @Input() public defaultExcludedTags: string = 'input, button, .searchEle, .modal-content, .modal-backdrop';
 
   // ui related
   @Input() public isOpen: boolean = false;
   @Input() public isMultiple: boolean = false;
   @Input() public ItemHeight: number = 38;
   @Input() public ItemWidth: number = 300;
-  // to show search bar inside
-  @Input() public outsideSearch: boolean = false;
+  // to search bar
   @Input() public searchBoxPlaceholder: string = 'Search...';
   @Input() public visibleItems: number = 10;
   // here will not need to add nativeElement in parent
@@ -101,10 +100,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   public ngOnInit() {
 
+    console.log ('onInit', this.parentEle);
+
     // listen to smart list
     this._store.select(p => p.general.smartList).pipe(take(1))
     .subscribe((data: IUlist[]) => {
-      console.log ('bingo smartlist', data);
       // init rows
       this.setValueInRow(data);
     });
@@ -116,19 +116,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     // due to view init issue using timeout
     setTimeout(() => {
-      // set position conditionally
-      if (this.wrapper && this.placement === 'bottom') {
-        if (this.parentEle) {
-          let box: any = this.parentEle.getBoundingClientRect();
-          let pos = this.winRef.nativeWindow.innerHeight - box.bottom;
-          pos = (pos < box.height) ? box.height : pos;
-          this.setParentWidthFunc();
-          this.renderer.setElementStyle(this.wrapper.nativeElement, 'bottom', `${pos}px`);
-        } else {
-          this.renderer.setElementStyle(this.wrapper.nativeElement, 'bottom', '0');
-        }
-      }
-    }, 0);
+      this.searchEle.nativeElement.focus();
+    }, 10);
 
   }
 
@@ -154,10 +143,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   // to hide dropdown on outside click
   public handleOutSideClick(e: any) {
-    if (this.isOpen) {
-      // this.closeEmitter.emit(true);
-      this.hide();
-    }
+    // if (this.isOpen) {
+    //   this.closeEmitter.emit(true);
+    //   this.hide();
+    // }
   }
 
   /**
@@ -168,34 +157,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    */
   public itemSelected(item: any) {
     this.emitData(item);
-  }
-
-  /**
-   * works when initiated by INPUT
-   * @param key : number
-   * @param funcName: string to see from which func func is getting called
-   */
-  public letElapseOnList(key?: number, funcName?: string) {
-    if (this.mainEle && this.virtualScrollElem) {
-      this.mainEle.nativeElement.focus();
-      let item = this.virtualScrollElem.getHighlightedItem();
-      if (item) {
-        this.refreshToll(item, key);
-      }
-    }
-  }
-
-  /**
-   * setting focus conditionally when triggered from outside.
-   */
-  public setFocusOnList(key?: number) {
-    setTimeout(() => {
-      if (this.outsideSearch) {
-        this.searchEle.nativeElement.focus();
-      } else {
-        this.letElapseOnList(key, 'setFocusOnList');
-      }
-    }, 0);
   }
 
   // a toll to add condition before calling final func
@@ -245,9 +206,9 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    */
   public ngOnChanges(changes: SimpleChanges) {
     // listen for force auto focus
-    if ('forceSetAutoFocus' in changes && changes.forceSetAutoFocus.currentValue) {
-      this.setFocusOnList(this.forcekey);
-    }
+    // if ('forceSetAutoFocus' in changes && changes.forceSetAutoFocus.currentValue) {
+      // this.setFocusOnList(this.forcekey);
+    // }
   }
 
   /**
@@ -269,18 +230,14 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     setTimeout(() => {
       // set focus conditionally
       if (this.autoFocus) {
-        this.setFocusOnList();
+        this.searchEle.nativeElement.focus();
       }
       this.doingUIErrands();
-    }, 0);
+    }, 1000);
   }
 
   public doingUIErrands() {
     this.zone.runOutsideAngular(() => {
-      // styling fix for parent
-      if (this.parentEle) {
-        this.renderer.setElementClass(this.parentEle, 'uniParent', true);
-      }
       if (this.wrapper && this.parentEle) {
         this.setParentWidthFunc();
       }
@@ -395,13 +352,9 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    * expect in case of multiple
    */
   public hide() {
-    if (this.outsideSearch && !this.preventOutSideClose) {
+    if (!this.preventOutSideClose) {
       this.isOpen = false;
     } else {
-      // remove styling from paren
-      // if (this.parentEle) {
-      //   this.renderer.setElementClass(this.parentEle, 'uniParent', false);
-      // }
       this.closeEmitter.emit(true);
     }
   }
@@ -432,7 +385,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
      * conditional set value in input box
      *
      */
-    if (this.outsideSearch) {
+    // if (this.outsideSearch) {
       // let team = this.teamList.find(t => t.id === data.id);
       // if (team) {
       //   if (this.isTeamDirect(team)) {
@@ -444,7 +397,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       //     this.searchEle.nativeElement.value = team.name;
       //   }
       // }
-    }
+    // }
 
     if (forceHide) {
       this.hide();

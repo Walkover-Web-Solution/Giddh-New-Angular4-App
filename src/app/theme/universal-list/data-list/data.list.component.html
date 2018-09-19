@@ -3,9 +3,6 @@
 [delayClickOutsideInit]="true"
 [exclude]= "defaultExcludedTags"
 (clickOutside)="handleOutSideClick($event)">
-  <ng-container *ngIf="outsideSearch">
-    <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
-  </ng-container>
 
   <section
     #wrapper
@@ -14,7 +11,7 @@
     class="universal-data-list-wrapper"
     >
     <!-- header -->
-    <ng-container *ngIf="!outsideSearch">
+    <ng-container>
       <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
     </ng-container>
     <!-- end header -->
