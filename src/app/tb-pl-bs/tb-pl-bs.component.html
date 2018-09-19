@@ -13,5 +13,8 @@
          (select)="CanNewTBLoad = true; CanTBLoad = false">
       <tb *ngIf="CanNewTBLoad" [isV2]="true" [selectedCompany]="selectedCompany"></tb>
     </tab>
+    <tab heading="Synram Design">
+      <tb-synram></tb-synram>
+    </tab>
   </tabset>
 </div>
