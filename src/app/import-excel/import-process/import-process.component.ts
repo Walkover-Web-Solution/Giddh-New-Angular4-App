@@ -1,12 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 
 interface DataModel {
   field: string;
@@ -26,17 +23,6 @@ interface DataModel {
 })
 
 export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();
-  @Output() public onBack = new EventEmitter();
-  @Input() public isLoading: boolean;
-  @Input() public entity: string;
-  public editHeaderIdx: number = null;
-  public dataModel: DataModel[];
-
-  constructor(private store: Store<AppState>) {
-  }
-
-  private _importData: ImportExcelRequestData;
 
   public get importData(): ImportExcelRequestData {
     return this._importData;
@@ -47,6 +33,17 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     this.prepareDataModel(value);
     // this.prepareData(value);
     this._importData = value;
+  }
+  @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();
+  @Output() public onBack = new EventEmitter();
+  @Input() public isLoading: boolean;
+  @Input() public entity: string;
+  public editHeaderIdx: number = null;
+  public dataModel: DataModel[];
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+
+  private _importData: ImportExcelRequestData;
+  constructor(private store: Store<AppState>) {
   }
 
   public ngOnInit() {
