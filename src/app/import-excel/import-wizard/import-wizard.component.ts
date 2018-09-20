@@ -26,15 +26,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
   public dataModel: DataModel[];
-
-  constructor(
-    private store: Store<AppState>,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private _importActions: ImportExcelActions
-  ) {
-  }
-
   public dataChanged = (excelState: ImportExcelState) => {
     this.excelState = excelState;
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
@@ -42,7 +33,18 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.onNext(excelState.importExcelData);
       this.prepareDataModel(excelState.importExcelData);
     }
+    if(excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess){
+      this._router.navigate(['/pages/import/select']);
+    }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
+  };
+
+  constructor(
+    private store: Store<AppState>,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _importActions: ImportExcelActions
+  ) {
   }
 
   public ngOnInit() {

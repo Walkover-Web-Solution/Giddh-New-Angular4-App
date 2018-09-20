@@ -1,11 +1,10 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
-import { startsWith, concat, includes } from 'app/lodash-optimized';
-import { Observable } from 'rxjs/Observable';
+import { concat, includes, startsWith } from 'app/lodash-optimized';
 import { IForceClear } from 'app/models/api-models/Sales';
 import { AVAccountListComponent } from './virtual-list-menu.component';
 
@@ -56,16 +55,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
   @ViewChild('menuEle') public menuEle: AVAccountListComponent;
   @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
   @ViewChild('dd') public ele: ElementRef;
-
-  @Input() set options(val: IOption[]) {
-    this._options = val;
-    this.updateRows(val);
-  }
-
-  get options(): IOption[] {
-    return this._options;
-  }
-
   @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -73,32 +62,10 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
   @Output() public noOptionsFound = new EventEmitter<boolean>();
   @Output() public noResultsClicked = new EventEmitter<null>();
   @Output() public viewInitEvent = new EventEmitter<any>();
-
   public rows: IOption[] = [];
-  public _options: IOption[] = [];
   public isOpen: boolean = true;
   public filter: string = '';
   public filteredData: IOption[] = [];
-  public _selectedValues: IOption[] = [];
-  get selectedValues(): any[] {
-    return this._selectedValues;
-  }
-
-  set selectedValues(val: any[]) {
-    if (!val) {
-      val = [];
-    }
-
-    if (!Array.isArray(val)) {
-      val = [val];
-    }
-    if (val.length > 0 && this.rows) {
-      this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value ) !== -1 );
-    } else {
-      this._selectedValues = val;
-    }
-  }
-
   /** Keys. **/
 
   private KEYS: any = {
@@ -112,6 +79,38 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
   };
 
   constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
+  }
+
+  public _options: IOption[] = [];
+
+  get options(): IOption[] {
+    return this._options;
+  }
+
+  @Input() set options(val: IOption[]) {
+    this._options = val;
+    this.updateRows(val);
+  }
+
+  public _selectedValues: IOption[] = [];
+
+  get selectedValues(): any[] {
+    return this._selectedValues;
+  }
+
+  set selectedValues(val: any[]) {
+    if (!val) {
+      val = [];
+    }
+
+    if (!Array.isArray(val)) {
+      val = [val];
+    }
+    if (val.length > 0 && this.rows) {
+      this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+    } else {
+      this._selectedValues = val;
+    }
   }
 
   /**
@@ -145,15 +144,15 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-    startsWithArr  = filteredArr.filter(function(item){
+    startsWithArr = filteredArr.filter(function (item) {
       if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
         return item;
-      }else {
+      } else {
         includesArr.push(item);
       }
     });
-    startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length );
-    includesArr = includesArr.sort((a, b) => a.label.length - b.label.length );
+    startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length);
+    includesArr = includesArr.sort((a, b) => a.label.length - b.label.length);
 
     return concat(startsWithArr, includesArr);
   }
@@ -164,7 +163,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
         return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
       });
-    }else {
+    } else {
       return array.filter((item: IOption) => {
         return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
       });
@@ -175,9 +174,9 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     const lowercaseFilter = filterProp.toLocaleLowerCase();
     if (this.useInBuiltFilterForFlattenAc && this._options) {
       this.filteredData = this.filterByIOption(this._options, lowercaseFilter, FLATTEN_SEARCH_TERM);
-    }else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
+    } else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
       this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
-    }else {
+    } else {
       let filteredData = this._options ? this._options.filter(item => {
         if (this.customFilter) {
           return this.customFilter(lowercaseFilter, item);
@@ -188,7 +187,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
       if (this.customSorting) {
         this.filteredData = filteredData.sort(this.customSorting);
       } else {
-        this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length );
+        this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length);
       }
     }
     if (this.filteredData.length === 0) {

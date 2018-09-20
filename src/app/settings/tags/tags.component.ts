@@ -1,15 +1,13 @@
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import * as moment from 'moment/moment';
 import { ToasterService } from '../../services/toaster.service';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { createSelector } from 'reselect';
-import { Observable } from 'rxjs/Observable';
 import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -29,6 +27,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
   public confirmationMessage: string = '';
   public searchText: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -50,7 +49,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.tagsBackup = null;
         return null;
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
   }
 
   public getTags() {
@@ -74,11 +73,11 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
   }
 
   public setUpdateIndex(indx: number) {
-    this.updateIndex  = indx;
+    this.updateIndex = indx;
   }
 
   public resetUpdateIndex() {
-    this.tags$ = Observable.of(_.cloneDeep(this.tagsBackup));
+    this.tags$ = observableOf(_.cloneDeep(this.tagsBackup));
     this.updateIndex = null;
   }
 
@@ -94,7 +93,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
   public filterData(searchTxt: string) {
     let tags = _.filter(this.tagsBackup, (tag) => tag.name.includes(searchTxt.toLowerCase()));
-    this.tags$ = Observable.of(tags);
+    this.tags$ = observableOf(tags);
   }
 
   public ngOnDestroy() {

@@ -1,4 +1,3 @@
-
 export const LOGIN_API = {
   // SignupWithPassword: 'signup',
   SignupWithPassword: 'v2/signup',

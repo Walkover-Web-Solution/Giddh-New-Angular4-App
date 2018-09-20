@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { Observable } from 'rxjs';

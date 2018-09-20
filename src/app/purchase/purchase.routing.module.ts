@@ -17,15 +17,14 @@ const INVOICE_ROUTES: Routes = [
     canActivate: [NeedsAuthentication],
     component: PurchaseComponent,
     children: [
-      { path: '', redirectTo: 'invoice', pathMatch: 'full' },
-      { path: 'invoice', component: PurchaseInvoiceComponent },
+      {path: '', redirectTo: 'invoice', pathMatch: 'full'},
+      {path: 'invoice', component: PurchaseInvoiceComponent},
     ]
   }
 ];
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     // Daterangepicker,
     FormsModule,
@@ -43,4 +42,5 @@ const INVOICE_ROUTES: Routes = [
   ],
   providers: [Location]
 })
-export class PurchaseRoutingModule { }
+export class PurchaseRoutingModule {
+}

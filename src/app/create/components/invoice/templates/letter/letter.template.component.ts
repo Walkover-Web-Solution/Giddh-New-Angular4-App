@@ -1,23 +1,22 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { VoucherClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, GenericRequestForGenerateSCD, SalesEntryClass } from '../../../../../models/api-models/Sales';
-import { FormControl, Form, NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { SalesEntryClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../../../../models/api-models/Sales';
+import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CreateHttpService } from '../../../../create-http-service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ToasterService } from '../../../../../services/toaster.service';
-import { EMAIL_REGEX_PATTERN } from '../../../../../shared/helpers/universalValidations';
 import * as moment from 'moment';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../../../shared/helpers/defaultDateFormat';
-import { BaseResponse } from '../../../../../models/api-models/BaseResponse';
 import { contriesWithCodes } from '../../../../../shared/helpers/countryWithCodes';
-import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { SelectComponent } from '../../../../../theme/ng-select/select.component';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
-import { IInvoiceTax, ICommonItemOfTransaction } from '../../../../../models/api-models/Invoice';
+import { ICommonItemOfTransaction, IInvoiceTax } from '../../../../../models/api-models/Invoice';
 
 @Component({
   selector: 'letter-template',
@@ -75,7 +74,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   // reactive form
   public CreateInvoiceForm: FormGroup;
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
   public isFormSubmitted: boolean = false;
   public isIndia: boolean = false;
 
@@ -100,6 +99,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(event.target.files[0]);
     }
   }
+
   public clearUploadedImg() {
     this.logoPath = null;
   }
@@ -109,18 +109,18 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     this.data = new VoucherClass();
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
     });
 
     // bind state sources
-    this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
+    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          arr.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
-      this.statesSource$ = Observable.of(arr);
+      this.statesSource$ = observableOf(arr);
     });
 
     this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.subscribe((val) => {
@@ -357,7 +357,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     }
     // let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
     if (gstVal.length >= 2) {
-      this.statesSource$.take(1).subscribe(st => {
+      this.statesSource$.pipe(take(1)).subscribe(st => {
         let s = st.find(item => item.value === gstVal.substr(0, 2));
         if (s) {
           if (type === 'senderInfo') {

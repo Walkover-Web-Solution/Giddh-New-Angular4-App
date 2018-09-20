@@ -1,13 +1,9 @@
+import { distinctUntilChanged } from 'rxjs/operators';
 import { ToasterService } from './../services/toaster.service';
-import { BlankLedgerVM, TransactionVM } from './../ledger/ledger.vm';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BlankLedgerVM } from './../ledger/ledger.vm';
+import { BehaviorSubject } from 'rxjs';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { Subject } from 'rxjs/Subject';
-import { Store } from '@ngrx/store';
-import { AppState } from './../store/roots';
-import { SessionState } from './../store/authentication/authentication.reducer';
-import { Injectable, HostListener, transition } from '@angular/core';
-import { createSelector } from 'reselect';
+import { Injectable } from '@angular/core';
 
 export interface IPageInfo {
   page: string;
@@ -49,7 +45,7 @@ export class TallyModuleService {
   public transactionObj: object = {};
 
   constructor(private _toaster: ToasterService) {
-    this.selectedFieldType.distinctUntilChanged((p, q) => p === q).subscribe((type: string) => {
+    this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
       if (type && this.selectedPageInfo.value) {
         let filteredAccounts;
         if (this.selectedPageInfo.value.page === 'Journal') {
@@ -209,7 +205,7 @@ export class TallyModuleService {
           accounts = this.flattenAccounts.value;
         case 'Contra':
           accounts = this.cashAccounts.value.concat(this.bankAccounts.value);
-        break;
+          break;
         default:
           accounts = this.flattenAccounts.value;
       }
@@ -219,34 +215,34 @@ export class TallyModuleService {
     }
   }
 
-    public prepareRequestForAPI(data: any): BlankLedgerVM {
-      let requestObj = _.cloneDeep(data);
-      let transactions = [];
-      // filter transactions which have selected account
-      _.each(requestObj.transactions, (txn: any) => {
-        if (txn.inventory && txn.inventory.length) {
-          _.each(txn.inventory, (inv, i) => {
-            let obj = null;
-            obj = _.cloneDeep(txn);
-            if (inv.stock.name && inv.amount) {
-              obj.inventory = inv;
-            } else {
-              delete obj.inventory;
-            }
-            // This line is added after all stocks changes
-            obj.amount = obj.inventory ? obj.inventory.amount : obj.amount;
-            transactions.push(obj);
-          });
-        } else {
-          delete txn.inventory;
-          transactions.push(txn);
-        }
-      });
-      if (transactions.length) {
-        requestObj.transactions = transactions;
+  public prepareRequestForAPI(data: any): BlankLedgerVM {
+    let requestObj = _.cloneDeep(data);
+    let transactions = [];
+    // filter transactions which have selected account
+    _.each(requestObj.transactions, (txn: any) => {
+      if (txn.inventory && txn.inventory.length) {
+        _.each(txn.inventory, (inv, i) => {
+          let obj = null;
+          obj = _.cloneDeep(txn);
+          if (inv.stock.name && inv.amount) {
+            obj.inventory = inv;
+          } else {
+            delete obj.inventory;
+          }
+          // This line is added after all stocks changes
+          obj.amount = obj.inventory ? obj.inventory.amount : obj.amount;
+          transactions.push(obj);
+        });
+      } else {
+        delete txn.inventory;
+        transactions.push(txn);
       }
-      return requestObj;
+    });
+    if (transactions.length) {
+      requestObj.transactions = transactions;
     }
+    return requestObj;
+  }
 
   private validateForData(data) {
     // console.log('the data in validation fn is :', data);

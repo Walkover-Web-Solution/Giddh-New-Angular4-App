@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
@@ -10,7 +11,7 @@ export class NeedsAuthentication implements CanActivate {
   }
 
   public canActivate() {
-    return this.store.select(p => p.session.userLoginState).map(p => {
+    return this.store.select(p => p.session.userLoginState).pipe(map(p => {
       if (p === userLoginStateEnum.newUserLoggedIn) {
         this._router.navigate(['/new-user']);
       }
@@ -21,6 +22,6 @@ export class NeedsAuthentication implements CanActivate {
       // console.log(userLoginStateEnum.userLoggedIn);
       // console.log('from nedd authentication' + (p === userLoginStateEnum.userLoggedIn));
       return p === userLoginStateEnum.userLoggedIn;
-    });
+    }));
   }
 }
