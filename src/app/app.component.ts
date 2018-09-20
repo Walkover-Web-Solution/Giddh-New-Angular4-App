@@ -20,7 +20,9 @@ import { pick } from './lodash-optimized';
     './app.component.css'
   ],
   template: `
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <router-outlet></router-outlet>
   `
 })
@@ -51,9 +53,11 @@ export class AppComponent implements AfterViewInit {
       window.scrollTo(0, 0);
     });
 
-    let tUrl = location.href.split('=');
-    if (tUrl[1]) {
-      this.router.navigate([tUrl[1]]);
+    if (location.href.includes('returnUrl')) {
+      let tUrl = location.href.split('=');
+      if (tUrl[1]) {
+        this.router.navigate([tUrl[1]]);
+      }
     }
   }
 
