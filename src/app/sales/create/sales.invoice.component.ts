@@ -1035,6 +1035,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public addBlankRow(txn: SalesTransactionItemClass, pushedBy?: string) {
     if (pushedBy) {
       let entry: SalesEntryClass = new SalesEntryClass();
+      entry.entryDate = this.universalDate || new Date();
       this.invFormData.entries.push(entry);
       // set default date
       forEach(this.invFormData.entries, (e) => {
