@@ -1,4 +1,5 @@
-import { app, Menu, MenuItemConstructorOptions } from 'electron';
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
+import WindowManager from './WindowManager';
 import { checkForUpdates } from './AppUpdater';
 
 export default function setMenu() {
@@ -6,6 +7,14 @@ export default function setMenu() {
     label: 'Window',
     role: 'window',
     submenu: [
+      {
+        label: 'New Window',
+        accelerator: 'CmdOrCtrl+N',
+        click: (menuItem, browserWindow: BrowserWindow, event) => {
+          let windowManager = new WindowManager();
+          windowManager.openWindows();
+        }
+      },
       {
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',

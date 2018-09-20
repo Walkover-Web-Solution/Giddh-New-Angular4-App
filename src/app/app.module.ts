@@ -75,7 +75,8 @@ interface StoreType {
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['session', 'permission'], rehydrate: true})(reducer);
+  return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: IS_ELECTRON_WA ? sessionStorage : localStorage })(reducer);
+  // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: sessionStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
@@ -138,8 +139,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ActionModule.forRoot(),
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
-    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
-    StoreModule.forRoot(reducers, {metaReducers}),
+    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+    StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: NoPreloading , onSameUrlNavigation: 'reload'}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
@@ -169,7 +170,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
     {
       provide: ServiceConfig,
-      useValue: {apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _}
+      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
     },
     {
       provide: HTTP_INTERCEPTORS,
