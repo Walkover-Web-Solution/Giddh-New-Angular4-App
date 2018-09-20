@@ -12,18 +12,19 @@ import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { take } from 'rxjs/operators';
+import {
+  CAPS_LOCK, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW,
+  ENTER, MAC_ENTER, BACKSPACE, TAB, SHIFT, CONTROL, ALT,
+  MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META, ESCAPE
+} from '@angular/cdk/keycodes';
 
-const KEYS: any = {
-  BACKSPACE: 8,
-  TAB: 9,
-  ENTER: 13,
-  ESC: 27,
-  SPACE: 32,
-  UP: 38,
-  LEFT: 37,
-  RIGHT: 39,
-  DOWN: 40
-};
+const DIRECTIONAL_KEYS = [
+  LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
+];
+
+const SPECIAL_KEYS = [ ...DIRECTIONAL_KEYS,
+  CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META
+];
 
 @Component({
   selector: 'universal-data-list',
@@ -84,8 +85,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   public rowsClone: any[] = [];
   public viewPortItems: any[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private keys: any = KEYS;
   private rawSmartComboList: IUlist[] = [];
+  private smartList: IUlist[];
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
@@ -111,6 +112,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     // listen to smart list
     this._store.select(p => p.general.smartList).pipe(take(1))
     .subscribe((data: IUlist[]) => {
+      this.smartList = data;
       // init rows
       this.setValueInRow(data);
     });
@@ -123,7 +125,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     // due to view init issue using timeout
     setTimeout(() => {
       this.searchEle.nativeElement.focus();
-    }, 10);
+    }, 0);
 
   }
 
@@ -167,7 +169,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   // a toll to add condition before calling final func
   public refreshToll(item: any, key?: number) {
-    if ( key === this.keys.UP) {
+    if ( key === UP_ARROW) {
       this.refreshScrollView(item, 'UP');
     } else {
       this.refreshScrollView(item);
@@ -185,25 +187,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // getting data from vscroll and assigning data to local var.
   public checkItems(event: {items: any[]; idx: number; }) {
     this.viewPortItems = event.items;
-  }
-
-  /**
-   * main func works after list get focused
-   * @param e: KeyBoardEvent
-   */
-  public onKeydownHandlerOfListEle(e) {
-    let key = (e.which) ? e.which : e.keyCode;
-    if (this.isOpen && ( key === this.keys.UP || key === this.keys.DOWN || key === this.keys.LEFT || key === this.keys.RIGHT)) {
-      e.preventDefault();
-      this.refreshToll(this.virtualScrollElem.directionToll(key), key);
-    }
-    if (this.isOpen && ( key === this.keys.ENTER)) {
-      e.preventDefault();
-      let item = this.virtualScrollElem.activeItem();
-      if (item) {
-        this.itemSelected(item);
-      }
-    }
   }
 
   /**
@@ -239,7 +222,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.searchEle.nativeElement.focus();
       }
       this.doingUIErrands();
-    }, 1000);
+    }, 0);
   }
 
   public doingUIErrands() {
@@ -257,15 +240,39 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   /**
+   * main func works after list get focused
+   * @param e: KeyBoardEvent
+   */
+  public onKeydownHandlerOfListEle(e) {
+    let key = e.which || e.keyCode;
+    if (this.isOpen && DIRECTIONAL_KEYS.indexOf(key) !== -1) {
+      e.preventDefault();
+      this.refreshToll(this.virtualScrollElem.directionToll(key), key);
+    }
+    if (this.isOpen && ( key === ENTER)) {
+      e.preventDefault();
+      let item = this.virtualScrollElem.activeItem();
+      if (item) {
+        this.itemSelected(item);
+      }
+    }
+  }
+
+  /**
    * will be called from search input keydown
    * @param e an event from search input.
    * checking for keys for animation scrolling purpose.
    * checking for enter for capture value.
    */
   public handleKeydown(e: any) {
-    let key = (e.which) ? e.which : e.keyCode;
+    let key = e.which || e.keyCode;
+
+    if (key === TAB) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
     // prevent caret movement
-    if (this.isOpen && ( key === this.keys.UP || key === this.keys.DOWN || key === this.keys.RIGHT || key === this.keys.LEFT)) {
+    if (this.isOpen && DIRECTIONAL_KEYS.indexOf(key) !== -1) {
       e.preventDefault();
       let item = this.virtualScrollElem.directionToll(key);
       if (item) {
@@ -273,16 +280,18 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       }
     }
 
-    if (this.isOpen && ( key === this.keys.ENTER)) {
+    if (this.isOpen && ( key === ENTER)) {
       e.preventDefault();
       e.stopPropagation();
       this.captureValueFromList();
     }
 
     // closing list on esc press
-    if (key === this.keys.ESC && this.isOpen) {
-      e.preventDefault();
-      e.stopPropagation();
+    if (key === ESCAPE) {
+      if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       // this.isOpen = false;
       // this.searchEle.nativeElement.value = null;
     }
@@ -293,31 +302,27 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
    * @param e an event from search input.
    * filtering data conditionally according to search term.
    */
-  public search(e: any) {
+  public search(e: KeyboardEvent, term: string) {
     let key = e.which || e.keyCode;
     // preventing search operation on arrows key
-    if (this.isOpen && ( key === this.keys.UP || key === this.keys.DOWN || key === this.keys.RIGHT || key === this.keys.LEFT)) {
+    if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
       return;
     }
-    if (e && e.target.value && e.target.value.length > 0) {
-      let term = e.target.value.toLowerCase();
-      let filteredData: any[] = [];
-
-      // open popover again
-      if (term && term.length > 0 && !this.isOpen ) {
+    term = term.trim();
+    if (term && term.length > 0) {
+      // open popover again if in case it's not opened
+      if (!this.isOpen ) {
         this.isOpen = true;
       }
-
+      term = term.toLowerCase();
+      let filteredData: any[] = [];
       let d = cloneDeep(this.rawSmartComboList);
-
       // search data conditional
       filteredData = this.universalSearchService.filterBy(term, d);
-      // console.log ('final', filteredData);
-
       this.updateRowsViaSearch(filteredData);
     } else {
       // backspace
-      if (this.isOpen && ( key === this.keys.BACKSPACE)) {
+      if (this.isOpen && ( key === BACKSPACE)) {
         e.preventDefault();
         e.stopPropagation();
         // remove item one by one on pressing backspace like gmail
@@ -325,9 +330,9 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
           this.listOfSelectedGroups.pop();
           // logic search
           this.updateRowsViaSearch(cloneDeep(this.rowsClone));
+        } else {
+          this.updateRowsViaSearch(cloneDeep(this.smartList));
         }
-      } else {
-        this.updateRowsViaSearch(cloneDeep(this.rowsClone));
       }
     }
     // setting width again due to if no data found.
@@ -409,6 +414,16 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
+  private doConditionalSearch() {
+    this.searchEle.nativeElement.value = null;
+    let filteredData: any[] = [];
+    let d = cloneDeep(this.rawSmartComboList);
+    let priorTerm = cloneDeep(this.listOfSelectedGroups).map(item => item.uniqueName);
+    console.log (priorTerm);
+    filteredData = this.universalSearchService.filterBy(null, d, priorTerm);
+    this.updateRowsViaSearch(filteredData);
+  }
+
   private emitData(item: IUlist) {
     // emit data in case of direct A/c or Menus
     if (!item.type || (item.type && item.type === 'MENU')) {
@@ -421,6 +436,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.listOfSelectedGroups = [];
         this.listOfSelectedGroups.push(item);
       }
+      // go for search
+      this.doConditionalSearch();
     }
 
     /**

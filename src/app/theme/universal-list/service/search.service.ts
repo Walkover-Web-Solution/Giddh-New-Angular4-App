@@ -24,20 +24,33 @@ export class UniversalSearchService {
    * @param arr chunk of data
    * return the filtered data of starts with array and includes array.
    */
-  public filterBy(term: string, arr: any[], conditions?: any): any[] {
+  public filterBy(term: string, arr: any[], conditions?: string[]): any[] {
+    let start = new Date().getTime();
+    console.log ('start', start);
     let array = cloneDeep(arr);
 
-    if (conditions) {
+    if (conditions && conditions.length > 0) {
+      let priorTerm = conditions.join();
+      console.log ('prio', priorTerm);
+      let res = arr.filter((item: any) => {
+        if (!item.type || item.type === 'GROUP') {
+          if (includes(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
+            return item;
+          }
+        }
+      });
+      console.log (res.length);
+      return res;
       //
     } else {
       let filtered: any[] = [];
-      let sorted: any[] = [];
       // get filtered result
       filtered = this.performIncludesFilter(array, term);
-      // sort data now
-      sorted = this.performStartsWithFilter(filtered, term);
-      // return this.sortFinalResultByType(concat(u, n));
-      return sorted;
+      // sort data and return
+      let final = this.performStartsWithFilter(filtered, term);
+      let end = new Date().getTime();
+      console.log ('diff', end - start);
+      return final;
     }
   }
 
@@ -61,9 +74,25 @@ export class UniversalSearchService {
     return concat([], acArr);
   }
 
+  private checkForAdditionalFilters(item, term) {
+    let result = false;
+    if (!item.type || item.type && item.type === 'GROUP') {
+      return includes(item['nameStr'].toLocaleLowerCase(), term) ||
+      includes(item['uNameStr'].toLocaleLowerCase(), term);
+    }
+    return result;
+  }
+
   // filtering data for own usage
   private performIncludesFilter(arr: any, term: string) {
-    return arr.filter((item: any) => includes(item['uniqueName'].toLocaleLowerCase(), term) || includes(item['name'].toLocaleLowerCase(), term));
+    return arr.filter((item: any) => {
+      if (
+        includes(item['uniqueName'].toLocaleLowerCase(), term) ||
+        includes(item['name'].toLocaleLowerCase(), term) || this.checkForAdditionalFilters(item, term)
+      ) {
+        return item;
+      }
+    });
   }
 
   //

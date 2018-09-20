@@ -107,6 +107,6 @@
         </div>
       </div>
     </span>
-    <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" (keydown)="handleKeydown($event)" (keyup)="search($event)"/>
+    <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()" (keydown)="handleKeydown($event)" (keyup)="search($event, $event.target.value)"/>
   </div>
 </ng-template>

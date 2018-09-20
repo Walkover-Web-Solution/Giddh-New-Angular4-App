@@ -33,7 +33,7 @@ module.exports = function (options) {
     metadata: METADATA
   }), {
     mode: 'development',
-    devtool: 'eval',
+    devtool: false,
     /**
      * Options affecting the output of the compilation.
      *

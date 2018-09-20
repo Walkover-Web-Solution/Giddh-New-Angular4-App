@@ -15,6 +15,7 @@ import { COMMON_ACTIONS } from '../../actions/common.const';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
@@ -57,9 +58,16 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
     case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
       let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
       if (result.status === 'success') {
+        let arr = result.body.results;
+        arr.map((item: any) => {
+          let o: any = provideStrings(item.parentGroups);
+          item.nameStr = o.name;
+          item.uNameStr = o.uName;
+          return item;
+        });
         return {
           ...state,
-          flattenAccounts: result.body.results
+          flattenAccounts: arr
         };
       }
       return state;
@@ -100,7 +108,14 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
     case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
       let result: BaseResponse<IPaginatedResponse, string> = action.payload;
       if (result.status === 'success') {
-        return { ...state, flattenGroups: result.body.results };
+        let arr = result.body.results;
+        arr.map((item: any) => {
+          let o: any = provideStrings(item.parentGroups);
+          item.nameStr = o.name;
+          item.uNameStr = o.uName;
+          return item;
+        });
+        return { ...state, flattenGroups: arr };
       }
       return state;
     }
@@ -462,4 +477,21 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
       }
     }
   }
+};
+
+// consume array and return array on string
+const provideStrings = (arr: any[]) => {
+  let o = { name: [], uName: [] };
+  let b = { name: '', uName: ''};
+  try {
+    arr.forEach((item: INameUniqueName) => {
+      o.name.push(item.name);
+      o.uName.push(item.uniqueName);
+    });
+    b.name = o.name.join(', ');
+    b.uName = o.uName.join(', ');
+  } catch (error) {
+    //
+  }
+  return b;
 };

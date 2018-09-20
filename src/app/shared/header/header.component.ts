@@ -28,6 +28,7 @@ import { IUlist } from '../../models/interfaces/ulist.interface';
 import { sortBy, concat, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { DbActions } from '../../actions/db.actions';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -356,12 +357,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           /**
           grpList.forEach((item, index) => {
             if (index < 11) {
+              item.time = + new Date();
               this._dbService.addItem('groups', item);
             }
           });
 
           acList.forEach((item, index) => {
             if (index < 11) {
+              item.time = + new Date();
               this._dbService.addItem('accounts', item);
             }
           });
@@ -436,30 +439,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     e.stopPropagation();
     // entry in db with confimation
     this.navigationOptionList$.pipe(take(1))
-    .subscribe((items: IUlist[]) => {
-      let menu: any = {};
-      let o: IUlist = find(items, ['uniqueName', pageName]);
-      if (o) {
-        menu = o;
+      .subscribe((items: IUlist[]) => {
+        let menu: any = {};
         menu.time = + new Date();
-      } else {
-        try {
-          menu.name = pageName.split('/pages/')[1].toUpperCase();
-        } catch (error) {
-          menu.name = pageName.toUpperCase();
+        let o: IUlist = find(items, ['uniqueName', pageName]);
+        if (o) {
+          menu = o;
+        } else {
+          try {
+            menu.name = pageName.split('/pages/')[1].toUpperCase();
+          } catch (error) {
+            menu.name = pageName.toUpperCase();
+          }
+          menu.uniqueName = pageName;
+          menu.type = 'MENU';
         }
-        menu.uniqueName = pageName;
-        menu.type = 'MENU';
-        menu.time = + new Date();
-      }
-      this._dbService.addItem('menus', menu).subscribe(d => {
-        this.findListFromDb();
-      }, (err: any) => {
-        // console.log('header.component.ts > addItem > err', err);
-        // already having entry will write the logic for shuffle
-        // console.log('err', err);
+        this._dbService.addItem('menus', menu).subscribe(d => {
+          this.findListFromDb();
+        }, (err: any) => {
+          // console.log('header.component.ts > addItem > err', err);
+          // already having entry will write the logic for shuffle
+          // console.log('err', err);
+        });
       });
-    });
     this.router.navigate([pageName]);
   }
 
@@ -469,15 +471,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this._dbService.getAllItems('groups').pipe(take(1)),
       this._dbService.getAllItems('accounts').pipe(take(1))
     )
-    .subscribe((resp: any[]) => {
-      let menuList: IUlist[] = resp[0];
-      let groupList: IUlist[] = resp[1];
-      let acList: IUlist[] = resp[2];
-      console.log('list: ', menuList);
-      // slicing due to we only need to show 10 result at first sight
-      let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 4));
-      this.store.dispatch(this._generalActions.setSmartList(combined));
-    });
+      .subscribe((resp: any[]) => {
+        let menuList: IUlist[] = resp[0];
+        let groupList: IUlist[] = resp[1];
+        let acList: IUlist[] = resp[2];
+        console.log('list: ', resp);
+        // slicing due to we only need to show 10 result at first sight
+        let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 4));
+        this.store.dispatch(this._generalActions.setSmartList(combined));
+      });
   }
 
   public showManageGroupsModal() {
