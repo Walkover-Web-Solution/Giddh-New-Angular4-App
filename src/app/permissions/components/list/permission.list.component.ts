@@ -1,3 +1,4 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -8,10 +9,9 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { CompanyActions } from '../../../actions/company.actions';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { NewRoleClass } from '../../permission.utility';
 import { CapitalizePipe } from './capitalize.pipe';
-import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -29,6 +29,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   public selectedRoleForDelete: IRoleCommonResponseAndRequest;
   public session$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private store: Store<AppState>,
     public route: ActivatedRoute,
@@ -37,17 +38,18 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     private router: Router,
     private permissionActions: PermissionActions,
     private _toasty: ToasterService
-  ) { }
+  ) {
+  }
 
   public ngOnInit() {
 
     // This module should be accessible to superuser only
     this.session$ = this.store.select(s => {
       return s.session;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
 
     this.session$.subscribe((session) => {
-      this.store.select(state => state.company).takeUntil(this.destroyed$).subscribe((company) => {
+      this.store.select(state => state.company).pipe(takeUntil(this.destroyed$)).subscribe((company) => {
         if (company && session.companies.length) {
           let selectedCompany = session.companies.find(cmp => {
             return cmp.uniqueName === session.companyUniqueName;
@@ -71,7 +73,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     // Getting roles every time user refresh page
     this.store.dispatch(this.permissionActions.GetRoles());
     this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
-    this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
+    this.store.select(p => p.permission.roles).pipe(takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
   }
 
   public ngOnDestroy() {
@@ -102,6 +104,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     this.selectedRoleForDelete = role;
     this.permissionConfirmationModel.show();
   }
+
   public deleteConfirmedRole() {
     this.permissionConfirmationModel.hide();
     this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete.uniqueName));

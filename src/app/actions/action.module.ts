@@ -42,9 +42,10 @@ import { InventoryUsersActions } from './inventory/inventory.users.actions';
 import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
 import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
-import { CarriedOverSalesActions } from './carried-over-sales.actions';
+import { NewVsOldInvoicesActions } from './new-vs-old-invoices.actions';
 import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
+import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
 
 /**
@@ -92,8 +93,10 @@ import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
       SettingsTriggersActions,
       ImportExcelActions,
       SettingsDiscountActions,
-      CarriedOverSalesActions,
+      NewVsOldInvoicesActions,
       AgingReportActions,
+      CompanyImportExportActions,
+      InvoiceReceiptActions,
       CompanyImportExportActions,
       GstReconcileActions
     ])

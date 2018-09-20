@@ -1,4 +1,4 @@
-<span (blur)="hideDiscountMenu()" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()" >
+<span (blur)="hideDiscountMenu()" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">
   <label>Discount</label>
   <a (click)="discountMenu = !discountMenu" id="discount">
       <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
@@ -11,7 +11,7 @@
               *ngFor="let discount of discountAccountsDetails;">
                 <td class="pdL w100">{{ discount.name }}</td>
                 <td class="pdR pdT w50">
-                    <input type="text"  decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
+                    <input type="text" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
                            (change)="change()" [(ngModel)]="discount.amount"/>
                 </td>
             </tr>

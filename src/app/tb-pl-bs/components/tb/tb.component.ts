@@ -1,15 +1,15 @@
+import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, Input, OnDestroy, OnInit, ViewChild, AfterViewChecked, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { TbGridComponent } from './tb-grid/tb-grid.component';
 import { createSelector } from 'reselect';
-import { ChildGroup, Account } from '../../../models/api-models/Search';
+import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -32,20 +32,20 @@ import { ToasterService } from '../../../services/toaster.service';
     ></tb-pl-bs-filter>
     <div *ngIf="(showLoader | async)">
       <!-- loader -->
-      <div class="loader" >
+      <div class="loader">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
-       <h1>loading trial balance</h1>
+        <h1>loading trial balance</h1>
       </div>
     </div>
     <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
-      [search]="search"
-        [expandAll]="expandAll"
-        [data$]="data$  | async"
+               [search]="search"
+               [expandAll]="expandAll"
+               [data$]="data$  | async"
       ></tb-grid>
     </div>
   `
@@ -57,6 +57,15 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public expandAll: boolean;
   public search: string;
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
+  @Input() public isV2: boolean = false;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions, private _toaster: ToasterService) {
+    this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).pipe(takeUntil(this.destroyed$));
+  }
+
+  private _selectedCompany: CompanyResponse;
+
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
   }
@@ -75,15 +84,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     }
   }
 
-  @Input() public isV2: boolean = false;
-
-  private _selectedCompany: CompanyResponse;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions, private _toaster: ToasterService) {
-    this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).takeUntil(this.destroyed$);
-  }
-
   public ngOnInit() {
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
       let d = _.cloneDeep(p) as AccountDetails;
@@ -95,13 +95,19 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
           }, 100);
         }
         this.InitData(d.groupDetails);
-        d.groupDetails.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        d.groupDetails.forEach(g => {
+          g.isVisible = true;
+          g.isCreated = true;
+        });
       }
       return d;
-    })).takeUntil(this.destroyed$);
-    this.data$.subscribe(p => { this.cd.markForCheck(); });
+    })).pipe(takeUntil(this.destroyed$));
+    this.data$.subscribe(p => {
+      this.cd.markForCheck();
+    });
     // console.log('hello Tb Component');
   }
+
   public InitData(d: ChildGroup[]) {
     _.each(d, (grp: ChildGroup) => {
       grp.isVisible = false;
@@ -117,9 +123,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       }
     });
   }
+
   public ngAfterViewInit() {
     this.cd.detectChanges();
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
     //   this.cd.detectChanges();
@@ -132,6 +140,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       }
     }
   }
+
   public filterData(request: TrialBalanceRequest) {
     if (this.isV2) {
       this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
@@ -144,15 +153,19 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public exportCsv($event) {
     //
   }
+
   public exportPdf($event) {
     //
   }
+
   public exportXLS($event) {
     //
   }
+
   public expandAllEvent(event: boolean) {
     this.cd.checkNoChanges();
     this.expandAll = !this.expandAll;
@@ -161,6 +174,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       this.cd.detectChanges();
     }, 1);
   }
+
   public searchChanged(event: string) {
     // this.cd.checkNoChanges();
     this.search = event;

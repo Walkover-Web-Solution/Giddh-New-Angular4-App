@@ -1,11 +1,10 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store } from '@ngrx/store';
 import * as _ from '../../../lodash-optimized';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as moment from 'moment/moment';
+import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 
 @Component({
@@ -20,11 +19,12 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
   public logs$: Observable<ILogsItem[]>;
   public loadMoreInProcess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   /**
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private _auditLogsActions: AuditLogsActions) {
-    this.loadMoreInProcess$ = this.store.select(p => p.auditlog.LoadMoreInProcess).takeUntil(this.destroyed$);
+    this.loadMoreInProcess$ = this.store.select(p => p.auditlog.LoadMoreInProcess).pipe(takeUntil(this.destroyed$));
     this.logs$ = this.store.select(p => p.auditlog.logs);
     this.size$ = this.store.select(p => p.auditlog.size);
     this.totalElements$ = this.store.select(p => p.auditlog.totalElements);
@@ -43,7 +43,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
   }
 
   public loadMoreLogs() {
-    this.store.select(p => p.auditlog).take(1).subscribe((r) => {
+    this.store.select(p => p.auditlog).pipe(take(1)).subscribe((r) => {
       let request = _.cloneDeep(r.CurrectLogsRequest);
       let page = r.CurrectPage + 1;
       this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));

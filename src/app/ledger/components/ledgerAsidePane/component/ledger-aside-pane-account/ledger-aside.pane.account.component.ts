@@ -1,7 +1,7 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../../theme/ng-select/option.interface';
 import { AppState } from '../../../../../store';
 import { GroupService } from '../../../../../services/group.service';
@@ -15,7 +15,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 @Component({
   selector: 'ledger-aside-pane-account',
   styles: [`
-    :host{
+    :host {
       position: fixed;
       left: auto;
       top: 0;
@@ -24,10 +24,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       width: 580px;
       z-index: 1045;
     }
-    #close{
+
+    #close {
       display: none;
     }
-    :host.in  #close{
+
+    :host.in #close {
       display: block;
       position: fixed;
       left: -41px;
@@ -36,25 +38,31 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       border: 0;
       border-radius: 0;
     }
-    :host .container-fluid{
+
+    :host .container-fluid {
       padding-left: 0;
       padding-right: 0;
     }
+
     :host .aside-pane {
       width: 580px;
     }
-    .aside-pane{
+
+    .aside-pane {
       width: 100%;
     }
-    .flexy-child{
+
+    .flexy-child {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    .flexy-child-1{
+
+    .flexy-child-1 {
       flex-grow: 1;
     }
+
     .vmiddle {
       position: absolute;
       top: 50%;
@@ -97,11 +105,11 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     private accountsAction: AccountsAction,
     private _groupService: GroupService
   ) {
-    this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
+    this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     // account-add component's property
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

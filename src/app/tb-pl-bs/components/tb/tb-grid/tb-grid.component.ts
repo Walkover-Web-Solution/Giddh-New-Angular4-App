@@ -1,9 +1,7 @@
-import { ViewChild, OnChanges, AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, NgZone, ViewChildren, QueryList, ContentChildren, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
-import { Observable } from 'rxjs/Observable';
-import { ChildGroup, Account } from '../../../../models/api-models/Search';
+import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
-import { TlPlGridRowComponent } from '../../tb-pl-bs-grid-row.component';
 
 @Component({
   selector: 'tb-grid',
@@ -19,6 +17,21 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public showLoader: boolean;
   @Input() public data$: AccountDetails;
   @Input() public expandAll: boolean;
+  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    _.each(data, (grp: ChildGroup) => {
+      if (grp.isIncludedInSearch) {
+        grp.isCreated = true;
+        grp.isVisible = isVisible;
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
+    });
+  }
 
   constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
@@ -27,6 +40,7 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   public ngOnInit() {
     //
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
       //
@@ -54,31 +68,20 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
+
   public ngAfterViewInit() {
     //
   }
+
   public markForCheck() {
     this.cd.markForCheck();
   }
+
   public detectChanges() {
     this.cd.detectChanges();
   }
+
   public trackByFn(index, item: ChildGroup) {
     return item;
-  }
-  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    _.each(data, (grp: ChildGroup) => {
-      if (grp.isIncludedInSearch) {
-        grp.isCreated = true;
-        grp.isVisible = isVisible;
-        _.each(grp.accounts, (acc: Account) => {
-          if (acc.isIncludedInSearch) {
-            acc.isCreated = true;
-            acc.isVisible = isVisible;
-          }
-        });
-        this.toggleVisibility(grp.childGroups, isVisible);
-      }
-    });
   }
 }

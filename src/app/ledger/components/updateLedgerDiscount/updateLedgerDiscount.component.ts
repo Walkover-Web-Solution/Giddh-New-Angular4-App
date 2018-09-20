@@ -1,8 +1,8 @@
+import { take } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
@@ -44,7 +44,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
    */
   public prepareDiscountList() {
     let discountAccountsList: IFlattenGroupsAccountsDetail = null;
-    this.discountAccountsList$.take(1).subscribe(d => discountAccountsList = d);
+    this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
     if (!this.discountAccountsDetails.length && discountAccountsList) {
       discountAccountsList.accountDetails.map(acc => {
         let disObj: ILedgerDiscount = {
