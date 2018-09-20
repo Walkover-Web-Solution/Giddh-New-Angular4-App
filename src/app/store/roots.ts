@@ -95,6 +95,5 @@ export const reducers: ActionReducerMap<AppState> = {
   agingreport: fromAgingReport.agingReportReducer,
   companyImportExport: fromCompanyImportExport.companyImportExportReducer,
   receipt: fromReceipt.Receiptreducer,
-  companyImportExport: fromCompanyImportExport.companyImportExportReducer,
   gstReconcile: fromGstReconcile.GstReconcileReducer
 };

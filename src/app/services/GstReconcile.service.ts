@@ -1,7 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -9,6 +8,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
 import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class GstReconcileService {
@@ -27,12 +27,13 @@ export class GstReconcileService {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':userName', encodeURIComponent(userName))
     )
-      .map((res) => {
-        let data: BaseResponse<string, string> = res;
-        data.queryString = userName;
-        return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<string, string> = res;
+          data.queryString = userName;
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
   public GstReconcileVerifyOtp(model: VerifyOtpRequest): Observable<BaseResponse<string, VerifyOtpRequest>> {
@@ -42,12 +43,13 @@ export class GstReconcileService {
     return this._http.post(this.config.apiUrl + GST_RECONCILE_API.VERIFY_OTP
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
       model)
-      .map((res) => {
-        let data: BaseResponse<string, VerifyOtpRequest> = res;
-        data.request = model;
-        return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, ''));
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<string, VerifyOtpRequest> = res;
+          data.request = model;
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, '')));
   }
 
   public GstReconcileGetInvoices(period: string, action: string, page: string, count: string): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
@@ -61,11 +63,12 @@ export class GstReconcileService {
       .replace(':page', encodeURIComponent(page))
       .replace(':count', encodeURIComponent(count))
     )
-      .map((res) => {
-        let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
-        data.queryString = {period, action, page, count};
-        return data;
-      })
-      .catch((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, ''));
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          data.queryString = {period, action, page, count};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
   }
 }
