@@ -4,8 +4,9 @@
   imported</strong>
   <form class="inline mrL1">
       <input type="search" class="form-control" placeholder="filter by name" />
+      <input type="search" class="form-control" placeholder="filter by name" />
   </form> -->
-  <div class="data_overview">
+  <div class="data_overview"  [perfectScrollbar]="config">
     <!-- {{ dataModel | json}} -->
     <table class="table basic table-bordered mrT1" *ngIf="importData">
       <thead>
@@ -35,13 +36,13 @@
       </tr>
       </tbody>
     </table>
-    <div class="mrT2 text-right">
-      <div class="pos-abs action_btn">
-        <button class="btn btn-default" (click)="onBack.emit()">Back</button>
-        <button class="btn btn-success" (click)="save()">Import</button>
-      </div>
+
+  </div>
+  <div class="mrT2 text-right">
+    <div class="pos-abs action_btn">
+      <button class="btn btn-default" (click)="onBack.emit()">Back</button>
+      <button class="btn btn-success" (click)="save()">Import</button>
     </div>
   </div>
-
 </div>
 <!-- Review Field end-->
