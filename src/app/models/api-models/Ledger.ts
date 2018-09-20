@@ -73,6 +73,7 @@ export class LedgerResponse {
   public tagNames?: string[];
   public voucherGenerated?: boolean;
   public voucherName?: string;
+  public voucherGeneratedType?: string;
 }
 
 /*

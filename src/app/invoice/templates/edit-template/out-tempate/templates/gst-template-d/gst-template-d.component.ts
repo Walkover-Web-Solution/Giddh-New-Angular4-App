@@ -1,6 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
@@ -32,14 +34,14 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companyAddress: string = '';
-  public companySetting$: Observable<any> = Observable.of(null);
+  public companySetting$: Observable<any> = observableOf(null);
   public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private settingsProfileActions: SettingsProfileActions) {
+              private settingsProfileActions: SettingsProfileActions) {
     //
-    this.companySetting$ = this.store.select(s => s.settings.profile).takeUntil(this.destroyed$);
+    this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -49,9 +51,9 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
           this.columnsVisibled++;
         }
-        // if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
-        //   this.columnsVisibled++;
-        // }
+        if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
+          this.columnsVisibled++;
+        }
         if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
           this.columnsVisibled++;
         }
@@ -64,12 +66,12 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate.display) {
           this.columnsVisibled++;
         }
-        if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
-          this.columnsVisibled++;
-        }
-        if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
-          this.columnsVisibled++;
-        }
+        // if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
+        //   this.columnsVisibled++;
+        // }
+        // if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
+        //   this.columnsVisibled++;
+        // }
         if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
           this.columnsVisibled++;
         }
@@ -79,6 +81,7 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
   }
+
   public ngOnInit() {
     //
     this.companySetting$.subscribe(a => {

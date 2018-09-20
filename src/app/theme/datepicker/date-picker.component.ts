@@ -1,17 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  forwardRef,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
 
@@ -77,6 +64,12 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
   @Input() public disabled: boolean = false;
   // emitter when value is changed
   @Input() public showToDatePicker: boolean;
+  public onChangeCb: (_: any) => void = (e) => {
+    //
+  }
+  public onTouchedCb: () => void = () => {
+    //
+  }
   private date: Date = new Date();
 
   constructor(private cd: ChangeDetectorRef, private _elementRef: ElementRef) {
@@ -93,14 +86,6 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
     if (!clickedInside) {
       this.showToDatePicker = false;
     }
-  }
-
-  public onChangeCb: (_: any) => void = (e) => {
-    //
-  }
-
-  public onTouchedCb: () => void = () => {
-    //
   }
 
   public writeValue(value: any): void {

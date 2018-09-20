@@ -32,6 +32,10 @@ export class OutwardNoteComponent implements OnChanges {
   public mode: 'receiver' | 'product' = 'receiver';
   public today = new Date();
 
+  constructor(private _fb: FormBuilder) {
+    this.initializeForm(true);
+  }
+
   public get inventoryEntryDate(): FormControl {
     return this.form.get('inventoryEntryDate') as FormControl;
   }
@@ -50,10 +54,6 @@ export class OutwardNoteComponent implements OnChanges {
 
   public get description(): FormArray {
     return this.form.get('description') as FormArray;
-  }
-
-  constructor(private _fb: FormBuilder) {
-    this.initializeForm(true);
   }
 
   public initializeForm(initialRequest: boolean = false) {

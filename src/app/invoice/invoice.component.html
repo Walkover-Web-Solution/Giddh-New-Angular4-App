@@ -2,9 +2,9 @@
   <nav class="navbar">
     <div class="container-fluid pdL0">
       <div class="">
-        <invoice-page-dd></invoice-page-dd>
+        <invoice-page-dd (pageChanged)="pageChanged($event)"></invoice-page-dd>
 
-        <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="!isRecurringSelected">
+        <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="showInvoiceNav">
           <li>
             <a [routerLink]="['preview']" routerLinkActive="active">Preview</a>
           </li>

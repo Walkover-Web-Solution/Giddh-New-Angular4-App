@@ -3,36 +3,19 @@
  */
 
 const helpers = require('./helpers');
-
+const webpack = require('webpack');
 /**
  * Webpack Plugins
  *
  * problem with copy-webpack-plugin
  */
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const WebpackInlineManifestPlugin = require('webpack-inline-manifest-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const ngcWebpack = require('ngc-webpack');
-
-
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const buildUtils = require('./build-utils');
-// /**
-//  * Webpack Constants
-//  */
-// const HMR = helpers.hasProcessFlag('hot');
-// const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot');
-// const METADATA = {
-//   title: 'Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software',
-//   baseUrl: '/',
-//   isDevServer: helpers.isWebpackDevServer(),
-//   HMR: HMR,
-//   isElectron: false
-// };
 
 /**
  * Webpack configuration
@@ -41,7 +24,8 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
   const isProd = options.env === 'production';
-  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {});
+  // console.log("govinda:  is prod", isProd);
+  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, buildUtils.DEFAULT_METADATA.definePluginObject, options.metadata || {});
   const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
   const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
 
@@ -49,10 +33,12 @@ module.exports = function (options) {
     polyfills: './src/polyfills.browser.ts',
     main: './src/main.browser.ts'
   };
+
   Object.assign(ngcWebpackConfig.plugin, {
     tsConfigPath: METADATA.tsConfigPath,
     mainPath: entry.main
   });
+  // console.log('Define Plugin : ---', JSON.stringify(METADATA));
   return {
     /**
      * The entry point for the bundle
@@ -69,6 +55,7 @@ module.exports = function (options) {
      */
     resolve: {
       mainFields: [...(supportES2015 ? ['es2015'] : []), 'browser', 'module', 'main'],
+
       /**
        * An array of extensions that should be used to resolve modules.
        *
@@ -80,6 +67,7 @@ module.exports = function (options) {
        * An array of directory names to be resolved to the current directory
        */
       modules: [helpers.root('src'), helpers.root('node_modules')],
+
       /**
        * Add support for lettable operators.
        *
@@ -100,7 +88,6 @@ module.exports = function (options) {
        * BE AWARE that not using lettable operators will probably result in significant payload added to your bundle.
        */
       alias: buildUtils.rxjsAlias(supportES2015)
-
     },
 
     /**
@@ -112,15 +99,6 @@ module.exports = function (options) {
 
       rules: [
         ...ngcWebpackConfig.loaders,
-        /**
-         * Json loader support for *.json files.
-         *
-         * See: https://github.com/webpack/json-loader
-         */
-        {
-          test: /\.json$/,
-          use: 'json-loader'
-        },
 
         /**
          * To string and css loader support for *.css files (from Angular components)
@@ -165,7 +143,7 @@ module.exports = function (options) {
         },
 
         /* File loader for supporting fonts, for example, in CSS files.
-         */
+        */
         {
           test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
           use: 'file-loader'
@@ -174,6 +152,7 @@ module.exports = function (options) {
       ],
 
     },
+
 
     /**
      * Add additional plugins to the compiler.
@@ -188,16 +167,28 @@ module.exports = function (options) {
        *
        * Environment helpers
        *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+       * See: https://webpack.js.org/plugins/define-plugin/
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-      new DefinePlugin({
+      new webpack.DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
+        'isElectron': JSON.stringify(false),
+        'errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'APP_FOLDER': JSON.stringify(METADATA.definePluginObject.APP_FOLDER),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
-        'process.env.HMR': METADATA.HMR
+        'process.env.HMR': METADATA.HMR,
+        'process.env.isElectron': JSON.stringify(false),
+        'process.env.errlyticsNeeded': JSON.stringify(METADATA.definePluginObject.errlyticsNeeded),
+        'process.env.errlyticsKey': JSON.stringify(METADATA.definePluginObject.errlyticsKey),
+        'process.env.AppUrl': JSON.stringify(METADATA.definePluginObject.AppUrl),
+        'process.env.ApiUrl': JSON.stringify(METADATA.definePluginObject.ApiUrl),
+        'process.env.APP_FOLDER': JSON.stringify(METADATA.definePluginObject.APP_FOLDER)
       }),
 
       /**
@@ -208,22 +199,21 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
        * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
        */
-      new CommonsChunkPlugin({
-        name: 'polyfills',
-        chunks: ['polyfills']
-      }),
+      // new CommonsChunkPlugin({
+      //   name: 'polyfills',
+      //   chunks: ['polyfills']
+      // }),
 
-
-      new CommonsChunkPlugin({
-        minChunks: Infinity,
-        name: 'inline'
-      }),
-      new CommonsChunkPlugin({
-        name: 'main',
-        async: 'common',
-        children: true,
-        minChunks: 2
-      }),
+      // new CommonsChunkPlugin({
+      //   minChunks: Infinity,
+      //   name: 'inline'
+      // }),
+      // new CommonsChunkPlugin({
+      //   name: 'main',
+      //   async: 'common',
+      //   children: true,
+      //   minChunks: 2
+      // }),
 
 
       /**
@@ -235,20 +225,20 @@ module.exports = function (options) {
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
       new CopyWebpackPlugin([
-        { from: 'src/assets', to: 'assets' },
-        { from: 'src/meta' }
-      ],
-        isProd ? { ignore: ['mock-data/**/*'] } : undefined
+          {from: 'src/assets', to: 'assets'},
+          {from: 'src/meta'}
+        ],
+        isProd ? {ignore: ['mock-data/**/*']} : undefined
       ),
 
       /*
-       * Plugin: HtmlWebpackPlugin
-       * Description: Simplifies creation of HTML files to serve your webpack bundles.
-       * This is especially useful for webpack bundles that include a hash in the filename
-       * which changes every compilation.
-       *
-       * See: https://github.com/ampedandwired/html-webpack-plugin
-       */
+      * Plugin: HtmlWebpackPlugin
+      * Description: Simplifies creation of HTML files to serve your webpack bundles.
+      * This is especially useful for webpack bundles that include a hash in the filename
+      * which changes every compilation.
+      *
+      * See: https://github.com/ampedandwired/html-webpack-plugin
+      */
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         title: METADATA.title,
@@ -267,16 +257,16 @@ module.exports = function (options) {
       }),
 
       /**
-      * Plugin: ScriptExtHtmlWebpackPlugin
-      * Description: Enhances html-webpack-plugin functionality
-      * with different deployment options for your scripts including:
-      *
-      * See: https://github.com/numical/script-ext-html-webpack-plugin
-      */
+       * Plugin: ScriptExtHtmlWebpackPlugin
+       * Description: Enhances html-webpack-plugin functionality
+       * with different deployment options for your scripts including:
+       *
+       * See: https://github.com/numical/script-ext-html-webpack-plugin
+       */
       new ScriptExtHtmlWebpackPlugin({
         sync: /inline|polyfills|vendor/,
         defaultAttribute: 'async',
-        preload: [/polyfill|vendor|main/],
+        preload: [/polyfills|vendor|main/],
         prefetch: [/chunk/]
       }),
 
@@ -306,14 +296,8 @@ module.exports = function (options) {
         headTags: require('./head-config.common')
       }),
 
-      /**
-       * Plugin LoaderOptionsPlugin (experimental)
-       *
-       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
-       */
-      new LoaderOptionsPlugin({}),
 
-      new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
+      new AngularCompilerPlugin(ngcWebpackConfig.plugin),
 
       /**
        * Plugin: InlineManifestWebpackPlugin
@@ -321,7 +305,7 @@ module.exports = function (options) {
        *
        * https://github.com/szrenwei/inline-manifest-webpack-plugin
        */
-      new InlineManifestWebpackPlugin(),
+      new WebpackInlineManifestPlugin(),
     ],
 
     /**

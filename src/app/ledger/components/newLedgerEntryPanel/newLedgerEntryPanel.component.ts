@@ -1,19 +1,19 @@
+import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { CompanyActions } from '../../../actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { UploadInput, UploadOutput } from 'ngx-uploader';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
@@ -23,7 +23,6 @@ import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interf
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { LoaderService } from '../../../loader/loader.service';
-import { UploaderOptions } from 'ngx-uploader/index';
 import { AccountResponse } from 'app/models/api-models/Account';
 import { Configuration } from 'app/app.constant';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
@@ -94,22 +93,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   private fetchedConvertedRate: number = null;
 
   constructor(private store: Store<AppState>,
-    private _ledgerService: LedgerService,
-    private _ledgerActions: LedgerActions,
-    private _companyActions: CompanyActions,
-    private cdRef: ChangeDetectorRef,
-    private _toasty: ToasterService,
-    private _loaderService: LoaderService,
-    private _settingsTagActions: SettingsTagActions,
-    private _settingsProfileActions: SettingsProfileActions) {
+              private _ledgerService: LedgerService,
+              private _ledgerActions: LedgerActions,
+              private _companyActions: CompanyActions,
+              private cdRef: ChangeDetectorRef,
+              private _toasty: ToasterService,
+              private _loaderService: LoaderService,
+              private _settingsTagActions: SettingsTagActions,
+              private _settingsProfileActions: SettingsProfileActions) {
     this.store.dispatch(this._settingsTagActions.GetALLTags());
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
-    this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
-    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
-    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
-    this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).takeUntil(this.destroyed$);
-    this.voucherTypeList = Observable.of([{
+    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$));
+    this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
+    this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).pipe(takeUntil(this.destroyed$));
+    this.voucherTypeList = observableOf([{
       label: 'Sales',
       value: 'sal'
     }, {
@@ -139,7 +138,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public ngOnInit() {
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
 
     this.activeAccount$.subscribe(acc => {
       if (acc) {
@@ -156,7 +155,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (acc.currency) {
           this.accountBaseCurrency = acc.currency;
         }
-        this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
           if (!_.isEmpty(o)) {
             let companyProfile = _.cloneDeep(o);
             if (companyProfile.isMultipleCurrency && !acc.currency) {
@@ -178,7 +177,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
         return _.orderBy(tags, 'name');
       }
-    })).takeUntil(this.destroyed$);
+    })).pipe(takeUntil(this.destroyed$));
   }
 
   @HostListener('click', ['$event'])
@@ -200,7 +199,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
           let appTaxes = [];
-          this.activeAccount$.take(1).subscribe(acc => {
+          this.activeAccount$.pipe(take(1)).subscribe(acc => {
             if (acc && acc.applicableTaxes) {
               acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
               this.taxListForStock = appTaxes;
@@ -346,15 +345,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
       let companyUniqueName = null;
-      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
-      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+      this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -386,7 +385,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public unitChanged(stockUnitCode: string) {
     let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-    this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+    this.currentTxn.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
     if (this.currentTxn.inventory.unit) {
       this.changePrice(this.currentTxn.inventory.unit.rate.toString());
     }
@@ -549,14 +548,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public checkForMulitCurrency() {
     let selectedAccountCurrency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
     this.currentTxn.selectedAccount.currency = _.cloneDeep(selectedAccountCurrency);
-      if (this.currentTxn && this.currentTxn.selectedAccount && selectedAccountCurrency && (this.accountBaseCurrency !== selectedAccountCurrency)) {
-        setTimeout(() => {
+    if (this.currentTxn && this.currentTxn.selectedAccount && selectedAccountCurrency && (this.accountBaseCurrency !== selectedAccountCurrency)) {
+      setTimeout(() => {
         this.isMulticurrency = true;
-        }, 400);
-        this.calculateConversionRate(this.accountBaseCurrency, selectedAccountCurrency, this.currentTxn.total, this.currentTxn);
-      } else {
-        this.isMulticurrency = false;
-        this.currentTxn.convertedAmount = 0;
-      }
+      }, 400);
+      this.calculateConversionRate(this.accountBaseCurrency, selectedAccountCurrency, this.currentTxn.total, this.currentTxn);
+    } else {
+      this.isMulticurrency = false;
+      this.currentTxn.convertedAmount = 0;
+    }
   }
 }

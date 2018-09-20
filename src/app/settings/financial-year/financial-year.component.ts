@@ -1,9 +1,10 @@
+import { takeUntil } from 'rxjs/operators';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ToasterService } from '../../services/toaster.service';
@@ -34,9 +35,9 @@ export class FinancialYearComponent implements OnInit {
   public financialOptions = [];
   public yearOptions = [];
   public FYPeriodOptions: IOption[] = [
-    { label: 'JAN-DEC', value: 'JAN-DEC'},
-    { label: 'APR-MAR', value: 'APR-MAR'},
-    { label: 'JULY-JULY', value: 'JULY-JULY'}
+    {label: 'JAN-DEC', value: 'JAN-DEC'},
+    {label: 'APR-MAR', value: 'APR-MAR'},
+    {label: 'JULY-JULY', value: 'JULY-JULY'}
   ];
   public selectedFYPeriod: string;
   public selectedFinancialYearOption: string;
@@ -56,7 +57,8 @@ export class FinancialYearComponent implements OnInit {
     private settingsFinancialYearActions: SettingsFinancialYearActions,
     private _companyActions: CompanyActions,
     private _toasty: ToasterService
-  ) { }
+  ) {
+  }
 
   public ngOnInit() {
 
@@ -64,9 +66,9 @@ export class FinancialYearComponent implements OnInit {
       if (o) {
         this.store.dispatch(this._companyActions.RefreshCompanies());
       }
-    })).takeUntil(this.destroyed$).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
 
-    this.store.takeUntil(this.destroyed$).subscribe(s => {
+    this.store.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s.session) {
         this.currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
       }
@@ -77,7 +79,7 @@ export class FinancialYearComponent implements OnInit {
           this.currentCompanyName = comp.name;
           this.currentCompanyFinancialYearUN = comp.activeFinancialYear.uniqueName;
           this.financialOptions = comp.financialYears.map(q => {
-            return { label: q.uniqueName, value: q.uniqueName };
+            return {label: q.uniqueName, value: q.uniqueName};
           });
         }
       }
@@ -89,7 +91,7 @@ export class FinancialYearComponent implements OnInit {
     let startYear = moment().subtract(7, 'year').year(); // moment().subtract(7, 'year').year();
     let yearArray = _.range(startYear, endYear);
     this.yearOptions = yearArray.map(q => {
-      return { label: q, value: q };
+      return {label: q, value: q};
     });
   }
 
@@ -114,7 +116,7 @@ export class FinancialYearComponent implements OnInit {
         this.store.dispatch(this._companyActions.RefreshCompanies());
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
       }
-    })).takeUntil(this.destroyed$).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
 
   public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {

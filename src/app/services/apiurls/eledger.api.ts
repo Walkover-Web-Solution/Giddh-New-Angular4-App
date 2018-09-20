@@ -1,4 +1,3 @@
-
 const UNIVERSAL_URI_ELEDGER = 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers';
 export const ELEDGER_API = {
   // get call

@@ -1,9 +1,5 @@
-import { Subject } from 'rxjs/Subject';
-import { Store } from '@ngrx/store';
-import { AppState } from './../store/roots';
-import { SessionState } from './../store/authentication/authentication.reducer';
-import { Injectable, HostListener } from '@angular/core';
-import { createSelector } from 'reselect';
+import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class KeyboardService {

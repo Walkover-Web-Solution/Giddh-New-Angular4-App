@@ -1,12 +1,7 @@
-import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ILogsItem } from '../../models/interfaces/logs.interface';
-import { Action } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
-import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
-import { COMMON_ACTIONS } from '../../actions/common.const';
-import { AgingDropDownoptions, Result, DueRangeRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+import { AgingDropDownoptions, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../../models/api-models/Contact';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
 export interface AgingReportState {
@@ -45,31 +40,30 @@ export function agingReportReducer(state = initialState, action: CustomActions):
   let newState: AgingReportState = null;
   switch (action.type) {
     case AgingReportActions.CREATE_DUE_DAY_RANGE: {
-      return Object.assign({}, state, { setDueRangeRequestInFlight: true });
+      return Object.assign({}, state, {setDueRangeRequestInFlight: true});
     }
     case AgingReportActions.DUE_DAY_RANGE_POPUP_OPEN: {
-      return Object.assign({}, state, { setDueRangeOpen: true });
+      return Object.assign({}, state, {setDueRangeOpen: true});
     }
     case AgingReportActions.DUE_DAY_RANGE_POPUP_CLOSE: {
-      return Object.assign({}, state, { setDueRangeOpen: false });
+      return Object.assign({}, state, {setDueRangeOpen: false});
     }
     case AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE: {
       let data = action.payload as BaseResponse<string, DueRangeRequest>;
 
       if (data.status === 'error') {
-        return Object.assign({}, state, { setDueRangeRequestInFlight: false });
+        return Object.assign({}, state, {setDueRangeRequestInFlight: false});
       }
       let agingDropDownoptions: AgingDropDownoptions = {
         fourth: parseInt(data.request.range[0]),
         fifth: parseInt(data.request.range[1]),
         sixth: parseInt(data.request.range[2])
       };
-      return Object.assign({}, state, { setDueRangeRequestInFlight: false, setDueRangeOpen: false, agingDropDownoptions });
+      return Object.assign({}, state, {setDueRangeRequestInFlight: false, setDueRangeOpen: false, agingDropDownoptions});
 
     }
     case AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE: {
       let data = action.payload as BaseResponse<string[], string>;
-
       if (data.status === 'error') {
         return state;
       }
@@ -78,7 +72,7 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         fifth: parseInt(data.body[1]),
         sixth: parseInt(data.body[2])
       };
-      return Object.assign({}, state, { agingDropDownoptions });
+      return Object.assign({}, state, {agingDropDownoptions});
 
     }
     case AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE: {
@@ -91,13 +85,13 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         if (data.results.length < 1) {
           noData = true;
         }
-        return { ...state, getAgingReportRequestInFlight, data, noData };
+        return {...state, getAgingReportRequestInFlight, data, noData};
       } else {
-        return { ...state, getAgingReportRequestInFlight: false, data: null, noData: true };
+        return {...state, getAgingReportRequestInFlight: false, data: null, noData: true};
       }
     }
     case AgingReportActions.GET_DUE_DAY_REPORT: {
-      return { ...state, getAgingReportRequestInFlight: true };
+      return {...state, getAgingReportRequestInFlight: true};
     }
     default: {
       return state;

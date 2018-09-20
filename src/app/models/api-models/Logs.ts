@@ -1,4 +1,5 @@
 import { ILogRequest, ILogsItem } from '../interfaces/logs.interface';
+
 /**
  * Model for Audit Logs api request
  * API:: (Audit Logs) company/:companyUniqueName/logs?page=:page
