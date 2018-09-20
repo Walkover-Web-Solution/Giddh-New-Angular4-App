@@ -6,6 +6,7 @@ import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purcha
 import { Observable } from 'rxjs';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'aside-menu-account',
@@ -74,10 +75,10 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
     this.store.select(p => p.invoicePurchase.isTaxProOTPSentSuccessfully).subscribe((yes: boolean) => {
       this.otpSentSuccessFully = yes;
     });
-    this.reconcileOtpInProcess$ = this.store.select(p => p.gstReconcile.isGenerateOtpInProcess).takeUntil(this.destroyed$);
-    this.reconcileOtpSuccess$ = this.store.select(p => p.gstReconcile.isGenerateOtpSuccess).takeUntil(this.destroyed$);
-    this.reconcileOtpVerifyInProcess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess).takeUntil(this.destroyed$);
-    this.reconcileOtpVerifySuccess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess).takeUntil(this.destroyed$);
+    this.reconcileOtpInProcess$ = this.store.select(p => p.gstReconcile.isGenerateOtpInProcess).pipe(takeUntil(this.destroyed$));
+    this.reconcileOtpSuccess$ = this.store.select(p => p.gstReconcile.isGenerateOtpSuccess).pipe(takeUntil(this.destroyed$));
+    this.reconcileOtpVerifyInProcess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess).pipe(takeUntil(this.destroyed$));
+    this.reconcileOtpVerifySuccess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess).pipe(takeUntil(this.destroyed$));
 
     this.store.select(s => s.settings.profile).subscribe(pro => {
       if (pro && pro.gstDetails) {
