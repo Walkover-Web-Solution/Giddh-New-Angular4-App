@@ -56,7 +56,9 @@ export class AppComponent implements AfterViewInit {
     if (location.href.includes('returnUrl')) {
       let tUrl = location.href.split('=');
       if (tUrl[1]) {
-        this.router.navigate([tUrl[1]]);
+        if (!isElectron) {
+          this.router.navigate([tUrl[1]]);
+        }
       }
     }
   }
