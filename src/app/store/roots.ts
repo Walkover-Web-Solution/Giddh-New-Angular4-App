@@ -27,6 +27,7 @@ import * as fromAgingReport from './AgingReport/aging-report.reducer';
 import * as fromInventoryBranchTransfer from './InventoryBranchTransfer/InventoryBranchTransfer.reducer';
 import * as fromCompanyImportExport from './CompanyImportExport/companyImportExport';
 import * as fromReceipt from './Invoice/Receipt/receipt.reducer';
+import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -59,6 +60,7 @@ export interface AppState {
   newVsOldInvoices: fromNewVsOldInvoices.NewVsOldInvoiceState;
   agingreport: fromAgingReport.AgingReportState;
   companyImportExport: fromCompanyImportExport.CompanyImportExportState;
+  gstReconcile: fromGstReconcile.GstReconcileState;
   receipt: fromReceipt.ReceiptState;
 }
 
@@ -92,5 +94,6 @@ export const reducers: ActionReducerMap<AppState> = {
   newVsOldInvoices: fromNewVsOldInvoices.newVsOldInvoicesReduce,
   agingreport: fromAgingReport.agingReportReducer,
   companyImportExport: fromCompanyImportExport.companyImportExportReducer,
-  receipt: fromReceipt.Receiptreducer
+  receipt: fromReceipt.Receiptreducer,
+  gstReconcile: fromGstReconcile.GstReconcileReducer
 };
