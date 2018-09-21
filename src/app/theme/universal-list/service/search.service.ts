@@ -17,6 +17,21 @@ export const CustomSorting = {
 @Injectable()
 export class UniversalSearchService {
 
+  public filterByConditions(arr: any[], conditions: string[], term?: string): any[] {
+    let priorTerm = conditions[conditions.length - 1];
+    let res = arr.filter((item: any) => {
+      if (!item.type || item.type === 'GROUP') {
+        if (includes(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
+          return item;
+        }
+      }
+    });
+    if (term) {
+      return this.filterByTerm(term, res);
+    }
+    return res;
+  }
+
   /**
    * this method is used for team data filteration
    * giving priority to name.
@@ -24,34 +39,14 @@ export class UniversalSearchService {
    * @param arr chunk of data
    * return the filtered data of starts with array and includes array.
    */
-  public filterBy(term: string, arr: any[], conditions?: string[]): any[] {
-    let start = new Date().getTime();
-    console.log ('start', start);
+  public filterByTerm(term: string, arr: any[]): any[] {
     let array = cloneDeep(arr);
-
-    if (conditions && conditions.length > 0) {
-      let priorTerm = conditions.join();
-      console.log ('prio', priorTerm);
-      let res = arr.filter((item: any) => {
-        if (!item.type || item.type === 'GROUP') {
-          if (includes(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
-            return item;
-          }
-        }
-      });
-      console.log (res.length);
-      return res;
-      //
-    } else {
-      let filtered: any[] = [];
-      // get filtered result
-      filtered = this.performIncludesFilter(array, term);
-      // sort data and return
-      let final = this.performStartsWithFilter(filtered, term);
-      let end = new Date().getTime();
-      console.log ('diff', end - start);
-      return final;
-    }
+    let filtered: any[] = [];
+    // get filtered result
+    filtered = this.performIncludesFilter(array, term);
+    // sort data and return
+    let final = this.performStartsWithFilter(filtered, term);
+    return final;
   }
 
   // sort by category

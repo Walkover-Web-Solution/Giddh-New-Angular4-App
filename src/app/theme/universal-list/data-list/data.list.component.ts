@@ -26,6 +26,12 @@ const SPECIAL_KEYS = [ ...DIRECTIONAL_KEYS,
   CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META
 ];
 
+// local memory
+const LOCAL_MEMORY = {
+  charCount: null,
+  grpCount: null
+};
+
 @Component({
   selector: 'universal-data-list',
   styleUrls: ['./data.list.component.scss'],
@@ -310,6 +316,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
     term = term.trim();
     if (term && term.length > 0) {
+      LOCAL_MEMORY.charCount = term.length;
       // open popover again if in case it's not opened
       if (!this.isOpen ) {
         this.isOpen = true;
@@ -317,19 +324,29 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       term = term.toLowerCase();
       let filteredData: any[] = [];
       let d = cloneDeep(this.rawSmartComboList);
+      if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+        // logic search
+        this.doConditionalSearch(term);
+        return;
+      }
       // search data conditional
-      filteredData = this.universalSearchService.filterBy(term, d);
+      filteredData = this.universalSearchService.filterByTerm(term, d);
       this.updateRowsViaSearch(filteredData);
     } else {
       // backspace
-      if (this.isOpen && ( key === BACKSPACE)) {
+      if ( this.isOpen && key === BACKSPACE ) {
         e.preventDefault();
         e.stopPropagation();
         // remove item one by one on pressing backspace like gmail
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
-          this.listOfSelectedGroups.pop();
+          if (!LOCAL_MEMORY.charCount) {
+            this.listOfSelectedGroups.pop();
+          }
+          if (LOCAL_MEMORY.charCount === 1) {
+            LOCAL_MEMORY.charCount = null;
+          }
           // logic search
-          this.updateRowsViaSearch(cloneDeep(this.rowsClone));
+          this.doConditionalSearch();
         } else {
           this.updateRowsViaSearch(cloneDeep(this.smartList));
         }
@@ -414,13 +431,29 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
-  private doConditionalSearch() {
-    this.searchEle.nativeElement.value = null;
+  private doConditionalSearch(term?: string) {
+    if (!term) {
+      LOCAL_MEMORY.charCount = 0;
+      this.searchEle.nativeElement.value = null;
+    }
     let filteredData: any[] = [];
     let d = cloneDeep(this.rawSmartComboList);
+    // not the first time so send prev. filtered data
+    if (this.listOfSelectedGroups.length > 1) {
+      d = cloneDeep(this.rowsClone);
+    }
     let priorTerm = cloneDeep(this.listOfSelectedGroups).map(item => item.uniqueName);
-    console.log (priorTerm);
-    filteredData = this.universalSearchService.filterBy(null, d, priorTerm);
+    // assuming going backwards
+    if (priorTerm && priorTerm.length > 0) {
+      filteredData = this.universalSearchService.filterByConditions(d, priorTerm, term);
+    } else {
+      // reset data like init state
+      filteredData = cloneDeep(this.smartList);
+    }
+    if (!term) {
+      this.rowsClone = [];
+      this.rowsClone = cloneDeep(filteredData);
+    }
     this.updateRowsViaSearch(filteredData);
   }
 
