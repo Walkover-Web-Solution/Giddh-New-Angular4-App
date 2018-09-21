@@ -50,6 +50,7 @@ import { SettingsDiscountService } from './settings.discount.service';
 import { NewVsOldInvoicesService } from './new-vs-old-invoices.service';
 import { CompanyImportExportService } from './companyImportExportService';
 import { AgingreportingService } from './agingreporting.service';
+import { GstReconcileService } from './GstReconcile.service';
 import { ReceiptService } from './receipt.service';
 
 /**
@@ -109,7 +110,9 @@ export class ServiceModule {
         NewVsOldInvoicesService,
         AgingreportingService,
         CompanyImportExportService,
-        ReceiptService
+        ReceiptService,
+        CompanyImportExportService,
+        GstReconcileService
       ]
     };
   }
