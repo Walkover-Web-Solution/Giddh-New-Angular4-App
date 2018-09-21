@@ -92,3 +92,6 @@ if (app.makeSingleInstance((commandLine: any[], workingDirectory: string) => {
 //     detail: 'It\'s my pleasure to make your life better.'
 //   });
 // });
+ipcMain.on('open-url', (event, arg) => {
+  windowManager.openWindows(arg);
+});
