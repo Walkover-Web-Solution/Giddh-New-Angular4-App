@@ -50,6 +50,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
+    this._generalService.IAmLoaded.next(true);
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
