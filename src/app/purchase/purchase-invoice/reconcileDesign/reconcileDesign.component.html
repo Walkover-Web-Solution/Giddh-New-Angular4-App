@@ -25,48 +25,86 @@
     </td>
     <td>
       <div>{{ item.accountName }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.accountName !== item.dataInGiddh.accountName}">{{
+        item.dataInGiddh.accountName }}
+      </div>
 
     </td>
     <td>
       <div>{{ item.invoiceNumber }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.invoiceNumber !== item.dataInGiddh.invoiceNumber}">
+        {{ item.dataInGiddh.invoiceNumber }}
+      </div>
 
     </td>
     <td>
       <div>{{ item.invoiceDate }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.invoiceDate !== item.dataInGiddh.invoiceDate}">
+        {{ item.dataInGiddh.invoiceDate }}
+      </div>
 
 
     </td>
     <td>
-      <div>
-        {{ item.placeOfSupply }} (23)
+      <div>{{ item.placeOfSupply }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.placeOfSupply !== item.dataInGiddh.placeOfSupply}">
+        {{ item.dataInGiddh.placeOfSupply }}
       </div>
 
 
     </td>
     <td class="text-right">
       <div>₹ {{ item.taxableAmount }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.taxableAmount !== item.dataInGiddh.taxableAmount}">
+        ₹ {{ item.dataInGiddh.taxableAmount }}
+      </div>
 
 
     </td>
     <td class="text-right">
       <div>₹ {{ item.igst }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.igst !== item.dataInGiddh.igst}">
+        ₹ {{ item.dataInGiddh.igst }}
+      </div>
 
     </td>
     <td class="text-right">
       <div>₹ {{ item.cgst }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.cgst !== item.dataInGiddh.cgst}">
+        ₹ {{ item.dataInGiddh.cgst }}
+      </div>
 
 
     </td>
     <td class="text-right">
       <div>₹ {{ item.sgst }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.sgst !== item.dataInGiddh.sgst}"
+      >₹ {{ item.dataInGiddh.sgst }}
+      </div>
 
 
     </td>
     <td class="text-right">
       <div>₹ {{ item.cess }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.cess !== item.dataInGiddh.cess}">
+        ₹ {{ item.dataInGiddh.cess }}
+      </div>
     </td>
     <td class="text-right">
       <div>₹ {{ item.grandTotal }}</div>
+      <div *ngIf="item.dataInGiddh"
+           [ngClass]="{ 'text-danger': item.grandTotal !== item.dataInGiddh.grandTotal}">
+        ₹ {{ item.dataInGiddh.grandTotal }}
+      </div>
     </td>
   </tr>
   </tbody>

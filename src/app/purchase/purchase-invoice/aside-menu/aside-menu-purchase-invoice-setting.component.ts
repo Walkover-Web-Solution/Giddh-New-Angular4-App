@@ -63,6 +63,7 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
   public reconcileOtpSuccess$: Observable<boolean>;
   public reconcileOtpVerifyInProcess$: Observable<boolean>;
   public reconcileOtpVerifySuccess$: Observable<boolean>;
+  public gstAuthenticated$: Observable<boolean>;
   public defaultGstNumber: string = null;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -79,6 +80,7 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
     this.reconcileOtpSuccess$ = this.store.select(p => p.gstReconcile.isGenerateOtpSuccess).pipe(takeUntil(this.destroyed$));
     this.reconcileOtpVerifyInProcess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess).pipe(takeUntil(this.destroyed$));
     this.reconcileOtpVerifySuccess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
 
     this.store.select(s => s.settings.profile).subscribe(pro => {
       if (pro && pro.gstDetails) {

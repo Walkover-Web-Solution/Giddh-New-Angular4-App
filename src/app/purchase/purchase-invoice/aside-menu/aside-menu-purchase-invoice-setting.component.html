@@ -4,7 +4,7 @@
     <!-- <h2>File GST via-</h2> -->
     <h2 *ngIf="selectedService === 'JIO_GST'">Jio GST</h2>
     <h2 *ngIf="selectedService === 'TAX_PRO'">Tax Pro</h2>
-  <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
+    <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
   </div>
   <div class="form_body witBg clearfix mrBChldLbl">
     <div class="form_bg clearfix">
@@ -73,33 +73,42 @@
       <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === 'RECONCILE'">
         <div class="row">
 
-          <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label for="tax_pro_username">Username:</label>
-                <input autocomplete="off" type="text" name="username" class="form-control" id="reconcile_username"
-                       [(ngModel)]="reconcileForm.uid">
+          <ng-container *ngIf="!(gstAuthenticated$ | async)">
+            <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label for="tax_pro_username">Username:</label>
+                  <input autocomplete="off" type="text" name="username" class="form-control" id="reconcile_username"
+                         [(ngModel)]="reconcileForm.uid">
+                </div>
               </div>
-            </div>
-          </ng-container>
+            </ng-container>
 
-          <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
-            <div class="col-xs-6" *ngIf="reconcileOtpSuccess$ | async">
-              <div class="form-group">
-                <label for="reconcile_otp">OTP:</label>
-                <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp"
-                       [(ngModel)]="reconcileForm.otp">
+            <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
+              <div class="col-xs-6" *ngIf="reconcileOtpSuccess$ | async">
+                <div class="form-group">
+                  <label for="reconcile_otp">OTP:</label>
+                  <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp"
+                         [(ngModel)]="reconcileForm.otp">
+                </div>
               </div>
-            </div>
-          </ng-container>
+            </ng-container>
 
-          <ng-container>
-            <div class="col-xs-6" *ngIf="defaultGstNumber">
-              <div class="form-group">
-                <label for="reconcile_otp">GSTN:</label>
-                <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_gstn"
-                       [value]="defaultGstNumber" [disabled]="true">
+            <ng-container>
+              <div class="col-xs-6" *ngIf="defaultGstNumber">
+                <div class="form-group">
+                  <label for="reconcile_otp">GSTN:</label>
+                  <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_gstn"
+                         [value]="defaultGstNumber" [disabled]="true">
+                </div>
               </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="(gstAuthenticated$ | async)">
+            <div class="col-xs-12">
+              <span>
+                Gst No - {{ defaultGstNumber }} Verified Successfully
+              </span>
             </div>
           </ng-container>
         </div>
