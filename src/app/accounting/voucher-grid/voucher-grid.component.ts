@@ -284,13 +284,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockFocus(stockIndx: number, indx: number) {
-    this.selectedField = 'stock';
     this.showConfirmationBox = false;
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
-    // this.getStock(this.groupUniqueName);
+    this.getStock(this.groupUniqueName);
     this.getStock();
     this.showLedgerAccountList = true;
+    setTimeout(() => {
+      this.selectedField = 'stock';
+    }, 100);
   }
 
   /**
@@ -337,9 +339,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
       this.openChequeDetailForm(acc);
     }
+    console.log('this.selectedIdx is :', this.selectedIdx);
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
+    console.log('selected transaction is :', transaction);
     if (acc) {
+      console.log('the acc isss :', acc);
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
@@ -582,7 +587,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function (obj: any, idx) {
+    _.forEach(transactions, function(obj: any, idx) {
       if (obj && !obj.particular && !obj.amount) {
         transactions = _.without(transactions, obj);
       }
@@ -596,7 +601,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public validateTransaction(transactions) {
     let validEntry = this.removeBlankTransaction(transactions);
     let entryIsValid = true;
-    _.forEach(validEntry, function (obj: any, idx) {
+    _.forEach(validEntry, function(obj: any, idx) {
       if (obj.particular && !obj.amount) {
         obj.amount = 0;
       } else if (obj && !obj.particular) {
@@ -773,6 +778,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
+    console.log('ev :', ev);
+    console.log('this.selectedField is :', this.selectedField);
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {

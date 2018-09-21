@@ -38,7 +38,6 @@ export class OnReturnDirective {
 
       // nodeList[indx + 1].focus();
       if (e.which === 13 || e.keyCode === 13) {
-
         let target = allElements[indx + 1];
 
         if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
