@@ -65,7 +65,8 @@ export const NAVIGATION_ITEM_LIST: IOption[] = [
   {label: 'New V/S Old Invoices', value: '/pages/new-vs-old-invoices'},
   {label: 'GST Module', value: '/pages/gst/gst'},
   {label: 'GST Module Page 2', value: '/pages/gst/gst-page-b'},
-  {label: 'GST Module Page 3', value: '/pages/gst/gst-page-c'}
+  {label: 'GST Module Page 3', value: '/pages/gst/gst-page-c'},
+  {label: 'Aging Report', value: 'pages/aging-report'},
 ];
 
 @Component({
