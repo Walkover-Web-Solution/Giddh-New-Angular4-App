@@ -1,5 +1,3 @@
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
-
 export class VerifyOtpRequest {
   public otp: string;
 }
@@ -13,9 +11,10 @@ export interface GstReconcileInvoiceResult {
   ctin: string;
   sgst: number;
   cgst: number;
-  igst?: any;
+  igst: any;
   cess: number;
   accountName: string;
+  dataInGiddh: GstReconcileInvoiceResult;
 }
 
 export interface GstReconcileInvoiceResponse {
