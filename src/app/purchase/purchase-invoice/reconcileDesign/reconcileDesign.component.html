@@ -49,10 +49,10 @@
 
     </td>
     <td>
-      <div>{{ item.placeOfSupply }}</div>
+      <div>{{ item.placeOfSupply }} ({{item.stateCode}})</div>
       <div *ngIf="item.dataInGiddh"
            [ngClass]="{ 'text-danger': item.placeOfSupply !== item.dataInGiddh.placeOfSupply}">
-        {{ item.dataInGiddh.placeOfSupply }}
+        {{ item.dataInGiddh.placeOfSupply }} ({{ item.dataInGiddh.stateCode }})
       </div>
 
 
