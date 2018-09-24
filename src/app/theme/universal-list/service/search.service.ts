@@ -19,7 +19,7 @@ export class UniversalSearchService {
 
   public filterByConditions(arr: any[], conditions: string[], term?: string): any[] {
     let priorTerm = conditions[conditions.length - 1];
-    let res = arr.filter((item: any) => {
+    let res: any[] = arr.filter((item: any) => {
       if (!item.type || item.type === 'GROUP') {
         if (includes(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
           return item;
@@ -29,7 +29,7 @@ export class UniversalSearchService {
     if (term) {
       return this.filterByTerm(term, res);
     }
-    return res;
+    return res.slice(0, 100);
   }
 
   /**
@@ -42,11 +42,23 @@ export class UniversalSearchService {
   public filterByTerm(term: string, arr: any[]): any[] {
     let array = cloneDeep(arr);
     let filtered: any[] = [];
-    // get filtered result
-    filtered = this.performIncludesFilter(array, term);
-    // sort data and return
-    let final: any[] = this.performStartsWithFilter(filtered, term);
-    return final.slice(0, 100);
+
+    const whiteSpaceRegex = /\s/gm;
+    if (whiteSpaceRegex.test(term)) {
+      const names: string[] = term.split(' ');
+      names.forEach((name: string) => {
+        filtered = this.performIncludesFilter(array, name);
+        array = cloneDeep(filtered);
+      });
+      let final: any[] = this.performStartsWithFilter(filtered, term);
+      return final.slice(0, 100);
+    } else {
+      // get filtered result
+      filtered = this.performIncludesFilter(array, term);
+      // sort data and return
+      let final: any[] = this.performStartsWithFilter(filtered, term);
+      return final.slice(0, 100);
+    }
   }
 
   private checkForAdditionalFilters(item, term) {
