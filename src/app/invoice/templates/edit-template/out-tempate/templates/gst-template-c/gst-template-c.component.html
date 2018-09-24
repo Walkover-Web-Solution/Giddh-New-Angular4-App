@@ -218,13 +218,13 @@
                         <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
                         <td *ngIf="fieldsAndVisibility.table.quantity?.display">2.00 Kg</td>
                         <td *ngIf="fieldsAndVisibility.table.rate?.display">1000.00</td>
-                        <td *ngIf="fieldsAndVisibility.table.discount?.display">300.00</td>
-                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">7200.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.discount?.display">-300.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">1700.00</td>
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">9700.00
                             <p>@10%</p>
                         </td> -->
-                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">153.00
-                            <p>@9.00%</p>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">306.00
+                            <p>@18.00%</p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display">2006.00</td>
                     </tr>
@@ -235,16 +235,17 @@
                         <td *ngIf="fieldsAndVisibility.table.quantity?.display">1.00 Nos
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.rate?.display">6000.00</td>
-                        <td *ngIf="fieldsAndVisibility.table.discount?.display">500.00 </td>
-                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">1700.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.discount?.display">-500.00 </td>
+                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">5500.00</td>
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">9700.00
                             <p>@10%</p>
                         </td> -->
-                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">153.00
-                            <p>@9.00%
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">660.00
+                            <p>@12.00%
                             </p>
                         </td>
-                        <td *ngIf="fieldsAndVisibility.table.total?.display">7040.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.total?.display">6160.00
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -254,8 +255,8 @@
                         <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">7200.00</td>
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">30100.00</td> -->
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">30100.00</td> -->
-                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">1846.00</td>
-                        <td *ngIf="fieldsAndVisibility.table.total?.display">9046.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">966.00</td>
+                        <td *ngIf="fieldsAndVisibility.table.total?.display">8166.00</td>
                     </tr>
                 </tfoot>
             </table>
@@ -275,18 +276,19 @@
             <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
                 <th>Total Tax* (INR)</th>
                 <td>
-                    <span>1846.00</span>
+                    <span>966.00</span>
                 </td>
             </tr>
             <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
                 <th>Invoice Total (INR)</th>
                 <td>
-                    <span>9046.00</span>
+                    <span>8166.00</span>
                 </td>
             </tr>
             <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
                 <th>Invoice Total (In words)</th>
-                <td>Nine Thousand Forty Six Only</td>
+                <td>Eight Thousand One Hundred Sixty Six Only
+                </td>
             </tr>
         </table>
         <aside class="mrT60">
