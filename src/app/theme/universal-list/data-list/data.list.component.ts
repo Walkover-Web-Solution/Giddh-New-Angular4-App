@@ -7,7 +7,7 @@ import {
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
 import { ReplaySubject } from 'rxjs';
-import { findIndex, cloneDeep, remove } from '../../../lodash-optimized';
+import { findIndex, cloneDeep, remove, uniq, find } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -17,7 +17,9 @@ import {
   ENTER, MAC_ENTER, BACKSPACE, TAB, SHIFT, CONTROL, ALT,
   MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META, ESCAPE
 } from '@angular/cdk/keycodes';
+import { DbService } from '../../../services/db.service';
 
+const KEY_FOR_QUERY = 'query';
 const DIRECTIONAL_KEYS = [
   LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
 ];
@@ -80,6 +82,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // broadcasting events
   @Output() public closeEmitter: EventEmitter<boolean | any> = new EventEmitter<boolean | any>();
   @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
+  @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
   @Output() public noResultFoundEmitter: EventEmitter<any> = new EventEmitter<null>();
   @Output() public newTeamCreationEmitter: EventEmitter<any> = new EventEmitter<null>();
 
@@ -98,6 +101,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     private renderer: Renderer,
     private zone: NgZone,
     private winRef: WindowRefService,
+    private _dbService: DbService,
     private universalSearchService: UniversalSearchService
   ) {
   }
@@ -130,7 +134,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     // due to view init issue using timeout
     setTimeout(() => {
-      this.searchEle.nativeElement.focus();
+      this.handleClickOnSearchWrapper();
     }, 0);
 
   }
@@ -228,7 +232,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     setTimeout(() => {
       // set focus conditionally
       if (this.autoFocus) {
-        this.searchEle.nativeElement.focus();
+        this.handleClickOnSearchWrapper();
       }
       this.doingUIErrands();
     }, 0);
@@ -245,7 +249,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // search box related funcs
 
   // does force reset the cursor to input
-  public handleClickOnSearchWrapper(e: KeyboardEvent) {
+  public handleClickOnSearchWrapper(e?: KeyboardEvent) {
     if (this.searchEle) {
       this.searchEle.nativeElement.focus();
     }
@@ -313,7 +317,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
           this.searchEle.nativeElement.value = null;
         } else {
           // second time pressing escape
-          this.listOfSelectedGroups.pop();
+          this.removeItemFromSelectedGroups();
         }
         this.doConditionalSearch();
       }
@@ -358,7 +362,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         // remove item one by one on pressing backspace like gmail
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
           if (!LOCAL_MEMORY.charCount) {
-            this.listOfSelectedGroups.pop();
+            this.removeItemFromSelectedGroups();
           }
           if (LOCAL_MEMORY.charCount === 1) {
             LOCAL_MEMORY.charCount = null;
@@ -408,10 +412,26 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     this.rowsClone = [];
     this.rowsClone = cloneDeep(val);
     this.rows = cloneDeep(val);
-  }
 
-  public handleClose(idx: number) {
-    //
+    if (this.winRef) {
+      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(KEY_FOR_QUERY));
+      if (priorTerm && priorTerm.length > 0) {
+        this.listOfSelectedGroups = [];
+        this._dbService.getAllItems('groups').pipe(take(1))
+        .subscribe((groupList: IUlist[]) => {
+          priorTerm.forEach((str: string) => {
+            let o = find(groupList, ['uniqueName', str ]);
+            if ( o ) {
+              this.listOfSelectedGroups.push(o);
+            }
+          });
+          this.listOfSelectedGroups = uniq(this.listOfSelectedGroups);
+          let d = cloneDeep(this.rawSmartComboList);
+          let filteredData: any[] = this.universalSearchService.filterByConditions(d, priorTerm);
+          this.updateRowsViaSearch(filteredData);
+        });
+      }
+    }
   }
 
   /**
@@ -426,9 +446,14 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
-  //
-  public removeItemFromSelectedGroups(item: IUlist) {
-    this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+  // remove item
+  public removeItemFromSelectedGroups(item?: IUlist) {
+    if (item) {
+      this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+    } else {
+      this.listOfSelectedGroups.pop();
+    }
+    this.saveValueInSession(this.getPriorTerm());
   }
 
   /**
@@ -449,6 +474,24 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
+  private saveValueInSession(priorTerm: string[]) {
+    try {
+      if (this.winRef) {
+        let sessionStorage: Storage = this.winRef.nativeWindow.sessionStorage;
+        sessionStorage.setItem(KEY_FOR_QUERY, JSON.stringify(priorTerm));
+      }
+    } catch (error) {
+      //
+    }
+  }
+
+  private getPriorTerm(): string[] {
+    if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+      return cloneDeep(this.listOfSelectedGroups).map(item => item.uniqueName);
+    }
+    return [];
+  }
+
   private doConditionalSearch(term?: string) {
 
     if (!term) {
@@ -458,16 +501,17 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     let filteredData: any[] = [];
     let d = cloneDeep(this.rawSmartComboList);
-    let priorTerm = cloneDeep(this.listOfSelectedGroups).map(item => item.uniqueName);
+    let priorTerm = this.getPriorTerm();
     // assuming going backwards and forwards
     if (priorTerm && priorTerm.length > 0) {
       // not the first time so send prev. filtered data
-      if (priorTerm.length > 1) {
+      if (priorTerm.length > 1 && LOCAL_MEMORY.filteredData.size > 0) {
         d = LOCAL_MEMORY.filteredData.get(priorTerm.length - 1);
       }
       filteredData = this.universalSearchService.filterByConditions(d, priorTerm, term);
       // setting values into local var
       if (!term) {
+        this.saveValueInSession(priorTerm);
         LOCAL_MEMORY.filteredData.set(priorTerm.length, filteredData);
       }
     } else {
@@ -485,12 +529,18 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     if (!item.type || (item.type && item.type === 'MENU')) {
       this.selectedItemEmitter.emit(item);
     } else {
+      // emit value for save data in db
+      if (item.type === 'GROUP') {
+        this.groupEmitter.emit(item);
+      }
       try {
         this.listOfSelectedGroups.push(item);
       } catch (error) {
         this.listOfSelectedGroups = [];
         this.listOfSelectedGroups.push(item);
       }
+      // set focus on search
+      this.handleClickOnSearchWrapper();
       // reset ui
       this.virtualScrollElem.refreshView();
       // go for search

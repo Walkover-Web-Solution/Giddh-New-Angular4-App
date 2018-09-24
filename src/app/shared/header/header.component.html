@@ -421,6 +421,7 @@
       <universal-data-list
         [forceSetAutoFocus]="true"
         [isFlying]="false"
+        (groupEmitter)="makeGroupEntryInDB($event)"
         (selectedItemEmitter)="onItemSelected($event)"
         [parentEle]="mdl"
         [isOpen] ="true"

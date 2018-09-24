@@ -16,6 +16,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
+import { cloneDeep } from '../../lodash-optimized';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
@@ -61,8 +62,8 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         let arr = result.body.results;
         arr.map((item: any) => {
           let o: any = provideStrings(item.parentGroups);
-          item.nameStr = o.name;
-          item.uNameStr = o.uName;
+          item.nameStr = o.nameStr;
+          item.uNameStr = o.uNameStr;
           return item;
         });
         return {
@@ -111,8 +112,8 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         let arr = result.body.results;
         arr.map((item: any) => {
           let o: any = provideStrings(item.parentGroups);
-          item.nameStr = o.name;
-          item.uNameStr = o.uName;
+          item.nameStr = o.nameStr;
+          item.uNameStr = o.uNameStr;
           return item;
         });
         return { ...state, flattenGroups: arr };
@@ -481,15 +482,15 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
 
 // consume array and return array on string
 const provideStrings = (arr: any[]) => {
-  let o = { name: [], uName: [] };
-  let b = { name: '', uName: ''};
+  let o = { nameStr: [], uNameStr: [] };
+  let b = { nameStr: '', uNameStr: ''};
   try {
     arr.forEach((item: INameUniqueName) => {
-      o.name.push(item.name);
-      o.uName.push(item.uniqueName);
+      o.nameStr.push(item.name);
+      o.uNameStr.push(item.uniqueName);
     });
-    b.name = o.name.join(', ');
-    b.uName = o.uName.join(', ');
+    b.nameStr = o.nameStr.join(', ');
+    b.uNameStr = o.uNameStr.join(', ');
   } catch (error) {
     //
   }

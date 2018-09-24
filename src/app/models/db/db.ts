@@ -42,11 +42,7 @@ class AppDatabase extends Dexie {
   }
 
   public addItem(entity: string, model: any): Promise<number> {
-    return this[entity].put(model).then((r) => {
-      console.log('Item added or updated successfully');
-    }).catch((err) => {
-      console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
-    });
+    return this[entity].put(model);
   }
 }
 

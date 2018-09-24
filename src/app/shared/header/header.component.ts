@@ -25,7 +25,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../models/api-models/Sales';
 import { IUlist } from '../../models/interfaces/ulist.interface';
-import { sortBy, concat, find } from '../../lodash-optimized';
+import { sortBy, concat, find, cloneDeep } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { DbActions } from '../../actions/db.actions';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -243,7 +243,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
       // Sagar told to change the logic
       // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
-      //   console.log('selectedCmp is :', selectedCmp);
       //   this.userIsSuperUser = true;
       // } else {
       //   this.userIsSuperUser = false;
@@ -332,9 +331,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
     )
       .subscribe((resp: any[]) => {
-        let menuList = resp[0];
-        let grpList = resp[1];
-        let acList = resp[2];
+        let menuList = cloneDeep(resp[0]);
+        let grpList = cloneDeep(resp[1]);
+        let acList = cloneDeep(resp[2]);
         let combinedList;
         if (menuList && grpList && acList) {
 
@@ -344,8 +343,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // modifying grouplist as per ulist requirement
           grpList.map((item: any) => {
             item.type = 'GROUP';
-            item.name = item.groupName;
-            item.uniqueName = item.groupUniqueName;
+            item.name = item.groupName || item.name;
+            item.uniqueName = item.groupUniqueName || item.uniqueName;
             delete item.groupName;
             delete item.groupUniqueName;
             return item;
@@ -438,13 +437,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu.uniqueName = pageName;
           menu.type = 'MENU';
         }
-        this._dbService.addItem('menus', menu).subscribe(d => {
-          this.findListFromDb();
-        }, (err: any) => {
-          // console.log('header.component.ts > addItem > err', err);
-          // already having entry will write the logic for shuffle
-          // console.log('err', err);
-        });
+        this.doEntryInDb('menus', menu);
       });
     this.router.navigate([pageName]);
   }
@@ -692,6 +685,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // });
   }
 
+  public makeGroupEntryInDB(item: IUlist) {
+    // save data to db
+    item.time = + new Date();
+    this.doEntryInDb('groups', item);
+  }
+
   public onItemSelected(item: IUlist) {
     this.modelRef.hide();
     if (item && item.type === 'MENU') {
@@ -706,7 +705,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.router.navigate([url]);
     }
     // save data to db
+    item.time = + new Date();
+    let entity = (item.type) ? 'menus' : 'accounts';
+    this.doEntryInDb(entity, item);
+  }
 
+  private doEntryInDb(entity: string, item: IUlist) {
+    this._dbService.addItem(entity, item).subscribe(() => {
+      this.findListFromDb();
+    }, (err: any) => {
+      console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+    });
   }
 
   private unsubscribe() {
@@ -717,6 +726,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private showNavigationModal() {
+    this.navigationModalVisible = true;
     const _combine = combineLatest(
       this.modalService.onShow,
       this.modalService.onShown,
@@ -741,6 +751,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     );
     this.subscriptions.push(
       this.modalService.onHidden.subscribe((reason: string) => {
+        this.navigationModalVisible = false;
         this.unsubscribe();
       })
     );

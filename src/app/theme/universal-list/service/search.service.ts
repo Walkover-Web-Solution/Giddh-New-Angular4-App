@@ -45,47 +45,35 @@ export class UniversalSearchService {
     // get filtered result
     filtered = this.performIncludesFilter(array, term);
     // sort data and return
-    let final = this.performStartsWithFilter(filtered, term);
-    return final;
-  }
-
-  // sort by category
-  private sortFinalResultByType(arr: any[]) {
-    let menus: any[] = [];
-    let groups: any[] = [];
-    console.log(arr);
-    let acArr: any[] = arr.filter(item => {
-      if (item.type) {
-        if (item.type === 'MENU') {
-          menus.push(item);
-        } else if (item.type === 'GROUP') {
-          groups.push(item);
-        }
-      } else {
-        return item;
-      }
-    });
-    console.log (menus, groups);
-    return concat([], acArr);
+    let final: any[] = this.performStartsWithFilter(filtered, term);
+    return final.slice(0, 100);
   }
 
   private checkForAdditionalFilters(item, term) {
     let result = false;
-    if (!item.type || item.type && item.type === 'GROUP') {
-      return includes(item['nameStr'].toLocaleLowerCase(), term) ||
-      includes(item['uNameStr'].toLocaleLowerCase(), term);
+    try {
+      if (!item.type || item.type && item.type === 'GROUP') {
+        return includes(item['nameStr'].toLocaleLowerCase(), term) ||
+        includes(item['uNameStr'].toLocaleLowerCase(), term);
+      }
+    } catch (error) {
+      console.log (error, item);
+      return result;
     }
-    return result;
   }
 
   // filtering data for own usage
   private performIncludesFilter(arr: any, term: string) {
     return arr.filter((item: any) => {
-      if (
-        includes(item['uniqueName'].toLocaleLowerCase(), term) ||
-        includes(item['name'].toLocaleLowerCase(), term) || this.checkForAdditionalFilters(item, term)
-      ) {
-        return item;
+      try {
+        if (
+          includes(item['uniqueName'].toLocaleLowerCase(), term) ||
+          includes(item['name'].toLocaleLowerCase(), term) || this.checkForAdditionalFilters(item, term)
+        ) {
+          return item;
+        }
+      } catch (error) {
+        console.log (error, item);
       }
     });
   }
