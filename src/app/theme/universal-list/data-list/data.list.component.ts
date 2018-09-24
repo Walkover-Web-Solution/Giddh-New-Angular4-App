@@ -22,14 +22,13 @@ const DIRECTIONAL_KEYS = [
   LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
 ];
 
-const SPECIAL_KEYS = [ ...DIRECTIONAL_KEYS,
-  CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META
+const SPECIAL_KEYS = [ ...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META
 ];
 
 // local memory
 const LOCAL_MEMORY = {
   charCount: null,
-  grpCount: null
+  filteredData: new Map()
 };
 
 @Component({
@@ -43,6 +42,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   @ViewChild('mainEle') public mainEle: ElementRef;
   @ViewChild('searchEle') public searchEle: ElementRef;
+  @ViewChild('searchWrapEle') public searchWrapEle: ElementRef;
   @ViewChild('wrapper') public wrapper: ElementRef;
   @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
 
@@ -215,6 +215,9 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       let box: any = this.parentEle.getBoundingClientRect();
       this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
       this.renderer.setElementStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+      if (this.searchWrapEle) {
+        this.renderer.setElementStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+      }
       if (box.width > 300) {
         this.renderer.setElementClass(this.wrapper.nativeElement, 'wider', true);
       }
@@ -240,6 +243,13 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   // search box related funcs
+
+  // does force reset the cursor to input
+  public handleClickOnSearchWrapper(e: KeyboardEvent) {
+    if (this.searchEle) {
+      this.searchEle.nativeElement.focus();
+    }
+  }
 
   public handleFocus() {
     this.isOpen = true;
@@ -277,8 +287,9 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       e.preventDefault();
       e.stopImmediatePropagation();
     }
-    // prevent caret movement
-    if (this.isOpen && DIRECTIONAL_KEYS.indexOf(key) !== -1) {
+
+    // prevent caret movement and animate selected element
+    if (this.isOpen && [UP_ARROW, DOWN_ARROW].indexOf(key) !== -1 && this.virtualScrollElem) {
       e.preventDefault();
       let item = this.virtualScrollElem.directionToll(key);
       if (item) {
@@ -297,9 +308,15 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
         e.preventDefault();
         e.stopPropagation();
+        // first escape
+        if (this.searchEle.nativeElement.value) {
+          this.searchEle.nativeElement.value = null;
+        } else {
+          // second time pressing escape
+          this.listOfSelectedGroups.pop();
+        }
+        this.doConditionalSearch();
       }
-      // this.isOpen = false;
-      // this.searchEle.nativeElement.value = null;
     }
   }
 
@@ -314,6 +331,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
       return;
     }
+
     term = term.trim();
     if (term && term.length > 0) {
       LOCAL_MEMORY.charCount = term.length;
@@ -432,36 +450,40 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   private doConditionalSearch(term?: string) {
+
     if (!term) {
       LOCAL_MEMORY.charCount = 0;
       this.searchEle.nativeElement.value = null;
     }
+
     let filteredData: any[] = [];
     let d = cloneDeep(this.rawSmartComboList);
-    // not the first time so send prev. filtered data
-    if (this.listOfSelectedGroups.length > 1) {
-      d = cloneDeep(this.rowsClone);
-    }
     let priorTerm = cloneDeep(this.listOfSelectedGroups).map(item => item.uniqueName);
-    // assuming going backwards
+    // assuming going backwards and forwards
     if (priorTerm && priorTerm.length > 0) {
+      // not the first time so send prev. filtered data
+      if (priorTerm.length > 1) {
+        d = LOCAL_MEMORY.filteredData.get(priorTerm.length - 1);
+      }
       filteredData = this.universalSearchService.filterByConditions(d, priorTerm, term);
+      // setting values into local var
+      if (!term) {
+        LOCAL_MEMORY.filteredData.set(priorTerm.length, filteredData);
+      }
     } else {
       // reset data like init state
       filteredData = cloneDeep(this.smartList);
+      // reset local var
+      LOCAL_MEMORY.filteredData = new Map();
     }
-    if (!term) {
-      this.rowsClone = [];
-      this.rowsClone = cloneDeep(filteredData);
-    }
+
     this.updateRowsViaSearch(filteredData);
   }
 
   private emitData(item: IUlist) {
     // emit data in case of direct A/c or Menus
     if (!item.type || (item.type && item.type === 'MENU')) {
-      console.log ('emit data', item);
-      // this.selectedItemEmitter.emit(item);
+      this.selectedItemEmitter.emit(item);
     } else {
       try {
         this.listOfSelectedGroups.push(item);
@@ -469,6 +491,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.listOfSelectedGroups = [];
         this.listOfSelectedGroups.push(item);
       }
+      // reset ui
+      this.virtualScrollElem.refreshView();
       // go for search
       this.doConditionalSearch();
     }

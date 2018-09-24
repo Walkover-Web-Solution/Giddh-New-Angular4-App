@@ -98,7 +98,7 @@
 
 <!-- input box template -->
 <ng-template #searchEleTemplate>
-  <div class="search-wrapper">
+  <div #searchWrapEle class="search-wrapper" (click)="handleClickOnSearchWrapper($event)">
     <span *ngFor="let item of listOfSelectedGroups">
       <div class="vR">
         <div class="vN">

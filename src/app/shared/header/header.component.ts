@@ -350,28 +350,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             delete item.groupUniqueName;
             return item;
           });
+
           // sort group list by name
           grpList = sortBy(grpList, ['name']);
-
-          // uncomment below to make few entries in db
-          /**
-          grpList.forEach((item, index) => {
-            if (index < 11) {
-              item.time = + new Date();
-              this._dbService.addItem('groups', item);
-            }
-          });
-
-          acList.forEach((item, index) => {
-            if (index < 11) {
-              item.time = + new Date();
-              this._dbService.addItem('accounts', item);
-            }
-          });
-          */
-
           // sort group list by name
           acList = sortBy(acList, ['name']);
+
           combinedList = concat(menuList, grpList, acList);
           this.store.dispatch(this._generalActions.setCombinedList(combinedList));
         }
@@ -475,7 +459,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let menuList: IUlist[] = resp[0];
         let groupList: IUlist[] = resp[1];
         let acList: IUlist[] = resp[2];
-        console.log('list: ', resp);
         // slicing due to we only need to show 10 result at first sight
         let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 4));
         this.store.dispatch(this._generalActions.setSmartList(combined));
@@ -722,6 +705,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let url = `ledger/${item.uniqueName}`;
       this.router.navigate([url]);
     }
+    // save data to db
+
   }
 
   private unsubscribe() {

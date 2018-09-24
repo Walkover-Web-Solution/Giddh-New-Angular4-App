@@ -282,7 +282,25 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     return this.items[this.lastActiveItemIdx];
   }
 
+  public refreshView() {
+    if (this.items) {
+      this.lastActiveItemIdx = null;
+      this.items.map(p => p.isHilighted = false);
+    }
+  }
+
+  public getHighLightedItemIndex(): number {
+    if (this.items) {
+      return this.items.findIndex(p => p.isHilighted);
+    } else {
+      return null;
+    }
+  }
+
   public directionToll(key: number): any {
+    if (!this.items) {
+      return false;
+    }
     let item;
     let d = this.calculateDimensions();
     // EMOJI case inline list case
@@ -370,10 +388,6 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       return this.items[0];
     }
-  }
-
-  private getHighLightedItemIndex(): number {
-    return this.items.findIndex(p => p.isHilighted);
   }
 
   // end©©
