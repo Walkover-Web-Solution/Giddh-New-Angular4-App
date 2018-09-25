@@ -88,7 +88,7 @@
 
                     <!-- <td colspan="1"></td> -->
                     <td class="total-amount">
-                        <h2 class="amt secondry_clr" *ngIf="fieldsAndVisibility.table.total?.display">37750.00/-</h2>
+                        <h2 class="amt secondry_clr" *ngIf="fieldsAndVisibility.table.total?.display">8166.00/-</h2>
                     </td>
                 </tr>
             </tbody>
@@ -159,24 +159,25 @@
                     <th class="text-right">Discount</th>
                     <th class="text-right">800.00</th>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
                     <th class="text-right">CGST</th>
                     <th class="text-right">923.00</th>
-                </tr>
+                </tr> -->
                 <tr>
                     <th [attr.colspan]="columnsVisibled -2"></th>
-                    <th class="text-right">SGST</th>
-                    <th class="text-right">923.00</th>
+                    <th class="text-right">IGST</th>
+                    <th class="text-right">966.00</th>
                 </tr>
 
                 <tr>
-                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">Nine Thousand Forty Six Only</th>
+                    <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">Eight Thousand One Hundred Sixty Six Only
+                    </th>
                     <th class="text-right">
                         <strong>Total</strong>
                     </th>
                     <th class="text-right">
-                        <strong>9046.00</strong>
+                        <strong>8166.00</strong>
                     </th>
                 </tr>
             </tfoot>
@@ -187,37 +188,45 @@
                     <th class="text-left" *ngIf="fieldsAndVisibility.table.hsnSac?.display" style="width: 50%;">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
                     <th *ngIf="fieldsAndVisibility.table.taxableValue?.display">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label
                         : 'Taxable Amt.'}}</th>
-                    <th>CGST Rate</th>
+                    <th>IGST Rate</th>
                     <th>Amt.</th>
-                    <th>SGST Rate</th>
-                    <th>Amt.</th>
+                    <!-- <th>SGST Rate</th>
+                    <th>Amt.</th> -->
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="text-left">12345 (H)</td>
-                    <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">7200.00</td>
+                    <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">1700.00</td>
                     <td>
-                        <p>@9.00%</p>
+                        <p>18.00%</p>
                     </td>
-                    <td>9046.00</td>
-                    <td>
-                        <p>@9.00%</p>
+                    <td>306.00
                     </td>
-                    <td>9046.00</td>
                 </tr>
+                <tr>
+                        <td class="text-left">54321 (H)</td>
+                        <td *ngIf="fieldsAndVisibility.table.taxableValue?.display">5500.00</td>
+                        <td>
+                            <p>12.00%</p>
+                        </td>
+                        <td>660.00
+    
+                        </td>
+                    </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="1"></th>
 
                     <th class="text-right">Total
-                        <span style="margin-left:20px;">9046.00</span>
+                        <span style="margin-left:20px;">7200.00</span>
                     </th>
                     <th colspan="1"></th>
-                    <th class="text-right">9046.00</th>
-                    <th colspan="1"></th>
-                    <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">9046.00</th>
+                    <th class="text-right">966.00</th>
+                    <!-- <th colspan="1"></th>
+                    <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">966.00
+                    </th> -->
                 </tr>
             </tfoot>
         </table>
