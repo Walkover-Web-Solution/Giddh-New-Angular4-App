@@ -68,11 +68,11 @@
                             <tbody>
                                 <tr>
                                     <!-- style="text-align: right; padding-right: 4px" -->
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">{{(fieldsAndVisibility.header.invoiceDate?.label?.length> 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}
+                                    <td style="text-align: right; padding-right: 4px" [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">{{(fieldsAndVisibility.header.invoiceDate?.label?.length> 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}
                                     </td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceDate?.display">23/06/2017</td>
-                                    <!-- style="text-align: right; padding-right: 4px" -->
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}
+                                    <!--  -->
+                                    <td style="text-align: right; padding-right: 4px" [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}
                                     </td>
                                     <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">201770323-64</td>
                                 </tr>
@@ -86,9 +86,9 @@
         <table class="meta" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
-                    <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
-                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                            <strong>Mr. Alok Gangrade</strong>
+                    <td *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
+                        <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                            <strong>Attn: Mr. Alok Gangrade</strong>
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alok@gmail.com</p>
                         <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
@@ -98,6 +98,7 @@
                             <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                 : 'Billing Address'}}</strong>
                         </p>
+                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                         <p>5 A.B. Road</p>
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
@@ -108,6 +109,7 @@
                             <strong>{{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label
                                 : 'Shipping Address'}}</strong>
                         </p>
+                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                         <p>5 A.B. Road</p>
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
@@ -360,7 +362,7 @@
 
         <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
             <p [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
-                <strong *ngIf="fieldsAndVisibility.header.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
+                <strong *ngIf="fieldsAndVisibility.footer.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
             </p>
             <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
             </p>

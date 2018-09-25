@@ -63,8 +63,8 @@
             <tbody>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
-                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                            <strong>Mr. Alok Gangrade</strong>
+                        <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                            <strong>Attn: Mr. Alok Gangrade</strong>
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
                         <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
@@ -74,6 +74,7 @@
                             <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                 : 'Billing Address'}}</strong>
                         </p>
+                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                         <p>5 A.B. Road</p>
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
@@ -84,6 +85,7 @@
                             <strong>{{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label
                                 : 'Shipping Address'}}</strong>
                         </p>
+                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                         <p>5 A.B. Road</p>
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
@@ -317,6 +319,14 @@
                 </tr>
             </tbody>
         </table>
+
+        <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
+            <p [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
+                <strong *ngIf="fieldsAndVisibility.footer.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
+            </p>
+            <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
+            </p>
+        </footer>
     </div>
 
 </body>

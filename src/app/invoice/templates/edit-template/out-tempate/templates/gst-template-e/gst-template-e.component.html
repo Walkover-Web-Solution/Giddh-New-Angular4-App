@@ -65,9 +65,9 @@
                             <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                 : 'Billing Address'}}</strong>
                         </p>
-                        <p *ngIf="fieldsAndVisibility.header.billingAddress?.display" class="address">Green Soft Solutions
-                            <br /> 24 Buidling Name
-                            <br /> 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
+                        <p *ngIf="fieldsAndVisibility.header.billingAddress?.display" class="address">
+                            24 Buidling Name <br /> 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingGstin?.display">
                             <strong>{{fieldsAndVisibility.header.billingGstin?.label ? fieldsAndVisibility.header.billingGstin?.label
                                 : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
@@ -293,7 +293,7 @@
         </table>
 
         <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
-            <p *ngIf="fieldsAndVisibility.header.companyName?.display">
+            <p *ngIf="fieldsAndVisibility.footer.companyName?.display">
                 <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
             </p>
             <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>

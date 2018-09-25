@@ -80,14 +80,14 @@
                             <tbody>
                                 <tr>
                                     <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
-                                        <p>Green Soft Solutions</p>
+                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                                         <p>24 Building Name</p>
                                         <p>3rd Floor</p>
                                         <p>15 A.B. Road</p>
                                         <p>Indore (M.P.) 452000</p>
                                     </td>
                                     <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
-                                        <p>Green Soft Solutions</p>
+                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                                         <p>24 Building Name</p>
                                         <p>3rd Floor</p>
                                         <p>15 A.B. Road</p>
@@ -95,8 +95,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td *ngIf="fieldsAndVisibility.header.billingGstin?.display && fieldsAndVisibility.header.billingAddress?.display">
-                                        <ng-container>
+                                    <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                        <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                                             <labeL>
                                                 <strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
                                                     : 'GSTIN'}}</strong>
@@ -104,8 +104,8 @@
                                             <p>23AAAAAA000Z0A8</p>
                                         </ng-container>
                                     </td>
-                                    <td *ngIf="fieldsAndVisibility.header.shippingGstin?.display && fieldsAndVisibility.header.shippingAddress?.display">
-                                        <ng-container>
+                                    <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                                        <ng-container *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
                                             <labeL>
                                                 <strong>{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label
                                                     : 'GSTIN'}}</strong>
@@ -117,8 +117,8 @@
 
                                 <tr>
                                     <td [style.padding-top.px]="20">
-                                        <labeL *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                            <strong>Mr. Alok Gangrade</strong>
+                                        <labeL *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                            <strong>Attn: Mr. Alok Gangrade</strong>
                                         </labeL>
                                         <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
                                         <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91-9123456901</p>
@@ -318,7 +318,7 @@
 
         </aside>
         <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
-            <p *ngIf="fieldsAndVisibility.header.companyName?.display">
+            <p *ngIf="fieldsAndVisibility.footer.companyName?.display">
                 <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
             </p>
             <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display" style="margin-top:5px;">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>
