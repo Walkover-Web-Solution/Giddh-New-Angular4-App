@@ -7,6 +7,7 @@ export interface GstReconcileInvoiceResult {
   taxableAmount: number;
   grandTotal: number;
   placeOfSupply: string;
+  stateCode: string;
   invoiceDate: string;
   ctin: string;
   sgst: number;
