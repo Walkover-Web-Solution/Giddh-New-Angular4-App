@@ -3886,7 +3886,9 @@ tr.db-bnk-account>td.reconnectDiv {
 .longcode-details figure h1 {
     font-size: 18px;
 }
-
+.no-padding {
+    padding: 0px !important;
+}
 .padding-0 {
     padding-left: 0;
     padding-right: 0;

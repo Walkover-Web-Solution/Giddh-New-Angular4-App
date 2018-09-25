@@ -1038,6 +1038,69 @@ input[type="checkbox"]:after {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+/* my css start */
+.text-green {
+    color: #33BB0C;
+}
+.text-light {
+    color: #CCCCCC;
+}
+.text-light-2 {
+    color: #adadad;
+}
+.subscription-title {
+    font-size: 20px;
+    font-family: 'LatoWebbold';
+}
+.box2 {
+    background: #fff;
+}
+.head-title {
+    background: #e5e5e5;
+    padding: 11px 20px;
+    font-size: 14px;
+    font-family: 'LatoWebbold';
+    border: 1px solid #ddd;
+}
+.inner-box2 {
+    padding: 15px;
+}
+.campanien-list {
+    min-height: 373px;
+    overflow: auto;
+}
+.campanien-list ul {
+    list-style-type: none;
+}
+.campanien-list ul > li {
+    display: block;
+    padding: 10px 0;
+    font-size: 14px;
+}
+.campanien-list ul > li > a {
+    display: block;
+    color: #231F20;
+}
+.campanien-list ul > li > a:hover {
+    color: #FF5F00;
+}
+.campanien-list ul > li > a > span {
+    color: #ABABAB;
+    float: right;
+}
+.modal-list ul {
+    list-style-type: none;
+}
+.modal-list ul > li > h3 {
+    display: inline-block;
+    min-width: 150px;
+    font-size: 18px;
+    font-family: 'LatoWebbold';
+}
+.modal-list ul > li {
+    padding: 7px 0;
+}
+
 
 @media only screen and (max-width: 1400px) {
     .template_list {
@@ -4269,9 +4332,9 @@ typeahead-container .dropdown-menu li.active>a>a {
     width: 100%;
 }
 
-small {
+/* small {
     color: #b2b2b2;
-}
+} */
 
 .square-switch {
     width: 100%;
