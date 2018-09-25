@@ -1088,6 +1088,9 @@ input[type="checkbox"]:after {
     color: #ABABAB;
     float: right;
 }
+.modal-list {
+    padding: 11px 15px 5px 15px;
+}
 .modal-list ul {
     list-style-type: none;
 }
@@ -1100,7 +1103,23 @@ input[type="checkbox"]:after {
 .modal-list ul > li {
     padding: 7px 0;
 }
-
+.subscription_modal .modal-body {
+    padding: 0px;
+}
+.subscription_modal .modal-content {
+    border-radius: 0px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
+}
+.subscription_modal .modal-content .close {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    z-index: 9;
+    text-shadow: none;
+}
+.subscription_modal .modal-content .table.basic tr td, .subscription_modal .modal-content .table.basic tr th {
+    padding: 10px 20px;
+}
 
 @media only screen and (max-width: 1400px) {
     .template_list {

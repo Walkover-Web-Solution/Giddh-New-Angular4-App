@@ -3152,7 +3152,9 @@ ul.pills li:hover {
     overflow: hidden;
     position: relative;
 }
-
+.padd15 {
+    padding: 15px;
+}
 .paddingTop200 {
     padding-top: 200px !important;
 }
