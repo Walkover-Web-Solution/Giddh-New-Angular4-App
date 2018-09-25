@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { cloneDeep, startsWith, concat, includes } from '../../../lodash-optimized';
+import { cloneDeep, startsWith, concat, includes, endsWith } from '../../../lodash-optimized';
 
 export const CustomSorting = {
   /**
@@ -19,17 +19,24 @@ export class UniversalSearchService {
 
   public filterByConditions(arr: any[], conditions: string[], term?: string): any[] {
     let priorTerm = conditions[conditions.length - 1];
+    let directChild: any[] = [];
     let res: any[] = arr.filter((item: any) => {
       if (!item.type || item.type === 'GROUP') {
         if (includes(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
-          return item;
+          if (endsWith(item['uNameStr'].toLocaleLowerCase(), priorTerm) ) {
+            directChild.push(item);
+          } else {
+            return item;
+          }
         }
       }
     });
+    res = [...directChild, ...res];
     if (term) {
       return this.filterByTerm(term, res);
     }
-    return res.slice(0, 100);
+
+    return res;
   }
 
   /**
@@ -51,43 +58,44 @@ export class UniversalSearchService {
         array = cloneDeep(filtered);
       });
       let final: any[] = this.performStartsWithFilter(filtered, term);
-      return final.slice(0, 100);
+      return final;
     } else {
       // get filtered result
       filtered = this.performIncludesFilter(array, term);
       // sort data and return
       let final: any[] = this.performStartsWithFilter(filtered, term);
-      return final.slice(0, 100);
-    }
-  }
-
-  private checkForAdditionalFilters(item, term) {
-    let result = false;
-    try {
-      if (!item.type || item.type && item.type === 'GROUP') {
-        return includes(item['nameStr'].toLocaleLowerCase(), term) ||
-        includes(item['uNameStr'].toLocaleLowerCase(), term);
-      }
-    } catch (error) {
-      console.log (error, item);
-      return result;
+      return final;
     }
   }
 
   // filtering data for own usage
   private performIncludesFilter(arr: any, term: string) {
-    return arr.filter((item: any) => {
+    let nameArr: any[] = [];
+    let unqNameArr: any[] = [];
+    let strNameArr: any[] = [];
+    let strUnqNameArr: any[] = [];
+    arr.forEach((item: any) => {
       try {
-        if (
-          includes(item['uniqueName'].toLocaleLowerCase(), term) ||
-          includes(item['name'].toLocaleLowerCase(), term) || this.checkForAdditionalFilters(item, term)
-        ) {
-          return item;
+        if ( includes(item['name'].toLocaleLowerCase(), term) ) {
+          nameArr.push(item);
+        } else if (includes(item['uniqueName'].toLocaleLowerCase(), term)) {
+          unqNameArr.push(item);
+        } else if (!item.type || item.type && item.type === 'GROUP') {
+          try {
+            if (includes(item['nameStr'].toLocaleLowerCase(), term)) {
+              strNameArr.push(item);
+            } else if (includes(item['uNameStr'].toLocaleLowerCase(), term) ) {
+              strUnqNameArr.push(item);
+            }
+          } catch (error) {
+            //
+          }
         }
       } catch (error) {
         console.log (error, item);
       }
     });
+    return [...nameArr, ...unqNameArr, ...strUnqNameArr, ...strNameArr];
   }
 
   //
@@ -95,15 +103,15 @@ export class UniversalSearchService {
     let startsWithArr: any[];
     let includesArr: any[] = [];
     startsWithArr  = arr.filter((item: any) => {
-      if (
-        startsWith(item['uniqueName'].toLocaleLowerCase(), term) || startsWith(item['name'].toLocaleLowerCase(), term)
-      ) {
+      if ( startsWith(item['name'].toLocaleLowerCase(), term) ) {
         return item;
       } else {
         includesArr.push(item);
       }
     });
-    // startsWithArr = CustomSorting.getSortedUsers(startsWithArr, key);
+    // console.log ('startsWith:', startsWithArr.length);
+    // startsWith(item['uniqueName'].toLocaleLowerCase(), term);
+    // startsWithArr = CustomSorting.getSortedUsers(startsWithArr, 'name');
     // includesArr = CustomSorting.getSortedUsers(includesArr, key);
     return concat(startsWithArr, includesArr);
   }
