@@ -252,7 +252,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           this.disableRazorPay = false;
           return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
         }
-      case 'discount_amount':
+      case 'discount_amount': 
         diff = this.amount - this.discount;
         if (diff < 100) {
           this.disableRazorPay = true;
