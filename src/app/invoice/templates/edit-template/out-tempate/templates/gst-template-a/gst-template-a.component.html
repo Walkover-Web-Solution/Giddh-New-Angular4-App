@@ -88,9 +88,9 @@
             <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
-                            <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                <strong>Mr. Alok Gangrade</strong>
+                        <td *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
+                            <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                <strong>Attn: Mr. Alok Gangrade</strong>
                             </p>
                             <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
                             <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
@@ -100,6 +100,7 @@
                                 <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                     : 'Billing Address'}}</strong>
                             </p>
+                            <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
@@ -110,6 +111,7 @@
                                 <strong>{{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label
                                     : 'Shipping Address'}}</strong>
                             </p>
+                            <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
@@ -127,20 +129,24 @@
                                 <p>10-09-2018 </p>
                             </ng-container>
                         </td>
-                        <td *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
-                            <p>
-                                <strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
-                                    : 'GSTIN'}}</strong>
-                            </p>
-                            <p>11AAAAAA000Z0A1</p>
+                        <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                            <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
+                                <p>
+                                    <strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
+                                        : 'GSTIN'}}</strong>
+                                </p>
+                                <p>11AAAAAA000Z0A1</p>
+                            </ng-container>
                         </td>
 
-                        <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
-                            <p>
-                                <strong>{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label
-                                    : 'GSTIN'}}</strong>
-                            </p>
-                            <p>11AAAAAA000Z0A1</p>
+                        <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                            <ng-container *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
+                                <p>
+                                    <strong>{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label
+                                        : 'GSTIN'}}</strong>
+                                </p>
+                                <p>11AAAAAA000Z0A1</p>
+                            </ng-container>
                         </td>
                     </tr>
                 </tbody>
@@ -340,7 +346,7 @@
 
             </aside>
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
-                <p *ngIf="fieldsAndVisibility.header.companyName?.display">
+                <p *ngIf="fieldsAndVisibility.footer.companyName?.display">
                     <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
                 <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
