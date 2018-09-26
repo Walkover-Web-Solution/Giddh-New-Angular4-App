@@ -68,7 +68,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/carriedoversales' },
   { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst/gst' },
   { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
-  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' }
+  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
+  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
 ];
 
 @Component({
