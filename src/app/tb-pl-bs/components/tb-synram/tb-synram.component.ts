@@ -5,28 +5,24 @@ import { Component } from '@angular/core';
   templateUrl: './tb-synram.component.html',
   styleUrls: ['./tb-synram.component.css']
 })
-export class TbSynramComponent {
- 
+export class TbSynramComponent implements OnInit {
 
- ngOnInit() {
-$(".exp").click(function(){
-        $(".exp11").slideToggle();
-		
+ public ngOnInit() {
+$('.exp').click(function() {
+        $('.exp11').slideToggle();
+
     });
-	$('#openingtr').click(function(){
+  $('#openingtr').click(function() {
    $('.openingcheck').toggle(this.checked);
-   
-   
-   $('#transactionstr').click(function(){
-  
+
+   $('#transactionstr').click(function() {
+
    $('.transcheck').toggle(this.checked);
-   
-   
-   $('#closingtr').click(function(){
+
+   $('#closingtr').click(function() {
    $('.closingcheck').toggle(this.checked);
-   
+
 });
-	
-	  }
-	  
-	  
+
+    });
+  }; }}
