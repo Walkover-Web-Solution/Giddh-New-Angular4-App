@@ -6,7 +6,7 @@
         <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
           <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" name="entryDate"
                  [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
-                 class="form-control text-right"/> {{ displayDay }}
+                 class="form-control text-right" (focus)="onDateFieldFocus()"/> {{ displayDay }}
         </div>
       </div>
       <!-- invoice num -->

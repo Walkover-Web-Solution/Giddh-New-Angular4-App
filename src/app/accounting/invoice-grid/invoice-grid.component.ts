@@ -378,13 +378,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (this.accountType === 'creditor') {
         setTimeout(() => {
           if (this.focusedField === 'ledgerName') {
+            console.log('ledgerName');
             this.debtorAcc = acc;
           } else if (this.focusedField === 'partyAcc') {
+            console.log('partyAcc');
             this.creditorAcc = acc;
           } else {
             console.log('No condition passed.');
           }
-        }, 200);
+        }, 10);
         return this.accountType = null;
       } else if (this.accountType === 'debitor') {
         this.debtorAcc = acc;
@@ -520,7 +522,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function (obj: any, idx) {
+    _.forEach(transactions, function(obj: any, idx) {
       if (obj && !obj.particular) {
         transactions = _.without(transactions, obj);
       }
@@ -702,7 +704,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
     if (filterData.transactions.length) {
-      _.forEach(filterData.transactions, function (o, i) {
+      _.forEach(filterData.transactions, function(o, i) {
         if (o.inventory && o.inventory.amount) {
           stocksTransaction.push(o);
         } else {
@@ -726,7 +728,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
     //  let result = _.chain(transactions).groupBy('particular').value();
     transactions = _.orderBy(transactions, 'type');
-    _.forEach(transactions, function (obj, idx) {
+    _.forEach(transactions, function(obj, idx) {
       let inventoryArr = [];
       if (obj.inventory && obj.inventory.amount) {
         inventoryArr.push(obj.inventory);
@@ -906,10 +908,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     // this.showAccountList.emit(false);
     // selectedInput=creditor;
     // this.isPartyACFocused = false;
-    setTimeout(() => {
-      this.currentSelectedValue = '';
-      this.showLedgerAccountList = false;
-    }, 200);
+    // setTimeout(() => {
+    //   this.currentSelectedValue = '';
+    //   this.showLedgerAccountList = false;
+    // }, 200);
+    this.currentSelectedValue = '';
+    this.showLedgerAccountList = false;
   }
 
   public closeCreateStock() {
