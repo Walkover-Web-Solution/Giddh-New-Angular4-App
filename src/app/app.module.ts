@@ -93,8 +93,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
-import '../styles/styles.scss';
-
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
