@@ -53,6 +53,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { IS_ELECTRON_WA } from './app.constant';
+import { UniversalListModule } from './theme/universal-list/universal.list.module';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // Application wide providers
@@ -91,6 +92,8 @@ if (ENV === 'development') {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+import '../styles/styles.scss';
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -142,6 +145,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ActionModule.forRoot(),
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
+    UniversalListModule.forRoot(),
+    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
+    StoreModule.forRoot(reducers, {metaReducers}),
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
