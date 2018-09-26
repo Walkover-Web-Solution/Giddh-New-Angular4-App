@@ -576,11 +576,13 @@ export class InventoryService {
     } else {
       response = this._http.get(url);
     }
-    return response.map((res) => {
-      let data: BaseResponse<InventoryReport, string> = res;
+    return response.pipe(map((res: any) => {
+      let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {}));
+    }), catchError((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {
+      stockUniqueName, from, to, page, count, reportFilters
+    })));
   }
 
   public GetInventoryAllInOutReport(from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
