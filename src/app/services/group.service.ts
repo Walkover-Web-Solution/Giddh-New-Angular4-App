@@ -15,6 +15,8 @@ import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
 
 declare var _: any;
 
@@ -219,6 +221,42 @@ export class GroupService {
       return observableEmpty();
     }
 
+  }
+
+  /**
+   * get flatten groups with breadcrumb
+   */
+  public GetFlattenGroups(q?: any): Observable<BaseResponse<IPaginatedResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    if (this.companyUniqueName) {
+      let URL = this.prepareURI(GROUP_API.FLATTEN_GROUPS_LIST);
+      return this._http.get(URL).pipe(map((res) => {
+        let data: BaseResponse<IPaginatedResponse, string> = res;
+        data.request = q;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<IPaginatedResponse, string>(e, q)));
+    } else {
+      return observableEmpty();
+    }
+  }
+
+  /**
+   * returns an URL after doing errands
+   * @param cStr [company uniquename]
+   * @param gStr [group uniquename]
+   * @param aStr [ac uniquename]
+   */
+  private prepareURI(cStr?: string, gStr?: string, gName?: string, aStr?: string) {
+    let cUName = this._generalService.companyUniqueName;
+    let URL = this.config.apiUrl;
+    if (cStr) {
+      URL += cStr.replace(':companyUniqueName', encodeURIComponent(cUName));
+    }
+    if (gStr && gName) {
+      URL += gStr.replace(':groupUniqueName', encodeURIComponent(gName));
+    }
+    return URL;
   }
 
 }

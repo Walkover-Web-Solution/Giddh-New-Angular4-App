@@ -32,7 +32,6 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
-import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
@@ -588,7 +587,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     // && this.advanceSearchRequest.from
     if (this.advanceSearchRequest.accountUniqueName) {
-      console.log('this.advanceSearchRequest is :', this.advanceSearchRequest);
       this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
