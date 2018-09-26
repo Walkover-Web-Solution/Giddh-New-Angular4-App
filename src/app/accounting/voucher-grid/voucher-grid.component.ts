@@ -300,14 +300,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public onAccountBlur(ev) {
     this.arrowInput = {key: 0};
-    // this.showStockList = false;
     // this.showStockList.next(true);
     if (this.accountSearch) {
       this.searchAccount('');
       this.accountSearch = '';
     }
-    this.showLedgerAccountList = false;
+
+    // if (ev.type === 'blur') {
+    //   this.showLedgerAccountList = false;
+    //   this.showStockList = false;
+    // }
+
     // this.showAccountList.emit(false);
+  }
+
+  public onDateFieldFocus() {
+    setTimeout(() => {
+      this.showLedgerAccountList = false;
+      this.showStockList = false;
+    }, 100);
   }
 
   public onAmountFieldBlur(ev) {

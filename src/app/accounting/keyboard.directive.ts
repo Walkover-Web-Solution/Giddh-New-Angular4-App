@@ -49,11 +49,11 @@ export class OnReturnDirective {
           } else if (rowEntryType === 'to') {
             target = allElements[indx + 5];
           }
-        } else if (allElements[indx].classList.contains('stock-field') && this.selectedField !== allElements[indx]) {
+        } else if (allElements[indx] && allElements[indx].classList.contains('stock-field') && this.selectedField !== allElements[indx]) {
           this.selectedField = allElements[indx];
-        } else if (target.classList.contains('debit-credit')) {
+        } else if (target && target.classList.contains('debit-credit')) {
           target = allElements[indx + 2];
-        } else if (allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
+        } else if (allElements[indx + 1] && allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
           target = allElements[indx + 2];
         }
 
@@ -69,7 +69,6 @@ export class OnReturnDirective {
         // }
 
         if (target) {
-
           // if (this.activeIndx === indx) {
           //   this.clickCount++;
           //   if (this.clickCount > 1) {
@@ -99,14 +98,25 @@ export class OnReturnDirective {
           //   this.clickCount = 0;
           // }
 
-          if (target.value === 'NaN') {
-            target.value = '';
+          if (target.disabled) {
+           target = allElements[indx + 2];
           }
+
+          if (allElements[indx] && allElements[indx].classList.contains('upper-fields')) {
+            setTimeout(() => {
+              target.focus();
+            }, 210);
+          } else {
+            if (target.value === 'NaN') {
+              target.value = '';
+            }
+            target.focus();
+          }
+
           // if (target.disabled) {
           //   const disabledFieldIndx = nodeList.findIndex((ele) => ele === target);
           //   allElements[disabledFieldIndx + 1].focus();
           // }
-          target.focus();
         }
 
       } else if (e.which === 8 || e.keyCode === 8) {
@@ -116,13 +126,13 @@ export class OnReturnDirective {
         const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
         const rowEntryType = activatedRow[0].children[0].children[0].value;
 
-        if (allElements[indx].classList.contains('debit-credit')) {
+        if (allElements[indx] && allElements[indx].classList.contains('debit-credit')) {
           if (rowEntryType === 'by') {
             target = allElements[indx - 4];
           } else if (rowEntryType === 'to') {
             target = allElements[indx - 5];
           }
-        } else if (allElements[indx].classList.contains('byTo')) {
+        } else if (allElements[indx] && allElements[indx].classList.contains('byTo')) {
           if (target.disabled) {
             target = allElements[indx - 2];
           }
@@ -132,7 +142,11 @@ export class OnReturnDirective {
 
         if (target && e.target.value.length === e.target.selectionEnd) {
           e.preventDefault();
-          target.focus();
+          if (target.disabled) {
+            target = allElements[indx + 2];
+          } else {
+            target.focus();
+          }
         }
 
         // if (selectedEle.value === '') {
