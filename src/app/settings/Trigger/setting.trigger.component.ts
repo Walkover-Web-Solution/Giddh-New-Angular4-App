@@ -163,9 +163,11 @@ export class SettingTriggerComponent implements OnInit {
       this._toaster.errorToast('Please select an action.', 'Validation');
       return;
     }
-    if (!dataToSave.value) {
+    if (!dataToSave.value && this.newTriggerObj.scope !== 'closing balance') {
       this._toaster.errorToast('Please enter value.', 'Validation');
       return;
+    } else {
+      delete dataToSave['value'];
     }
     if (!dataToSave.url) {
       this._toaster.errorToast('Please enter URL.', 'Validation');
