@@ -12,28 +12,34 @@
         <div class="main-container-import-export">
           <div>
             <div>
-              <h2 class="text-center" style="font-size: 20px;">import or export your account master data </h2>
+              <h2 class="text-center" style="font-size: 36px;">Import or export your account master data </h2>
             </div>
 
-            <div style="display:flex;margin-top: 100px;">
+            <div style="display:flex;margin-top: 50px;">
 
-              <div class="export-card btn" [ngClass]="{'selected': mode === 'export'}" (click)="setActiveTab('export')">
-                <div class="text-center" style="font-size: 50px;">
-                  <i class="fa fa-upload"></i>
+              
+                <div class="export-card btn" [ngClass]="{'selected': mode === 'export'}" (click)="setActiveTab('export')">
+                <a href="javascript:void(0)">
+                  <div class="text-center import-export-icon">
+                    <i class="fa fa-upload"></i>
+                  </div>
+                  <div>
+                    <span>EXPORT</span>
+                  </div>
+                </a>
                 </div>
-                <div>
-                  <span>EXPORT</span>
-                </div>
-              </div>
+              
 
 
               <div class="import-card btn" [ngClass]="{'selected': mode === 'import'}" (click)="setActiveTab('import')">
-                <div class="text-center" style="font-size: 50px;">
+              <a href="javascript:void(0)">
+                <div class="text-center import-export-icon">
                   <i class="fa fa-download"></i>
                 </div>
                 <div>
                   <span>IMPORT</span>
                 </div>
+              </a>
               </div>
             </div>
 
