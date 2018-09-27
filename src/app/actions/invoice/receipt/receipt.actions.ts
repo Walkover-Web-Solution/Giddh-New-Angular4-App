@@ -9,7 +9,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse } from '../../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -37,6 +37,20 @@ export class InvoiceReceiptActions {
           this.showToaster(response.message, 'error');
         }
         return this.GetAllInvoiceReceiptResponse(response);
+      }));
+
+  @Effect()
+  private GET_VOUCHER_DETAILS$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._receiptService.GetVoucherDetails(action.payload.accountUniqueName,
+        action.payload.model)),
+      map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+          this.showToaster(response.message, 'error');
+        }
+        return this.GetVoucherDetailsResponse(response);
       }));
 
   @Effect()
@@ -91,6 +105,20 @@ export class InvoiceReceiptActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE,
       payload: model
+    };
+  }
+
+  public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS,
+      payload: {accountUniqueName, model}
+    };
+  }
+
+  public GetVoucherDetailsResponse(response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSE,
+      payload: response
     };
   }
 

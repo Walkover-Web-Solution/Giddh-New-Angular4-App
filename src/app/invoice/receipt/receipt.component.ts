@@ -21,7 +21,7 @@ import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
 import { ReceiptService } from '../../services/receipt.service';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
@@ -49,6 +49,7 @@ const COMPARISON_FILTER = [
 export class ReceiptComponent implements OnInit, OnDestroy {
 
   @ViewChild('invoiceReceiptConfirmationModel') public invoiceReceiptConfirmationModel: ModalDirective;
+  @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public selectedInvoice: IInvoiceResult;
@@ -64,6 +65,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public endDate: Date;
   public isGetAllRequestInProcess$: Observable<boolean>;
   public type: string;
+  public downloadVoucherRequestObject: any;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -147,8 +149,11 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     // }
   }
 
-  public onEditBtnClick(uniqueName) {
-    //
+  public onEditBtnClick(accountUniqueName: string, voucherNumber: string) {
+    let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
+    request.invoiceNumber = voucherNumber;
+    request.voucherType = this.type;
+    this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(accountUniqueName, request));
   }
 
   public onDeleteBtnClick(uniqueName) {
@@ -244,15 +249,20 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
   }
 
-  public downloadVoucherRequest(uniqueName: string) {
+  public downloadVoucherRequest(uniqueName: string, isDownloadMode: boolean) {
     let allReceipts: ReceiptItem[] = _.cloneDeep(this.receiptData.items);
     this.selectedReceipt = allReceipts.find((o) => o.uniqueName === uniqueName);
-    let dataToSend: DownloadVoucherRequest = {
+    this.downloadVoucherRequestObject = {
       voucherNumber: [this.selectedReceipt.voucherNumber],
-      voucherType: this.type
+      voucherType: this.type,
+      accountUniqueName: this.selectedReceipt.account.uniqueName
     };
+    if (!isDownloadMode) {
+      this.showPreviewDownloadModal();
+      return;
+    }
 
-    this._receiptService.DownloadVoucher(dataToSend, this.selectedReceipt.account.uniqueName)
+    this._receiptService.DownloadVoucher(this.downloadVoucherRequestObject, this.selectedReceipt.account.uniqueName)
       .subscribe(s => {
         if (s) {
           return saveAs(s, `Receipt-${this.selectedReceipt.account.uniqueName}.pdf`);
@@ -262,6 +272,14 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       }, (e) => {
         this._toasty.errorToast('File not Downloaded Please Try Again');
       });
+  }
+
+  public showPreviewDownloadModal() {
+    this.invoiceReceiptVoucherDetailsModel.show();
+  }
+
+  public hidePreviewDownloadModal() {
+    this.invoiceReceiptVoucherDetailsModel.hide();
   }
 
   public ngOnDestroy() {
