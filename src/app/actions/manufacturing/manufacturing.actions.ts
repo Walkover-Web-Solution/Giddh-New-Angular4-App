@@ -13,7 +13,7 @@ import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class ManufacturingActions {
-  // GET MF Report
+  // GET_ALL MF Report
   @Effect()
   private GetMfReport$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.MF_REPORT).pipe(
@@ -33,7 +33,7 @@ export class ManufacturingActions {
         return {type: 'EmptyAction'};
       }));
 
-  // GET STOCK WITH RATE
+  // GET_ALL STOCK WITH RATE
   @Effect()
   private GetStockWithRate$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE).pipe(
@@ -53,7 +53,7 @@ export class ManufacturingActions {
         return {type: 'EmptyAction'};
       }));
 
-  // GET MANUFACTURING ITEM DETAIL
+  // GET_ALL MANUFACTURING ITEM DETAIL
   @Effect()
   private GetMFItemDetail$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS).pipe(

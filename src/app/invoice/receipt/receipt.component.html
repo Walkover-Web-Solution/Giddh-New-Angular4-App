@@ -96,19 +96,33 @@
   <tbody>
   <tr *ngFor="let item of receiptData.items; let i = index">
     <td>{{ i + 1}}</td>
-    <td><a style="cursor: pointer" (click)="downloadVoucherRequest(item.uniqueName)">
+    <td><a style="cursor: pointer" (click)="downloadVoucherRequest(item.uniqueName, false)">
       {{item.voucherNumber }}</a></td>
     <td>{{item.account.name}}</td>
     <td>{{item.voucherDate}}</td>
     <td>{{item.grandTotal}}</td>
     <td class="text-center">
       <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
-      <i (click)="onEditBtnClick(item.uniqueName)" class="glyphicon glyphicon-pencil cp"></i>
+      <i (click)="onEditBtnClick(item.account.uniqueName, item.voucherNumber)"
+         class="glyphicon glyphicon-pencil cp"></i>
     </td>
   </tr>
   </tbody>
 </table>
 <!-- grid -->
+
+<!-- Download or Preview Voucher model -->
+<div bsModal #invoiceReceiptVoucherDetailsModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <preview-download-receipt-component
+        (closeModelEvent)="hidePreviewDownloadModal()"
+        [request]="downloadVoucherRequestObject"></preview-download-receipt-component>
+    </div>
+  </div>
+</div>
+<!-- Download or Preview Voucher model -->
+
 
 <!-- Delete invoice confirmation model -->
 <div bsModal #invoiceReceiptConfirmationModel="bs-modal" class="modal fade" role="dialog">
