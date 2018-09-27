@@ -212,6 +212,28 @@ input {
 }
 
 
+/* my css start */
+
+
+
+/* file upload css start */
+
+.input-upload .input-group-btn {
+    display: inline;
+}
+.date-range .date-range-picker {
+    /* width: 100% !important; */
+    max-width: 100%;
+}
+.col-xs-2.date-range {
+    width: 220px;
+}
+
+      
+/* file upload css end */
+
+/* my css end */
+
 /*input*/
 
 .form-control {
@@ -2949,6 +2971,10 @@ label {
     font-size: 1.2rem;
 }
 
+.top_bar h1.section_title.inline {
+    margin-top: 7px;
+}
+
 .clearfix {
     clear: both;
 }
@@ -4819,6 +4845,10 @@ table td[class*=col-]:last-child {
     /* max-width: 85%; */
     opacity: 0.7;
     /* max-width: 300px; */
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .plus-btn .btn {
