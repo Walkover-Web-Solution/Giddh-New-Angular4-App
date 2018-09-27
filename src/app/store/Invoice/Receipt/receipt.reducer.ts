@@ -1,6 +1,6 @@
 import { CustomActions } from '../../customActions';
 import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receipt.const';
-import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse } from '../../../models/api-models/recipt';
+import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 
 export interface ReceiptState {
@@ -9,6 +9,8 @@ export interface ReceiptState {
   isGetAllRequestSuccess: boolean;
   isDeleteInProcess: boolean;
   isDeleteSuccess: boolean;
+  voucher: Voucher;
+  voucherDetailsInProcess: boolean;
 }
 
 const initialState: ReceiptState = {
@@ -16,7 +18,9 @@ const initialState: ReceiptState = {
   isGetAllRequestInProcess: false,
   isGetAllRequestSuccess: false,
   isDeleteInProcess: false,
-  isDeleteSuccess: false
+  isDeleteSuccess: false,
+  voucher: null,
+  voucherDetailsInProcess: false
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -89,6 +93,20 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       return state;
     }
 
+    case INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS: {
+      return {
+        ...state,
+        voucherDetailsInProcess: true
+      };
+    }
+
+    case INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSE: {
+      return {
+        ...state,
+        voucherDetailsInProcess: false,
+        voucher: action.payload.body ? action.payload.body : null
+      };
+    }
     default:
       return state;
   }

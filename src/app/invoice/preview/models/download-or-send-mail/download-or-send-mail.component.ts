@@ -66,6 +66,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
         this.base64Data = o.dataPreview;
         this.showPdfWrap = true;
         let str = 'data:application/pdf;base64,' + o.dataPreview;
+        debugger;
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
       } else {
         this.showPdfWrap = false;
