@@ -92,8 +92,7 @@ export class ReceiptService implements OnInit {
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
       , model, {responseType: isPreview ? 'text' : 'blob'}).pipe(
       catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}))
-    )
-      ;
+    );
   }
 
   public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
