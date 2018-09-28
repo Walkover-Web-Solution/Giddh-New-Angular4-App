@@ -51,7 +51,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceReceiptConfirmationModel') public invoiceReceiptConfirmationModel: ModalDirective;
   @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
 
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public selectedInvoice: IInvoiceResult;
   public selectedReceipt: ReceiptItem;
   public receiptSearchRequest: InvoiceReceiptFilter = new InvoiceReceiptFilter();
