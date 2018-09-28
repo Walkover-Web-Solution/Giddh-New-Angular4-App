@@ -33,14 +33,19 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
     let accountUniqueName: string = this.request.accountUniqueName;
     //
     this.isRequestInProcess = true;
-    this._receiptService.DownloadVoucher(model, accountUniqueName, true)
+    this._receiptService.DownloadVoucher(model, accountUniqueName, false)
       .subscribe(s => {
         if (s) {
           this.isRequestInProcess = false;
           this.isError = false;
-          debugger;
-          let str = (window.URL || (window as any).webkitURL).createObjectURL(s);
-          this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
+          const reader = new FileReader();
+
+          reader.addEventListener('loadend', (e: any) => {
+            let str = 'data:application/pdf;base64,' + e.srcElement.result.split(',')[1];
+            this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
+          });
+
+          reader.readAsDataURL(s);
         } else {
           this.isRequestInProcess = false;
           this.isError = true;
