@@ -11,6 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
   @Input() public request: any;
+  @Output() public openUpdateReceiptModel: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public closeModelEvent: EventEmitter<string> = new EventEmitter();
   public base64StringForModel: any;
   public isRequestInProcess: boolean = false;
@@ -35,6 +36,7 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
     this.isRequestInProcess = true;
     this._receiptService.DownloadVoucher(model, accountUniqueName, false)
       .subscribe(s => {
+        debugger;
         if (s) {
           this.isRequestInProcess = false;
           this.isError = false;
@@ -47,11 +49,13 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
 
           reader.readAsDataURL(s);
         } else {
+          debugger;
           this.isRequestInProcess = false;
           this.isError = true;
           this._toasty.errorToast('Preview Not Available! Please Try Again');
         }
       }, (e) => {
+        debugger;
         this.isRequestInProcess = false;
         this.isError = true;
         this._toasty.errorToast('Preview Not Available! Please Try Again');
@@ -62,5 +66,10 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
     if (changes['request'].currentValue && changes['request'].currentValue !== changes['request'].previousValue) {
       this.downloadVoucherRequest();
     }
+  }
+
+  public editButtonClicked() {
+    this.openUpdateReceiptModel.emit(true);
+    this.closeModelEvent.emit();
   }
 }
