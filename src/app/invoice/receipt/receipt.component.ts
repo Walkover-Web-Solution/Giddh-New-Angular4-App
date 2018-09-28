@@ -21,7 +21,7 @@ import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
 import { ReceiptService } from '../../services/receipt.service';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
@@ -82,7 +82,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _receiptService: ReceiptService,
     private _toasty: ToasterService,
-    private router: Router
+    private router: Router,
   ) {
     this.routeEvent = this.router.events.pipe(takeUntil(this.destroyed$));
     this.receiptSearchRequest.page = 1;
@@ -99,15 +99,11 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.store.select(p => p.receipt.data).pipe(take(1)).subscribe((o: ReciptResponse) => {
           this.getInvoiceReceipts(event.url);
         });
-        // if (event.url === '/pages/invoice/cr-note') {
-        //   this.type = 'credit note';
-        // }
-        // if (event.url === '/pages/invoice/dr-note') {
-        //   this.type = 'debit note';
-        // }
-        // console.log("current url", event.url);
       }
     });
+
+    this.getInvoiceReceipts();
+
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
