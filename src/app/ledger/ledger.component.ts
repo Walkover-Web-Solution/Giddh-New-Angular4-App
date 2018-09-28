@@ -143,6 +143,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public needToShowLoader: boolean = true;
   public entryUniqueNamesForBulkAction: string[] = [];
   public searchText: string = '';
+  public isCompanyCreated$: Observable<boolean>;
+
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -172,6 +174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -393,7 +396,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-        this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        this.isCompanyCreated$.subscribe(s => {
+          if (!s) {
+            this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+          }
+        });
         this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         // init transaction request and call for transaction data
         // this.advanceSearchRequest = new AdvanceSearchRequest();
