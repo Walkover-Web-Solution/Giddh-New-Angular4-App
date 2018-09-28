@@ -19,7 +19,7 @@ export const GST_RETURN_API = {
   // SAVE_TAX_PRO: GSTRETURN + 'taxpro/get-otp?gstin=:GSTIN&username=:USERNAME', // GET
   SAVE_TAX_PRO: GSTRETURN + 'taxpro/get-otp', // POST given by @Mayank
   // SAVE_TAX_PRO_WITH_OTP: GSTRETURN + 'taxpro/get-auth-token?gstin=:GSTIN&username=:USERNAME&otp=:OTP', // GET
-  SAVE_TAX_PRO_WITH_OTP: GSTRETURN + 'taxpro/get-auth-token', // POST given by @Mayank
+  SAVE_TAX_PRO_WITH_OTP: GSTRETURN + 'taxpro/get-auth-token?otp=:OTP', // POST given by @Mayank
   FILE_JIO_GST_RETURN: GSTRETURN + 'post-data-to-jiogst?monthYear=:month&gstin=:company_gstin',
   FILE_TAX_PRO_RETURN: GSTRETURN + 'taxpro/post-data-to-taxpro?gstin=:company_gstin&monthYear=:month',
 };
