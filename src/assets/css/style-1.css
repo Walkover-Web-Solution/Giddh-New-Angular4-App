@@ -1612,9 +1612,11 @@ li:last-child .angular-ui-tree-handle {
 .max350 {
     max-width: 350px;
 }
-.max500{
+
+.max500 {
     max-width: 500px;
 }
+
 
 /* styles for trial-balance */
 
@@ -3156,9 +3158,11 @@ ul.pills li:hover {
     overflow: hidden;
     position: relative;
 }
+
 .padd15 {
     padding: 15px;
 }
+
 .paddingTop200 {
     padding-top: 200px !important;
 }
@@ -3892,9 +3896,11 @@ tr.db-bnk-account>td.reconnectDiv {
 .longcode-details figure h1 {
     font-size: 18px;
 }
+
 .no-padding {
     padding: 0px !important;
 }
+
 .padding-0 {
     padding-left: 0;
     padding-right: 0;
@@ -5170,46 +5176,59 @@ bs-datepicker-container {
 .daterangepicker.show-calendar {
     min-width: 666px;
 }
-.panel.sFthanks.fieldset{
-    display:none !important;
+
+.panel.sFthanks.fieldset {
+    display: none !important;
 }
-.panel.sFformfield.fieldset{
-box-shadow: none !important;
+
+.panel.sFformfield.fieldset {
+    box-shadow: none !important;
 }
-#sFSection-Jkvq .sFsubmit.btn-primary{
+
+#sFSection-Jkvq .sFsubmit.btn-primary {
     font-size: 14px !important;
     background: #e5e5e5 !important;
     color: #28ab00 !important;
 }
 
+
 /* added by sarfaraz */
-.d-flex{
-  display: flex;
-  display: -ms-flexbox!important
+
+.d-flex {
+    display: flex;
+    display: -ms-flexbox!important
 }
-.flex-row{
-  flex-direction: row;
-  -ms-flex-direction: row;
+
+.flex-row {
+    flex-direction: row;
+    -ms-flex-direction: row;
 }
+
 .flex-grow-1 {
-  -ms-flex-positive: 1!important;
-  flex-grow: 1!important;
+    -ms-flex-positive: 1!important;
+    flex-grow: 1!important;
 }
-.align-items-center{
-  align-items: center;
-  -ms-flex-align: center;
+
+.align-items-center {
+    align-items: center;
+    -ms-flex-align: center;
 }
+
+
 /* cmdk modal styles */
-.modal-dialog.universal_modal .modal-body{
-  padding: 0;
+
+.modal-dialog.universal_modal .modal-body {
+    padding: 0;
 }
-.modal-dialog.universal_modal  .shortcuts {
-  background: #f9f9f9;
-  border-top: none;
-  margin: 0;
-  padding: 12px 16px 12px 20px;
-  color: #717274;
-  font-size: 12px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+
+.modal-dialog.universal_modal .shortcuts {
+    background: #f9f9f9;
+    border-top: none;
+    margin: 0;
+    padding: 12px 16px 12px 20px;
+    color: #717274;
+    font-size: 12px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: right;
 }
