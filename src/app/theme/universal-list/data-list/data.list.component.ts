@@ -71,7 +71,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // ui related
   @Input() public isOpen: boolean = false;
   @Input() public isMultiple: boolean = false;
-  @Input() public ItemHeight: number = 46;
+  @Input() public ItemHeight: number = 50;
   @Input() public ItemWidth: number = 300;
   // to search bar
   @Input() public searchBoxPlaceholder: string = 'Search...';
