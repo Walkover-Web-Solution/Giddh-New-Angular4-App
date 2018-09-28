@@ -90,8 +90,10 @@ export class ReceiptService implements OnInit {
     return this._http.post(this.config.apiUrl + RECEIPT_API.DOWNLOAD_VOUCHER
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      , model, {responseType: 'blob'}).pipe(
-      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})));
+      , model, {responseType: isPreview ? 'text' : 'blob'}).pipe(
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}))
+    )
+      ;
   }
 
   public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
