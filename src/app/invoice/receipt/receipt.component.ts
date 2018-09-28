@@ -145,11 +145,11 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     // }
   }
 
-  public onEditBtnClick(accountUniqueName: string, voucherNumber: string) {
+  public onEditBtnClick() {
     let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
-    request.invoiceNumber = voucherNumber;
+    request.invoiceNumber = this.downloadVoucherRequestObject.voucherNumber;
     request.voucherType = this.type;
-    this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(accountUniqueName, request));
+    this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.selectedReceipt.account.uniqueName, request));
   }
 
   public onDeleteBtnClick(uniqueName) {

@@ -67,6 +67,20 @@ export class InvoiceReceiptActions {
               private store: Store<AppState>, private _receiptService: ReceiptService) {
   }
 
+  public UpdateInvoiceReceiptRequest(model: ReciptRequest, accountUniqueName: string): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT,
+      payload: {model, accountUniqueName}
+    };
+  }
+
+  public UpdateInvoiceReceiptResponse(model: BaseResponse<string, ReciptRequest>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
+      payload: model
+    };
+  }
+
   public ResetInvoiceReceiptState(): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.INVOICE_RECEIPT_RESET
