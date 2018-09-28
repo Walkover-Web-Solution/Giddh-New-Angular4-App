@@ -73,13 +73,6 @@ export class InvoiceReceiptActions {
     };
   }
 
-  public UpdateInvoiceReceiptRequest(accountUniqueName: string, model: ReciptRequest): CustomActions {
-    return {
-      type: INVOICE_RECEIPT_ACTIONS.UPDATE_GENERATED_INVOICE_RECEIPT,
-      payload: {accountUniqueName, body: model}
-    };
-  }
-
   public GetAllInvoiceReceiptRequest(model: InvoiceReceiptFilter, type: string): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT,
