@@ -217,8 +217,8 @@
     "appId": "org.walkover.giddh",
     "publish": [
       {
-        "provider": "s3",
-        "bucket": "tetingmankuuuuu"
+        "provider": "s3", 
+        "bucket": "giddh-app-builds"
       }
     ],
     "directories": {
