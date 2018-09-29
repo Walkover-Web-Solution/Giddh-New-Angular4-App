@@ -21,6 +21,24 @@ import { NgForm } from '@angular/forms';
     .pad-8 {
       padding: 8px;
     }
+
+    .divTable {
+      display: table;
+      width: auto;
+      background-color: white;
+    }
+
+    .divRow {
+      display: table-row;
+      width: auto;
+    }
+
+    .divCell {
+      float: left;
+      display: table-column;
+      width: 150px;
+      background-color: white;
+    }
   `]
 })
 
@@ -40,6 +58,16 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
   public isRequestSuccess$: Observable<boolean>;
   public crdTotal: number = 0;
   public invTotal: number = 0;
+  public clientTotal: number = 0;
+  public newSalesClientTotal: number = 0;
+  public totalSalesClientTotal: number = 0;
+  public clientAllTotal: number = 0;
+  public newSalesAmount: number = 0;
+  public totalSalesAmount: number = 0;
+  public totalAmount: number = 0;
+  public newSalesInvCount: number = 0;
+  public totalSalesInvCount: number = 0;
+  public invoiceCountAll: number = 0;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private searchFilterData: any = null;
 
@@ -71,6 +99,18 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.invTotal = s.carriedSales.reduce((p, c) => {
           return p + c.invoiceCount;
         }, 0);
+        this.clientTotal = s.carriedSales.reduce((p, c) => {
+          return p + c.uniqueCount;
+        }, 0);
+        this.newSalesClientTotal = s.newSales.uniqueCount;
+        this.totalSalesClientTotal = s.totalSales.uniqueCount;
+        this.clientAllTotal = this.clientTotal + this.newSalesClientTotal + this.totalSalesClientTotal;
+        this.newSalesAmount = s.newSales.total;
+        this.totalSalesAmount = s.totalSales.total;
+        this.totalAmount = this.crdTotal + this.newSalesAmount + this.totalSalesAmount;
+        this.newSalesInvCount = s.newSales.invoiceCount;
+        this.totalSalesInvCount = s.totalSales.invoiceCount;
+        this.invoiceCountAll = this.invTotal + this.newSalesInvCount + this.totalSalesInvCount;
       }
     });
 
