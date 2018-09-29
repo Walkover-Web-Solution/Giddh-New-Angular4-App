@@ -290,7 +290,7 @@ export class AuthenticationService {
     args.headers['Content-Type'] = 'application/xml';
     // args.headers['Accept'] = 'application/xml';
     args.headers = new HttpHeaders(args.headers);
-    return this._httpClient.get('https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/latest.yml', {
+    return this._httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest.yml', {
       headers: args.headers,
       responseType: 'text'
     }).pipe(map((res) => {
