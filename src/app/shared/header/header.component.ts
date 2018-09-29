@@ -66,9 +66,9 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst/gst' },
-  { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
-  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
+  // { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst/gst' },
+  // { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
+  // { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
   { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
 ];
 
@@ -666,25 +666,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   // CMD + K functionality
-  @HostListener('document:keydown', ['$event'])
-  public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.showNavigationModal();
-    }
+  // @HostListener('document:keydown', ['$event'])
+  // public handleKeyboardUpEvent(event: KeyboardEvent) {
+  //   if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //     this.showNavigationModal();
+  //   }
 
-    // window.addEventListener('keyup', (e: KeyboardEvent) => {
-    //   if (e.keyCode === 27) {
-    //     if (this.sideMenu.isopen) {
-    //       this.sideMenu.isopen = false;
-    //     }
-    //     if (this.manageGroupsAccountsModal.isShown) {
-    //       this.hideManageGroupsModal();
-    //     }
-    //   }
-    // });
-  }
+  //   // window.addEventListener('keyup', (e: KeyboardEvent) => {
+  //   //   if (e.keyCode === 27) {
+  //   //     if (this.sideMenu.isopen) {
+  //   //       this.sideMenu.isopen = false;
+  //   //     }
+  //   //     if (this.manageGroupsAccountsModal.isShown) {
+  //   //       this.hideManageGroupsModal();
+  //   //     }
+  //   //   }
+  //   // });
+  // }
 
   public makeGroupEntryInDB(item: IUlist) {
     // save data to db
