@@ -284,6 +284,8 @@ export class SalesEntryClass {
   public entryTotal: number;
   public taxSum?: number;
   public discountSum?: number;
+  public attachFile?: string;
+  public attachedFileName?: string;
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
