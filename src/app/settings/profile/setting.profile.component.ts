@@ -179,7 +179,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           profileObj.gstDetails.push(newGstObj);
         }
         this.companyProfileObj = profileObj;
-        this.dataToSave = [];
         // if (this.statesInBackground && this.statesInBackground.length) {
         //   let selectedState;
         //   if (profileObj.state) {
