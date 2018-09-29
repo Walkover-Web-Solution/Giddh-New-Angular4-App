@@ -146,13 +146,13 @@
   <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
   <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
     <div class="row">
-      <h1 class="section_title">
+      <!-- <h1 class="section_title">
         <strong>Reconciliations </strong>
         <small>(To file your GST return, all missing data needs to be filled properly)</small>
         <button class="btn isActive btn-sm pull-right" style="margin-bottom: 10px"
                 (click)="toggleSettingAsidePane($event, 'RECONCILE');">Pull from GSTN
         </button>
-      </h1>
+      </h1> -->
     </div>
   </div>
 
@@ -161,12 +161,12 @@
     <!-- filter -->
     <div class="col-xs-12">
 
-      <alert type="info" [dismissible]="true" *ngIf="(gstFoundOnGiddh$ | async) === false">
+      <!-- <alert type="info" [dismissible]="true" *ngIf="(gstFoundOnGiddh$ | async) === false">
         <strong>Warning!</strong> GST No, Not found for this company. Please update the GSTIN by updating company
         setting profile
-      </alert>
+      </alert> -->
 
-      <div class="row">
+      <!-- <div class="row">
         <tabset #staticTabs id="c-tab">
           <tab heading="{{'Missing in GSTN (' + (gstNotFoundOnPortalData$ | async)?.count + ')' }}"
                (select)="reconcileTabChanged('NOT_ON_PORTAL')">
@@ -240,9 +240,7 @@
           </tab>
         </tabset>
 
-
-        <!-- search form  -->
-      </div>
+      </div> -->
     </div>
     <!-- filter end  -->
 
@@ -257,11 +255,11 @@
                       (fireReconcileRequest)="fireGstReconcileRequest('NOT_ON_PORTAL')"
                       (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
-<div class="form-group col-xs-2">
-        <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
-    </div>
+<!-- <div class="form-group col-xs-2">
+  <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
+</div> -->
 <!-- Arpit: This code is not yet ready for production -->
-<div class="return-body scroll-y noscroll-x body fill scroll-part">
+<!--div class="return-body scroll-y noscroll-x body fill scroll-part">
   <div class="row">
     <div class="col-md-9 main-wrapper">
       <div class="return-content"> <span class="btn-toolbar  pull-right">
@@ -484,4 +482,4 @@
       </div>
     </div>
   </div>
-</div>
+</div-->
