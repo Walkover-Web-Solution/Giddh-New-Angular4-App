@@ -50,6 +50,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   @ViewChild('invoiceReceiptConfirmationModel') public invoiceReceiptConfirmationModel: ModalDirective;
   @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
+  @ViewChild('invoiceReceiptVoucherUpdateModel') public invoiceReceiptVoucherUpdateModel: ModalDirective;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public selectedInvoice: IInvoiceResult;
@@ -147,9 +148,10 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public onEditBtnClick() {
     let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
-    request.invoiceNumber = this.downloadVoucherRequestObject.voucherNumber;
+    request.invoiceNumber = this.downloadVoucherRequestObject.voucherNumber.join();
     request.voucherType = this.type;
     this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.selectedReceipt.account.uniqueName, request));
+    this.showUpdateModal();
   }
 
   public onDeleteBtnClick(uniqueName) {
@@ -276,6 +278,14 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public hidePreviewDownloadModal() {
     this.invoiceReceiptVoucherDetailsModel.hide();
+  }
+
+  public showUpdateModal() {
+    this.invoiceReceiptVoucherUpdateModel.show();
+  }
+
+  public hideUpdateModal() {
+    this.invoiceReceiptVoucherUpdateModel.hide();
   }
 
   public ngOnDestroy() {

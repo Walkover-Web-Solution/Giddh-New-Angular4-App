@@ -41,7 +41,7 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { TextMaskModule } from '../../../node_modules/angular2-text-mask';
+import { TextMaskModule } from 'angular2-text-mask';
 import { ReceiptComponent } from './receipt/receipt.component';
 import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
 import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
@@ -122,7 +122,8 @@ const INVOICE_ROUTES: Routes = [
     RouterModule,
     TooltipModule,
   ],
-  entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent],
+  entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
+    ReceiptUpdateComponent],
   providers: [InvoiceUiDataService, {
     provide: FONT_PICKER_CONFIG,
     useValue: DEFAULT_FONT_PICKER_CONFIG
