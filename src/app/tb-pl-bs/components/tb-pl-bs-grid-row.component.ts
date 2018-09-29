@@ -56,7 +56,14 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
 
   public entryClicked(acc) {
     let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
-    (window as any).open(url);
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName;
+      console.log(ipcRenderer.send('open-url', url));
+    } else {
+      (window as any).open(url);
+    }
+
   }
 
   public trackByFn(index, item: Account) {

@@ -5,6 +5,7 @@ export const GROUP_API = {
   UNSHARE: 'company/:companyUniqueName/groups/:groupUniqueName/unshare',
   SHARED_WITH: 'company/:companyUniqueName/groups/:groupUniqueName/shared-with',
   UPDATE: 'company/:companyUniqueName/groups/:groupUniqueName',
+  FLATTEN_GROUPS_LIST: 'company/:companyUniqueName/flatten-groups?count=0',
   GROUPS_WITH_ACCOUNT: 'company/:companyUniqueName/groups-with-accounts?q=:q',
   GET_SUB_GROUPS: 'company/:companyUniqueName/groups/:groupUniqueName/subgroups', // model GroupResponse[]  get method
   GET_GROUP_DETAILS: 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
