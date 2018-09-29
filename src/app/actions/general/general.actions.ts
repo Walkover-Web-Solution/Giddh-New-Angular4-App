@@ -12,6 +12,9 @@ import { AccountService } from '../../services/account.service';
 import { States } from '../../models/api-models/Company';
 import { CompanyService } from '../../services/companyService.service';
 import { CustomActions } from '../../store/customActions';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
+import { IUlist } from '../../models/interfaces/ulist.interface';
 
 @Injectable()
 export class GeneralActions {
@@ -23,6 +26,16 @@ export class GeneralActions {
       ),
       map(response => {
         return this.getGroupWithAccountsResponse(response);
+      }));
+
+  @Effect()
+  public GetFlattenGroups$: Observable<Action> = this.action$
+    .ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ).pipe(
+      switchMap((action: CustomActions) =>
+        this._groupService.GetFlattenGroups(action.payload)
+      ),
+      map(response => {
+        return this.getFlattenGroupsRes(response);
       }));
 
   @Effect()
@@ -90,6 +103,44 @@ export class GeneralActions {
   public addAndManageClosed(): CustomActions {
     return {
       type: GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE
+    };
+  }
+
+  public getFlattenGroupsReq(value?: any): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.FLATTEN_GROUPS_REQ,
+      payload: value
+    };
+  }
+
+  public getFlattenGroupsRes(model: BaseResponse<IPaginatedResponse, any>): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.FLATTEN_GROUPS_RES,
+      payload: model
+    };
+  }
+
+  public setCombinedList(model: IUlist[]): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.SET_COMBINED_LIST,
+      payload: model
+    };
+  }
+  public resetCombinedList(): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.RESET_COMBINED_LIST
+    };
+  }
+
+  public setSmartList(model: IUlist[]): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.SET_SMART_LIST,
+      payload: model
+    };
+  }
+  public resetSmartList(): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.RESET_SMART_LIST
     };
   }
 }

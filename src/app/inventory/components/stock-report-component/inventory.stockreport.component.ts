@@ -72,6 +72,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  public stockReport: StockReportResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -136,6 +137,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
           this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
         }
       }
+    });
+
+    this.stockReport$.subscribe(res => {
+      this.stockReport = res;
     });
   }
 
@@ -206,5 +211,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
     this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+  }
+
+  public pageChanged(event: any): void {
+    this.stockReportRequest.page = event.page;
+    this.getStockReport(false);
   }
 }
