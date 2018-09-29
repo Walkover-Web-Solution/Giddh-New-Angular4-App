@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReceiptService } from '../../../services/receipt.service';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ToasterService } from '../../../services/toaster.service';
@@ -17,7 +17,8 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
   public isRequestInProcess: boolean = false;
   public isError: boolean = false;
 
-  constructor(private _receiptService: ReceiptService, private _toasty: ToasterService, private sanitizer: DomSanitizer) {
+  constructor(private _receiptService: ReceiptService, private _toasty: ToasterService,
+              private sanitizer: DomSanitizer, private _cdRef: ChangeDetectorRef) {
     //
   }
 
@@ -36,7 +37,6 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
     this.isRequestInProcess = true;
     this._receiptService.DownloadVoucher(model, accountUniqueName, false)
       .subscribe(s => {
-        debugger;
         if (s) {
           this.isRequestInProcess = false;
           this.isError = false;
@@ -45,17 +45,16 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
           reader.addEventListener('loadend', (e: any) => {
             let str = 'data:application/pdf;base64,' + e.srcElement.result.split(',')[1];
             this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
+            this._cdRef.detectChanges();
           });
 
           reader.readAsDataURL(s);
         } else {
-          debugger;
           this.isRequestInProcess = false;
           this.isError = true;
           this._toasty.errorToast('Preview Not Available! Please Try Again');
         }
       }, (e) => {
-        debugger;
         this.isRequestInProcess = false;
         this.isError = true;
         this._toasty.errorToast('Preview Not Available! Please Try Again');

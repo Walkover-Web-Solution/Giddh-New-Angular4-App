@@ -124,6 +124,17 @@
 </div>
 <!-- Download or Preview Voucher model -->
 
+<!-- Edit Voucher model -->
+<div bsModal #invoiceReceiptVoucherUpdateModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-md">
+    <div class="modal-content">
+      <app-receipt-update
+        (closeModelEvent)="hideUpdateModal()"></app-receipt-update>
+    </div>
+  </div>
+</div>
+<!-- Edit Voucher model -->
+
 
 <!-- Delete invoice confirmation model -->
 <div bsModal #invoiceReceiptConfirmationModel="bs-modal" class="modal fade" role="dialog">
