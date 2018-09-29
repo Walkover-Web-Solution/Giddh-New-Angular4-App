@@ -60,6 +60,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public statesSourceCompany: IOption[] = [];
   public keyDownSubject$: Subject<any> = new Subject<any>();
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
+  public dataToSave: object = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -129,9 +130,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     };
 
     this.keyDownSubject$
-      .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
+      .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
       .subscribe((event: any) => {
-        this.patchProfile({[event.target.name]: event.target.value});
+        this.patchProfile(this.dataToSave);
       });
 
     this.gstKeyDownSubject$
@@ -471,5 +472,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         // }
       }
     });
+  }
+
+  public pushToUpdate(event) {
+    setTimeout(() => {
+      this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
+    }, 100);
   }
 }

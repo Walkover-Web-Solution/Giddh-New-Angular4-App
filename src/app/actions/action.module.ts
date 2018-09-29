@@ -46,6 +46,7 @@ import { NewVsOldInvoicesActions } from './new-vs-old-invoices.actions';
 import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
 import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
+import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -95,7 +96,9 @@ import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
       NewVsOldInvoicesActions,
       AgingReportActions,
       CompanyImportExportActions,
-      InvoiceReceiptActions
+      InvoiceReceiptActions,
+      CompanyImportExportActions,
+      GstReconcileActions
     ])
   ],
   exports: [EffectsModule]

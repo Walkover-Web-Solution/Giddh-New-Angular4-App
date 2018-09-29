@@ -11,7 +11,11 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
-
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -23,7 +27,10 @@ import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
     ImportWizardComponent
   ],
   exports: [ImportComponent],
-  providers: [],
+  providers: [{
+    provide: PERFECT_SCROLLBAR_CONFIG,
+    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+  }],
   imports: [
     CommonModule,
     FormsModule,
@@ -31,7 +38,8 @@ import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
     LaddaModule,
     ShSelectModule,
     TooltipModule,
-    BsDropdownModule
+    BsDropdownModule,
+    PerfectScrollbarModule
   ],
 })
 export class ImportExcelModule {
