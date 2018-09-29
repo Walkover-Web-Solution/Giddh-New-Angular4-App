@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
 import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
+import { GeneralService } from '../services/general.service';
 
 @Component({
   selector: 'onboarding-component',
@@ -10,12 +11,12 @@ import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
 
 })
 
-export class OnboardingComponent implements OnInit {
+export class OnboardingComponent implements OnInit, AfterViewInit {
   @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
   @ViewChild('supportTab') public supportTab: TabsetComponent;
   public loadAPI: Promise<any>;
 
-  constructor(private _router: Router, private _window: WindowRef) {
+  constructor(private _router: Router, private _window: WindowRef, private _generalService: GeneralService) {
     this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
@@ -25,6 +26,10 @@ export class OnboardingComponent implements OnInit {
       this.loadScript();
       resolve(true);
     });
+  }
+
+  public ngAfterViewInit() {
+    this._generalService.IAmLoaded.next(true);
   }
 
   public goTo(path: string) {
