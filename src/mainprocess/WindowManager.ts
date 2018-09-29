@@ -52,7 +52,7 @@ export default class WindowManager {
     });
   }
 
-  public openWindows(): void {
+  public openWindows(url: string = null): void {
     let descriptors = this.stateManager.getWindows();
     if (descriptors == null || descriptors.length === 0) {
       this.stateManager.restoreWindows();
@@ -60,15 +60,21 @@ export default class WindowManager {
     }
 
     for (const descriptor of descriptors) {
-      if (isUrlInvalid(descriptor.url)) {
+      if (isUrlInvalid(descriptor.url) && isUrlInvalid(url)) {
         // was error on load
         descriptor.url = DEFAULT_URL;
+      }
+      if (!isUrlInvalid(url)) {
+        descriptor.url = url;
+        console.log('all set');
       }
 
       const options: BrowserWindowConstructorOptions = {
         // to avoid visible maximizing
+
         show: false,
-        webPreferences: {}
+        webPreferences: {},
+        tabbingIdentifier: 'giddh'
       };
 
       let isMaximized = true;

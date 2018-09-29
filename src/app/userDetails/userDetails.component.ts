@@ -15,6 +15,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'user-details',
@@ -53,11 +55,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public moment = moment;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public userSessionId: any = null;
+  public modalRef: BsModalRef;
+  
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
               private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
-              private _companyActions: CompanyActions, private router: Router, private _sessionAction: SessionActions) {
+              private _companyActions: CompanyActions, private router: Router, private _sessionAction: SessionActions, private modalService: BsModalService) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -248,7 +252,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           this.disableRazorPay = false;
           return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
         }
-      case 'discount_amount':
+      case 'discount_amount': 
         diff = this.amount - this.discount;
         if (diff < 100) {
           this.disableRazorPay = true;
@@ -320,4 +324,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public clearAllSession() {
     this.store.dispatch(this._sessionAction.deleteAllSession());
   }
+
+  public openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, { class: 'subscription_modal'})
+    );
+  }
 }
+
+
+
+
+
+
