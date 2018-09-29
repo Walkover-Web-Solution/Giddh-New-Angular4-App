@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { eventsConst } from 'app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GeneralService {
-  public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
-  private _user: UserDetails;
 
   get user(): UserDetails {
     return this._user;
@@ -16,8 +14,6 @@ export class GeneralService {
     this._user = userData;
   }
 
-  private _companyUniqueName: string;
-
   get companyUniqueName(): string {
     return this._companyUniqueName;
   }
@@ -25,8 +21,6 @@ export class GeneralService {
   set companyUniqueName(companyUniqueName: string) {
     this._companyUniqueName = companyUniqueName;
   }
-
-  private _sessionId: string;
 
   get sessionId(): string {
     return this._sessionId;
@@ -36,9 +30,21 @@ export class GeneralService {
     this._sessionId = sessionId;
   }
 
+  public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
+  public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _user: UserDetails;
+
+  private _companyUniqueName: string;
+
+  private _sessionId: string;
+
   public resetGeneralServiceState() {
     this.user = null;
     this.sessionId = null;
     this.companyUniqueName = null;
+  }
+
+  public SetIAmLoaded(iAmLoaded: boolean) {
+    this.IAmLoaded.next(iAmLoaded);
   }
 }

@@ -18,7 +18,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
   @Output('backPressed') public backPressed: EventEmitter<boolean> = new EventEmitter();
   public fileTypes: IOption[] = [
     {label: 'Accounting Entries', value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES.toString()},
-    {label: 'Master Except Accounts', value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString()},
+    {label: 'Master Except Accounting Entries', value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString()},
   ];
   public fileType: string = '';
   public datePickerOptions: any = {

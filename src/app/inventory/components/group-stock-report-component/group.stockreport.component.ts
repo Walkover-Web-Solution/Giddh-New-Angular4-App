@@ -113,6 +113,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     startDate: moment().subtract(1, 'month'),
     endDate: moment()
   };
+  public groupStockReport: GroupStockReportResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -166,6 +167,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
     this.entityFilterDropDown$ = observableOf(ENTITY_FILTER);
     this.valueFilterDropDown$ = observableOf(VALUE_FILTER);
+    this.groupStockReport$.subscribe(res => {
+      this.groupStockReport = res;
+    });
   }
 
   public getGroupReport(resetPage: boolean) {
@@ -239,5 +243,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
     this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+  }
+
+  public pageChanged(event: any): void {
+    this.GroupStockReportRequest.page = event.page;
+    this.getGroupReport(false);
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import moment from 'moment';
+import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
