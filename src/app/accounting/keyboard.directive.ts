@@ -110,6 +110,14 @@ export class OnReturnDirective {
             if (target.value === 'NaN') {
               target.value = '';
             }
+            if (this.clickCount > 1) {
+              // focus Narration
+              this.clickCount = 0;
+              return document.getElementById('narration').focus();
+            }
+            if (allElements[indx] && allElements[indx].classList.contains('from-or-to-acc')) {
+              this.clickCount++;
+            }
             target.focus();
           }
 
