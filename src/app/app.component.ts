@@ -26,7 +26,7 @@ import { pick } from './lodash-optimized';
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit {
   public IAmLoaded: boolean = false;
