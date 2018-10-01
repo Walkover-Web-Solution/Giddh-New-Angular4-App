@@ -45,12 +45,14 @@
             </div>
           </div>
           <div class="btn-group">
-            <div>
-              <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
-                Go
-              </button>
+            <div style="margin-top: 20px">
+              <div>
+                <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
+                  Go
+                </button>
+              </div>
+              <div class="h-25px"></div>
             </div>
-            <div class="h-25px"></div>
           </div>
         </div>
       </form>
@@ -83,372 +85,371 @@
     </div>
   </div>
 
-  <div style="display: flex; height: 70px;" *ngIf="selectedType==='month'">
+  <div style="display: flex;" *ngIf="selectedType==='month'">
     <div class="divTable">
-      <div class="headRow" style="margin-top: 15px; margin-left: 35px;">
+      <div class="headRow">
         <div class="divCell">Sales from</div>
-        <div class="divCell">Clients</div>
-        <div class="divCell">Amount</div>
-        <div class="divCell">No.of Invoices</div>
+        <div class="divCell align-end">Clients</div>
+        <div class="divCell align-end">Amount</div>
+        <div class="divCell align-end">No.of Invoices</div>
       </div>
-      <div class="divRow">
+      <div class="divRow" style="font-weight: bold">
         <div class="divCell">{{columnName }} {{selectedYear}}</div>
-        <div class="divCell">{{clientAllTotal}}</div>
-        <div class="divCell">{{totalAmount}}</div>
-        <div class="divCell">{{invoiceCountAll}}</div>
+        <div class="divCell align-end">{{clientAllTotal}}</div>
+        <div class="divCell align-end">{{totalAmount}}</div>
+        <div class="divCell align-end">{{invoiceCountAll}}</div>
       </div>
     </div>
   </div>
-  <div style="display: flex; height: 200px;" *ngIf="selectedType==='month'">
-    <div class="divTable">
-      <div style="margin-left: 150px!important;">Bifurcation of clients in {{columnName}}</div>
-      <div class="divRow">
-        <div class="divCell">From new Clients</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.newSales.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount}}</div>
+  <div style="display: flex;" *ngIf="selectedType==='month'">
+    <div class="divTable" style="background-color: #E5E5E5;">
+      <div><h3 class="h3-heading">Bifurcation of clients in {{columnName}} </h3></div>
+      <div class="divRow" style="margin: 30px 0">
+        <div class="divCell" style="font-size: 16px;font-weight: bold">From new Clients</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount}}</div>
       </div>
-      <div class="divRow">
-        <div class="divCell">From old Clients</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.totalSales.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount}}</div>
+      <div class="divRow" style="margin: 30px 0">
+        <div class="divCell" style="font-size: 16px;font-weight: bold">From old Clients</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.invoiceCount}}</div>
       </div>
     </div>
   </div>
-  <div style="display: flex; height: 70px;" *ngIf="selectedType==='month'">
+  <div style="display: flex;margin-top: 30px " *ngIf="selectedType==='month'">
     <div class="divTable">
       <div class="headRow">
         <div class="divCell">Sales from</div>
-        <div class="divCell">Clients</div>
-        <div class="divCell">Amount</div>
-        <div class="divCell">No.of Invoices</div>
+        <div class="divCell align-end">Clients</div>
+        <div class="divCell align-end">Amount</div>
+        <div class="divCell align-end">No.of Invoices</div>
       </div>
-      <div class="divRow">
+      <div class="divRow" style="font-weight: bold">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{selectedYear}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
       </div>
     </div>
   </div>
-  <div style="display: flex; height: 70px;" *ngIf="selectedType==='month'">
+  <div style="display: flex;margin-top: 30px" *ngIf="selectedType==='month'">
     <div class="divTable">
       <div class="headRow">
         <div class="divCell">Sales from</div>
-        <div class="divCell">Clients</div>
-        <div class="divCell">Amount</div>
-        <div class="divCell">No.of Invoices</div>
+        <div class="divCell align-end">Clients</div>
+        <div class="divCell align-end">Amount</div>
+        <div class="divCell align-end">No.of Invoices</div>
       </div>
-      <div class="divRow">
+      <div class="divRow" style="font-weight: bold">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{selectedYear}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
       </div>
     </div>
   </div>
 
-
-  <div style="display: flex; height: 44px;" *ngIf="selectedType==='quater'">
+  <div style="display: flex;" *ngIf="selectedType==='quater'">
     <div class="divTable">
       <div class="headRow">
         <div class="divCell">Sales from</div>
-        <div class="divCell">Clients</div>
-        <div class="divCell">Amount</div>
-        <div class="divCell">No.of Invoices</div>
+        <div class="divCell align-end">Clients</div>
+        <div class="divCell align-end">Amount</div>
+        <div class="divCell align-end">No.of Invoices</div>
       </div>
-      <div class="divRow">
+      <div class="divRow" style="font-weight: bold">
         <div class="divCell">{{columnName }} {{selectedYear}}</div>
-        <div class="divCell">{{clientAllTotal}}</div>
-        <div class="divCell">{{totalAmount}}</div>
-        <div class="divCell">{{invoiceCountAll}}</div>
+        <div class="divCell align-end">{{clientAllTotal}}</div>
+        <div class="divCell align-end">{{totalAmount}}</div>
+        <div class="divCell align-end">{{invoiceCountAll}}</div>
       </div>
     </div>
   </div>
-  <div style="display: flex; height: 160px;" *ngIf="selectedType==='quater'">
-    <div class="divTable">
-      <div style="margin-left: 150px!important;">Bifurcation of clients in {{columnName}}</div>
-      <div class="divRow">
-        <div class="divCell">From new Clients</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.newSales.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount}}</div>
+  <div style="display: flex;" *ngIf="selectedType==='quater'">
+    <div class="divTable" style="background-color: #E5E5E5;">
+      <div><h3 class="h3-heading">Bifurcation of clients in {{columnName}} </h3></div>
+      <div class="divRow" style="margin: 30px 0">
+        <div class="divCell" style="font-size: 16px;font-weight: bold">From new Clients</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount}}</div>
       </div>
-      <div class="divRow">
-        <div class="divCell">From old Clients</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.totalSales.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount}}</div>
+      <div class="divRow" style="margin: 30px 0">
+        <div class="divCell" style="font-size: 16px;font-weight: bold">From old Clients</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
       </div>
       <div class="divRow">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount}}</div>
       </div>
     </div>
   </div>
-  <div style="display: flex; height: 70px;" *ngIf="selectedType==='quater'">
+  <div style="display: flex; margin-top: 30px" *ngIf="selectedType==='quater'">
     <div class="divTable">
       <div class="headRow">
         <div class="divCell">Sales from</div>
-        <div class="divCell">Clients</div>
-        <div class="divCell">Amount</div>
-        <div class="divCell">No.of Invoices</div>
+        <div class="divCell align-end">Clients</div>
+        <div class="divCell align-end">Amount</div>
+        <div class="divCell align-end">No.of Invoices</div>
       </div>
-      <div class="divRow">
+      <div class="divRow" style="font-weight: bold">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{selectedYear}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount}}</div>
       </div>
     </div>
   </div>
-  <div style="display: flex; height: 70px;" *ngIf="selectedType==='quater'">
+  <div style="display: flex;margin-top: 30px" *ngIf="selectedType==='quater'">
     <div class="divTable">
       <div class="headRow">
         <div class="divCell">Sales from</div>
-        <div class="divCell">Clients</div>
-        <div class="divCell">Amount</div>
-        <div class="divCell">No.of Invoices</div>
+        <div class="divCell align-end">Clients</div>
+        <div class="divCell align-end">Amount</div>
+        <div class="divCell align-end">No.of Invoices</div>
       </div>
-      <div class="divRow">
+      <div class="divRow" style="font-weight: bold">
         <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{selectedYear}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
-        <div class="divCell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</div>
+        <div class="divCell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount}}</div>
       </div>
     </div>
   </div>
-
-  <!--<table class="table basic table-bordered">-->
-  <!--<thead>-->
-  <!--<tr>-->
-  <!--<th colspan="3" class="text-center">Total</th>-->
-  <!--<th colspan="3" class="text-center">{{columnName}}(New Customer)</th>-->
-  <!--<th colspan="4" class="text-center">Carried</th>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<th [style.width.%]="5">Amt</th>-->
-  <!--<th [style.width.%]="10">Inv Count</th>-->
-  <!--<th [style.width.%]="15">Customer Count</th>-->
-  <!--<th [style.width.%]="5">Amt</th>-->
-  <!--<th [style.width.%]="10">Inv Count</th>-->
-  <!--<th [style.width.%]="15">Customer Count</th>-->
-  <!--<th [style.width.%]="5">Amt</th>-->
-  <!--<th [style.width.%]="10">Inv Count</th>-->
-  <!--<th [style.width.%]="15">Customer Count</th>-->
-  <!--<th [style.width.%]="10">Month</th>-->
-  <!--</tr>-->
-  <!--</thead>-->
-  <!--<tbody>-->
-  <!--<tr *ngIf="selectedType==='month'">-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="5"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.totalSales.total}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="10"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.totalSales.invoiceCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="15"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="5"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ | async)?.newSales.total}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="10"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.newSales.invoiceCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="15"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"-->
-  <!--style="vertical-align: top!important; margin: 0px; padding: 0px;">-->
-  <!--<table [style.width.%]="100">-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8">{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[0]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[1]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[2]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[3]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[4]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"></td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"></td>-->
-  <!--<td [style.width.%]="39" class="pad-8"></td>-->
-  <!--<td [style.width.%]="24" class="pad-8"></td>-->
-  <!--</tr>-->
-  <!--<tr style="border-top: 1px solid gainsboro;">-->
-  <!--<td [style.width.%]="13.5" class="pad-8">{{ crdTotal }}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{ invTotal }}</td>-->
-  <!--<td [style.width.%]="39" class="pad-8"></td>-->
-  <!--<td [style.width.%]="24" class="pad-8">Total</td>-->
-  <!--</tr>-->
-  <!--</table>-->
-  <!--</th>-->
-  <!--</tr>-->
-
-  <!--<tr *ngIf="selectedType==='quater'">-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="5"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.totalSales.total}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="10"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.totalSales.invoiceCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="15"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="5"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ | async)?.newSales.total}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="10"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.newSales.invoiceCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="15"-->
-  <!--style="vertical-align: top!important;">-->
-  <!--{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}-->
-  <!--</th>-->
-  <!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"-->
-  <!--style="vertical-align: top!important; margin: 0px; padding: 0px;">-->
-  <!--<table [style.width.%]="100">-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8">{{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[0]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[1]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
-  <!--async)?.carriedSales[2]?.invoiceCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}-->
-  <!--</td>-->
-  <!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-  <!--<td [style.width.%]="13.5" class="pad-8"></td>-->
-  <!--<td [style.width.%]="23.9" class="pad-8"></td>-->
-  <!--<td [style.width.%]="39" class="pad-8"></td>-->
-  <!--<td [style.width.%]="24" class="pad-8"></td>-->
-  <!--</tr>-->
-  <!--<tr style="border-top: 1px solid gainsboro;">-->
-  <!--<td [style.width.%]="13.5">{{ crdTotal }}</td>-->
-  <!--<td [style.width.%]="23.9"> {{ invTotal }}</td>-->
-  <!--<td [style.width.%]="39"></td>-->
-  <!--<td [style.width.%]="24">Total</td>-->
-  <!--</tr>-->
-  <!--</table>-->
-  <!--</th>-->
-  <!--</tr>-->
-  <!--</table>-->
 </div>
+<!--<table class="table basic table-bordered">-->
+<!--<thead>-->
+<!--<tr>-->
+<!--<th colspan="3" class="text-center">Total</th>-->
+<!--<th colspan="3" class="text-center">{{columnName}}(New Customer)</th>-->
+<!--<th colspan="4" class="text-center">Carried</th>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<th [style.width.%]="5">Amt</th>-->
+<!--<th [style.width.%]="10">Inv Count</th>-->
+<!--<th [style.width.%]="15">Customer Count</th>-->
+<!--<th [style.width.%]="5">Amt</th>-->
+<!--<th [style.width.%]="10">Inv Count</th>-->
+<!--<th [style.width.%]="15">Customer Count</th>-->
+<!--<th [style.width.%]="5">Amt</th>-->
+<!--<th [style.width.%]="10">Inv Count</th>-->
+<!--<th [style.width.%]="15">Customer Count</th>-->
+<!--<th [style.width.%]="10">Month</th>-->
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr *ngIf="selectedType==='month'">-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="5"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ |-->
+<!--async)?.totalSales.total}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="10"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ |-->
+<!--async)?.totalSales.invoiceCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="15"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="5"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ | async)?.newSales.total}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="10"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ |-->
+<!--async)?.newSales.invoiceCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="15"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"-->
+<!--style="vertical-align: top!important; margin: 0px; padding: 0px;">-->
+<!--<table [style.width.%]="100">-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8">{{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[0]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[1]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[2]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[3]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[4]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"></td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"></td>-->
+<!--<td [style.width.%]="39" class="pad-8"></td>-->
+<!--<td [style.width.%]="24" class="pad-8"></td>-->
+<!--</tr>-->
+<!--<tr style="border-top: 1px solid gainsboro;">-->
+<!--<td [style.width.%]="13.5" class="pad-8">{{ crdTotal }}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{ invTotal }}</td>-->
+<!--<td [style.width.%]="39" class="pad-8"></td>-->
+<!--<td [style.width.%]="24" class="pad-8">Total</td>-->
+<!--</tr>-->
+<!--</table>-->
+<!--</th>-->
+<!--</tr>-->
+
+<!--<tr *ngIf="selectedType==='quater'">-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="5"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ |-->
+<!--async)?.totalSales.total}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="10"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ |-->
+<!--async)?.totalSales.invoiceCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.totalSales" [style.width.%]="15"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="5"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ | async)?.newSales.total}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="10"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ |-->
+<!--async)?.newSales.invoiceCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.newSales" [style.width.%]="15"-->
+<!--style="vertical-align: top!important;">-->
+<!--{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount}}-->
+<!--</th>-->
+<!--<th [hidden]="!(NewVsOldInvoicesData$ | async)?.carriedSales" [style.width.%]="40" colspan="4"-->
+<!--style="vertical-align: top!important; margin: 0px; padding: 0px;">-->
+<!--<table [style.width.%]="100">-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8">{{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[0]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[1]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total}}</td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"> {{(NewVsOldInvoicesData$ |-->
+<!--async)?.carriedSales[2]?.invoiceCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="39" class="pad-8">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount}}-->
+<!--</td>-->
+<!--<td [style.width.%]="24" class="pad-8"> {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td [style.width.%]="13.5" class="pad-8"></td>-->
+<!--<td [style.width.%]="23.9" class="pad-8"></td>-->
+<!--<td [style.width.%]="39" class="pad-8"></td>-->
+<!--<td [style.width.%]="24" class="pad-8"></td>-->
+<!--</tr>-->
+<!--<tr style="border-top: 1px solid gainsboro;">-->
+<!--<td [style.width.%]="13.5">{{ crdTotal }}</td>-->
+<!--<td [style.width.%]="23.9"> {{ invTotal }}</td>-->
+<!--<td [style.width.%]="39"></td>-->
+<!--<td [style.width.%]="24">Total</td>-->
+<!--</tr>-->
+<!--</table>-->
+<!--</th>-->
+<!--</tr>-->
+<!--</table>-->
+
