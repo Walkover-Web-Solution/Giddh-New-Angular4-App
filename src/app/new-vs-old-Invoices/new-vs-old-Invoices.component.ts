@@ -24,20 +24,38 @@ import { NgForm } from '@angular/forms';
 
     .divTable {
       display: table;
-      width: auto;
+      width: 50%;
       background-color: white;
+      padding: 15px 30px;
+    }
+
+    .h3-heading {
+      text-align: center;
+      margin: 20px 0;
+      font-weight: bold;
+      font-size: 20px;
     }
 
     .divRow {
-      display: table-row;
+      display: flex;
+      margin-top: 10px;
       width: auto;
+    }
+
+    .headRow {
+      display: flex;
     }
 
     .divCell {
       float: left;
       display: table-column;
       width: 150px;
-      background-color: white;
+      background-color: #ffffff00;
+      font-size: 14px;
+    }
+
+    .align-end {
+      text-align: end;
     }
   `]
 })
@@ -111,6 +129,10 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.newSalesInvCount = s.newSales.invoiceCount;
         this.totalSalesInvCount = s.totalSales.invoiceCount;
         this.invoiceCountAll = this.invTotal + this.newSalesInvCount + this.totalSalesInvCount;
+      } else {
+        this.clientAllTotal = 0;
+        this.totalAmount = 0;
+        this.invoiceCountAll = 0;
       }
     });
 
