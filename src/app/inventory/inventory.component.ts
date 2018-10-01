@@ -6,6 +6,7 @@ import { InventoryAction } from '../actions/inventory/inventory.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Observable, ReplaySubject } from 'rxjs';
+import { StockGroupResponse, StockDetailResponse } from '../models/api-models/Inventory';
 
 @Component({
   selector: 'inventory',
@@ -13,9 +14,15 @@ import { Observable, ReplaySubject } from 'rxjs';
 })
 export class InventoryComponent implements OnInit, OnDestroy {
   public isBranchVisible$: Observable<boolean>;
+  public activeStock$: Observable<StockDetailResponse>;
+  public activeGroup$: Observable<StockGroupResponse>;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions) {
+    this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
+    this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
