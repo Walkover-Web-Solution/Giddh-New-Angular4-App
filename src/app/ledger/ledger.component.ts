@@ -150,10 +150,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-    private invoiceActions: InvoiceActions, private _loaderService: LoaderService) {
+              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
+              private invoiceActions: InvoiceActions, private _loaderService: LoaderService) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
@@ -325,7 +325,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
 
     observableCombineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
       this.hideEledgerWrap();
@@ -468,36 +468,36 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-              if (stockListFormFlattenAccount) {
-                stockListFormFlattenAccount.stocks.map(as => {
-                  // stock entry
-                  accountsArray.push({
-                    value: uuid.v4(),
-                    label: acc.name + '(' + as.uniqueName + ')',
-                    additional: Object.assign({}, acc, { stock: as })
-                  });
+            if (stockListFormFlattenAccount) {
+              stockListFormFlattenAccount.stocks.map(as => {
+                // stock entry
+                accountsArray.push({
+                  value: uuid.v4(),
+                  label: acc.name + '(' + as.uniqueName + ')',
+                  additional: Object.assign({}, acc, {stock: as})
                 });
-              }
+              });
+            }
           });
         } else {
           // stocks from account itself
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, { stock: as })
+                  additional: Object.assign({}, acc, {stock: as})
                 });
               });
             } else {
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             }
           });
         }
@@ -997,6 +997,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
+  public selectAllEntries(ev: any, type: string = 'debit') {
+    if (type === 'debit') {
+
+    } else {
+
+    }
+  }
+
   public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
     if (entryUniqueName) {
       if (ev.target.checked) {
@@ -1030,8 +1038,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
-        headers: { 'Session-Id': sessionKey },
+        data: {entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join()},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -1053,7 +1061,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onSelectInvoiceGenerateOption(isCombined: boolean) {
     this.bulkActionGenerateVoucherModal.hide();
-    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
   }
 
   public onCancelSelectInvoiceModal() {
