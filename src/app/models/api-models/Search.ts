@@ -104,6 +104,7 @@ export interface BulkEmailRequest {
 }
 
 export interface BulkEmailRequestData {
+  subject: string;
   message: string;
   accounts: string[];
 }
