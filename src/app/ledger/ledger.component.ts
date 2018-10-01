@@ -1,6 +1,6 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeLast, takeUntil } from 'rxjs/operators';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -998,10 +998,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectAllEntries(ev: any, type: string = 'debit') {
+    let debitTrx: ITransactionItem[] = [];
+    let creditTrx: ITransactionItem[] = [];
+
+    this.lc.transactionData$.pipe(takeLast(1)).subscribe(s => {
+      debitTrx = s.debitTransactions;
+      creditTrx = s.creditTransactions;
+    });
     if (type === 'debit') {
-
+      this.entryUniqueNamesForBulkAction = this.entryUniqueNamesForBulkAction.filter(eufb => {
+        return !(debitTrx.findIndex(dt => dt.entryUniqueName === eufb) > -1);
+      });
+      if (ev.target.checked) {
+        debitTrx.forEach(dt => {
+          if (dt.isCompoundEntry) {
+            let compoundDebitEntries: string[] = creditTrx.filter(crt => crt.entryUniqueName === dt.entryUniqueName).map(d => d.entryUniqueName);
+            this.entryUniqueNamesForBulkAction.push(...[...compoundDebitEntries, dt.entryUniqueName]);
+          } else {
+            this.entryUniqueNamesForBulkAction.push(dt.entryUniqueName);
+          }
+        });
+      }
     } else {
-
+      this.entryUniqueNamesForBulkAction = this.entryUniqueNamesForBulkAction.filter(eufb => {
+        return !(creditTrx.findIndex(dt => dt.entryUniqueName === eufb) > -1);
+      });
+      if (ev.target.checked) {
+        creditTrx.forEach(dt => {
+          if (dt.isCompoundEntry) {
+            let compoundCreditEntries: string[] = debitTrx.filter(crt => crt.entryUniqueName === dt.entryUniqueName).map(d => d.entryUniqueName);
+            this.entryUniqueNamesForBulkAction.push(...[...compoundCreditEntries, dt.entryUniqueName]);
+          } else {
+            this.entryUniqueNamesForBulkAction.push(dt.entryUniqueName);
+          }
+        });
+      }
     }
   }
 
