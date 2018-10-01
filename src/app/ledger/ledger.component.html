@@ -356,9 +356,10 @@
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}"
               tooltip="{{txn.description}}">
-            <td class="col-xs-1 text-center"><input type="checkbox"
-                                                    (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"
-                                                    [checked]="entryUniqueNamesForBulkAction.indexOf(txn.entryUniqueName) > -1"/>
+            <td class="col-xs-1 text-center">
+              <input type="checkbox"
+                     (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"
+                     checked="{{(entryUniqueNamesForBulkAction.indexOf(txn.entryUniqueName) > -1)" }}/>
             </td>
             <td class="col-xs-2">{{ txn.entryDate }}</td>
             <td class="col-xs-7">
@@ -485,7 +486,7 @@
           <tr class="ledger-row"
               *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
             <td class="col-xs-1 text-center">
-              <input type="checkbox" (click)="selectAllEntries('credit')">
+              <input type="checkbox" (click)="selectAllEntries($event,'credit')">
             </td>
             <td class="col-xs-2"></td>
             <td class="col-xs-7">B/F Balance</td>
@@ -498,7 +499,7 @@
 
           <tr class="ledger-row"
               *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type !== 'CREDIT' || ((lc.transactionData$ | async)?.forwardedBalance.amount == 0)">
-            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectAllEntries('credit')"></td>
+            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectAllEntries($event,'credit')"></td>
             <td class="col-xs-2">&nbsp;</td>
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
