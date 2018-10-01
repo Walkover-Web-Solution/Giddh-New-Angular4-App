@@ -294,7 +294,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       for (let entry of this.companyProfileObj.gstDetails) {
         entry.addressList[0].isDefault = false;
       }
-      this.companyProfileObj.gstDetails[indx].addressList[0].isDefault = true;
+      if (this.companyProfileObj.gstDetails && this.companyProfileObj.gstDetails[indx] && this.companyProfileObj.gstDetails[indx].addressList && this.companyProfileObj.gstDetails[indx].addressList[0]) {
+        this.companyProfileObj.gstDetails[indx].addressList[0].isDefault = true;
+      }
     }
   }
 
