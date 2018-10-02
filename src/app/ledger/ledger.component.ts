@@ -1,6 +1,6 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeLast, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -717,7 +717,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           discounts: [],
           selectedAccount: null,
           applyApplicableTaxes: true,
-          isInclusiveTax: true
+          isInclusiveTax: true,
+          isChecked: false
         },
         {
           id: uuid.v4(),
@@ -731,7 +732,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           discounts: [],
           selectedAccount: null,
           applyApplicableTaxes: true,
-          isInclusiveTax: true
+          isInclusiveTax: true,
+          isChecked: false
         }],
       voucherType: null,
       entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
@@ -744,7 +746,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       chequeNumber: '',
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
-      compoundTotal: 0
+      compoundTotal: 0,
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -981,6 +983,31 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public performBulkAction(actionType: string) {
+    this.entryUniqueNamesForBulkAction = [];
+    if (this.lc.showEledger) {
+      this.entryUniqueNamesForBulkAction.push(
+        ...this.lc.bankTransactionsData.map(bt => bt.transactions)
+          .reduce((prev, curr) => {
+            return prev.concat(curr);
+          }, []).filter(f => f.isChecked).map(m => m.particular)
+      );
+    } else {
+      let debitTrx: ITransactionItem[] = [];
+      let creditTrx: ITransactionItem[] = [];
+
+      this.lc.transactionData$.pipe(take(2)).subscribe(s => {
+        if (s) {
+          debitTrx = s.debitTransactions;
+          creditTrx = s.creditTransactions;
+        }
+      });
+
+      this.entryUniqueNamesForBulkAction.push(
+        ...[
+          ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+          ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+        ]);
+    }
     if (!this.entryUniqueNamesForBulkAction.length) {
       this._toaster.errorToast('Please select at least one entry.', 'Error');
       return;
@@ -997,43 +1024,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public selectAllEntries(ev: any, type: string = 'debit') {
-    let debitTrx: ITransactionItem[] = [];
-    let creditTrx: ITransactionItem[] = [];
-
-    this.lc.transactionData$.pipe(takeLast(1)).subscribe(s => {
-      debitTrx = s.debitTransactions;
-      creditTrx = s.creditTransactions;
+  public selectAllEntries(ev: any, type: 'debit' | 'credit') {
+    let key = type === 'debit' ? 'DEBIT' : 'CREDIT';
+    this.lc.blankLedger.transactions.map(bt => {
+      if (bt.type === key) {
+        bt.isChecked = ev.target.checked;
+      }
+      return bt;
     });
-    if (type === 'debit') {
-      this.entryUniqueNamesForBulkAction = this.entryUniqueNamesForBulkAction.filter(eufb => {
-        return !(debitTrx.findIndex(dt => dt.entryUniqueName === eufb) > -1);
-      });
-      if (ev.target.checked) {
-        debitTrx.forEach(dt => {
-          if (dt.isCompoundEntry) {
-            let compoundDebitEntries: string[] = creditTrx.filter(crt => crt.entryUniqueName === dt.entryUniqueName).map(d => d.entryUniqueName);
-            this.entryUniqueNamesForBulkAction.push(...[...compoundDebitEntries, dt.entryUniqueName]);
-          } else {
-            this.entryUniqueNamesForBulkAction.push(dt.entryUniqueName);
-          }
-        });
-      }
-    } else {
-      this.entryUniqueNamesForBulkAction = this.entryUniqueNamesForBulkAction.filter(eufb => {
-        return !(creditTrx.findIndex(dt => dt.entryUniqueName === eufb) > -1);
-      });
-      if (ev.target.checked) {
-        creditTrx.forEach(dt => {
-          if (dt.isCompoundEntry) {
-            let compoundCreditEntries: string[] = debitTrx.filter(crt => crt.entryUniqueName === dt.entryUniqueName).map(d => d.entryUniqueName);
-            this.entryUniqueNamesForBulkAction.push(...[...compoundCreditEntries, dt.entryUniqueName]);
-          } else {
-            this.entryUniqueNamesForBulkAction.push(dt.entryUniqueName);
-          }
-        });
-      }
-    }
+    this.store.dispatch(this._ledgerActions.SelectDeSelectAllEntries(type, ev.target.checked));
   }
 
   public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
@@ -1050,11 +1049,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public onCancelBulkActionConfirmation() {
+    this.entryUniqueNamesForBulkAction = [];
     this.bulkActionConfirmationModal.hide();
   }
 
   public onConfirmationBulkActionConfirmation() {
     this.store.dispatch(this._ledgerActions.DeleteMultipleLedgerEntries(this.lc.accountUnq, _.cloneDeep(this.entryUniqueNamesForBulkAction)));
+    this.entryUniqueNamesForBulkAction = [];
     this.bulkActionConfirmationModal.hide();
   }
 

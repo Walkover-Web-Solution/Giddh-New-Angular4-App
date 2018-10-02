@@ -123,7 +123,7 @@
                   <td class="width100" *ngIf="txn.type === 'DEBIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
-                      <tr class="ledger-row" (click)="selectBankTxn(txn)"
+                      <tr class="ledger-row" (click)="selectBankTxn(txn)" [(ngModel)]="txn.isChecked"
                           [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                         <td class="col-xs-1 text-center">
                           <input type="checkbox" (click)="selectEntryForBulkAction($event, item)"/>
@@ -195,7 +195,8 @@
                       <tbody class="ledger-main">
                       <tr class="ledger-row">
                         <td class="col-xs-1 text-center">
-                          <input type="checkbox" (click)="selectEntryForBulkAction($event, item)"/>
+                          <input type="checkbox" [(ngModel)]="txn.isChecked"
+                                 (click)="selectEntryForBulkAction($event, item)"/>
                         </td>
                         <td class="col-xs-2">
                           <input class="form-control" type="text" [(ngModel)]="item.entryDate"
@@ -317,6 +318,7 @@
       <!--debit transaction-->
       <div class="left-col-new"
            [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
+        <!--debit transaction header-->
         <table class="width100">
           <thead>
           <tr class="t-h-bg1">
@@ -331,12 +333,17 @@
           </tr>
           </thead>
         </table>
+        <!--debit transaction header-->
+
 
         <table class="width100">
           <tbody>
+          <!--debit transaction if forwardedBalance -->
           <tr class="ledger-row"
               *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">
-            <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectAllEntries($event, 'debit')"></td>
+            <td class="col-xs-1 text-center">
+              <input type="checkbox" (click)="selectAllEntries($event, 'debit')">
+            </td>
             <td class="col-xs-2"></td>
             <td class="col-xs-7">B/F Balance</td>
             <td class="col-xs-3">
@@ -344,7 +351,9 @@
               <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
             </td>
           </tr>
+          <!--debit transaction if forwardedBalance -->
 
+          <!--debit transaction if no forwardedBalance -->
           <tr class="ledger-row"
               *ngIf="((lc.transactionData$ | async)?.forwardedBalance.type !== 'DEBIT') || ((lc.transactionData$ | async)?.forwardedBalance.amount == 0)">
             <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectAllEntries($event, 'debit')"></td>
@@ -352,14 +361,15 @@
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
           </tr>
+          <!--debit transaction if no forwardedBalance -->
+
+          <!--debit transaction loop over transactions -->
           <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}"
               tooltip="{{txn.description}}">
             <td class="col-xs-1 text-center">
-              <input type="checkbox"
-                     (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"
-                     checked="{{(entryUniqueNamesForBulkAction.indexOf(txn.entryUniqueName) > -1)" }}/>
+              <input type="checkbox" [(ngModel)]="txn.isChecked"/>
             </td>
             <td class="col-xs-2">{{ txn.entryDate }}</td>
             <td class="col-xs-7">
@@ -382,6 +392,7 @@
                 </span>
             </td>
           </tr>
+          <!--debit transaction loop over transactions -->
           </tbody>
         </table>
 
@@ -395,7 +406,7 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row">
                   <td class="col-xs-1 text-center">
-                    <input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/></td>
+                    <input type="checkbox"/></td>
                   <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
                            [textMask]="{mask: lc.dateMask, guide: true}">
@@ -466,6 +477,7 @@
       <!--credit transaction-->
       <div class="right-col-new"
            [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+        <!--credit transaction header-->
         <table class="width100">
           <thead>
           <tr class="t-h-bg1">
@@ -480,9 +492,12 @@
           </tr>
           </thead>
         </table>
+        <!--credit transaction header-->
 
         <table class="width100">
           <tbody>
+
+          <!--credit transaction if forwardedBalance -->
           <tr class="ledger-row"
               *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
             <td class="col-xs-1 text-center">
@@ -496,7 +511,9 @@
               <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
             </td>
           </tr>
+          <!--credit transaction if forwardedBalance -->
 
+          <!--credit transaction no forwardedBalance -->
           <tr class="ledger-row"
               *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type !== 'CREDIT' || ((lc.transactionData$ | async)?.forwardedBalance.amount == 0)">
             <td class="col-xs-1 text-center"><input type="checkbox" (click)="selectAllEntries($event,'credit')"></td>
@@ -504,13 +521,15 @@
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
           </tr>
+          <!--credit transaction no forwardedBalance -->
 
+          <!--credit transaction loop over transactions -->
           <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}"
               tooltip="{{txn.description}}">
-            <td class="col-xs-1 text-center"><input type="checkbox"
-                                                    (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
+            <td class="col-xs-1 text-center">
+              <input type="checkbox" [(ngModel)]="txn.isChecked"/>
             </td>
             <td class="col-xs-2">{{ txn.entryDate }}</td>
             <td class="col-xs-7">
@@ -533,7 +552,7 @@
                 </span>
             </td>
           </tr>
-
+          <!--credit transaction loop over transactions -->
           </tbody>
         </table>
 
@@ -546,7 +565,7 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row">
                   <td class="col-xs-1 text-center">
-                    <input type="checkbox" (click)="selectEntryForBulkAction($event, txn.entryUniqueName)"/>
+                    <input type="checkbox"/>
                   </td>
                   <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -841,7 +860,7 @@
 <!-- Bulk action confirmation popup -->
 
 <!-- Bulk action generate voucher popup -->
-<div bsModal #bulkActionGenerateVoucherModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #bulkActionGenerateVoucherModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;"performBulkAction>
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div id="" class="">

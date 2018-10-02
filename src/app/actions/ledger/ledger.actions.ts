@@ -634,6 +634,20 @@ export class LedgerActions {
     };
   }
 
+  public SelectDeSelectAllEntries(mode: 'debit' | 'credit', isChecked: boolean): CustomActions {
+    return {
+      type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
+      payload: {mode, isChecked}
+    };
+  }
+
+  public SelectDeSelectSingleEntries(mode: 'debit' | 'credit', isChecked: boolean): CustomActions {
+    return {
+      type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
+      payload: {mode, isChecked}
+    };
+  }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
