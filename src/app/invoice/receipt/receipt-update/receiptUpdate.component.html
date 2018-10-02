@@ -202,8 +202,8 @@
               <button type="button" class="btn btn-default mrR1"
                       (click)="closeModelEvent.emit()">Close
               </button>
-              <button type="submit" class="btn btn-default">
-                <span>Update {{activatedInvoice | titlecase }}</span>
+              <button type="submit" class="btn btn-default" (click)="updateModelData()">
+                <span>Update {{activatedInvoice | titlecase}}</span>
               </button>
             </div>
           </div>
