@@ -104,7 +104,7 @@
     <td class="text-center">
       <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
       <!--<i (click)="onEditBtnClick()"-->
-         <!--class="glyphicon glyphicon-pencil cp"></i>-->
+      <!--class="glyphicon glyphicon-pencil cp"></i>-->
     </td>
   </tr>
   </tbody>
@@ -118,7 +118,7 @@
       <preview-download-receipt-component
         (closeModelEvent)="hidePreviewDownloadModal()"
         (openUpdateReceiptModel)="onEditBtnClick()"
-        [request]="downloadVoucherRequestObject" ></preview-download-receipt-component>
+        [request]="downloadVoucherRequestObject"></preview-download-receipt-component>
     </div>
   </div>
 </div>
@@ -129,7 +129,8 @@
   <div class="modal-md">
     <div class="modal-content">
       <app-receipt-update
-        (closeModelEvent)="hideUpdateModal()" [activatedInvoice]="type"></app-receipt-update>
+        (closeModelEvent)="hideUpdateModal()" [activatedInvoice]="type"
+        [selectedReceipt]="selectedReceipt"></app-receipt-update>
     </div>
   </div>
 </div>
