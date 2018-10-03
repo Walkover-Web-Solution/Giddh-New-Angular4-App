@@ -117,7 +117,7 @@
     <div class="modal-content">
       <preview-download-receipt-component
         (closeModelEvent)="hidePreviewDownloadModal()"
-        (openUpdateReceiptModel)="onEditBtnClick()"
+        (openUpdateReceiptModel)="onEditBtnClick()" [activatedInvoice]="type"
         [request]="downloadVoucherRequestObject"></preview-download-receipt-component>
     </div>
   </div>
