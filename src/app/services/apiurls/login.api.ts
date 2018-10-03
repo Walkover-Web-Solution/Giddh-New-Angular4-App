@@ -26,3 +26,7 @@ export const LOGIN_API = {
   RESET_PASSWORD: 'reset-password',
   RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
 };
+
+export const GMAIL_API = {
+  GENERATE_GMAIL_TOKEN: 'company/:companyUniqueName/generate-mail-token' // POST
+};
