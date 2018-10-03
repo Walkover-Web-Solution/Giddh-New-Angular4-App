@@ -17,6 +17,7 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
   public base64StringForModel: any;
   public isRequestInProcess: boolean = false;
   public isError: boolean = false;
+  @Input() public activatedInvoice: string;
 
   constructor(private _receiptService: ReceiptService, private _toasty: ToasterService,
               private sanitizer: DomSanitizer, private _cdRef: ChangeDetectorRef) {
