@@ -158,7 +158,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
-    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay());
+    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay(1));
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
@@ -967,7 +967,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getReconciliation() {
-    this.lc.transactionData$.pipe(take(2)).subscribe((val) => {
+    this.lc.transactionData$.pipe(take(1)).subscribe((val) => {
       if (val) {
         this.closingBalanceBeforeReconcile = val.closingBalance;
         this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -995,7 +995,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       let debitTrx: ITransactionItem[] = [];
       let creditTrx: ITransactionItem[] = [];
 
-      this.lc.transactionData$.pipe(take(2)).subscribe(s => {
+      this.lc.transactionData$.pipe(take(1)).subscribe(s => {
         if (s) {
           debitTrx = s.debitTransactions;
           creditTrx = s.creditTransactions;
@@ -1026,12 +1026,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public selectAllEntries(ev: any, type: 'debit' | 'credit') {
     let key = type === 'debit' ? 'DEBIT' : 'CREDIT';
-    this.lc.blankLedger.transactions.map(bt => {
-      if (bt.type === key) {
-        bt.isChecked = ev.target.checked;
-      }
-      return bt;
-    });
+    // this.lc.blankLedger.transactions.map(bt => {
+    //   if (bt.type === key) {
+    //     bt.isChecked = ev.target.checked;
+    //   }
+    //   return bt;
+    // });
     this.store.dispatch(this._ledgerActions.SelectDeSelectAllEntries(type, ev.target.checked));
   }
 
