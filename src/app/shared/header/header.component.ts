@@ -271,6 +271,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.findListFromDb();
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
+
     //
     this.user$.pipe(take(1)).subscribe((u) => {
       if (u) {
@@ -411,6 +412,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public ngAfterViewChecked() {
     this.cdRef.detectChanges();
+  }
+
+  public handleNoResultFoundEmitter(e: any) {
+    this.store.dispatch(this._generalActions.getFlattenAccount());
+    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
+  }
+
+  public handleNewTeamCreationEmitter(e: any) {
+    this.modelRef.hide();
+    this.showManageGroupsModal();
   }
 
   /**
