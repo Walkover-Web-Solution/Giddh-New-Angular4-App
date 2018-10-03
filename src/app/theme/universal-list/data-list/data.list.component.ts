@@ -51,7 +51,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // bot related
   @Input() public preventOutSideClose: boolean = false;
   @Input() public dontShowNoResultMsg: boolean = false;
-  @Input() public showChannelCreateBtn: boolean = false;
+  @Input() public showChannelCreateBtn: boolean = true;
 
   // positioning
   @Input() public placement: string;
@@ -152,6 +152,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.virtualScrollElem.setLastItemIndex(idx);
       }
     }
+  }
+
+  public triggerAddManage() {
+    this.newTeamCreationEmitter.emit(true);
   }
 
   // get initialized on init and return selected item
@@ -354,6 +358,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       // search data conditional
       filteredData = this.universalSearchService.filterByTerm(term, d);
       this.updateRowsViaSearch(filteredData);
+
+      // emit no result event
+      if (filteredData.length === 0) {
+        this.noResultFoundEmitter.emit(true);
+      }
     } else {
       // backspace
       if ( this.isOpen && key === BACKSPACE ) {
