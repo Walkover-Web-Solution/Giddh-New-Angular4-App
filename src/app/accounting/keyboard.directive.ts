@@ -55,6 +55,8 @@ export class OnReturnDirective {
           target = allElements[indx + 2];
         } else if (allElements[indx + 1] && allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
           target = allElements[indx + 2];
+        } else if (allElements[indx] && allElements[indx].classList.contains('account-amout-field')) {
+          console.log('Go to Next field');
         }
 
         // let attrArray = [];
@@ -146,6 +148,8 @@ export class OnReturnDirective {
           }
         } else if (allElements[indx - 1] && allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
           target = allElements[indx - 2];
+        } else if (allElements[indx] && allElements[indx].classList.contains('account-amout-field')) {
+          console.log('Go to previous field');
         }
 
         if (target && e.target.value.length === e.target.selectionEnd) {
