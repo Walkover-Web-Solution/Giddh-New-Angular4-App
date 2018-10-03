@@ -144,6 +144,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public entryUniqueNamesForBulkAction: string[] = [];
   public searchText: string = '';
   public isCompanyCreated$: Observable<boolean>;
+  public debitSelectAll: boolean = false;
+  public creditSelectAll: boolean = false;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
