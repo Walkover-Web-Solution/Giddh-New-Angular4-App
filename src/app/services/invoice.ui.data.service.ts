@@ -174,7 +174,7 @@ export class InvoiceUiDataService {
           };
         }
 
-        selectedTemplate = this.BRToNewLine(selectedTemplate);
+        // selectedTemplate = this.BRToNewLine(selectedTemplate);
         // console.log('THe selected template is :', selectedTemplate);
 
         this.customTemplate.next(_.cloneDeep(selectedTemplate));
@@ -189,7 +189,7 @@ export class InvoiceUiDataService {
         };
       }
 
-      selectedTemplate = this.BRToNewLine(selectedTemplate);
+      // selectedTemplate = this.BRToNewLine(selectedTemplate);
       // console.log('THe selected template is :', selectedTemplate);
 
       this.customTemplate.next(_.cloneDeep(selectedTemplate));
