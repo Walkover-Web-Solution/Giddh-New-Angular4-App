@@ -501,7 +501,7 @@
           <tr class="ledger-row"
               *ngIf="(lc.transactionData$ | async)?.forwardedBalance.amount > 0 && (lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
             <td class="col-xs-1 text-center">
-              <input type="checkbox" (click)="selectAllEntries($event,'credit')">
+              <input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">
             </td>
             <td class="col-xs-2"></td>
             <td class="col-xs-7">B/F Balance</td>
