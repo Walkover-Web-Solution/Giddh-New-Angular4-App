@@ -36,8 +36,10 @@
       <div class="mx-350 clearfix form-inline mrB">
         <div class="form-group">
           <label>Party A/c Name:<sup>*</sup></label>
-          <input name="party_name" type="text" onReturn #creditor placeholder="Party account"
-                 class="form-control max-height28 appearance_none" (keyup)="searchAccount($event?.target?.value)"
+          <!-- #creditor -->
+          <input name="party_name" type="text" onReturn placeholder="Party account"
+                 class="form-control max-height28 appearance_none upper-fields" 
+                 (keyup)="searchAccount($event?.target?.value)"
                  (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name"
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'partyAcc'"
                  (blur)="onPartyAccBlur();selectedField=null;focusedField = null" style="max-width:200px"/>
@@ -45,7 +47,7 @@
         <div class="form-group" style="margin-top: 5px;" [hidden]="!isPurchaseInvoiceSelected">
           <label>Ledger name:<sup>*</sup></label>
           <input name="ledger_name" type="text" onReturn placeholder="Ledger name"
-                 class="form-control max-height28 appearance_none" style="max-width:200px"
+                 class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="debtorAcc.name"
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'ledgerName'"
@@ -150,7 +152,7 @@
                 <td><input onReturn type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled
                            readonly/></td>
                 <td>
-                  <input onReturn type="text" class="form-control text-right"
+                  <input onReturn type="text" class="form-control text-right account-amout-field"
                          (change)="changeTotal(i, transaction.amount)" decimalDigitsDirective [DecimalPlaces]="2"
                          [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i"
                          [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
@@ -188,7 +190,7 @@
           </div>
         </div>
         <div class="total_box text-right pull-right">
-          <span><strong>{{stockTotal + accountsTotal | number: '1.2-2' }}</strong></span>
+          <span><strong>{{ stockTotal - accountsTotal| number: '1.2-2' }}</strong></span>
         </div>
       </div>
     </div>

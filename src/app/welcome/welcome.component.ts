@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { States } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
@@ -10,6 +10,7 @@ import { AppState } from '../store';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { Router } from '@angular/router';
+import { GeneralService } from '../services/general.service';
 
 @Component({
   selector: 'welcome-component',
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./welcome.component.scss']
 })
 
-export class WelcomeComponent implements OnInit, OnDestroy {
+export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
   public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -97,7 +98,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-              private _router: Router) {
+              private _router: Router, private  _generalService: GeneralService) {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
@@ -139,6 +140,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         this._router.navigate(['/onboarding']);
       }
     });
+  }
+
+  public ngAfterViewInit() {
+    this._generalService.IAmLoaded.next(true);
   }
 
   public skip() {
