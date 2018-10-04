@@ -350,12 +350,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
       this.openChequeDetailForm(acc);
     }
-    console.log('this.selectedIdx is :', this.selectedIdx);
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
-    console.log('selected transaction is :', transaction);
     if (acc) {
-      console.log('the acc isss :', acc);
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
