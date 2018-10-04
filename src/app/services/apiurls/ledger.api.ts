@@ -6,6 +6,7 @@ export const LEDGER_API = {
   CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/',
   RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
   UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
+  DELETE_LEDGER_ENTRY: 'company/:companyUniqueName/accounts/:accountUniqueName/entries/' + ':entryUniqueName',
   // ledger utility related mail,share
   MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format', // post call
   // get call
@@ -26,7 +27,8 @@ export const LEDGER_API = {
   GET_MAGIC_LINK_DATA_WITH_DATE: 'magic-link/:id?from=:from&to=:to', // Method: GET
   MAGIC_LINK_DOWNLOAD_FILE: 'magic-link/:id/download-invoice/:invoiceNum', // Method: GET
   ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=asc&page=:page&count=:count&q=:q',
-  GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type',
+  // GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type&format=:format',
+  GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail-v2?from=:from&to=:to&type=:type&format=:format',
   MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
   CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency'
 };

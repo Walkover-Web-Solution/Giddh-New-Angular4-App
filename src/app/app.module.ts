@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule } from '@angular/router';
+import { NoPreloading, PreloadAllModules, RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import * as _ from './lodash-optimized';
@@ -53,6 +53,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { IS_ELECTRON_WA } from './app.constant';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -141,12 +143,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: PreloadAllModules}),
+    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: NoPreloading , onSameUrlNavigation: 'reload'}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
-    // StoreRouterConnectingModule,
-    // StoreDevtoolsModule.instrument({
-    //   maxAge: 25
-    // }),
+    StoreRouterConnectingModule,
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
+    }),
     ...CONDITIONAL_IMPORTS,
     /**
      * This section will import the `DevModuleModule` only in certain build types.

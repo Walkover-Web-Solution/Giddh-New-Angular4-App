@@ -55,6 +55,11 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
       if (s && s.customCreatedTemplates) {
         this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
+          this.customCreatedTemplates.sort((a, b) => {
+            if (a.uniqueName < b.uniqueName) { return -1; }
+            if (a.uniqueName > b.uniqueName) {return 1; }
+            return 0;
+        });
       }
     });
   }
