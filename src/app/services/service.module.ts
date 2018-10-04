@@ -52,6 +52,7 @@ import { CompanyImportExportService } from './companyImportExportService';
 import { AgingreportingService } from './agingreporting.service';
 import { GstReconcileService } from './GstReconcile.service';
 import { ReceiptService } from './receipt.service';
+import { DbService } from './db.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -111,7 +112,7 @@ export class ServiceModule {
         AgingreportingService,
         CompanyImportExportService,
         ReceiptService,
-        CompanyImportExportService,
+        DbService,
         GstReconcileService
       ]
     };

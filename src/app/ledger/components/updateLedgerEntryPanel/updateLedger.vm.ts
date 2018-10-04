@@ -440,6 +440,9 @@ export class UpdateLedgerVm {
       }
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
+    requestObj.total  = _.sumBy(requestObj.transactions, o => {
+     return o.amount;
+    });
     return requestObj;
   }
 

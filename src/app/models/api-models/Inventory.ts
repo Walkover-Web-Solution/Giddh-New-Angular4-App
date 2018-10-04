@@ -34,7 +34,6 @@ export class StockGroupResponse {
   public uniqueName: string;
 }
 
-
 /**
  * Model for Stocks api response
  * API:: (Stocks) company/:companyUniqueName/stock-group/stocks
@@ -209,4 +208,3 @@ interface IGroupStockReport {
   stockUniqueName: string;
   stockName: string;
 }
-

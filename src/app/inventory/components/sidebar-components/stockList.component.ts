@@ -66,6 +66,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   public OpenStock(item, e: Event) {
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
+    this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));
     this._router.navigate(['/pages', 'inventory', 'add-group', this.Groups.uniqueName, 'stock-report', item.uniqueName]);
   }
 
@@ -75,6 +76,8 @@ export class StockListComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.sideBarAction.GetInventoryStock(stock.uniqueName, this.Groups.uniqueName));
       // this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
       // this.setInventoryAsideState(true, false, true);
+      this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+      this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen: true, isGroup: false, isUpdate: true}));
     }
   }
 
