@@ -120,6 +120,19 @@ export class OnReturnDirective {
             if (allElements[indx] && allElements[indx].classList.contains('from-or-to-acc')) {
               this.clickCount++;
             }
+            // if (allElements[indx] && allElements[indx].classList.contains('select-stock-in-invoice')) {
+            //   console.log('Yesssss...');
+            //   console.log('this.clickCount is :', this.clickCount);
+            //   if (this.clickCount < 1) {
+            //     this.clickCount = 0;
+            //     target = allElements[indx + 4];
+            //   } else {
+            //     if (allElements[indx + 1].disabled) {
+            //       console.log('yes it is disabled');
+            //       this.clickCount++;
+            //     }
+            //   }
+            // }
             target.focus();
           }
 
