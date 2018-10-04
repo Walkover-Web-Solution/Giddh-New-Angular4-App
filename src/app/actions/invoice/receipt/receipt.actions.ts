@@ -29,7 +29,7 @@ export class InvoiceReceiptActions {
   @Effect()
   private GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT).pipe(
-      switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload)),
+      switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.body, action.payload.type)),
       map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
         if (response.status === 'success') {
           // this.showToaster('');
@@ -66,10 +66,10 @@ export class InvoiceReceiptActions {
     };
   }
 
-  public GetAllInvoiceReceiptRequest(model: InvoiceReceiptFilter): CustomActions {
+  public GetAllInvoiceReceiptRequest(model: InvoiceReceiptFilter, type: string): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT,
-      payload: model
+      payload: {body: model, type}
     };
   }
 

@@ -55,6 +55,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public accountUniqueName?: string;
   public balanceDue?: string;
   public entryTotalBy?: string;
+  public invoiceNumber?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

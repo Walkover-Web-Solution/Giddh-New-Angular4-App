@@ -1,12 +1,12 @@
-<div class="loader mrT4" *ngIf="showLoader">
+<!-- <div class="loader mrT4" *ngIf="showLoader">
     <span></span>
     <span></span>
     <span></span>
     <span></span>
     <span></span>
-</div>
-
-<section class="container nopad" *ngIf="!showLoader">
+</div> -->
+<!-- *ngIf="!showLoader" -->
+<section class="container nopad">
 
     <!--ledger table-->
     <div class="ledgHead transactions-page mrT3 pos-rel">
@@ -46,7 +46,7 @@
 
                         <div class="mrL2 col-xs-6 pos-rel pull-right">
                             <div class="row">
-                                <input type="search" class="form-control" (keyup)="search(ledgerSearchTerms.value)" placeholder="Search ledger" #ledgerSearchTerms>
+                                <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control" (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                                 <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
                             </div>
                         </div>

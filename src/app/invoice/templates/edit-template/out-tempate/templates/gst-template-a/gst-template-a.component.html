@@ -33,7 +33,7 @@
                                         <tr [hidden]="!fieldsAndVisibility.header.gstin?.display">
                                             <td>
                                                 <strong>{{fieldsAndVisibility.header.gstin?.label}}</strong> {{companyGSTIN ? companyGSTIN
-                                                : '22BBBBBB000A1Z0'}}</td>
+                                                : '23AAUCS7548A1Z4'}}</td>
                                         </tr>
                                         <!-- <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
                                             <td><strong>{{fieldsAndVisibility.header.pan?.label}}</strong> {{companyPAN ? companyPAN : 'AAACW9768L'}}</td>
@@ -53,7 +53,7 @@
                                                     : 'Invoice Date'}}</strong>
                                             </td>
                                             <td>
-                                                <p> 23/06/2017 </p>
+                                                <p> 11-09-2017 </p>
                                             </td>
                                         </tr>
                                         <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
@@ -61,7 +61,7 @@
                                                 <strong>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                                     : 'Invoice No.'}}</strong>
                                             </td>
-                                            <td>20170623-1</td>
+                                            <td>20170911-1</td>
                                         </tr>
                                         <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
                                             <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
@@ -128,7 +128,7 @@
                                     <strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label
                                         : 'Due Date'}}</strong>
                                 </p>
-                                <p>30/06/2017</p>
+                                <p>10-09-2018 </p>
                             </ng-container>
                         </td>
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
@@ -136,7 +136,7 @@
                                 <strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
                                     : 'GSTIN'}}</strong>
                             </p>
-                            <p>11AAAAAA000Z0A1</p>
+                            <p>23AAUCS7548A1Z4</p>
                         </td>
 
                         <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
@@ -144,7 +144,7 @@
                                 <strong>{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label
                                     : 'GSTIN'}}</strong>
                             </p>
-                            <p>11AAAAAA000Z0A1</p>
+                            <p>23AAUCS7548A1Z4</p>
                         </td>
                     </tr>
                 </tbody>
@@ -155,7 +155,7 @@
                         <td *ngIf="fieldsAndVisibility.header.shippingDate?.display">
                             <strong>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
                                 : 'Ship Date'}}</strong>
-                            <p>30/06/2017</p>
+                            <p>10-09-2018</p>
                         </td>
 
                         <td *ngIf="fieldsAndVisibility.header.shippedVia?.display">
@@ -225,31 +225,34 @@
                     <tbody>
                         <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
-                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
-                            <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
-                            <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456 (H)</td>
-                            <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
-                            <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
-                            <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
-                            <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
-                            <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
-                                <p>@5%</p>
+                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
                             </td>
-                            <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 1</td>
+                            <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 (H)</td>
+                            <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Kg</td>
+                            <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">1700.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">153.00
+                                <p>@9.00%</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">2006.00</td>
                         </tr>
                         <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
-                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">23/07/17</td>
-                            <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
-                            <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">456123 (S)</td>
-                            <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">10 No.</td>
-                            <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
-                            <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">30.00</td>
-                            <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td>
-                            <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">970.00
-                                <p>@18%</p>
+                            <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
                             </td>
-                            <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">10670.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 (H)</td>
+                            <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">6000.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">5500.00</td>
+                            <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">770.00
+                                <p>@14.00%</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">7040.00</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -259,11 +262,11 @@
                             <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
                             <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
                             <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
-                            <th *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">700.00</th>
-                            <th *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">49300.00</th>
-                            <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">4930.00</th>
-                            <th *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">4930.00</th>
-                            <th *ngIf="fieldsAndVisibility.table.total?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">54230.00</th>
+                            <th *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">7000.00</th>
+                            <th *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">800.00</th>
+                            <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">7200.00</th>
+                            <th *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">1846.00</th>
+                            <th *ngIf="fieldsAndVisibility.table.total?.display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">9046.00</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -281,7 +284,7 @@
                             <strong>{{fieldsAndVisibility.footer.taxableAmount?.label}} (INR)</strong>
                         </th>
                         <td>
-                            <strong>49300.00.00</strong>
+                            <strong>7000.00</strong>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
@@ -289,7 +292,7 @@
                             <strong>{{fieldsAndVisibility.footer.totalTax?.label}} (INR)</strong>
                         </th>
                         <td>
-                            <strong>5920.00</strong>
+                            <strong>1846.00</strong>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
@@ -297,7 +300,7 @@
                             <strong>{{fieldsAndVisibility.footer.grandTotal?.label}} (INR)</strong>
                         </th>
                         <td>
-                            <strong>54230.00</strong>
+                            <strong>9046.00</strong>
                         </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
@@ -305,7 +308,7 @@
                             <strong>{{fieldsAndVisibility.footer.totalInWords?.label}}</strong>
                         </th>
                         <td>
-                            <strong>Fifty-Four Thousand Two Hundred Thirty Only</strong>
+                            <strong>Nine Thousand Forty Six Only</strong>
                         </td>
                     </tr>
                 </table>

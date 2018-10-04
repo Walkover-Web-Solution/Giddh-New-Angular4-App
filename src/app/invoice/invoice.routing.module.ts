@@ -61,7 +61,9 @@ const INVOICE_ROUTES: Routes = [
       {path: 'templates', component: EditInvoiceComponent},
       {path: 'settings', component: InvoiceSettingComponent},
       {path: 'recurring', component: RecurringComponent},
-      {path: 'receipt', component: ReceiptComponent}
+      {path: 'receipt', component: ReceiptComponent},
+      {path: 'cr-note', component: ReceiptComponent},
+      {path: 'dr-note', component: ReceiptComponent}
     ]
   }
 ];
