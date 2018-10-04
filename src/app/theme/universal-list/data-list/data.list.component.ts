@@ -96,6 +96,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private rawSmartComboList: IUlist[] = [];
   private smartList: IUlist[];
+  private activeCompany: string;
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
@@ -112,6 +113,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   public ngOnInit() {
+
+    // listen for companies and active company
+    this._store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe((name) => {
+      this.activeCompany = name;
+    });
 
     // listen to smart list
     this._store.select(p => p.general.smartCombinedList).pipe(take(1))
@@ -423,10 +429,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     this.rows = cloneDeep(val);
 
     if (this.winRef) {
-      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(KEY_FOR_QUERY));
+      let key = `${KEY_FOR_QUERY}_${this.activeCompany}`;
+      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(key));
       if (priorTerm && priorTerm.length > 0) {
         this.listOfSelectedGroups = [];
-        this._dbService.getAllItems('groups').pipe(take(1))
+        this._dbService.getAllItems(this.activeCompany, 'groups').pipe(take(1))
         .subscribe((groupList: IUlist[]) => {
           priorTerm.forEach((str: string) => {
             let o = find(groupList, ['uniqueName', str ]);
@@ -487,7 +494,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     try {
       if (this.winRef) {
         let sessionStorage: Storage = this.winRef.nativeWindow.sessionStorage;
-        sessionStorage.setItem(KEY_FOR_QUERY, JSON.stringify(priorTerm));
+        let key = `${KEY_FOR_QUERY}_${this.activeCompany}`;
+        sessionStorage.setItem(key, JSON.stringify(priorTerm));
       }
     } catch (error) {
       //
