@@ -51,7 +51,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // bot related
   @Input() public preventOutSideClose: boolean = false;
   @Input() public dontShowNoResultMsg: boolean = false;
-  @Input() public showChannelCreateBtn: boolean = false;
+  @Input() public showChannelCreateBtn: boolean = true;
 
   // positioning
   @Input() public placement: string;
@@ -96,6 +96,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private rawSmartComboList: IUlist[] = [];
   private smartList: IUlist[];
+  private activeCompany: string;
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
@@ -112,6 +113,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   public ngOnInit() {
+
+    // listen for companies and active company
+    this._store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe((name) => {
+      this.activeCompany = name;
+    });
 
     // listen to smart list
     this._store.select(p => p.general.smartCombinedList).pipe(take(1))
@@ -152,6 +158,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.virtualScrollElem.setLastItemIndex(idx);
       }
     }
+  }
+
+  public triggerAddManage() {
+    this.newTeamCreationEmitter.emit(true);
   }
 
   // get initialized on init and return selected item
@@ -354,6 +364,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       // search data conditional
       filteredData = this.universalSearchService.filterByTerm(term, d);
       this.updateRowsViaSearch(filteredData);
+
+      // emit no result event
+      if (filteredData.length === 0) {
+        this.noResultFoundEmitter.emit(true);
+      }
     } else {
       // backspace
       if ( this.isOpen && key === BACKSPACE ) {
@@ -389,6 +404,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
+  public trackByFn(index, item: IUlist) {
+    return item.uniqueName; // unique id corresponding to the item
+ }
+
   /**
    * main function to write data on UI.
    * it will be responsible for notify angular
@@ -414,10 +433,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     this.rows = cloneDeep(val);
 
     if (this.winRef) {
-      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(KEY_FOR_QUERY));
+      let key = `${KEY_FOR_QUERY}_${this.activeCompany}`;
+      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(key));
       if (priorTerm && priorTerm.length > 0) {
         this.listOfSelectedGroups = [];
-        this._dbService.getAllItems('groups').pipe(take(1))
+        this._dbService.getAllItems(this.activeCompany, 'groups').pipe(take(1))
         .subscribe((groupList: IUlist[]) => {
           priorTerm.forEach((str: string) => {
             let o = find(groupList, ['uniqueName', str ]);
@@ -478,7 +498,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     try {
       if (this.winRef) {
         let sessionStorage: Storage = this.winRef.nativeWindow.sessionStorage;
-        sessionStorage.setItem(KEY_FOR_QUERY, JSON.stringify(priorTerm));
+        let key = `${KEY_FOR_QUERY}_${this.activeCompany}`;
+        sessionStorage.setItem(key, JSON.stringify(priorTerm));
       }
     } catch (error) {
       //

@@ -11,3 +11,13 @@ export interface IUlist extends INameUniqueName, IHelpersForSearch {
   time?: number;
   parentGroups?: INameUniqueName[];
 }
+
+export interface ICompAidata extends INameUniqueName {
+  aidata: Igtbl;
+}
+
+export interface Igtbl {
+  menus: IUlist[];
+  groups: IUlist[];
+  accounts: IUlist[];
+}

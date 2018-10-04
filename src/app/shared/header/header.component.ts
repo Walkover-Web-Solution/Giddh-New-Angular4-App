@@ -24,11 +24,12 @@ import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../models/api-models/Sales';
-import { IUlist } from '../../models/interfaces/ulist.interface';
+import { IUlist, ICompAidata } from '../../models/interfaces/ulist.interface';
 import { sortBy, concat, find, cloneDeep } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { DbActions } from '../../actions/db.actions';
 import { INameUniqueName } from '../../models/api-models/Inventory';
+import { CompAidataModel } from '../../models/db';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -182,6 +183,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
+  private activeCompanyForDb: ICompAidata;
   /**
    *
    */
@@ -268,9 +270,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
-    this.findListFromDb();
+
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
+
+    // listen for companies and active company
+    this.store.select(p => p.session).pipe(take(1)).subscribe((state) => {
+      let obj: any = state.companies.find((o: CompanyResponse) => o.uniqueName === state.companyUniqueName);
+      if (obj) {
+        this.activeCompanyForDb = new CompAidataModel();
+        this.activeCompanyForDb.name = obj.name;
+        this.activeCompanyForDb.uniqueName = obj.uniqueName;
+        this.findListFromDb();
+      }
+    });
+
     //
     this.user$.pipe(take(1)).subscribe((u) => {
       if (u) {
@@ -413,6 +427,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.cdRef.detectChanges();
   }
 
+  public handleNoResultFoundEmitter(e: any) {
+    this.store.dispatch(this._generalActions.getFlattenAccount());
+    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
+  }
+
+  public handleNewTeamCreationEmitter(e: any) {
+    this.modelRef.hide();
+    this.showManageGroupsModal();
+  }
+
   /**
    * redirect to route and save page entry into db
    * @param e event
@@ -443,20 +467,66 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.router.navigate([pageName]);
   }
 
+  public prepareSmartList(data: IUlist[]) {
+    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact'];
+    const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
+    const DEFAULT_AC = ['cash', 'sales', 'purchases'];
+    let menuList: IUlist[] = [];
+    let groupList: IUlist[] = [];
+    let acList: IUlist[] = [];
+    data.forEach((item: IUlist) => {
+      if (item.type === 'MENU') {
+        if ( DEFAULT_MENUS.indexOf(item.uniqueName) !== -1) {
+          item.time = + new Date();
+          menuList.push(item);
+        }
+      } else if (item.type === 'GROUP') {
+        if ( DEFAULT_GROUPS.indexOf(item.uniqueName) !== -1) {
+          item.time = + new Date();
+          groupList.push(item);
+        }
+      } else {
+        if ( DEFAULT_AC.indexOf(item.uniqueName) !== -1) {
+          item.time = + new Date();
+          acList.push(item);
+        }
+      }
+
+    });
+    let combined = cloneDeep([...menuList, ...groupList, ...acList]);
+    this.store.dispatch(this._generalActions.setSmartList(combined));
+    this.activeCompanyForDb.aidata = {
+      menus: menuList,
+      groups: groupList,
+      accounts: acList
+    };
+    // due to some issue
+    this._dbService.insertFreshData(this.activeCompanyForDb);
+  }
+
   public findListFromDb() {
+    let acmp = cloneDeep(this.activeCompanyForDb);
+
     combineLatest(
-      this._dbService.getAllItems('menus').pipe(take(1)),
-      this._dbService.getAllItems('groups').pipe(take(1)),
-      this._dbService.getAllItems('accounts').pipe(take(1))
-    )
-      .subscribe((resp: any[]) => {
-        let menuList: IUlist[] = resp[0];
-        let groupList: IUlist[] = resp[1];
-        let acList: IUlist[] = resp[2];
-        // slicing due to we only need to show 10 result at first sight
-        let combined = concat(menuList.slice(0, 3), groupList.slice(0, 3), acList.slice(0, 4));
-        this.store.dispatch(this._generalActions.setSmartList(combined));
-      });
+      this._dbService.getItemDetails(acmp.uniqueName),
+      this.store.select(p => p.general.smartCombinedList).pipe(
+        takeUntil(this.destroyed$),
+        distinctUntilChanged()
+      )
+    ).subscribe((resp: any[]) => {
+      let dbResult: ICompAidata = resp[0];
+      let data: IUlist[] = resp[1];
+      if (data && data.length) {
+        if (dbResult) {
+          // entry found check for data
+          let combined = this._dbService.extractDataForUI(dbResult.aidata);
+          this.store.dispatch(this._generalActions.setSmartList(combined));
+        } else {
+          // make entry with smart list data
+          this.prepareSmartList(data);
+        }
+      }
+    });
   }
 
   public showManageGroupsModal() {
@@ -712,11 +782,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private doEntryInDb(entity: string, item: IUlist) {
-    this._dbService.addItem(entity, item).subscribe(() => {
-      this.findListFromDb();
-    }, (err: any) => {
-      console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
-    });
+    if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item).subscribe((res) => {
+        if (res) {
+          this.findListFromDb();
+        }
+      }, (err: any) => {
+        console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+      });
+    }
   }
 
   private unsubscribe() {
