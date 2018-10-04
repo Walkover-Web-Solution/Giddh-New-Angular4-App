@@ -8,6 +8,7 @@ import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { cr, s, st } from '@angular/core/src/render3';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -300,6 +301,29 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         ...state,
         transactionsResponse: markCheckedUnChecked(state.transactionsResponse, action.payload.mode, action.payload.isChecked)
       };
+    }
+    case LEDGER.DESELECT_SELECTED_ENTRIES: {
+      let res = action.payload as string[];
+      let newState = _.cloneDeep(state);
+      let debitTrx = newState.transactionsResponse.debitTransactions;
+      debitTrx = debitTrx.map(f => {
+        f.isChecked = res.findIndex(c => f.entryUniqueName === c) > -1;
+        return f;
+      });
+      let creditTrx = newState.transactionsResponse.creditTransactions;
+      creditTrx = creditTrx.map(f => {
+        f.isChecked = res.findIndex(c => f.entryUniqueName === c) > -1;
+        return f;
+      });
+
+      return {
+        ...state,
+        transactionsResponse: {
+          ...state.transactionsResponse,
+          debitTransactions: debitTrx,
+          creditTransactions: creditTrx
+        }
+      }
     }
     default: {
       return state;
