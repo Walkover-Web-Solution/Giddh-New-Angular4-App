@@ -10,21 +10,21 @@ export class TbSynramComponent implements OnInit {
     //
   }
  public ngOnInit() {
-// $('.exp').click(function() {
-//         $('.exp11').slideToggle();
+  $('.exp').click(function() {
+    $('.exp11').slideToggle();
 
-//     });
-//   $('#openingtr').click(function() {
-//    $('.openingcheck').toggle(this.checked);
+  });
+  // $('#openingtr').click(function() {
+  //   $('.openingcheck').toggle(this.checked);
+  // });
 
-//    $('#transactionstr').click(function() {
+  // $('#transactionstr').click(function() {
+  //   $('.transcheck').toggle(this.checked);
+  // });
 
-//    $('.transcheck').toggle(this.checked);
-
-//    $('#closingtr').click(function() {
-//    $('.closingcheck').toggle(this.checked);
-
-// });
+  // $('#closingtr').click(function() {
+  //    $('.closingcheck').toggle(this.checked);
+  // });
 
  }
 }
