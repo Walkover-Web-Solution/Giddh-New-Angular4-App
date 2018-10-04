@@ -20,7 +20,11 @@ export class ImportExcelActions {
       switchMap((action: CustomActions) => {
         return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
       }), map((res) => {
-        return this.validateResponse(res, this.uploadFileResponse(res.body), true, this.uploadFileResponse(res.body));
+        if (res.status === 'error') {
+          this._toasty.errorToast(res.message);
+        }
+        return this.uploadFileResponse(res);
+        // return this.validateResponse(res, this.uploadFileResponse(res.body), true, this.uploadFileResponse(res.body));
       }));
   @Effect()
   public processImport$: Observable<Action> = this.action$
@@ -42,7 +46,7 @@ export class ImportExcelActions {
     };
   }
 
-  public uploadFileResponse(response: ImportExcelResponseData): CustomActions {
+  public uploadFileResponse(response: BaseResponse<ImportExcelResponseData, string>): CustomActions {
     return {
       type: IMPORT_EXCEL.UPLOAD_FILE_RESPONSE,
       payload: response
@@ -61,6 +65,12 @@ export class ImportExcelActions {
       type: IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE,
       payload: response
     };
+  }
+
+  public resetImportExcelState(): CustomActions {
+    return {
+      type: IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE
+    }
   }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,

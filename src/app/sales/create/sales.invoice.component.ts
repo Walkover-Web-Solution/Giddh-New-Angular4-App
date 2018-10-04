@@ -454,7 +454,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     forEach(o.entries, (entry: SalesEntryClass) => {
       forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
         // txn.date = date;
-        entry.entryDate = date;
+        if (!txn.accountUniqueName) {
+          entry.entryDate = date;
+        }
       });
     });
     return Object.assign(this.invFormData, o);
@@ -1038,6 +1040,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
           // t.date = this.universalDate || new Date();
+          // && !e.entryDate
           // e.entryDate = this.universalDate || new Date();
         });
       });
@@ -1054,7 +1057,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
           // t.date = this.universalDate || new Date();
-          e.entryDate = this.universalDate || new Date();
+          // e.entryDate = this.universalDate || new Date();
         });
       });
 

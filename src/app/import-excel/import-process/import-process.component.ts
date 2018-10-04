@@ -1,6 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { Observable, ReplaySubject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 
 interface DataModel {
   field: string;
@@ -27,8 +33,7 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   public editHeaderIdx: number = null;
   public dataModel: DataModel[];
 
-  constructor() {
-    //
+  constructor(private store: Store<AppState>) {
   }
 
   private _importData: ImportExcelRequestData;
@@ -45,7 +50,6 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public ngOnInit() {
-    //
   }
 
   public ngAfterViewInit(): void {

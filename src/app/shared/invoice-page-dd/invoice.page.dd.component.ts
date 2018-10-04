@@ -40,6 +40,8 @@ export class InvoicePageDDComponent implements OnInit {
     {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
     {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'},
     {name: 'Receipt', uniqueName: 'receipt', path: 'receipt'},
+    {name: 'Cr-note', uniqueName: 'cr-note', path: 'cr-note'},
+    {name: 'Dr-note', uniqueName: 'dr-note', path: 'dr-note'}
   ];
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
@@ -71,6 +73,12 @@ export class InvoicePageDDComponent implements OnInit {
           break;
         case 'receipt':
           this.selectedPage = 'Receipt';
+          break;
+        case 'cr-note':
+          this.selectedPage = 'Cr-note';
+          break;
+        case 'dr-note':
+          this.selectedPage = 'Dr-note';
           break;
         default:
           this.selectedPage = 'Invoice';
