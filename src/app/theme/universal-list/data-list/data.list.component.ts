@@ -404,6 +404,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
+  public trackByFn(index, item: IUlist) {
+    return item.uniqueName; // unique id corresponding to the item
+ }
+
   /**
    * main function to write data on UI.
    * it will be responsible for notify angular
