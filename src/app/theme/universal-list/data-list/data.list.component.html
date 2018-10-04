@@ -17,7 +17,10 @@
             <universal-virtual-scroll [items]="rows" [childHeight]="ItemHeight" (update)="checkItems($event)"
               (highLightedItemEmitter)="handleHighLightedItemEvent($event)" [style.max-height.px]="(viewPortItems?.length !== 0) ? ItemHeight * (viewPortItems && (viewPortItems.length < visibleItems ) ? viewPortItems.length : visibleItems) : ItemHeight">
 
-              <div class="item" *ngFor="let r of viewPortItems" (mouseenter)="handleMouseEvent($event, r)" (click)="itemSelected(r)"
+              <div class="item"
+                *ngFor="let r of viewPortItems; trackBy: trackByFn"
+                (mouseenter)="handleMouseEvent($event, r)"
+                (click)="itemSelected(r)"
                 [ngClass]="{'selected': r.isHilighted, 'active': r.isSelected }">
                 <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
                   <div class="item-icon">
