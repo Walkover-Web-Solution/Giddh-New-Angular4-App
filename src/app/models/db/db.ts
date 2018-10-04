@@ -1,5 +1,6 @@
 import Dexie from 'dexie';
-import { IUlist } from '../interfaces/ulist.interface';
+import { IUlist, ICompAidata, Igtbl } from '../interfaces/ulist.interface';
+import { orderBy } from '../../lodash-optimized';
 
 export class UlistDbModel implements IUlist {
   public id: number;
@@ -12,37 +13,75 @@ export class UlistDbModel implements IUlist {
   }
 }
 
+export class CompAidataModel implements ICompAidata {
+  public name: string;
+  public uniqueName: string;
+  public aidata: Igtbl;
+  constructor() {
+    //
+  }
+}
+
 class AppDatabase extends Dexie {
-  public menus: Dexie.Table<any, number>;
-  public groups: Dexie.Table<any, number>;
-  public accounts: Dexie.Table<any, number>;
+  public companies: Dexie.Table<ICompAidata, number>;
   constructor() {
     super('_giddh');
     this.version(1).stores({
-      menus: 'uniqueName,name,additional,type,time',
-      groups: 'uniqueName,name,parentGroups,type,time',
-      accounts: 'uniqueName,name,parentGroups,time'
+      companies: '&uniqueName'
     });
     // directly on retrieved database objects.
-    this.menus.mapToClass(UlistDbModel);
-    this.groups.mapToClass(UlistDbModel);
-    this.accounts.mapToClass(UlistDbModel);
+    this.companies.mapToClass(CompAidataModel);
   }
 
-  public getAllItems(entity: string): Promise<any[]> {
-    return this[entity].orderBy('time').reverse().toArray();
+  public getItemByKey(key: any): Promise<any> {
+    return this.companies.get(key);
   }
 
-  public getItemById(entity: string, key: any): Promise<any> {
-    return this[entity].get(key);
+  public insertFreshData(item: ICompAidata): Promise<any> {
+    return this.companies.put(item);
   }
 
-  public removeItemById(entity: string, key: any): Promise<any> {
-    return this[entity].delete(key);
+  public getAllItems(key: any, entity: string): Promise<any[]> {
+    return this.companies.get(key).then((res: CompAidataModel) => {
+      return res.aidata[entity];
+    });
   }
 
-  public addItem(entity: string, model: any): Promise<number> {
-    return this[entity].put(model);
+  public addItem(key: any, entity: string, model: IUlist): Promise<any> {
+    return this.companies.get(key).then((res: CompAidataModel) => {
+      let arr: IUlist[] = res.aidata[entity];
+      let isFound = false;
+      arr.map((item: IUlist) => {
+        if (item.uniqueName === model.uniqueName) {
+          isFound = true;
+          return item = Object.assign(item, model);
+        } else {
+          return item;
+        }
+      });
+      if (!isFound) {
+        arr.push(model);
+      }
+      // order by time and set descending order to get the last element first
+      arr = orderBy(arr, ['time'], ['desc']);
+
+      res.aidata[entity] = this.getSlicedResult(entity, arr);
+      return this.companies.put(res);
+    }).catch((err) => {
+      console.log ('error while adding item', err);
+    });
+  }
+
+  private getSlicedResult(entity: string, arr: IUlist[]): any[] {
+    let endCount: number = 0;
+    if (entity === 'menus') {
+      endCount = 15;
+    } else if (entity === 'groups') {
+      endCount = 40;
+    } else if (entity === 'accounts') {
+      endCount = 45;
+    }
+    return arr.slice(0, endCount);
   }
 }
 

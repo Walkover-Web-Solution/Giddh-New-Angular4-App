@@ -402,7 +402,13 @@
 <!--CMD + K modal  -->
 <ng-template #navigationModal>
     <div class="modal-body" #mdl>
-        <universal-data-list [forceSetAutoFocus]="true" [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
+        <universal-data-list
+        (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
+        (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+        [forceSetAutoFocus]="true" [isFlying]="false"
+        (groupEmitter)="makeGroupEntryInDB($event)"
+        (selectedItemEmitter)="onItemSelected($event)"
+        [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
         <div class="shortcuts">
             <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
         </div>
