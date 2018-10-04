@@ -85,7 +85,7 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
     this.store.select(s => s.settings.profile).subscribe(pro => {
       if (pro && pro.gstDetails) {
         let gstNo = pro.gstDetails.filter(f => {
-          return f.addressList[0].isDefault === true;
+          return f.addressList[0] && f.addressList[0].isDefault === true;
         }).map(p => {
           return p.gstNumber;
         });
