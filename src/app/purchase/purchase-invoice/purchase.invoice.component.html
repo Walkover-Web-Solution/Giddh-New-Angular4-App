@@ -1,68 +1,59 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
-  <form class="">
-    <div class="row">
-      <div class="form-group col-xs-2">
-        <label>GSTR Form</label>
-        <div class="btn-group btn-block" dropdown>
-          <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
+    <form class="">
+        <div class="row">
+            <div class="form-group col-xs-2">
+                <label>GSTR Form</label>
+                <div class="btn-group btn-block" dropdown>
+                    <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
             <span *ngIf="!selectedGstrType.name">-- Select GSTR --</span>
             <span *ngIf="selectedGstrType.name">{{selectedGstrType.name}}</span>
             <span class="pull-right">
                             <i class="fa fa-caret-down"></i>
                         </span>
           </button>
-          <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-            <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
-              {{item.name}}
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;"
-           [hidden]="!selectedGstrType.name">
-        <div class="row">
-          <label>Month</label>
-          <div class="input-group">
-            <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')"
-                   (focus)="showGSTR1DatePicker = true;"
-                   class="form-control" required/>
-            <span class="input-group-btn">
+                    <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                        <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
+                            {{item.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
+                <div class="row">
+                    <label>Month</label>
+                    <div class="input-group">
+                        <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+                        <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
                                     (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
                                 <i class="glyphicon glyphicon-calendar"></i>
                             </button>
                         </span>
-          </div>
-          <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
-            <ul class="my-dropdown-menu calendar-dropdown">
-              <li>
-                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
-                            [(ngModel)]="selectedDateForGSTR1"
-                            (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)"
-                            [showWeeks]="false"
-                            [minMode]="'month'"></datepicker>
-              </li>
-              <li class="pd1 clearfix pdT pdB">
+                    </div>
+                    <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                        <ul class="my-dropdown-menu calendar-dropdown">
+                            <li>
+                                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
+                            </li>
+                            <li class="pd1 clearfix pdT pdB">
                                 <span class="btn-group pull-left">
                                     <button type="button" class="btn btn-xs btn-primary mrR"
                                             (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                     <button type="button" class="btn btn-xs btn-success"
                                             (click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
-        <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
+                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
+                <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-        <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off"
-               placeholder="Email address"
-        />
-      </div>
-      <!-- comment by mustafa for GSTR2
+                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
+            </div>
+            <!-- comment by mustafa for GSTR2
           <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
               <label>Report</label>
               <div class="btn-group btn-block" dropdown>
@@ -76,186 +67,161 @@
               </div>
           </div>
           -->
-      <!-- hide due to unused
+            <!-- hide due to unused
           <div class="form-group inline" *ngIf="selectedGstrType.name">
               <br />
              <button [disabled]="!selectedGstrType.name || selectedGstrType.name =='GSTR1'" class="btn btn-success">GO</button>
 
           </div>
       -->
-      <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
-        <label class="d-block">&nbsp;</label>
-        <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
-          <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
-            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
+            <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
+                <label class="d-block">&nbsp;</label>
+                <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
+                    <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
+                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
               {{ selectedGstrType.name }}
               <span class="pull-right mrL4">
                                 <i class="fa fa-caret-down"></i>
                             </span>
             </button>
-            <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
-              <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'"
-                  (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download
-                Sheet
-              </li>
-              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'"
-                  (click)="onDownloadSheetGSTR('gstr1-error-export');">Download
-                Error Sheet
-              </li>
-              <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'"
-                  (click)="onDownloadSheetGSTR('gstr2-error-export');">Download
-                Error Sheet
-              </li>
-              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'"
-                  (click)="fileJioGstReturn('JIO_GST');">File
-                GSTR1 using Jio GST
-              </li>
-              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'"
-                  (click)="fileJioGstReturn('TAX_PRO');">File
-                GSTR1 using Tax Pro
-              </li>
-              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email
-                Sheet
-              </li>
-              <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email
-                With Detail Sheet
-              </li>
-              <!-- <li class="cp dd-options">Use JIOGST API</li> -->
-              <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
-            </ul>
-          </div>
-          <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading...</small>
-        </div>
-      </div>
-      <!-- hide due to unused -->
-      <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
-        <label class="d-block">&nbsp;</label>
-        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
+                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'" (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet
+                            </li>
+                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="onDownloadSheetGSTR('gstr1-error-export');">Download Error Sheet
+                            </li>
+                            <li class="cp dd-options text-danger" *ngIf="selectedGstrType.name === 'GSTR2'" (click)="onDownloadSheetGSTR('gstr2-error-export');">Download Error Sheet
+                            </li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST
+                            </li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro
+                            </li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet
+                            </li>
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(true)">Email With Detail Sheet
+                            </li>
+                            <!-- <li class="cp dd-options">Use JIOGST API</li> -->
+                            <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
+                        </ul>
+                    </div>
+                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading...</small>
+                </div>
+            </div>
+            <!-- hide due to unused -->
+            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+                <label class="d-block">&nbsp;</label>
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
           class="fa fa-cog" aria-hidden="true"></i> Jio GST
         </button>
-        <span style="margin: 5px 10px;" class="pull-right">OR</span>
-        <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i
+                <span style="margin: 5px 10px;" class="pull-right">OR</span>
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i
           class="fa fa-cog" aria-hidden="true"></i> Tax Pro
         </button>
-      </div>
+            </div>
 
-    </div>
-  </form>
-  <!-- Top filter end  -->
+        </div>
+    </form>
+    <!-- Top filter end  -->
 
-  <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
-  <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
-    <div class="row">
-      <h1 class="section_title">
-        <strong>Reconciliations </strong>
-        <small>(To file your GST return, all missing data needs to be filled properly)</small>
-        <button class="btn isActive btn-sm pull-right" style="margin-bottom: 10px"
-                (click)="toggleSettingAsidePane($event, 'RECONCILE');">Pull from GSTN
+    <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
+    <div class="col-xs-12" *ngIf="selectedGstrType.name == 'GSTR2'">
+        <div class="row">
+            <h1 class="section_title">
+                <strong>Reconciliations </strong>
+                <small>(To file your GST return, all missing data needs to be filled properly)</small>
+                <button class="btn isActive btn-sm pull-right" style="margin-bottom: 10px" (click)="toggleSettingAsidePane($event, 'RECONCILE');">Pull from GSTN
         </button>
-      </h1>
+            </h1>
+        </div>
     </div>
-  </div>
 
-  <!-- reconcile -->
-  <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
-    <!-- filter -->
-    <div class="col-xs-12">
+    <!-- reconcile -->
+    <div class="box clearfix" *ngIf="selectedGstrType.name == 'GSTR2'">
+        <!-- filter -->
+        <div class="col-xs-12">
 
-      <alert type="info" [dismissible]="true" *ngIf="(gstFoundOnGiddh$ | async) === false">
-        <strong>Warning!</strong> GST No, Not found for this company. Please update the GSTIN by updating company
-        setting profile
-      </alert>
+            <alert type="info" [dismissible]="true" *ngIf="(gstFoundOnGiddh$ | async) === false">
+                <strong>Warning!</strong> GST No, Not found for this company. Please update the GSTIN by updating company setting profile
+            </alert>
 
-      <div class="row">
-        <tabset #staticTabs id="c-tab">
-          <tab heading="{{'Missing in GSTN (' + (gstNotFoundOnPortalData$ | async)?.count + ')' }}"
-               (select)="reconcileTabChanged('NOT_ON_PORTAL')">
-            <div>
-              <reconcileDesign [data]="(gstNotFoundOnPortalData$ | async)?.data">
-              </reconcileDesign>
+            <div class="row">
+                <tabset #staticTabs id="c-tab">
+                    <tab heading="{{'Missing in GSTN (' + (gstNotFoundOnPortalData$ | async)?.count + ')' }}" (select)="reconcileTabChanged('NOT_ON_PORTAL')">
+                        <div>
+                            <reconcileDesign [data]="(gstNotFoundOnPortalData$ | async)?.data">
+                            </reconcileDesign>
 
-              <div style="display: flex;justify-content: center">
-                <div element-view-container-ref
-                     #pgGstNotFoundOnPortal="elementviewcontainerref">
-                </div>
-              </div>
+                            <div style="display: flex;justify-content: center">
+                                <div element-view-container-ref #pgGstNotFoundOnPortal="elementviewcontainerref">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="(gstNotFoundOnPortalData$ | async)?.count === 0">
+                            <h3 class="text-center">NO DATA</h3>
+                        </div>
+                    </tab>
+                    <tab heading="{{'Missing in Giddh (' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}" (select)="reconcileTabChanged('NOT_ON_GIDDH')">
+                        <div>
+                            <reconcileDesign [data]="(gstNotFoundOnGiddhData$ | async)?.data">
+                            </reconcileDesign>
+
+                            <div style="display: flex;justify-content: center">
+                                <div element-view-container-ref #pgGstNotFoundOnGiddh="elementviewcontainerref">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="(gstNotFoundOnGiddhData$ | async)?.count === 0">
+                            <h3 class="text-center">NO DATA</h3>
+                        </div>
+
+
+                    </tab>
+                    <tab heading="{{'Partially Matched (' + (gstPartiallyMatchedData$ | async)?.count + ')'}}" (select)="reconcileTabChanged('PARTIALLY_MATCHED')">
+                        <div>
+
+                            <reconcileDesign [data]="(gstPartiallyMatchedData$ | async)?.data">
+                            </reconcileDesign>
+
+                            <div style="display: flex;justify-content: center">
+                                <div element-view-container-ref #pgPartiallyMatched="elementviewcontainerref">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="(gstPartiallyMatchedData$ | async)?.count === 0">
+                            <h3 class="text-center">NO DATA</h3>
+                        </div>
+
+                    </tab>
+                    <tab heading="{{'Matched (' + (gstMatchedData$ | async)?.count + ')'}}" (select)="reconcileTabChanged('MATCHED')">
+                        <div>
+                            <reconcileDesign [data]="(gstMatchedData$ | async)?.data">
+                            </reconcileDesign>
+
+                            <div style="display: flex;justify-content: center">
+                                <div element-view-container-ref #pgMatched="elementviewcontainerref">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="(gstMatchedData$ | async)?.count === 0">
+                            <h3 class="text-center">NO DATA</h3>
+                        </div>
+
+
+                    </tab>
+                </tabset>
+
+
+                <!-- search form  -->
             </div>
-            <div class="row" *ngIf="(gstNotFoundOnPortalData$ | async)?.count === 0">
-              <h3 class="text-center">NO DATA</h3>
-            </div>
-          </tab>
-          <tab heading="{{'Missing in Giddh (' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}"
-               (select)="reconcileTabChanged('NOT_ON_GIDDH')">
-            <div>
-              <reconcileDesign [data]="(gstNotFoundOnGiddhData$ | async)?.data">
-              </reconcileDesign>
+        </div>
+        <!-- filter end  -->
 
-              <div style="display: flex;justify-content: center">
-                <div
-                  element-view-container-ref #pgGstNotFoundOnGiddh="elementviewcontainerref">
-                </div>
-              </div>
-            </div>
-            <div class="row" *ngIf="(gstNotFoundOnGiddhData$ | async)?.count === 0">
-              <h3 class="text-center">NO DATA</h3>
-            </div>
+        <!-- table  -->
 
-
-          </tab>
-          <tab heading="{{'Partially Matched (' + (gstPartiallyMatchedData$ | async)?.count + ')'}}"
-               (select)="reconcileTabChanged('PARTIALLY_MATCHED')">
-            <div>
-
-              <reconcileDesign [data]="(gstPartiallyMatchedData$ | async)?.data">
-              </reconcileDesign>
-
-              <div style="display: flex;justify-content: center">
-                <div
-                  element-view-container-ref #pgPartiallyMatched="elementviewcontainerref">
-                </div>
-              </div>
-            </div>
-            <div class="row" *ngIf="(gstPartiallyMatchedData$ | async)?.count === 0">
-              <h3 class="text-center">NO DATA</h3>
-            </div>
-
-          </tab>
-          <tab heading="{{'Matched (' + (gstMatchedData$ | async)?.count + ')'}}"
-               (select)="reconcileTabChanged('MATCHED')">
-            <div>
-              <reconcileDesign [data]="(gstMatchedData$ | async)?.data">
-              </reconcileDesign>
-
-              <div style="display: flex;justify-content: center">
-                <div
-                  element-view-container-ref #pgMatched="elementviewcontainerref">
-                </div>
-              </div>
-            </div>
-            <div class="row" *ngIf="(gstMatchedData$ | async)?.count === 0">
-              <h3 class="text-center">NO DATA</h3>
-            </div>
-
-
-          </tab>
-        </tabset>
-
-
-        <!-- search form  -->
-      </div>
     </div>
-    <!-- filter end  -->
+    <!-- reconcile -->
 
-    <!-- table  -->
-
-  </div>
-  <!-- reconcile -->
-
-  <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-  <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState"
-                      [@slideInOut]="accountAsideMenuState"
-                      (fireReconcileRequest)="fireGstReconcileRequest('NOT_ON_PORTAL')"
-                      (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+    <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (fireReconcileRequest)="fireGstReconcileRequest('NOT_ON_PORTAL')" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
 <!--<div class="form-group col-xs-2">
         <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
