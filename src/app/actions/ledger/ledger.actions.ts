@@ -641,10 +641,10 @@ export class LedgerActions {
     };
   }
 
-  public SelectDeSelectSingleEntries(mode: 'debit' | 'credit', isChecked: boolean): CustomActions {
+  public DeSelectSelectedEntries(entries: string[]): CustomActions {
     return {
-      type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
-      payload: {mode, isChecked}
+      type: LEDGER.DESELECT_SELECTED_ENTRIES,
+      payload: entries
     };
   }
 
