@@ -153,10 +153,9 @@
                 <td>
                   <input onReturn type="text" class="form-control text-right account-amout-field"
                          (change)="changeTotal(i, transaction.amount)" decimalDigitsDirective [DecimalPlaces]="2"
-                         [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i"
+                         [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
                          [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                         [disabled]="!transaction.selectedAccount.account"
-                         (blur)="addNewAccount(transaction.amount, l)"/>
+                         [disabled]="!transaction.selectedAccount.account"/>
                 </td>
               </tr>
             </ng-container>
