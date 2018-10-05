@@ -26,7 +26,8 @@
     </div>
   </div>
   <div class="max500 center-block mrT clearfix">
-    <a href="assets/sample-files/{{entity}}-sample.xlsx">Download a sample file</a>
+    <!-- <a  href="assets/sample-files/{{entity}}-sample.xlsx">Download a sample file</a> -->
+    <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">Download a sample file</button>
     <div class="pull-right mrT2">
       <button class="btn btn-default" [routerLink]="['/pages/import']">Back</button>
       <button class="btn btn-success" [ladda]="isLoading" [disabled]="file === null" (click)="onFileUpload.emit(file)">
