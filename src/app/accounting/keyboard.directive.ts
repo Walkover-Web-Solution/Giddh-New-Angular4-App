@@ -56,7 +56,10 @@ export class OnReturnDirective {
         } else if (allElements[indx + 1] && allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
           target = allElements[indx + 2];
         } else if (allElements[indx] && allElements[indx].classList.contains('account-amout-field')) {
-          console.log('Go to Next field');
+          // alert('Go to Next field');
+          return setTimeout(() => {
+            target.focus();
+          }, 0);
         }
 
         // let attrArray = [];
@@ -162,7 +165,9 @@ export class OnReturnDirective {
         } else if (allElements[indx - 1] && allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
           target = allElements[indx - 2];
         } else if (allElements[indx] && allElements[indx].classList.contains('account-amout-field')) {
-          console.log('Go to previous field');
+          return setTimeout(() => {
+            target.focus();
+          }, 0);
         }
 
         if (target && e.target.value.length === e.target.selectionEnd) {
