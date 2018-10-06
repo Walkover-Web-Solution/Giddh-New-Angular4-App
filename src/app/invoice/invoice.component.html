@@ -2,20 +2,20 @@
   <nav class="navbar">
     <div class="container-fluid pdL0">
       <div class="">
-        <invoice-page-dd (pageChanged)="pageChanged($event)"></invoice-page-dd>
+        <invoice-page-dd ></invoice-page-dd>
 
         <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="showInvoiceNav">
           <li>
-            <a [routerLink]="['preview']" routerLinkActive="active">Preview</a>
+            <a [routerLink]="['preview']"  routerLinkActive="active">Preview</a>
           </li>
           <li>
-            <a [routerLink]="['generate']" routerLinkActive="active">Generate</a>
+            <a [routerLink]="['generate']"  routerLinkActive="active">Generate</a>
           </li>
           <li>
-            <a [routerLink]="['templates']" routerLinkActive="active">Templates</a>
+            <a [routerLink]="['templates']"  routerLinkActive="active">Templates</a>
           </li>
           <li>
-            <a [routerLink]="['settings']" routerLinkActive="active">Settings</a>
+            <a [routerLink]="['settings']"  routerLinkActive="active">Settings</a>
           </li>
         </ul>
       </div>
