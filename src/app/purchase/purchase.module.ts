@@ -15,6 +15,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { AlertModule, TabsModule } from 'ngx-bootstrap';
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -35,7 +36,8 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
     ClickOutsideModule,
     TabsModule,
     AlertModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    PerfectScrollbarModule
   ],
   entryComponents: [
     PaginationComponent

@@ -53,7 +53,8 @@ export class GstReconcileActions {
       ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST)
       , switchMap((action: CustomActions) => {
 
-        return this._reconcileService.GstReconcileGetInvoices(action.payload.period, action.payload.action, action.payload.page, action.payload.count)
+        return this._reconcileService.GstReconcileGetInvoices(action.payload.period, action.payload.action, action.payload.page, action.payload.count,
+          action.payload.refresh)
           .pipe(
             map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
               if (response.status === 'success') {
@@ -86,10 +87,10 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoiceRequest(period: string, action: string, page: string, count: string = '10'): CustomActions {
+  public GstReconcileInvoiceRequest(period: string, action: string, page: string, refresh: boolean = false, count: string = '10'): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
-      payload: {period, action, page, count}
+      payload: {period, action, page, refresh, count}
     };
   }
 

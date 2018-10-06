@@ -511,7 +511,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
 
       if (checkIsAuthenticated) {
-        this.fireGstReconcileRequest(this.reconcileActiveTab);
+        this.fireGstReconcileRequest(this.reconcileActiveTab, this.selectedDateForGSTR1, 1, true);
         return;
       }
     }
@@ -731,9 +731,9 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1) {
+  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-      this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString())
+      this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString(), refresh)
     );
   }
 
