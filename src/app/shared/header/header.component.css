@@ -79,7 +79,7 @@
   width: auto !important;
   max-width: inherit !important;
 }
-
+/*
 :host ::ng-deep #universal_search .form-control {
   margin-bottom: 0;
   border: none !important;
@@ -110,24 +110,13 @@
   border-bottom-right-radius: 8px !important;
 }
 
-.universal_modal .shortcuts {
-  background: #f9f9f9;
-  border-top: none;
-  margin: 0;
-  padding: 12px 16px 12px 20px;
-  color: #717274;
-  font-size: 12px;
-  border-bottom-left-radius: 8px !important;
-  border-bottom-right-radius: 8px !important;
-}
-
 .universal_modal .form-group {
   margin-bottom: 0;
 }
 
 .universal_modal.modal.in .modal-dialog {
   transform: translateY(100px) !important;
-}
+} */
 
 :host ::ng-deep .left_fixed_header perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y {
   opacity: 0;

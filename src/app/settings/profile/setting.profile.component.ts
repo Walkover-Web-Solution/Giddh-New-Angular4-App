@@ -60,6 +60,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public statesSourceCompany: IOption[] = [];
   public keyDownSubject$: Subject<any> = new Subject<any>();
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
+  public dataToSave: object = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -129,9 +130,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     };
 
     this.keyDownSubject$
-      .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
+      .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
       .subscribe((event: any) => {
-        this.patchProfile({[event.target.name]: event.target.value});
+        this.patchProfile(this.dataToSave);
       });
 
     this.gstKeyDownSubject$
@@ -293,7 +294,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       for (let entry of this.companyProfileObj.gstDetails) {
         entry.addressList[0].isDefault = false;
       }
-      this.companyProfileObj.gstDetails[indx].addressList[0].isDefault = true;
+      if (this.companyProfileObj.gstDetails && this.companyProfileObj.gstDetails[indx] && this.companyProfileObj.gstDetails[indx].addressList && this.companyProfileObj.gstDetails[indx].addressList[0]) {
+        this.companyProfileObj.gstDetails[indx].addressList[0].isDefault = true;
+      }
     }
   }
 
@@ -471,5 +474,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         // }
       }
     });
+  }
+
+  public pushToUpdate(event) {
+    setTimeout(() => {
+      this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
+    }, 100);
   }
 }

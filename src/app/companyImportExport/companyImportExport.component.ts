@@ -18,26 +18,42 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
       align-items: center;
     }
 
-    .export-card {
-      padding: 40px 67px;
-      margin-right: 15px;
-      box-shadow: 0px 2px 18px gainsboro;
-      border-radius: 8px;
-      border: 2px solid gray;
+    .export-card:hover, .import-card:hover {
+      border: 1px solid #ff5e01;
     }
 
-    .import-card {
+    .import-card, .export-card {
       padding: 40px 67px;
-      margin-left: 15px;
-      box-shadow: 0px 2px 18px gainsboro;
-      border-radius: 8px;
-      border: 2px solid gray;
+      margin: 0 15px;
+      border-radius: 2px;
+      border: 1px solid #d9d9d9;
+      background: #fafafa;
+      width: 330px;
+      text-align: center;
+      transition: .5s all ease;
     }
 
     .selected {
-      box-shadow: 0px 2px 18px #0095ff70 !important;
-      border-color: #84b1ff !important;
+      /*box-shadow: 0px 2px 18px #0095ff70 !important;
+      border-color: #84b1ff !important;*/
     }
+
+    .import-export-icon {
+      width: 90px;
+      height: 90px;
+      background: #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 90px;
+      font-size: 34px;
+      color: #666666;
+      margin: 0 auto 20px;
+    }
+
+    
+
+
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

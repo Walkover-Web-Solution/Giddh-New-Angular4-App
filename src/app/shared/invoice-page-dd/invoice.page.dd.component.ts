@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -61,30 +61,14 @@ export class InvoicePageDDComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.router.routerState.snapshot.url) {
-      let url = this.router.routerState.snapshot.url.split('/')
-      let lastUrl = url[url.length - 1];
-      this.pageChanged.emit(lastUrl);
-      switch (lastUrl) {
-        case 'invoice':
-          this.selectedPage = 'Invoice';
-          break;
-        case 'recurring':
-          this.selectedPage = 'Recurring';
-          break;
-        case 'receipt':
-          this.selectedPage = 'Receipt';
-          break;
-        case 'cr-note':
-          this.selectedPage = 'Cr-note';
-          break;
-        case 'dr-note':
-          this.selectedPage = 'Dr-note';
-          break;
-        default:
-          this.selectedPage = 'Invoice';
-          break;
-      }
+      this.setUrl(this.router.routerState.snapshot.url);
     }
+
+    this.router.events.subscribe(ev => {
+      if (ev instanceof NavigationEnd) {
+        this.setUrl(ev.url);
+      }
+    });
   }
 
   private removeObjFromArr(str) {
@@ -96,6 +80,32 @@ export class InvoicePageDDComponent implements OnInit {
 
   private onShown(): void {
     // console.log('Dropdown is shown');
+  }
+
+  private setUrl(mainUrl: string) {
+    let url = mainUrl.split('/');
+    let lastUrl = url[url.length - 1];
+    this.pageChanged.emit(lastUrl);
+    switch (lastUrl) {
+      case 'invoice':
+        this.selectedPage = 'Invoice';
+        break;
+      case 'recurring':
+        this.selectedPage = 'Recurring';
+        break;
+      case 'receipt':
+        this.selectedPage = 'Receipt';
+        break;
+      case 'cr-note':
+        this.selectedPage = 'Cr-note';
+        break;
+      case 'dr-note':
+        this.selectedPage = 'Dr-note';
+        break;
+      default:
+        this.selectedPage = 'Invoice';
+        break;
+    }
   }
 
   private changePage(page): void {
