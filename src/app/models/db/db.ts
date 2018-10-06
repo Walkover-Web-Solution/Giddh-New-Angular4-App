@@ -34,7 +34,19 @@ class AppDatabase extends Dexie {
   }
 
   public getItemByKey(key: any): Promise<any> {
-    return this.companies.get(key);
+    try {
+      return this.companies.get(key);
+    } catch (err) {
+      // handle error in case of any issue
+      // will delete the db and init new one
+      Dexie.delete('_giddh').then(() => {
+        console.log('Database successfully deleted');
+      }).catch((err) => {
+        console.error('Could not delete database');
+      }).finally(() => {
+        console.log('Do what should be done next...');
+      });
+    }
   }
 
   public insertFreshData(item: ICompAidata): Promise<any> {
@@ -68,7 +80,7 @@ class AppDatabase extends Dexie {
       res.aidata[entity] = this.getSlicedResult(entity, arr);
       return this.companies.put(res);
     }).catch((err) => {
-      console.log ('error while adding item', err);
+      console.log('error while adding item', err);
     });
   }
 
