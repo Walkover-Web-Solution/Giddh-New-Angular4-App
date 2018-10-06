@@ -36,8 +36,10 @@
       <div class="mx-350 clearfix form-inline mrB">
         <div class="form-group">
           <label>Party A/c Name:<sup>*</sup></label>
-          <input name="party_name" type="text" onReturn #creditor placeholder="Party account"
-                 class="form-control max-height28 appearance_none" (keyup)="searchAccount($event?.target?.value)"
+          <!-- #creditor -->
+          <input name="party_name" type="text" onReturn placeholder="Party account"
+                 class="form-control max-height28 appearance_none upper-fields" 
+                 (keyup)="searchAccount($event?.target?.value)"
                  (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name"
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'partyAcc'"
                  (blur)="onPartyAccBlur();selectedField=null;focusedField = null" style="max-width:200px"/>
@@ -45,7 +47,7 @@
         <div class="form-group" style="margin-top: 5px;" [hidden]="!isPurchaseInvoiceSelected">
           <label>Ledger name:<sup>*</sup></label>
           <input name="ledger_name" type="text" onReturn placeholder="Ledger name"
-                 class="form-control max-height28 appearance_none" style="max-width:200px"
+                 class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="debtorAcc.name"
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'ledgerName'"
@@ -86,7 +88,7 @@
                 <tr
                   [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
                   <!-- (blur)="onStockItemBlur($event, qty); showStockList.next(false)" -->
-                  <td><input onReturn id="first_element_{{i}}_{{i}}" type="text" class="form-control"
+                  <td><input onReturn id="first_element_{{i}}_{{i}}" type="text" class="form-control select-stock-in-invoice"
                              [(ngModel)]="transaction.inventory.stock.name"
                              (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
                              [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
@@ -114,9 +116,8 @@
                   <td>
                     <input onReturn type="text" class="form-control text-right" #toAmountField
                            [(ngModel)]="transaction.inventory.amount" (ngModelChange)="amountChanged(i)"
-                           (focus)="selectRow(true,i)"
+                           (focus)="selectRow(true,i);addNewStock(transaction.inventory.amount,transaction, i)"
                            (keydown.Tab)="addNewStock(transaction.inventory.amount,transaction, i)"
-                           (blur)="addNewStock(transaction.inventory.amount,transaction, i)"
                            [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}" decimalDigitsDirective
                            [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name"/>
                   </td>
@@ -150,12 +151,11 @@
                 <td><input onReturn type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled
                            readonly/></td>
                 <td>
-                  <input onReturn type="text" class="form-control text-right"
+                  <input onReturn type="text" class="form-control text-right account-amout-field"
                          (change)="changeTotal(i, transaction.amount)" decimalDigitsDirective [DecimalPlaces]="2"
-                         [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i"
+                         [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
                          [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                         [disabled]="!transaction.selectedAccount.account"
-                         (blur)="addNewAccount(transaction.amount, l)"/>
+                         [disabled]="!transaction.selectedAccount.account"/>
                 </td>
               </tr>
             </ng-container>
@@ -188,7 +188,7 @@
           </div>
         </div>
         <div class="total_box text-right pull-right">
-          <span><strong>{{stockTotal + accountsTotal | number: '1.2-2' }}</strong></span>
+          <span><strong>{{ stockTotal - accountsTotal| number: '1.2-2' }}</strong></span>
         </div>
       </div>
     </div>

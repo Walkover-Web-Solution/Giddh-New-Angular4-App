@@ -47,6 +47,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
   public moment = moment;
   public startDate: Date;
   public endDate: Date;
+  public activeStockGroup: string;
   private universalDate: Date[];
   private isUniversalDateApplicable: boolean = false;
   private lastPage: number = 0;
@@ -72,7 +73,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         if (o.results) {
           this.stockListDropDown = [];
           _.forEach(o.results, (unit: any) => {
-            this.stockListDropDown.push({label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName});
+            this.stockListDropDown.push({label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, additional: unit.stockGroup});
           });
         }
       } else {
@@ -169,6 +170,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
       this.mfStockSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
       this.mfStockSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
     }
+  }
+
+  /**
+   * setActiveStockGroup
+   */
+  public setActiveStockGroup(event) {
+    this.activeStockGroup = event.additional.uniqueName;
   }
 
   public ngOnDestroy() {

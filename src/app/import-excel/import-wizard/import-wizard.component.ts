@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
@@ -26,6 +26,16 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
   public dataModel: DataModel[];
+
+  constructor(
+    private store: Store<AppState>,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _importActions: ImportExcelActions,
+    private _cdRef: ChangeDetectorRef
+  ) {
+  }
+
   public dataChanged = (excelState: ImportExcelState) => {
     this.excelState = excelState;
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
@@ -33,18 +43,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.onNext(excelState.importExcelData);
       this.prepareDataModel(excelState.importExcelData);
     }
-    if(excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess){
+    if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
       this._router.navigate(['/pages/import/select']);
     }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
-  };
-
-  constructor(
-    private store: Store<AppState>,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private _importActions: ImportExcelActions
-  ) {
   }
 
   public ngOnInit() {
@@ -68,7 +70,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public onNext(importData: ImportExcelResponseData) {
     console.log(importData);
     this.mappedData = importData;
-    // this.step++;
+    this._cdRef.detectChanges();
   }
 
   public onBack() {

@@ -93,6 +93,7 @@ export class MfEditComponent implements OnInit {
           if (!this.initialQuantityObj.length) {
             this.initialQuantityObj = manufacturingObj.linkedStocks;
           }
+          // manufacturingObj.activeStockGroupUniqueName = o.activeStockGroup;
           this.manufacturingDetails = manufacturingObj;
           this.onQuantityChange(manufacturingObj.manufacturingMultipleOf);
         }
@@ -135,7 +136,7 @@ export class MfEditComponent implements OnInit {
   public ngOnInit() {
     if (this.isUpdateCase) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-      this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
+      this.store.dispatch(this.inventoryAction.GetStockWithUniqueName(manufacturingDetailsObj.stockUniqueName));
     }
     // dispatch stockList request
     this.store.select(p => p.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
@@ -216,9 +217,10 @@ export class MfEditComponent implements OnInit {
       let selectedValue = _.cloneDeep(data.value);
       this.selectedProduct = selectedValue;
       let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-      manufacturingObj.stockUniqueName = selectedValue;
+      // manufacturingObj.stockUniqueName = selectedValue;
+      manufacturingObj.uniqueName = selectedValue;
       this.manufacturingDetails = manufacturingObj;
-      this.store.dispatch(this.manufacturingActions.GetStockWithRate(selectedValue));
+      this.store.dispatch(this.manufacturingActions.GetStockWithRate(manufacturingObj.stockUniqueName));
     }
   }
 
@@ -420,7 +422,7 @@ export class MfEditComponent implements OnInit {
   public getStockUnit(selectedItem, itemQuantity) {
     if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-      this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
+      this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).subscribe((res) => {
 
         if (res.status === 'success') {
           let unitCode = res.body.stockUnit.code;

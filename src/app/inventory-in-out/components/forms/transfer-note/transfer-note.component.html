@@ -22,9 +22,9 @@
                      (selected)="stockChanged($event)"
                      [ItemHeight]="'33'"
                      formControlName="stock"></sh-select>
-          <span *ngIf="stock.invalid">
+          <!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
-                    </span>
+                    </span> -->
         </div>
       </div>
 
@@ -37,10 +37,10 @@
                      [placeholder]="'Select Sender'"
                      formControlName="inventoryUser"
                      [ItemHeight]="'33'"></sh-select>
-          <span *ngIf="inventoryUser.invalid">
+          <!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Sender.</span>
-                    </span>
+                    </span> -->
         </div>
 
         <div class="col-xs-6 form-group">
@@ -50,7 +50,7 @@
                      [placeholder]="'Select Receiver'"
                      (selected)="recieverUniqueName = $event.value"
                      [ItemHeight]="'33'"></sh-select>
-          <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span>
+          <!-- <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span> -->
         </div>
       </div>
 
@@ -60,8 +60,8 @@
           <label>Quantity <sup>*</sup></label>
           <input name="dateRange" type="text" class="form-control" formControlName="quantity"
                  [placeholder]="'Enter Quantity'"/>
-          <span *ngIf="quantity?.errors && quantity.errors['required']"
-                class="text-danger">Please enter quantity.</span>
+          <!-- <span *ngIf="quantity?.errors && quantity.errors['required']"
+                class="text-danger">Please enter quantity.</span> -->
         </div>
 
         <div class="col-xs-6 form-group">
@@ -69,7 +69,7 @@
           <sh-select [options]="stockUnitsOptions"
                      [placeholder]="'Choose unit'" formControlName="stockUnit"
                      [multiple]="false" [ItemHeight]="33"></sh-select>
-          <span *ngIf="stockUnit?.errors && stockUnit.errors['required']" class="text-danger">Please select Unit.</span>
+          <!-- <span *ngIf="stockUnit?.errors && stockUnit.errors['required']" class="text-danger">Please select Unit.</span> -->
         </div>
 
       </div>

@@ -6,7 +6,7 @@
         <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
           <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" name="entryDate"
                  [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
-                 class="form-control text-right"/> {{ displayDay }}
+                 class="form-control text-right" (focus)="onDateFieldFocus()"/> {{ displayDay }}
         </div>
       </div>
       <!-- invoice num -->
@@ -37,7 +37,7 @@
                                                (focus)="selectRow(true,i);hideListItems()"
                                                [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
                                                value="{{ transaction.type | lowercase }}" maxlength="2"/></td>
-              <td><input onReturn id="first_element_{{i}}" type="text" class="form-control" #particular
+              <td><input onReturn id="first_element_{{i}}" type="text" class="form-control from-or-to-acc" #particular
                          [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account"
                          (keyup)="searchAccount($event?.target?.value);"
                          (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
@@ -128,7 +128,7 @@
         <div class="col-xs-4">
           <div class="form-group">
             <label>Narration:</label>
-            <textarea class="form-control" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
+            <textarea id="narration" class="form-control" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
                       (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="requestObj.description" resize="false"
                       rows="6"></textarea>
           </div>
