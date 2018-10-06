@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -46,17 +46,17 @@ export class InvoicePageDDComponent implements OnInit {
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
     this.selectedPage = 'Invoice';
-    // this.router.events.subscribe((event: NavigationStart) => {
-    //   if (event.url) {
-    //     if (event.url.indexOf('invoice') !== -1) {
-    //       this.navItems = this.removeObjFromArr('invoice');
-    //       this.selectedPage = INV_PAGE[0].name;
-    //     } else if (event.url.indexOf('proforma') !== -1) {
-    //       this.navItems = this.removeObjFromArr('proforma');
-    //       this.selectedPage = INV_PAGE[1].name;
-    //     }
-    //   }
-    // });
+    this.router.events.subscribe((event: NavigationStart) => {
+      if (event.url) {
+        if (event.url.indexOf('invoice') !== -1) {
+          this.navItems = this.removeObjFromArr('invoice');
+          this.selectedPage = INV_PAGE[0].name;
+        } else if (event.url.indexOf('proforma') !== -1) {
+          this.navItems = this.removeObjFromArr('proforma');
+          this.selectedPage = INV_PAGE[1].name;
+        }
+      }
+    });
   }
 
   public ngOnInit(): void {
