@@ -1,10 +1,10 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
@@ -45,8 +45,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>,
               private companyActions: CompanyActions,
-              private router: Router
-  ) {
+              private router: Router,
+              private _cd: ChangeDetectorRef) {
     //
   }
 
@@ -58,23 +58,37 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'invoice';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-      // console.log('router.event');
-      // debugger;
-      // if (event && event.url && event.url.includes('preview')) {
-      //   this.showInvoiceNav = true;
-      // } else {
-      //   this.showInvoiceNav = false;
-      // }
+    // debugger;
+    this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((ev) => {
+      if (ev instanceof NavigationEnd) {
+        this.showInvoiceNav = this.router.routerState.snapshot.url !== '/pages/invoice/receipt';
+        this._cd.detectChanges();
+      }
     });
+    // this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+    //   // console.log('router.event');
+    //   // debugger;
+    //   // if (event && event.url && event.url.includes('preview')) {
+    //   //   this.showInvoiceNav = true;
+    //   // } else {
+    //   //   this.showInvoiceNav = false;
+    //   // }
+    // });
     // if (this.router.routerState.snapshot.url.includes('preview')) {
     //   this.showInvoiceNav = true;
     // }
   }
 
-  public pageChanged(page: string) {
-    this.showInvoiceNav = page === 'preview';
-  }
+  // public pageChanged(page: string) {
+  //   this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings'].indexOf(page) > -1;
+  //   // this.showInvoiceNav = page === 'preview';
+  // }
+
+  // public goToRoute(path: string) {
+  //   debugger;
+  //   this.pageChanged(path);
+  //   this.router.navigateByUrl('page/invoice/' + path);
+  // }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
