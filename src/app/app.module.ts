@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
-import { NoPreloading, PreloadAllModules, RouterModule } from '@angular/router';
+import { NoPreloading, RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import * as _ from './lodash-optimized';
@@ -53,6 +53,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { IS_ELECTRON_WA } from './app.constant';
+import { UniversalListModule } from './theme/universal-list/universal.list.module';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // Application wide providers
@@ -77,7 +78,9 @@ interface StoreType {
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['session', 'permission'], rehydrate: true})(reducer);
+  // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: IS_ELECTRON_WA ? sessionStorage : localStorage })(reducer);
+  return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: localStorage })(reducer);
+  // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: sessionStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
@@ -140,10 +143,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ActionModule.forRoot(),
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
+    UniversalListModule.forRoot(),
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.forRoot(reducers, {metaReducers}),
+    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+    StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: NoPreloading , onSameUrlNavigation: 'reload'}),
+    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: NoPreloading, onSameUrlNavigation: 'reload'}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     StoreRouterConnectingModule,
     StoreDevtoolsModule.instrument({
@@ -171,7 +177,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
     {
       provide: ServiceConfig,
-      useValue: {apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _}
+      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
     },
     {
       provide: HTTP_INTERCEPTORS,

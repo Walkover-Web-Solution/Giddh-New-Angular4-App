@@ -40,6 +40,7 @@ import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCa
 import { HighlightModule } from 'app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { DigitsOnlyModule } from 'app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
+import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -84,6 +85,7 @@ export function provideConfig() {
     ReactiveFormsModule,
     ModalModule,
     TypeaheadModule,
+    UniversalListModule,
     NgbTypeaheadModule,
     TooltipModule,
     BsDropdownModule,

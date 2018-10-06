@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ReplaySubject } from 'rxjs';
+import { GeneralService } from './services/general.service';
 
 @Component({
   selector: 'page',
@@ -22,7 +23,7 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) {
+  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location, private _generalService: GeneralService) {
   }
 
   public ngOnInit() {
@@ -30,6 +31,7 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
+    this._generalService.SetIAmLoaded(true);
     // if (this.location.path() === '/pages') {
     //   this.router.navigate(['/pages', 'home']);
     // }

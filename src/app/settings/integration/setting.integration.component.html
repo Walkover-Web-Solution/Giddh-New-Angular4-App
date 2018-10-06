@@ -252,7 +252,7 @@
     <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
         <ng-container formArrayName="sellers">
             <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
-                <div class="clearfix" [formGroupName]="i">
+                <div class="clearfix" [formGroupName]="i" -->
                     <!-- <div class="mrR1 pull-left" [ngClass]="{'mrT2': f}"> -->
                         <!-- <input type="checkbox" /> -->
                     <!-- </div> -->

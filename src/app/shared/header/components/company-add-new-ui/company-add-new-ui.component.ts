@@ -64,10 +64,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-
-        this._route.navigate([isNewUSer ? 'welcome' : 'sales']);
-        this.closeModal();
+        // this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+        setTimeout(() => {
+          this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+          this._route.navigate([isNewUSer ? 'welcome' : 'sales']);
+          this.closeModal();
+        }, 500);
       }
     });
   }
