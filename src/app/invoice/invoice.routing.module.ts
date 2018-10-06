@@ -47,6 +47,8 @@ import { PreviewDownloadReceiptComponent } from './receipt/models/preview-downlo
 import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
 import { WebviewDirective } from './webview.directive';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
+import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
+
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -95,6 +97,7 @@ const INVOICE_ROUTES: Routes = [
     ReceiptComponent,
     ReceiptUpdateComponent,
     PreviewDownloadReceiptComponent,
+    DownloadReceiptComponent,
     WebviewDirective
   ],
   imports: [
