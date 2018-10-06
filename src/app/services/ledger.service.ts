@@ -298,4 +298,17 @@ export class LedgerService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
+
+  /*
+  * delete bank transaction
+  */
+  public DeleteBankTransaction(transactionId: string): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + LEDGER_API.DELETE_BANK_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':transactionId', transactionId)).pipe(map((res) => {
+      let data: any = res;
+      data.queryString = {transactionId};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
+  }
 }
