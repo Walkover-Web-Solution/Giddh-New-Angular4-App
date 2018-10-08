@@ -69,6 +69,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
     this.searchQuery.emit(this.searchQueryForm.value.searchQuery);
   }
 
+  public createCSV() {
+    this.createCsv.emit(this.searchQueryForm.value.searchQuery);
+  }
+
   public addSearchRow() {
     this.searchDataSet.push(this.fb.group({
       queryType: ['closingBalance', Validators.required],
