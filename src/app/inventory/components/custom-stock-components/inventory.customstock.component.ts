@@ -19,7 +19,7 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
-  templateUrl: './inventory.customstock.component.html'
+  templateUrl: './inventory.customstock.component.html',
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isAsideClose: boolean;
@@ -41,6 +41,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public isIndia: boolean;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public isStockUnitCodeAvailable$: Observable<boolean>;
+  public isDivide: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -228,5 +229,12 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.customUnitObj.code = _.cloneDeep(val);
       }
     }
+  }
+
+  /**
+   * changeType
+   */
+  public changeType(ev) {
+    this.isDivide = ev;
   }
 }
