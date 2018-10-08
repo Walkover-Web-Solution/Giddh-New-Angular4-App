@@ -136,7 +136,7 @@
             <!--  -->
             <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
               <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
-                <td colspan="2"><input onReturn type="text" class="form-control" #particular
+                <td colspan="2"><input onReturn type="text" class="form-control invoice-account-field" #particular
                                        [(ngModel)]="transaction.selectedAccount.account"
                                        (ngModelChange)="searchAccount($event);" (focus)="onAccountFocus(i)"
                                        [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
@@ -170,7 +170,7 @@
         <div class="col-xs-4">
           <div class="form-group">
             <label>Narration:</label>
-            <textarea class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
+            <textarea id="invoice-narration" class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
                       (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="data.description" resize="false"
                       rows="6"></textarea>
           </div>
