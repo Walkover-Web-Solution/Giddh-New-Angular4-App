@@ -14,12 +14,12 @@ import { CompanyActions } from '../actions/company.actions';
 export class SearchComponent implements OnInit, OnDestroy {
   public searchRequestEmitter = new EventEmitter<SearchRequest>();
 
-  constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
-  }
-
   public _searchRequest: SearchRequest;
   public pageChangeEvent: any;
   public filterEventQuery: any;
+
+  constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
+  }
 
   public get searchRequest(): SearchRequest {
     return this._searchRequest;
@@ -50,6 +50,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   public FilterByAPIEvent(ev) {
-    this.filterEventQuery = ev;
+    this.filterEventQuery = ev; // this key is an input in search-sidebar component
   }
 }
