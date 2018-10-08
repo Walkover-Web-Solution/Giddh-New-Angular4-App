@@ -11,7 +11,7 @@
 
   <!-- result -->
   <section class="" [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
-    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)"
+    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)"
                    (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()"></search-filter>
     <table class="table table-bordered basic mrT1">
       <thead>
