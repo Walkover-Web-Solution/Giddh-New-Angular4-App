@@ -455,12 +455,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
     this.showConfirmationBox = true;
-    if (this.data.description) {
+    if (this.data.description.trim() !== '') {
       this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
+      setTimeout(() => {
+        submitBtnEle.focus();
+      }, 100);
     }
-    setTimeout(() => {
-      submitBtnEle.focus();
-    }, 100);
   }
 
   /**
@@ -851,6 +851,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
+
+    console.log('On acc selected the ev is :', ev);
+
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {

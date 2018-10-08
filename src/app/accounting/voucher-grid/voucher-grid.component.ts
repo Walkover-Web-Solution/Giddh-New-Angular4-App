@@ -441,12 +441,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
     if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
-      if (this.requestObj.description) {
+      if (this.requestObj.description.trim() !== '') {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
+        setTimeout(() => {
+          submitBtnEle.focus();
+        }, 100);
       }
-      setTimeout(() => {
-        submitBtnEle.focus();
-      }, 100);
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
       return;
