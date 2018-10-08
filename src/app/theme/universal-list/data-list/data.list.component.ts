@@ -2,16 +2,16 @@ import {
   Component, ChangeDetectionStrategy, OnInit,
   OnDestroy, Input, Output, EventEmitter, OnChanges,
   SimpleChanges, ElementRef, ViewChild,
-  Renderer, AfterViewInit, NgZone
+  Renderer, AfterViewInit, NgZone, ChangeDetectorRef
 } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { findIndex, cloneDeep, remove, uniq, find } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take } from 'rxjs/operators';
+import { take, debounceTime } from 'rxjs/operators';
 import {
   CAPS_LOCK, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW,
   ENTER, MAC_ENTER, BACKSPACE, TAB, SHIFT, CONTROL, ALT,
@@ -97,12 +97,14 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private rawSmartComboList: IUlist[] = [];
   private smartList: IUlist[];
   private activeCompany: string;
+  private searchSubject: Subject<string> = new Subject();
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
     private zone: NgZone,
     private winRef: WindowRefService,
     private _dbService: DbService,
+    private _cdref: ChangeDetectorRef,
     private universalSearchService: UniversalSearchService
   ) {
   }
@@ -113,6 +115,12 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   public ngOnInit() {
+
+    // listen on input for searc
+    this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+      this.handleSearch(term);
+      this._cdref.markForCheck();
+    });
 
     // listen for companies and active company
     this._store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe((name) => {
@@ -334,19 +342,41 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
-  /**
-   * will be called from search input keyup
-   * @param e an event from search input.
-   * filtering data conditionally according to search term.
-   */
   public search(e: KeyboardEvent, term: string) {
     let key = e.which || e.keyCode;
     // preventing search operation on arrows key
     if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
       return;
     }
-
     term = term.trim();
+    this.searchSubject.next(term);
+    if (term === '' || term.length === 0) {
+      if ( this.isOpen && key === BACKSPACE ) {
+        e.preventDefault();
+        e.stopPropagation();
+        // remove item one by one on pressing backspace like gmail
+        if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+          if (!LOCAL_MEMORY.charCount) {
+            this.removeItemFromSelectedGroups();
+          }
+          if (LOCAL_MEMORY.charCount === 1) {
+            LOCAL_MEMORY.charCount = null;
+          }
+          // logic search
+          this.doConditionalSearch();
+        } else {
+          this.updateRowsViaSearch(cloneDeep(this.smartList));
+        }
+      }
+    }
+  }
+
+  /**
+   * will be called from search input keyup
+   * @param e an event from search input.
+   * filtering data conditionally according to search term.
+   */
+  public handleSearch(term: string) {
     if (term && term.length > 0) {
       LOCAL_MEMORY.charCount = term.length;
       // open popover again if in case it's not opened
@@ -368,25 +398,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       // emit no result event
       if (filteredData.length === 0) {
         this.noResultFoundEmitter.emit(true);
-      }
-    } else {
-      // backspace
-      if ( this.isOpen && key === BACKSPACE ) {
-        e.preventDefault();
-        e.stopPropagation();
-        // remove item one by one on pressing backspace like gmail
-        if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
-          if (!LOCAL_MEMORY.charCount) {
-            this.removeItemFromSelectedGroups();
-          }
-          if (LOCAL_MEMORY.charCount === 1) {
-            LOCAL_MEMORY.charCount = null;
-          }
-          // logic search
-          this.doConditionalSearch();
-        } else {
-          this.updateRowsViaSearch(cloneDeep(this.smartList));
-        }
       }
     }
     // setting width again due to if no data found.
