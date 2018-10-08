@@ -44,6 +44,7 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { TextMaskModule } from '../../../node_modules/angular2-text-mask';
 import { ReceiptComponent } from './receipt/receipt.component';
 import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
+import { WebviewDirective } from './webview.directive';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -90,7 +91,8 @@ const INVOICE_ROUTES: Routes = [
     InvoicePageDDComponent,
     RecurringComponent,
     ReceiptComponent,
-    DownloadReceiptComponent
+    DownloadReceiptComponent,
+    WebviewDirective
   ],
   imports: [
     FormsModule,
