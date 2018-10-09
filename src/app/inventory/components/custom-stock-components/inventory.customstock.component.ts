@@ -20,6 +20,29 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html',
+  styles: [`
+  .square-switch input[type="checkbox"]:checked~label {
+    background: initial;
+    color: initial;
+  }
+  .square-switch img {
+    top: -1px;
+    position: relative;
+  }
+  .division {
+    display: flex;
+    align-items: center;
+  }
+  .division>div {
+    display: inline-block;
+    width: auto;
+    padding: 0 7px;
+  }
+  .hr {
+    border-bottom: 2px solid #ddd;
+    margin: 3px 0;
+  }
+  `]
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isAsideClose: boolean;
@@ -41,7 +64,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public isIndia: boolean;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public isStockUnitCodeAvailable$: Observable<boolean>;
-  public isDivide: boolean = true;
+  public isDivide: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -111,13 +134,23 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   }
 
   public saveUnit(): any {
+    let customUnitObj = _.clone(this.customUnitObj);
     if (!this.editMode) {
       if (this.isIndia && this.selectedUnitName) {
-        this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
+        customUnitObj.name = _.cloneDeep(this.selectedUnitName);
       }
-      this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
+      if (this.isDivide) {
+        customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
+        customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
+      }
+      this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(customUnitObj)));
     } else {
-      this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(this.customUnitObj), this.editCode));
+      if (this.isDivide) {
+        customUnitObj.quantityPerUnit =  1 / _.cloneDeep(customUnitObj.quantityPerUnit);
+        customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
+      }
+
+      this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(customUnitObj), this.editCode));
       this.customUnitObj.name = null;
     }
   }
@@ -142,6 +175,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     this.customUnitObj.parentStockUnitCode = null;
     this.editMode = false;
     this.editCode = '';
+    this.isDivide = false;
 
   }
 
@@ -224,6 +258,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     if (selectElem) {
       let val: string = selectElem.filter;
       this.customUnitObj.name = _.cloneDeep(val);
+      this.selectedUnitName = '';
       if (!this.editMode && val) {
         val = uniqueNameInvalidStringReplace(val);
         this.customUnitObj.code = _.cloneDeep(val);
@@ -237,4 +272,5 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public changeType(ev) {
     this.isDivide = ev;
   }
+
 }
