@@ -638,7 +638,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (s && transactonId) {
           this.deleteBankTxn(transactonId);
         }
-      );
+      });
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
