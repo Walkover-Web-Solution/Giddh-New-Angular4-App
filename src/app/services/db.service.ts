@@ -15,7 +15,9 @@ export class DbService {
   }
 
   public getItemDetails(key: any): Observable<IUlist[]> {
-    return from(GIDDH_DB.getItemByKey(key));
+    return from(GIDDH_DB.getItemByKey(key).catch(err => {
+      GIDDH_DB.forceDeleteDB();
+    }));
   }
 
   public getAllItems(key: string, entity: string): Observable<IUlist[]> {
