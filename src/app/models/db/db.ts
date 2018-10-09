@@ -33,20 +33,19 @@ class AppDatabase extends Dexie {
     this.companies.mapToClass(CompAidataModel);
   }
 
+  public forceDeleteDB() {
+    this.delete();
+  }
+
   public getItemByKey(key: any): Promise<any> {
-    try {
-      return this.companies.get(key);
-    } catch (err) {
-      // handle error in case of any issue
-      // will delete the db and init new one
-      Dexie.delete('_giddh').then(() => {
-        console.log('Database successfully deleted');
-      }).catch((err) => {
-        console.error('Could not delete database');
-      }).finally(() => {
-        console.log('Do what should be done next...');
+    return new Promise((resolve, reject) => {
+      this.companies.get(key)
+      .then((res) => {
+        resolve(res);
+      }).catch(err => {
+        reject(err);
       });
-    }
+    });
   }
 
   public insertFreshData(item: ICompAidata): Promise<any> {
