@@ -255,24 +255,27 @@ input {
 /* my css start */
 
 
-
 /* file upload css start */
 
 .input-upload .input-group-btn {
     display: inline;
 }
+
 .date-range .date-range-picker {
     /* width: 100% !important; */
     max-width: 100%;
 }
+
 .col-xs-2.date-range {
     width: 220px;
 }
 
-      
+
 /* file upload css end */
 
+
 /* my css end */
+
 
 /*input*/
 
@@ -5073,4 +5076,29 @@ panel.sFthanks.fieldset {
 
 .auto_save i.rotate {
     animation: rotate 1.5s infinite linear;
+}
+
+.square-switch img {
+    max-width: 16px;
+}
+
+.unit_action .btn {
+    margin-right: 0;
+    border: 1px solid #ccc;
+    opacity: 0.5;
+}
+
+.unit_action .btn:nth-child(1) {
+    background: url(../images/divide-ico.svg) no-repeat center center;
+    background-size: 16px;
+}
+
+.unit_action .btn:nth-child(2) {
+    background: url(../images/multiply.svg) no-repeat center center;
+    background-size: 12px;
+}
+
+.unit_action .isSelected {
+    opacity: 1;
+    background-color: #fff !important;
 }
