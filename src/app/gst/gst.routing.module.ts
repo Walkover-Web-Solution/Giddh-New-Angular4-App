@@ -6,12 +6,14 @@ import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { GstPagesComponent } from './gst-pages/gst-pages.component';
 import { GstPageBComponent } from './gst-page-b/gst-page-b.component';
+import { GstComponent } from './gst.component';
 
 /**
  * Created by kunalsaxena on 9/1/17.
  */
 
 const GST_ROUTES: Routes = [
+  { path: '', component: GstComponent },
   { path: 'gst', component: GstPagesComponent },
   { path: 'gst-page-b', component: GstPageBComponent },
   { path: 'gst-page-c', component: GstPageCComponent }

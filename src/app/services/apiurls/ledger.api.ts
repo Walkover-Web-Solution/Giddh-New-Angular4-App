@@ -17,7 +17,8 @@ export const LEDGER_API = {
   UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
   MAGIC_LINK: 'company/:companyUniqueName/accounts/:accountUniqueName/magic-link?from=:from&to=:to',
   // EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
-  EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
+  // EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
+  EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v3/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
   EXPORT_LEDGER_WITH_INVOICE_NUMBER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger-with-invoice/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
   GET_BANK_TRANSACTIONS: 'company/:companyUniqueName/yodlee/accounts/:accountUniqueName/eledgers?refresh=true&from=:from',
   // put call to map transaction
@@ -30,5 +31,6 @@ export const LEDGER_API = {
   // GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type&format=:format',
   GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail-v2?from=:from&to=:to&type=:type&format=:format',
   MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
-  CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency'
+  CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
+  DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId'
 };

@@ -633,6 +633,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+      let transactonId = blankTransactionObj.transactionId;
+      this.isLedgerCreateSuccess$.subscribe(s => {
+        if (s && transactonId) {
+          this.deleteBankTxn(transactonId);
+        }
+      });
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
@@ -1085,5 +1091,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.toggleBodyClass();
   }
 
+/**
+ * deleteBankTxn
+ */
+  public deleteBankTxn(transactionId) {
+    this._ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
+      if (res.status === 'success') {
+        this._toaster.successToast('Bank transaction deleted Successfully');
+      }
+    });
+  }
   // endregion
 }

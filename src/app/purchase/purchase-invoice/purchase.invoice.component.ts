@@ -238,7 +238,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
     this.gstAuthenticated$.subscribe(s => {
       if (!s) {
-        this.toggleSettingAsidePane(null, 'RECONCILE');
+        // commented due to not tested yet
+        // this.toggleSettingAsidePane(null, 'RECONCILE');
       } else {
         //  means user logged in gst portal
       }
@@ -511,7 +512,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
 
       if (checkIsAuthenticated) {
-        this.fireGstReconcileRequest(this.reconcileActiveTab);
+        this.fireGstReconcileRequest(this.reconcileActiveTab, this.selectedDateForGSTR1, 1, true);
         return;
       }
     }
@@ -731,10 +732,11 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1) {
-    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-      this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString())
-    );
+  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
+    // commented due to not tested yet by alok sir
+    // this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
+    //   this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString(), refresh)
+    // );
   }
 
   public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
