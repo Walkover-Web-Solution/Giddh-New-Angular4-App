@@ -44,14 +44,19 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngIf="r.parentGroups">
-                      <small>
-                        <span *ngFor="let item of r.parentGroups; let idx = index">
-                          <ng-container *ngIf="idx > 0">
-                            <span>&nbsp;❯&nbsp;</span>
-                          </ng-container>
-                          {{item.name}}
-                        </span>
-                      </small>
+                      <p class="smlP">
+                        <small>
+                          <span *ngFor="let item of r.parentGroups; let idx = index">
+                            <ng-container *ngIf="idx > 0">
+                              <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                            {{item.name}}
+                          </span>
+                        </small>
+                      </p>
+                    </ng-container>
+                    <ng-container *ngIf="!r.type">
+                      <span class="hvrTxt">{{r.uniqueName}}</span>
                     </ng-container>
                   </div>
                 </a>
