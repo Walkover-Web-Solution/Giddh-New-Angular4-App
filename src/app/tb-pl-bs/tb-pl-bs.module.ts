@@ -1,3 +1,4 @@
+import { TbSynramComponent } from './components/tb-synram/tb-synram.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -38,6 +39,7 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
     TbPlBsFilterComponent,
     TlPlGridRowComponent,
     TbComponent,
+    TbSynramComponent,
     PlComponent,
     PlGridComponent,
     PlGridRowComponent,

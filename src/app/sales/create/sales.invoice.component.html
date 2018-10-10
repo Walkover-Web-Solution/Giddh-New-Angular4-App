@@ -544,10 +544,11 @@
                             </div>
                             <!-- commented due to presently attachfile key is not available in request 
                             -->
-                            <div class="pdT1 pl0 max-600" *ngIf="isPurchaseInvoice">
+                            <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
                                 <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
-                                <label class="custom-file-label form-control cp" for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em> <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span></label>
-                                <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" (change)="onFileChange($event.target.files)">
+                                <label class="custom-file-label form-control cp pos-rel" for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em> <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span>
+                                    <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" (change)="onFileChange($event.target.files)" droppable="true">
+                                </label>
                             </div>
                         </td>
                         <td width="50%">

@@ -28,8 +28,8 @@
 
 <h3 class="section_head mrT2">Gmail Integration</h3>
 <div class="box clearfix">
-  <a *ngIf="!(isGmailIntegrated$ | async)" class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">Connect with Gmail</a>
-  <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
+    <a *ngIf="!(isGmailIntegrated$ | async)" class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">Connect with Gmail</a>
+    <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
 </div>
 
 
@@ -252,9 +252,9 @@
     <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
         <ng-container formArrayName="sellers">
             <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
-                <div class="clearfix" [formGroupName]="i" -->
+                <div class="clearfix" [formGroupName]="i">
                     <!-- <div class="mrR1 pull-left" [ngClass]="{'mrT2': f}"> -->
-                        <!-- <input type="checkbox" /> -->
+                    <!-- <input type="checkbox" /> -->
                     <!-- </div> -->
                     <!-- <div class="form-group col-xs-2">
                         <div class="row">
