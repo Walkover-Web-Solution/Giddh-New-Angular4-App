@@ -27,6 +27,9 @@ export class OnReturnDirective {
 
       // nodeList[indx + 1].focus();
       if (e.which === 13 || e.keyCode === 13) {
+
+        selectedEle.setAttribute('data-changed', false);
+
         let target = allElements[indx + 1];
 
         if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
@@ -44,12 +47,7 @@ export class OnReturnDirective {
           target = allElements[indx + 2];
         } else if (allElements[indx + 1] && allElements[indx + 1].classList.contains('byTo') && allElements[indx + 1].disabled) {
           target = allElements[indx + 2];
-        } else if (allElements[indx] && allElements[indx].classList.contains('account-amout-field')) {
-          // alert('Go to Next field');
-          return setTimeout(() => {
-            target.focus();
-          }, 0);
-        } else if (allElements[indx] && allElements[indx].classList.contains('select-stock-in-invoice')) {
+        }  else if (allElements[indx] && allElements[indx].classList.contains('select-stock-in-invoice')) {
           if (this.activeIndx === indx) {
             target = allElements[indx + 1];
             if (target.disabled) {
@@ -63,11 +61,14 @@ export class OnReturnDirective {
         } else if (allElements[indx] && allElements[indx].classList.contains('invoice-account-field')) {
           if (this.activeIndx === indx) {
             target = allElements[indx + 1];
-            if (target.disabled) {
-              return document.getElementById('invoice-narration').focus();
-            }
-            this.activeIndx = null;
-            return target.focus();
+            return setTimeout(() => {
+              if (target.disabled && allElements[indx].value.trim() === '') {
+                return document.getElementById('invoice-narration').focus();
+              } else {
+                this.activeIndx = null;
+                return target.focus();
+              }
+            }, 100);
           } else {
             return this.activeIndx = indx;
           }
@@ -118,18 +119,21 @@ export class OnReturnDirective {
           }
         } else if (allElements[indx - 1] && allElements[indx - 1].classList.contains('byTo') && allElements[indx - 1].disabled) {
           target = allElements[indx - 2];
-        } else if (allElements[indx] && allElements[indx].classList.contains('account-amout-field')) {
-          return setTimeout(() => {
-            target.focus();
-          }, 0);
         }
+        // } else if (allElements[indx] && allElements[indx].classList.contains('account-amount-field')) {
+        //   return target.focus();
+        // }
         // && !this.isOtherKeyPressed && this.selectedField !== target
         if (target && e.target.value.length === e.target.selectionEnd) {
-          e.preventDefault();
-          if (target.disabled) {
-            target = allElements[indx + 2];
-          } else {
-            target.focus();
+          if (selectedEle.getAttribute('data-changed') === 'false' || selectedEle.value.trim() === '') {
+            e.preventDefault();
+            if (target.disabled) {
+              // console.log('yes if');
+              target = allElements[indx - 2];
+              return target.focus();
+            } else {
+              return target.focus();
+            }
           }
         }
       } else if (e.which === 32 || e.keyCode === 32) {
@@ -138,18 +142,19 @@ export class OnReturnDirective {
           target.value = '';
         }
       }
+    } else if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode >= 65 && e.keyCode <= 90) {
+
+      const selectedEle = e.target;
+      // const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
+      // const nodeList = Array.from(allElements);
+      // const indx = nodeList.findIndex((ele) => ele === selectedEle);
+      selectedEle.setAttribute('data-changed', true);
+      // if (this.selectedField === allElements[indx]) {
+      //   this.isOtherKeyPressed = true;
+      // } else {
+      //   this.isOtherKeyPressed = false;
+      //   this.selectedField = allElements[indx];
+      // }
     }
-    // else {
-    //   const selectedEle = e.target;
-    //   const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
-    //   const nodeList = Array.from(allElements);
-    //   const indx = nodeList.findIndex((ele) => ele === selectedEle);
-    //   if (this.selectedField === allElements[indx]) {
-    //     this.isOtherKeyPressed = true;
-    //   } else {
-    //     this.isOtherKeyPressed = false;
-    //     this.selectedField = allElements[indx];
-    //   }
-    // }
   }
 }
