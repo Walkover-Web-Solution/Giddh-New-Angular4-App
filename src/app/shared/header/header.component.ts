@@ -84,7 +84,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
-  public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co'];
+  public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
