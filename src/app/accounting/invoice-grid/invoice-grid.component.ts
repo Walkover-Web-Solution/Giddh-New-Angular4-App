@@ -455,12 +455,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
     this.showConfirmationBox = true;
-    if (this.data.description) {
+    if (this.data.description.trim() !== '') {
       this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
+      setTimeout(() => {
+        submitBtnEle.focus();
+      }, 100);
     }
-    setTimeout(() => {
-      submitBtnEle.focus();
-    }, 100);
   }
 
   /**
@@ -851,6 +851,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
+
+    console.log('On acc selected the ev is :', ev);
+
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {
@@ -901,7 +904,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.currentSelectedValue = '';
       this.showLedgerAccountList = true;
-    }, 200);
+    }, 10);
   }
 
   public onPartyAccBlur() {
@@ -920,16 +923,16 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.asideMenuStateForProductService = 'out';
   }
 
+  public addNewAccount(val, lastIdx) {
+    if (val && lastIdx) {
+      this.addNewRow('account');
+    }
+  }
+
   private deleteRow(idx: number) {
     this.stocksTransaction.splice(idx, 1);
     if (!idx) {
       this.addNewRow('stock');
-    }
-  }
-
-  private addNewAccount(val, lastIdx) {
-    if (val && lastIdx) {
-      this.addNewRow('account');
     }
   }
 

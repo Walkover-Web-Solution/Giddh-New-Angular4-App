@@ -67,9 +67,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  // { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst/gst' },
-  // { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
-  // { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
+  { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst' },
+  { type: 'MENU', name: 'GST Module Page 1', uniqueName: '/pages/gst/gst' },
+  { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
+  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
   { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
 ];
 
@@ -127,8 +128,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         moment()
       ],
       'This Financial Year to Date': [
-        // moment(this.activeFinancialYear.financialYearStarts).startOf('day'),
-        moment(),
+        moment().startOf('year').subtract(9, 'year'),
         moment()
       ],
       'This Year to Date': [
@@ -144,8 +144,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
       ],
       'Last Financial Year': [
-        moment(),
-        moment()
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
       ],
       'Last Year': [
         moment().startOf('year').subtract(1, 'year'),
@@ -256,10 +256,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         this.userIsSuperUser = true;
       }
-      if (selectedCmp) {
-        this.activeFinancialYear = selectedCmp.activeFinancialYear;
-      }
-
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
       }
@@ -686,19 +682,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public setApplicationDate(ev) {
     let data = ev ? _.cloneDeep(ev) : null;
     if (data && data.picker) {
-
+    let dates = {
+      fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+      toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+    };
       if (data.picker.chosenLabel === 'This Financial Year to Date') {
         data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
       }
       if (data.picker.chosenLabel === 'Last Financial Year') {
-        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year');
-        data.picker.endDate = moment(_.clone(this.activeFinancialYear.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year');
+        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
+        data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
+        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+        dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
       }
       this.isTodaysDateSelected = false;
-      let dates = {
-        fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-        toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
-      };
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
       this.isTodaysDateSelected = true;
