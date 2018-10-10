@@ -297,6 +297,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       }
       let request: BulkEmailRequest = {
         data: {
+          subject: this.messageBody.subject,
           message: this.messageBody.msg,
           accounts: [],
         },
@@ -389,6 +390,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // Open Modal for Email
   public openEmailDialog() {
     this.messageBody.msg = '';
+    this.messageBody.subject = '';
     this.messageBody.type = 'Email';
     this.messageBody.btn.set = this.messageBody.btn.email;
     this.messageBody.header.set = this.messageBody.header.email;
@@ -445,6 +447,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       }
       let request: BulkEmailRequest = {
         data: {
+          subject: this.messageBody.subject,
           message: this.messageBody.msg,
           accounts: this.selectedItems,
         },
@@ -468,7 +471,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.isAllChecked = false;
           });
       } else if (this.messageBody.btn.set === 'Send Sms') {
-        return this._companyServices.sendSms(request)
+        let temp = request;
+        delete temp.data['subject'];
+        return this._companyServices.sendSms(temp)
           .subscribe((r) => {
             r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
             this.checkboxInfo = {

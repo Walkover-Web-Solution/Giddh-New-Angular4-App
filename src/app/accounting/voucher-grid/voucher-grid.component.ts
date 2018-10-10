@@ -350,12 +350,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
       this.openChequeDetailForm(acc);
     }
-    console.log('this.selectedIdx is :', this.selectedIdx);
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
-    console.log('selected transaction is :', transaction);
     if (acc) {
-      console.log('the acc isss :', acc);
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
@@ -444,12 +441,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
     if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
-      if (this.requestObj.description) {
+      if (this.requestObj.description.trim() !== '') {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
+        setTimeout(() => {
+          submitBtnEle.focus();
+        }, 100);
       }
-      setTimeout(() => {
-        submitBtnEle.focus();
-      }, 100);
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
       return;
