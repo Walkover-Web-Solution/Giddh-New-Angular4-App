@@ -136,9 +136,9 @@
             <!--  -->
             <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
               <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
-                <td colspan="2"><input onReturn type="text" class="form-control invoice-account-field" #particular
+                <td colspan="2"><input data-accountlistid="i" onReturn type="text" class="form-control invoice-account-field" #particular
                                        [(ngModel)]="transaction.selectedAccount.account"
-                                       (ngModelChange)="searchAccount($event);" (focus)="onAccountFocus(i)"
+                                       (ngModelChange)="searchAccount($event);" (focus)="selectedAccIdx=i; onAccountFocus(i)"
                                        [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
                                        (keydown)="detectKey($event)" (blur)="onAccountBlur(particular)"/></td>
                 <td>
@@ -151,11 +151,12 @@
                 <td><input onReturn type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled
                            readonly/></td>
                 <td>
-                  <input onReturn type="text" class="form-control text-right account-amout-field"
-                         (change)="changeTotal(i, transaction.amount)" decimalDigitsDirective [DecimalPlaces]="2"
-                         [(ngModel)]="transaction.amount" (focus)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
+                  <!-- (change)="changeTotal(i, transaction.amount)" -->
+                  <input type="text" class="form-control text-right"
+                        decimalDigitsDirective [DecimalPlaces]="2"
+                         [(ngModel)]="transaction.amount" (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
                          [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                         [disabled]="!transaction.selectedAccount.account"/>
+                         [disabled]="!transaction.selectedAccount.account" onReturn/>
                 </td>
               </tr>
             </ng-container>
@@ -164,8 +165,6 @@
         </div>
       </div>
       <!--  purchase as INVOICE -->
-
-
       <div class="clearfix">
         <div class="col-xs-4">
           <div class="form-group">
