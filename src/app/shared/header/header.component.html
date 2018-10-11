@@ -1,146 +1,207 @@
-<header class="clearfix header-container">
+<header class="clearfix header-container" [ngClass]="{'navbar_open':sideMenu.isopen}">
     <div class="nav-left-bar">
 
-    <ul class="company-name" dropdown [isOpen]="companyMenu.isopen">
-        <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
-            <span class="icon-dropdown"></span>
-            <div class="cText">
-                <span class="cName">{{ (selectedCompany | async)?.name }}</span>
-                <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
-            </div>
-        </a>
-        <ul id="companyList" class="company-list dropdown-menu" role="menu" *dropdownMenu>
-            <li class="create-company clearfix" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
-                <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">
-            Create Company
-            </button>
-                        <button id="refreshCompanyBtn" class="btn btn-default btn-sm pull-right" (click)="refreshCompanies($event)">
-            <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-            </button>
-            </li>
-            <li style="padding:0px;">
-                <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
-                    <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-                        <span tooltip-placement="right">{{ cmp.name }}</span>
-                        <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
-                    </li>
-                </ul>
-            </li>
+        <ul class="company-name pos-rel" dropdown [isOpen]="companyMenu.isopen" [autoClose]="false">
+            <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
+                <span class="icon-dropdown"></span>
+                <div class="cText">
+                    <span class="cName">{{ (selectedCompany | async)?.name }}</span>
+                    <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
+                </div>
+            </a>
+
+            <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+
+                <li dropdown dropdownToggle class="pos-rel">
+                    <a (click)="$event.preventDefault()" class="clearfix">
+                        Switch company
+                    </a>
+
+                    <ul id="companyList" class="company-list dropdown-menu" dropdown role="menu" *dropdownMenu>
+                        <li class="create-company clearfix" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
+                            <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">
+                        Create Company
+                        </button>
+                            <button id="refreshCompanyBtn" class="btn btn-default btn-sm pull-right" (click)="refreshCompanies($event)">
+                        <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                        </button>
+                        </li>
+                        <li style="padding:0px;">
+                            <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
+                                <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                                    <span tooltip-placement="right">{{ cmp.name }}</span>
+                                    <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </li>
+                <li>
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh"><span
+                  class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span>
+                <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}"
+                    alt="" /></span>
+                <div class="pull-left userName_wrap ellp">{{ userFullName }} <br />
+                  <small class="grey_clr">Profile</small>
+                </div>
+              </a>
+                </li>
+                <li role="separator" class="divider" style="width:100%"></li>
+                <li>
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
+                </li>
+                <li>
+                    <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
+                </li>
+                <li>
+                    <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
+                </li>
+                <li>
+                    <a href="http://faq.giddh.com" target="_blank">Help</a>
+                </li>
+                <li role="separator" class="divider" style="width:100%"></li>
+                <li>
+                    <a href="javascript:void(0)" (click)="logout()">Logout</a>
+                </li>
+                <li role="separator" class="divider" style="width:100%"></li>
+                <li class="app_list">
+                    <ul>
+                        <h6>Downloads</h6>
+                        <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i
+                      class="fa fa-android"></i> Android</a></li>
+                        <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
+                      class="fa fa-apple"></i> ios</a></li>
+                        <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                        <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                    </ul>
+                </li>
+                <li role="separator" class="divider" style="width:100%"></li>
+                <li class="app_list">
+                    <ul>
+
+                        <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                        <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+
         </ul>
-    </ul>
 
-    <div class="input-group account-search">
-        <span class="input-group-addon" id="basic-addon2"><i class="uicon-search"></i></span>
-        <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="basic-addon2">
+        <div class="input-group account-search">
+            <span class="input-group-addon" id="basic-addon2"><i class="uicon-search"></i></span>
+            <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="basic-addon2">
+        </div>
+
+        <ul class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+                <li [checkPermission]="['MENU', 'DASHBOARD']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/home')">
+                        <span class="navico-dashboard"></span>
+                        <span class="label">Dashboard</span>
+                    </a>
+                </li>
+                <!-- <li class="divider"></li> -->
+                <li [checkPermission]="['MENU', 'INVOICE']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/sales')">
+                        <span class="navico-sales"></span>
+                        <span class="label">Sales</span>
+                    </a>
+                </li>
+                <li [checkPermission]="['MENU', 'INVOICE']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/invoice')">
+                        <span class="navico-invoice"></span>
+                        <span class="label">Invoice</span>
+                    </a>
+                </li>
+                <li [checkPermission]="['MENU', 'LEDGER']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/accounting-voucher')">
+                        <span class="navico-journal"></span>
+                        <span class="label">Journal Voucher</span>
+                    </a>
+                </li>
+                <!-- <li class="divider"></li> -->
+                <li [checkPermission]="['MENU', 'LEDGER']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/daybook')">
+                        <span class="navico-daybook"></span>
+                        <span class="label">Daybook</span>
+                    </a>
+                </li>
+
+                <li [checkPermission]="['MENU', 'REPORT']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/trial-balance-and-profit-loss')">
+                        <span class="navico-tbpl"></span>
+                        <span class="label">TB, P&L and B/S</span>
+                    </a>
+                </li>
+
+                <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/audit-logs')">
+                        <span class="navico-log"></span>
+                        <span class="label">Audit Logs</span>
+                    </a>
+                </li>
+                <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/purchase/invoice')">
+                        <span class="navico-tax"></span>
+                        <span class="label">Taxes</span>
+                    </a>
+                </li>
+                <!-- <li class="divider"></li> -->
+
+                <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/inventory')">
+                        <span class="navico-inventory"></span>
+                        <span class="label">Inventory</span>
+                    </a>
+                </li>
+                <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/manufacturing')">
+                        <span class="navico-manufacturing"></span>
+                        <span class="label">Manufacturing</span>
+                    </a>
+                </li>
+                <!-- <li class="divider"></li> -->
+
+                <li [checkPermission]="['MENU', 'SEARCH']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/search')">
+                        <span class="navico-search"></span>
+                        <span class="label">Search</span>
+                    </a>
+                </li>
+                <li class="dmLi" [hidden]="!userIsSuperUser">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/permissions')">
+                        <span class="navico-permission"></span>
+                        <span class="label">Permissions</span>
+                    </a>
+                </li>
+                <li [checkPermission]="['MENU', 'SETTINGS']">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">
+                        <span class="navico-setting"></span>
+                        <span class="label">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/contact')">
+                        <span class="navico-daybook"></span>
+                        <span class="label">Contacts</span>
+                    </a>
+                </li>
+            </perfect-scrollbar>
+        </ul>
     </div>
-
-    <ul class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-        <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-            <li [checkPermission]="['MENU', 'DASHBOARD']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/home')">
-                    <span class="navico-dashboard"></span>
-                    <span class="label">Dashboard</span>
-                </a>
-            </li>
-            <!-- <li class="divider"></li> -->
-            <li [checkPermission]="['MENU', 'INVOICE']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/sales')">
-                    <span class="navico-sales"></span>
-                    <span class="label">Sales</span>
-                </a>
-            </li>
-            <li [checkPermission]="['MENU', 'INVOICE']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/invoice')">
-                    <span class="navico-invoice"></span>
-                    <span class="label">Invoice</span>
-                </a>
-            </li>
-            <li [checkPermission]="['MENU', 'LEDGER']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/accounting-voucher')">
-                    <span class="navico-journal"></span>
-                    <span class="label">Journal Voucher</span>
-                </a>
-            </li>
-            <!-- <li class="divider"></li> -->
-            <li [checkPermission]="['MENU', 'LEDGER']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/daybook')">
-                    <span class="navico-daybook"></span>
-                    <span class="label">Daybook</span>
-                </a>
-            </li>
-
-            <li [checkPermission]="['MENU', 'REPORT']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/trial-balance-and-profit-loss')">
-                    <span class="navico-tbpl"></span>
-                    <span class="label">TB, P&L and B/S</span>
-                </a>
-            </li>
-
-            <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/audit-logs')">
-                    <span class="navico-log"></span>
-                    <span class="label">Audit Logs</span>
-                </a>
-            </li>
-            <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/purchase/invoice')">
-                    <span class="navico-tax"></span>
-                    <span class="label">Taxes</span>
-                </a>
-            </li>
-            <!-- <li class="divider"></li> -->
-
-            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/inventory')">
-                    <span class="navico-inventory"></span>
-                    <span class="label">Inventory</span>
-                </a>
-            </li>
-            <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/manufacturing')">
-                    <span class="navico-manufacturing"></span>
-                    <span class="label">Manufacturing</span>
-                </a>
-            </li>
-            <!-- <li class="divider"></li> -->
-
-            <li [checkPermission]="['MENU', 'SEARCH']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/search')">
-                    <span class="navico-search"></span>
-                    <span class="label">Search</span>
-                </a>
-            </li>
-            <li class="dmLi" [hidden]="!userIsSuperUser">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/permissions')">
-                    <span class="navico-permission"></span>
-                    <span class="label">Permissions</span>
-                </a>
-            </li>
-            <li [checkPermission]="['MENU', 'SETTINGS']">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">
-                    <span class="navico-setting"></span>
-                    <span class="label">Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/contact')">
-                    <span class="navico-daybook"></span>
-                    <span class="label">Contacts</span>
-                </a>
-            </li>
-        </perfect-scrollbar>
-    </ul>
-</div>
 
     <nav class="navbar navbar-inverse" [ngClass]="{'menu_open':sideMenu.isopen}">
         <div class="container-fluid pdL0 text-center">
-            <ul class="nav navbar-nav" >
-                <li class="hamburger_menu cp" dropdown (isOpenChange)="sideBarStateChange($event)" [isOpen]="sideMenu.isopen">
-                    <a dropdownToggle href (click)="$event.preventDefault()">
+            <ul class="nav navbar-nav">
+                <!-- (isOpenChange)="sideBarStateChange($event)" -->
+                <li class="hamburger_menu cp">
+                    <a href="javascript:void(0)" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                         <i class="glyphicon glyphicon-menu-hamburger"></i>
                     </a>
 
-                    <ul [hidden]="true" *dropdownMenu id="topMenusBar" role="menu" class="dropdown-menu">
+                    <ul [hidden]="true" id="topMenusBar" role="menu" class="dropdown-menu">
                         <li>
                             <div>
                                 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
@@ -287,7 +348,7 @@
                     </div>
                 </li> -->
                 <li>
-                    
+
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right universal_date" *ngIf="(selectedCompany | async)">
@@ -301,7 +362,7 @@
                     <label class="btn btn-link">Today</label>
                     <label class="header-date mrT1">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
                 </li>
-                
+
                 <!-- <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
                     <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
                         <span class="icon-dropdown grey"></span>
@@ -329,7 +390,7 @@
                         </li>
                     </ul>
                 </li> -->
-                
+
                 <!-- <li dropdown [isOpen]="userMenu.isopen" [tooltip]="(user$ | async)?.email" [placement]="'left'">
                     <a href (click)="$event.preventDefault()" id="user-dropdown" dropdownToggle>
             {{userName | uppercase}}
@@ -435,13 +496,8 @@
 <!--CMD + K modal  -->
 <ng-template #navigationModal>
     <div class="modal-body" #mdl>
-        <universal-data-list
-        (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
-        (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-        [forceSetAutoFocus]="true" [isFlying]="false"
-        (groupEmitter)="makeGroupEntryInDB($event)"
-        (selectedItemEmitter)="onItemSelected($event)"
-        [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
+        <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)" (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true" [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
+            [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
         <div class="shortcuts">
             <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
         </div>

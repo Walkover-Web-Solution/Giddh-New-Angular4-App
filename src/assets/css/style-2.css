@@ -350,7 +350,6 @@ input {
 
 header .navbar {
     background-color: #F7F8FA;
-    margin-left: 230px;
 }
 
 .company-name.open span {
@@ -650,6 +649,7 @@ header .navbar {
     font-size: 12px;
     height: 26px;
 }
+
 .header-date {
     background: #E7E7E8 !important;
     font-size: 12px;
@@ -658,15 +658,18 @@ header .navbar {
     padding: 2px 13px;
     border-radius: 2px;
 }
+
 .btn-gray {
     background: #666666;
     color: #fff;
     /* font-size: 10px;
     padding: 7px 10px; */
 }
+
 .btn-gray:hover {
     color: #fff;
 }
+
 
 /* header {
     border-bottom: 1px solid rgb(214, 214, 214);
@@ -784,6 +787,7 @@ header .navbar {
     display: inline-block;
     width: 100%;
 }
+
 
 /* #cmpWrp .cText {
     margin: 5px 0 5px 0px;
@@ -4790,6 +4794,7 @@ table td[class*=col-]:last-child {
     background: #fff !important;
 }
 
+
 /* .universal_date label {
     color: #fff;
 } */
@@ -4798,6 +4803,7 @@ table td[class*=col-]:last-child {
     color: #2262D1 !important;
     padding-top: 3px;
 }
+
 .universal_date .btn-link:hover {
     text-decoration: none;
 }
@@ -5143,7 +5149,12 @@ panel.sFthanks.fieldset {
     opacity: 1;
     background-color: #fff !important;
 }
+
 .menu_open {
-    /* width: calc(100% - 210px);
-    float: right; */
-  }
+    padding-left: 240px;
+}
+
+.navbar_open {
+    left: 240px;
+    transition: left .1s ease;
+}
