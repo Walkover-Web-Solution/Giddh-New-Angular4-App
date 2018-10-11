@@ -331,8 +331,17 @@ input {
     font-size: 14px;
 }
 
+.company-name .cText .cName {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.company-name .cText .fyear {
+    font-size: 10px;
+}
+
 .company-name .cText span {
-    color: #fff !important;
+    color: #B7B7B7;
 }
 
 .acntAccordion .title.active {
@@ -340,7 +349,8 @@ input {
 }
 
 header .navbar {
-    background-color: #1a1a1a;
+    background-color: #F7F8FA;
+    margin-left: 230px;
 }
 
 .company-name.open span {
@@ -525,12 +535,12 @@ header .navbar {
 }
 
 #accountSearch {
-    min-height: 54px;
+    min-height: 28px;
     border: 0;
-    background: #333 !important;
+    background: transparent;
     color: #fff;
     padding: 7px 35px 7px 10px !important;
-    width: 270px;
+    border: 1px solid #5F6E7E;
 }
 
 #accountSearch:focus {
@@ -636,8 +646,27 @@ header .navbar {
 .date-range-picker {
     max-width: 220px;
     width: 100% !important;
+    background: #E7E7E8 !important;
+    font-size: 12px;
+    height: 26px;
 }
-
+.header-date {
+    background: #E7E7E8 !important;
+    font-size: 12px;
+    height: 26px;
+    line-height: 23px;
+    padding: 2px 13px;
+    border-radius: 2px;
+}
+.btn-gray {
+    background: #666666;
+    color: #fff;
+    /* font-size: 10px;
+    padding: 7px 10px; */
+}
+.btn-gray:hover {
+    color: #fff;
+}
 
 /* header {
     border-bottom: 1px solid rgb(214, 214, 214);
@@ -652,7 +681,7 @@ header .navbar {
 }
 
 .company-name {
-    min-width: 380px;
+    /* min-width: 380px; */
 }
 
 .childTab>.nav.nav-tabs {
@@ -751,15 +780,16 @@ header .navbar {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
-    max-width: 380px;
+    /* max-width: 380px; */
+    display: inline-block;
+    width: 100%;
 }
 
-#cmpWrp .cText {
+/* #cmpWrp .cText {
     margin: 5px 0 5px 0px;
-    width: 100%;
     font-size: 9px;
     padding-right: 5px;
-}
+} */
 
 #companyList {
     background: #fff;
@@ -790,7 +820,8 @@ header .navbar {
     top: 60%;
     bottom: 0;
     transform: translateY(-50%);
-    right: 10px;
+    right: 0px;
+    color: #B7B7B7;
 }
 
 .basic>tbody>tr>td,
@@ -3920,6 +3951,7 @@ input[type='checkbox'][disabled] {
 .top_bar {
     padding-top: 15px;
     padding-bottom: 15px;
+    padding-left: 240px;
 }
 
 .section_head {
@@ -4758,12 +4790,21 @@ table td[class*=col-]:last-child {
     background: #fff !important;
 }
 
-.universal_date label {
+/* .universal_date label {
     color: #fff;
-}
+} */
 
 .universal_date .btn-link {
-    color: #10aae0 !important;
+    color: #2262D1 !important;
+    padding-top: 3px;
+}
+.universal_date .btn-link:hover {
+    text-decoration: none;
+}
+
+.universal_date {
+    float: none !important;
+    display: inline-block;
 }
 
 .divide-ico {
@@ -5102,3 +5143,7 @@ panel.sFthanks.fieldset {
     opacity: 1;
     background-color: #fff !important;
 }
+.menu_open {
+    /* width: calc(100% - 210px);
+    float: right; */
+  }
