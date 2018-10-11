@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public moment = moment;
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
-  
+
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
@@ -102,7 +102,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
-
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -271,7 +270,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
-
+    this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
 
