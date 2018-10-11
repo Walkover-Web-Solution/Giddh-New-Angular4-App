@@ -28,7 +28,9 @@ export const initialState: SearchState = {
     queryType: '',
     balType: 'CREDIT',
     queryDiffer: '',
-    amount: ''
+    amount: '',
+    closingBalanceType: 'DEBIT',
+    openingBalanceType: 'DEBIT'
   }],
   searchPaginationInfo: {
     totalPages: 0,
@@ -80,7 +82,9 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
           queryType: '',
           balType: 'CREDIT',
           queryDiffer: '',
-          amount: ''
+          amount: '',
+          closingBalanceType: 'DEBIT',
+          openingBalanceType: 'DEBIT'
         }]
       });
     }
