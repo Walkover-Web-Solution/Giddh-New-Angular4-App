@@ -83,7 +83,7 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    background: #f4f5f8;
+    background: #F7F8FA;
     font-family: 'LatoWebMedium';
     color: #333333;
     -webkit-font-smoothing: antialiased;
@@ -286,8 +286,13 @@ aside-menu-account .container-fluid {
 /*header nav links override*/
 
 .navbar-inverse .navbar-nav>li>a {
-    color: #fff;
+    color: #363A41;
     line-height: 24px;
+    padding-left: 25px;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover {
+    color: #363A41 !important;
 }
 
 .navbar-inverse .navbar-text {
@@ -304,20 +309,15 @@ aside-menu-account .container-fluid {
     margin: 15px 0;
 }
 
-#cmpWrp .cText {
-    float: left;
-    margin: 8px 0 0 10px;
-}
-
 .cText span {
     display: block;
 }
 
-.cName {
+/* .cName {
     line-height: 20px;
     min-width: 130px;
     text-transform: uppercase;
-}
+} */
 
 .cDate {
     font-size: 11px;
@@ -3501,9 +3501,9 @@ ul.pills li:hover {
     text-align: right;
 }
 
-.company-name {
+/* .company-name {
     min-width: 450px;
-}
+} */
 
 #InvoiceTemplate.no-border input {
     border: none !important;
@@ -5141,6 +5141,7 @@ strong {
 
 #main {
     padding-top: 54px;
+    padding-left: 240px;
 }
 
 bs-daterangepicker-container,
