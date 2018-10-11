@@ -10,9 +10,9 @@ import { GeneralService } from './services/general.service';
 @Component({
   selector: 'page',
   template: `
-    <div id="main">
+    <div id="main" [ngClass]="{'menu_open':sideMenu.isopen}">
       <giddh-loader></giddh-loader>
-      <app-header></app-header>
+      <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>
       <layout-main>
         <router-outlet></router-outlet>
       </layout-main>
@@ -21,6 +21,7 @@ import { GeneralService } from './services/general.service';
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
+  public sideMenu: { isopen: boolean } = { isopen: false };  
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location, private _generalService: GeneralService) {
@@ -35,6 +36,10 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
     // if (this.location.path() === '/pages') {
     //   this.router.navigate(['/pages', 'home']);
     // }
+  }
+
+  public sidebarStatusChange(event) {
+    this.sideMenu.isopen = event;
   }
 
   public ngOnDestroy(): void {

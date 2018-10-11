@@ -3,7 +3,7 @@ import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ModalDirective, BsModalService, ModalOptions, BsModalRef } from 'ngx-bootstrap';
 import { AppState } from '../../store';
@@ -30,6 +30,7 @@ import { DbService } from '../../services/db.service';
 import { DbActions } from '../../actions/db.actions';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
+import { EventEmitter } from '@angular/core';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -86,6 +87,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public accountSearchControl: FormControl = new FormControl();
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
+
+  @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
+  
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
@@ -98,6 +102,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -663,6 +668,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public sideBarStateChange(event: boolean) {
     this.sideMenu.isopen = event;
+    this.menuStateChange.emit(event);
   }
 
   public forceCloseSidebar(event) {
