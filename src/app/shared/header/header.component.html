@@ -42,7 +42,7 @@
                   class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span>
                 <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}"
                     alt="" /></span>
-                <div class="pull-left userName_wrap ellp">{{ userFullName }} <br />
+                <div class="pull-left userName_wrap ellp">{{ userFullName }}
                   <small class="grey_clr">Profile</small>
                 </div>
               </a>
@@ -57,9 +57,10 @@
                 <li>
                     <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
                 </li>
-                <li>
+                <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                <!-- <li>
                     <a href="http://faq.giddh.com" target="_blank">Help</a>
-                </li>
+                </li> -->
                 <li role="separator" class="divider" style="width:100%"></li>
                 <li>
                     <a href="javascript:void(0)" (click)="logout()">Logout</a>
@@ -73,16 +74,21 @@
                         <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
                       class="fa fa-apple"></i> ios</a></li>
                         <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
-                        <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                        <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i>  Windows</a></li>
                     </ul>
                 </li>
-                <li role="separator" class="divider" style="width:100%"></li>
-                <li class="app_list">
+                <!-- <li role="separator" class="divider" style="width:100%"></li> -->
+                <li class="footer-navigate clearfix">
                     <ul>
+                        <li>to navigate</li>
+                        <li>to select</li>
+                    </ul>
+                    <!-- <ul>
 
                         <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
                         <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
-                    </ul>
+                    </ul> -->
+
                 </li>
             </ul>
 
@@ -339,7 +345,7 @@
                     <div class="ledger_search form-inline">
                         <div class="form-group">
                             <div class="input-group">
-                                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+                                <input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
                                 <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
                                     <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                                 </div>
@@ -431,8 +437,8 @@
                       class="fa fa-android"></i> Android</a></li>
                                 <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
                       class="fa fa-apple"></i> ios</a></li>
-                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
-                                <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
+                                <li><a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                                <li><a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i> Windows</a></li>
                             </ul>
                         </li>
                         <li role="separator" class="divider" style="width:100%"></li>
