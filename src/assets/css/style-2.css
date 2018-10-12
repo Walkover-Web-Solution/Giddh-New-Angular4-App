@@ -4842,13 +4842,13 @@ table td[class*=col-]:last-child {
 }
 
 .user_dropdown {
-    width: 200px;
+    width: 270px;
     right: 4px;
 }
 
 .user_dropdown>li>a {
     font-size: 14px;
-    padding: 3px 10px;
+    padding: 4px 20px;
 }
 
 .app_list>ul {
@@ -4882,7 +4882,7 @@ table td[class*=col-]:last-child {
 }
 
 .user_circle {
-    background: #555555;
+    background: #FF5F00;
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -4892,6 +4892,7 @@ table td[class*=col-]:last-child {
     line-height: 30px;
     color: #fff;
     font-size: 12px;
+    broder: 1px solid #FF5F00;
 }
 
 .user_circle img {
