@@ -21,7 +21,7 @@ import { GeneralService } from './services/general.service';
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
-  public sideMenu: { isopen: boolean } = { isopen: false };  
+  public sideMenu: { isopen: boolean } = { isopen: true };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location, private _generalService: GeneralService) {

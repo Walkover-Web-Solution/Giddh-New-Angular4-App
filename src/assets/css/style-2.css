@@ -3955,7 +3955,7 @@ input[type='checkbox'][disabled] {
 .top_bar {
     padding-top: 15px;
     padding-bottom: 15px;
-    padding-left: 240px;
+    /* padding-left: 240px; */
 }
 
 .section_head {
