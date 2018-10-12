@@ -24,7 +24,7 @@
     font-size: 12px;
 }
 
-.account-search .input-group-addon i.uicon-search {
+.account-search .input-group-addon i.icon-search {
     position: relative;
     top: 1px;
 }
@@ -142,7 +142,7 @@
     font-family: 'LatoWebBold';
 }
 
-.left_fixed_header [class^="navico-"] {
+.left_fixed_header [class^="icon-"] {
     font-size: 20px;
     display: none;
 }
