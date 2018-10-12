@@ -3,7 +3,7 @@
 
         <ul class="company-name pos-rel" dropdown [isOpen]="companyMenu.isopen" [autoClose]="false">
             <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
-                <span class="icon-dropdown"></span>
+                <span class="icon-dots-three-vertical"></span>
                 <div class="cText">
                     <span class="cName">{{ (selectedCompany | async)?.name }}</span>
                     <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
@@ -79,11 +79,11 @@
                 </li>
                 <!-- <li role="separator" class="divider" style="width:100%"></li> -->
                 <li class="footer-navigate clearfix">
-                    <ul>
+                    <!--<ul>
                         <li>to navigate</li>
                         <li>to select</li>
                     </ul>
-                    <!-- <ul>
+                     <ul>
 
                         <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
                         <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
@@ -96,7 +96,7 @@
         </ul>
 
         <div class="input-group account-search">
-            <span class="input-group-addon" id="basic-addon2"><i class="uicon-search"></i></span>
+            <span class="input-group-addon" id="basic-addon2"><i class="icon-search"></i></span>
             <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="basic-addon2">
         </div>
 
@@ -104,53 +104,53 @@
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                 <li [checkPermission]="['MENU', 'DASHBOARD']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/home')">
-                        <span class="navico-dashboard"></span>
+                        <span class="icon-dashboard"></span>
                         <span class="label">Dashboard</span>
                     </a>
                 </li>
                 <!-- <li class="divider"></li> -->
                 <li [checkPermission]="['MENU', 'INVOICE']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/sales')">
-                        <span class="navico-sales"></span>
+                        <span class="icon-sales"></span>
                         <span class="label">Sales</span>
                     </a>
                 </li>
                 <li [checkPermission]="['MENU', 'INVOICE']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/invoice')">
-                        <span class="navico-invoice"></span>
+                        <span class="icon-invoice"></span>
                         <span class="label">Invoice</span>
                     </a>
                 </li>
                 <li [checkPermission]="['MENU', 'LEDGER']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/accounting-voucher')">
-                        <span class="navico-journal"></span>
+                        <span class="icon-journal"></span>
                         <span class="label">Journal Voucher</span>
                     </a>
                 </li>
                 <!-- <li class="divider"></li> -->
                 <li [checkPermission]="['MENU', 'LEDGER']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/daybook')">
-                        <span class="navico-daybook"></span>
+                        <span class="icon-daybook"></span>
                         <span class="label">Daybook</span>
                     </a>
                 </li>
 
                 <li [checkPermission]="['MENU', 'REPORT']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/trial-balance-and-profit-loss')">
-                        <span class="navico-tbpl"></span>
+                        <span class="icon-tbpl"></span>
                         <span class="label">TB, P&L and B/S</span>
                     </a>
                 </li>
 
                 <li [checkPermission]="['MENU', 'AUDIT_LOGS']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/audit-logs')">
-                        <span class="navico-log"></span>
+                        <span class="icon-log"></span>
                         <span class="label">Audit Logs</span>
                     </a>
                 </li>
                 <li [checkPermission]="['MENU', 'SETTINGS']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/purchase/invoice')">
-                        <span class="navico-tax"></span>
+                        <span class="icon-tax"></span>
                         <span class="label">Taxes</span>
                     </a>
                 </li>
@@ -158,13 +158,13 @@
 
                 <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/inventory')">
-                        <span class="navico-inventory"></span>
+                        <span class="icon-inventory"></span>
                         <span class="label">Inventory</span>
                     </a>
                 </li>
                 <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/manufacturing')">
-                        <span class="navico-manufacturing"></span>
+                        <span class="icon-manufacturing"></span>
                         <span class="label">Manufacturing</span>
                     </a>
                 </li>
@@ -172,25 +172,25 @@
 
                 <li [checkPermission]="['MENU', 'SEARCH']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/search')">
-                        <span class="navico-search"></span>
+                        <span class="icon-search"></span>
                         <span class="label">Search</span>
                     </a>
                 </li>
                 <li class="dmLi" [hidden]="!userIsSuperUser">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/permissions')">
-                        <span class="navico-permission"></span>
+                        <span class="icon-permission"></span>
                         <span class="label">Permissions</span>
                     </a>
                 </li>
                 <li [checkPermission]="['MENU', 'SETTINGS']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">
-                        <span class="navico-setting"></span>
+                        <span class="icon-setting"></span>
                         <span class="label">Settings</span>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/contact')">
-                        <span class="navico-daybook"></span>
+                        <span class="icon-daybook"></span>
                         <span class="label">Contacts</span>
                     </a>
                 </li>
@@ -204,7 +204,7 @@
                 <!-- (isOpenChange)="sideBarStateChange($event)" -->
                 <li class="hamburger_menu cp">
                     <a href="javascript:void(0)" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                        <i class="glyphicon glyphicon-menu-hamburger"></i>
+                        <i class="icon-bar"></i>
                     </a>
                 </li>
                 <!-- books search -->
