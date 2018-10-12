@@ -4844,39 +4844,62 @@ table td[class*=col-]:last-child {
 .user_dropdown {
     width: 270px;
     right: 4px;
+    padding: 0px;
+    border: 1px solid #CCCCCC;
 }
 
 .user_dropdown>li>a {
-    font-size: 14px;
-    padding: 4px 20px;
+    font-size: 12px;
+    padding: 4px 20px !important;
+    color: #333333;
 }
 
 .app_list>ul {
     width: 100%;
     float: left;
-    padding: 0px 10px;
+    padding: 4px 20px;
     font-size: 14px;
     /* margin: 10px 0; */
 }
 
 .app_list>ul h6 {
-    color: #333;
-    margin-bottom: 7px;
+    margin-bottom: 10px;
+    font-family: LatoWebBold;
+    font-size: 13px;
 }
 
 .app_list>ul li {
-    list-style: none;
+    list-style-type: none;
     float: left;
     width: 50%;
     margin: 3px 0;
+    font-size: 20px;
 }
-
+.footer-navigate {
+    background: #F5F5F5;
+    border-radius: 0 0 3px 3px;
+}
+.footer-navigate > ul {
+    display: flex;
+    width: 100%;
+}
+.footer-navigate > ul li {
+    width: 100%;
+    list-style-type: none;
+    padding: 8px 20px;
+    font-size: 11px;
+    color: #666666;
+}
 .app_list>ul li a {
     padding: 3px 0;
     color: #555;
     display: block;
+    position: relative;
+    font-size: 12px;
 }
-
+.app_list>ul li a > i {
+    margin-right: 2px;
+}
 .app_list>ul li a:hover {
     color: #000;
 }
@@ -4891,8 +4914,9 @@ table td[class*=col-]:last-child {
     text-align: center;
     line-height: 30px;
     color: #fff;
-    font-size: 12px;
-    broder: 1px solid #FF5F00;
+    font-size: 14px;
+    border: 1px solid #FF5F00;
+    text-transform: uppercase;
 }
 
 .user_circle img {
@@ -4926,6 +4950,13 @@ table td[class*=col-]:last-child {
 
 .userName_wrap {
     width: calc(100% - 40px);
+    font-size: 16px;
+    line-height: initial;
+}
+
+.userName_wrap small {
+    font-size: 12px;
+    display: block;
 }
 
 .parent-Group>.stock-grp-list:first-child {
@@ -5152,7 +5183,7 @@ panel.sFthanks.fieldset {
 }
 
 .menu_open {
-    padding-left: 240px;
+    padding-left: 230px;
 }
 
 .navbar_open {

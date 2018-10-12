@@ -499,12 +499,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       openingBalanceGreaterThan: false,
       openingBalanceLessThan: false,
       openingBalanceEqual: true,
-      // openingBalanceType: 'String (DEBIT / CREDIT)',
+      openingBalanceType: 'DEBIT',
       closingBalance: null,
       closingBalanceGreaterThan: false,
       closingBalanceLessThan: false,
       closingBalanceEqual: true,
-      // closingBalanceType: 'String (DEBIT / CREDIT)',
+      closingBalanceType: 'DEBIT',
       creditTotal: null,
       creditTotalGreaterThan: false,
       creditTotalLessThan: false,
@@ -524,12 +524,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
             queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
             queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['openingBalanceType'] = query.openingBalanceType === 'DEBIT' ? 'DEBIT' : 'CREDIT';
           break;
         case 'closingBalance':
           queryForApi['closingBalance'] = query.amount,
             queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
             queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
             queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['closingBalanceType'] = query.closingBalanceType === 'DEBIT' ? 'DEBIT' : 'CREDIT';
           break;
         case 'creditTotal':
           queryForApi['creditTotal'] = query.amount,

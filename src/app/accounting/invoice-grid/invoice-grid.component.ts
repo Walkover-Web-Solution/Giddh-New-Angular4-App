@@ -904,7 +904,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.currentSelectedValue = '';
       this.showLedgerAccountList = true;
-    }, 200);
+    }, 10);
   }
 
   public onPartyAccBlur() {
@@ -923,16 +923,16 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.asideMenuStateForProductService = 'out';
   }
 
+  public addNewAccount(val, lastIdx) {
+    if (val && lastIdx) {
+      this.addNewRow('account');
+    }
+  }
+
   private deleteRow(idx: number) {
     this.stocksTransaction.splice(idx, 1);
     if (!idx) {
       this.addNewRow('stock');
-    }
-  }
-
-  private addNewAccount(val, lastIdx) {
-    if (val && lastIdx) {
-      this.addNewRow('account');
     }
   }
 
