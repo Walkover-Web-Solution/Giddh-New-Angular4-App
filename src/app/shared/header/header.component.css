@@ -114,13 +114,12 @@
     display: block;
     padding: 6px 0px;
     color: #B7B7B7;
-    text-transform: uppercase;
     /* width: 32px; */
 }
 
 .left_fixed_header li a .label {
     display: table-cell;
-    font-size: 12px;
+    font-size: 13px;
     vertical-align: middle;
     padding-left: 0px;
     /* opacity: 0; */
@@ -140,7 +139,7 @@
 .left_fixed_header li:hover a span {
     color: #ff5f00;
     cursor: pointer;
-    font-weight: bold;
+    font-family: 'LatoWebBold';
 }
 
 .left_fixed_header [class^="navico-"] {
