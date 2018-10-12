@@ -139,7 +139,7 @@ export class OnReturnDirective {
       } else if (e.which === 32 || e.keyCode === 32) {
         const target = allElements[indx];
         if (target) {
-          target.value = '';
+          // target.value = ''; // No need to make the field empty
         }
       }
     } else if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode >= 65 && e.keyCode <= 90) {
