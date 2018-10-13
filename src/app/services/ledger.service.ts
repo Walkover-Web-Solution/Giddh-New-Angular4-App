@@ -280,7 +280,7 @@ export class LedgerService {
   /*
   * delete Multiple Ledger transaction
   */
-  public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<string, string>> {
+  public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     let sessionId = this._generalService.sessionId;
     this.companyUniqueName = this._generalService.companyUniqueName;

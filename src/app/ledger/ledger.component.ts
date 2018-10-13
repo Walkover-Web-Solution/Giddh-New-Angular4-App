@@ -37,7 +37,6 @@ import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
-import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
@@ -132,6 +131,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isBankOrCashAccount: boolean;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
+  public failedBulkEntries$: Observable<string[]>;
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public isFileUploading: boolean = false;
@@ -155,7 +155,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-              private invoiceActions: InvoiceActions, private _loaderService: LoaderService) {
+              private _loaderService: LoaderService) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
@@ -177,6 +177,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+    this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -426,6 +427,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (lt.closingBalanceForBank) {
           this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
           this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
+        }
+
+        let failedEntries: string[] = [];
+        this.failedBulkEntries$.pipe(take(1)).subscribe(ent => failedEntries = ent);
+
+        if (failedEntries.length > 0) {
+          this.store.dispatch(this._ledgerActions.SelectGivenEntries(failedEntries));
         }
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
@@ -1095,7 +1103,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onSelectInvoiceGenerateOption(isCombined: boolean) {
     this.bulkActionGenerateVoucherModal.hide();
-    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
+    this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
   }
 
   public onCancelSelectInvoiceModal() {
