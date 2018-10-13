@@ -6,9 +6,7 @@ import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
-import { INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cr, s, st } from '@angular/core/src/render3';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -31,6 +29,7 @@ export interface LedgerState {
   transactionDetails: LedgerResponse;
   isAdvanceSearchApplied: boolean;
   ledgerBulkActionSuccess: boolean;
+  ledgerBulkActionFailedEntries: string[];
 }
 
 export const initialState: LedgerState = {
@@ -46,7 +45,8 @@ export const initialState: LedgerState = {
   isQuickAccountCreatedSuccessfully: false,
   transactionDetails: null,
   isAdvanceSearchApplied: false,
-  ledgerBulkActionSuccess: false
+  ledgerBulkActionSuccess: false,
+  ledgerBulkActionFailedEntries: []
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -283,10 +283,10 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE: {
       return Object.assign({}, state, {ledgerBulkActionSuccess: true});
     }
-    case INVOICE_ACTIONS.GENERATE_BULK_INVOICE: {
+    case LEDGER.GENERATE_BULK_LEDGER_INVOICE: {
       return Object.assign({}, state, {ledgerBulkActionSuccess: false});
     }
-    case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
+    case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
       return Object.assign({}, state, {ledgerBulkActionSuccess: true});
     }
     case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
@@ -302,7 +302,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         transactionsResponse: markCheckedUnChecked(state.transactionsResponse, action.payload.mode, action.payload.isChecked)
       };
     }
-    case LEDGER.DESELECT_SELECTED_ENTRIES: {
+    case LEDGER.SELECT_GIVEN_ENTRIES: {
       let res = action.payload as string[];
       let newState = _.cloneDeep(state);
       let debitTrx = newState.transactionsResponse.debitTransactions;
@@ -322,8 +322,15 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
           ...state.transactionsResponse,
           debitTransactions: debitTrx,
           creditTransactions: creditTrx
-        }
-      }
+        },
+        ledgerBulkActionFailedEntries: []
+      };
+    }
+    case LEDGER.SET_FAILED_BULK_ENTRIES: {
+      return {
+        ...state,
+        ledgerBulkActionFailedEntries: action.payload
+      };
     }
     default: {
       return state;
