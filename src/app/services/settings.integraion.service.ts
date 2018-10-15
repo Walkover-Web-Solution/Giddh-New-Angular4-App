@@ -282,7 +282,8 @@ export class SettingsIntegrationService {
   }
 
   public GetGmailIntegrationStatus(): Observable<BaseResponse<any, any>> {
-    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS).pipe(map((res) => {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
