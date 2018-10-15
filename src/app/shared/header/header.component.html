@@ -102,14 +102,21 @@
 
         <ul class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-                <li [checkPermission]="['MENU', 'DASHBOARD']">
+                <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
+                <li *ngFor="let menu of menuItemsFromIndexDB">
+                    <a href="javascript:void(0)" (click)="analyzeMenus($event, menu.uniqueName)">
+                        <span class="icon-dashboard"></span>
+                        <span class="label">{{menu.name}}</span>
+                    </a>
+                </li>
+                <!-- <li [checkPermission]="['MENU', 'DASHBOARD']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/home')">
                         <span class="icon-dashboard"></span>
                         <span class="label">Dashboard</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="divider"></li> -->
-                <li [checkPermission]="['MENU', 'INVOICE']">
+                <!-- <li [checkPermission]="['MENU', 'INVOICE']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/sales')">
                         <span class="icon-sales"></span>
                         <span class="label">Sales</span>
@@ -126,9 +133,9 @@
                         <span class="icon-journal"></span>
                         <span class="label">Journal Voucher</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="divider"></li> -->
-                <li [checkPermission]="['MENU', 'LEDGER']">
+                <!-- <li [checkPermission]="['MENU', 'LEDGER']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/daybook')">
                         <span class="icon-daybook"></span>
                         <span class="label">Daybook</span>
@@ -153,10 +160,10 @@
                         <span class="icon-tax"></span>
                         <span class="label">Taxes</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="divider"></li> -->
 
-                <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+                <!-- <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/inventory')">
                         <span class="icon-inventory"></span>
                         <span class="label">Inventory</span>
@@ -167,10 +174,10 @@
                         <span class="icon-manufacturing"></span>
                         <span class="label">Manufacturing</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="divider"></li> -->
 
-                <li [checkPermission]="['MENU', 'SEARCH']">
+                <!-- <li [checkPermission]="['MENU', 'SEARCH']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/search')">
                         <span class="icon-search"></span>
                         <span class="label">Search</span>
@@ -193,7 +200,7 @@
                         <span class="icon-daybook"></span>
                         <span class="label">Contacts</span>
                     </a>
-                </li>
+                </li> -->
             </perfect-scrollbar>
         </ul>
     </div>

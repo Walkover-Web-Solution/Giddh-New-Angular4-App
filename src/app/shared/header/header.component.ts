@@ -183,6 +183,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public selectedNavigation: string = '';
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
+  public menuItemsFromIndexDB = [];
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -520,6 +521,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (dbResult) {
           // entry found check for data
           console.log('the smart data is :', dbResult);
+          this.menuItemsFromIndexDB = dbResult.aidata.menus;
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
           this.store.dispatch(this._generalActions.setSmartList(combined));
         } else {
