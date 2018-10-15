@@ -15,7 +15,8 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     </div>
     <ng-container  *ngFor="let account of groupDetail.accounts">
         <section class="row row-2 account pl-grid-row" *ngIf="account.isVisible || account.isCreated" [ngClass]="{'isHidden': !account.isVisible }">
-          <div class="row"*ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)">
+          <div class="row"*ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)"
+               (dblclick)="entryClicked(account)">
             <div class="col-xs-4  account" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"></div>
             <div class="col-xs-4  account text-right">
               <span>{{account.closingBalance.amount | number:'1.2-2'}}{{account.closingBalance | recType}}</span>
@@ -49,5 +50,16 @@ export class BsGridRowComponent implements OnInit, OnChanges {
 
   public ngOnInit() {
     //
+  }
+  public entryClicked(acc) {
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName;
+      console.log(ipcRenderer.send('open-url', url));
+    } else {
+      (window as any).open(url);
+    }
+
   }
 }
