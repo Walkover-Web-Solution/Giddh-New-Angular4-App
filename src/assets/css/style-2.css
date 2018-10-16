@@ -1,18 +1,15 @@
 @charset "utf-8";
-
 @font-face {
     font-family: 'icomoon';
     src: url('../fonts/main-icomoon/icomoon.eot');
-    src: url('../fonts/main-icomoon/icomoon.eot') format('eot'), 
-    url('../fonts/icomoon/main-icomoon.ttf') format('ttf'), 
-    url('../fonts/main-icomoon/icomoon.woff') format('woff'), 
-    url('../fonts/main-icomoon/icomoon.svg') format('svg');
+    src: url('../fonts/main-icomoon/icomoon.eot') format('eot'), url('../fonts/icomoon/main-icomoon.ttf') format('ttf'), url('../fonts/main-icomoon/icomoon.woff') format('woff'), url('../fonts/main-icomoon/icomoon.svg') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 
 /* css start */
+
 
 /* @font-face {
     font-family: 'icomoon';
@@ -24,8 +21,9 @@
     font-weight: normal;
     font-style: normal;
   } */
-  
-  [class^="icon-"], [class*=" icon-"] {
+
+[class^="icon-"],
+[class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon' !important;
     speak: none;
@@ -34,135 +32,175 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
-  
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  
-  .icon-dots-three-vertical:before {
+}
+
+.icon-dots-three-vertical:before {
     content: "\e916";
-  }
-  .icon-group:before {
+}
+
+.icon-group:before {
     content: "\e900";
-  }
-  .icon-bar:before {
+}
+
+.icon-bar:before {
     content: "\e901";
-  }
-  .icon-Search:before {
+}
+
+.icon-Search:before {
     content: "\e902";
-  }
-  .icon-add:before {
+}
+
+.icon-add:before {
     content: "\e903";
-  }
-  .icon-cross:before {
+}
+
+.icon-cross:before {
     content: "\e904";
-  }
-  .icon-caret-down:before {
+}
+
+.icon-caret-down:before {
     content: "\e906";
-  }
-  .icon-edit:before {
+}
+
+.icon-edit:before {
     content: "\e907";
-  }
-  .icon-arrow-down:before {
+}
+
+.icon-arrow-down:before {
     content: "\e908";
-  }
-  .icon-child:before {
+}
+
+.icon-child:before {
     content: "\e909";
-  }
-  .icon-download:before {
+}
+
+.icon-download:before {
     content: "\e90a";
-  }
-  .icon-share:before {
+}
+
+.icon-share:before {
     content: "\e90b";
-  }
-  .icon-magic_link:before {
+}
+
+.icon-magic_link:before {
     content: "\e90c";
-  }
-  .icon-dropdown:before {
+}
+
+.icon-dropdown:before {
     content: "\e90d";
-  }
-  .icon-plus:before {
+}
+
+.icon-plus:before {
     content: "\e90e";
-  }
-  .icon-search:before {
+}
+
+.icon-search:before {
     content: "\e90f";
-  }
-  .icon-building:before {
+}
+
+.icon-building:before {
     content: "\e910";
-  }
-  .icon-options:before {
+}
+
+.icon-options:before {
     content: "\e911";
-  }
-  .icon-minus:before {
+}
+
+.icon-minus:before {
     content: "\e912";
-  }
-  .icon-trash:before {
+}
+
+.icon-trash:before {
     content: "\e913";
-  }
-  .icon-checkbox-icon:before {
+}
+
+.icon-checkbox-icon:before {
     content: "\e914";
-  }
-  .icon-checkboxfill-icon:before {
+}
+
+.icon-checkboxfill-icon:before {
     content: "\e915";
-  }
-  .icon-folderminus:before {
+}
+
+.icon-folderminus:before {
     content: "\f2332";
-  }
-  .icon-folderplus:before {
+}
+
+.icon-folderplus:before {
     content: "\f2333";
-  }
-  .icon-folder:before {
+}
+
+.icon-folder:before {
     content: "\f2334";
-  }
-  .icon-log:before {
+}
+
+.icon-log:before {
     content: "\e001";
-  }
-  .icon-recurring:before {
+}
+
+.icon-recurring:before {
     content: "\e002";
-  }
-  .icon-dashboard:before {
+}
+
+.icon-dashboard:before {
     content: "\e004";
-  }
-  .icon-purchase:before {
+}
+
+.icon-purchase:before {
     content: "\e005";
-  }
-  .icon-invoice:before {
+}
+
+.icon-invoice:before {
     content: "\e006";
-  }
-  .icon-report:before {
+}
+
+.icon-report:before {
     content: "\e007";
-  }
-  .icon-sales:before {
+}
+
+.icon-sales:before {
     content: "\e008";
-  }
-  .icon-search1:before {
+}
+
+.icon-search1:before {
     content: "\e009";
-  }
-  .icon-setting:before {
+}
+
+.icon-setting:before {
     content: "\e010";
-  }
-  .icon-tbpl:before {
+}
+
+.icon-tbpl:before {
     content: "\e011";
-  }
-  .icon-tax:before {
+}
+
+.icon-tax:before {
     content: "\e012";
-  }
-  .icon-manufacturing:before {
+}
+
+.icon-manufacturing:before {
     content: "\e013";
-  }
-  .icon-permission:before {
+}
+
+.icon-permission:before {
     content: "\e014";
-  }
-  .icon-daybook:before {
+}
+
+.icon-daybook:before {
     content: "\e015";
-  }
-  .icon-journal:before {
+}
+
+.icon-journal:before {
     content: "\e016";
-  }
-  .icon-inventory:before {
+}
+
+.icon-inventory:before {
     content: "\e905";
-  }  
+}
+
 
 /* css end */
 
@@ -176,11 +214,6 @@
 } */
 
 
-
-
-
-
-
 /* @font-face {
     font-family: 'icomoon-navbar';
     src: url('../fonts/header/icomoon.eot?9v3fyi');
@@ -188,6 +221,7 @@
     font-weight: normal;
     font-style: normal;
 } */
+
 
 /* [class^="icon-"],
 [class*=" icon-"] {
@@ -203,6 +237,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 } */
+
 
 /* [class^="icon-"],
 [class*=" icon-"] {
@@ -218,6 +253,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 } */
+
 
 /* @font-face {
     font-family: 'universalList-icon';
@@ -244,6 +280,7 @@
 /* .icon-account:before {
     content: "\e903";
 } */
+
 
 /* .icon-group:before {
     content: "\e900";
@@ -506,6 +543,7 @@ input {
 .company-name .cText .cName {
     font-size: 14px;
     font-weight: bold;
+    text-transform: capitalize;
 }
 
 .company-name .cText .fyear {
@@ -522,10 +560,6 @@ input {
 
 header .navbar {
     background-color: #F7F8FA;
-}
-
-.company-name.open span {
-    color: #fff;
 }
 
 
@@ -971,23 +1005,17 @@ header .navbar {
     background: #fff;
 }
 
-#companyList li ul li:hover {
-    background: #e7e7e6;
-}
-
-#companyList li {
-    background: #fff;
+#companyList li:not(.divider) {
     text-transform: capitalize;
 }
 
 #companyList li.selected-company,
 #companyList li.selected-company:hover {
-    background: #ff5e01;
-    color: #fff;
+    color: #ff5e01;
 }
 
 #companyList li.selected-company span {
-    color: #fff !important;
+    color: #ff5e01 !important;
 }
 
 .company-name .icon-dots-three-vertical {
@@ -1461,9 +1489,10 @@ input[type="checkbox"]:after {
     border: 0 !important;
 }
 
-#companyList .glyphicon-trash {
+
+/* #companyList .glyphicon-trash {
     color: #ff5e01;
-}
+} */
 
 .proforma-list>.filters>div {
     margin-right: 0;
@@ -5021,8 +5050,8 @@ table td[class*=col-]:last-child {
 }
 
 .user_dropdown>li>a {
-    font-size: 12px;
-    padding: 4px 20px !important;
+    font-size: 13px;
+    padding: 6px 20px !important;
     color: #333333;
 }
 
@@ -5047,21 +5076,25 @@ table td[class*=col-]:last-child {
     margin: 3px 0;
     font-size: 20px;
 }
+
 .footer-navigate {
     background: #F5F5F5;
     border-radius: 0 0 3px 3px;
 }
-.footer-navigate > ul {
+
+.footer-navigate>ul {
     display: flex;
     width: 100%;
 }
-.footer-navigate > ul li {
+
+.footer-navigate>ul li {
     width: 100%;
     list-style-type: none;
     padding: 8px 20px;
     font-size: 11px;
     color: #666666;
 }
+
 .app_list>ul li a {
     padding: 3px 0;
     color: #555;
@@ -5069,9 +5102,11 @@ table td[class*=col-]:last-child {
     position: relative;
     font-size: 12px;
 }
-.app_list>ul li a > i {
+
+.app_list>ul li a>i {
     margin-right: 2px;
 }
+
 .app_list>ul li a:hover {
     color: #000;
 }
@@ -5361,4 +5396,20 @@ panel.sFthanks.fieldset {
 .navbar_open {
     left: 240px;
     transition: left .1s ease;
+}
+
+perfect-scrollbar>.ps>.ps-overlay {
+    opacity: 0;
+}
+
+.cmp:hover {
+    color: #fff;
+}
+
+.user_dropdown>li a:hover {
+    color: #ff5e01;
+}
+
+.user_dropdown>li.open>a {
+    color: #ff5e01;
 }

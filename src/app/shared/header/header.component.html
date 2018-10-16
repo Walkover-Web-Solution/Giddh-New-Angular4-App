@@ -1,44 +1,97 @@
 <header class="clearfix header-container" [ngClass]="{'navbar_open':sideMenu.isopen}">
     <div class="nav-left-bar">
 
-        <ul class="company-name pos-rel" dropdown [isOpen]="companyMenu.isopen" [autoClose]="false">
-            <a id="cmpWrp" (click)="$event.preventDefault()" class="clearfix" dropdownToggle>
-                <span class="icon-dots-three-vertical"></span>
-                <div class="cText">
-                    <span class="cName">{{ (selectedCompany | async)?.name }}</span>
-                    <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
-                </div>
-            </a>
+        <ul>
 
-            <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+            <li class="company-name pos-rel" dropdown [isOpen]="companyMenu.isopen" [autoClose]="false">
+                <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
+                    <span class="icon-dots-three-vertical"></span>
+                    <div class="cText">
+                        <span class="cName ellp">{{ (selectedCompany | async)?.name }}</span>
+                        <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
+                    </div>
+                </a>
 
-                <li dropdown dropdownToggle class="pos-rel">
-                    <a (click)="$event.preventDefault()" class="clearfix">
-                        Switch company
-                    </a>
+                <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
 
-                    <ul id="companyList" class="company-list dropdown-menu" dropdown role="menu" *dropdownMenu>
-                        <li class="create-company clearfix" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
-                            <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">
-                        Create Company
-                        </button>
-                            <button id="refreshCompanyBtn" class="btn btn-default btn-sm pull-right" (click)="refreshCompanies($event)">
-                        <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                        </button>
-                        </li>
-                        <li style="padding:0px;">
-                            <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
-                                <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-                                    <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <li dropdown class="pos-rel pdT1" #dropdown="bs-dropdown" [autoClose]="false">
+                        <a href="javascript:void(0)" class="clearfix" dropdownToggle>
+                            <div class="ellp"><strong>{{ (selectedCompany | async)?.name }}</strong></div>
+                            <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear.uniqueName }}</small>
+                        </a>
 
-                </li>
-                <li>
-                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh"><span
+                        <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+                            <li class="create-company clearfix">
+                                <span>Financial Year</span>
+                            </li>
+                            <li style="padding:0px;">
+                                <ul style="height: 150px;" *ngIf="companies$ | async">
+                                    <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+
+                                        <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                                            {{ cmp.name }}
+                                        </li>
+                                    </perfect-scrollbar>
+                                </ul>
+                            </li>
+                            <li>
+                                <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">Settings</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings?tab=permission&tabIndex=5')">Manage Users (Permission)</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up Data</a>
+                    </li>
+                    <li dropdown class="pos-rel" #dropdown="bs-dropdown" [autoClose]="false">
+                        <a href="javascript:void(0)" class="clearfix" dropdownToggle>
+                            Switch company
+                        </a>
+
+                        <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+                            <!-- <li class="create-company clearfix" [style.padding.px]="0">
+                             <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
+                                Create Company
+                                </button>
+                                        <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
+                                <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                </button> 
+                            </li>
+                            -->
+
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search Company" aria-describedby="">
+                                <span class="input-group-addon" id=""> <i (click)="refreshCompanies($event)" class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                    </span>
+                            </div>
+                            <li style="padding:0px;">
+                                <ul style="height: 150px;" *ngIf="companies$ | async">
+                                    <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+
+                                        <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                                            <a href="javascript:void(0);">{{ cmp.name }}</a>
+                                            <!-- commented by meghna 
+                                                <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                            -->
+                                        </li>
+                                    </perfect-scrollbar>
+                                </ul>
+                            </li>
+                            <li>
+                                <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
+                            </li>
+                        </ul>
+                    </li>
+                    <li role="separator" class="divider" style="width:100%"></li>
+
+                    <li class="mrB1">
+                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh"><span
                   class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span>
                 <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}"
                     alt="" /></span>
@@ -46,40 +99,39 @@
                   <small class="grey_clr">Profile</small>
                 </div>
               </a>
-                </li>
-                <li role="separator" class="divider" style="width:100%"></li>
-                <li>
-                    <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
-                </li>
-                <li>
-                    <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
-                </li>
-                <li>
-                    <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
-                </li>
-                <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
-                <!-- <li>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
+                    </li>
+                    <li>
+                        <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
+                    </li>
+                    <li>
+                        <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
+                    </li>
+                    <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                    <!-- <li>
                     <a href="http://faq.giddh.com" target="_blank">Help</a>
                 </li> -->
-                <li role="separator" class="divider" style="width:100%"></li>
-                <li>
-                    <a href="javascript:void(0)" (click)="logout()">Logout</a>
-                </li>
-                <li role="separator" class="divider" style="width:100%"></li>
-                <li class="app_list">
-                    <ul>
-                        <h6>Downloads</h6>
-                        <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i
+                    <li role="separator" class="divider" style="width:100%"></li>
+                    <li>
+                        <a href="javascript:void(0)" (click)="logout()">Logout</a>
+                    </li>
+                    <li role="separator" class="divider" style="width:100%"></li>
+                    <li class="app_list">
+                        <ul>
+                            <h6>Downloads</h6>
+                            <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i
                       class="fa fa-android"></i> Android</a></li>
-                        <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
+                            <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
                       class="fa fa-apple"></i> ios</a></li>
-                        <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
-                        <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i>  Windows</a></li>
-                    </ul>
-                </li>
-                <!-- <li role="separator" class="divider" style="width:100%"></li> -->
-                <li class="footer-navigate clearfix">
-                    <!--<ul>
+                            <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                            <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i>  Windows</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li role="separator" class="divider" style="width:100%"></li> -->
+                    <li class="footer-navigate clearfix">
+                        <!--<ul>
                         <li>to navigate</li>
                         <li>to select</li>
                     </ul>
@@ -89,22 +141,35 @@
                         <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
                     </ul> -->
 
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </li>
 
+            <div class="input-group account-search" (click)="showNavigationModal()">
+                <span class="input-group-addon" id=""><i class="icon-search"></i></span>
+                <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
+            </div>
 
         </ul>
 
-        <div class="input-group account-search">
-            <span class="input-group-addon" id="basic-addon2"><i class="icon-search"></i></span>
-            <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="basic-addon2">
-        </div>
+        <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+            <h6>ACCOUNTS</h6>
+            <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
+            <li *ngFor="let acc of accountItemsFromIndexDB">
+                <a href="javascript:void(0)" (click)="analyzeMenus($event, acc.uniqueName)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
+                    <span class="icon-dashboard"></span>
+                    <span class="label">{{acc.name}}</span>
+                </a>
+            </li>
+            <h6 class="mrT cp" (click)="showNavigationModal()">Show more...</h6>
+        </ul>
 
-        <ul class="left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+        <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+            <h6 class="mrB1">MENU</h6>
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                 <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                 <li *ngFor="let menu of menuItemsFromIndexDB">
-                    <a href="javascript:void(0)" (click)="analyzeMenus($event, menu.uniqueName)">
+                    <a href="javascript:void(0)" [ngClass]="{'active': selectedPage?.name === menu.name}" (click)="analyzeMenus($event, menu.uniqueName)">
                         <span class="icon-dashboard"></span>
                         <span class="label">{{menu.name}}</span>
                     </a>

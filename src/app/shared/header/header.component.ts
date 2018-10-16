@@ -13,7 +13,7 @@ import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Co
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from '../../lodash-optimized';
+import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -184,6 +184,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   public menuItemsFromIndexDB = [];
+  public accountItemsFromIndexDB = [];
+  public selectedPage: any = {};
+  public selectedLedger: any = {};
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -469,9 +472,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public prepareSmartList(data: IUlist[]) {
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact'];
+    // hardcoded aiData
+    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices' ];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
-    const DEFAULT_AC = ['cash', 'sales', 'purchases'];
+    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
     let menuList: IUlist[] = [];
     let groupList: IUlist[] = [];
     let acList: IUlist[] = [];
@@ -521,7 +525,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (dbResult) {
           // entry found check for data
           console.log('the smart data is :', dbResult);
-          this.menuItemsFromIndexDB = dbResult.aidata.menus;
+          // slice and sort menu item
+          this.menuItemsFromIndexDB = _.slice(dbResult.aidata.menus, 0, 14);
+          this.menuItemsFromIndexDB = _.sortBy(dbResult.aidata.menus, [function(o) { return o.name; }]);
+          // slice and sort account item
+          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 8);
+          this.accountItemsFromIndexDB = _.sortBy(dbResult.aidata.accounts, [function(o) { return o.name; }]);
+
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
           this.store.dispatch(this._generalActions.setSmartList(combined));
         } else {
@@ -747,6 +757,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
+      debugger;
       this.showNavigationModal();
     }
 
