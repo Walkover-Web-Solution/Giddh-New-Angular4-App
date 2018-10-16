@@ -290,7 +290,8 @@ aside-menu-account .container-fluid {
     line-height: 24px;
 }
 
-.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>a:focus {
     color: #363A41 !important;
 }
 
@@ -3457,33 +3458,36 @@ ul.pills li:hover {
 
 /* company list dropdown styles */
 
-#companyList {
+.sub_menu_nav {
     width: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    color: #fff;
     z-index: 100;
     list-style-type: none;
     padding: 0px;
+    left: 269px;
+    box-shadow: none;
+    top: 0;
 }
 
-#companyList li {
-    padding: 10px;
+.sub_nav_menu li:not(.divider) {
+    padding: 5px 10px;
     cursor: pointer;
     position: relative;
 }
 
-#companyList li:last-child {
+.sub_nav_menu li:last-child {
     border: none;
 }
 
-#companyList li:hover {
-    background: rgba(63, 63, 63, .9);
+.sub_nav_menu ul li:not(.divider):hover {
+    /* background: rgba(63, 63, 63, .9); */
+    background: #2D9EE0;
 }
 
-#companyList li i.glyphicon-trash {
+.sub_nav_menu li i.glyphicon-trash {
     position: absolute;
     right: 10px;
-    top: 12px;
+    top: 8px;
+    color: #fff;
 }
 
 .company-list-container {
@@ -3494,11 +3498,6 @@ ul.pills li:hover {
     z-index: 9999;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-}
-
-.create-company {
-    border-top: 1px solid #fff;
-    text-align: right;
 }
 
 
@@ -5232,4 +5231,19 @@ bs-datepicker-container {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     text-align: right;
+}
+
+perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-top) .ps-indicator-top,
+perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
+    opacity: 0;
+}
+
+.sub_menu_nav li>a {
+    padding: 5px 12px;
+    color: #333333;
+    display: block;
+}
+
+.sub_menu_nav li>a:hover {
+    background: #2D9EE0;
 }
