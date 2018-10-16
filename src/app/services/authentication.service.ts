@@ -6,7 +6,7 @@ import { Configuration, URLS } from '../app.constants';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { LoaderService } from './loader.service';
-import { LOGIN_API } from './apiurls/login.api';
+import { LOGIN_API, GMAIL_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AuthKeyResponse, LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -290,7 +290,7 @@ export class AuthenticationService {
     args.headers['Content-Type'] = 'application/xml';
     // args.headers['Accept'] = 'application/xml';
     args.headers = new HttpHeaders(args.headers);
-    return this._httpClient.get('https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/latest.yml', {
+    return this._httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest.yml', {
       headers: args.headers,
       responseType: 'text'
     }).pipe(map((res) => {
@@ -326,6 +326,7 @@ export class AuthenticationService {
   }
 
   public saveGmailAuthCode(data) {
-    return this._http.post(this.config.apiUrl + 'users/generate-mail-token', data);
+    const companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data);
   }
 }

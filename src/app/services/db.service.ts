@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { GIDDH_DB } from '../models/db';
-import { IUlist } from '../models/interfaces/ulist.interface';
+import { IUlist, ICompAidata, Igtbl } from '../models/interfaces/ulist.interface';
 
 @Injectable()
 export class DbService {
@@ -10,23 +10,26 @@ export class DbService {
     //
   }
 
-  public getItemDetails(entity: string, key: any): Observable<IUlist[]> {
-    return from(GIDDH_DB.getItemById(entity, key));
+  public extractDataForUI(data: Igtbl): IUlist[] {
+    return [...data['menus'].slice(0, 3), ...data['groups'].slice(0, 3), ...data['accounts'].slice(0, 3)];
   }
 
-  public getAllItems(entity: string): Observable<IUlist[]> {
-    return from(GIDDH_DB.getAllItems(entity));
+  public getItemDetails(key: any): Observable<IUlist[]> {
+    return from(GIDDH_DB.getItemByKey(key).catch(err => {
+      GIDDH_DB.forceDeleteDB();
+    }));
   }
 
-  public addItem(entity: string, model: IUlist): Observable<number> {
-    return from(GIDDH_DB.addItem(entity, model));
+  public getAllItems(key: string, entity: string): Observable<IUlist[]> {
+    return from(GIDDH_DB.getAllItems(key, entity));
   }
 
-  public removeItem(entity: string, id: number): Observable<number> {
-    return from(GIDDH_DB.removeItemById(entity, id));
+  public insertFreshData(item: ICompAidata): Observable<number> {
+    return from(GIDDH_DB.insertFreshData(item));
   }
 
-  /* public orderByIndex(entity: string, index: string): Observable<number> {
-    return from(GIDDH_DB.orderByIndex(entity, index));
-  } */
+  public addItem(key: string, entity: string, model: IUlist): Observable<number> {
+    return from(GIDDH_DB.addItem(key, entity, model));
+  }
+
 }

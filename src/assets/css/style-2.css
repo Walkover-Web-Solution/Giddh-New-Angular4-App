@@ -45,6 +45,46 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+    font-family: 'universalList-icon';
+    src: url('../fonts/universal-list/icomoon.eot?m6r1qf');
+    src: url('../fonts/universal-list/icomoon.eot?m6r1qf#iefix') format('embedded-opentype'), url('../fonts/universal-list/icomoon.ttf?m6r1qf') format('truetype'), url('../fonts/universal-list/icomoon.woff?m6r1qf') format('woff'), url('../fonts/universal-list/icomoon.svg?m6r1qf#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="uicon-"],
+[class*=" uicon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'universalList-icon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* .uicon-account:before {
+    content: "\e903";
+} */
+
+.uicon-group:before {
+    content: "\e900";
+}
+
+.uicon-search:before {
+    content: "\e902";
+}
+
+.uicon-bar:before {
+    content: "\e901";
+}
+
 .icon-Create-Invoice:before {
     content: "\e901";
 }
@@ -210,6 +250,31 @@ button,
 input {
     transition: all 0.3s ease;
 }
+
+
+/* my css start */
+
+
+/* file upload css start */
+
+.input-upload .input-group-btn {
+    display: inline;
+}
+
+.date-range .date-range-picker {
+    /* width: 100% !important; */
+    max-width: 100%;
+}
+
+.col-xs-2.date-range {
+    width: 220px;
+}
+
+
+/* file upload css end */
+
+
+/* my css end */
 
 
 /*input*/
@@ -577,13 +642,14 @@ header .navbar {
 /* header {
     border-bottom: 1px solid rgb(214, 214, 214);
 } */
+
 .p-t-5 {
     padding-right: 5px;
 }
+
 .p-t-10 {
     padding-left: 10px;
 }
-
 
 .company-name {
     min-width: 380px;
@@ -1038,23 +1104,31 @@ input[type="checkbox"]:after {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
 /* my css start */
+
 .text-green {
     color: #33BB0C;
 }
+
 .text-light {
     color: #CCCCCC;
 }
+
 .text-light-2 {
     color: #adadad;
 }
+
 .subscription-title {
     font-size: 20px;
     font-family: 'LatoWebbold';
 }
+
 .box2 {
     background: #fff;
 }
+
 .head-title {
     background: #e5e5e5;
     padding: 11px 20px;
@@ -1062,54 +1136,68 @@ input[type="checkbox"]:after {
     font-family: 'LatoWebbold';
     border: 1px solid #ddd;
 }
+
 .inner-box2 {
     padding: 15px;
 }
+
 .campanien-list {
     min-height: 373px;
     overflow: auto;
 }
+
 .campanien-list ul {
     list-style-type: none;
 }
-.campanien-list ul > li {
+
+.campanien-list ul>li {
     display: block;
     padding: 10px 0;
     font-size: 14px;
 }
-.campanien-list ul > li > a {
+
+.campanien-list ul>li>a {
     display: block;
     color: #231F20;
 }
-.campanien-list ul > li > a:hover {
+
+.campanien-list ul>li>a:hover {
     color: #FF5F00;
 }
-.campanien-list ul > li > a > span {
+
+.campanien-list ul>li>a>span {
     color: #ABABAB;
     float: right;
 }
+
 .modal-list {
     padding: 11px 15px 5px 15px;
 }
+
 .modal-list ul {
     list-style-type: none;
 }
-.modal-list ul > li > h3 {
+
+.modal-list ul>li>h3 {
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
     font-family: 'LatoWebbold';
 }
-.modal-list ul > li {
+
+.modal-list ul>li {
     padding: 7px 0;
 }
+
 .subscription_modal .modal-body {
     padding: 0px;
 }
+
 .subscription_modal .modal-content {
     border-radius: 0px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
 }
+
 .subscription_modal .modal-content .close {
     position: absolute;
     right: 10px;
@@ -1117,7 +1205,9 @@ input[type="checkbox"]:after {
     z-index: 9;
     text-shadow: none;
 }
-.subscription_modal .modal-content .table.basic tr td, .subscription_modal .modal-content .table.basic tr th {
+
+.subscription_modal .modal-content .table.basic tr td,
+.subscription_modal .modal-content .table.basic tr th {
     padding: 10px 20px;
 }
 
@@ -1992,7 +2082,10 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
+
 /* by dude */
+
+
 /*.modal-backdrop {
     background-color: #808080;
 }
@@ -2092,6 +2185,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .mrl0 {
     margin-left: 0 !important;
 }
+
 .mr-b-5 {
     margin-bottom: 5px;
 }
@@ -2947,6 +3041,10 @@ label {
 
 .section_title {
     font-size: 1.2rem;
+}
+
+.top_bar h1.section_title.inline {
+    margin-top: 7px;
 }
 
 .clearfix {
@@ -4165,7 +4263,7 @@ ng-select .select_drop i {
     pointer-events: none;
 }
 
-virtual-scroll .scrollable-content .item >a {
+virtual-scroll .scrollable-content .item>a {
     color: #333;
     padding: 6px;
     display: table-cell;
@@ -4173,7 +4271,7 @@ virtual-scroll .scrollable-content .item >a {
     height: 100%;
 }
 
-virtual-scroll .scrollable-content .item.selected >a {
+virtual-scroll .scrollable-content .item.selected>a {
     color: rgb(210, 95, 42)!important;
 }
 
@@ -4351,6 +4449,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 .entry-modal {
     width: 100%;
 }
+
 
 /* small {
     color: #b2b2b2;
@@ -4821,12 +4920,18 @@ table td[class*=col-]:last-child {
     /* max-width: 300px; */
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .plus-btn .btn {
     background: none;
 }
+
 .header-left .btn {
     vertical-align: bottom;
 }
+
 .header-left .form-group {
     vertical-align: bottom !important;
 }
@@ -4834,7 +4939,6 @@ table td[class*=col-]:last-child {
 .icon-options {
     vertical-align: -webkit-baseline-middle;
 }
-
 
 .max900 {
     max-width: 900px;
@@ -4851,6 +4955,7 @@ table td[class*=col-]:last-child {
 .max120 {
     max-width: 120px;
 }
+
 .select-option .form-control {
     width: 100% !important;
     border-radius: 3px;
@@ -4956,16 +5061,44 @@ panel.sFthanks.fieldset {
     right: 5px;
     top: -8px;
 }
+
 .auto_save {
     float: right;
     position: absolute;
     top: 15px;
     right: 20px;
 }
+
 .auto_save i {
     top: 2px;
     position: relative;
 }
+
 .auto_save i.rotate {
     animation: rotate 1.5s infinite linear;
+}
+
+.square-switch img {
+    max-width: 16px;
+}
+
+.unit_action .btn {
+    margin-right: 0;
+    border: 1px solid #ccc;
+    opacity: 0.5;
+}
+
+.unit_action .btn:nth-child(1) {
+    background: url(../images/divide-ico.svg) no-repeat center center;
+    background-size: 16px;
+}
+
+.unit_action .btn:nth-child(2) {
+    background: url(../images/multiply.svg) no-repeat center center;
+    background-size: 12px;
+}
+
+.unit_action .isSelected {
+    opacity: 1;
+    background-color: #fff !important;
 }

@@ -43,7 +43,7 @@
                                 <div class="form-inline pull-left clearfix mrT1">
                                     <div class="form-group max150">
                                         <label class="clearfix width100">Initial Invoice No.</label>
-                                        <input type="text" class="form-control w100" [(ngModel)]="invoiceSetting.initialInvoiceNumber" name="invoiceNum" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
+                                        <input type="text" class="form-control w100" decimalDigitsDirective [(ngModel)]="invoiceSetting.initialInvoiceNumber" name="invoiceNum" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
                                     </div>
                                     <div class="form-group mrL2">
                                         <label class="clearfix width100">Invoice No. Prefix</label>

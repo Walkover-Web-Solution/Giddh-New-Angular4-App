@@ -10,7 +10,8 @@ import { take } from 'rxjs/operators';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({
-  templateUrl: './gst.component.html'
+  templateUrl: './gst.component.html',
+  styleUrls: ['./gst.component.css']
 })
 export class GstComponent implements OnInit {
   constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {

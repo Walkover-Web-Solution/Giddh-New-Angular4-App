@@ -4,7 +4,6 @@ import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChi
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
-import { isNullOrUndefined } from 'util';
 import { saveAs } from 'file-saver';
 import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -103,6 +102,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   private checkboxInfo: any = {
     selectedPage: 1
   };
+  private formattedQuery: any;
 
   /**
    * TypeScript public modifiers
@@ -179,57 +179,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // Filter data of table By Filters
   public filterData(searchQuery: SearchDataSet[]) {
 
-    let queryForApi = {
-      openingBalance: null,
-      openingBalanceGreaterThan: false,
-      openingBalanceLessThan: false,
-      openingBalanceEqual: true,
-      // openingBalanceType: 'String (DEBIT / CREDIT)',
-      closingBalance: null,
-      closingBalanceGreaterThan: false,
-      closingBalanceLessThan: false,
-      closingBalanceEqual: true,
-      // closingBalanceType: 'String (DEBIT / CREDIT)',
-      creditTotal: null,
-      creditTotalGreaterThan: false,
-      creditTotalLessThan: false,
-      creditTotalEqual: true,
-      debitTotal: null,
-      debitTotalGreaterThan: false,
-      debitTotalLessThan: false,
-      debitTotalEqual: true
-    };
+    let queryForApi = this.createSearchQueryReqObj();
 
-    searchQuery.forEach((query: SearchDataSet) => {
-      switch (query.queryType) {
-        case 'openingBalance':
-          queryForApi['openingBalance'] = query.amount,
-            queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-            queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
-            queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
-          break;
-        case 'closingBalance':
-          queryForApi['closingBalance'] = query.amount,
-            queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-            queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
-            queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
-          break;
-        case 'creditTotal':
-          queryForApi['creditTotal'] = query.amount,
-            queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-            queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
-            queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
-          break;
-        case 'debitTotal':
-          queryForApi['debitTotal'] = query.amount,
-            queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
-            queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
-            queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
-          break;
-      }
-    });
+    let formattedQuery = this.formatQuery(queryForApi, searchQuery);
 
-    this.FilterByAPIEvent.emit(queryForApi);
+    this.formattedQuery = formattedQuery;
+
+    this.FilterByAPIEvent.emit(formattedQuery);
 
     // Old logic (filter data on UI)
     // this.searchResponseFiltered$ = this.searchResponse$.map(p => {
@@ -247,56 +203,56 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // });
   }
 
-  public searchAndFilter(query, searchIn) {
-    this.searchResponseFiltered$ = searchIn.map((accounts) => {
-      return accounts.filter((account) => {
-        let amount;
-        amount = +query.amount;
-        switch (query.queryDiffer) {
-          case 'Greater':
-            if (amount === 0) {
-              return account[query.queryType] > amount;
-            } else {
-              if (query.queryType === 'openingBalance') {
-                return account.openingBalance > amount && account.openBalanceType === query.balType;
-              }
-              if (query.queryType === 'closingBalance') {
-                return account.closingBalance > amount && account.closeBalanceType === query.balType;
-              } else {
-                return account[query.queryType] > amount;
-              }
-            }
-          case 'Less':
-            if (amount === 0) {
-              return account[query.queryType] < amount;
-            } else {
-              if (query.queryType === 'openingBalance') {
-                return account.openingBalance < amount && account.openBalanceType === query.balType;
-              }
-              if (query.queryType === 'closingBalance') {
-                return account.closingBalance < amount && account.closeBalanceType === query.balType;
-              } else {
-                return account[query.queryType] < amount;
-              }
-            }
-          case 'Equals':
-            if (amount === 0) {
-              return account[query.queryType] === amount;
-            } else {
-              if (query.queryType === 'openingBalance') {
-                return account.openingBalance === amount && account.openBalanceType === query.balType;
-              }
-              if (query.queryType === 'closingBalance') {
-                return account.closingBalance === amount && account.closeBalanceType === query.balType;
-              } else {
-                return account[query.queryType] === amount;
-              }
-            }
-          default:
-        }
-      });
-    });
-  }
+  // public searchAndFilter(query, searchIn) {
+  //   this.searchResponseFiltered$ = searchIn.map((accounts) => {
+  //     return accounts.filter((account) => {
+  //       let amount;
+  //       amount = +query.amount;
+  //       switch (query.queryDiffer) {
+  //         case 'Greater':
+  //           if (amount === 0) {
+  //             return account[query.queryType] > amount;
+  //           } else {
+  //             if (query.queryType === 'openingBalance') {
+  //               return account.openingBalance > amount && account.openBalanceType === query.balType;
+  //             }
+  //             if (query.queryType === 'closingBalance') {
+  //               return account.closingBalance > amount && account.closeBalanceType === query.balType;
+  //             } else {
+  //               return account[query.queryType] > amount;
+  //             }
+  //           }
+  //         case 'Less':
+  //           if (amount === 0) {
+  //             return account[query.queryType] < amount;
+  //           } else {
+  //             if (query.queryType === 'openingBalance') {
+  //               return account.openingBalance < amount && account.openBalanceType === query.balType;
+  //             }
+  //             if (query.queryType === 'closingBalance') {
+  //               return account.closingBalance < amount && account.closeBalanceType === query.balType;
+  //             } else {
+  //               return account[query.queryType] < amount;
+  //             }
+  //           }
+  //         case 'Equals':
+  //           if (amount === 0) {
+  //             return account[query.queryType] === amount;
+  //           } else {
+  //             if (query.queryType === 'openingBalance') {
+  //               return account.openingBalance === amount && account.openBalanceType === query.balType;
+  //             }
+  //             if (query.queryType === 'closingBalance') {
+  //               return account.closingBalance === amount && account.closeBalanceType === query.balType;
+  //             } else {
+  //               return account[query.queryType] === amount;
+  //             }
+  //           }
+  //         default:
+  //       }
+  //     });
+  //   });
+  // }
 
   // Reset Filters and show all
   public resetFilters(isFiltered) {
@@ -327,16 +283,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   }
 
   // Save CSV File with data from Table...
-  public createCSV() {
+  public createCSV(searchQuery: SearchDataSet[]) {
+
+    let queryForApi = this.createSearchQueryReqObj();
+
+    let formattedQuery = this.formatQuery(queryForApi, searchQuery);
 
     // New logic (download CSV from API)
     this.searchLoader$ = of(true);
     this.searchRequest$.pipe(take(1)).subscribe(p => {
-      if (isNullOrUndefined(p)) {
+      if (!p) {
         return;
       }
       let request: BulkEmailRequest = {
         data: {
+          subject: this.messageBody.subject,
           message: this.messageBody.msg,
           accounts: [],
         },
@@ -346,6 +307,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
           groupUniqueName: p.groupName
         }
       };
+
+      request.data = Object.assign({}, request.data, formattedQuery);
 
       this._companyServices.downloadCSV(request).subscribe((res) => {
         this.searchLoader$ = of(false);
@@ -427,6 +390,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // Open Modal for Email
   public openEmailDialog() {
     this.messageBody.msg = '';
+    this.messageBody.subject = '';
     this.messageBody.type = 'Email';
     this.messageBody.btn.set = this.messageBody.btn.email;
     this.messageBody.header.set = this.messageBody.header.email;
@@ -478,11 +442,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
     this.searchRequest$.pipe(take(1)).subscribe(p => {
-      if (isNullOrUndefined(p)) {
+      if (!p) {
         return;
       }
       let request: BulkEmailRequest = {
         data: {
+          subject: this.messageBody.subject,
           message: this.messageBody.msg,
           accounts: this.selectedItems,
         },
@@ -492,6 +457,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
           groupUniqueName: p.groupName
         }
       };
+
+      request.data = Object.assign({} , request.data, this.formattedQuery);
+
       if (this.messageBody.btn.set === 'Send Email') {
         return this._companyServices.sendEmail(request)
           .subscribe((r) => {
@@ -503,7 +471,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.isAllChecked = false;
           });
       } else if (this.messageBody.btn.set === 'Send Sms') {
-        return this._companyServices.sendSms(request)
+        let temp = request;
+        delete temp.data['subject'];
+        return this._companyServices.sendSms(temp)
           .subscribe((r) => {
             r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
             this.checkboxInfo = {
@@ -521,5 +491,62 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     this.checkboxInfo.selectedPage = ev.page;
     this.pageChangeEvent.emit(ev);
     this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
+  }
+
+  private createSearchQueryReqObj() {
+    return {
+      openingBalance: null,
+      openingBalanceGreaterThan: false,
+      openingBalanceLessThan: false,
+      openingBalanceEqual: true,
+      openingBalanceType: 'DEBIT',
+      closingBalance: null,
+      closingBalanceGreaterThan: false,
+      closingBalanceLessThan: false,
+      closingBalanceEqual: true,
+      closingBalanceType: 'DEBIT',
+      creditTotal: null,
+      creditTotalGreaterThan: false,
+      creditTotalLessThan: false,
+      creditTotalEqual: true,
+      debitTotal: null,
+      debitTotalGreaterThan: false,
+      debitTotalLessThan: false,
+      debitTotalEqual: true
+    };
+  }
+
+  private formatQuery(queryForApi, searchQuery) {
+    searchQuery.forEach((query: SearchDataSet) => {
+      switch (query.queryType) {
+        case 'openingBalance':
+          queryForApi['openingBalance'] = query.amount,
+            queryForApi['openingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['openingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['openingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['openingBalanceType'] = query.openingBalanceType === 'DEBIT' ? 'DEBIT' : 'CREDIT';
+          break;
+        case 'closingBalance':
+          queryForApi['closingBalance'] = query.amount,
+            queryForApi['closingBalanceGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['closingBalanceLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['closingBalanceEqual'] = query.queryDiffer === 'Equals' ? true : false;
+            queryForApi['closingBalanceType'] = query.closingBalanceType === 'DEBIT' ? 'DEBIT' : 'CREDIT';
+          break;
+        case 'creditTotal':
+          queryForApi['creditTotal'] = query.amount,
+            queryForApi['creditTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['creditTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['creditTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+        case 'debitTotal':
+          queryForApi['debitTotal'] = query.amount,
+            queryForApi['debitTotalGreaterThan'] = query.queryDiffer === 'Greater' ? true : false,
+            queryForApi['debitTotalLessThan'] = query.queryDiffer === 'Less' ? true : false,
+            queryForApi['debitTotalEqual'] = query.queryDiffer === 'Equals' ? true : false;
+          break;
+      }
+    });
+    return queryForApi;
   }
 }

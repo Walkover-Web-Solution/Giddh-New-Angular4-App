@@ -74,7 +74,7 @@
                                     <!--  -->
                                     <td style="text-align: right; padding-right: 4px" [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}
                                     </td>
-                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">201770323-64</td>
+                                    <td [hidden]="!fieldsAndVisibility.header.invoiceNumber?.display">20170623-1</td>
                                 </tr>
 
                             </tbody>
@@ -222,9 +222,8 @@
                         <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">1000.00</td>
                         <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
                         <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">1700.00</td>
-                        <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">153.00
-                            <p>306.00 @18.00%
-                            </p>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right"> 306.00
+                            <p>@18.00%</p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">2006.00</td>
                     </tr>

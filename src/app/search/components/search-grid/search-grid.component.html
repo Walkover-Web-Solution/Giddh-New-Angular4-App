@@ -11,7 +11,7 @@
 
   <!-- result -->
   <section class="" [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
-    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)"
+    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)"
                    (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()"></search-filter>
     <table class="table table-bordered basic mrT1">
       <thead>
@@ -136,8 +136,8 @@
           <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
         </div>
         <div class="modal-body pdL2 pdR2 clearfix">
-          <!-- 		<h1 class="mrB1" ng-if="messageBody.type == 'Email'">Enter Subject:</h1>
-        <input ng-if="messageBody.type == 'Email'" class="form-control mrB1" type="text" ng-model="messageBody.subject" placeholder="Enter subject here"/> -->
+          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+          <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here"/>
           <h1 class="mrB1">Type message body:</h1>
           <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
                     placeholder="start typing your message here"></textarea>
