@@ -39,6 +39,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
 
   public showEmailTextarea: boolean = false;
   public base64StringForModel: any;
+  public unSafeBase64StringForModel: any;
   public showPdfWrap: boolean = false;
   public showEsign: boolean = false;
   public showEditButton: boolean = false;
@@ -49,6 +50,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public downloadTabActive: boolean = false;
   public smsTabActive: boolean = false;
   public isSendSmsEnabled: boolean = false;
+  public isElectron = isElectron;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -66,6 +68,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
         this.base64Data = o.dataPreview;
         this.showPdfWrap = true;
         let str = 'data:application/pdf;base64,' + o.dataPreview;
+        this.unSafeBase64StringForModel = _.clone(str);
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
       } else {
         this.showPdfWrap = false;

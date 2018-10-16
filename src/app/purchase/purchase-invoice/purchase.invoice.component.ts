@@ -8,7 +8,7 @@ import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
 import { CompanyResponse } from '../../models/api-models/Company';
@@ -19,7 +19,6 @@ import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../mode
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
-import { Observable } from 'rxjs';
 import { ReconcileActionState } from '../../store/GstReconcile/GstReconcile.reducer';
 import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -506,6 +505,17 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     if (event) {
       event.preventDefault();
     }
+
+    if (selectedService === 'RECONCILE') {
+      let checkIsAuthenticated;
+      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
+
+      if (checkIsAuthenticated) {
+        this.fireGstReconcileRequest(this.reconcileActiveTab, this.selectedDateForGSTR1, 1, true);
+        return;
+      }
+    }
+
     if (selectedService) {
       this.selectedServiceForGSTR1 = selectedService;
     }
@@ -721,9 +731,9 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1) {
+  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-      this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString())
+      this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString(), refresh)
     );
   }
 

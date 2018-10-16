@@ -34,9 +34,9 @@
                      [placeholder]="'Select Product'"
                      formControlName="stock"
                      (selected)="stockChanged($event)"></sh-select>
-          <span *ngIf="stock.invalid">
+          <!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
-                    </span>
+                    </span> -->
         </div>
 
         <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
@@ -46,10 +46,10 @@
                      [placeholder]="'Select Receiver'"
                      formControlName="inventoryUser"
                      (selected)="userChanged($event)"></sh-select>
-          <span *ngIf="inventoryUser.invalid">
+          <!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Receiver.</span>
-                    </span>
+                    </span> -->
         </div>
 
       </div>
@@ -81,23 +81,23 @@
             <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
                        (selected)="userChanged($event,i)" formControlName="inventoryUser"
                        [ItemHeight]="'33'"></sh-select>
-            <span [hidden]="!item.controls['inventoryUser'].errors?.required"
-                  class="text-danger">Please select Receiver.</span>
+            <!-- <span [hidden]="!item.controls['inventoryUser'].errors?.required"
+                  class="text-danger">Please select Receiver.</span> -->
           </div>
 
           <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
             <!-- <label class="mrB1">Product Name</label> -->
             <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
                        (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
-            <span [hidden]="!item.controls['stock'].errors?.required"
-                  class="text-danger">Please select Product.</span>
+            <!-- <span [hidden]="!item.controls['stock'].errors?.required"
+                  class="text-danger">Please select Product.</span> -->
           </div>
 
           <div class="col-xs-4 form-group">
             <sh-select [options]="stockUnitsOptions"
                        [placeholder]="'Choose unit'" formControlName="stockUnit"
                        [multiple]="false" [ItemHeight]="33"></sh-select>
-            <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span>
+            <!-- <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span> -->
           </div>
 
           <div class="col-xs-4 form-group">
@@ -118,8 +118,8 @@
                 </button>
               </div>
             </div>
-            <span [hidden]="!item.controls['quantity'].errors?.required"
-                  class="text-danger">Please enter quantity.</span>
+            <!-- <span [hidden]="!item.controls['quantity'].errors?.required"
+                  class="text-danger">Please enter quantity.</span> -->
             <!--
 <div class="input-group">
   <input name="dateRange" type="text" formControlName="quantity" class="form-control">

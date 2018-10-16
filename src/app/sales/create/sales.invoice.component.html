@@ -164,14 +164,14 @@
 
 
 
-                        <div class="pull-right">
+                        <!-- <div class="pull-right">
                             <label class="upload_div" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
             <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
               (uploadOutput)="onUploadOutput($event)">
             <label for="invoiceFile" class="cp fs16">
               <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                             </label>
-                        </div>
+                        </div> -->
 
                         <!-- <div class="form-group col-xs-2">
                     <label>Country</label>
@@ -543,12 +543,13 @@
                                 <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
                             <!-- commented due to presently attachfile key is not available in request 
-                            <div class="pdT1 pl0 max-600" *ngIf="isPurchaseInvoice">
-                                <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
-                                <label class="custom-file-label form-control cp" for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em> <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span></label>
-                                <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" (change)="onFileChange($event.target.files)">
-                            </div>
                             -->
+                            <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
+                                <label class="custom-file-label form-control cp pos-rel" for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em> <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span>
+                                    <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" (change)="onFileChange($event.target.files)" droppable="true">
+                                </label>
+                            </div>
                         </td>
                         <td width="50%">
                             <section class="tableSec form-group">

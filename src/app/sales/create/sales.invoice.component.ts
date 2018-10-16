@@ -532,6 +532,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isOthrDtlCollapsed = false;
     this.forceClear$ = observableOf({status: true});
     this.isCustomerSelected = false;
+    this.selectedFileName = '';
   }
 
   public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
@@ -1294,6 +1295,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       // this._loaderService.hide();
       if (output.file.response.status === 'success') {
         this.isFileUploading = false;
+        this.invFormData.entries[0].attachFile = output.file.response.body.uniqueName;
+        this.invFormData.entries[0].attachedFileName = output.file.response.body.name;
         // this.blankLedger.attachedFile = output.file.response.body.uniqueName;
         // this.blankLedger.attachedFileName = output.file.response.body.name;
         this._toasty.successToast('file uploaded successfully');
@@ -1301,6 +1304,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.isFileUploading = false;
         // this.blankLedger.attachedFile = '';
         // this.blankLedger.attachedFileName = '';
+        this.invFormData.entries[0].attachFile = '';
+        this.invFormData.entries[0].attachedFileName = '';
         this._toasty.errorToast(output.file.response.message);
       }
     }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'upload-file',
@@ -40,4 +41,14 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  public async downloadSampleFile(entity: string) {
+    const fileUrl = `assets/sample-files/${entity}-sample.xlsx`;
+    const fileName = `${entity}-sample.xlsx`;
+    try {
+      let blob = await fetch(fileUrl).then(r => r.blob());
+      saveAs(blob, fileName);
+    } catch (e) {
+      console.log('error while downloading sample file :', e);
+    }
+  }
 }

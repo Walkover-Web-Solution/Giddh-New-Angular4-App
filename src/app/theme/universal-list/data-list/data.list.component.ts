@@ -2,16 +2,16 @@ import {
   Component, ChangeDetectionStrategy, OnInit,
   OnDestroy, Input, Output, EventEmitter, OnChanges,
   SimpleChanges, ElementRef, ViewChild,
-  Renderer, AfterViewInit, NgZone
+  Renderer, AfterViewInit, NgZone, ChangeDetectorRef
 } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { findIndex, cloneDeep, remove, uniq, find } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take } from 'rxjs/operators';
+import { take, debounceTime } from 'rxjs/operators';
 import {
   CAPS_LOCK, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW,
   ENTER, MAC_ENTER, BACKSPACE, TAB, SHIFT, CONTROL, ALT,
@@ -51,7 +51,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // bot related
   @Input() public preventOutSideClose: boolean = false;
   @Input() public dontShowNoResultMsg: boolean = false;
-  @Input() public showChannelCreateBtn: boolean = false;
+  @Input() public showChannelCreateBtn: boolean = true;
 
   // positioning
   @Input() public placement: string;
@@ -71,7 +71,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // ui related
   @Input() public isOpen: boolean = false;
   @Input() public isMultiple: boolean = false;
-  @Input() public ItemHeight: number = 46;
+  @Input() public ItemHeight: number = 50;
   @Input() public ItemWidth: number = 300;
   // to search bar
   @Input() public searchBoxPlaceholder: string = 'Search...';
@@ -96,12 +96,15 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private rawSmartComboList: IUlist[] = [];
   private smartList: IUlist[];
+  private activeCompany: string;
+  private searchSubject: Subject<string> = new Subject();
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
     private zone: NgZone,
     private winRef: WindowRefService,
     private _dbService: DbService,
+    private _cdref: ChangeDetectorRef,
     private universalSearchService: UniversalSearchService
   ) {
   }
@@ -112,6 +115,17 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   public ngOnInit() {
+
+    // listen on input for searc
+    this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+      this.handleSearch(term);
+      this._cdref.markForCheck();
+    });
+
+    // listen for companies and active company
+    this._store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe((name) => {
+      this.activeCompany = name;
+    });
 
     // listen to smart list
     this._store.select(p => p.general.smartCombinedList).pipe(take(1))
@@ -152,6 +166,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         this.virtualScrollElem.setLastItemIndex(idx);
       }
     }
+  }
+
+  public triggerAddManage() {
+    this.newTeamCreationEmitter.emit(true);
   }
 
   // get initialized on init and return selected item
@@ -324,38 +342,15 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
   }
 
-  /**
-   * will be called from search input keyup
-   * @param e an event from search input.
-   * filtering data conditionally according to search term.
-   */
   public search(e: KeyboardEvent, term: string) {
     let key = e.which || e.keyCode;
     // preventing search operation on arrows key
     if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
       return;
     }
-
     term = term.trim();
-    if (term && term.length > 0) {
-      LOCAL_MEMORY.charCount = term.length;
-      // open popover again if in case it's not opened
-      if (!this.isOpen ) {
-        this.isOpen = true;
-      }
-      term = term.toLowerCase();
-      let filteredData: any[] = [];
-      let d = cloneDeep(this.rawSmartComboList);
-      if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
-        // logic search
-        this.doConditionalSearch(term);
-        return;
-      }
-      // search data conditional
-      filteredData = this.universalSearchService.filterByTerm(term, d);
-      this.updateRowsViaSearch(filteredData);
-    } else {
-      // backspace
+    this.searchSubject.next(term);
+    if (term === '' || term.length === 0) {
       if ( this.isOpen && key === BACKSPACE ) {
         e.preventDefault();
         e.stopPropagation();
@@ -374,6 +369,37 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         }
       }
     }
+  }
+
+  /**
+   * will be called from search input keyup
+   * @param e an event from search input.
+   * filtering data conditionally according to search term.
+   */
+  public handleSearch(term: string) {
+    if (term && term.length > 0) {
+      LOCAL_MEMORY.charCount = term.length;
+      // open popover again if in case it's not opened
+      if (!this.isOpen ) {
+        this.isOpen = true;
+      }
+      term = term.toLowerCase();
+      let filteredData: any[] = [];
+      let d = cloneDeep(this.rawSmartComboList);
+      if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+        // logic search
+        this.doConditionalSearch(term);
+        return;
+      }
+      // search data conditional
+      filteredData = this.universalSearchService.filterByTerm(term, d);
+      this.updateRowsViaSearch(filteredData);
+
+      // emit no result event
+      if (filteredData.length === 0) {
+        this.noResultFoundEmitter.emit(true);
+      }
+    }
     // setting width again due to if no data found.
     // the other block (no result) also have to be liquid
     this.setParentWidthFunc();
@@ -388,6 +414,10 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       return this.visibleItems * this.rowHeight;
     }
   }
+
+  public trackByFn(index, item: IUlist) {
+    return item.uniqueName; // unique id corresponding to the item
+ }
 
   /**
    * main function to write data on UI.
@@ -414,10 +444,11 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     this.rows = cloneDeep(val);
 
     if (this.winRef) {
-      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(KEY_FOR_QUERY));
+      let key = `${KEY_FOR_QUERY}_${this.activeCompany}`;
+      let priorTerm: string[] = JSON.parse(sessionStorage.getItem(key));
       if (priorTerm && priorTerm.length > 0) {
         this.listOfSelectedGroups = [];
-        this._dbService.getAllItems('groups').pipe(take(1))
+        this._dbService.getAllItems(this.activeCompany, 'groups').pipe(take(1))
         .subscribe((groupList: IUlist[]) => {
           priorTerm.forEach((str: string) => {
             let o = find(groupList, ['uniqueName', str ]);
@@ -478,7 +509,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     try {
       if (this.winRef) {
         let sessionStorage: Storage = this.winRef.nativeWindow.sessionStorage;
-        sessionStorage.setItem(KEY_FOR_QUERY, JSON.stringify(priorTerm));
+        let key = `${KEY_FOR_QUERY}_${this.activeCompany}`;
+        sessionStorage.setItem(key, JSON.stringify(priorTerm));
       }
     } catch (error) {
       //

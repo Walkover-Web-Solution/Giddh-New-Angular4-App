@@ -638,6 +638,10 @@ aside-menu-account .container-fluid {
   margin-left: 10px;
 }
 
+.mrL15 {
+    margin-left: 15px;
+}
+
 .mrR1 {
   margin-right: 10px;
 }
@@ -1566,6 +1570,7 @@ li:last-child .angular-ui-tree-handle {
 .max500 {
   max-width: 500px;
 }
+
 
 /* styles for trial-balance */
 
@@ -4514,9 +4519,9 @@ border-bottom: 1px solid #e0e0e0;
   min-width: 480px;
 }
 
-.stock-grp-list > li > a {
-  text-transform: uppercase;
-  color: #616161;
+.stock-grp-list>li>a {
+    /* text-transform: uppercase; */
+    color: #616161;
 }
 
 .sub-grp > li > a {
@@ -5069,56 +5074,56 @@ bs-datepicker-container {
 }
 
 .panel.sFthanks.fieldset {
-  display: none !important;
+    display: none !important;
 }
 
 .panel.sFformfield.fieldset {
-  box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 #sFSection-Jkvq .sFsubmit.btn-primary {
-  font-size: 14px !important;
-  background: #e5e5e5 !important;
-  color: #28ab00 !important;
+    font-size: 14px !important;
+    background: #e5e5e5 !important;
+    color: #28ab00 !important;
 }
+
 
 /* added by sarfaraz */
 .d-flex {
-  display: flex;
-  display: -ms-flexbox !important
+    display: flex;
+    display: -ms-flexbox!important
 }
 
 .flex-row {
-  flex-direction: row;
-  -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-direction: row;
 }
 
 .flex-grow-1 {
-  -ms-flex-positive: 1 !important;
-  flex-grow: 1 !important;
+    -ms-flex-positive: 1!important;
+    flex-grow: 1!important;
 }
 
 .align-items-center {
-  align-items: center;
-  -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-align: center;
 }
 
+
 /* cmdk modal styles */
+
 .modal-dialog.universal_modal .modal-body {
-  padding: 0;
+    padding: 0;
 }
 
 .modal-dialog.universal_modal .shortcuts {
-  background: #f9f9f9;
-  border-top: none;
-  margin: 0;
-  padding: 12px 16px 12px 20px;
-  color: #717274;
-  font-size: 12px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.myDpClass .bs-calendar-container > div {
-  display: flex;
+    background: #f9f9f9;
+    border-top: none;
+    margin: 0;
+    padding: 12px 16px 12px 20px;
+    color: #717274;
+    font-size: 12px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: right;
 }
