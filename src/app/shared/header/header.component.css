@@ -10,7 +10,7 @@
     background: #303E4E;
     width: 230px;
     padding-bottom: 120px;
-    padding: 15px 25px;
+    padding: 15px 20px;
     left: -240px;
 }
 
@@ -112,7 +112,7 @@
 
 .left_fixed_header li a {
     display: block;
-    padding: 6px 0px;
+    padding: 8px 0px;
     color: #B7B7B7;
     /* width: 32px; */
 }
@@ -128,6 +128,7 @@
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: 'LatoWebSemibold';
+    padding: 0;
 }
 
 .left_fixed_header.open li a .label {
@@ -207,4 +208,9 @@
 :host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-top) .ps-indicator-top,
 :host ::ng-deep .left_fixed_header perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
+}
+
+.left_fixed_header h6 {
+    color: #5F6E7E;
+    font-size: 14px;
 }
