@@ -40,8 +40,8 @@ export class InvoicePageDDComponent implements OnInit {
     {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
     {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'},
     {name: 'Receipt', uniqueName: 'receipt', path: 'receipt'},
-    // {name: 'Cr-note', uniqueName: 'cr-note', path: 'cr-note'},
-    // {name: 'Dr-note', uniqueName: 'dr-note', path: 'dr-note'}
+    {name: 'Cr-note', uniqueName: 'cr-note', path: 'cr-note'},
+    {name: 'Dr-note', uniqueName: 'dr-note', path: 'dr-note'}
   ];
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
