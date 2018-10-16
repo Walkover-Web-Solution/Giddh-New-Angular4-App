@@ -85,7 +85,7 @@ export class OnReturnDirective {
               target.focus();
             }, 210);
           } else {
-            if (target.value === 'NaN') {
+            if (target.value === 'NaN' || target.value === 0) {
               target.value = '';
             }
             if (this.clickCount > 1) {
