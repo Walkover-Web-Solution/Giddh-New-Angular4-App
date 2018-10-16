@@ -52,7 +52,7 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, '')));
   }
 
-  public GstReconcileGetInvoices(period: string, action: string, page: string, count: string): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
+  public GstReconcileGetInvoices(period: string, action: string, page: string, count: string, refresh: boolean): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
@@ -62,6 +62,7 @@ export class GstReconcileService {
       .replace(':action', encodeURIComponent(action))
       .replace(':page', encodeURIComponent(page))
       .replace(':count', encodeURIComponent(count))
+      .replace(':refresh', refresh ? 'true' : 'false')
     )
       .pipe(
         map((res) => {
