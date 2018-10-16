@@ -185,7 +185,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public apkVersion: string;
   public menuItemsFromIndexDB = [];
   public accountItemsFromIndexDB = [];
-  public selectedPage: any = {};
+  public selectedPage: any =  '';
   public selectedLedger: any = {};
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -757,7 +757,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
-      debugger;
       this.showNavigationModal();
     }
 
@@ -798,7 +797,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb(entity, item);
   }
 
+  public filterCompanyList(ev) {
+    console.log('the ev  is :', ev);
+  }
+
   private doEntryInDb(entity: string, item: IUlist) {
+    if (entity === 'menus') {
+      this.selectedPage = item.name;
+    }
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
       this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item).subscribe((res) => {
         if (res) {

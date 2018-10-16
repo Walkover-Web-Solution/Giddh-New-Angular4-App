@@ -13,14 +13,14 @@
                 </a>
 
                 <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
-
-                    <li dropdown class="pos-rel pdT1" #dropdown="bs-dropdown" [autoClose]="false">
+                    <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
+                    <li class="pos-rel pdT1">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
                             <div class="ellp bold">{{ (selectedCompany | async)?.name }}</div>
                             <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear.uniqueName }}</small>
                         </a>
-
-                        <ul class="company-list dropdown-menu sub_menu_nav dropdown-menu user_dropdown" dropdown role="menu" *dropdownMenu>
+                        <!-- commented due to not required now
+                        <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
                             <li class="create-company clearfix">
                                 <span>Financial Year</span>
                             </li>
@@ -38,6 +38,7 @@
                                 <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
                             </li>
                         </ul>
+                         -->
                     </li>
 
                     <li>
@@ -66,7 +67,7 @@
                             -->
 
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Company" aria-describedby="">
+                                <input type="text" class="form-control" placeholder="Search Company" aria-describedby="" (ngModelChange)="filterCompanyList($event)">
                                 <span class="input-group-addon" id=""> <i (click)="refreshCompanies($event)" class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                     </span>
                             </div>
@@ -129,7 +130,6 @@
                             <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i>  Windows</a></li>
                         </ul>
                     </li>
-                    <!-- <li role="separator" class="divider" style="width:100%"></li> -->
                     <li class="footer-navigate clearfix">
                         <!--<ul>
                         <li>to navigate</li>
@@ -140,7 +140,6 @@
                         <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
                         <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
                     </ul> -->
-
                     </li>
                 </ul>
             </li>
@@ -169,7 +168,7 @@
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                 <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                 <li *ngFor="let menu of menuItemsFromIndexDB">
-                    <a href="javascript:void(0)" [ngClass]="{'active': selectedPage?.name === menu.name}" (click)="analyzeMenus($event, menu.uniqueName)">
+                    <a href="javascript:void(0)" [ngClass]="{'active': selectedPage === menu.name}" (click)="analyzeMenus($event, menu.uniqueName)">
                         <span class="icon-dashboard"></span>
                         <span class="label">{{menu.name}}</span>
                     </a>
@@ -278,6 +277,9 @@
                     <a href="javascript:void(0)" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                         <i class="icon-bar"></i>
                     </a>
+                </li>
+                <li>
+                    <span class="mrT2 inline" style="line-height: 10px;">{{selectedPage}}</span>
                 </li>
                 <!-- books search -->
                 <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
