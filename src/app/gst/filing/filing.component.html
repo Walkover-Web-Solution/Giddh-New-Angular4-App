@@ -1,0 +1,27 @@
+<div class="column content-column gst-filing-container navs-list">
+    <div class="tax-engine">
+        <div class="column list-column expanded-list-column transactions-list">
+            <div class="list-header">
+                <filing-header [selectedPeriod]="selectedPeriod"></filing-header>
+            </div>
+            <div class="nav-band">
+                <tabset #staticTabs id="c-tab">
+                    <!-- <tab heading="Overview">
+                        <div class="gstr-transactions-summary">
+                            <filing-overview></filing-overview>
+                        </div>
+                    </tab> -->
+                    <tab heading="Reconcilation">
+                        <reconcile [data]="" [selectedPeriod]="selectedPeriod"></reconcile>
+                    </tab>
+                    <!-- <tab heading="Push to GSTIN">
+                        <h1>Push to GSTIN</h1>
+                    </tab> -->
+                    <!-- <tab heading="File your Return">
+                        <h1>File your return</h1>
+                    </tab> -->
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
