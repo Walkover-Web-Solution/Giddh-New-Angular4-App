@@ -91,46 +91,35 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
       newState.isGstReconcileInvoiceInProcess = false;
 
       if (response.status === 'success') {
+        debugger;
         newState.isGstReconcileInvoiceSuccess = true;
         newState.gstAuthenticated = true;
         newState.gstFoundOnGiddh = true;
 
         let gstData = newState.gstReconcileData;
 
-        // gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
-        // gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
-        // gstData.matched.count = response.body.matched;
-        // gstData.partiallyMatched.count = response.body.partiallyMatched;
+        gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+        gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+        gstData.matched.count = response.body.matched;
+        gstData.partiallyMatched.count = response.body.partiallyMatched;
 
         switch (response.queryString.action) {
           case 'NOT_ON_GIDDH':
-            gstData.notFoundOnGiddh = {
-              count: response.body.notFoundOnGiddh,
-              data: response.body.details
-            };
+            gstData.notFoundOnGiddh.data = response.body.details;
             break;
           case 'NOT_ON_PORTAL':
-            gstData.notFoundOnPortal = {
-              count: response.body.notFoundOnPortal,
-              data: response.body.details
-            };
+            gstData.notFoundOnPortal.data = response.body.details;
             break;
           case 'MATCHED':
-            gstData.matched = {
-              count: response.body.matched,
-              data: response.body.details
-            };
+            gstData.matched.data = response.body.details;
             break;
           case 'PARTIALLY_MATCHED':
-            gstData.partiallyMatched = {
-              count: response.body.partiallyMatched,
-              data: response.body.details
-            };
+            gstData.partiallyMatched = response.body.details;
             break;
         }
 
       } else {
-
+        debugger;
         if (response.code === 'GST_AUTH_ERROR') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstAuthenticated = false;

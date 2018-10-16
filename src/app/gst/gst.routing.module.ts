@@ -4,19 +4,19 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { GstPagesComponent } from './gst-pages/gst-pages.component';
-import { GstPageBComponent } from './gst-page-b/gst-page-b.component';
-import { GstComponent } from './gst.component';
 
-/**
- * Created by kunalsaxena on 9/1/17.
- */
+import { GstComponent } from './gst.component';
+import { FileGstR1Component } from './gstR1/gstR1.component';
+import { FileGstR2Component } from './gstR2/gstR2.component';
+import { FileGstR3Component } from './gstR3/gstR3.component';
+import { FilingComponent } from './filing/filing.component';
 
 const GST_ROUTES: Routes = [
   { path: '', component: GstComponent },
-  { path: 'gst', component: GstPagesComponent },
-  { path: 'gst-page-b', component: GstPageBComponent },
-  { path: 'gst-page-c', component: GstPageCComponent }
+  { path: 'gstR1', component: FileGstR1Component },
+  { path: 'gstR2', component: FileGstR2Component },
+  { path: 'gstR3', component: FileGstR3Component },
+  { path: 'filing-return/:period', component: FilingComponent }
 ];
 
 @NgModule({
@@ -32,7 +32,6 @@ const GST_ROUTES: Routes = [
     RouterModule,
     FormsModule,
     CommonModule,
-  ],
-  providers: [Location]
+  ]
 })
 export class GstRoutingModule { }
