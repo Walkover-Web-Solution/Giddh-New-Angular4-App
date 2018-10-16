@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { Voucher } from '../../../models/api-models/recipt';
+import { ReceiptItem, ReciptRequest, Voucher } from '../../../models/api-models/recipt';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -11,11 +11,15 @@ import * as _ from '../../../lodash-optimized';
 import { ToasterService } from '../../../services/toaster.service';
 import * as moment from 'moment';
 import { GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction } from '../../../models/api-models/Invoice';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { e } from '@angular/core/src/render3';
+import { ReceiptService } from '../../../services/receipt.service';
+import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 
 const THEAD = [
   {
     display: true,
-    label: '',
+    label: 'S no.',
     field: 'sNo'
   },
   {
@@ -25,52 +29,47 @@ const THEAD = [
   },
   {
     display: true,
-    label: '',
+    label: 'Item',
     field: 'item'
   },
   {
     display: true,
-    label: '',
+    label: 'HSN/SAC',
     field: 'hsnSac'
   },
   {
     display: true,
-    label: '',
+    label: 'Qty.',
     field: 'quantity'
   },
   {
     display: true,
-    label: '',
+    label: 'Some label',
     field: 'description'
   },
   {
     display: true,
-    label: '',
+    label: 'Rate/ Item',
     field: 'rate'
   },
   {
     display: true,
-    label: '',
+    label: 'Dis./ Item',
     field: 'discount'
   },
-  // {
-  //   display: true,
-  //   label: '',
-  //   field: 'taxableAmount'
-  // },
   {
     display: true,
-    label: '',
+    label: 'Taxable Value',
     field: 'taxableValue'
   },
   {
     display: true,
-    label: '',
+    label: 'taxes',
     field: 'taxes'
   },
   {
     display: true,
-    label: '',
+    label: 'total',
     field: 'total'
   }
 ];
@@ -91,8 +90,11 @@ export class ReceiptUpdateComponent implements OnInit, OnDestroy {
   public customThead: IContent[] = THEAD;
   public autoFillShipping: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  @Input() public activatedInvoice: string;
+  @Input() public selectedReceipt: ReceiptItem;
 
-  constructor(private store: Store<AppState>, private _toasty: ToasterService, private _cdRef: ChangeDetectorRef) {
+  constructor(private store: Store<AppState>, private _toasty: ToasterService, private _cdRef: ChangeDetectorRef,
+              private receiptActions: InvoiceReceiptActions) {
     this.voucher$ = this.store.pipe(select((state: AppState) => state.receipt.voucher), takeUntil(this.destroyed$));
   }
 
@@ -195,6 +197,15 @@ export class ReceiptUpdateComponent implements OnInit, OnDestroy {
     } else {
       return null;
     }
+  }
+
+  public updateModelData() {
+    let request: ReciptRequest = {
+      voucher: this.voucherFormDetails,
+      entryUniqueNames: [],
+      updateAccountDetails: true
+    };
+    this.store.dispatch(this.receiptActions.UpdateInvoiceReceiptRequest(request, this.selectedReceipt.account.uniqueName));
   }
 
   public getEntryTotal(entry: GstEntry, idx: number): any {

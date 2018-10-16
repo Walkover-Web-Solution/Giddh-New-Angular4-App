@@ -3,6 +3,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ToasterService } from '../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'preview-download-receipt-component',
@@ -16,10 +17,10 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
   public base64StringForModel: any;
   public isRequestInProcess: boolean = false;
   public isError: boolean = false;
+  @Input() public activatedInvoice: string;
 
   constructor(private _receiptService: ReceiptService, private _toasty: ToasterService,
               private sanitizer: DomSanitizer, private _cdRef: ChangeDetectorRef) {
-    //
   }
 
   public ngOnInit() {
