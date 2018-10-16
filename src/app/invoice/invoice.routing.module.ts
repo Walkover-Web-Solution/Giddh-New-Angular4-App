@@ -45,7 +45,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { ReceiptComponent } from './receipt/receipt.component';
 import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
 import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
-import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 import { WebviewDirective } from './webview.directive';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -95,7 +94,6 @@ const INVOICE_ROUTES: Routes = [
     ReceiptComponent,
     ReceiptUpdateComponent,
     PreviewDownloadReceiptComponent,
-    DownloadReceiptComponent,
     WebviewDirective
   ],
   imports: [
