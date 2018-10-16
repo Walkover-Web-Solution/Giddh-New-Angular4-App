@@ -103,8 +103,8 @@
     <td>{{item.grandTotal}}</td>
     <td class="text-center">
       <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
-      <i (click)="onEditBtnClick()"
-         class="glyphicon glyphicon-pencil cp"></i>
+      <!--<i (click)="onEditBtnClick()"-->
+      <!--class="glyphicon glyphicon-pencil cp"></i>-->
     </td>
   </tr>
   </tbody>
@@ -117,7 +117,7 @@
     <div class="modal-content">
       <preview-download-receipt-component
         (closeModelEvent)="hidePreviewDownloadModal()"
-        (openUpdateReceiptModel)="onEditBtnClick()"
+        (openUpdateReceiptModel)="onEditBtnClick()" [activatedInvoice]="type"
         [request]="downloadVoucherRequestObject"></preview-download-receipt-component>
     </div>
   </div>
@@ -129,7 +129,8 @@
   <div class="modal-md">
     <div class="modal-content">
       <app-receipt-update
-        (closeModelEvent)="hideUpdateModal()"></app-receipt-update>
+        (closeModelEvent)="hideUpdateModal()" [activatedInvoice]="type"
+        [selectedReceipt]="selectedReceipt"></app-receipt-update>
     </div>
   </div>
 </div>

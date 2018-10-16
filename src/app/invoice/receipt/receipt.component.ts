@@ -184,6 +184,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
     if (url === '/pages/invoice/receipt') {
       this.type = 'receipt';
+
     }
 
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(
