@@ -462,7 +462,52 @@ input {
 
 
 /* my css start */
+.company-list button.btn-link {
+    font-size: 13px;
+    color: #1E67C8;
+    display: block;
+    padding: 7px 10px;
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+.company-list button.btn-link:hover {
+    color: #fff;
+    background: #2D9EE0;
+    text-decoration: none;
+}
+ul.sub-list {
+    margin-top: 5px;
+}
+.user_dropdown>li>a .glyphicon-menu-right {
+    font-size: 10px;
+    float: right;
+    padding-top: 4px;
+}
+.sub-list li a {
+    font-size: 13px;
+}
+.company-list .input-group {
+    border-bottom: 1px solid #d2d2d2;
+}
+.company-list .input-group .form-control {
+    /* border-bottom: 1px solid #e8e8e8 !important; */
+    border: 0px solid !important;
+    /* border-bottom: 1px solid #e8e8e8 !important; */
+}
+.company-list .input-group .input-group-addon {
+    background: no-repeat;
+    border-radius: 0px;
+    border: 0px;
+    font-size: 9px;
+    color: #333333;
+    border-left: 1px solid #d2d2d2;
+}
 
+
+.bold {
+    font-family: 'LatoWebbold';
+}
 
 /* file upload css start */
 
@@ -1003,6 +1048,7 @@ header .navbar {
 
 #companyList {
     background: #fff;
+    padding-bottom: 4px;
 }
 
 #companyList li:not(.divider) {
@@ -5060,6 +5106,7 @@ table td[class*=col-]:last-child {
     float: left;
     padding: 4px 20px;
     font-size: 14px;
+    margin-bottom: 5px;
     /* margin: 10px 0; */
 }
 
@@ -5109,6 +5156,7 @@ table td[class*=col-]:last-child {
 
 .app_list>ul li a:hover {
     color: #000;
+    background: none;
 }
 
 .user_circle {
@@ -5407,9 +5455,10 @@ perfect-scrollbar>.ps>.ps-overlay {
 }
 
 .user_dropdown>li a:hover {
-    color: #ff5e01;
+    color: #fff;
+    background: #2D9EE0;
 }
 
 .user_dropdown>li.open>a {
-    color: #ff5e01;
+    /* color: #ff5e01; */
 }

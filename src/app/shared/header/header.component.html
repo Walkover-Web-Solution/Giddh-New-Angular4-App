@@ -16,16 +16,16 @@
 
                     <li dropdown class="pos-rel pdT1" #dropdown="bs-dropdown" [autoClose]="false">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-                            <div class="ellp"><strong>{{ (selectedCompany | async)?.name }}</strong></div>
+                            <div class="ellp bold">{{ (selectedCompany | async)?.name }}</div>
                             <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear.uniqueName }}</small>
                         </a>
 
-                        <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+                        <ul class="company-list dropdown-menu sub_menu_nav dropdown-menu user_dropdown" dropdown role="menu" *dropdownMenu>
                             <li class="create-company clearfix">
                                 <span>Financial Year</span>
                             </li>
                             <li style="padding:0px;">
-                                <ul style="height: 150px;" *ngIf="companies$ | async">
+                                <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
                                     <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
                                         <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
@@ -51,7 +51,7 @@
                     </li>
                     <li dropdown class="pos-rel" #dropdown="bs-dropdown" [autoClose]="false">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-                            Switch company
+                            Switch company <span class="glyphicon glyphicon-menu-right"></span>
                         </a>
 
                         <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
@@ -71,7 +71,7 @@
                                     </span>
                             </div>
                             <li style="padding:0px;">
-                                <ul style="height: 150px;" *ngIf="companies$ | async">
+                                <ul class="sub-list" *ngIf="companies$ | async">
                                     <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
                                         <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
@@ -118,14 +118,14 @@
                         <a href="javascript:void(0)" (click)="logout()">Logout</a>
                     </li>
                     <li role="separator" class="divider" style="width:100%"></li>
-                    <li class="app_list">
+                    <li class="app_list ">
                         <ul>
                             <h6>Downloads</h6>
                             <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i
                       class="fa fa-android"></i> Android</a></li>
                             <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
-                      class="fa fa-apple"></i> ios</a></li>
-                            <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> macOS</a></li>
+                      class="fa fa-apple"></i> IOS</a></li>
+                            <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> MacOS</a></li>
                             <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i>  Windows</a></li>
                         </ul>
                     </li>
@@ -153,7 +153,7 @@
         </ul>
 
         <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-            <h6>ACCOUNTS</h6>
+            <h6 class="mrB1">ACCOUNTS</h6>
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
             <li *ngFor="let acc of accountItemsFromIndexDB">
                 <a href="javascript:void(0)" (click)="analyzeMenus($event, acc.uniqueName)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
