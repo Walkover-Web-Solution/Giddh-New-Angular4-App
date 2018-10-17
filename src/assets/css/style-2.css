@@ -462,6 +462,9 @@ input {
 
 
 /* my css start */
+.top-heading {
+
+}
 .company-list button.btn-link {
     font-size: 13px;
     color: #1E67C8;
@@ -524,7 +527,10 @@ ul.sub-list {
     width: 220px;
 }
 
-
+.top-heading > h4 {
+    font-size: 18px;
+    font-family: 'LatoWebbold';
+}
 /* file upload css end */
 
 
@@ -1070,7 +1076,7 @@ header .navbar {
     top: 60%;
     bottom: 0;
     transform: translateY(-50%);
-    right: 0px;
+    right: 16px;
     color: #B7B7B7;
 }
 
@@ -5093,6 +5099,7 @@ table td[class*=col-]:last-child {
     right: 4px;
     padding: 0px;
     border: 1px solid #CCCCCC;
+    left: 25px;
 }
 
 .user_dropdown>li>a {

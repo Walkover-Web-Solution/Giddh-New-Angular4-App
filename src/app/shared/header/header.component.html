@@ -1,7 +1,7 @@
 <header class="clearfix header-container" [ngClass]="{'navbar_open':sideMenu.isopen}">
     <div class="nav-left-bar">
 
-        <ul>
+        <ul class="main-company-name">
 
             <li class="company-name pos-rel" dropdown [isOpen]="companyMenu.isopen" [autoClose]="false">
                 <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
@@ -152,7 +152,7 @@
         </ul>
 
         <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-            <h6 class="mrB1">ACCOUNTS</h6>
+            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus"></i></h6>
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
             <li *ngFor="let acc of accountItemsFromIndexDB">
                 <a href="javascript:void(0)" (click)="analyzeMenus($event, acc.uniqueName)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
@@ -278,8 +278,8 @@
                         <i class="icon-bar"></i>
                     </a>
                 </li>
-                <li>
-                    <span class="mrT2 inline" style="line-height: 10px;">{{selectedPage}}</span>
+                <li class="top-heading">
+                    <h4 class="mrT2 inline" style="line-height: 10px;">{{selectedPage}}</h4>
                 </li>
                 <!-- books search -->
                 <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
