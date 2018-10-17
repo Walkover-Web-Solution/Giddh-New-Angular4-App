@@ -72,7 +72,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'GST Module Page 1', uniqueName: '/pages/gst/gst' },
   { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
   { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
+  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report' },
 ];
 
 @Component({
@@ -185,8 +185,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public apkVersion: string;
   public menuItemsFromIndexDB = [];
   public accountItemsFromIndexDB = [];
-  public selectedPage: any =  '';
+  public selectedPage: any = '';
   public selectedLedger: any = {};
+  public companyList: any = [];
+  public searchCmp: string = '';
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -271,6 +273,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
+
+    this.companies$.subscribe((a) => {
+      console.log(a);
+      this.companyList = a;
+    });
   }
 
   public ngOnInit() {
@@ -473,7 +480,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices' ];
+    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
     const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
     let menuList: IUlist[] = [];
@@ -481,17 +488,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let acList: IUlist[] = [];
     data.forEach((item: IUlist) => {
       if (item.type === 'MENU') {
-        if ( DEFAULT_MENUS.indexOf(item.uniqueName) !== -1) {
+        if (DEFAULT_MENUS.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           menuList.push(item);
         }
       } else if (item.type === 'GROUP') {
-        if ( DEFAULT_GROUPS.indexOf(item.uniqueName) !== -1) {
+        if (DEFAULT_GROUPS.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           groupList.push(item);
         }
       } else {
-        if ( DEFAULT_AC.indexOf(item.uniqueName) !== -1) {
+        if (DEFAULT_AC.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           acList.push(item);
         }
@@ -700,10 +707,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public setApplicationDate(ev) {
     let data = ev ? _.cloneDeep(ev) : null;
     if (data && data.picker) {
-    let dates = {
-      fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-      toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
-    };
+      let dates = {
+        fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
       if (data.picker.chosenLabel === 'This Financial Year to Date') {
         data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
         dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
@@ -798,7 +805,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public filterCompanyList(ev) {
-    console.log('the ev  is :', ev);
+    this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev)));
   }
 
   private doEntryInDb(entity: string, item: IUlist) {
