@@ -52,7 +52,8 @@
                     </li>
                     <li dropdown class="pos-rel" #dropdown="bs-dropdown" [autoClose]="false">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-                            Switch company <span class="glyphicon glyphicon-menu-right"></span>
+                            Switch company
+                            <span class="glyphicon glyphicon-menu-right"></span>
                         </a>
 
                         <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
@@ -67,15 +68,18 @@
                             -->
 
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Company" aria-describedby="" (ngModelChange)="filterCompanyList($event)">
-                                <span class="input-group-addon" id=""> <i (click)="refreshCompanies($event)" class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                                    </span>
+                                <input type="text" class="form-control" placeholder="Search Company" [(ngModel)]="searchCmp" name="searchCompany" (ngModelChange)="filterCompanyList($event)"
+                                />
+                                <span class="input-group-addon" id="">
+                                    <i (click)="refreshCompanies($event)" class="glyphicon glyphicon-refresh cp" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                </span>
                             </div>
                             <li style="padding:0px;">
                                 <ul class="sub-list" *ngIf="companies$ | async">
                                     <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
-                                        <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                                        <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                                            (click)="changeCompany(cmp.uniqueName)">
                                             <a href="javascript:void(0);">{{ cmp.name }}</a>
                                             <!-- commented by meghna 
                                                 <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
@@ -92,14 +96,17 @@
                     <li role="separator" class="divider" style="width:100%"></li>
 
                     <li class="mrB1">
-                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh"><span
-                  class="user_circle pull-left" *ngIf="!userAvatar"><span>{{userName | uppercase}}</span></span>
-                <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'"><img src="{{userAvatar}}"
-                    alt="" /></span>
-                <div class="pull-left userName_wrap ellp">{{ userFullName }}
-                  <small class="grey_clr">Profile</small>
-                </div>
-              </a>
+                        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh">
+                            <span class="user_circle pull-left" *ngIf="!userAvatar">
+                                <span>{{userName | uppercase}}</span>
+                            </span>
+                            <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
+                                <img src="{{userAvatar}}" alt="" />
+                            </span>
+                            <div class="pull-left userName_wrap ellp">{{ userFullName }}
+                                <small class="grey_clr">Profile</small>
+                            </div>
+                        </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
@@ -110,7 +117,9 @@
                     <li>
                         <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
                     </li>
-                    <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+                    <li>
+                        <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
+                    </li>
                     <!-- <li>
                     <a href="http://faq.giddh.com" target="_blank">Help</a>
                 </li> -->
@@ -122,12 +131,24 @@
                     <li class="app_list ">
                         <ul>
                             <h6>Downloads</h6>
-                            <li><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app"><i
-                      class="fa fa-android"></i> Android</a></li>
-                            <li><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app"><i
-                      class="fa fa-apple"></i> IOS</a></li>
-                            <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app"><i class="fa fa-apple"></i> MacOS</a></li>
-                            <li><a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app"><i class="fa fa-windows"></i>  Windows</a></li>
+                            <li>
+                                <a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app">
+                                    <i class="fa fa-android"></i> Android</a>
+                            </li>
+                            <li>
+                                <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
+                                    <i class="fa fa-apple"></i> IOS</a>
+                            </li>
+                            <li>
+                                <a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh-{{apkVersion}}.dmg" target="_blank"
+                                    title="macOS app">
+                                    <i class="fa fa-apple"></i> MacOS</a>
+                            </li>
+                            <li>
+                                <a href="https://s3-ap-southeast-1.amazonaws.com/tetingmankuuuuu/giddh%20Setup%20{{apkVersion}}.exe"
+                                    target="_blank" title="windows app">
+                                    <i class="fa fa-windows"></i> Windows</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="footer-navigate clearfix">
@@ -145,7 +166,9 @@
             </li>
 
             <div class="input-group account-search" (click)="showNavigationModal()">
-                <span class="input-group-addon" id=""><i class="icon-search"></i></span>
+                <span class="input-group-addon" id="">
+                    <i class="icon-search"></i>
+                </span>
                 <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
             </div>
 
@@ -303,7 +326,8 @@
                     <button class="btn btn-link mrT1 pull-left" (click)="jumpToToday();">Go back to Today</button>
                 </li>
                 <li [hidden]="isTodaysDateSelected">
-                    <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker mrT1" />
+                    <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
+                        class="form-control date-range-picker mrT1" />
                 </li>
                 <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                     <label class="btn btn-link">Today</label>
@@ -400,10 +424,12 @@
 
         </div>
     </nav>
-    <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+    <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue'
+        [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog"
+    (onShown)="onShown()">
     <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
         <div class="modal-content fullScreenMy">
             <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -413,7 +439,8 @@
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
+<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog"
+    (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
@@ -423,7 +450,8 @@
 </div>
 
 <!--add company new modal  -->
-<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
+<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog"
+    (onHidden)="onHide()">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
@@ -443,10 +471,14 @@
 <!--CMD + K modal  -->
 <ng-template #navigationModal>
     <div class="modal-body" #mdl>
-        <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)" (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true" [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
+        <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)" (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+            [forceSetAutoFocus]="true" [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
             [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
         <div class="shortcuts">
-            <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+            <strong>↑</strong>
+            <strong>↓</strong>&nbsp; to navigate
+            <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select
+            <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
         </div>
     </div>
 </ng-template>
