@@ -10,7 +10,7 @@
     background: #303E4E;
     width: 230px;
     padding-bottom: 120px;
-    padding: 15px 20px;
+    /* padding: 15px 20px; */
     left: -240px;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .account-search {
-    margin: 28px 0 22px;
+    margin: 20px 25px 22px;
     position: relative;
 }
 .account-search:hover:after {
@@ -75,21 +75,29 @@
 .account-search .form-control::-webkit-input-placeholder {
     color: #B7B7B7;
     font-size: 12px;
+    position: relative;
+    top: -1px;
 }
 
 .account-search .form-control::-moz-placeholder {
     color: #B7B7B7;
     font-size: 12px;
+    position: relative;
+    top: -1px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
     color: #B7B7B7;
     font-size: 12px;
+    position: relative;
+    top: -1px;
 }
 
 .account-search .form-control:-moz-placeholder {
     color: #B7B7B7;
     font-size: 12px;
+    position: relative;
+    top: -1px;
 }
 
 
@@ -101,7 +109,16 @@
 .left_fixed_header li:hover {
     cursor: pointer;
 }
-
+.main-company-name > li > a {
+    padding: 12px 25px !important;
+}
+.main-company-name > li > a:hover {
+    background: #40505F;
+}
+.main-company-name > li > a:hover .cText .cName, .main-company-name > li > a:hover .cText .fyear,
+.main-company-name > li > a:hover .icon-dots-three-vertical {
+    color: #fff;
+}
 .left_fixed_header li {
     overflow: hidden;
     position: relative;
@@ -115,14 +132,23 @@
 
 .left_fixed_header li a {
     display: block;
-    padding: 8px 0px;
+    padding: 8px 25px;
     color: #B7B7B7;
     /* width: 32px; */
 }
-
+.left_fixed_header li a:hover {
+    background: #40505F;
+}
+.left_fixed_header li a.active {
+    background: transparent;
+}
+.left_fixed_header li a.active .label {
+    color: #FF5F00;
+    font-family: 'LatoWebBold';
+}
 .left_fixed_header li a .label {
     display: table-cell;
-    font-size: 13px;
+    font-size: 14px;
     vertical-align: middle;
     padding-left: 0px;
     /* opacity: 0; */
@@ -141,9 +167,7 @@
 .left_fixed_header li:hover a,
 .left_fixed_header li a:hover span,
 .left_fixed_header li:hover a span {
-    color: #ff5f00;
-    cursor: pointer;
-    font-family: 'LatoWebBold';
+    color: #fff;
 }
 
 .left_fixed_header [class^="icon-"] {
@@ -216,4 +240,20 @@
 .left_fixed_header h6 {
     color: #5F6E7E;
     font-size: 14px;
+    padding-left: 25px;
+    padding-right: 25px;
+    /* font-family: 'LatoWebBold'; */
+}
+.left_fixed_header > h6 > i {
+    float: right;
+    font-size: 8px;
+    background: #B7B7B7;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    text-align: center;
+    line-height: 12px;
+    border-radius: 2px;
+    color: #303E4E;
+    margin-top: 2px;
 }
