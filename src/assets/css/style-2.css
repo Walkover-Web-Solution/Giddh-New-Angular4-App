@@ -505,6 +505,7 @@ ul.sub-list {
     font-size: 9px;
     color: #333333;
     border-left: 1px solid #d2d2d2;
+    cursor: pointer;
 }
 
 
@@ -5457,7 +5458,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     opacity: 0;
 }
 
-.cmp:hover {
+.cmp:hover, .user_dropdown>li a:hover .userName_wrap small {
     color: #fff;
 }
 
