@@ -5,7 +5,7 @@ import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDirective, BsModalService, ModalOptions, BsModalRef } from 'ngx-bootstrap';
+import { ModalDirective, BsModalService, ModalOptions, BsModalRef, BsDropdownDirective, TabsetComponent } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -31,6 +31,7 @@ import { DbActions } from '../../actions/db.actions';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
 import { EventEmitter } from '@angular/core';
+import { WindowRef } from '../helpers/window.object';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -102,6 +103,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
+  @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
+  @ViewChild('supportTab') public supportTab: TabsetComponent;
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -189,6 +193,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public selectedLedger: any = {};
   public companyList: any = [];
   public searchCmp: string = '';
+  public loadAPI: Promise<any>;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -214,8 +219,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private authService: AuthenticationService,
     private _dbService: DbService,
     private modalService: BsModalService,
-    private changeDetection: ChangeDetectorRef
-
+    private changeDetection: ChangeDetectorRef,
+    private _windowRef: WindowRef
   ) {
 
     // Reset old stored application date
@@ -277,9 +282,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.companies$.subscribe((a) => {
       this.companyList = a;
     });
+
+    this._windowRef.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
+    this.loadAPI = new Promise((resolve) => {
+      this.loadScript();
+      resolve(true);
+    });
     this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -385,6 +396,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       });
     // end logic for cmd+k
+
+    this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
+        this.selectedPage = s.toLowerCase();
+    });
   }
 
   public ngAfterViewInit() {
@@ -472,6 +487,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu.uniqueName = pageName;
           menu.type = 'MENU';
         }
+        this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
     this.router.navigate([pageName]);
@@ -537,10 +553,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (dbResult) {
           // entry found check for data
           // slice and sort menu item
-          this.menuItemsFromIndexDB = _.slice(dbResult.aidata.menus, 0, 14);
-          this.menuItemsFromIndexDB = _.sortBy(dbResult.aidata.menus, [function(o) { return o.name; }]);
+          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
+            o.name = o.name.toLowerCase();
+            return o.uniqueName;
+            });
+          this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
           // slice and sort account item
-          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 8);
+          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 6);
           this.accountItemsFromIndexDB = _.sortBy(dbResult.aidata.accounts, [function(o) { return o.name; }]);
 
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
@@ -691,7 +711,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public sideBarStateChange(event: boolean) {
     this.sideMenu.isopen = event;
-    this.companyMenu.isopen = false;
+    this.companyDropdown.isOpen = false;
     this.menuStateChange.emit(event);
   }
 
@@ -816,13 +836,55 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev.toLowerCase())));
   }
 
-  public closeDiv(ev) {
-    if (ev.target && ev.target.classList && !ev.target.classList.contains('cName')) {
-      this.companyMenu.isopen = false;
-    } else {
-      this.companyMenu.isopen = true;
+  public closeUserMenu(ev) {
+    // if (ev.target && ev.target.classList && !ev.target.classList.contains('cName')) {
+    //   this.companyMenu.isopen = false;
+    // } else {
+    //   this.companyMenu.isopen = true;
+    // }
+    ev.isopen = false;
+    this.companyMenu.isopen = false;
+  }
+
+  public openScheduleModal() {
+    this.talkSalesModal.show();
+  }
+  public closeModal() {
+    this.talkSalesModal.hide();
+  }
+
+  public loadScript() {
+    let isFound = false;
+    let scripts = document.getElementsByTagName('script');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < scripts.length; ++i) {
+      if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
+        isFound = true;
+      }
     }
-    console.log('close the div', this.companyMenu.isopen);
+
+    if (!isFound) {
+      let dynamicScripts = ['https://random-scripts.herokuapp.com/superform/superform.js'];
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < dynamicScripts.length; i++) {
+        let node = document.createElement('script');
+        node.src = dynamicScripts [i];
+        node.type = 'text/javascript';
+        node.async = false;
+        node.charset = 'utf-8';
+        document.getElementsByTagName('head')[0].appendChild(node);
+      }
+
+    }
+  }
+
+  public scheduleNow() {
+    let newwindow = window.open('https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
+    if (window.focus) {
+      newwindow.focus();
+    }
+    return false;
   }
 
   private doEntryInDb(entity: string, item: IUlist) {

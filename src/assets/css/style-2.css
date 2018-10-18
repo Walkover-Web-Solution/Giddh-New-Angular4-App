@@ -462,9 +462,9 @@ input {
 
 
 /* my css start */
-.top-heading {
 
-}
+.top-heading {}
+
 .company-list button.btn-link {
     font-size: 13px;
     color: #1E67C8;
@@ -474,30 +474,37 @@ input {
     width: 100%;
     text-align: left;
 }
+
 .company-list button.btn-link:hover {
     color: #fff;
     background: #2D9EE0;
     text-decoration: none;
 }
+
 ul.sub-list {
     margin-top: 5px;
 }
+
 .user_dropdown>li>a .glyphicon-menu-right {
     font-size: 10px;
     float: right;
     padding-top: 4px;
 }
+
 .sub-list li a {
     font-size: 13px;
 }
+
 .company-list .input-group {
     border-bottom: 1px solid #d2d2d2;
 }
+
 .company-list .input-group .form-control {
     /* border-bottom: 1px solid #e8e8e8 !important; */
     border: 0px solid !important;
     /* border-bottom: 1px solid #e8e8e8 !important; */
 }
+
 .company-list .input-group .input-group-addon {
     background: no-repeat;
     border-radius: 0px;
@@ -508,10 +515,10 @@ ul.sub-list {
     cursor: pointer;
 }
 
-
 .bold {
     font-family: 'LatoWebbold';
 }
+
 
 /* file upload css start */
 
@@ -528,10 +535,14 @@ ul.sub-list {
     width: 220px;
 }
 
-.top-heading > h4 {
+.top-heading>h4 {
     font-size: 18px;
     font-family: 'LatoWebbold';
+    line-height: 28px;
+    text-transform: capitalize;
 }
+
+
 /* file upload css end */
 
 
@@ -5469,4 +5480,24 @@ perfect-scrollbar>.ps>.ps-overlay {
 
 .user_dropdown>li.open>a {
     /* color: #ff5e01; */
+}
+
+.hamburger_menu button,
+.hamburger_menu button:hover,
+.hamburger_menu button:focus {
+    padding-left: 0;
+    background: transparent;
+    outline: none;
+}
+
+app-header {
+    position: relative;
+}
+
+.navbar_header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
 }
