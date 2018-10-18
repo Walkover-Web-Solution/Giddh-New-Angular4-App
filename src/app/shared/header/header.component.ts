@@ -470,6 +470,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public analyzeMenus(e: any, pageName: string) {
     e.preventDefault();
     e.stopPropagation();
+    this.companyDropdown.isOpen = false;
     // entry in db with confimation
     this.navigationOptionList$.pipe(take(1))
       .subscribe((items: IUlist[]) => {
@@ -484,6 +485,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           } catch (error) {
             menu.name = pageName.toUpperCase();
           }
+          menu.name = this.getReadableNameFromUrl(menu.name);
           menu.uniqueName = pageName;
           menu.type = 'MENU';
         }
@@ -951,5 +953,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let versNum = version.split(' ')[1];
       this.apkVersion = versNum;
     });
+  }
+
+  private getReadableNameFromUrl(url) {
+    let name = '';
+    switch (url) {
+      case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
+        name = 'Settings > Permission';
+        break;
+      default:
+        name = url;
+    }
+    return name;
   }
 }
