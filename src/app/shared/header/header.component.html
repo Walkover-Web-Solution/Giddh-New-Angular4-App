@@ -2,8 +2,8 @@
     <div class="nav-left-bar">
 
         <ul class="main-company-name">
-
-            <li class="company-name pos-rel" dropdown [isOpen]="companyMenu.isopen" [autoClose]="false">
+            <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen" -->
+            <li class="company-name pos-rel" dropdown [autoClose]="companyMenu.isopen" (clickOutSide)="closeDiv($event)">
                 <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
                     <span class="icon-dots-three-vertical"></span>
                     <div class="cText">
@@ -50,7 +50,8 @@
                     <li>
                         <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up Data</a>
                     </li>
-                    <li dropdown class="pos-rel" #dropdown="bs-dropdown" [autoClose]="false">
+                    <!-- #dropdown="bs-dropdown" -->
+                    <li dropdown class="pos-rel" [autoClose]="false">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
                             Switch company
                             <span class="glyphicon glyphicon-menu-right"></span>
@@ -77,7 +78,6 @@
                             <li style="padding:0px;">
                                 <ul class="sub-list" *ngIf="companies$ | async">
                                     <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
-
                                         <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                                             (click)="changeCompany(cmp.uniqueName)">
                                             <a href="javascript:void(0);">{{ cmp.name }}</a>
@@ -173,12 +173,14 @@
             </div>
 
         </ul>
+        
+        <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
         <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus"></i></h6>
+            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
             <li *ngFor="let acc of accountItemsFromIndexDB">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, acc.uniqueName)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
+                <a href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
                     <span class="icon-dashboard"></span>
                     <span class="label">{{acc.name}}</span>
                 </a>
@@ -186,9 +188,9 @@
             <h6 class="mrT cp" (click)="showNavigationModal()">Show more...</h6>
         </ul>
 
-        <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+        <ul class="left_fixed_header mrT4 mrB2" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
             <h6 class="mrB1">MENU</h6>
-            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+            <!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true"> -->
                 <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                 <li *ngFor="let menu of menuItemsFromIndexDB">
                     <a href="javascript:void(0)" [ngClass]="{'active': selectedPage === menu.name}" (click)="analyzeMenus($event, menu.uniqueName)">
@@ -288,8 +290,9 @@
                         <span class="label">Contacts</span>
                     </a>
                 </li> -->
-            </perfect-scrollbar>
+            <!-- </perfect-scrollbar> -->
         </ul>
+        </perfect-scrollbar>
     </div>
 
     <nav class="navbar navbar-inverse" [ngClass]="{'menu_open':sideMenu.isopen}">
