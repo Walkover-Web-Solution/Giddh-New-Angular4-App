@@ -48,10 +48,12 @@
     margin: 20px 25px 22px;
     position: relative;
 }
+
 .account-search:hover:after {
     color: #FF5F00;
     cursor: pointer;
 }
+
 .account-search:after {
     content: 'Ctrl + K ';
     position: absolute;
@@ -110,16 +112,21 @@
 .left_fixed_header li:hover {
     cursor: pointer;
 }
-.main-company-name > li > a {
+
+.main-company-name>li>a {
     padding: 12px 25px !important;
 }
-.main-company-name > li > a:hover {
+
+.main-company-name>li>a:hover {
     background: #40505F;
 }
-.main-company-name > li > a:hover .cText .cName, .main-company-name > li > a:hover .cText .fyear,
-.main-company-name > li > a:hover .icon-dots-three-vertical {
+
+.main-company-name>li>a:hover .cText .cName,
+.main-company-name>li>a:hover .cText .fyear,
+.main-company-name>li>a:hover .icon-dots-three-vertical {
     color: #fff;
 }
+
 .left_fixed_header li {
     overflow: hidden;
     position: relative;
@@ -137,16 +144,20 @@
     color: #B7B7B7;
     /* width: 32px; */
 }
+
 .left_fixed_header li a:hover {
     background: #40505F;
 }
+
 .left_fixed_header li a.active {
     background: transparent;
 }
+
 .left_fixed_header li a.active .label {
     color: #FF5F00;
     font-family: 'LatoWebBold';
 }
+
 .left_fixed_header li a .label {
     display: table-cell;
     font-size: 14px;
@@ -245,7 +256,8 @@
     padding-right: 25px;
     /* font-family: 'LatoWebBold'; */
 }
-.left_fixed_header > h6 > i {
+
+.left_fixed_header>h6>i {
     float: right;
     font-size: 8px;
     background: #B7B7B7;
@@ -257,4 +269,12 @@
     border-radius: 2px;
     color: #303E4E;
     margin-top: 2px;
+}
+
+.left_fixed_header li {
+    text-transform: capitalize
+}
+
+.nav-tabs {
+    padding-top: 0;
 }

@@ -267,10 +267,10 @@ header .navbar-nav>li.active {
 }
 
 .header-container {
-    position: fixed;
-    top: 0;
+    position: relative;
+    /* top: 0;
     left: 0;
-    right: 0;
+    right: 0; */
     z-index: 3;
 }
 
@@ -5140,7 +5140,7 @@ strong {
 }
 
 #main {
-    padding-top: 54px;
+    /* padding-top: 54px; */
 }
 
 bs-daterangepicker-container,
