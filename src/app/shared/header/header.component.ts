@@ -275,7 +275,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
     this.companies$.subscribe((a) => {
-      console.log(a);
       this.companyList = a;
     });
   }
@@ -286,7 +285,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.dispatch(this.companyActions.GetApplicationDate());
 
     // listen for companies and active company
-    this.store.select(p => p.session).pipe(take(1)).subscribe((state) => {
+    this.store.select(p => p.session).pipe().subscribe((state) => {
       let obj: any = state.companies.find((o: CompanyResponse) => o.uniqueName === state.companyUniqueName);
       if (obj) {
         this.activeCompanyForDb = new CompAidataModel();
@@ -478,6 +477,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.router.navigate([pageName]);
   }
 
+  public analyzeAccounts(e: any, acc) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.onItemSelected(acc);
+  }
+
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
     const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
@@ -531,7 +536,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (data && data.length) {
         if (dbResult) {
           // entry found check for data
-          console.log('the smart data is :', dbResult);
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.slice(dbResult.aidata.menus, 0, 14);
           this.menuItemsFromIndexDB = _.sortBy(dbResult.aidata.menus, [function(o) { return o.name; }]);
@@ -687,6 +691,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public sideBarStateChange(event: boolean) {
     this.sideMenu.isopen = event;
+    this.companyMenu.isopen = false;
     this.menuStateChange.emit(event);
   }
 
@@ -786,7 +791,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public onItemSelected(item: IUlist) {
-    this.modelRef.hide();
+    if (this.modelRef) {
+      this.modelRef.hide();
+    }
+
     if (item && item.type === 'MENU') {
       if (item.additional && item.additional.tab) {
         this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
@@ -805,7 +813,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public filterCompanyList(ev) {
-    this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev)));
+    this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev.toLowerCase())));
+  }
+
+  public closeDiv(ev) {
+    if (ev.target && ev.target.classList && !ev.target.classList.contains('cName')) {
+      this.companyMenu.isopen = false;
+    } else {
+      this.companyMenu.isopen = true;
+    }
+    console.log('close the div', this.companyMenu.isopen);
   }
 
   private doEntryInDb(entity: string, item: IUlist) {
