@@ -351,7 +351,6 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
   newResponse[key].map(dbt => dbt.isChecked = false);
   if (isChecked) {
     newResponse[key].map(dt => {
-      console.log('isCompoundEntry', dt.isCompoundEntry);
       if (dt.isCompoundEntry) {
         newResponse[reverse].map(d => {
           if (dt.entryUniqueName === d.entryUniqueName) {
