@@ -115,7 +115,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'daybook/';
+    stateDetailsRequest.lastState = 'daybook';
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
   }
 
