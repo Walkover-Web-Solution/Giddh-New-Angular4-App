@@ -96,6 +96,8 @@ export class SearchDataSet {
   public balType: string = 'CREDIT';
   public queryDiffer: string = null;
   public amount: string = null;
+  public closingBalanceType?: string = 'DEBIT';
+  public openingBalanceType?: string = 'DEBIT';
 }
 
 export interface BulkEmailRequest {

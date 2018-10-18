@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, OnInit, Optional } from '@angular/core';
 import { GeneralService } from './general.service';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse } from '../models/api-models/recipt';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../models/api-models/recipt';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -43,8 +43,8 @@ export class ReceiptService implements OnInit {
   public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET, {
-      page: body.page, count: body.count, from: body.from, to: body.to, type: type
+    let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL, {
+      page: body.page, count: body.count, from: body.from, to: body.to, type
     });
 
     return this._http.post(url
@@ -84,17 +84,31 @@ export class ReceiptService implements OnInit {
       }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)));
   }
 
-  public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string): any {
+  public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string, isPreview: boolean = false): any {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + RECEIPT_API.DOWNLOAD_VOUCHER
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      , model, {responseType: 'blob'}).pipe(
+      , model, {responseType: isPreview ? 'text' : 'blob'}).pipe(
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}))
+    );
+  }
+
+  public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + RECEIPT_API.GET_DETAILS
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
+      model
+    ).pipe(
       map((res) => {
-        return res;
+        let data: BaseResponse<Voucher, ReceiptVoucherDetailsRequest> = res;
+        data.queryString = accountUniqueName;
+        data.request = model;
+        return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName})));
+      catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, {accountUniqueName})));
   }
 
   private createQueryString(str, model) {

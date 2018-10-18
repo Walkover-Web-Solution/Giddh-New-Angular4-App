@@ -140,7 +140,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         , distinctUntilChanged()
         , takeUntil(this.destroyed$))
       .subscribe((event: any) => {
+        if (this.isGstValid) {
         this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+        }
       });
   }
 

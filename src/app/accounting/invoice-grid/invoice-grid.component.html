@@ -44,7 +44,8 @@
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'partyAcc'"
                  (blur)="onPartyAccBlur();selectedField=null;focusedField = null" style="max-width:200px"/>
         </div>
-        <div class="form-group" style="margin-top: 5px;" [hidden]="!isPurchaseInvoiceSelected">
+        <!-- [hidden]="!isPurchaseInvoiceSelected" -->
+        <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
           <label>Ledger name:<sup>*</sup></label>
           <input name="ledger_name" type="text" onReturn placeholder="Ledger name"
                  class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
