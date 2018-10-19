@@ -9,6 +9,11 @@ export interface ReciptDeleteRequest {
   voucherType: string;
 }
 
+export class ReceiptVoucherDetailsRequest {
+  public invoiceNumber: string;
+  public voucherType: string;
+}
+
 export class ReciptRequestParams {
   public page: number;
   public count: number;
@@ -51,6 +56,12 @@ export interface VoucherDetails {
   grandTotal: number;
   subTotal: number;
   totalDiscount: number;
+  taxesTotal?: {
+    uniqueName?: string,
+    name?: string,
+    total?: number
+  };
+  customerName?: string;
 }
 
 export interface CompanyDetails {

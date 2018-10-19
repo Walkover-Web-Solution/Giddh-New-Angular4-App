@@ -6,7 +6,6 @@ import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
-import { INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface LedgerState {
@@ -30,6 +29,7 @@ export interface LedgerState {
   transactionDetails: LedgerResponse;
   isAdvanceSearchApplied: boolean;
   ledgerBulkActionSuccess: boolean;
+  ledgerBulkActionFailedEntries: string[];
 }
 
 export const initialState: LedgerState = {
@@ -45,7 +45,8 @@ export const initialState: LedgerState = {
   isQuickAccountCreatedSuccessfully: false,
   transactionDetails: null,
   isAdvanceSearchApplied: false,
-  ledgerBulkActionSuccess: false
+  ledgerBulkActionSuccess: false,
+  ledgerBulkActionFailedEntries: []
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -81,7 +82,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
           transactionInprogress: false,
           isAdvanceSearchApplied: false,
           transcationRequest: transaction.request,
-          transactionsResponse: transaction.body
+          transactionsResponse: prepareTransactions(transaction.body)
         });
       }
       return Object.assign({}, state, {
@@ -96,7 +97,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
           transactionInprogress: false,
           isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
-          transactionsResponse: transaction.body
+          transactionsResponse: prepareTransactions(transaction.body)
         });
       }
       return Object.assign({}, state, {
@@ -267,11 +268,11 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         isQuickAccountCreatedSuccessfully: false,
         transactionDetails: null
       };
-    case  LEDGER.GET_RECONCILIATION_RESPONSE: {
+    case LEDGER.GET_RECONCILIATION_RESPONSE: {
       let res = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {
-          transactionsResponse: res.body
+          transactionsResponse: prepareTransactions(res.body)
         });
       }
       return state;
@@ -282,21 +283,87 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE: {
       return Object.assign({}, state, {ledgerBulkActionSuccess: true});
     }
-    case INVOICE_ACTIONS.GENERATE_BULK_INVOICE: {
+    case LEDGER.GENERATE_BULK_LEDGER_INVOICE: {
       return Object.assign({}, state, {ledgerBulkActionSuccess: false});
     }
-    case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
+    case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
       return Object.assign({}, state, {ledgerBulkActionSuccess: true});
     }
-    case  LEDGER.GET_CURRENCY_RATE_RESPONSE: {
+    case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
       let res = action.payload;
       if (res.status === 'success') {
         console.log('res:', res.rates);
       }
       return state;
     }
+    case LEDGER.SELECT_DESELECT_ALL_ENTRIES: {
+      return {
+        ...state,
+        transactionsResponse: markCheckedUnChecked(state.transactionsResponse, action.payload.mode, action.payload.isChecked)
+      };
+    }
+    case LEDGER.SELECT_GIVEN_ENTRIES: {
+      let res = action.payload as string[];
+      let newState = _.cloneDeep(state);
+      let debitTrx = newState.transactionsResponse.debitTransactions;
+      debitTrx = debitTrx.map(f => {
+        f.isChecked = res.findIndex(c => f.entryUniqueName === c) > -1;
+        return f;
+      });
+      let creditTrx = newState.transactionsResponse.creditTransactions;
+      creditTrx = creditTrx.map(f => {
+        f.isChecked = res.findIndex(c => f.entryUniqueName === c) > -1;
+        return f;
+      });
+
+      return {
+        ...state,
+        transactionsResponse: {
+          ...state.transactionsResponse,
+          debitTransactions: debitTrx,
+          creditTransactions: creditTrx
+        },
+        ledgerBulkActionFailedEntries: []
+      };
+    }
+    case LEDGER.SET_FAILED_BULK_ENTRIES: {
+      return {
+        ...state,
+        ledgerBulkActionFailedEntries: action.payload
+      };
+    }
     default: {
       return state;
     }
   }
 }
+
+const prepareTransactions = (transactionDetails: TransactionsResponse): TransactionsResponse => {
+  transactionDetails.debitTransactions.map(dbt => dbt.isChecked = false);
+  transactionDetails.creditTransactions.map(cbt => cbt.isChecked = false);
+  return transactionDetails;
+};
+
+const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'debit' | 'credit', isChecked: boolean): TransactionsResponse => {
+  let newResponse: TransactionsResponse = Object.assign({}, transactionDetails);
+  let key = mode === 'debit' ? 'debitTransactions' : 'creditTransactions';
+  let reverse = mode === 'debit' ? 'creditTransactions' : 'debitTransactions';
+  newResponse[key].map(dbt => dbt.isChecked = false);
+  if (isChecked) {
+    newResponse[key].map(dt => {
+      if (dt.isCompoundEntry) {
+        newResponse[reverse].map(d => {
+          if (dt.entryUniqueName === d.entryUniqueName) {
+            return d.isChecked = true;
+          }
+          return d;
+        });
+        dt.isChecked = true;
+      } else {
+        dt.isChecked = true;
+      }
+      return dt;
+    });
+  }
+  return newResponse;
+};

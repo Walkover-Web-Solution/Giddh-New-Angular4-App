@@ -30,7 +30,8 @@ export const LEDGER_API = {
   ADVANCE_SEARCH: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=asc&page=:page&count=:count&q=:q',
   // GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail?from=:from&to=:to&type=:type&format=:format',
   GET_GROUP_EXPORT_LEDGER: 'company/:companyUniqueName/groups/:groupUniqueName/export-ledger/mail-v2?from=:from&to=:to&type=:type&format=:format',
-  MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
+  // MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
+  MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/entries',
   CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
   DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId'
 };
