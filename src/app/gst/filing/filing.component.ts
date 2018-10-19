@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AppState } from 'app/store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'filing',
@@ -9,7 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class FilingComponent implements OnInit {
   public selectedPeriod: string = null;
-  constructor(private _route: Router, private activatedRoute: ActivatedRoute, ) {
+  public gstNumber: string = null;
+  constructor(private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>) {
     //
   }
 
@@ -17,7 +20,6 @@ export class FilingComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.selectedPeriod = params['period'];
     });
-    //
   }
 
 }

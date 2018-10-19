@@ -13,6 +13,7 @@ export interface GstReconcileState {
   gstAuthenticated: boolean;
   gstFoundOnGiddh: boolean;
   gstReconcileData: GstReconcileDataState;
+  isPullFromGstInProgress: boolean;
 }
 
 export class ReconcileActionState {
@@ -44,7 +45,8 @@ const initialState: GstReconcileState = {
   isGstReconcileVerifyOtpSuccess: false,
   gstAuthenticated: true,
   gstFoundOnGiddh: true,
-  gstReconcileData: gstReconcileDataInitialState
+  gstReconcileData: gstReconcileDataInitialState,
+  isPullFromGstInProgress: false
 };
 
 export function GstReconcileReducer(state: GstReconcileState = initialState, action: CustomActions): GstReconcileState {
@@ -91,7 +93,6 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
       newState.isGstReconcileInvoiceInProcess = false;
 
       if (response.status === 'success') {
-        debugger;
         newState.isGstReconcileInvoiceSuccess = true;
         newState.gstAuthenticated = true;
         newState.gstFoundOnGiddh = true;
@@ -119,7 +120,6 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
         }
 
       } else {
-        debugger;
         if (response.code === 'GST_AUTH_ERROR') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstAuthenticated = false;
@@ -139,6 +139,13 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
 
     case GST_RECONCILE_ACTIONS.RESET_GST_RECONCILE_STATE:
       return initialState;
+
+    case GST_RECONCILE_ACTIONS.PULL_FROM_GSTIN:
+      return {
+        ...state,
+        isPullFromGstInProgress: true
+      };
+
     default:
       return state;
   }

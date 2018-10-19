@@ -9,6 +9,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
 import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
+import { GSTR_API } from './apiurls/gstR.api';
 
 @Injectable()
 export class GstReconcileService {
@@ -68,6 +69,23 @@ export class GstReconcileService {
         map((res) => {
           let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
           data.queryString = {period, action, page, count};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+  }
+
+  public GetGstrOverview(model: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':mmyyyy', encodeURIComponent(model.period))
+      .replace(':gstin', encodeURIComponent(model.gstin))
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          data.queryString = {model};
           return data;
         })
         , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));

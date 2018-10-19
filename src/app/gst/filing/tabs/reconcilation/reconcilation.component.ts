@@ -61,6 +61,9 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public reconcileActiveTab: string = 'NOT_ON_PORTAL';
   public selectedDateForGSTR1 = {};
   public moment = moment;
+  public accountAsideMenuState: string = 'out';
+  public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
+  public pullFromGstInProgress$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -85,6 +88,7 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
     this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
     this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
+    this.pullFromGstInProgress$ = this.store.select(p => p.gstReconcile.isPullFromGstInProgress).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -118,9 +122,14 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 
     this.gstAuthenticated$.subscribe(s => {
       if (!s) {
-        // this.toggleSettingAsidePane(null, 'RECONCILE');
+        this.toggleSettingAsidePane(null, 'RECONCILE');
       } else {
         //  means user logged in gst portal
+      }
+    });
+    this.pullFromGstInProgress$.subscribe(s => {
+      if (s) {
+        this.toggleSettingAsidePane(null, 'RECONCILE');
       }
     });
   }
@@ -134,11 +143,13 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.fireGstReconcileRequest(action, this.selectedDateForGSTR1, event.page);
   }
   public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
-    let period = this.selectedPeriod;
+    if (!this.selectedPeriod) {
+      return;
+    }
+    let period = this.selectedPeriod.split('-').join('');
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
       period, action, page.toString(), refresh)
     );
-    // this.moment(selectedDateForGSTR1).format('MMYYYY')
   }
 
   public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
@@ -181,6 +192,30 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     componentInstance.pageChanged.subscribe(e => {
       this.reconcilePageChanged(e, this.reconcileActiveTab);
     });
+  }
+
+  /**
+   * toggleSettingAsidePane
+   */
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
+    if (event) {
+      event.preventDefault();
+    }
+
+    if (selectedService === 'RECONCILE') {
+      let checkIsAuthenticated;
+      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
+
+      if (checkIsAuthenticated) {
+        this.fireGstReconcileRequest(this.reconcileActiveTab, this.selectedDateForGSTR1, 1, true);
+        return;
+      }
+    }
+
+    if (selectedService) {
+      this.selectedServiceForGSTR1 = selectedService;
+    }
+    this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
 
   public ngOnDestroy() {

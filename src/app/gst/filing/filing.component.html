@@ -6,11 +6,11 @@
             </div>
             <div class="nav-band">
                 <tabset #staticTabs id="c-tab">
-                    <!-- <tab heading="Overview">
+                    <tab heading="Overview">
                         <div class="gstr-transactions-summary">
-                            <filing-overview></filing-overview>
+                            <filing-overview [selectedPeriod]="selectedPeriod" [gstNumber]="gstNumber"></filing-overview>
                         </div>
-                    </tab> -->
+                    </tab>
                     <tab heading="Reconcilation">
                         <reconcile [data]="" [selectedPeriod]="selectedPeriod"></reconcile>
                     </tab>

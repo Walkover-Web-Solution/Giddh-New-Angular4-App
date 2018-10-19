@@ -1,8 +1,9 @@
 <div class="transactions-overview">
 
     <div class="gstr-transactions-summary">
-        <div class="text-uppercase title"> Overall Summary </div>
+        <div class="text-uppercase title"> Overall Summary {{gstNumber}}</div>
         <div id="ember1233" class="ember-view">
+            {{ (gstOverviewData$ | async)?.totalTransactions }}
             <table class="table table-striped transactions-table transactions-summary-table">
                 <thead>
                     <tr class="text-uppercase">
