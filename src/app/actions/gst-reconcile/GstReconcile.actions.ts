@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GST_RECONCILE_ACTIONS } from './GstReconcile.const';
+import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
 import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
@@ -66,6 +66,23 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect() private GetOverView$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GSTR_OVERVIEW)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstrOverview(action.payload)
+          .pipe(
+            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+              if (response.status === 'success') {
+                // this._toasty.successToast('su');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetOverViewResponse(response);
+            }));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -118,6 +135,28 @@ export class GstReconcileActions {
   public ResetGstReconcileState() {
     return {
       type: GST_RECONCILE_ACTIONS.RESET_GST_RECONCILE_STATE
+    };
+  }
+
+  public showPullFromGstInModal() {
+    return {
+      type: GST_RECONCILE_ACTIONS.PULL_FROM_GSTIN
+    };
+  }
+
+  /**
+   * GetOverView
+   */
+  public GetOverView(model) {
+    return {
+      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW,
+      payload: model
+    };
+  }
+  public GetOverViewResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESOPONSE,
+      payload: {res}
     };
   }
 }

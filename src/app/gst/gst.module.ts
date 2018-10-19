@@ -22,6 +22,7 @@ import { PushToGstInComponent } from './filing/tabs/push-to-gstin/push-to-gstin.
 import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { PurchaseModule } from 'app/purchase/purchase.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -44,6 +45,7 @@ import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits
     ElementViewChildModule,
     AlertModule,
     DecimalDigitsModule,
+    PurchaseModule
   ],
   providers: [Location],
   entryComponents: [
