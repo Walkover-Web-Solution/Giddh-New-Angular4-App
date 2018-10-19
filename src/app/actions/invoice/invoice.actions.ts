@@ -20,7 +20,7 @@ import { RecurringVoucherService } from '../../services/recurring-voucher.servic
 @Injectable()
 export class InvoiceActions {
 
-  // GET All Invoices
+  // GET_ALL All Invoices
   @Effect()
   public GetAllInvoices$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_INVOICES).pipe(
@@ -199,7 +199,7 @@ export class InvoiceActions {
   // *********************************** MUSTAFA //***********************************\\
 
   /**
-   * GET INVOICE SETTING
+   * GET_ALL INVOICE SETTING
    */
   @Effect()
   public getInvoiceSetting$: Observable<Action> = this.action$
@@ -274,7 +274,7 @@ export class InvoiceActions {
       })));
 
   /**
-   * GET RAZORPAY DETAIL
+   * GET_ALL RAZORPAY DETAIL
    */
   @Effect()
   public GetRazorPayDetail$: Observable<Action> = this.action$
@@ -433,7 +433,7 @@ export class InvoiceActions {
   //     return { type: 'EmptyAction' };
   //   });
 
-  // GET SAMPLE TEMPLATES
+  // GET_ALL SAMPLE TEMPLATES
   @Effect()
   private GetSampleTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES).pipe(
@@ -453,7 +453,7 @@ export class InvoiceActions {
         return {type: 'EmptyAction'};
       }));
 
-  // GET CUSTOM CREATED TEMPLATES
+  // GET_ALL CUSTOM CREATED TEMPLATES
   @Effect()
   private getAllCreatedTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES).pipe(
@@ -516,7 +516,7 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
-  // GET All Recurring Vouchers
+  // GET_ALL All Recurring Vouchers
   @Effect()
   private GetAllRecurringInvoices$: Observable<Action> = this.action$
     .ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA).pipe(
