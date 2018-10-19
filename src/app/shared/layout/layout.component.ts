@@ -5,7 +5,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
   templateUrl: './layout.component.html',
   styles: [`
   #content_wrapper {
-    margin-left: 46px;
+    
   }
     `]
 })

@@ -3,9 +3,9 @@ import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDirective, BsModalService, ModalOptions, BsModalRef } from 'ngx-bootstrap';
+import { ModalDirective, BsModalService, ModalOptions, BsModalRef, BsDropdownDirective, TabsetComponent } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -13,7 +13,7 @@ import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Co
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from '../../lodash-optimized';
+import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -30,6 +30,8 @@ import { DbService } from '../../services/db.service';
 import { DbActions } from '../../actions/db.actions';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
+import { EventEmitter } from '@angular/core';
+import { WindowRef } from '../helpers/window.object';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -67,11 +69,11 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  // { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst' },
-  // { type: 'MENU', name: 'GST Module Page 1', uniqueName: '/pages/gst/gst' },
-  // { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
-  // { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
+  { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst' },
+  { type: 'MENU', name: 'GST Module Page 1', uniqueName: '/pages/gst/gst' },
+  { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
+  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
+  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report' },
 ];
 
 @Component({
@@ -86,6 +88,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public accountSearchControl: FormControl = new FormControl();
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
+
+  @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
+
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
   // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
@@ -98,6 +103,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
+  @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
+  @ViewChild('supportTab') public supportTab: TabsetComponent;
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -179,6 +187,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public selectedNavigation: string = '';
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
+  public menuItemsFromIndexDB = [];
+  public accountItemsFromIndexDB = [];
+  public selectedPage: any = '';
+  public selectedLedger: any = {};
+  public companyList: any = [];
+  public searchCmp: string = '';
+  public loadAPI: Promise<any>;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -204,8 +219,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private authService: AuthenticationService,
     private _dbService: DbService,
     private modalService: BsModalService,
-    private changeDetection: ChangeDetectorRef
-
+    private changeDetection: ChangeDetectorRef,
+    private _windowRef: WindowRef
   ) {
 
     // Reset old stored application date
@@ -263,15 +278,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
+
+    this.companies$.subscribe((a) => {
+      this.companyList = a;
+    });
+
+    this._windowRef.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
-
+    this.loadAPI = new Promise((resolve) => {
+      this.loadScript();
+      resolve(true);
+    });
+    this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
 
     // listen for companies and active company
-    this.store.select(p => p.session).pipe(take(1)).subscribe((state) => {
+    this.store.select(p => p.session).pipe().subscribe((state) => {
       let obj: any = state.companies.find((o: CompanyResponse) => o.uniqueName === state.companyUniqueName);
       if (obj) {
         this.activeCompanyForDb = new CompAidataModel();
@@ -371,6 +396,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       });
     // end logic for cmd+k
+
+    this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
+        this.selectedPage = s.toLowerCase();
+    });
   }
 
   public ngAfterViewInit() {
@@ -458,31 +487,39 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu.uniqueName = pageName;
           menu.type = 'MENU';
         }
+        this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
     this.router.navigate([pageName]);
   }
 
+  public analyzeAccounts(e: any, acc) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.onItemSelected(acc);
+  }
+
   public prepareSmartList(data: IUlist[]) {
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact'];
+    // hardcoded aiData
+    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
-    const DEFAULT_AC = ['cash', 'sales', 'purchases'];
+    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
     let menuList: IUlist[] = [];
     let groupList: IUlist[] = [];
     let acList: IUlist[] = [];
     data.forEach((item: IUlist) => {
       if (item.type === 'MENU') {
-        if ( DEFAULT_MENUS.indexOf(item.uniqueName) !== -1) {
+        if (DEFAULT_MENUS.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           menuList.push(item);
         }
       } else if (item.type === 'GROUP') {
-        if ( DEFAULT_GROUPS.indexOf(item.uniqueName) !== -1) {
+        if (DEFAULT_GROUPS.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           groupList.push(item);
         }
       } else {
-        if ( DEFAULT_AC.indexOf(item.uniqueName) !== -1) {
+        if (DEFAULT_AC.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           acList.push(item);
         }
@@ -515,6 +552,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (data && data.length) {
         if (dbResult) {
           // entry found check for data
+          // slice and sort menu item
+          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
+            o.name = o.name.toLowerCase();
+            return o.uniqueName;
+            });
+          this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
+          // slice and sort account item
+          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 6);
+          this.accountItemsFromIndexDB = _.sortBy(dbResult.aidata.accounts, [function(o) { return o.name; }]);
+
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
           this.store.dispatch(this._generalActions.setSmartList(combined));
         } else {
@@ -663,6 +711,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public sideBarStateChange(event: boolean) {
     this.sideMenu.isopen = event;
+    this.companyDropdown.isOpen = false;
+    this.menuStateChange.emit(event);
   }
 
   public forceCloseSidebar(event) {
@@ -682,10 +732,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public setApplicationDate(ev) {
     let data = ev ? _.cloneDeep(ev) : null;
     if (data && data.picker) {
-    let dates = {
-      fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-      toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
-    };
+      let dates = {
+        fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
       if (data.picker.chosenLabel === 'This Financial Year to Date') {
         data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
         dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
@@ -761,7 +811,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public onItemSelected(item: IUlist) {
-    this.modelRef.hide();
+    if (this.modelRef) {
+      this.modelRef.hide();
+    }
+
     if (item && item.type === 'MENU') {
       if (item.additional && item.additional.tab) {
         this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
@@ -779,7 +832,65 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb(entity, item);
   }
 
+  public filterCompanyList(ev) {
+    this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev.toLowerCase())));
+  }
+
+  public closeUserMenu(ev) {
+    // if (ev.target && ev.target.classList && !ev.target.classList.contains('cName')) {
+    //   this.companyMenu.isopen = false;
+    // } else {
+    //   this.companyMenu.isopen = true;
+    // }
+    ev.isopen = false;
+    this.companyMenu.isopen = false;
+  }
+
+  public openScheduleModal() {
+    this.talkSalesModal.show();
+  }
+  public closeModal() {
+    this.talkSalesModal.hide();
+  }
+
+  public loadScript() {
+    let isFound = false;
+    let scripts = document.getElementsByTagName('script');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < scripts.length; ++i) {
+      if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
+        isFound = true;
+      }
+    }
+
+    if (!isFound) {
+      let dynamicScripts = ['https://random-scripts.herokuapp.com/superform/superform.js'];
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < dynamicScripts.length; i++) {
+        let node = document.createElement('script');
+        node.src = dynamicScripts [i];
+        node.type = 'text/javascript';
+        node.async = false;
+        node.charset = 'utf-8';
+        document.getElementsByTagName('head')[0].appendChild(node);
+      }
+
+    }
+  }
+
+  public scheduleNow() {
+    let newwindow = window.open('https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
+    if (window.focus) {
+      newwindow.focus();
+    }
+    return false;
+  }
+
   private doEntryInDb(entity: string, item: IUlist) {
+    if (entity === 'menus') {
+      this.selectedPage = item.name;
+    }
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
       this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item).subscribe((res) => {
         if (res) {
