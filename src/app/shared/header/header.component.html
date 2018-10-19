@@ -172,10 +172,10 @@
 
     <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
         <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus "></i></h6>
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
             <li *ngFor="let acc of accountItemsFromIndexDB">
-                <a href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
+                <a href="javascript:void(0)" (click)="analyzeMenus($event, acc.uniqueName)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
                     <span class="icon-dashboard"></span>
                     <span class="label">{{acc.name}}</span>
                 </a>
@@ -183,7 +183,7 @@
             <h6 class="mrT cp" (click)="showNavigationModal()">Show more...</h6>
         </ul>
 
-        <ul class="left_fixed_header mrT4 mrB2" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+        <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
             <h6 class="mrB1">MENU</h6>
             <!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true"> -->
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
@@ -285,7 +285,6 @@
                         <span class="label">Contacts</span>
                     </a>
                 </li> -->
-            <!-- </perfect-scrollbar> -->
         </ul>
     </perfect-scrollbar>
 </div>
@@ -491,10 +490,7 @@
         <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)" (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true" [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
             [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
         <div class="shortcuts">
-            <strong>↑</strong>
-            <strong>↓</strong>&nbsp; to navigate
-            <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select
-            <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+            <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
         </div>
     </div>
 </ng-template>
