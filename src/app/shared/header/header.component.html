@@ -1,4 +1,4 @@
-<div class="nav-left-bar">
+<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen}">
 
     <ul class="main-company-name">
         <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
@@ -296,7 +296,7 @@
                 <ul class="nav navbar-nav">
                     <!-- (isOpenChange)="sideBarStateChange($event)" -->
                     <li class="hamburger_menu cp">
-                        <button (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)" class="btn btn-default">
+                        <button (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)" class="btn">
                         <i class="icon-bar"></i>
                     </button>
                     </li>
