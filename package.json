@@ -215,10 +215,12 @@
     },
     "build": {
         "appId": "org.walkover.giddh",
-        "publish": [{
-            "provider": "s3",
-            "bucket": "giddh-app-builds"
-        }],
+        "publish": [
+            {
+                "provider": "s3",
+                "bucket": "giddh-app-builds"
+            }
+        ],
         "author": "Walkover Technologies<info@walkover.in>",
         "homepage": "https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App",
         "license": "MIT",
@@ -424,10 +426,12 @@
         },
         "build": {
             "appId": "org.walkover.giddh",
-            "publish": [{
-                "provider": "s3",
-                "bucket": "tetingmankuuuuu"
-            }],
+            "publish": [
+                {
+                    "provider": "s3",
+                    "bucket": "tetingmankuuuuu"
+                }
+            ],
             "directories": {
                 "buildResources": "src/resources",
                 "output": "packages",
