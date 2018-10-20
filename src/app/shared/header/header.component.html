@@ -295,14 +295,13 @@
             <div class="navbar_header">
                 <ul class="nav navbar-nav">
                     <!-- (isOpenChange)="sideBarStateChange($event)" -->
-                    <li class="hamburger_menu cp">
-                        <button (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)" class="btn">
-                        <i class="icon-bar"></i>
-                    </button>
-                    </li>
-                    <li class="top-heading">
+                    <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                        <button class="btn mrR0">
+                            <i class="icon-bar"></i>
+                        </button>
                         <h4 class="inline">{{selectedPage}}</h4>
                     </li>
+                    
                     <!-- books search -->
                     <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
                     <div class="ledger_search form-inline">
