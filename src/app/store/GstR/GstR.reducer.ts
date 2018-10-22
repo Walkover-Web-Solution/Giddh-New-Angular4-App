@@ -14,6 +14,8 @@ export interface GstRReducerState {
   gstFoundOnGiddh: boolean;
   isPullFromGstInProgress: boolean;
   overViewData: GstOverViewResponse;
+  viewTransactionData: GstOverViewResponse;
+  activeCompanyGst: string;
 }
 
 export class GstOverViewResponse {
@@ -32,6 +34,7 @@ export class TransactionSummary {
   public rate: number;
   public type: string;
   public pos: any;
+  public name: string;
   }
 
 const initialState: GstRReducerState = {
@@ -44,18 +47,31 @@ const initialState: GstRReducerState = {
   gstAuthenticated: true,
   gstFoundOnGiddh: true,
   isPullFromGstInProgress: false,
-  overViewData: new GstOverViewResponse()
+  overViewData: new GstOverViewResponse(),
+  viewTransactionData: new GstOverViewResponse(),
+  activeCompanyGst: ''
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
 
   switch (action.type) {
-    case GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESOPONSE:
+    case GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN:
+      return {
+        ...state,
+        activeCompanyGst: action.payload
+      };
+    case GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE:
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
-
       if (response.status === 'success') {
         newState.overViewData = response.body;
+      }
+      return newState;
+    case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE:
+      let response: BaseResponse<any, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      if (response.status === 'success') {
+        newState.viewTransactionData = response.body;
       }
       return newState;
 

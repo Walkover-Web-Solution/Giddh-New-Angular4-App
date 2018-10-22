@@ -45,6 +45,8 @@ import { Location } from '@angular/common';
 export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public data: GstReconcileInvoiceDetails = null;
   @Input() public selectedPeriod: string = null;
+  @Input() public activeCompanyGstNumber: string = '';
+  @Input() public selectedGst: string = '';
 
   @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
   @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
@@ -146,7 +148,7 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.selectedPeriod) {
       return;
     }
-    let period = this.selectedPeriod.split('-').join('');
+    let period = this.selectedPeriod;
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
       period, action, page.toString(), refresh)
     );
