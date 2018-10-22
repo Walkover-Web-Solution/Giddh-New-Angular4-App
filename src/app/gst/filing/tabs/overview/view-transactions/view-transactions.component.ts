@@ -36,6 +36,12 @@ export const Status = [
   {label: 'Unuploaded', value: 'unuploaded'},
 ];
 
+export const filterTransaction = {
+  entityType: '',
+  type: '',
+  status: ''
+};
+
 @Component({
   selector: 'view-transactions',
   templateUrl: './view-transactions.component.html',
@@ -48,19 +54,18 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
 
-  public gstOverviewData$: Observable<GstOverViewResponse>;
+  public viewTransaction$: Observable<any[]>;
   public entityType = TransactionType;
   public invoiceType = InvoiceType;
   public otherEntityType = Entitytype;
   public status = Status;
   public selectedEntityType: string = '';
   public companyGst$: Observable<string> = of('');
-
+  public filterParam = filterTransaction;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
-    this.gstOverviewData$ = this._store.select(p => p.gstR.overViewData).pipe(takeUntil(this.destroyed$));
+    this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
@@ -69,18 +74,23 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
         this.selectedGst = a;
       }
     });
-    this.activatedRoute.params.subscribe(params => {
+
+    this.activatedRoute.parent.params.subscribe(params => {
+      debugger;
       this.selectedPeriod = params['period'];
       this.selectedGst = params['selectedGst'];
     });
+    this.filterParam['monthYear'] = this.selectedPeriod;
+    this.filterParam['gstin'] = this.activeCompanyGstNumber;
     //
   }
 
   /**
    * viewFilteredTxn
    */
-  public viewFilteredTxn() {
-
+  public viewFilteredTxn(filter, val) {
+    this.filterParam[filter] = val;
+    this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));
   }
 
   public goBack() {
