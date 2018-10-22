@@ -74,18 +74,41 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
   }
 
-  public GetGstrOverview(model: any): Observable<BaseResponse<any, string>> {
+  public GetGstrOverview(type: string, model: any): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':mmyyyy', encodeURIComponent(model.period))
       .replace(':gstin', encodeURIComponent(model.gstin))
+      .replace(':gstType', type)
     )
       .pipe(
         map((res) => {
           let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
           data.queryString = {model};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+  }
+
+  public GetSummaryTransaction(type: string, params: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    debugger;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':mmyyyy', params.period)
+      .replace(':gstin', params.gstin)
+      .replace(':entityType', params.entity)
+      .replace(':gstType', type)
+      .replace(':type', params.type)
+      .replace(':status', params.status)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          data.queryString = params;
           return data;
         })
         , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));

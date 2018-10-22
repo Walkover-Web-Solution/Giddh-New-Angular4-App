@@ -71,7 +71,7 @@ export class GstReconcileActions {
       ofType(GSTR_ACTIONS.GET_GSTR_OVERVIEW)
       , switchMap((action: CustomActions) => {
 
-        return this._reconcileService.GetGstrOverview(action.payload)
+        return this._reconcileService.GetGstrOverview(action.payload.type , action.payload.model)
           .pipe(
             map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
               if (response.status === 'success') {
@@ -80,6 +80,23 @@ export class GstReconcileActions {
                 this._toasty.errorToast(response.message);
               }
               return this.GetOverViewResponse(response);
+            }));
+      }));
+
+  @Effect() private GetSummaryTransaction$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetSummaryTransaction(action.payload.type , action.payload.model)
+          .pipe(
+            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+              if (response.status === 'success') {
+                // this._toasty.successToast('su');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetSummaryTransactionResponse(response);
             }));
       }));
 
@@ -147,16 +164,43 @@ export class GstReconcileActions {
   /**
    * GetOverView
    */
-  public GetOverView(model) {
+  public GetOverView(type, model) {
     return {
       type: GSTR_ACTIONS.GET_GSTR_OVERVIEW,
-      payload: model
+      payload: { type, model }
     };
   }
   public GetOverViewResponse(res) {
     return {
-      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESOPONSE,
-      payload: {res}
+      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE,
+      payload: res
+    };
+  }
+
+  /**
+   * GetSummaryTransaction
+   */
+  public GetSummaryTransaction(type, model) {
+    return {
+      type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS,
+      payload: { type, model }
+    };
+  }
+
+   /**
+   * viewSummaryTransaction
+   */
+  public GetSummaryTransactionResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE,
+      payload: res
+    };
+  }
+
+  public SetActiveCompanyGstin(gstIn) {
+    return {
+      type: GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN,
+      payload: gstIn
     };
   }
 }
