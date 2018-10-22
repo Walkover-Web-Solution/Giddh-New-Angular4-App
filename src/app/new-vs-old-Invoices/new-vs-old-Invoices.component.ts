@@ -9,6 +9,8 @@ import { CompanyActions } from '../actions/company.actions';
 import { Observable } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { NgForm } from '@angular/forms';
+import { StateDetailsRequest } from 'app/models/api-models/Company';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'new-vs-old-invoices',
@@ -98,6 +100,13 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'new-vs-old-invoices';
+
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.isRequestSuccess$.subscribe(s => {
       if (s) {
