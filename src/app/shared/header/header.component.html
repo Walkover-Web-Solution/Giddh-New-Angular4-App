@@ -172,10 +172,10 @@
 
     <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
         <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus "></i></h6>
+            <h6 class="mrB1">ACCOUNTS <i class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
             <li *ngFor="let acc of accountItemsFromIndexDB">
-                <a href="javascript:void(0)" (click)="analyzeMenus($event, acc.uniqueName)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
+                <a href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
                     <span class="icon-dashboard"></span>
                     <span class="label">{{acc.name}}</span>
                 </a>
@@ -183,12 +183,12 @@
             <h6 class="mrT cp" (click)="showNavigationModal()">Show more...</h6>
         </ul>
 
-        <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+        <ul class="left_fixed_header mrT4 mrB2" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
             <h6 class="mrB1">MENU</h6>
             <!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true"> -->
             <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
             <li *ngFor="let menu of menuItemsFromIndexDB">
-                <a href="javascript:void(0)" [ngClass]="{'active': selectedPage === menu.name}" (click)="analyzeMenus($event, menu.uniqueName)">
+                <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
                     <span class="icon-dashboard"></span>
                     <span class="label">{{menu.name}}</span>
                 </a>
@@ -295,14 +295,13 @@
             <div class="navbar_header">
                 <ul class="nav navbar-nav">
                     <!-- (isOpenChange)="sideBarStateChange($event)" -->
-                    <li class="hamburger_menu cp">
-                        <button (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)" class="btn">
-                        <i class="icon-bar"></i>
-                    </button>
+                    <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                        <button class="btn mrR0">
+                            <i class="icon-bar"></i>
+                        </button>
+                        <h4 class="inline text-capitalize">{{selectedPage}}</h4>
                     </li>
-                    <li class="top-heading">
-                        <h4 class="inline">{{selectedPage}}</h4>
-                    </li>
+                    
                     <!-- books search -->
                     <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
                     <div class="ledger_search form-inline">
@@ -419,11 +418,11 @@
                 <div class="pull-right">
                     <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
                     <div class="btn-group cp mrL1" dropdown>
-                        <img src="../assets/images/support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
+                        <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
                             <li>
                                 <button class="btn btn-block btn-gray">
-                                   <img src="../assets/images/support-white.svg" [style.max-width.px]="24" />
+                                   <img src="{{imgPath}}support-white.svg" [style.max-width.px]="24" />
                                    Support
                                </button>
                             </li>
