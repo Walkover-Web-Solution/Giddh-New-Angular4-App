@@ -98,7 +98,7 @@ export class GstReconcileService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':mmyyyy', params.period)
+      .replace(':mmyyyy', params.monthYear)
       .replace(':gstin', params.gstin)
       .replace(':entityType', params.entity)
       .replace(':gstType', type)
