@@ -17,8 +17,9 @@ import * as moment from 'moment/moment';
 export class GstComponent implements OnInit {
   public showCalendar: boolean = false;
   public selectedPeriod: string = null;
-  public period: string = null;
+  public period: any = null;
   constructor(private store: Store<AppState>, private _companyActions: CompanyActions, private _route: Router) {
+    this.periodChanged(new Date());
     //
   }
   public ngOnInit(): void {
@@ -37,7 +38,13 @@ export class GstComponent implements OnInit {
   public periodChanged(ev) {
     this.selectedPeriod = moment(ev).format('MMMM-YYYY');
     this.showCalendar = false;
-    this._route.navigate(['pages', 'gstfiling', 'filing-return',  moment(ev).format('MM-YYYY')]);
+  }
+
+  /**
+   * fileNow
+   */
+  public fileNow(type) {
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', type, moment(this.selectedPeriod).format('MM-YYYY')]);
   }
 
 }

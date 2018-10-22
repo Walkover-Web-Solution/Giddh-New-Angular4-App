@@ -5,6 +5,7 @@ import { AppState } from 'app/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GstRReducerState, GstOverViewResponse } from 'app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'filing-overview',
@@ -14,16 +15,28 @@ import { takeUntil } from 'rxjs/operators';
 export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() public selectedPeriod: string = null;
-  @Input() public gstNumber: string = null;
+  @Input() public activeCompanyGstNumber: string = '';
+  @Input() public selectedGst: string = '';
 
   public gstOverviewData$: Observable<GstOverViewResponse>;
+  public showTransaction: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>) {
+  constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
     this.gstOverviewData$ = this._store.select(p => p.gstR.overViewData).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      if (params['transaction']) {
+        this.showTransaction = true;
+      } else {
+        this.showTransaction = false;
+      }
+    });
+
+    let model = {period: this.selectedPeriod, gstin: this.activeCompanyGstNumber };
+    this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
     //
   }
 
@@ -31,8 +44,9 @@ export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit
    * ngOnChanges
    */
   public ngOnChanges(s: SimpleChanges) {
-    let model = {period: this.selectedPeriod, gstin: '23AAACW9768L1ZO' };
-    this._store.dispatch(this.gstAction.GetOverView(model));
+    // 23AAACW9768L1ZO
+    // let model = {period: this.selectedPeriod, gstin: this.activeCompanyGstNumber };
+    // this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
   }
 
   /**

@@ -8,11 +8,11 @@
                 <tabset #staticTabs id="c-tab">
                     <tab heading="Overview">
                         <div class="gstr-transactions-summary">
-                            <filing-overview [selectedPeriod]="selectedPeriod" [gstNumber]="gstNumber"></filing-overview>
+                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedPeriod]="selectedPeriod" [selectedGst]="selectedGst"></filing-overview>
                         </div>
                     </tab>
                     <tab heading="Reconcilation">
-                        <reconcile [data]="" [selectedPeriod]="selectedPeriod"></reconcile>
+                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedPeriod]="selectedPeriod" [selectedGst]="selectedGst"></reconcile>
                     </tab>
                     <!-- <tab heading="Push to GSTIN">
                         <h1>Push to GSTIN</h1>

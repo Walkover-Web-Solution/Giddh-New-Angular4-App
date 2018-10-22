@@ -23,13 +23,11 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { PurchaseModule } from 'app/purchase/purchase.module';
-
-/**
- * Created by kunalsaxena on 9/1/17.
- */
+import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
+import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
 
 @NgModule({
-  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent],
+  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,
@@ -50,6 +48,7 @@ import { PurchaseModule } from 'app/purchase/purchase.module';
   providers: [Location],
   entryComponents: [
     PaginationComponent
-  ]
+  ],
+  exports: [ViewTransactionsComponent]
 })
 export class GstModule { }
