@@ -88,6 +88,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public accountSearchControl: FormControl = new FormControl();
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
+  public imgPath: string = '';
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -400,6 +401,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
         this.selectedPage = s.toLowerCase();
     });
+
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   public ngAfterViewInit() {
