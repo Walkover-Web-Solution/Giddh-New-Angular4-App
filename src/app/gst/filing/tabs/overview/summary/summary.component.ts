@@ -50,7 +50,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       entity: 'invoices',
       gstin: this.activeCompanyGstNumber,
       type: obj.gstReturnType,
-      period: this.selectedPeriod,
+      monthYear: this.selectedPeriod,
       status: ''
     };
     this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, param));

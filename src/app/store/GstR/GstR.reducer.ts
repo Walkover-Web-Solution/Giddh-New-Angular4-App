@@ -14,7 +14,7 @@ export interface GstRReducerState {
   gstFoundOnGiddh: boolean;
   isPullFromGstInProgress: boolean;
   overViewData: GstOverViewResponse;
-  viewTransactionData: GstOverViewResponse;
+  viewTransactionData: [];
   activeCompanyGst: string;
 }
 
@@ -48,7 +48,7 @@ const initialState: GstRReducerState = {
   gstFoundOnGiddh: true,
   isPullFromGstInProgress: false,
   overViewData: new GstOverViewResponse(),
-  viewTransactionData: new GstOverViewResponse(),
+  viewTransactionData: [],
   activeCompanyGst: ''
 };
 
