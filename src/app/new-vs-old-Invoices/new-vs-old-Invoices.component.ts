@@ -189,7 +189,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    //
+   //
   }
 
   public customMonthSorting(a: IOption, b: IOption) {
