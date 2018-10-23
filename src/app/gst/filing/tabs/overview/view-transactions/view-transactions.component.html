@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-right ember-view">
+                    <th style="" class="text-left ember-view">
                         <div style="position: relative">
                             <div class=" over-flow"> Reverse Charge
                             </div>
@@ -153,6 +153,13 @@
                             </div>
                         </div>
                     </th>
+
+                    <th style="" class="text-right ember-view">
+                        <div style="position: relative">
+                            <div class=" over-flow"> Total Amount
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -169,10 +176,10 @@
                         {{item.pos}}
                     </td>
                     <td>{{item.reverseCharge}}</td>
-                    <td align="right">₹{{item.taxableAmount ? item.taxableAmount : '-'}}</td>
-                    <td align="right"> {{ '₹' + item.igstAmount ? item.igstAmount : '-'}}</td>
-                    <td align="right">₹ {{item.sgstAmount ? item.sgstAmount : '-'}}</td>
-                    <td align="right">₹ {{item.cessAmount ? item.cessAmount : '-'}}</td>
+                    <td align="right">{{item.taxableAmount ? '₹' + item.taxableAmount : '-'}}</td>
+                    <td align="right">{{ item.igstAmount ? '₹' + item.igstAmount : '-'}}</td>
+                    <td align="right">{{item.sgstAmount ? '₹' + item.sgstAmount : '-'}}</td>
+                    <td align="right">{{item.cessAmount ? '₹' + item.cessAmount : '-'}}</td>
                     <td align="right">₹{{item.totalAmount}}</td>
                 </tr>
             </tbody>

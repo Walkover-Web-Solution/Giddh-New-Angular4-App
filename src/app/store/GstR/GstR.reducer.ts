@@ -48,7 +48,7 @@ const initialState: GstRReducerState = {
   gstFoundOnGiddh: true,
   isPullFromGstInProgress: false,
   overViewData: new GstOverViewResponse(),
-  viewTransactionData: [],
+  viewTransactionData: null,
   activeCompanyGst: ''
 };
 
