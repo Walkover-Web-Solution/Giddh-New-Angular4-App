@@ -47,7 +47,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
     this.searchQueryForm = this.fb.group({
       searchQuery: this.fb.array([this.fb.group({
         queryType: ['closingBalance', Validators.required],
-        balType: ['CREDIT', Validators.required],
+        openingBalanceType: ['DEBIT', Validators.required],
+        closingBalanceType: ['DEBIT', Validators.required],
         queryDiffer: ['Greater', Validators.required],
         amount: ['1', [Validators.required, digitsOnly]],
       })])
@@ -66,6 +67,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 
   public filterData() {
     this.isFiltered.emit(true);
+    console.log(this.searchQueryForm.value.searchQuery);
     this.searchQuery.emit(this.searchQueryForm.value.searchQuery);
   }
 
@@ -76,7 +78,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   public addSearchRow() {
     this.searchDataSet.push(this.fb.group({
       queryType: ['closingBalance', Validators.required],
-      balType: ['CREDIT', Validators.required],
+      openingBalanceType: ['DEBIT', Validators.required],
+      closingBalanceType: ['DEBIT', Validators.required],
       queryDiffer: ['Greater', Validators.required],
       amount: ['1', Validators.required],
     }));

@@ -21,7 +21,7 @@ import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptItem, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
 import { ReceiptService } from '../../services/receipt.service';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
@@ -49,8 +49,10 @@ const COMPARISON_FILTER = [
 export class ReceiptComponent implements OnInit, OnDestroy {
 
   @ViewChild('invoiceReceiptConfirmationModel') public invoiceReceiptConfirmationModel: ModalDirective;
+  @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
+  @ViewChild('invoiceReceiptVoucherUpdateModel') public invoiceReceiptVoucherUpdateModel: ModalDirective;
 
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public selectedInvoice: IInvoiceResult;
   public selectedReceipt: ReceiptItem;
   public receiptSearchRequest: InvoiceReceiptFilter = new InvoiceReceiptFilter();
@@ -64,6 +66,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public endDate: Date;
   public isGetAllRequestInProcess$: Observable<boolean>;
   public type: string;
+  public downloadVoucherRequestObject: any;
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -80,7 +83,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _receiptService: ReceiptService,
     private _toasty: ToasterService,
-    private router: Router
+    private router: Router,
   ) {
     this.routeEvent = this.router.events.pipe(takeUntil(this.destroyed$));
     this.receiptSearchRequest.page = 1;
@@ -97,15 +100,11 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.store.select(p => p.receipt.data).pipe(take(1)).subscribe((o: ReciptResponse) => {
           this.getInvoiceReceipts(event.url);
         });
-        // if (event.url === '/pages/invoice/cr-note') {
-        //   this.type = 'credit note';
-        // }
-        // if (event.url === '/pages/invoice/dr-note') {
-        //   this.type = 'debit note';
-        // }
-        // console.log("current url", event.url);
       }
     });
+
+    this.getInvoiceReceipts();
+
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
@@ -147,8 +146,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     // }
   }
 
-  public onEditBtnClick(uniqueName) {
-    //
+  public onEditBtnClick() {
+    let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
+    request.invoiceNumber = this.downloadVoucherRequestObject.voucherNumber.join();
+    request.voucherType = this.type;
+    this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.selectedReceipt.account.uniqueName, request));
+    this.showUpdateModal();
   }
 
   public onDeleteBtnClick(uniqueName) {
@@ -181,6 +184,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
     if (url === '/pages/invoice/receipt') {
       this.type = 'receipt';
+
     }
 
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(
@@ -244,15 +248,20 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
   }
 
-  public downloadVoucherRequest(uniqueName: string) {
+  public downloadVoucherRequest(uniqueName: string, isDownloadMode: boolean) {
     let allReceipts: ReceiptItem[] = _.cloneDeep(this.receiptData.items);
     this.selectedReceipt = allReceipts.find((o) => o.uniqueName === uniqueName);
-    let dataToSend: DownloadVoucherRequest = {
+    this.downloadVoucherRequestObject = {
       voucherNumber: [this.selectedReceipt.voucherNumber],
-      voucherType: this.type
+      voucherType: this.type,
+      accountUniqueName: this.selectedReceipt.account.uniqueName
     };
+    if (!isDownloadMode) {
+      this.showPreviewDownloadModal();
+      return;
+    }
 
-    this._receiptService.DownloadVoucher(dataToSend, this.selectedReceipt.account.uniqueName)
+    this._receiptService.DownloadVoucher(this.downloadVoucherRequestObject, this.selectedReceipt.account.uniqueName)
       .subscribe(s => {
         if (s) {
           return saveAs(s, `Receipt-${this.selectedReceipt.account.uniqueName}.pdf`);
@@ -262,6 +271,22 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       }, (e) => {
         this._toasty.errorToast('File not Downloaded Please Try Again');
       });
+  }
+
+  public showPreviewDownloadModal() {
+    this.invoiceReceiptVoucherDetailsModel.show();
+  }
+
+  public hidePreviewDownloadModal() {
+    this.invoiceReceiptVoucherDetailsModel.hide();
+  }
+
+  public showUpdateModal() {
+    this.invoiceReceiptVoucherUpdateModel.show();
+  }
+
+  public hideUpdateModal() {
+    this.invoiceReceiptVoucherUpdateModel.hide();
   }
 
   public ngOnDestroy() {

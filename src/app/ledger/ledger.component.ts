@@ -37,7 +37,6 @@ import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
-import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
@@ -132,6 +131,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isBankOrCashAccount: boolean;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
+  public failedBulkEntries$: Observable<string[]>;
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public isFileUploading: boolean = false;
@@ -144,21 +144,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public entryUniqueNamesForBulkAction: string[] = [];
   public searchText: string = '';
   public isCompanyCreated$: Observable<boolean>;
+  public debitSelectAll: boolean = false;
+  public creditSelectAll: boolean = false;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-    private invoiceActions: InvoiceActions, private _loaderService: LoaderService) {
+              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
+              private _loaderService: LoaderService) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
-    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay());
+    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay(1));
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
@@ -175,6 +177,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+    this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -325,7 +328,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
 
     observableCombineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
       this.hideEledgerWrap();
@@ -425,6 +428,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
           this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
         }
+
+        let failedEntries: string[] = [];
+        this.failedBulkEntries$.pipe(take(1)).subscribe(ent => failedEntries = ent);
+
+        if (failedEntries.length > 0) {
+          this.store.dispatch(this._ledgerActions.SelectGivenEntries(failedEntries));
+        }
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
         setTimeout(() => {
@@ -468,36 +478,36 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-              if (stockListFormFlattenAccount) {
-                stockListFormFlattenAccount.stocks.map(as => {
-                  // stock entry
-                  accountsArray.push({
-                    value: uuid.v4(),
-                    label: acc.name + '(' + as.uniqueName + ')',
-                    additional: Object.assign({}, acc, { stock: as })
-                  });
+            if (stockListFormFlattenAccount) {
+              stockListFormFlattenAccount.stocks.map(as => {
+                // stock entry
+                accountsArray.push({
+                  value: uuid.v4(),
+                  label: acc.name + '(' + as.uniqueName + ')',
+                  additional: Object.assign({}, acc, {stock: as})
                 });
-              }
+              });
+            }
           });
         } else {
           // stocks from account itself
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, { stock: as })
+                  additional: Object.assign({}, acc, {stock: as})
                 });
               });
             } else {
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             }
           });
         }
@@ -723,7 +733,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           discounts: [],
           selectedAccount: null,
           applyApplicableTaxes: true,
-          isInclusiveTax: true
+          isInclusiveTax: true,
+          isChecked: false
         },
         {
           id: uuid.v4(),
@@ -737,7 +748,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           discounts: [],
           selectedAccount: null,
           applyApplicableTaxes: true,
-          isInclusiveTax: true
+          isInclusiveTax: true,
+          isChecked: false
         }],
       voucherType: null,
       entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
@@ -750,7 +762,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       chequeNumber: '',
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
-      compoundTotal: 0
+      compoundTotal: 0,
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -971,7 +983,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getReconciliation() {
-    this.lc.transactionData$.pipe(take(2)).subscribe((val) => {
+    this.lc.transactionData$.pipe(take(1)).subscribe((val) => {
       if (val) {
         this.closingBalanceBeforeReconcile = val.closingBalance;
         this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -987,6 +999,31 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public performBulkAction(actionType: string) {
+    this.entryUniqueNamesForBulkAction = [];
+    if (this.lc.showEledger) {
+      this.entryUniqueNamesForBulkAction.push(
+        ...this.lc.bankTransactionsData.map(bt => bt.transactions)
+          .reduce((prev, curr) => {
+            return prev.concat(curr);
+          }, []).filter(f => f.isChecked).map(m => m.particular)
+      );
+    } else {
+      let debitTrx: ITransactionItem[] = [];
+      let creditTrx: ITransactionItem[] = [];
+
+      this.lc.transactionData$.pipe(take(1)).subscribe(s => {
+        if (s) {
+          debitTrx = s.debitTransactions;
+          creditTrx = s.creditTransactions;
+        }
+      });
+
+      this.entryUniqueNamesForBulkAction.push(
+        ...[
+          ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+          ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+        ]);
+    }
     if (!this.entryUniqueNamesForBulkAction.length) {
       this._toaster.errorToast('Please select at least one entry.', 'Error');
       return;
@@ -1003,6 +1040,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
+  public selectAllEntries(ev: any, type: 'debit' | 'credit') {
+    let key = type === 'debit' ? 'DEBIT' : 'CREDIT';
+    // this.lc.blankLedger.transactions.map(bt => {
+    //   if (bt.type === key) {
+    //     bt.isChecked = ev.target.checked;
+    //   }
+    //   return bt;
+    // });
+    this.store.dispatch(this._ledgerActions.SelectDeSelectAllEntries(type, ev.target.checked));
+  }
+
   public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
     if (entryUniqueName) {
       if (ev.target.checked) {
@@ -1017,11 +1065,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public onCancelBulkActionConfirmation() {
+    this.entryUniqueNamesForBulkAction = [];
     this.bulkActionConfirmationModal.hide();
   }
 
   public onConfirmationBulkActionConfirmation() {
     this.store.dispatch(this._ledgerActions.DeleteMultipleLedgerEntries(this.lc.accountUnq, _.cloneDeep(this.entryUniqueNamesForBulkAction)));
+    this.entryUniqueNamesForBulkAction = [];
     this.bulkActionConfirmationModal.hide();
   }
 
@@ -1036,8 +1086,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
-        headers: { 'Session-Id': sessionKey },
+        data: {entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join()},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -1059,7 +1109,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onSelectInvoiceGenerateOption(isCombined: boolean) {
     this.bulkActionGenerateVoucherModal.hide();
-    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+    this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
   }
 
   public onCancelSelectInvoiceModal() {
