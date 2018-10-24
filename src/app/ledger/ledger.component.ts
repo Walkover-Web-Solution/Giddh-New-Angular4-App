@@ -146,7 +146,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isCompanyCreated$: Observable<boolean>;
   public debitSelectAll: boolean = false;
   public creditSelectAll: boolean = false;
-
+  public isBankTransactionLoading: boolean = false;
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -604,7 +604,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getBankTransactions() {
     // && this.advanceSearchRequest.from
     if (this.advanceSearchRequest.accountUniqueName) {
+      this.isBankTransactionLoading = true;
       this._ledgerService.GetBankTranscationsForLedger(this.advanceSearchRequest.accountUniqueName, this.advanceSearchRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
+        this.isBankTransactionLoading = false;
         if (res.status === 'success') {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }

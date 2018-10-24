@@ -61,6 +61,7 @@
 
     <!--bank ledgers-->
     <div class="clearfix"></div>
+    <h1 class="mrT2 primary_clr" *ngIf="isBankTransactionLoading">Loading Bank Transactions...</h1>
     <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
       <div class="alert alert-danger fade in pr" style="padding-right:15px">
         <button type="button" class="close">
@@ -123,7 +124,8 @@
                   <td class="width100" *ngIf="txn.type === 'DEBIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
-                      <tr class="ledger-row" (click)="selectBankTxn(txn)" [(ngModel)]="txn.isChecked"
+                      <!-- [(ngModel)]="txn.isChecked" -->
+                      <tr class="ledger-row" (click)="selectBankTxn(txn)"
                           [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                         <td class="col-xs-1 text-center">
                           <input type="checkbox" (click)="selectEntryForBulkAction($event, item)"/>
