@@ -68,14 +68,43 @@
                                 <path d="M426 0H86C38.6 0 0 38.6 0 86v340c0 47.4 38.6 86 86 86h340c47.4 0 86-38.6 86-86V86c0-47.4-38.6-86-86-86zM312 32v124.3l-56-49.7-56 49.7V32h112zm168 394c0 29.8-24.2 54-54 54H86c-29.8 0-54-24.2-54-54V86c0-29.8 24.2-54 54-54h82v195.7l88-78.3 88 78.3V32h82c29.8 0 54 24.2 54 54v340z"></path>
                                 </svg>
                             </ng-container> -->
-                            <span style="margin-left: 5px;"> {{item?.name}}</span></td>
-                        <td class="text-center"><a href="javascript:void(0)"> {{item?.totalTransactions}} </a></td>
-                        <td class="text-right"> ₹{{item?.taxableAmount}} </td>
-                        <td class="text-right"> ₹{{item?.igstAmount}} </td>
-                        <td class="text-right"> ₹{{item?.cgstAmount}} </td>
-                        <td class="text-right"> ₹{{item?.sgstAmount}} </td>
-                        <td class="text-right"> ₹{{item?.cessAmount}} </td>
+                            <span style="margin-left: 5px;"> {{item?.name}}</span>
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div style="margin-left: 50px;" class="secondary-row "> {{item?.name}}</div>
+                            </ng-container>
+                        </td>
+                        <td class="text-center"><a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div class="secondary-row "> {{item?.totalTransactions}}</div>
+                            </ng-container>
+                        </td>
+                        <td class="text-right"> ₹{{item?.taxableAmount}}
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div class="secondary-row "> ₹{{item?.totalTransactions}}</div>
+                            </ng-container>
+                        </td>
+                        <td class="text-right"> ₹{{item?.igstAmount}}
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div class="secondary-row "> ₹{{item?.igstAmount}}</div>
+                            </ng-container>
+                        </td>
+                        <td class="text-right"> ₹{{item?.cgstAmount}}
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div class="secondary-row "> ₹{{item?.cgstAmount}}</div>
+                            </ng-container>
+                        </td>
+                        <td class="text-right"> ₹{{item?.sgstAmount}}
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div class="secondary-row "> ₹{{item?.sgstAmount}}</div>
+                            </ng-container>
+                        </td>
+                        <td class="text-right"> ₹{{item?.cessAmount}}
+                            <ng-container *ngFor="let item of item.transactions">
+                                <div class="secondary-row "> ₹{{item?.cessAmount}}</div>
+                            </ng-container>
+                        </td>
                     </tr>
+
                 </tbody>
             </table>
         </div>

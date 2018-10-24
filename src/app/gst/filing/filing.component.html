@@ -2,24 +2,24 @@
     <div class="tax-engine">
         <div class="column list-column expanded-list-column transactions-list">
             <div class="list-header">
-                <filing-header [selectedPeriod]="selectedPeriod"></filing-header>
+                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-header>
             </div>
             <div class="nav-band">
                 <tabset #staticTabs id="c-tab">
                     <tab heading="Overview">
                         <div class="gstr-transactions-summary">
-                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedPeriod]="selectedPeriod" [selectedGst]="selectedGst"></filing-overview>
+                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-overview>
                         </div>
                     </tab>
-                    <tab heading="Reconcilation">
-                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedPeriod]="selectedPeriod" [selectedGst]="selectedGst"></reconcile>
+                    <tab heading="Reconcilation" (select)="initReconcile($event)" *ngIf="selectedGst === 'gstr2'">
+                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [selectedTab]></reconcile>
                     </tab>
-                    <!-- <tab heading="Push to GSTIN">
+                    <tab heading="Push to GSTIN" *ngIf="selectedGst !== 'gstr2'">
                         <h1>Push to GSTIN</h1>
-                    </tab> -->
-                    <!-- <tab heading="File your Return">
+                    </tab>
+                    <tab heading="File your Return" *ngIf="selectedGst !== 'gstr2'">
                         <h1>File your return</h1>
-                    </tab> -->
+                    </tab>
                 </tabset>
             </div>
         </div>

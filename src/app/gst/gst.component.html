@@ -1,9 +1,9 @@
 <div class="tax-engine">
     <div class="header-band filings-header clearfix">
         <div class="header-info pull-left"><span style="font-weight: 400;" class="text-muted"> GST Summary for </span>
-            <div id="ember1310" class="dropdown clearfix list-title filter-by return-sel font-large ember-view">
+            <div id="ember1310" class="dropdown clearfix list-title filter-by return-sel font-large">
                 <a data-toggle="dropdown" class="dropdown-toggle" (click)="showCalendar = !showCalendar">
-                    {{ selectedPeriod }} <b class="caret"></b></a>
+                    {{ currentPeriod }} <b class="caret"></b></a>
                 <!--  -->
                 <div *ngIf="showCalendar" style="position: absolute; z-index:10; min-height:290px;">
                     <ul class="my-dropdown-menu calendar-dropdown">
@@ -22,7 +22,7 @@
         <div class="col-md-12 main-wrapper">
             <!-- ============================ GSTR3B SUMMARY ================================== -->
             <div class="return-content" *ngIf="false"> <span class="btn-toolbar  pull-right">
-        <button class="btn btn-primary ember-view"> View Summary </button>
+        <button class="btn btn-primary"> View Summary </button>
         </span>
                 <div> <img src="../assets/images/summary.svg" class="icon icon-xxlg-md text-middle" />
                     <div class="return-top text-middle">
@@ -34,30 +34,32 @@
             <!-- ============================ GSTR3B SUMMARY ================================== -->
 
             <!-- ============================ GSTR1 ================================== -->
-            <div class="return-content"> <span class="btn-toolbar pull-right"> <a href="#" class="btn btn-primary ember-view"> View Summary </a> </span>
+            <div class="return-content"> <span class="btn-toolbar pull-right"> <a href="javascript:void(0)" class="btn btn-primary"  (click)="fileNow('gstr1')"> View Summary </a> </span>
                 <div>
                     <img src="../assets/images/summary.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
-                        <div style="margin: 7px auto;" class="font-xlarge"> <b class="text-middle">GSTR-1 (July - 2017)</b> &nbsp;&nbsp; <span class="label text-uppercase return-filed "> Filed </span> </div>
+                        <div style="margin: 7px auto;" class="font-xlarge"> <b class="text-middle">GSTR-1 ({{currentPeriod}})</b> &nbsp;&nbsp;
+                            <!-- <span class="label text-uppercase return-filed "> Filed </span> -->
+                        </div>
                         <p class="text-muted"> Details of outward supplies of goods and services </p>
                     </div>
                 </div>
-                <div class="content-graph">
-                    <div class="sales-colm ember-view">
+                <div class="content-graph" *ngIf="(gstR1TotalTransactions$ | async) && (gstR1TotalTransactions$ | async).length">
+                    <div class="sales-colm">
                         <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                         <div class="line"></div>
-                        <div class="count"><a><span class="font-xxxlarge"><b> 1 </b></span> <span>Transactions</span></a></div>
+                        <div class="count"><a><span class="font-xxxlarge"><b> gstR1TotalTransactions$ </b></span> <span>Transactions</span></a></div>
                     </div>
-                    <div class="sales-colm ember-view">
+                    <!-- <div class="sales-colm">
                         <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
                         <div class="line"></div>
                         <div class="count"><a><span class="font-xxxlarge"><b>0</b></span><span>&nbsp;Transactions</span></a></div>
-                    </div>
-                    <div class="sales-colm">
+                    </div> -->
+                    <!-- <div class="sales-colm">
                         <div class="text-muted font-xs"><b class="text-uppercase"> Filed on </b></div>
                         <div class="line line-gradient"></div>
                         <div style="padding-top: 7px;" class="font-xlarge"> 04/09/2018 </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- ============================ GSTR1 ================================== -->
@@ -65,29 +67,30 @@
             <!-- ============================ GSTR2 ================================== -->
 
             <div class="return-content "> <span class="btn-toolbar  pull-right"> 
-        <button id="ember1214" class="btn btn-default ember-view"> Categorize Now </button>
-        <a href="javascript:void(0)" class="btn btn-primary ember-view" (click)="fileNow('gstr1')"> File Now </a> </span>
+                <a href="javascript:void(0)" class="btn btn-primary" (click)="fileNow('gstr2')"> View Summary </a> </span>
+                <!-- <button id="ember1214" class="btn btn-default"> Categorize Now </button>
+        <a href="javascript:void(0)" class="btn btn-primary" (click)="fileNow('gstr1')"> File Now </a> </span> -->
                 <div>
                     <img src="../assets/images/bag.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
-                        <div style="margin: 7px auto;" class="font-xlarge"> <b>GSTR-2 ({{selectedPeriod}})</b>
+                        <div style="margin: 7px auto;" class="font-xlarge"> <b>GSTR-2 ({{currentPeriod}})</b>
                             <!---->
                         </div>
                         <p class="text-muted"> Details of inward supplies of goods and services </p>
                     </div>
                 </div>
                 <div class="content-graph gstr2-push-disabled">
-                    <div class="purchase-colm ember-view">
+                    <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                         <div class="line"></div>
                         <div class="count"><a><span class="font-xxxlarge"><b> 3 </b></span> <span>&nbsp;Transactions</span></a></div>
                     </div>
-                    <div class="purchase-colm ember-view">
+                    <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b>Uncategorized</b></div>
                         <div class="line"></div>
                         <div class="count"><a><span class="font-xxxlarge"><b>39</b></span> <span>&nbsp;Transactions</span></a></div>
                     </div>
-                    <!-- <div class="purchase-colm ember-view">
+                    <!-- <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
                         <div class="line"></div>
                         <div class="count"><a><span class="font-xxxlarge"><b>0</b></span><span>&nbsp;Transactions</span></a></div>
