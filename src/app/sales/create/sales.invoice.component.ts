@@ -1080,7 +1080,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
-  public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
+  public taxAmountEvent(tax) {
+    if (!this.activeIndx && this.activeIndx !== 0) {
+      return;
+    }
+    let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
+    let txn = entry.transactions[0];
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
     entry.taxSum = _.sumBy(entry.taxes, (o) => {
@@ -1088,7 +1093,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
   }
 
-  public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
+  public selectedTaxEvent(arr: string[]) {
+    let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
     if (!entry) {
       return;
     }
@@ -1169,6 +1175,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.activeIndx = indx;
     if (indx === lastIndx) {
       this.addBlankRow(null, 'code');
+    }
+    this.stockTaxList = [];
+    if (this.invFormData.entries[this.activeIndx].taxList) {
+      this.stockTaxList = this.invFormData.entries[this.activeIndx].taxList;
     }
   }
 
