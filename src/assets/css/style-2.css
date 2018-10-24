@@ -462,7 +462,10 @@ input {
 
 
 /* my css start */
-
+.hover-orange:hover {
+    color: #FF5F00 !important;
+    font-family: 'LatoWebBold';
+}
 .top-heading {}
 
 .company-list button.btn-link {
@@ -914,17 +917,20 @@ header .navbar {
 .date-range-picker {
     max-width: 220px;
     width: 100% !important;
-    background: #E7E7E8 !important;
+    background: none !important;
     font-size: 12px;
     height: 26px;
+    border: 0px;
+    color: #333333;
+    padding-left: 0px !important;
 }
 
 .header-date {
-    background: #E7E7E8 !important;
+    /* background: #E7E7E8 !important; */
     font-size: 12px;
     height: 26px;
     line-height: 23px;
-    padding: 2px 13px;
+    padding: 2px 0px;
     border-radius: 2px;
 }
 
@@ -5071,6 +5077,8 @@ table td[class*=col-]:last-child {
 .universal_date .btn-link {
     color: #2262D1 !important;
     padding-top: 3px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .universal_date .btn-link:hover {
@@ -5461,7 +5469,7 @@ panel.sFthanks.fieldset {
 }
 
 .menu_open {
-    padding-left: 230px;
+    padding-left: 215px;
 }
 
 .navbar_open {
@@ -5492,6 +5500,12 @@ perfect-scrollbar>.ps>.ps-overlay {
     padding-left: 0;
     background: transparent;
     outline: none;
+    padding-right: 10px;
+}
+.hamburger_menu h4 {
+    font-size: 20px;
+    position: relative;
+    top: 1px;
 }
 
 app-header {
