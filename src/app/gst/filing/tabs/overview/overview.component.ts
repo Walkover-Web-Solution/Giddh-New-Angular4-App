@@ -14,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit {
 
-  @Input() public selectedPeriod: string = null;
+  @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
 
@@ -35,7 +35,7 @@ export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit
       }
     });
 
-    let model = {period: this.selectedPeriod, gstin: this.activeCompanyGstNumber };
+    let model = {period: this.currentPeriod, gstin: this.activeCompanyGstNumber };
     this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
     //
   }
@@ -45,7 +45,7 @@ export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit
    */
   public ngOnChanges(s: SimpleChanges) {
     // 23AAACW9768L1ZO
-    // let model = {period: this.selectedPeriod, gstin: this.activeCompanyGstNumber };
+    // let model = {period: this.currentPeriod, gstin: this.activeCompanyGstNumber };
     // this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
   }
 

@@ -14,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewInit {
 
-  @Input() public selectedPeriod: string = null;
+  @Input() public currentPeriod: string = null;
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
 
@@ -34,7 +34,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
     });
 
     this.activatedRoute.params.subscribe(params => {
-      this.selectedPeriod = params['period'];
+      this.currentPeriod = params['period'];
       this.selectedGst = params['selectedGst'];
     });
 
@@ -50,11 +50,11 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       entity: 'invoices',
       gstin: this.activeCompanyGstNumber,
       type: obj.gstReturnType,
-      monthYear: this.selectedPeriod,
+      monthYear: this.currentPeriod,
       status: ''
     };
     this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, param));
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.selectedPeriod , 'transaction']);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod , 'transaction']);
 
   }
 

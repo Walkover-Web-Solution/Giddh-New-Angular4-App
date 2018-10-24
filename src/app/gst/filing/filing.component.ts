@@ -15,12 +15,12 @@ import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.acti
   encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit {
-  public selectedPeriod: string = null;
+  public currentPeriod: string = null;
   public selectedGst: string = null;
   public gstNumber: string = null;
   public activeCompanyUniqueName: string = '';
   public activeCompanyGstNumber: string = '';
-
+  public selectedTab: string = '';
   public companies: CompanyResponse[];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,9 +53,13 @@ export class FilingComponent implements OnInit {
 
   public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.selectedPeriod = params['period'];
+      this.currentPeriod = params['period'];
       this.selectedGst = params['selectedGst'];
     });
   }
 
+  public initReconcile(e) {
+    this.selectedTab = e.heading;
+    console.log(e);
+  }
 }

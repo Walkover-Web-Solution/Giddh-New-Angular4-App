@@ -50,7 +50,7 @@ export const filterTransaction = {
 
 export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewInit {
 
-  @Input() public selectedPeriod: string = null;
+  @Input() public currentPeriod: string = null;
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
 
@@ -77,10 +77,10 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
 
     this.activatedRoute.parent.params.subscribe(params => {
       debugger;
-      this.selectedPeriod = params['period'];
+      this.currentPeriod = params['period'];
       this.selectedGst = params['selectedGst'];
     });
-    this.filterParam['monthYear'] = this.selectedPeriod;
+    this.filterParam['monthYear'] = this.currentPeriod;
     this.filterParam['gstin'] = this.activeCompanyGstNumber;
     //
   }
@@ -94,7 +94,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   public goBack() {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedPeriod]);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.currentPeriod]);
   }
 
   /**
