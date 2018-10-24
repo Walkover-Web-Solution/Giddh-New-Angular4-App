@@ -763,7 +763,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         toDate: null,
         duration: null,
         period: null,
-        noOfTransactions: 50
+        noOfTransactions: null
       };
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }
