@@ -1081,7 +1081,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public taxAmountEvent(tax) {
-    if (!this.activeIndx) {
+    if (!this.activeIndx && this.activeIndx !== 0) {
       return;
     }
     let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];

@@ -419,8 +419,7 @@
                             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
                         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" (selectedTaxEvent)="selectedTaxEvent($event)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)"
-                                    [TaxSum]="entry.taxSum">
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" (selectedTaxEvent)="selectedTaxEvent($event)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
                             <td style="width: 120px;">
