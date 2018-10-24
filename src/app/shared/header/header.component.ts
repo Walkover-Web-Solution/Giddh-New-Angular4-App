@@ -761,8 +761,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let dates = {
         fromDate: null,
         toDate: null,
-        duration: 1,
-        period: 'MONTH'
+        duration: null,
+        period: null,
+        noOfTransactions: 50
       };
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }
