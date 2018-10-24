@@ -44,9 +44,10 @@ import { Location } from '@angular/common';
 })
 export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public data: GstReconcileInvoiceDetails = null;
-  @Input() public selectedPeriod: string = null;
+  @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
+  @Input() public selectedTab: string = '';
 
   @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
   @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
@@ -94,6 +95,13 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
+    // debugger;
+  }
+
+  /**
+   * initData
+   */
+  public initComponent() {
     this.fireGstReconcileRequest('NOT_ON_PORTAL');
     this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
     this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
@@ -135,7 +143,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
-
   public reconcileTabChanged(action: string) {
     this.reconcileActiveTab = action;
     this.fireGstReconcileRequest(action);
@@ -145,10 +152,10 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.fireGstReconcileRequest(action, this.selectedDateForGSTR1, event.page);
   }
   public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
-    if (!this.selectedPeriod) {
+    if (!this.currentPeriod) {
       return;
     }
-    let period = this.selectedPeriod;
+    let period = this.currentPeriod;
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
       period, action, page.toString(), refresh)
     );

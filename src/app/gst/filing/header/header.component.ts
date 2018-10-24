@@ -11,9 +11,9 @@ import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.acti
   styleUrls: ['header.component.css'],
 })
 export class FilingHeaderComponent implements OnInit, OnChanges {
-  public selectedGst: number = 2;
-  @Input() public selectedPeriod: string = null;
-
+  @Input() public currentPeriod: string = null;
+  @Input() public selectedGst: string = null;
+  public reconcileIsActive: boolean = false;
   constructor(
     private store: Store<AppState>,
     private router: Router,
