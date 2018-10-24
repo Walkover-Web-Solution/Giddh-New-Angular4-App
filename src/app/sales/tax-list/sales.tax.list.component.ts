@@ -120,12 +120,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     // set values
     this.sum = this.calculateSum();
     this.selectedTax = this.getSelectedTaxes();
-    setTimeout(() => {
-    // emit events
-      this.selectedTaxEvent.emit(this.selectedTax);
-      this.taxAmountSumEvent.emit(this.sum);
-    }, 100);
-
+    this.selectedTaxEvent.emit(this.selectedTax);
+    this.taxAmountSumEvent.emit(this.sum);
   }
 
   private applicableTaxesFn() {
