@@ -3,8 +3,12 @@ import { TaxResponse } from 'app/models/api-models/Company';
 import { ITaxList } from 'app/models/api-models/Sales';
 import { each, find, findIndex, indexOf } from 'app/lodash-optimized';
 import * as moment from 'moment';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { ITaxDetail } from 'app/models/interfaces/tax.interface';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/store';
+import { takeUntil } from 'rxjs/operators';
+import { of as observableOf } from 'rxjs';
 
 @Component({
   selector: 'sales-tax-list',
@@ -37,38 +41,51 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @ViewChild('taxListUl') public taxListUl: ElementRef;
+  public companyTaxesList$: Observable<TaxResponse[]>;
 
   public sum: number = 0;
   public taxList: ITaxList[] = [];
   public selectedTax: string[] = [];
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor() {
+  constructor(private store: Store<AppState>) {
     //
+
+    // get tax list and assign values to local vars
+    this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+      if (o) {
+        this.companyTaxesList$ = observableOf(o);
+        this.taxes = o;
+        this.makeTaxList();
+      } else {
+        this.companyTaxesList$ = observableOf([]);
+        this.taxes = [];
+      }
+    });
   }
 
   public ngOnDestroy() {
-    this.sum = 0;
-    this.taxAmountSumEvent.unsubscribe();
-    this.selectedTaxEvent.unsubscribe();
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    // this.sum = 0;
+    // this.taxAmountSumEvent.unsubscribe();
+    // this.selectedTaxEvent.unsubscribe();
+    // this.destroyed$.next(true);
+    // this.destroyed$.complete();
   }
 
   public ngOnInit(): void {
-    this.makeTaxList();
-    this.distendFn();
+    // this.makeTaxList();
+    // this.distendFn();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
-      this.makeTaxList();
-      this.distendFn();
-    }
+    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
+    //   this.makeTaxList();
+    //   this.distendFn();
+    // }
 
-    if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
-      this.distendFn();
-    }
+    // if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
+    //   this.distendFn();
+    // }
 
     if ('applicableTaxes' in changes && changes.applicableTaxes.currentValue !== changes.applicableTaxes.previousValue) {
       this.applicableTaxesFn();
@@ -103,8 +120,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     // set values
     this.sum = this.calculateSum();
     this.selectedTax = this.getSelectedTaxes();
-
-    // emit events
     this.selectedTaxEvent.emit(this.selectedTax);
     this.taxAmountSumEvent.emit(this.sum);
   }
