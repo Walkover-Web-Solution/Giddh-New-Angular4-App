@@ -53,4 +53,18 @@
                   [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
   </gst-template-g>
 
+  <gst-template-h *ngSwitchCase="'gst_template_h'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
+  [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN"
+  [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
+  [templateUISectionVisibility]="templateUISectionVisibility"
+  (sectionName)="onClickSection($event)">
+</gst-template-h>
+
+<gst-template-i *ngSwitchCase="'gst_template_i'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
+[showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN"
+[inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
+[templateUISectionVisibility]="templateUISectionVisibility"
+(sectionName)="onClickSection($event)">
+</gst-template-i>
+
 </ng-container>

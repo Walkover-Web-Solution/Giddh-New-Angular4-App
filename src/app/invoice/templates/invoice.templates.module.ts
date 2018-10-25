@@ -12,6 +12,8 @@ import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst
 import { GstTemplateCComponent } from './edit-template/out-tempate/templates/gst-template-c/gst-template-c.component';
 import { GstTemplateFComponent } from './edit-template/out-tempate/templates/gst-template-f/gst-template-f.component';
 import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst-template-g/gst-template-g.component';
+import { GstTemplateHComponent } from './edit-template/out-tempate/templates/gst-template-h/gst-template-h.component';
+import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst-template-i/gst-template-i.component';
 
 @NgModule({
   imports: [
@@ -29,7 +31,9 @@ import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst
     GstTemplateFComponent,
     GstTemplateBComponent,
     GstTemplateCComponent,
-    GstTemplateGComponent
+    GstTemplateGComponent,
+    GstTemplateHComponent,
+    GstTemplateIComponent
   ],
   exports: [
     OutTemplateComponent,
