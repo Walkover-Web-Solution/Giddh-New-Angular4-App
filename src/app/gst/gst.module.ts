@@ -25,9 +25,14 @@ import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits
 import { PurchaseModule } from 'app/purchase/purchase.module';
 import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
 import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
+import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/components/transaction-summary/transaction-summary.component';
+import { NilSummaryComponent } from './filing/tabs/push-to-gstin/components/nil-summary/nil-summary.component';
+import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-summary/hsn-summary.component';
+import { B2csSummaryComponent } from './filing/tabs/push-to-gstin/components/b2cs-summary/b2cs-summary.component';
+import { SummaryOverviewComponent } from './filing/tabs/summary-overview/summary-overview.component';
 
 @NgModule({
-  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent],
+  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, SummaryOverviewComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,

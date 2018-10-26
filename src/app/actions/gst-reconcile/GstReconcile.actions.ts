@@ -100,6 +100,23 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect() private GetReturnSummary$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GST_RETURN_SUMMARY)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstReturnSummary(action.payload.type , action.payload.requestParam)
+          .pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetReturnSummaryResponse(response);
+            }));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -201,6 +218,19 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN,
       payload: gstIn
+    };
+  }
+
+  public GetReturnSummary(type, requestParam) {
+    return {
+      type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY,
+      payload: { type, requestParam }
+    };
+  }
+  public GetReturnSummaryResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE,
+      payload: res
     };
   }
 }

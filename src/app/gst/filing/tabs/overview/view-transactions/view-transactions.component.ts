@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { GstRReducerState, GstOverViewResponse } from 'app/store/GstR/GstR.reducer';
+import { GstRReducerState, GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -39,7 +39,9 @@ export const Status = [
 export const filterTransaction = {
   entityType: '',
   type: '',
-  status: ''
+  status: '',
+  page: '',
+  count: ''
 };
 
 @Component({
@@ -48,13 +50,14 @@ export const filterTransaction = {
   styleUrls: ['view-transactions.component.css'],
 })
 
-export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewInit {
+export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public currentPeriod: string = null;
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
+  @Input() public isTransactionSummary: boolean;
 
-  public viewTransaction$: Observable<any[]>;
+  public viewTransaction$: Observable<TransactionSummary>;
   public entityType = TransactionType;
   public invoiceType = InvoiceType;
   public otherEntityType = Entitytype;
@@ -62,7 +65,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
   public selectedEntityType: string = '';
   public companyGst$: Observable<string> = of('');
   public filterParam = filterTransaction;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
@@ -76,10 +81,10 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
     });
 
     this.activatedRoute.parent.params.subscribe(params => {
-      debugger;
       this.currentPeriod = params['period'];
       this.selectedGst = params['selectedGst'];
     });
+
     this.filterParam['monthYear'] = this.currentPeriod;
     this.filterParam['gstin'] = this.activeCompanyGstNumber;
     //
@@ -94,9 +99,15 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   public goBack() {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.currentPeriod]);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod]);
   }
 
+  /**
+   * pageChanged
+   */
+  public pageChanged(event) {
+    console.log(event);
+  }
   /**
    * ngOnChanges
    */
@@ -105,9 +116,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   /**
-   * ngViewAfterInit
+   * ngOnDestroy
    */
-  public ngAfterViewInit() {
-      //
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
   }
 }
