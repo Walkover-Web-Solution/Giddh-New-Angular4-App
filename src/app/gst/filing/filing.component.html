@@ -6,20 +6,24 @@
             </div>
             <div class="nav-band">
                 <tabset #staticTabs id="c-tab">
-                    <tab heading="Overview">
-                        <div class="gstr-transactions-summary">
+                    <tab heading="Overview" (select)="selectTab($event)">
+                        <div class="transactions-overview" *ngIf="selectedTab === 'Overview'">
                             <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-overview>
                         </div>
                     </tab>
-                    <tab heading="Reconcilation" (select)="initReconcile($event)" *ngIf="selectedGst === 'gstr2'">
+                    <tab heading="Reconcilation" (select)="selectTab($event)" *ngIf="selectedGst === 'gstr2'">
                         <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [selectedTab]></reconcile>
                     </tab>
-                    <tab heading="Push to GSTIN" *ngIf="selectedGst !== 'gstr2'">
-                        <h1>Push to GSTIN</h1>
+                    <tab heading="Push to GSTIN" [hidden]="selectedGst === 'gstr2'" (select)="selectTab($event)">
+                        <div *ngIf="selectedTab === 'Push to GSTIN'">
+                            <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
+                        </div>
                     </tab>
+                    <!-- hidden not availability of API 
                     <tab heading="File your Return" *ngIf="selectedGst !== 'gstr2'">
                         <h1>File your return</h1>
                     </tab>
+                     -->
                 </tabset>
             </div>
         </div>

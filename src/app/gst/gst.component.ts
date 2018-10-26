@@ -21,6 +21,7 @@ export class GstComponent implements OnInit {
   public currentPeriod: string = null;
   public period: any = null;
   public gstR1TotalTransactions$: Observable<number> = of(0);
+  public gstR2TotalTransactions$: Observable<number> = of(0);
   public activeCompanyUniqueName: string = '';
   public companies: CompanyResponse[] = [];
   public activeCompanyGstNumber = '';
@@ -29,7 +30,8 @@ export class GstComponent implements OnInit {
 
   constructor(private store: Store<AppState>, private _companyActions: CompanyActions, private _route: Router, private gstAction: GstReconcileActions) {
     this.periodChanged(new Date());
-    this.gstR1TotalTransactions$ = this.store.select(p => p.gstR.overViewData.totalTransactions).pipe(takeUntil(this.destroyed$));
+    this.gstR1TotalTransactions$ = this.store.select(p => p.gstR.gstR1TotalTransactions).pipe(takeUntil(this.destroyed$));
+    this.gstR2TotalTransactions$ = this.store.select(p => p.gstR.gstR2TotalTransactions).pipe(takeUntil(this.destroyed$));
 
     this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
         if (c) {
@@ -63,9 +65,6 @@ export class GstComponent implements OnInit {
     stateDetailsRequest.lastState = 'gst';
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
-    let model = {period: this.currentPeriod, gstin: this.activeCompanyGstNumber };
-    this.store.dispatch(this.gstAction.GetOverView('gstr1', model));
   }
 
   /**
@@ -80,6 +79,13 @@ export class GstComponent implements OnInit {
    * fileNow
    */
   public fileNow(type) {
+      //
+  }
+
+  /**
+   * navigateToOverview
+   */
+  public navigateToOverview(type) {
     this._route.navigate(['pages', 'gstfiling', 'filing-return', type, moment(this.currentPeriod).format('MM-YYYY')]);
   }
 

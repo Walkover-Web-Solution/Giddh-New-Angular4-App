@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
@@ -12,11 +12,12 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './overview.component.html',
   styleUrls: ['overview.component.css'],
 })
-export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit {
+export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
+  @Input() public isTransactionSummary: boolean = false;
 
   public gstOverviewData$: Observable<GstOverViewResponse>;
   public showTransaction: boolean = false;
@@ -35,7 +36,12 @@ export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit
       }
     });
 
-    let model = {period: this.currentPeriod, gstin: this.activeCompanyGstNumber };
+    let model = {
+      period: this.currentPeriod,
+      gstin: this.activeCompanyGstNumber,
+      page: 1,
+      count: 20
+    };
     this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
     //
   }
@@ -44,15 +50,14 @@ export class FilingOverviewComponent implements OnInit, OnChanges, AfterViewInit
    * ngOnChanges
    */
   public ngOnChanges(s: SimpleChanges) {
-    // 23AAACW9768L1ZO
-    // let model = {period: this.currentPeriod, gstin: this.activeCompanyGstNumber };
-    // this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
+    //
   }
 
   /**
-   * ngViewAfterInit
+   * ngOnDestroy
    */
-  public ngAfterViewInit() {
-      //
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
   }
+
 }
