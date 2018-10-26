@@ -34,7 +34,7 @@
             <!-- ============================ GSTR3B SUMMARY ================================== -->
 
             <!-- ============================ GSTR1 ================================== -->
-            <div class="return-content"> <span class="btn-toolbar pull-right"> <a href="javascript:void(0)" class="btn btn-primary"  (click)="fileNow('gstr1')"> View Summary </a> </span>
+            <div class="return-content"> <span class="btn-toolbar pull-right"> <a href="javascript:void(0)" class="btn btn-primary"  (click)="navigateToOverview('gstr1')"> View Summary </a> </span>
                 <div>
                     <img src="../assets/images/summary.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
@@ -44,11 +44,11 @@
                         <p class="text-muted"> Details of outward supplies of goods and services </p>
                     </div>
                 </div>
-                <div class="content-graph" *ngIf="(gstR1TotalTransactions$ | async) && (gstR1TotalTransactions$ | async).length">
+                <div class="content-graph">
                     <div class="sales-colm">
                         <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                         <div class="line"></div>
-                        <div class="count"><a><span class="font-xxxlarge"><b> gstR1TotalTransactions$ </b></span> <span>Transactions</span></a></div>
+                        <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{gstR1TotalTransactions$ | async}} </b></span> <span>Transactions</span></a></div>
                     </div>
                     <!-- <div class="sales-colm">
                         <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
@@ -67,7 +67,7 @@
             <!-- ============================ GSTR2 ================================== -->
 
             <div class="return-content "> <span class="btn-toolbar  pull-right"> 
-                <a href="javascript:void(0)" class="btn btn-primary" (click)="fileNow('gstr2')"> View Summary </a> </span>
+                <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateToOverview('gstr2')"> View Summary </a> </span>
                 <!-- <button id="ember1214" class="btn btn-default"> Categorize Now </button>
         <a href="javascript:void(0)" class="btn btn-primary" (click)="fileNow('gstr1')"> File Now </a> </span> -->
                 <div>
@@ -83,13 +83,13 @@
                     <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                         <div class="line"></div>
-                        <div class="count"><a><span class="font-xxxlarge"><b> 3 </b></span> <span>&nbsp;Transactions</span></a></div>
+                        <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{gstR2TotalTransactions$ | async}} </b></span> <span>&nbsp;Transactions</span></a></div>
                     </div>
-                    <div class="purchase-colm">
+                    <!-- <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b>Uncategorized</b></div>
                         <div class="line"></div>
                         <div class="count"><a><span class="font-xxxlarge"><b>39</b></span> <span>&nbsp;Transactions</span></a></div>
-                    </div>
+                    </div> -->
                     <!-- <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
                         <div class="line"></div>

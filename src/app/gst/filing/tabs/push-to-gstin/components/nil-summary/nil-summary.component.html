@@ -1,0 +1,49 @@
+<div class="gstr-transactions-summary">
+    <h4 class="clearfix gstr-summary-title">Nil Summary</h4>
+    <p style="padding-top:6px;" class="text-muted half">This section displays the sale of goods and services that are nil rated.&nbsp;Nil rated goods and services are those that have 0% GST but allows you to claim ITC on the filing paid on inputs</p>
+    <div id="ember1945" class="ember-view">
+        <div *ngIf="(nilSummaryResponse$ | async) && (nilSummaryResponse$ | async).totalItems">
+            <table id="ember1946" class="transactions-table table-striped  table zi-table  ember-view">
+                <thead>
+                    <tr>
+                        <th style="" id="ember1947" class="  text-left ember-view">
+                            <div style="position: relative">
+                                <div class="pull-left over-flow"> Supply Type </div>
+                            </div>
+                        </th>
+                        <th style="" id="ember1948" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Nil Amount </div>
+                            </div>
+                        </th>
+                        <th style="" id="ember1949" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Exempt Amount </div>
+                            </div>
+                        </th>
+                        <th style="" id="ember1950" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Non GST Amount </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of (nilSummaryResponse$ | async).results">
+                        <td> {{item.supplyType}} </td>
+                        <td class="text-right"> ₹{{item.nilAmount | number: '1.2-2'}} </td>
+                        <td class="text-right"> ₹{{item.exemptAmount | number: '1.2-2'}} </td>
+                        <td class="text-right"> ₹{{item.nonGstAmount | number: '1.2-2'}} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="" *ngIf="(nilSummaryResponse$ | async) && !(nilSummaryResponse$ | async).totalItems">
+            <div class="filings-empty-state">
+                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span>  There is no NIL-wise summary.  </span></div>
+            </div>
+        </div>
+    </div>
+</div>

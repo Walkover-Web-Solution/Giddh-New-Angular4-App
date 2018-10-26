@@ -75,7 +75,7 @@
         </div>
     </div>
     <div class="table-responsive scroll-x">
-        <table class="transactions-table table-striped  table zi-table table-hover ember-view">
+        <table class="transactions-table table-striped  table zi-table table-hover ember-view" *ngIf="(viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems">
             <thead>
                 <tr>
                     <th style="" class="text-left ember-view">
@@ -163,7 +163,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async)">
+                <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
                     <td>{{item.voucherDate}}</td>
                     <td class="btn-link">{{item.voucherNumber}}</td>
                     <td>
@@ -176,14 +176,15 @@
                         {{item.pos}}
                     </td>
                     <td>{{item.reverseCharge}}</td>
-                    <td align="right">{{item.taxableAmount ? '₹' + item.taxableAmount : '-'}}</td>
-                    <td align="right">{{ item.igstAmount ? '₹' + item.igstAmount : '-'}}</td>
-                    <td align="right">{{item.sgstAmount ? '₹' + item.sgstAmount : '-'}}</td>
-                    <td align="right">{{item.cessAmount ? '₹' + item.cessAmount : '-'}}</td>
-                    <td align="right">₹{{item.totalAmount}}</td>
+                    <td align="right">₹{{item.taxableAmount | number: '1.2-2'}}</td>
+                    <td align="right">₹{{item.igstAmount | number: '1.2-2'}}</td>
+                    <td align="right">₹{{item.sgstAmount | number: '1.2-2'}}</td>
+                    <td align="right">₹{{item.cessAmount | number: '1.2-2'}}</td>
+                    <td align="right">₹{{item.totalAmount | number: '1.2-2'}}</td>
                 </tr>
             </tbody>
         </table>
+        <pagination [maxSize]="5" [totalItems]="(viewTransaction$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
     </div>
     <div class="ember-view">
         <div class="pagination clearfix hidden-print">

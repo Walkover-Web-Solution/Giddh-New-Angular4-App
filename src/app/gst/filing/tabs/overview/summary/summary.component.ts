@@ -17,10 +17,12 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Input() public currentPeriod: string = null;
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
+  public isTransactionSummary: boolean = false;
 
   public gstOverviewData$: Observable<GstOverViewResponse>;
   public companyGst$: Observable<string> = of('');
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
     this.gstOverviewData$ = this._store.select(p => p.gstR.overViewData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
@@ -47,7 +49,9 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   public viewTransactions(obj) {
     console.log(obj);
     let param = {
-      entity: 'invoices',
+      page: 1,
+      count: 20,
+      entity: obj.type,
       gstin: this.activeCompanyGstNumber,
       type: obj.gstReturnType,
       monthYear: this.currentPeriod,
@@ -70,5 +74,12 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
    */
   public ngAfterViewInit() {
       //
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
   }
 }
