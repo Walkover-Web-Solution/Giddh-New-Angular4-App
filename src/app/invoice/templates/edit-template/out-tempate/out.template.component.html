@@ -52,15 +52,17 @@
                   [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
                   [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
   </gst-template-g> -->
+
   <!-- *ngSwitchCase="'gst_template_h'"  -->
-  <gst-template-h *ngSwitchDefault [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
+  <gst-template-h *ngSwitchDefault [fieldsAndVisibility]="fieldsAndVisibility" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
   [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN"
   [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
   [templateUISectionVisibility]="templateUISectionVisibility"
   (sectionName)="onClickSection($event)">
 </gst-template-h>
 
-<!-- <gst-template-i *ngSwitchCase="'gst_template_i'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
+<!-- *ngSwitchCase="'gst_template_i'" -->
+<!-- <gst-template-i *ngSwitchDefault [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
 [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN"
 [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
 [templateUISectionVisibility]="templateUISectionVisibility"
