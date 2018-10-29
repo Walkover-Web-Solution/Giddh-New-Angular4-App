@@ -21,6 +21,7 @@ export interface GstRReducerState {
   hsnSummary: HsnSummaryResponse;
   nilSummary: NilSummaryResponse;
   b2csSummary: TransactionSummary;
+  transactionCounts: TransactionCounts[];
 }
 
 export class GstOverViewResponse {
@@ -88,6 +89,11 @@ export class OverViewResult {
   public name: string;
 }
 
+export class TransactionCounts {
+  public gstType: string;
+  public transactionCount: number;
+}
+
 const initialState: GstRReducerState = {
   isGenerateOtpInProcess: false,
   isGenerateOtpSuccess: false,
@@ -105,7 +111,8 @@ const initialState: GstRReducerState = {
   gstR2TotalTransactions: 0,
   hsnSummary: null,
   nilSummary: null,
-  b2csSummary: null
+  b2csSummary: null,
+  transactionCounts: []
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -152,6 +159,14 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             newState.b2csSummary = response.body;
             break;
         }
+      }
+      return newState;
+    }
+    case GSTR_ACTIONS.GET_TRANSACTIONS_COUNT_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      if (response.status === 'success') {
+        newState.TransactionCounts = response.body;
       }
       return newState;
     }

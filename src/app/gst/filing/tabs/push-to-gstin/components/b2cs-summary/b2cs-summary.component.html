@@ -76,6 +76,10 @@
                     <!---->
                 </tbody>
             </table>
+
+            <div class="text-center" *ngIf="(b2csSummaryResponse$ | async)?.totalPages > 1">
+                <pagination [maxSize]="5" [totalItems]="(b2csSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
+            </div>
         </div>
 
         <div class="" *ngIf="(b2csSummaryResponse$ | async) && !(b2csSummaryResponse$ | async).totalItems">

@@ -1,4 +1,4 @@
-<div class="tax-engine">
+<div class="tax-engine" [ngClass]="{'section-disabled': !(gstAuthenticated$ | async)}">
     <div class="header-band filings-header clearfix">
         <div class="header-info pull-left"><span style="font-weight: 400;" class="text-muted"> GST Summary for </span>
             <div id="ember1310" class="dropdown clearfix list-title filter-by return-sel font-large">
@@ -34,7 +34,7 @@
             <!-- ============================ GSTR3B SUMMARY ================================== -->
 
             <!-- ============================ GSTR1 ================================== -->
-            <div class="return-content"> <span class="btn-toolbar pull-right"> <a href="javascript:void(0)" class="btn btn-primary"  (click)="navigateToOverview('gstr1')"> View Summary </a> </span>
+            <div class="return-content" [ngClass]="{'section-disabled': !(gstAuthenticated$ | async)}"> <span class="btn-toolbar pull-right"> <a href="javascript:void(0)" class="btn btn-primary"  (click)="navigateToOverview('gstr1')"> View Summary </a> </span>
                 <div>
                     <img src="../assets/images/summary.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
@@ -48,7 +48,7 @@
                     <div class="sales-colm">
                         <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                         <div class="line"></div>
-                        <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{gstR1TotalTransactions$ | async}} </b></span> <span>Transactions</span></a></div>
+                        <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{(gstTransactionCounts$ | async)?.gstr1?.transactionCount}} </b></span> <span>Transactions</span></a></div>
                     </div>
                     <!-- <div class="sales-colm">
                         <div class="text-muted text-uppercase font-xs"><b>UNPUSHED</b></div>
@@ -66,7 +66,7 @@
 
             <!-- ============================ GSTR2 ================================== -->
 
-            <div class="return-content "> <span class="btn-toolbar  pull-right"> 
+            <div class="return-content " [ngClass]="{'section-disabled': !(gstAuthenticated$ | async)}"> <span class="btn-toolbar  pull-right"> 
                 <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateToOverview('gstr2')"> View Summary </a> </span>
                 <!-- <button id="ember1214" class="btn btn-default"> Categorize Now </button>
         <a href="javascript:void(0)" class="btn btn-primary" (click)="fileNow('gstr1')"> File Now </a> </span> -->
@@ -83,7 +83,7 @@
                     <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                         <div class="line"></div>
-                        <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{gstR2TotalTransactions$ | async}} </b></span> <span>&nbsp;Transactions</span></a></div>
+                        <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{(gstTransactionCounts$ | async)?.gstr1?.transactionCount}} </b></span> <span>&nbsp;Transactions</span></a></div>
                     </div>
                     <!-- <div class="purchase-colm">
                         <div class="text-muted text-uppercase font-xs"><b>Uncategorized</b></div>
@@ -146,3 +146,6 @@
     </div>
 </div>
 <!-- <router-outlet></router-outlet> -->
+
+
+<filing-header></filing-header>

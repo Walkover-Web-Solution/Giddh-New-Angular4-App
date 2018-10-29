@@ -38,8 +38,8 @@ export const Status = [
 
 export const filterTransaction = {
   entityType: '',
-  type: '',
-  status: '',
+  type: 'all',
+  status: 'all',
   page: '',
   count: ''
 };
@@ -74,16 +74,17 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    this.companyGst$.subscribe(a => {
-      if (a) {
-        this.selectedGst = a;
-      }
-    });
+    // this.companyGst$.subscribe(a => {
+    //   if (a) {
+    //     this.selectedGst = a;
+    //   }
+    // });
 
-    this.activatedRoute.parent.params.subscribe(params => {
-      this.currentPeriod = params['period'];
-      this.selectedGst = params['selectedGst'];
-    });
+    // this.activatedRoute.parent.params.subscribe(params => {
+    //   debugger;
+    //   this.currentPeriod = params['period'];
+    //   this.selectedGst = params['selectedGst'];
+    // });
 
     this.filterParam['monthYear'] = this.currentPeriod;
     this.filterParam['gstin'] = this.activeCompanyGstNumber;
@@ -106,8 +107,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
    * pageChanged
    */
   public pageChanged(event) {
-    console.log(event);
+    this.viewFilteredTxn('page', event.page);
   }
+
   /**
    * ngOnChanges
    */
