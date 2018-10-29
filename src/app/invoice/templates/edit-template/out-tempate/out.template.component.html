@@ -40,17 +40,33 @@
   </gst-template-e>
 
   <!-- GET_ALL TEMPLATE F -->
-  <gst-template-f *ngSwitchCase="'gst_template_f'" [fieldsAndVisibility]="fieldsAndVisibility"
+  <!-- <gst-template-f *ngSwitchCase="'gst_template_f'" [fieldsAndVisibility]="fieldsAndVisibility"
                   [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [companyGSTIN]="companyGSTIN"
                   [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
                   [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
-  </gst-template-f>
+  </gst-template-f> -->
 
   <!-- GET_ALL TEMPLATE G -->
-  <gst-template-g *ngSwitchCase="'gst_template_g'" [fieldsAndVisibility]="fieldsAndVisibility"
+  <!-- <gst-template-g *ngSwitchCase="'gst_template_g'" [fieldsAndVisibility]="fieldsAndVisibility"
                   [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [companyGSTIN]="companyGSTIN"
                   [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
                   [templateUISectionVisibility]="templateUISectionVisibility" (sectionName)="onClickSection($event)">
-  </gst-template-g>
+  </gst-template-g> -->
+
+  <!-- GET_ALL TEMPLATE H  *ngSwitchCase="'gst_template_h'" -->
+  <gst-template-h *ngSwitchCase="'gst_template_f'" [fieldsAndVisibility]="fieldsAndVisibility" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
+  [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN"
+  [inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
+  [templateUISectionVisibility]="templateUISectionVisibility"
+  (sectionName)="onClickSection($event)">
+</gst-template-h>
+
+<!-- GST TEMPLATE I *ngSwitchCase="'gst_template_i'" -->
+<gst-template-i *ngSwitchCase="'gst_template_g'" [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode"
+[showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN"
+[inputTemplate]="inputTemplate" [logoSrc]="logoSrc"
+[templateUISectionVisibility]="templateUISectionVisibility"
+(sectionName)="onClickSection($event)">
+</gst-template-i>
 
 </ng-container>
