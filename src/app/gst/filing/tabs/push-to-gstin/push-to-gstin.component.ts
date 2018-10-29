@@ -19,7 +19,6 @@ export class PushToGstInComponent implements OnInit, OnChanges {
 
   constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe(params => {
-      debugger;
       if (params['transaction']) {
         this.showTransaction = true;
       } else {

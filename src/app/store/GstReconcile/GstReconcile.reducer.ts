@@ -43,7 +43,7 @@ const initialState: GstReconcileState = {
   isGstReconcileInvoiceSuccess: false,
   isGstReconcileVerifyOtpInProcess: false,
   isGstReconcileVerifyOtpSuccess: false,
-  gstAuthenticated: true,
+  gstAuthenticated: false,
   gstFoundOnGiddh: true,
   gstReconcileData: gstReconcileDataInitialState,
   isPullFromGstInProgress: false
@@ -127,7 +127,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
         } else if (response.code === 'GSTIN_NOT_FOUND') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstFoundOnGiddh = false;
-          newState.gstAuthenticated = true;
+          newState.gstAuthenticated = false;
         } else {
           newState.isGstReconcileInvoiceSuccess = true;
           newState.gstAuthenticated = true;

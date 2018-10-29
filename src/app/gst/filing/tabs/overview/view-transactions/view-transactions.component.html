@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="filter-row ember-view">
+                <div class="filter-row ember-view" *ngIf="filterParam.entity !== 'invoices' || !filterParam.entity">
                     <div class="name">{{filterParam.entity}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -32,12 +32,12 @@
                 </div>
 
 
-                <div class="filter-row ember-view">
+                <div class="filter-row ember-view" *ngIf="filterParam.entity === 'invoices'">
                     <div class="name">{{filterParam.entity}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
-                            Button dropdown <span class="caret"></span>
+                            {{filterParam.type}} <span class="caret"></span>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngFor="let type of invoiceType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a></li>
@@ -184,7 +184,10 @@
                 </tr>
             </tbody>
         </table>
-        <pagination [maxSize]="5" [totalItems]="(viewTransaction$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
+        <!-- *ngIf="(viewTransaction$ | async)?.totalPages > 1" -->
+        <div class="text-center">
+            <pagination [maxSize]="5" [totalItems]="(viewTransaction$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
+        </div>
     </div>
     <div class="ember-view">
         <div class="pagination clearfix hidden-print">

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import * as moment from 'moment/moment';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
+import { TransactionCounts } from 'app/store/GstR/GstR.reducer';
 
 @Component({
   templateUrl: './gst.component.html',
@@ -25,14 +26,17 @@ export class GstComponent implements OnInit {
   public activeCompanyUniqueName: string = '';
   public companies: CompanyResponse[] = [];
   public activeCompanyGstNumber = '';
+  public gstAuthenticated$: Observable<boolean>;
+  public gstTransactionCounts$: Observable<TransactionCounts[]> = of([]);
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _companyActions: CompanyActions, private _route: Router, private gstAction: GstReconcileActions) {
+  constructor(private store: Store<AppState>, private _companyActions: CompanyActions, private _route: Router, private _gstAction: GstReconcileActions) {
     this.periodChanged(new Date());
     this.gstR1TotalTransactions$ = this.store.select(p => p.gstR.gstR1TotalTransactions).pipe(takeUntil(this.destroyed$));
     this.gstR2TotalTransactions$ = this.store.select(p => p.gstR.gstR2TotalTransactions).pipe(takeUntil(this.destroyed$));
-
+    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstTransactionCounts$ = this.store.select(p => p.gstR.transactionCounts).pipe(takeUntil(this.destroyed$));
     this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
         if (c) {
           this.activeCompanyUniqueName = _.cloneDeep(c);
@@ -46,7 +50,7 @@ export class GstComponent implements OnInit {
             if (activeCompany && activeCompany.gstDetails[0]) {
               this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
               console.log('activeCompanyGstNumber', this.activeCompanyGstNumber);
-              this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+              this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             } else {
               // this.toasty.errorToast('GST number not found.');
             }
@@ -65,6 +69,12 @@ export class GstComponent implements OnInit {
     stateDetailsRequest.lastState = 'gst';
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
+    this.gstAuthenticated$.subscribe(s => {
+      if (s) {
+        this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
+      }
+    });
   }
 
   /**
