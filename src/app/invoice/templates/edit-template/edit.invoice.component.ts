@@ -42,6 +42,586 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   public selectedTemplateUniqueName: string;
   public templateMeta: any;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public fakeTemplateH = {
+    createdBy: {
+      name: 'System Admin',
+      email: 'business@giddh.com',
+      uniqueName: 'system_admin',
+      mobileNo: '99-99999999990'
+    },
+    fontSize: '10pt',
+    sections: [{
+      sectionName: 'header',
+      content: [{
+        field: 'companyName',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'gstin',
+        label: 'GSTIN',
+        display: true,
+        width: null
+      }, {
+        field: 'pan',
+        label: 'PAN',
+        display: true,
+        width: null
+      }, {
+        field: 'address',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'invoiceDate',
+        label: 'Date',
+        display: true,
+        width: null
+      }, {
+        field: 'invoiceNumber',
+        label: 'Number',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingDate',
+        label: 'Ship Date',
+        display: true,
+        width: null
+      }, {
+        field: 'shippedVia',
+        label: 'Ship Via',
+        display: true,
+        width: null
+      }, {
+        field: 'trackingNumber',
+        label: 'Tracking No.',
+        display: true,
+        width: null
+      }, {
+        field: 'customerName',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customerEmail',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customerMobileNumber',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'dueDate',
+        label: 'Due Date',
+        display: true,
+        width: null
+      }, {
+        field: 'billingState',
+        label: 'State',
+        display: true,
+        width: null
+      }, {
+        field: 'billingAddress',
+        label: 'Billing Address',
+        display: true,
+        width: null
+      }, {
+        field: 'billingGstin',
+        label: 'GSTIN',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingAddress',
+        label: 'Shipping Address',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingState',
+        label: 'State',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingGstin',
+        label: 'GSTIN',
+        display: true,
+        width: null
+      }, {
+        field: 'customField1',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customField2',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customField3',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'formNameInvoice',
+        label: 'INVOICE',
+        display: true,
+        width: null
+      }, {
+        field: 'formNameTaxInvoice',
+        label: 'TAX INVOICE',
+        display: true,
+        width: null
+      }, {
+        field: 'attentionTo',
+        label: 'Attention To',
+        display: true,
+        width: null
+      }]
+    }, {
+      sectionName: 'table',
+      content: [{
+        field: 'sNo',
+        label: 'S. No.',
+        display: true,
+        width: '10'
+      }, {
+        field: 'date',
+        label: 'Date',
+        display: true,
+        width: '10'
+      }, {
+        field: 'item',
+        label: 'Descripion',
+        display: true,
+        width: '10'
+      }, {
+        field: 'hsnSac',
+        label: 'HSN/SAC',
+        display: true,
+        width: '10'
+      }, {
+        field: 'quantity',
+        label: 'Qty.',
+        display: true,
+        width: '10'
+      }, {
+        field: 'description',
+        label: 'Some label',
+        display: true,
+        width: '10'
+      }, {
+        field: 'rate',
+        label: 'Rate/ Item',
+        display: true,
+        width: '10'
+      }, {
+        field: 'discount',
+        label: 'Dis./ Item',
+        display: true,
+        width: '10'
+      }, {
+        field: 'taxableValue',
+        label: 'Taxable Amt.',
+        display: true,
+        width: '10'
+      }, {
+        field: 'taxes',
+        label: 'taxes',
+        display: true,
+        width: '10'
+      }, {
+        field: 'total',
+        label: 'Amount',
+        display: true,
+        width: '10'
+      }, {
+        field: 'previousDue',
+        label: 'Previous Due',
+        display: true,
+        width: null
+      }]
+    }, {
+      sectionName: 'footer',
+      content: [{
+        field: 'taxableAmount',
+        label: 'Sub Total',
+        display: true,
+        width: null
+      }, {
+        field: 'totalTax',
+        label: 'Total Tax*',
+        display: true,
+        width: null
+      }, {
+        field: 'otherDeduction',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'grandTotal',
+        label: 'Invoice Total',
+        display: true,
+        width: null
+      }, {
+        field: 'totalInWords',
+        label: 'Invoice Total (In words)',
+        display: true,
+        width: null
+      }, {
+        field: 'message1',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'thanks',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'companyAddress',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'imageSignature',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'slogan',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'companyName',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'totalDue',
+        label: 'Total Due',
+        display: true,
+        width: null
+      }]
+    }],
+    isDefault: false,
+    uniqueName: 'gst_template_f',
+    createdAt: '29-09-2018 08:55:24',
+    updatedAt: '24-10-2018 06:03:41',
+    updatedBy: {
+      name: 'System Admin',
+      email: 'business@giddh.com',
+      uniqueName: 'system_admin',
+      mobileNo: '99-99999999990'
+    },
+    primaryColor: '#f63407',
+    secondaryColor: '#fff6f4',
+    font: 'open sans',
+    topMargin: 10,
+    leftMargin: 10,
+    rightMargin: 10,
+    bottomMargin: 10,
+    logoPosition: 'center/left/right',
+    logoSize: 'small/medium/large',
+    logoUniqueName: null,
+    copyFrom: null,
+    templateColor: '#f63407',
+    tableColor: '#fff6f4',
+    templateType: 'gst_template_h',
+    name: 'Template H',
+    type: 'invoice'
+  };
+  public fakeTemplateI = {
+    createdBy: {
+      name: 'System Admin',
+      email: 'business@giddh.com',
+      uniqueName: 'system_admin',
+      mobileNo: '99-99999999990'
+    },
+    fontSize: '10pt',
+    sections: [{
+      sectionName: 'header',
+      content: [{
+        field: 'companyName',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'gstin',
+        label: 'GSTIN',
+        display: true,
+        width: null
+      }, {
+        field: 'pan',
+        label: 'PAN',
+        display: true,
+        width: null
+      }, {
+        field: 'address',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'invoiceDate',
+        label: 'Date',
+        display: true,
+        width: null
+      }, {
+        field: 'invoiceNumber',
+        label: 'Number',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingDate',
+        label: 'Ship Date',
+        display: true,
+        width: null
+      }, {
+        field: 'shippedVia',
+        label: 'Ship Via',
+        display: true,
+        width: null
+      }, {
+        field: 'trackingNumber',
+        label: 'Tracking No.',
+        display: true,
+        width: null
+      }, {
+        field: 'customerName',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customerEmail',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customerMobileNumber',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'dueDate',
+        label: 'Due Date',
+        display: true,
+        width: null
+      }, {
+        field: 'billingState',
+        label: 'State',
+        display: true,
+        width: null
+      }, {
+        field: 'billingAddress',
+        label: 'Billing Address',
+        display: true,
+        width: null
+      }, {
+        field: 'billingGstin',
+        label: 'GSTIN',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingAddress',
+        label: 'Shipping Address',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingState',
+        label: 'State',
+        display: true,
+        width: null
+      }, {
+        field: 'shippingGstin',
+        label: 'GSTIN',
+        display: true,
+        width: null
+      }, {
+        field: 'customField1',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customField2',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'customField3',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'formNameInvoice',
+        label: 'INVOICE',
+        display: true,
+        width: null
+      }, {
+        field: 'formNameTaxInvoice',
+        label: 'TAX INVOICE',
+        display: true,
+        width: null
+      }, {
+        field: 'attentionTo',
+        label: 'Attention To',
+        display: true,
+        width: null
+      }]
+    }, {
+      sectionName: 'table',
+      content: [{
+        field: 'sNo',
+        label: 'S. No.',
+        display: true,
+        width: '10'
+      }, {
+        field: 'date',
+        label: 'Date',
+        display: true,
+        width: '10'
+      }, {
+        field: 'item',
+        label: 'Descripion',
+        display: true,
+        width: '10'
+      }, {
+        field: 'hsnSac',
+        label: 'HSN/SAC',
+        display: true,
+        width: '10'
+      }, {
+        field: 'quantity',
+        label: 'Qty.',
+        display: true,
+        width: '10'
+      }, {
+        field: 'description',
+        label: 'Some label',
+        display: true,
+        width: '10'
+      }, {
+        field: 'rate',
+        label: 'Rate/ Item',
+        display: true,
+        width: '10'
+      }, {
+        field: 'discount',
+        label: 'Dis./ Item',
+        display: true,
+        width: '10'
+      }, {
+        field: 'taxableValue',
+        label: 'Taxable Amt.',
+        display: true,
+        width: '10'
+      }, {
+        field: 'taxes',
+        label: 'taxes',
+        display: true,
+        width: '10'
+      }, {
+        field: 'total',
+        label: 'Amount',
+        display: true,
+        width: '10'
+      }, {
+        field: 'previousDue',
+        label: 'Previous Due',
+        display: true,
+        width: null
+      }]
+    }, {
+      sectionName: 'footer',
+      content: [{
+        field: 'taxableAmount',
+        label: 'Sub Total',
+        display: true,
+        width: null
+      }, {
+        field: 'totalTax',
+        label: 'Total Tax*',
+        display: true,
+        width: null
+      }, {
+        field: 'otherDeduction',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'grandTotal',
+        label: 'Invoice Total',
+        display: true,
+        width: null
+      }, {
+        field: 'totalInWords',
+        label: 'Invoice Total (In words)',
+        display: true,
+        width: null
+      }, {
+        field: 'message1',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'thanks',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'companyAddress',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'imageSignature',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'slogan',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'companyName',
+        label: '',
+        display: true,
+        width: null
+      }, {
+        field: 'totalDue',
+        label: 'Total Due',
+        display: true,
+        width: null
+      }]
+    }],
+    isDefault: false,
+    uniqueName: 'gst_template_g',
+    createdAt: '29-09-2018 08:55:24',
+    updatedAt: '24-10-2018 06:03:41',
+    updatedBy: {
+      name: 'System Admin',
+      email: 'business@giddh.com',
+      uniqueName: 'system_admin',
+      mobileNo: '99-99999999990'
+    },
+    primaryColor: '#f63407',
+    secondaryColor: '#fff6f4',
+    font: 'open sans',
+    topMargin: 10,
+    leftMargin: 10,
+    rightMargin: 10,
+    bottomMargin: 10,
+    logoPosition: 'center/left/right',
+    logoSize: 'small/medium/large',
+    logoUniqueName: null,
+    copyFrom: null,
+    templateColor: '#f63407',
+    tableColor: '#fff6f4',
+    templateType: 'gst_template_i',
+    name: 'Template I',
+    type: 'invoice'
+  };
 
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
