@@ -306,7 +306,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       }]
     }],
     isDefault: false,
-    uniqueName: 'gst_template_b',
+    uniqueName: 'gst_template_f',
     createdAt: '29-09-2018 08:55:24',
     updatedAt: '24-10-2018 06:03:41',
     updatedBy: {
@@ -596,7 +596,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       }]
     }],
     isDefault: false,
-    uniqueName: 'gst_template_b',
+    uniqueName: 'gst_template_g',
     createdAt: '29-09-2018 08:55:24',
     updatedAt: '24-10-2018 06:03:41',
     updatedBy: {
