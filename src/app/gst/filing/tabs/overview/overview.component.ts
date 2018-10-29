@@ -28,8 +28,8 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      if (params['transaction']) {
+    this.activatedRoute.url.subscribe(params => {
+      if (this._route.routerState.snapshot.url.includes('transaction')) {
         this.showTransaction = true;
       } else {
         this.showTransaction = false;

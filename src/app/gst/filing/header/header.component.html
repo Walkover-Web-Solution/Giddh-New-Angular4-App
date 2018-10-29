@@ -35,3 +35,6 @@
     </div>
 
 </div>
+
+<div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+<aside-menu-account [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (fireReconcileRequest)="fireGstReconcileRequest('NOT_ON_PORTAL')" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>

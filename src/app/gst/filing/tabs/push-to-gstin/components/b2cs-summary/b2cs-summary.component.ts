@@ -6,6 +6,14 @@ import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { GstReconcileService } from 'app/services/GstReconcile.service';
 
+export const requestParam = {
+      period: this.currentPeriod,
+      gstin: this.activeCompanyGstNumber,
+      gstReturnType: 'b2cs',
+      page: 1,
+      count: 20
+};
+
 @Component({
   selector: 'b2cs-summary',
   templateUrl: './b2cs-summary.component.html',
@@ -18,6 +26,7 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
   @Input() public selectedGst: string = '';
 
   public b2csSummaryResponse$: Observable<TransactionSummary>;
+  public request = requestParam;
 
   constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
     this.b2csSummaryResponse$ = this._store.select(p => p.gstR.b2csSummary);
@@ -27,6 +36,12 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
   public ngOnInit() {
     //
   }
+
+  public pageChanged(event) {
+    this.request['page'] = event.page;
+    this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
+  }
+
   /**
    * ngOnChnages
   */

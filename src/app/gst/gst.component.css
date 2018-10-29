@@ -352,3 +352,8 @@ hr {
 .my-dropdown-menu {
     top: 8px;
 }
+
+.section-disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}

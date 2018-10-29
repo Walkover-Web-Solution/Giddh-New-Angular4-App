@@ -35,10 +35,10 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       }
     });
 
-    this.activatedRoute.params.subscribe(params => {
-      this.currentPeriod = params['period'];
-      this.selectedGst = params['selectedGst'];
-    });
+    // this.activatedRoute.params.subscribe(params => {
+    //   this.currentPeriod = params['period'];
+    //   this.selectedGst = params['selectedGst'];
+    // });
 
     //
   }
@@ -47,7 +47,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
    * viewTransactions
    */
   public viewTransactions(obj) {
-    console.log(obj);
     let param = {
       page: 1,
       count: 20,
@@ -59,7 +58,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
     };
     this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, param));
     this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod , 'transaction']);
-
   }
 
   /**

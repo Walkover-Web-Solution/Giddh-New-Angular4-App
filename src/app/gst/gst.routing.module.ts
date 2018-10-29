@@ -20,8 +20,8 @@ const GST_ROUTES: Routes = [
   { path: 'gstR3', component: FileGstR3Component },
   { path: 'filing-return/:selectedGst/:period', component: FilingComponent,
     children: [
-      { path: '', component: OverviewSummaryComponent },
-      { path: 'transaction', component: ViewTransactionsComponent },
+      { path: '', component: FilingComponent },
+      { path: 'transaction', component: FilingComponent },
     ]
   },
   { path: 'filing/transactions', component: OverviewSummaryComponent }

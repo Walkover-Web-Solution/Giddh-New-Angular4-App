@@ -67,13 +67,13 @@ export class FilingComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.currentPeriod = params['period'];
       this.selectedGst = params['selectedGst'];
-    //   this._cdr.detach();
-    // setTimeout(() => {
-    //     this._cdr.reattach();
-    //     if (!this._cdr['destroyed']) {
-    //       this._cdr.detectChanges();
-    //     }
-    //   }, 20);
+      this._cdr.detach();
+      setTimeout(() => {
+          this._cdr.reattach();
+          if (!this._cdr['destroyed']) {
+            this._cdr.detectChanges();
+          }
+        }, 20);
     });
   }
 
@@ -85,7 +85,7 @@ export class FilingComponent implements OnInit {
         if (!this._cdr['destroyed']) {
           this._cdr.detectChanges();
         }
-      }, 100);
+      }, 200);
     this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod]);
   }
 

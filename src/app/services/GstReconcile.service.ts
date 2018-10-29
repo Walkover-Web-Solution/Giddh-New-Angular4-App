@@ -137,4 +137,21 @@ export class GstReconcileService {
         })
         , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
   }
+
+  public GetTransactionCount(requestParam: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS_COUNTS
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':mmyyyy', requestParam.period)
+      .replace(':gstin', requestParam.gstin)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<any, string> = res;
+          data.queryString = requestParam;
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+  }
 }

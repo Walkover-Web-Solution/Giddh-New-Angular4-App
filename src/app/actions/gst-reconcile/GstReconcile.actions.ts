@@ -117,6 +117,23 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect() private GetTransactionsCount$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_TRANSACTIONS_COUNT)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetTransactionCount(action.payload)
+          .pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetTransactionsCountResponse(response);
+            }));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -230,6 +247,26 @@ export class GstReconcileActions {
   public GetReturnSummaryResponse(res) {
     return {
       type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE,
+      payload: res
+    };
+  }
+
+  /**
+   * getTransactionsCount
+   */
+  public GetTransactionsCount(period, gstin) {
+    return {
+      type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT,
+      payload: {period, gstin}
+    };
+  }
+
+  /**
+   * GetTransactionsCountResponse
+   */
+  public GetTransactionsCountResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT_RESPONSE,
       payload: res
     };
   }

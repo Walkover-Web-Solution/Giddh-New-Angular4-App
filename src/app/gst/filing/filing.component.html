@@ -12,7 +12,7 @@
                         </div>
                     </tab>
                     <tab heading="Reconcilation" (select)="selectTab($event)" *ngIf="selectedGst === 'gstr2'">
-                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [selectedTab]></reconcile>
+                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [selectedTab]="selectedGst"></reconcile>
                     </tab>
                     <tab heading="Push to GSTIN" [hidden]="selectedGst === 'gstr2'" (select)="selectTab($event)">
                         <div *ngIf="selectedTab === 'Push to GSTIN'">
