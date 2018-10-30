@@ -8,8 +8,8 @@ import { NilSummaryResponse } from 'app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
 
 export const requestParam = {
-      period: this.currentPeriod,
-      gstin: this.activeCompanyGstNumber,
+      period: '',
+      gstin: '',
       gstReturnType: 'nil',
       page: 1,
       count: 20
