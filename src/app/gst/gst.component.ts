@@ -12,10 +12,28 @@ import * as moment from 'moment/moment';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { TransactionCounts } from 'app/store/GstR/GstR.reducer';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { trigger, state, animate, transition, style } from '@angular/animations';
 
 @Component({
   templateUrl: './gst.component.html',
-  styleUrls: ['./gst.component.css']
+  styleUrls: ['./gst.component.css'],
+  providers: [
+    {
+      provide: AlertConfig, useValue: {}
+    }
+  ],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in <=> out', animate('400ms ease-in-out')),
+    ])
+  ]
 })
 export class GstComponent implements OnInit {
   public showCalendar: boolean = false;
@@ -28,6 +46,8 @@ export class GstComponent implements OnInit {
   public activeCompanyGstNumber = '';
   public gstAuthenticated$: Observable<boolean>;
   public gstTransactionCounts$: Observable<TransactionCounts[]> = of([]);
+  public selectedService: string;
+  public GstAsidePaneState: string = 'out';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -70,11 +90,16 @@ export class GstComponent implements OnInit {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
+    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(take(1));
     this.gstAuthenticated$.subscribe(s => {
-      if (s) {
+      if (!s) {
+        this.toggleSettingAsidePane(null, 'RECONCILE');
+      } else {
         this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
+        //  means user logged in gst portal
       }
     });
+
   }
 
   /**
@@ -86,17 +111,23 @@ export class GstComponent implements OnInit {
   }
 
   /**
-   * fileNow
-   */
-  public fileNow(type) {
-      //
-  }
-
-  /**
    * navigateToOverview
    */
   public navigateToOverview(type) {
     this._route.navigate(['pages', 'gstfiling', 'filing-return', type, moment(this.currentPeriod).format('MM-YYYY')]);
+  }
+
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
+    if (event) {
+      event.preventDefault();
+    }
+
+    if (selectedService === 'RECONCILE') {
+      let checkIsAuthenticated;
+      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
+    }
+    this.selectedService = selectedService;
+    this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
   }
 
 }

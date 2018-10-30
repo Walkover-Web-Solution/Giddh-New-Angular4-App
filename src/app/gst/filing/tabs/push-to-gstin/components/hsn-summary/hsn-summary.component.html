@@ -81,5 +81,9 @@
                 <div class="empty-msg"><span>  There is no HSN-wise summary.  </span></div>
             </div>
         </div>
+
+        <div class="mrT5 mrB5" *ngIf="(hsnSummaryInProgress$ | async)">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+        </div>
     </div>
 </div>

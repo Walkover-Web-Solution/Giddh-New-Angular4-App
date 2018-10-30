@@ -2,9 +2,10 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { HsnSummaryResponse } from 'app/store/GstR/GstR.reducer';
 import { GstReconcileService } from 'app/services/GstReconcile.service';
+import { takeUntil } from 'rxjs/operators';
 
 export const requestParam = {
       period: this.currentPeriod,
@@ -25,11 +26,14 @@ export class HsnSummaryComponent implements OnInit, OnChanges {
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
   public request = requestParam;
-
   public hsnSummaryResponse$: Observable<HsnSummaryResponse> = of(new HsnSummaryResponse());
+  public hsnSummaryInProgress$: Observable<boolean>;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
     this.hsnSummaryResponse$ = this._store.select(p => p.gstR.hsnSummary);
+    this.hsnSummaryInProgress$ = this._store.select(p => p.gstR.hsnSummaryInProgress).pipe(takeUntil(this.destroyed$));
     //
   }
 

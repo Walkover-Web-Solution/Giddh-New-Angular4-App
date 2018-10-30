@@ -148,4 +148,5 @@
 <!-- <router-outlet></router-outlet> -->
 
 
-<filing-header></filing-header>
+<div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+<aside-menu-account [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
