@@ -209,3 +209,7 @@
     </div>
   </div>
 </div>
+
+<div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
+<aside-inventory-stock-group (keyup.esc)="onEscape($event)" (closeAsideEvent)="closeCreateStock()" [class]="asideMenuStateForProductService"
+                             [@slideInOut]="asideMenuStateForProductService"></aside-inventory-stock-group>
