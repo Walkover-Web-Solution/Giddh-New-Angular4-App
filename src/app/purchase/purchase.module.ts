@@ -41,6 +41,9 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
   ],
   entryComponents: [
     PaginationComponent
+  ],
+  exports: [
+    AsideMenuPurchaseInvoiceSettingComponent
   ]
 })
 export class PurchaseModule {
