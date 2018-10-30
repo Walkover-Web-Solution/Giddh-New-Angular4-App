@@ -45,6 +45,7 @@ export class PushToGstInComponent implements OnInit, OnChanges {
   }
 
  public getSummary(type) {
+    debugger;
     let requestParam = {
       period: this.currentPeriod,
       gstin: this.activeCompanyGstNumber,
