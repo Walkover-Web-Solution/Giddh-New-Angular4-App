@@ -18,7 +18,7 @@ import { GroupService } from '../../services/group.service';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../../store/customActions';
-import { GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
+import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 
@@ -344,11 +344,17 @@ export class LedgerActions {
   public DeleteMultipleLedgerEntriesResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE).pipe(
       map((action: CustomActions) => {
-        let res: any = action.payload as BaseResponse<string, string>;
+        let res: any = action.payload as BaseResponse<any, string>;
         if (res.status === 'success') {
-          let errorMessage = res.body[0].reason;
-          if (errorMessage) {
-            this._toasty.errorToast(errorMessage, 'Error');
+          if (Array.isArray(res.body)) {
+            let errorMessage = res.body[0].reason;
+            let failedEntries = res.body[0].failedEntries;
+            if (errorMessage) {
+              this._toasty.errorToast(errorMessage, 'Error');
+            }
+            if (failedEntries && failedEntries.length) {
+              return this.SetFailedBulkEntries(failedEntries);
+            }
           } else {
             this._toasty.successToast('Entries deleted successfully', 'Success');
           }
@@ -358,6 +364,34 @@ export class LedgerActions {
         return {
           type: 'EmptyAction'
         };
+      }));
+
+  @Effect()
+  public GenerateBulkLedgerInvoice$: Observable<Action> = this.action$
+    .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE).pipe(
+      switchMap((action: CustomActions) => this._invoiceServices.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom)),
+      map(response => {
+        return this.GenerateBulkLedgerInvoiceResponse(response);
+      }));
+
+  @Effect()
+  public GenerateBulkLedgerInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          if (typeof data.body === 'string') {
+            this._toasty.successToast(data.body);
+          } else if (_.isArray(data.body) && data.body.length > 0) {
+            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+              this._toasty.warningToast(item.reason);
+            });
+            return this.SetFailedBulkEntries(data.body[0].failedEntries);
+          }
+        }
+        return {type: 'EmptyAction'};
       }));
 
   // public GetCurrencyRate$: Observable<Action> = this.action$
@@ -613,10 +647,24 @@ export class LedgerActions {
     };
   }
 
-  public DeleteMultipleLedgerEntriesResponse(res: BaseResponse<string, string>): CustomActions {
+  public DeleteMultipleLedgerEntriesResponse(res: BaseResponse<any, string>): CustomActions {
     return {
       type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE,
       payload: res
+    };
+  }
+
+  public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
+    return {
+      type: LEDGER.GENERATE_BULK_LEDGER_INVOICE,
+      payload: {reqObj, body: model, requestedFrom}
+    };
+  }
+
+  public GenerateBulkLedgerInvoiceResponse(model: any): CustomActions {
+    return {
+      type: LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE,
+      payload: model
     };
   }
 
@@ -631,6 +679,27 @@ export class LedgerActions {
     return {
       type: LEDGER.GET_CURRENCY_RATE_RESPONSE,
       payload: res
+    };
+  }
+
+  public SelectDeSelectAllEntries(mode: 'debit' | 'credit', isChecked: boolean): CustomActions {
+    return {
+      type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
+      payload: {mode, isChecked}
+    };
+  }
+
+  public SelectGivenEntries(entries: string[]): CustomActions {
+    return {
+      type: LEDGER.SELECT_GIVEN_ENTRIES,
+      payload: entries
+    };
+  }
+
+  public SetFailedBulkEntries(entries: string[]): CustomActions {
+    return {
+      type: LEDGER.SET_FAILED_BULK_ENTRIES,
+      payload: entries
     };
   }
 

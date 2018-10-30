@@ -26,10 +26,10 @@
                   <div class="item-icon">
                     <ng-container [ngSwitch]="r.type">
                       <ng-container *ngSwitchCase="'MENU'">
-                        <span class="uicon-bar"></span>
+                        <span class="icon-bar"></span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'GROUP'">
-                        <span class="uicon-group"></span>
+                        <span class="icon-group"></span>
                       </ng-container>
                       <ng-container *ngSwitchDefault>
                         <small class="">A/c</small>
@@ -96,7 +96,7 @@
 <!-- input box template -->
 <ng-template #searchEleTemplate>
   <div #searchWrapEle class="search-wrapper" (click)="handleClickOnSearchWrapper($event)">
-    <span class="searh-ico"><i class="uicon-search"></i></span>
+    <span class="searh-ico"><i class="icon-search"></i></span>
     <span *ngFor="let item of listOfSelectedGroups; let idx = index">
       <div class="vR">
         <div class="vN">
