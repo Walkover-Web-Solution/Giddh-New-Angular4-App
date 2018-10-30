@@ -37,7 +37,7 @@
         <div class="form-group">
           <label>Party A/c Name:<sup>*</sup></label>
           <!-- #creditor -->
-          <input name="party_name" type="text" onReturn placeholder="Party account"
+          <input #partyAccNameInputField name="party_name" type="text" onReturn placeholder="Party account"
                  class="form-control max-height28 appearance_none upper-fields" 
                  (keyup)="searchAccount($event?.target?.value)"
                  (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name"
@@ -94,6 +94,7 @@
                              (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
                              [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
                              (focus)="onStockFocus(i)"
+                             (blur)="filterByText = ''"
                              (keydown)="detectKey($event)"/></td>
                   <td>
                     <input onReturn type="text" class="form-control text-right" #qty
@@ -197,7 +198,6 @@
   <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
     <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
     <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
-    <p>filterByText is : {{filterByText}}</p>
     <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
     <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
                              [showList]="showLedgerAccountList" [isFilterEnabled]="true"
