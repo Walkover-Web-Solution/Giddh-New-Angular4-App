@@ -51,19 +51,25 @@
                             </div>
                         </tab>
 
-                        <tab>
+                        <tab (select)="getDocumentIssuedTxn()">
                             <ng-template tabHeading>
                                 Document Issued
                             </ng-template>
                             <div class="subtabs-box transactions-overview">
-                                <b2cs-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></b2cs-summary>
+                                <document-issued [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></document-issued>
                             </div>
                         </tab>
+
+                        <tab>
+                            <ng-template tabHeading>
+                                Failed Transactions
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                            </div>
+                        </tab>
+
                     </tabset>
                 </div>
-
-
-
             </div>
         </div>
     </div>

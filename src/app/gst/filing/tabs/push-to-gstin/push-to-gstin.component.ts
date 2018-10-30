@@ -55,4 +55,8 @@ export class PushToGstInComponent implements OnInit, OnChanges {
     this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, requestParam));
   }
 
+  public getDocumentIssuedTxn() {
+    this._store.dispatch(this.gstrAction.GetDocumentIssued(this.currentPeriod, this.activeCompanyGstNumber));
+  }
+
 }
