@@ -41,6 +41,7 @@ import { HighlightModule } from 'app/shared/helpers/pipes/highlightPipe/highligh
 import { DigitsOnlyModule } from 'app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -105,7 +106,8 @@ export function provideConfig() {
     // BsDatepickerModule,
     Daterangepicker,
     TextCaseChangeModule,
-    HighlightModule
+    HighlightModule,
+    TabsModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,

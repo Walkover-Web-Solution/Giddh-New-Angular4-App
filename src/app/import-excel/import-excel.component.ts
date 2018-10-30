@@ -1,4 +1,9 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/store';
+import { StateDetailsRequest } from 'app/models/api-models/Company';
+import { CompanyActions } from 'app/actions/company.actions';
 
 @Component({
   selector: 'import-excel',  // <home></home>
@@ -8,12 +13,18 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 
 export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor() {
+  constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
     //
   }
 
   public ngOnInit() {
     //
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'import';
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
   }
 
   public ngAfterViewInit(): void {

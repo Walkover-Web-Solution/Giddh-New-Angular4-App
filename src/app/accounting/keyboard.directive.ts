@@ -1,5 +1,12 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
+const KEY_CODE_CONSTANTS = {
+  ENTER: 13,
+  SPACE: 32,
+  BACKSPACE: 8,
+  ESC: 27
+};
+
 @Directive({
   selector: '[onReturn]'
 })
@@ -19,14 +26,14 @@ export class OnReturnDirective {
   @HostListener('keydown', ['$event'])
   public onKeyDown(e: any) {
 
-    if ((e.which === 13 || e.keyCode === 13) || (e.which === 8 || e.keyCode === 8) || (e.which === 32 || e.keyCode === 32)) {
+    if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC)) {
       const selectedEle = e.target;
       const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
       const nodeList = Array.from(allElements);
       const indx = nodeList.findIndex((ele) => ele === selectedEle);
 
       // nodeList[indx + 1].focus();
-      if (e.which === 13 || e.keyCode === 13) {
+      if (e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) {
 
         selectedEle.setAttribute('data-changed', false);
 
@@ -85,7 +92,7 @@ export class OnReturnDirective {
               target.focus();
             }, 210);
           } else {
-            if (target.value === 'NaN') {
+            if (target.value === 'NaN' || target.value === 0) {
               target.value = '';
             }
             if (this.clickCount > 1) {
@@ -100,7 +107,7 @@ export class OnReturnDirective {
           }
         }
 
-      } else if (e.which === 8 || e.keyCode === 8) {
+      } else if (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) {
 
         let target = allElements[indx - 1];
 
@@ -136,11 +143,17 @@ export class OnReturnDirective {
             }
           }
         }
-      } else if (e.which === 32 || e.keyCode === 32) {
+      } else if (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) {
         const target = allElements[indx];
         if (target) {
-          target.value = '';
+          // target.value = ''; // No need to make the field empty
         }
+      } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
+        selectedEle.value = '';
+        selectedEle.blur();
+        return setTimeout(() => {
+          selectedEle.focus();
+        }, 200);
       }
     } else if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode >= 65 && e.keyCode <= 90) {
 

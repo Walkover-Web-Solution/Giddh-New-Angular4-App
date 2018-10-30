@@ -1,19 +1,26 @@
 @charset "utf-8";
 @font-face {
     font-family: 'icomoon';
-    src: url('../fonts/icomoon/icomoon.eot?t896p1');
-    src: url('../fonts/icomoon/icomoon.eot?ji5w6e#iefix') format('embedded-opentype'), url('../fonts/icomoon/icomoon.ttf?ji5w6e') format('truetype'), url('../fonts/icomoon/icomoon.woff?ji5w6e') format('woff'), url('../fonts/icomoon/icomoon.svg?ji5w6e#icomoon') format('svg');
+    src: url('../fonts/main-icomoon/icomoon.eot');
+    src: url('../fonts/main-icomoon/icomoon.eot') format('eot'), url('../fonts/icomoon/main-icomoon.ttf') format('ttf'), url('../fonts/main-icomoon/icomoon.woff') format('woff'), url('../fonts/main-icomoon/icomoon.svg') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'icomoon-navbar';
-    src: url('../fonts/header/icomoon.eot?9v3fyi');
-    src: url('../fonts/header/icomoon.eot?9v3fyi#iefix') format('embedded-opentype'), url('../fonts/header/icomoon.ttf?9v3fyi') format('truetype'), url('../fonts/header/icomoon.woff?9v3fyi') format('woff'), url('../fonts/header/icomoon.svg?9v3fyi#icomoon') format('svg');
+
+/* css start */
+
+
+/* @font-face {
+    font-family: 'icomoon';
+    src:  url('fonts/icomoon.eot?79c1u5');
+    src:  url('fonts/icomoon.eot?79c1u5#iefix') format('embedded-opentype'),
+      url('fonts/icomoon.ttf?79c1u5') format('truetype'),
+      url('fonts/icomoon.woff?79c1u5') format('woff'),
+      url('fonts/icomoon.svg?79c1u5#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
-}
+  } */
 
 [class^="icon-"],
 [class*=" icon-"] {
@@ -30,9 +37,211 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-[class^="navico-"],
-[class*=" navico-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
+.icon-dots-three-vertical:before {
+    content: "\e916";
+}
+
+.icon-group:before {
+    content: "\e900";
+}
+
+.icon-bar:before {
+    content: "\e901";
+}
+
+.icon-Search:before {
+    content: "\e902";
+}
+
+.icon-add:before {
+    content: "\e903";
+}
+
+.icon-cross:before {
+    content: "\e904";
+}
+
+.icon-caret-down:before {
+    content: "\e906";
+}
+
+.icon-edit:before {
+    content: "\e907";
+}
+
+.icon-arrow-down:before {
+    content: "\e908";
+}
+
+.icon-child:before {
+    content: "\e909";
+}
+
+.icon-download:before {
+    content: "\e90a";
+}
+
+.icon-share:before {
+    content: "\e90b";
+}
+
+.icon-magic_link:before {
+    content: "\e90c";
+}
+
+.icon-dropdown:before {
+    content: "\e90d";
+}
+
+.icon-plus:before {
+    content: "\e90e";
+}
+
+.icon-search:before {
+    content: "\e90f";
+}
+
+.icon-building:before {
+    content: "\e910";
+}
+
+.icon-options:before {
+    content: "\e911";
+}
+
+.icon-minus:before {
+    content: "\e912";
+}
+
+.icon-trash:before {
+    content: "\e913";
+}
+
+.icon-checkbox-icon:before {
+    content: "\e914";
+}
+
+.icon-checkboxfill-icon:before {
+    content: "\e915";
+}
+
+.icon-folderminus:before {
+    content: "\f2332";
+}
+
+.icon-folderplus:before {
+    content: "\f2333";
+}
+
+.icon-folder:before {
+    content: "\f2334";
+}
+
+.icon-log:before {
+    content: "\e001";
+}
+
+.icon-recurring:before {
+    content: "\e002";
+}
+
+.icon-dashboard:before {
+    content: "\e004";
+}
+
+.icon-purchase:before {
+    content: "\e005";
+}
+
+.icon-invoice:before {
+    content: "\e006";
+}
+
+.icon-report:before {
+    content: "\e007";
+}
+
+.icon-sales:before {
+    content: "\e008";
+}
+
+.icon-search1:before {
+    content: "\e009";
+}
+
+.icon-setting:before {
+    content: "\e010";
+}
+
+.icon-tbpl:before {
+    content: "\e011";
+}
+
+.icon-tax:before {
+    content: "\e012";
+}
+
+.icon-manufacturing:before {
+    content: "\e013";
+}
+
+.icon-permission:before {
+    content: "\e014";
+}
+
+.icon-daybook:before {
+    content: "\e015";
+}
+
+.icon-journal:before {
+    content: "\e016";
+}
+
+.icon-inventory:before {
+    content: "\e905";
+}
+
+
+/* css end */
+
+
+/* @font-face {
+    font-family: 'icomoon';
+    src: url('../fonts/icomoon/icomoon.eot?t896p1');
+    src: url('../fonts/icomoon/icomoon.eot?ji5w6e#iefix') format('embedded-opentype'), url('../fonts/icomoon/icomoon.ttf?ji5w6e') format('truetype'), url('../fonts/icomoon/icomoon.woff?ji5w6e') format('woff'), url('../fonts/icomoon/icomoon.svg?ji5w6e#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+} */
+
+
+/* @font-face {
+    font-family: 'icomoon-navbar';
+    src: url('../fonts/header/icomoon.eot?9v3fyi');
+    src: url('../fonts/header/icomoon.eot?9v3fyi#iefix') format('embedded-opentype'), url('../fonts/header/icomoon.ttf?9v3fyi') format('truetype'), url('../fonts/header/icomoon.woff?9v3fyi') format('woff'), url('../fonts/header/icomoon.svg?9v3fyi#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+} */
+
+
+/* [class^="icon-"],
+[class*=" icon-"] {
+    
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+} */
+
+
+/* [class^="icon-"],
+[class*=" icon-"] {
+    
     font-family: 'icomoon-navbar' !important;
     speak: none;
     font-style: normal;
@@ -40,12 +249,13 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
-    /* Better Font Rendering =========== */
+    
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
+} */
 
-@font-face {
+
+/* @font-face {
     font-family: 'universalList-icon';
     src: url('../fonts/universal-list/icomoon.eot?m6r1qf');
     src: url('../fonts/universal-list/icomoon.eot?m6r1qf#iefix') format('embedded-opentype'), url('../fonts/universal-list/icomoon.ttf?m6r1qf') format('truetype'), url('../fonts/universal-list/icomoon.woff?m6r1qf') format('woff'), url('../fonts/universal-list/icomoon.svg?m6r1qf#icomoon') format('svg');
@@ -53,9 +263,8 @@
     font-style: normal;
 }
 
-[class^="uicon-"],
-[class*=" uicon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
+[class^="icon-"],
+[class*=" icon-"] {
     font-family: 'universalList-icon' !important;
     speak: none;
     font-style: normal;
@@ -63,25 +272,25 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
-    /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
+} */
 
 
-/* .uicon-account:before {
+/* .icon-account:before {
     content: "\e903";
 } */
 
-.uicon-group:before {
+
+/* .icon-group:before {
     content: "\e900";
 }
 
-.uicon-search:before {
+.icon-search:before {
     content: "\e902";
 }
 
-.uicon-bar:before {
+.icon-bar:before {
     content: "\e901";
 }
 
@@ -181,69 +390,69 @@
     content: "\f2334";
 }
 
-.navico-log:before {
+.icon-log:before {
     content: "\e001";
 }
 
-.navico-recurring:before {
+.icon-recurring:before {
     content: "\e002";
 }
 
-.navico-inventory:before {
+.icon-inventory:before {
     content: "\e902";
 }
 
-.navico-dashboard:before {
+.icon-dashboard:before {
     content: "\e004";
 }
 
-.navico-purchase:before {
+.icon-purchase:before {
     content: "\e005";
 }
 
-.navico-invoice:before {
+.icon-invoice:before {
     content: "\e006";
 }
 
-.navico-report:before {
+.icon-report:before {
     content: "\e007";
 }
 
-.navico-sales:before {
+.icon-sales:before {
     content: "\e008";
 }
 
-.navico-search:before {
+.icon-search:before {
     content: "\e009";
 }
 
-.navico-setting:before {
+.icon-setting:before {
     content: "\e010";
 }
 
-.navico-tbpl:before {
+.icon-tbpl:before {
     content: "\e011";
 }
 
-.navico-tax:before {
+.icon-tax:before {
     content: "\e012";
 }
 
-.navico-manufacturing:before {
+.icon-manufacturing:before {
     content: "\e013";
 }
 
-.navico-permission:before {
+.icon-permission:before {
     content: "\e014";
 }
 
-.navico-daybook:before {
+.icon-daybook:before {
     content: "\e015";
 }
 
-.navico-journal:before {
+.icon-journal:before {
     content: "\e016";
-}
+} */
 
 a,
 button,
@@ -253,6 +462,67 @@ input {
 
 
 /* my css start */
+
+.hover-orange:hover {
+    color: #FF5F00 !important;
+    font-family: 'LatoWebBold';
+}
+
+.top-heading {}
+
+.company-list button.btn-link {
+    font-size: 13px;
+    color: #1E67C8;
+    display: block;
+    padding: 7px 10px;
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.company-list button.btn-link:hover {
+    color: #fff;
+    background: #2D9EE0;
+    text-decoration: none;
+}
+
+ul.sub-list {
+    margin-top: 5px;
+}
+
+.user_dropdown>li>a .glyphicon-menu-right {
+    font-size: 10px;
+    float: right;
+    padding-top: 4px;
+}
+
+.sub-list li a {
+    font-size: 13px;
+}
+
+.company-list .input-group {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.company-list .input-group .form-control {
+    /* border-bottom: 1px solid #e8e8e8 !important; */
+    border: 0px solid !important;
+    /* border-bottom: 1px solid #e8e8e8 !important; */
+}
+
+.company-list .input-group .input-group-addon {
+    background: no-repeat;
+    border-radius: 0px;
+    border: 0px;
+    font-size: 9px;
+    color: #333333;
+    border-left: 1px solid #d2d2d2;
+    cursor: pointer;
+}
+
+.bold {
+    font-family: 'LatoWebbold';
+}
 
 
 /* file upload css start */
@@ -268,6 +538,13 @@ input {
 
 .col-xs-2.date-range {
     width: 220px;
+}
+
+.top-heading>h4 {
+    font-size: 18px;
+    font-family: 'LatoWebbold';
+    line-height: 28px;
+    text-transform: capitalize;
 }
 
 
@@ -331,8 +608,18 @@ input {
     font-size: 14px;
 }
 
+.company-name .cText .cName {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.company-name .cText .fyear {
+    font-size: 10px;
+}
+
 .company-name .cText span {
-    color: #fff !important;
+    color: #B7B7B7;
 }
 
 .acntAccordion .title.active {
@@ -340,11 +627,7 @@ input {
 }
 
 header .navbar {
-    background-color: #1a1a1a;
-}
-
-.company-name.open span {
-    color: #fff;
+    background-color: #F7F8FA;
 }
 
 
@@ -525,12 +808,12 @@ header .navbar {
 }
 
 #accountSearch {
-    min-height: 54px;
+    min-height: 28px;
     border: 0;
-    background: #333 !important;
+    background: transparent;
     color: #fff;
     padding: 7px 35px 7px 10px !important;
-    width: 270px;
+    border: 1px solid #5F6E7E;
 }
 
 #accountSearch:focus {
@@ -636,6 +919,32 @@ header .navbar {
 .date-range-picker {
     max-width: 220px;
     width: 100% !important;
+    background: none !important;
+    font-size: 12px;
+    height: 26px;
+    border: 0px;
+    color: #333333;
+    padding-left: 0px !important;
+}
+
+.header-date {
+    /* background: #E7E7E8 !important; */
+    font-size: 12px;
+    height: 26px;
+    line-height: 23px;
+    padding: 2px 0px;
+    border-radius: 2px;
+}
+
+.btn-gray {
+    background: #666666;
+    color: #fff;
+    /* font-size: 10px;
+    padding: 7px 10px; */
+}
+
+.btn-gray:hover {
+    color: #fff;
 }
 
 
@@ -652,7 +961,7 @@ header .navbar {
 }
 
 .company-name {
-    min-width: 380px;
+    /* min-width: 380px; */
 }
 
 .childTab>.nav.nav-tabs {
@@ -751,46 +1060,44 @@ header .navbar {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
-    max-width: 380px;
+    /* max-width: 380px; */
+    display: inline-block;
+    width: 100%;
 }
 
-#cmpWrp .cText {
+
+/* #cmpWrp .cText {
     margin: 5px 0 5px 0px;
-    width: 100%;
     font-size: 9px;
     padding-right: 5px;
-}
+} */
 
 #companyList {
     background: #fff;
+    padding-bottom: 4px;
 }
 
-#companyList li ul li:hover {
-    background: #e7e7e6;
-}
-
-#companyList li {
-    background: #fff;
+#companyList li:not(.divider) {
     text-transform: capitalize;
 }
 
 #companyList li.selected-company,
 #companyList li.selected-company:hover {
-    background: #ff5e01;
-    color: #fff;
+    color: #ff5e01;
 }
 
 #companyList li.selected-company span {
-    color: #fff !important;
+    color: #ff5e01 !important;
 }
 
-.company-name .icon-dropdown {
-    font-size: 6px;
+.company-name .icon-dots-three-vertical {
+    font-size: 18px;
     position: absolute;
     top: 60%;
     bottom: 0;
     transform: translateY(-50%);
-    right: 10px;
+    right: 16px;
+    color: #B7B7B7;
 }
 
 .basic>tbody>tr>td,
@@ -1254,9 +1561,10 @@ input[type="checkbox"]:after {
     border: 0 !important;
 }
 
-#companyList .glyphicon-trash {
+
+/* #companyList .glyphicon-trash {
     color: #ff5e01;
-}
+} */
 
 .proforma-list>.filters>div {
     margin-right: 0;
@@ -2184,6 +2492,10 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .mrl0 {
     margin-left: 0 !important;
+}
+
+.mrR0 {
+    margin-right: 0 !important;
 }
 
 .mr-b-5 {
@@ -3920,6 +4232,7 @@ input[type='checkbox'][disabled] {
 .top_bar {
     padding-top: 15px;
     padding-bottom: 15px;
+    /* padding-left: 240px; */
 }
 
 .section_head {
@@ -4758,12 +5071,25 @@ table td[class*=col-]:last-child {
     background: #fff !important;
 }
 
-.universal_date label {
+
+/* .universal_date label {
     color: #fff;
-}
+} */
 
 .universal_date .btn-link {
-    color: #10aae0 !important;
+    color: #2262D1 !important;
+    padding-top: 3px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.universal_date .btn-link:hover {
+    text-decoration: none;
+}
+
+.universal_date {
+    float: none !important;
+    display: inline-block;
 }
 
 .divide-ico {
@@ -4795,47 +5121,79 @@ table td[class*=col-]:last-child {
 }
 
 .user_dropdown {
-    width: 200px;
+    width: 270px;
     right: 4px;
+    padding: 0px;
+    border: 1px solid #CCCCCC;
+    left: 25px;
 }
 
 .user_dropdown>li>a {
-    font-size: 14px;
-    padding: 3px 10px;
+    font-size: 13px;
+    padding: 6px 20px !important;
+    color: #333333;
 }
 
 .app_list>ul {
     width: 100%;
     float: left;
-    padding: 0px 10px;
+    padding: 4px 20px;
     font-size: 14px;
+    margin-bottom: 5px;
     /* margin: 10px 0; */
 }
 
 .app_list>ul h6 {
-    color: #333;
-    margin-bottom: 7px;
+    margin-bottom: 10px;
+    font-family: LatoWebBold;
+    font-size: 13px;
 }
 
 .app_list>ul li {
-    list-style: none;
+    list-style-type: none;
     float: left;
     width: 50%;
     margin: 3px 0;
+    font-size: 20px;
+}
+
+.footer-navigate {
+    background: #F5F5F5;
+    border-radius: 0 0 3px 3px;
+}
+
+.footer-navigate>ul {
+    display: flex;
+    width: 100%;
+}
+
+.footer-navigate>ul li {
+    width: 100%;
+    list-style-type: none;
+    padding: 8px 20px;
+    font-size: 11px;
+    color: #666666;
 }
 
 .app_list>ul li a {
     padding: 3px 0;
     color: #555;
     display: block;
+    position: relative;
+    font-size: 12px;
+}
+
+.app_list>ul li a>i {
+    margin-right: 2px;
 }
 
 .app_list>ul li a:hover {
     color: #000;
+    background: none;
 }
 
 .user_circle {
-    background: #555555;
+    background: #FF5F00;
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -4844,7 +5202,9 @@ table td[class*=col-]:last-child {
     text-align: center;
     line-height: 30px;
     color: #fff;
-    font-size: 12px;
+    font-size: 14px;
+    border: 1px solid #FF5F00;
+    text-transform: uppercase;
 }
 
 .user_circle img {
@@ -4878,6 +5238,13 @@ table td[class*=col-]:last-child {
 
 .userName_wrap {
     width: calc(100% - 40px);
+    font-size: 16px;
+    line-height: initial;
+}
+
+.userName_wrap small {
+    font-size: 12px;
+    display: block;
 }
 
 .parent-Group>.stock-grp-list:first-child {
@@ -5106,7 +5473,7 @@ panel.sFthanks.fieldset {
 
 /* ===============================================================
 GST filing
-================================================================== */
+===============================================================  */
 
 .column.list-column.expanded-list-column {
     width: auto;
@@ -5215,6 +5582,46 @@ GST filing
 .list-header .list-filter .btn [class*=icon] {
     position: relative;
     top: 1px;
+}
+
+.menu_open {
+    padding-left: 215px;
+}
+
+.navbar_open {
+    left: 240px;
+    transition: left .1s ease;
+}
+
+perfect-scrollbar>.ps>.ps-overlay {
+    opacity: 0;
+}
+
+.cmp:hover,
+.user_dropdown>li a:hover .userName_wrap small {
+    color: #fff;
+}
+
+.user_dropdown>li a:hover {
+    color: #fff;
+    background: #2D9EE0;
+}
+
+.user_dropdown>li.open>a {
+    /* color: #ff5e01; */
+}
+
+.hamburger_menu button,
+.hamburger_menu button:hover,
+.hamburger_menu button:focus {
+    padding-left: 0;
+    background: transparent;
+    outline: none;
+    padding-right: 10px;
+}
+
+.hamburger_menu h4 {
+    font-size: 20px;
 }
 
 .tax-engine .icon {
@@ -5876,4 +6283,16 @@ GST filing
     cursor: pointer;
     display: inline-block;
     border: 1px solid #ddd;
+}
+
+app-header {
+    position: relative;
+}
+
+.navbar_header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
 }
