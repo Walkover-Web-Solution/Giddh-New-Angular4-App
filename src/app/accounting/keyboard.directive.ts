@@ -150,7 +150,8 @@ export class OnReturnDirective {
         }
       } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
         selectedEle.value = '';
-        selectedEle.blur();
+        // selectedEle.blur();
+        allElements[indx - 1].focus();
         return setTimeout(() => {
           selectedEle.focus();
         }, 200);
