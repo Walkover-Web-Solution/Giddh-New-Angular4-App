@@ -2,9 +2,10 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/cor
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { GstReconcileService } from 'app/services/GstReconcile.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { NilSummaryResponse } from 'app/store/GstR/GstR.reducer';
+import { takeUntil } from 'rxjs/operators';
 
 export const requestParam = {
       period: this.currentPeriod,
@@ -26,10 +27,15 @@ export class NilSummaryComponent implements OnInit, OnChanges {
   @Input() public selectedGst: string = '';
 
   public nilSummaryResponse$: Observable<NilSummaryResponse> = of(new NilSummaryResponse());
+  public nilSummaryInProgress$: Observable<boolean>;
   public request = requestParam;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
     this.nilSummaryResponse$ = this._store.select(p => p.gstR.nilSummary);
+    this.nilSummaryInProgress$ = this._store.select(p => p.gstR.nilSummaryInProgress).pipe(takeUntil(this.destroyed$));
+
     //
   }
 

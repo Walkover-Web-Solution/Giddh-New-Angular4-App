@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { GstReconcileService } from 'app/services/GstReconcile.service';
+import { takeUntil } from 'rxjs/operators';
 
 export const requestParam = {
       period: this.currentPeriod,
@@ -27,9 +28,13 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
 
   public b2csSummaryResponse$: Observable<TransactionSummary>;
   public request = requestParam;
+  public b2csSummaryInProgress$: Observable<boolean>;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
     this.b2csSummaryResponse$ = this._store.select(p => p.gstR.b2csSummary);
+    this.b2csSummaryInProgress$ = this._store.select(p => p.gstR.b2csSummaryInProgress).pipe(takeUntil(this.destroyed$));
     //
   }
 

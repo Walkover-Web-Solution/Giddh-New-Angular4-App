@@ -130,13 +130,13 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
       // this.loadReconcilePaginationComponent(s, 'MATCHED');
     });
 
-    this.gstAuthenticated$.subscribe(s => {
-      if (!s) {
-        this.toggleSettingAsidePane(null, 'RECONCILE');
-      } else {
-        //  means user logged in gst portal
-      }
-    });
+    // this.gstAuthenticated$.subscribe(s => {
+    //   if (!s) {
+    //     this.toggleSettingAsidePane(null, 'RECONCILE');
+    //   } else {
+    //     //  means user logged in gst portal
+    //   }
+    // });
     this.pullFromGstInProgress$.subscribe(s => {
       if (s) {
         this.toggleSettingAsidePane(null, 'RECONCILE');

@@ -28,7 +28,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="!(gstOverviewDataInProgress$ | async)">
                     <tr *ngFor="let item of (gstOverviewData$ | async)?.transactionSummary.results" (click)="viewTransactions(item)">
                         <td></td>
                         <td [ngSwitch]="item.gstReturnType">
@@ -107,7 +107,13 @@
                             </ng-container>
                         </td>
                     </tr>
-
+                </tbody>
+                <tbody *ngIf="(gstOverviewDataInProgress$ | async)">
+                    <tr>
+                        <td colspan="7">
+                            <div class="giddh-spinner vertical-center-spinner"></div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -88,5 +88,9 @@
                 <div class="empty-msg"><span>  There is no summary of invoices with value less than 2.5 lakhs, other than B2C (Large) that you’ve issued to consumers.  </span></div>
             </div>
         </div>
+
+        <div class="mrT5 mrB5" *ngIf="(b2csSummaryInProgress$ | async)">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+        </div>
     </div>
 </div>
