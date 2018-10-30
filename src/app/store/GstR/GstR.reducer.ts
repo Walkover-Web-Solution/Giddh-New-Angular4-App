@@ -4,15 +4,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GstReconcileInvoiceDetails, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
-  isGenerateOtpInProcess: boolean;
-  isGenerateOtpSuccess: boolean;
-  isGstReconcileInvoiceInProcess: boolean;
-  isGstReconcileInvoiceSuccess: boolean;
-  isGstReconcileVerifyOtpInProcess: boolean;
-  isGstReconcileVerifyOtpSuccess: boolean;
-  gstAuthenticated: boolean;
-  gstFoundOnGiddh: boolean;
-  isPullFromGstInProgress: boolean;
+  overViewDataInProgress: boolean;
   overViewData: GstOverViewResponse;
   viewTransactionData: TransactionSummary;
   activeCompanyGst: string;
@@ -22,6 +14,10 @@ export interface GstRReducerState {
   nilSummary: NilSummaryResponse;
   b2csSummary: TransactionSummary;
   transactionCounts: TransactionCounts[];
+  hsnSummaryInProgress: boolean;
+  nilSummaryInProgress: boolean;
+  b2csSummaryInProgress: boolean;
+
 }
 
 export class GstOverViewResponse {
@@ -95,15 +91,7 @@ export class TransactionCounts {
 }
 
 const initialState: GstRReducerState = {
-  isGenerateOtpInProcess: false,
-  isGenerateOtpSuccess: false,
-  isGstReconcileInvoiceInProcess: false,
-  isGstReconcileInvoiceSuccess: false,
-  isGstReconcileVerifyOtpInProcess: false,
-  isGstReconcileVerifyOtpSuccess: false,
-  gstAuthenticated: true,
-  gstFoundOnGiddh: true,
-  isPullFromGstInProgress: false,
+  overViewDataInProgress: false,
   overViewData: new GstOverViewResponse(),
   viewTransactionData: new TransactionSummary(),
   activeCompanyGst: '',
@@ -112,7 +100,10 @@ const initialState: GstRReducerState = {
   hsnSummary: null,
   nilSummary: null,
   b2csSummary: null,
-  transactionCounts: []
+  transactionCounts: [],
+  hsnSummaryInProgress: false,
+  nilSummaryInProgress: false,
+  b2csSummaryInProgress: false
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -123,6 +114,12 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         ...state,
         activeCompanyGst: action.payload
       };
+    case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS: {
+      return {
+        ...state,
+        overViewDataInProgress: true
+      };
+    }
     case GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
@@ -141,9 +138,16 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.viewTransactionData = response.body;
+        newState.overViewDataInProgress = false;
       }
       return newState;
     }
+    case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY:
+     return Object.assign({}, state, {
+          nilSummaryInProgress: true,
+          hsnSummaryInProgress: true,
+          b2csSummaryInProgress: true
+      });
     case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
@@ -151,12 +155,15 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         switch (response.queryString.requestParam.gstReturnType) {
           case 'hsnsac':
             newState.hsnSummary = response.body;
+            newState.hsnSummaryInProgress = false;
             break;
           case 'nil':
             newState.nilSummary = response.body;
+            newState.nilSummaryInProgress = false;
             break;
           case 'b2cs':
             newState.b2csSummary = response.body;
+            newState.b2csSummaryInProgress = false;
             break;
         }
       }

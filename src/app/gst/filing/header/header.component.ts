@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -34,7 +34,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     ])
   ]
 })
-export class FilingHeaderComponent implements OnInit, OnChanges {
+export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public currentPeriod: string = null;
   @Input() public selectedGst: string = null;
   public reconcileIsActive: boolean = false;
@@ -50,18 +50,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges {
     private _toasty: ToasterService,
     private _reconcileAction: GstReconcileActions
   ) {
-    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(take(1));
+    // this.gstAuthenticated$.subscribe(s => {
+    //   if (!s) {
+    //     this.toggleSettingAsidePane(null, 'RECONCILE');
+    //   }
+    // });
   }
 
   public ngOnInit() {
-    this.gstAuthenticated$.subscribe(s => {
-      debugger;
-      if (!s) {
-        this.toggleSettingAsidePane(null, 'RECONCILE');
-      } else {
-        //  means user logged in gst portal
-      }
-    });
+
   }
 
   /**
@@ -95,4 +93,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges {
     this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
   }
 
+  /**
+   * ngOnDestroy
+   */
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 }
