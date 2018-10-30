@@ -17,7 +17,8 @@ export interface GstRReducerState {
   hsnSummaryInProgress: boolean;
   nilSummaryInProgress: boolean;
   b2csSummaryInProgress: boolean;
-
+  documentIssuedResponse: DocumentIssuedResponse[];
+  documentIssuedRequestInProgress: boolean;
 }
 
 export class GstOverViewResponse {
@@ -90,6 +91,18 @@ export class TransactionCounts {
   public transactionCount: number;
 }
 
+export class DocumentIssuedResponse {
+  public num: number;
+  public doc: string;
+  public from: string;
+  public to: string;
+  public totnum: number;
+  public cancel: number;
+  public netIssue: any;
+  public action: string;
+  public custom: string;
+}
+
 const initialState: GstRReducerState = {
   overViewDataInProgress: false,
   overViewData: new GstOverViewResponse(),
@@ -103,7 +116,9 @@ const initialState: GstRReducerState = {
   transactionCounts: [],
   hsnSummaryInProgress: false,
   nilSummaryInProgress: false,
-  b2csSummaryInProgress: false
+  b2csSummaryInProgress: false,
+  documentIssuedResponse: [],
+  documentIssuedRequestInProgress: false
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -174,6 +189,21 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.TransactionCounts = response.body;
+      }
+      return newState;
+    }
+    case GSTR_ACTIONS.GET_DOCUMENT_ISSUED: {
+      return {
+        ...state,
+        documentIssuedRequestInProgress: true
+      };
+    }
+    case GSTR_ACTIONS.GET_DOCUMENT_ISSUED_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      if (response.status === 'success') {
+        newState.documentIssuedResponse = response.body;
+        newState.documentIssuedRequestInProgress = false;
       }
       return newState;
     }

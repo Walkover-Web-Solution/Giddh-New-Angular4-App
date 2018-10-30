@@ -134,6 +134,23 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect() private GetDocumentIssued$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_DOCUMENT_ISSUED)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetDocumentIssuedTransaction(action.payload)
+          .pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetDocumentIssuedResponse(response);
+            }));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -267,6 +284,19 @@ export class GstReconcileActions {
   public GetTransactionsCountResponse(res) {
     return {
       type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT_RESPONSE,
+      payload: res
+    };
+  }
+
+  public GetDocumentIssued(period, gstin) {
+    return {
+      type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED,
+      payload: {period, gstin}
+    };
+  }
+  public GetDocumentIssuedResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED_RESPONSE,
       payload: res
     };
   }
