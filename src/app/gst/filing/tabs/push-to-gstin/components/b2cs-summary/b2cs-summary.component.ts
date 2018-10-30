@@ -8,8 +8,8 @@ import { GstReconcileService } from 'app/services/GstReconcile.service';
 import { takeUntil } from 'rxjs/operators';
 
 export const requestParam = {
-      period: this.currentPeriod,
-      gstin: this.activeCompanyGstNumber,
+      period: '',
+      gstin: '',
       gstReturnType: 'b2cs',
       page: 1,
       count: 20
