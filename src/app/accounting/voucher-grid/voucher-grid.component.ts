@@ -786,8 +786,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
-    console.log('ev :', ev);
-    console.log('this.selectedField is :', this.selectedField);
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {

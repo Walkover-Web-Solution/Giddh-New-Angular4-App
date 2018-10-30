@@ -786,8 +786,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    if (this.allStocks && this.allStocks.length) {
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false) {
+    if (this.allStocks && this.allStocks.length && !forceRefresh) {
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
       this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -887,8 +887,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public showQuickAccountModal() {
-    this.loadQuickAccountComponent();
-    this.quickAccountModal.show();
+    this.asideMenuStateForProductService = 'in';
+    // this.loadQuickAccountComponent();
+    // this.quickAccountModal.show();
   }
 
   public hideQuickAccountModal() {
@@ -921,6 +922,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public closeCreateStock() {
     this.asideMenuStateForProductService = 'out';
+    // after creating stock, get all stocks again
+    this.getFlattenGrpofAccounts(null, null, true);
   }
 
   public addNewAccount(val, lastIdx) {

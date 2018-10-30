@@ -314,7 +314,7 @@
                 </thead>
                 <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
                     <ng-container *ngFor="let transaction of entry.transactions;">
-                        <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx !== entryIdx" class="row-active">
+                        <tr [hidden]="activeIndx !== entryIdx" class="row-active">
                             <td>{{ entryIdx+1 }}</td>
                             <td style="min-width: 115px;width: 115px">
                                 <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-left" [(ngModel)]="entry.entryDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
@@ -419,8 +419,7 @@
                             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
                         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxes]="companyTaxesList$ | async" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" [taxListAutoRender]="transaction.taxRenderData" (selectedTaxEvent)="selectedTaxEvent($event, invFormData.entries[activeIndx])"
-                                    (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)" [TaxSum]="entry.taxSum">
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" (selectedTaxEvent)="selectedTaxEvent($event)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
                             <td style="width: 120px;">

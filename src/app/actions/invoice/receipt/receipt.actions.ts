@@ -9,7 +9,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse } from '../../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -40,6 +40,20 @@ export class InvoiceReceiptActions {
       }));
 
   @Effect()
+  private GET_VOUCHER_DETAILS$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._receiptService.GetVoucherDetails(action.payload.accountUniqueName,
+        action.payload.model)),
+      map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+          this.showToaster(response.message, 'error');
+        }
+        return this.GetVoucherDetailsResponse(response);
+      }));
+
+  @Effect()
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT).pipe(
       switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
@@ -53,16 +67,23 @@ export class InvoiceReceiptActions {
               private store: Store<AppState>, private _receiptService: ReceiptService) {
   }
 
-  public ResetInvoiceReceiptState(): CustomActions {
+  public UpdateInvoiceReceiptRequest(model: ReciptRequest, accountUniqueName: string): CustomActions {
     return {
-      type: INVOICE_RECEIPT_ACTIONS.INVOICE_RECEIPT_RESET
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT,
+      payload: {model, accountUniqueName}
     };
   }
 
-  public UpdateInvoiceReceiptRequest(accountUniqueName: string, model: ReciptRequest): CustomActions {
+  public UpdateInvoiceReceiptResponse(model: BaseResponse<string, ReciptRequest>): CustomActions {
     return {
-      type: INVOICE_RECEIPT_ACTIONS.UPDATE_GENERATED_INVOICE_RECEIPT,
-      payload: {accountUniqueName, body: model}
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
+      payload: model
+    };
+  }
+
+  public ResetInvoiceReceiptState(): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.INVOICE_RECEIPT_RESET
     };
   }
 
@@ -91,6 +112,20 @@ export class InvoiceReceiptActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT_RESPONSE,
       payload: model
+    };
+  }
+
+  public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS,
+      payload: {accountUniqueName, model}
+    };
+  }
+
+  public GetVoucherDetailsResponse(response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSE,
+      payload: response
     };
   }
 
