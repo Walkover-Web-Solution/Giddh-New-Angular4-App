@@ -67,6 +67,56 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public isGetAllRequestInProcess$: Observable<boolean>;
   public type: string;
   public downloadVoucherRequestObject: any;
+
+  public datePickerOptions: any = {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
+
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -125,17 +175,18 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      // if (dateObj) {
-      //       //   this.universalDate = _.cloneDeep(dateObj);
-      //       //   this.receiptSearchRequest.dateRange = this.universalDate;
-      //       //   this.isUniversalDateApplicable = true;
-      //       //   this.getInvoiceReceipts();
-      //       // }
+      if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.receiptSearchRequest.dateRange = this.universalDate;
+        this.isUniversalDateApplicable = true;
+        this.getInvoiceReceipts();
+      }
     })).subscribe();
   }
 
   public pageChanged(event: any): void {
     this.receiptSearchRequest.page = event.page;
+    this.isUniversalDateApplicable = false;
     this.getInvoiceReceipts();
   }
 
@@ -225,16 +276,17 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     let fromDate = null;
     let toDate = null;
-    if (this.universalDate && this.universalDate.length) {
+    if (this.universalDate && this.universalDate.length && this.isUniversalDateApplicable) {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-    } else {
-      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
+    // else {
+    //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    //   toDate = moment().format(GIDDH_DATE_FORMAT);
+    // }
 
-    model.from = this.isUniversalDateApplicable ? fromDate : o.from;
-    model.to = this.isUniversalDateApplicable ? toDate : o.to;
+    model.from =  o.from;
+    model.to =  o.to;
     model.count = o.count;
     model.page = o.page;
     return model;
@@ -242,8 +294,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public bsValueChange(event: any) {
     if (event) {
-      this.receiptSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
-      this.receiptSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+      this.receiptSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      this.receiptSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
       // this.getInvoiceReceipts();
     }
   }
