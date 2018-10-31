@@ -6,7 +6,7 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 @NgModule({
   imports: [
     RouterModule.forChild([{
-      path: '', component: NewVsOldInvoicesComponent, canActivate: [NeedsAuthentication]
+      path: '', component: NewVsOldInvoicesComponent
     }])
   ],
   exports: [RouterModule]
