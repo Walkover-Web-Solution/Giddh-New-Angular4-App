@@ -28,7 +28,7 @@ export class OnReturnDirective {
 
     if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC)) {
       const selectedEle = e.target;
-      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
+      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
       const nodeList = Array.from(allElements);
       const indx = nodeList.findIndex((ele) => ele === selectedEle);
 
@@ -137,6 +137,9 @@ export class OnReturnDirective {
             if (target.disabled) {
               // console.log('yes if');
               target = allElements[indx - 2];
+              if (target.disabled) {
+                target = allElements[indx - 3];
+              }
               return target.focus();
             } else {
               return target.focus();
