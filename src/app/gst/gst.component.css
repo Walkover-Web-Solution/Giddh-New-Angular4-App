@@ -348,3 +348,12 @@ hr {
     border-top: 0 !important;
     border-bottom-color: #025cff;
 }
+
+.my-dropdown-menu {
+    top: 8px;
+}
+
+.section-disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}

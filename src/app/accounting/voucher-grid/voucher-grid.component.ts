@@ -23,6 +23,7 @@ import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},
@@ -36,7 +37,19 @@ const CustomShortcode = [
 @Component({
   selector: 'account-as-voucher',
   templateUrl: './voucher-grid.component.html',
-  styleUrls: ['../accounting.component.css']
+  styleUrls: ['../accounting.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -92,7 +105,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedField: 'account' | 'stock';
 
   public chequeDetailForm: FormGroup;
+  public asideMenuStateForProductService: string = 'out';
 
+  private selectedAccountInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
 
@@ -800,8 +815,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getStock
    */
-  public getStock(parentGrpUnqName?, q?: string) {
-    if (this.allStocks && this.allStocks.length) {
+  public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false) {
+    if (this.allStocks && this.allStocks.length && !forceRefresh) {
       // this.inputForList = _.cloneDeep(this.allStocks);
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
@@ -856,12 +871,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public showQuickAccountModal() {
-    this.loadQuickAccountComponent();
-    this.quickAccountModal.show();
+    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    this.selectedAccountInputField = selectedField;
+    if (this.selectedField === 'account') {
+      this.loadQuickAccountComponent();
+      this.quickAccountModal.show();
+    } else if (this.selectedField === 'stock') {
+      this.asideMenuStateForProductService = 'in';
+    }
   }
 
   public hideQuickAccountModal() {
     this.quickAccountModal.hide();
+    this.dateField.nativeElement.focus();
+    return setTimeout(() => {
+      this.selectedAccountInputField.value = '';
+      this.selectedAccountInputField.focus();
+    }, 200);
+  }
+
+  public closeCreateStock() {
+    this.asideMenuStateForProductService = 'out';
+    // after creating stock, get all stocks again
+    this.getStock(null, null, true);
+    this.selectedAccountInputField.value = '';
+    this.filterByText = '';
+    this.dateField.nativeElement.focus();
+    setTimeout(() => {
+      this.selectedAccountInputField.focus();
+    }, 200);
   }
 
   private deleteRow(idx: number) {
