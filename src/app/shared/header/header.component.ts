@@ -954,9 +954,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   private getElectronAppVersion() {
     this.authService.GetElectronAppVersion().subscribe((res: string) => {
-      let version = res.split('files')[0];
-      let versNum = version.split(' ')[1];
-      this.apkVersion = versNum;
+      if (res) {
+        let version = res.split('files')[0];
+        let versNum = version.split(' ')[1];
+        this.apkVersion = versNum;
+      }
     });
   }
 
