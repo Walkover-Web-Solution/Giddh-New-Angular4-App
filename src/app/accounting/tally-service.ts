@@ -210,12 +210,12 @@ export class TallyModuleService {
           accounts = this.flattenAccounts.value;
       }
       if (accounts && accounts.length) {
-        const endOfLine = {
-          uniqueName: '_endoflist',
-          name: 'End Of List',
-          parentGroups: []
-        };
-        accounts.unshift(endOfLine);
+        // const endOfLine = {
+        //   uniqueName: '_endoflist',
+        //   name: 'End Of List',
+        //   parentGroups: []
+        // };
+        // accounts.unshift(endOfLine);
         this.filteredAccounts.next(accounts);
       }
     }

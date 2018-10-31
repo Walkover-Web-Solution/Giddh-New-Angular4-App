@@ -171,7 +171,7 @@
         <div class="col-xs-4">
           <div class="form-group">
             <label>Narration:</label>
-            <textarea id="invoice-narration" class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
+            <textarea onReturn id="invoice-narration" class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
                       (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="data.description" resize="false"
                       rows="6"></textarea>
           </div>
