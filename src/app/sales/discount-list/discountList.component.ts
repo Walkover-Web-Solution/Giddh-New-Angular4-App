@@ -26,6 +26,14 @@ import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAc
     .form-control[readonly] {
       background: #fff !important;
     }
+    .dropdown-menu {
+      right: -110px;
+      left: auto;
+      top: 8px;
+    }
+    td {
+      vertical-align: middle !important;
+    }
   `]
 })
 
