@@ -24,7 +24,12 @@
                         <td></td>
                         <td>{{i}}</td>
                         <td> {{item.doc}} </td>
-                        <td colspan="5" style="padding: 0;">
+                        <td>{{item.from}}</td>
+                        <td>{{item.to}}</td>
+                        <td>{{item.totnum}}</td>
+                        <td>{{item.cancel}}</td>
+                        <td>{{item.netIssue}}</td>
+                        <!-- <td colspan="5" style="padding: 0;">
                             <table style="margin-bottom: 0; border-left: 1px solid #ededed;" class="table zi-table table-hover">
                                 <thead>
                                     <tr>
@@ -37,15 +42,15 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of (documentIssuedResponse$ | async).results; let i = index">
-                                        <td>{{item.from}}/td>
-                                            <td>{{item.to}}</td>
-                                            <td>{{item.totnum}}</td>
-                                            <td>{{item.cancel}}</td>
-                                            <td>{{item.netIssue}}</td>
+                                        <td>{{item.from}}</td>
+                                        <td>{{item.to}}</td>
+                                        <td>{{item.totnum}}</td>
+                                        <td>{{item.cancel}}</td>
+                                        <td>{{item.netIssue}}</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
