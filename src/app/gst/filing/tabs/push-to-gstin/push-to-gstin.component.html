@@ -1,0 +1,75 @@
+<div class="column content-column gst-filing-container navs-list">
+    <div class="tax-engine">
+        <!---->
+        <!---->
+        <div class="column list-column expanded-list-column transactions-list">
+            <div class="scroll-y noscroll-x body fill">
+                <div class="sub-filter-nav-band reconciliation-type-band">
+                    <tabset #staticTabs (select)="selectTab('')">
+                        <tab>
+                            <ng-template tabHeading>
+                                Transaction Summary
+                            </ng-template>
+
+                            <div class="subtabs-box transactions-overview">
+                                <div class="gstr-transactions-summary" *ngIf="!showTransaction">
+                                    <!---->
+                                    <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
+                                    <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
+                                </div>
+                                <transaction-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></transaction-summary>
+                            </div>
+
+                        </tab>
+
+                        <tab (select)="getSummary('hsnsac')">
+                            <ng-template tabHeading>
+                                HSN
+                            </ng-template>
+
+                            <div class="subtabs-box transactions-overview">
+                                <hsn-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></hsn-summary>
+                            </div>
+                        </tab>
+
+
+                        <tab (select)="getSummary('nil')">
+                            <ng-template tabHeading>
+                                NIL
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <nil-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></nil-summary>
+                            </div>
+                        </tab>
+
+                        <tab (select)="getSummary('b2cs')">
+                            <ng-template tabHeading>
+                                B2CS
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <b2cs-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></b2cs-summary>
+                            </div>
+                        </tab>
+
+                        <tab (select)="getDocumentIssuedTxn()">
+                            <ng-template tabHeading>
+                                Document Issued
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <document-issued [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></document-issued>
+                            </div>
+                        </tab>
+
+                        <tab>
+                            <ng-template tabHeading>
+                                Failed Transactions
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                            </div>
+                        </tab>
+
+                    </tabset>
+                </div>
+            </div>
+        </div>
+    </div>

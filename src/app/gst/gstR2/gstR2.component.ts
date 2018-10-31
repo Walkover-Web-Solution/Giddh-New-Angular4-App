@@ -3,17 +3,18 @@ declare var jquery: any;
 declare var $: any;
 
 @Component({
-  selector: 'gst-page-c',
-  templateUrl: './gst-page-c.component.html',
-  styleUrls: ['gst-page-c.component.css'],
+  selector: 'file-gstr2',
+  templateUrl: './gstR2.component.html',
+  styleUrls: ['gstR2.component.css'],
 })
-export class GstPageCComponent {
+export class FileGstR2Component {
   constructor() {
     //
   }
 
-  ngOnInit() {
-       $('.tabs_new a').on('click', function (event) {
+  public ngOnInit() {
+		
+		       $('.tabs_new a').on('click', function (event) {
 			event.preventDefault();
 			
 			$('.tabs_new li').removeClass('active');
@@ -61,7 +62,7 @@ $('.transactions-summary-table tbody tr').on('click', function (event) {
 			$('.subtabs-box').hide();
 			$($(this).attr('href')).show();
 		});
-		
+
 		$('.sub-filter-nav-bandnew ul li a').on('click', function (event) {
 			event.preventDefault();
 			
@@ -71,47 +72,40 @@ $('.transactions-summary-table tbody tr').on('click', function (event) {
 			$($(this).attr('href')).show();
 		});
 		
-		
 		$('.filter').each(function() {
-    var $dropdown = $(this);
+    let $dropdown = $(this);
 
     $(".dropdown-toggle", $dropdown).click(function(e) {
       e.preventDefault();
       $(".dropdown-menu", $dropdown).toggle();
       return false;
-	  
+
     });
 
 });
 
 $('.actions-dropdown').each(function() {
-    var $dropdown = $(this);
+    let $dropdown = $(this);
 
     $(".dropdown-toggle", $dropdown).click(function(e) {
       e.preventDefault();
       $(".dropdown-menu", $dropdown).toggle();
       return false;
-	  
+
     });
 
 });
-    
-  $('html').click(function(){
-    $(".dropdown-menu").hide();
+
+  $('html').click(function() {
+    $('.dropdown-menu').hide();
   });
-	
-    $('.showdiv').on('click', function (event) {
-			
+
+    $('.showdiv').on('click', function(event) {
 			$('#tab2').show();
 			$('.tabs_new li').removeClass('active');
 			$('.reco_active').addClass('active');
 			$('#tab1, #tab3, #tabs4').hide();
-			
-			
-		});	
 
-		
-	 
-    }
-
+		});
+  }
 }

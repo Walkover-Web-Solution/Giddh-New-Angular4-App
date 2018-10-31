@@ -87,7 +87,7 @@ export class SettingsLinkedAccountsService {
   public RefreshBankAccount(ebankItemId: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':ebankItemId', ebankItemId)).pipe(map((res) => {
+    return this._http.put(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':ebankItemId', ebankItemId), {}).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {ebankItemId};
       return data;
