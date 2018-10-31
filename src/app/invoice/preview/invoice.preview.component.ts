@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -58,6 +58,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
+  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public showPdfWrap: boolean = false;
@@ -79,6 +80,55 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
+  public datePickerOptions: any = {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
+
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -119,7 +169,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
           return o;
         });
       } else {
-        this.getInvoices();
+        this.getInvoices(true);
       }
     });
 
@@ -168,7 +218,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.universalDate = _.cloneDeep(dateObj);
         this.invoiceSearchRequest.dateRange = this.universalDate;
         this.isUniversalDateApplicable = true;
-        this.getInvoices();
+        this.getInvoices(true);
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
@@ -207,13 +257,13 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public pageChanged(event: any): void {
     this.invoiceSearchRequest.page = event.page;
-    this.getInvoices();
+    this.getInvoices(false);
   }
 
   public getInvoicesByFilters(f: NgForm) {
     if (f.valid) {
       this.isUniversalDateApplicable = false;
-      this.getInvoices();
+      this.getInvoices(false);
     }
   }
 
@@ -331,8 +381,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.invoiceSearchRequest[model] = '';
   }
 
-  public getInvoices() {
-    this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(), this.prepareModelForInvoiceApi()));
+  public getInvoices(isUniversalDateSelected: boolean) {
+    this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
   }
 
   public prepareModelForInvoiceApi() {
@@ -366,20 +416,21 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     return model;
   }
 
-  public prepareQueryParamsForInvoiceApi() {
+  public prepareQueryParamsForInvoiceApi(isUniversalDateSelected: boolean) {
     let o = _.cloneDeep(this.invoiceSearchRequest);
-    let fromDate = null;
-    let toDate = null;
-    if (this.universalDate && this.universalDate.length) {
-      fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-      toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-    } else {
-      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate = moment().format(GIDDH_DATE_FORMAT);
+    // let fromDate = null;
+    // let toDate = null;
+    if (this.universalDate && this.universalDate.length && isUniversalDateSelected) {
+      o.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+      o.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     }
+    // else {
+    //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    //   toDate = moment().format(GIDDH_DATE_FORMAT);
+    // }
     return {
-      from: this.isUniversalDateApplicable ? fromDate : o.from,
-      to: this.isUniversalDateApplicable ? toDate : o.to,
+      from: o.from,
+      to: o.to,
       count: o.count,
       page: o.page
     };
@@ -387,9 +438,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
   public bsValueChange(event: any) {
     if (event) {
-      this.invoiceSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
-      this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
-      this.getInvoices();
+      this.invoiceSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      this.invoiceSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      this.getInvoices(false);
     }
   }
 

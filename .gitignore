@@ -1,5 +1,9 @@
 # @AngularClass
 
+# build auth related
+default.entitlements.mac.plist
+embedded.provisionprofile
+
 package-lock_*
 
 # Logs

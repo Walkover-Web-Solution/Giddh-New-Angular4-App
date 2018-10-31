@@ -69,6 +69,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+  @ViewChild('partyAccNameInputField') public partyAccNameInputField: ElementRef;
 
   // public showAccountList: boolean = true;
   public TransactionType: 'by' | 'to' = 'by';
@@ -120,6 +121,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
+  private selectedStockInputField: any;
 
   constructor(
     private _accountService: AccountService,
@@ -363,6 +365,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public onAccountBlur(ele) {
     this.selectedInput = ele;
     this.showLedgerAccountList = false;
+    this.filterByText = '';
     // if (ev.target.value === 0) {
     //   ev.target.focus();
     //   ev.preventDefault();
@@ -786,8 +789,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    if (this.allStocks && this.allStocks.length) {
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false) {
+    if (this.allStocks && this.allStocks.length && !forceRefresh) {
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
       this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -887,8 +890,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public showQuickAccountModal() {
-    this.loadQuickAccountComponent();
-    this.quickAccountModal.show();
+    this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
+    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    this.selectedStockInputField = selectedField;
+    // this.loadQuickAccountComponent();
+    // this.quickAccountModal.show();
   }
 
   public hideQuickAccountModal() {
@@ -915,12 +921,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     //   this.currentSelectedValue = '';
     //   this.showLedgerAccountList = false;
     // }, 200);
+    this.filterByText = '';
     this.currentSelectedValue = '';
     this.showLedgerAccountList = false;
   }
 
   public closeCreateStock() {
     this.asideMenuStateForProductService = 'out';
+    // after creating stock, get all stocks again
+    this.getFlattenGrpofAccounts(null, null, true);
+    this.selectedStockInputField.value = '';
+    this.filterByText = '';
+    this.partyAccNameInputField.nativeElement.focus();
+    setTimeout(() => {
+      this.selectedStockInputField.focus();
+    }, 200);
   }
 
   public addNewAccount(val, lastIdx) {

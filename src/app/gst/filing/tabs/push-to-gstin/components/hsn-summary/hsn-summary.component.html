@@ -1,0 +1,89 @@
+<div class="gstr-transactions-summary">
+    <h4 class="clearfix gstr-summary-title">HSN Summary</h4>
+    <p style="padding-top:6px;" class="text-muted half">This section includes the HSN-wise summary of the items you have sold</p>
+    <div id="ember1945" class="ember-view">
+        <div *ngIf="(hsnSummaryResponse$ | async) && (hsnSummaryResponse$ | async).results.length">
+            <table id="ember1946" class="transactions-table table-striped  table zi-table  ember-view">
+                <thead>
+                    <tr>
+                        <th style="" class="  text-left ember-view">
+                            <div style="position: relative">
+                                <div class="pull-left over-flow"> HSN/SAC </div>
+                            </div>
+                        </th>
+                        <th style="" class="  text-left ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Description </div>
+                            </div>
+                        </th>
+                        <th style="" class="text-left ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Quantity </div>
+                            </div>
+                        </th>
+                        <th style="" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Taxable Amount </div>
+                            </div>
+                        </th>
+
+                        <th style="" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> IGST Amount </div>
+                            </div>
+                        </th>
+                        <th style="" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> CGST Amount </div>
+                            </div>
+                        </th>
+                        <th style="" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> SGST Amount </div>
+                            </div>
+                        </th>
+                        <th style="" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> CESS </div>
+                            </div>
+                        </th>
+
+                        <th style="" class="  text-right ember-view">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Total Amount </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of (hsnSummaryResponse$ | async).results">
+                        <td> {{item.hsnsac}} </td>
+                        <td> {{item.desc}} </td>
+                        <td> {{item.qty}} </td>
+                        <td class="text-right"> ₹{{item.txval | number: '1.2-2' }} </td>
+                        <td class="text-right"> ₹{{item.iamt | number: '1.2-2' }} </td>
+                        <td class="text-right"> ₹{{item.camt | number: '1.2-2' }} </td>
+                        <td class="text-right"> ₹{{item.samt | number: '1.2-2' }} </td>
+                        <td class="text-right"> ₹{{item.csamt | number: '1.2-2' }} </td>
+                        <td class="text-right"> ₹{{item.total | number: '1.2-2' }} </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-center" *ngIf="(hsnSummaryResponse$ | async)?.totalPages > 1">
+                <pagination [maxSize]="5" [totalItems]="(hsnSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
+            </div>
+        </div>
+
+        <div class="" *ngIf="(hsnSummaryResponse$ | async) && !(hsnSummaryResponse$ | async).totalItems">
+            <div class="filings-empty-state">
+                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span>  There is no HSN-wise summary.  </span></div>
+            </div>
+        </div>
+
+        <div class="mrT5 mrB5" *ngIf="(hsnSummaryInProgress$ | async)">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+        </div>
+    </div>
+</div>

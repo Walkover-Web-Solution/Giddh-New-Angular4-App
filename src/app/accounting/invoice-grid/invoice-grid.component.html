@@ -37,7 +37,7 @@
         <div class="form-group">
           <label>Party A/c Name:<sup>*</sup></label>
           <!-- #creditor -->
-          <input name="party_name" type="text" onReturn placeholder="Party account"
+          <input #partyAccNameInputField name="party_name" type="text" onReturn placeholder="Party account"
                  class="form-control max-height28 appearance_none upper-fields" 
                  (keyup)="searchAccount($event?.target?.value)"
                  (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name"
@@ -88,12 +88,13 @@
               <ng-container>
                 <tr
                   [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
-                  <!-- (blur)="onStockItemBlur($event, qty); showStockList.next(false)" -->
+                  <!-- (blur)="onStockItemBlur($event, qty);" showStockList.next(false)" -->
                   <td><input onReturn id="first_element_{{i}}_{{i}}" type="text" class="form-control select-stock-in-invoice"
                              [(ngModel)]="transaction.inventory.stock.name"
                              (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
                              [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                             (focus)="onStockFocus(i)" (blur)="onStockItemBlur($event, qty);"
+                             (focus)="onStockFocus(i)"
+                             (blur)="filterByText = ''"
                              (keydown)="detectKey($event)"/></td>
                   <td>
                     <input onReturn type="text" class="form-control text-right" #qty
@@ -202,7 +203,7 @@
                              [showList]="showLedgerAccountList" [isFilterEnabled]="true"
                              (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue"
                              [placeholder]="'Select Option'"
-                             [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()"
+                             [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
                              [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
   </div>
 
