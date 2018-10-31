@@ -210,7 +210,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onRefreshToken(account) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.itemAccountId));
+    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId));
     // this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
