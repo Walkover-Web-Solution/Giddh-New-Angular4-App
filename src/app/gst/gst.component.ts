@@ -48,6 +48,7 @@ export class GstComponent implements OnInit {
   public gstTransactionCounts$: Observable<TransactionCounts[]> = of([]);
   public selectedService: string;
   public GstAsidePaneState: string = 'out';
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -99,7 +100,7 @@ export class GstComponent implements OnInit {
         //  means user logged in gst portal
       }
     });
-
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   /**
