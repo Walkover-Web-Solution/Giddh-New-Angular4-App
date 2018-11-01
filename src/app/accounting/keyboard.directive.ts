@@ -25,7 +25,6 @@ export class OnReturnDirective {
 
   @HostListener('keydown', ['$event'])
   public onKeyDown(e: any) {
-
     if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC)) {
       const selectedEle = e.target;
       const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
@@ -35,7 +34,11 @@ export class OnReturnDirective {
       // nodeList[indx + 1].focus();
       if (e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) {
 
-        selectedEle.setAttribute('data-changed', false);
+        if (e.ctrlKey) {
+          return selectedEle.setAttribute('data-changed', true);
+        } else {
+          selectedEle.setAttribute('data-changed', false);
+        }
 
         let target = allElements[indx + 1];
 
