@@ -5,7 +5,7 @@
             <span class="caret"></span>
         </div>
     </a>
-    <ul #taxListUl class="dropdown-menu" *ngIf="showTaxPopup" (click)="$event.stopPropagation()" [style.max-height.px]="102" [style.min-height.px]="40">
+    <ul #taxListUl class="dropdown-menu dropdown-menu-right" *ngIf="showTaxPopup" (click)="$event.stopPropagation()" [style.max-height.px]="102" [style.min-height.px]="40">
         <li *ngIf="taxList.length === 0">
             <p class="pd1 alC">No Taxes Found</p>
         </li>
