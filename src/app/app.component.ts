@@ -65,7 +65,7 @@ export class AppComponent implements AfterViewInit {
           location.reload(true);
         } else {
           // The chunk really does not exists after reload
-          console.error('We really don\'t find the chunk....');
+          console.error('We really don\'t find the chunk.....');
         }
       }
       // Run original handler
