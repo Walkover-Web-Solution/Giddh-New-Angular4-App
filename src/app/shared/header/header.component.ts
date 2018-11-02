@@ -275,6 +275,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
