@@ -454,6 +454,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * openConfirmBox() to save entry
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
+    this.showLedgerAccountList = false;
+    this.showStockList = false;
     if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
       if (this.requestObj.description.trim() !== '') {

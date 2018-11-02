@@ -457,6 +457,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * openConfirmBox() to save entry
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
+    this.showLedgerAccountList = false;
+    this.showStockList.emit(false);
     this.showConfirmationBox = true;
     if (this.data.description.trim() !== '') {
       this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
