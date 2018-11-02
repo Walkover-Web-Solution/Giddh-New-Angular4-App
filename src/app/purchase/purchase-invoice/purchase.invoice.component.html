@@ -21,7 +21,9 @@
             <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
                 <div class="row">
                     <label>Month</label>
-                    <div class="input-group">
+                    <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
+
+                    <!-- <div class="input-group">
                         <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
@@ -29,8 +31,8 @@
                                 <i class="glyphicon glyphicon-calendar"></i>
                             </button>
                         </span>
-                    </div>
-                    <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                    </div> -->
+                    <!-- <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
                         <ul class="my-dropdown-menu calendar-dropdown">
                             <li>
                                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
@@ -42,10 +44,10 @@
                                     <button type="button" class="btn btn-xs btn-success"
                                             (click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
-                            </li>
-                        </ul>
-                    </div>
+                                 <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
+                    </li>
+                    </ul>
+                </div> -->
                 </div>
             </div>
             <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
