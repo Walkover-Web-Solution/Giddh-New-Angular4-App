@@ -53,7 +53,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
-
+    console.log('....ngAfterViewInit....');
     // Keep the original error handler
     const oldHandler = this.router.errorHandler;
     // Replace route error handler
@@ -67,7 +67,7 @@ export class AppComponent implements AfterViewInit {
           location.reload(true);
         } else {
           // The chunk really does not exists after reload
-          console.error('We really don\'t find the chunk...');
+          console.error('We really don\'t find the chunk....');
         }
       }
       // Run original handler
