@@ -669,7 +669,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public saveEntry() {
     if (!this.creditorAcc.uniqueName) {
-      return this._toaster.errorToast("Party A/c Name can't be blank.");
+      this._toaster.errorToast("Party A/c Name can't be blank.");
+      return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
     }
     let data = _.cloneDeep(this.data);
 
