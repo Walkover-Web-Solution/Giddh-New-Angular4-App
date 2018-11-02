@@ -270,6 +270,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr *ngIf="fieldsAndVisibility.table.previousDue?.display">
+                            <td colspan="9"></td>
+                            <td style="text-align: right;">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
+                            <td style="text-align: right;">5000.00</td>
+                        </tr>
                         <tr>
                             <!-- <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td> -->
                             <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
