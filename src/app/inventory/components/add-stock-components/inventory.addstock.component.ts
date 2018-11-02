@@ -924,7 +924,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * selectTax
    */
   public selectTax(e, tax) {
-    debugger;
     const taxesControls = this.addStockForm.controls['taxes']['value'] as any;
     if (e.target.checked) {
       tax.isChecked = true;
