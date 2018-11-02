@@ -36,7 +36,7 @@
             <!-- ============================ GSTR1 ================================== -->
             <div class="return-content" [ngClass]="{'section-disabled': !(gstAuthenticated$ | async)}"> <span class="btn-toolbar pull-right"> <a href="javascript:void(0)" class="btn btn-primary"  (click)="navigateToOverview('gstr1')"> View Summary </a> </span>
                 <div>
-                    <img src="../assets/images/summary.svg" class="icon gstr-icon text-middle" />
+                    <img src="{{imgPath}}summary.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
                         <div style="margin: 7px auto;" class="font-xlarge"> <b class="text-middle">GSTR-1 ({{currentPeriod}})</b> &nbsp;&nbsp;
                             <!-- <span class="label text-uppercase return-filed "> Filed </span> -->
