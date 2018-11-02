@@ -50,10 +50,8 @@ export class AppComponent implements AfterViewInit {
     this._generalService.IAmLoaded.subscribe(s => {
       this.IAmLoaded = s;
     });
-  }
 
-  public ngAfterViewInit() {
-    console.log('....ngAfterViewInit....');
+    console.log('....CUSTOM ERROR HANDLER....');
     // Keep the original error handler
     const oldHandler = this.router.errorHandler;
     // Replace route error handler
@@ -73,6 +71,10 @@ export class AppComponent implements AfterViewInit {
       // Run original handler
       oldHandler(err);
     };
+
+  }
+
+  public ngAfterViewInit() {
 
     this._generalService.IAmLoaded.next(true);
     this._cdr.detectChanges();
