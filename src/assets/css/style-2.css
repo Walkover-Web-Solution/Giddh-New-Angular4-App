@@ -6297,3 +6297,7 @@ app-header {
     align-items: center;
     justify-content: space-between;
 }
+
+.form-inline sh-select .form-control {
+    width: 100%;
+}
