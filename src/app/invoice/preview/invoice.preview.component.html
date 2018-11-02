@@ -76,7 +76,7 @@
             <th class="text-center">Delete</th>
         </tr>
     </thead>
-    <tfoot>
+    <tfoot *ngIf="invoiceData && invoiceData?.totalPages > 1">
         <tr>
             <td colspan="100%">
                 <div class="alC">
