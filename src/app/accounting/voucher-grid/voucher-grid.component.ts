@@ -67,6 +67,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
+  @ViewChild('narrationBox') public narrationBox: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showLedgerAccountList: boolean = false;
@@ -466,7 +467,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
   }
 
@@ -490,17 +491,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (foundContraEntry && data.voucherType !== 'Contra') {
       this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
     if (!foundContraEntry && data.voucherType === 'Contra') {
       this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
 
     // This suggestion was given by Sandeep
     if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
       this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
 
     if (this.totalCreditAmount === this.totalDebitAmount) {
@@ -516,9 +517,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       } else {
         const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
         this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
+        setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+      setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
   }
 
@@ -639,7 +642,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return validEntry;
     } else {
       this._toaster.errorToast("Particular can't be blank");
-      return false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
 
   }
