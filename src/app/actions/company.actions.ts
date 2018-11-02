@@ -44,6 +44,8 @@ export class CompanyActions {
 
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
 
+  public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
+
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY).pipe(
@@ -376,6 +378,16 @@ export class CompanyActions {
 
   public ResetCompanyPopup(): CustomActions {
     return {type: CompanyActions.RESET_CREATE_COMPANY_FLAG};
+  }
+
+  /**
+   * setActiveFinancialYear
+   */
+  public setActiveFinancialYear(activeFinancialYear) {
+    return {
+      type: CompanyActions.SET_ACTIVE_FINANCIAL_YEAR,
+      payload: activeFinancialYear
+    };
   }
 
 }
