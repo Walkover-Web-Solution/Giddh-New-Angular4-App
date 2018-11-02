@@ -91,15 +91,15 @@ export class GstComponent implements OnInit {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(take(1));
-    this.gstAuthenticated$.subscribe(s => {
-      if (!s) {
-        this.toggleSettingAsidePane(null, 'RECONCILE');
-      } else {
-        this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
-        //  means user logged in gst portal
-      }
-    });
+    this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
+
+    // this.gstAuthenticated$.subscribe(s => {
+    //   if (!s) {
+    //     this.toggleSettingAsidePane(null, 'RECONCILE');
+    //   } else {
+    //     this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
+    //   }
+    // });
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 

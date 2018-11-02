@@ -401,6 +401,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
         this.selectedPage = s.toLowerCase();
+        if (this.selectedPage === 'gst') {
+          this.selectedPage = 'GST';
+        }
     });
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
