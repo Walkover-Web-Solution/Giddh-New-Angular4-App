@@ -62,7 +62,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public ngOnInit() {
     if (!AppUrl.includes('localapp.giddh.com') && !IS_ELECTRON_WA) {
-      this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
+      this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
     }
   }
 
