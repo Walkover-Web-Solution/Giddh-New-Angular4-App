@@ -24,7 +24,7 @@
         "post-build": "node ./config/post-build.js",
         "build-prod:test": "cross-env BUILD_AOT=1 envFileSuffix=test definePluginEnv=test npm run build-prod --aot --prod && npm run post-build",
         "build-dev:prod": "cross-env BUILD_AOT=1 envFileSuffix=prod definePluginEnv=prod npm run build-dev --aot --prod",
-        "build-prod:prod": "cross-env BUILD_AOT=1 envFileSuffix=prod definePluginEnv=prod npm run build-prod --aot --prod",
+        "build-prod:prod": "cross-env BUILD_AOT=1 envFileSuffix=prod definePluginEnv=prod npm run build-prod --aot --prod && npm run post-build",
         "build-rendered-prod:prod": "cross-env BUILD_AOT=1 envFileSuffix=prod definePluginEnv=prod npm run build-rendered-prod --aot --prod",
         "clean:build": "rimraf dist dev compiled *.temp.json",
         "clean:dev": "rimraf dev",
