@@ -42,7 +42,7 @@ export class VersionCheckService {
                     }
                     // store the new hash so we wouldn't trigger versionChange again
                     // only necessary in case you did not force refresh
-                    this.currentHash = hash;
+                    // this.currentHash = hash;
                 },
                 (err) => {
                     console.error(err, 'Could not get version');
