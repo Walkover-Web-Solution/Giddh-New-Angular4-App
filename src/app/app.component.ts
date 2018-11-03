@@ -64,9 +64,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     // Need to implement for Web app only
     if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
       this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
-    }
 
-    if (!isElectron) {
       this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
         if (isChanged) {
           this.newVersionAvailableForWebApp = _.clone(isChanged);
@@ -80,9 +78,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     this._generalService.IAmLoaded.next(true);
     this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
-      console.log('the evt is :', evt);
       if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
-        console.log('==== RELOADING THE APPLICATION ====');
         return window.location.reload(true);
       }
       if (!(evt instanceof NavigationEnd)) {
