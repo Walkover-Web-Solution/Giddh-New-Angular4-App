@@ -216,8 +216,8 @@
                     <tbody>
                         <tr class="text-right">
                             <td colspan="8"></td>
-                            <td>Previous Due</td>
-                            <td>5000.00</td>
+                            <td class="font-12">Previous Due</td>
+                            <td class="font-12">5000.00</td>
                         </tr>
                         <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
@@ -312,15 +312,15 @@
                         <tr>
                             <td>
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                    <p>*Tax to be paid on Reverse Charge</p>
+                                    <p class="font-10 pb-1">*Tax to be paid on Reverse Charge</p>
                                     <h2>
                                         <strong>Notes</strong>
                                     </h2>
-                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                    <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                             : 'All payments to be made in cash'}}</span>
                                     </p>
-                                    <p>Contact us for queries on these quotations.</p>
+                                    <p class="font-10">Contact us for queries on these quotations.</p>
                                 </ng-container>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
@@ -334,7 +334,7 @@
                                     <small *ngIf="!fieldsAndVisibility.footer.slogan?.display">
                                         (Signature) </small>
                                 </strong>
-                                <p *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                <p class="font-10" *ngIf="fieldsAndVisibility.footer.slogan?.display">
                                     <small>{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
                                         '(Signature)'}}
                                     </small>
@@ -353,10 +353,10 @@
 
             </aside>
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
-                <p *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-10">
+                <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-10">
                     <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
-                <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display" class="font-10">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
+                <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyAddress?.display" class="font-10">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
                 </p>
             </footer>
         </div>
