@@ -58,7 +58,7 @@ export class AppComponent implements AfterViewInit {
     this.router.errorHandler =  (err: any) => {
       // Check if there is an error loading the chunk
       if (err.originalStack && err.originalStack.indexOf('Error: Loading chunk') >= 0) {
-        console.log('....Yes Error....');
+        console.log('.....Yes Error.....');
         // Check if is the first time the error happend
         if (localStorage.getItem('lastChunkError') !== err.originalStack) {
           // Save the last error to avoid an infinite reload loop if the chunk really does not exists after reload
