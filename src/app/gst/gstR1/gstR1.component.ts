@@ -3,11 +3,11 @@ declare var jquery:any;
 declare var $ :any;
 
 @Component({
-  selector: 'gst-pages',
-  templateUrl: './gst-pages.component.html',
-  styleUrls: ['gst-pages.component.css'],
+  selector: 'file-gstR1',
+  templateUrl: './gstR1.component.html',
+  styleUrls: ['gstR1.component.css'],
 })
-export class GstPagesComponent {
+export class FileGstR1Component {
   constructor() {
     //
   }
@@ -71,7 +71,7 @@ $('.transactions-summary-table tbody tr').on('click', function (event) {
       e.preventDefault();
       $(".dropdown-menu", $dropdown).toggle();
       return false;
-	  
+
     });
 
 });
@@ -80,11 +80,7 @@ $('.transactions-summary-table tbody tr').on('click', function (event) {
     $(".dropdown-menu").hide();
   });
 	
-	   
     }
   
 }
   
-  
- 
- 

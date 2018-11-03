@@ -148,6 +148,7 @@ export interface IBankAccount {
   transactionDate?: null;
   accountNumber: string;
   visible: boolean;
+  providerAccount: { providerAccountId: string};
 }
 
 let cost = {

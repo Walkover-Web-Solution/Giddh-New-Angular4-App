@@ -69,11 +69,12 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST Module', uniqueName: '/pages/gst' },
-  { type: 'MENU', name: 'GST Module Page 1', uniqueName: '/pages/gst/gst' },
-  { type: 'MENU', name: 'GST Module Page 2', uniqueName: '/pages/gst/gst-page-b' },
-  { type: 'MENU', name: 'GST Module Page 3', uniqueName: '/pages/gst/gst-page-c' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report' },
+  { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'GSTR1 Filing', uniqueName: '/pages/gstfiling/gstR1' },
+  { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
+  { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
+  { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/filing-return' },
+  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
 ];
 
 @Component({
@@ -400,6 +401,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
         this.selectedPage = s.toLowerCase();
+        if (this.selectedPage === 'gst') {
+          this.selectedPage = 'GST';
+        }
     });
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -763,7 +767,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         toDate: null,
         duration: null,
         period: null,
-        noOfTransactions: 50
+        noOfTransactions: null
       };
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     }
@@ -953,9 +957,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   private getElectronAppVersion() {
     this.authService.GetElectronAppVersion().subscribe((res: string) => {
-      let version = res.split('files')[0];
-      let versNum = version.split(' ')[1];
-      this.apkVersion = versNum;
+      if (res) {
+        let version = res.split('files')[0];
+        let versNum = version.split(' ')[1];
+        this.apkVersion = versNum;
+      }
     });
   }
 

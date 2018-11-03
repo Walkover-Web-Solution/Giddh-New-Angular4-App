@@ -1,11 +1,13 @@
-import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
+import { AppState } from 'app/store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'connect-bank-modal',
@@ -38,6 +40,9 @@ export class ConnectBankModalComponent implements OnChanges {
 
   @Input() public sourceOfIframe: string;
   @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
+  @Output() public refreshAccountEvent: EventEmitter<any> = new EventEmitter(null);
+  @Input() public providerId: string = '';
+  @Input() public isRefreshWithCredentials: true;
 
   public url: SafeResourceUrl = null;
 
@@ -51,12 +56,17 @@ export class ConnectBankModalComponent implements OnChanges {
   public bankSyncInProgress: boolean;
   public apiInInterval: any;
   public cancelRequest: boolean = false;
+  public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(public sanitizer: DomSanitizer,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
     private _fb: FormBuilder,
-    private _toaster: ToasterService
+    private _toaster: ToasterService,
+    private store: Store<AppState>
   ) {
+    this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
     this.dataSource = (text$: Observable<any>): Observable<any> => {
       return text$.pipe(
         debounceTime(300),
@@ -87,14 +97,25 @@ export class ConnectBankModalComponent implements OnChanges {
         this.rowArray()
       ]),
     });
+
+    this.needReloadingLinkedAccounts$.subscribe(a => {
+      if (a) {
+        this.resetBankForm();
+      }
+    });
   }
 
   public ngOnChanges(changes) {
-    this.isIframeLoading = true;
-    if (changes.sourceOfIframe.currentValue) {
-      this.iframeSrc = this.sourceOfIframe;
-      this.isIframeLoading = false;
-      this.getIframeUrl(this.iframeSrc);
+    // this.isIframeLoading = true;
+    // if (changes.sourceOfIframe.currentValue) {
+    //   this.iframeSrc = this.sourceOfIframe;
+    //   this.isIframeLoading = false;
+    //   this.getIframeUrl(this.iframeSrc);
+    // }
+
+    if (changes.providerId && changes.providerId.currentValue) {
+      this.step = 2;
+      this.getProviderLoginForm(changes.providerId.currentValue);
     }
   }
 
@@ -112,6 +133,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this.selectedProvider = {};
     this.bankSyncInProgress = false;
     this.cancelRequest = true;
+    this.bankSyncInProgress = false;
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -184,6 +206,7 @@ export class ConnectBankModalComponent implements OnChanges {
    * getProviderLoginForm
    */
   public getProviderLoginForm(providerId) {
+    this.loginForm.reset();
     this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
       if (a && a.status === 'success') {
         let response = _.cloneDeep(a.body.loginForm[0]);
@@ -263,6 +286,13 @@ export class ConnectBankModalComponent implements OnChanges {
   public resetBankForm() {
     this.step = 1;
     this.selectedProvider = {};
+  }
+
+  /**
+   * refreshAccount
+   */
+  public refreshAccount(ev) {
+    this.refreshAccountEvent.emit(ev.value);
   }
 
 }

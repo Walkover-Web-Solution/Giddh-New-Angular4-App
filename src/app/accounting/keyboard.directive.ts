@@ -25,17 +25,20 @@ export class OnReturnDirective {
 
   @HostListener('keydown', ['$event'])
   public onKeyDown(e: any) {
-
     if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC)) {
       const selectedEle = e.target;
-      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
+      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
       const nodeList = Array.from(allElements);
       const indx = nodeList.findIndex((ele) => ele === selectedEle);
 
       // nodeList[indx + 1].focus();
       if (e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) {
 
-        selectedEle.setAttribute('data-changed', false);
+        if (e.ctrlKey) {
+          return selectedEle.setAttribute('data-changed', true);
+        } else {
+          selectedEle.setAttribute('data-changed', false);
+        }
 
         let target = allElements[indx + 1];
 
@@ -137,6 +140,9 @@ export class OnReturnDirective {
             if (target.disabled) {
               // console.log('yes if');
               target = allElements[indx - 2];
+              if (target.disabled) {
+                target = allElements[indx - 3];
+              }
               return target.focus();
             } else {
               return target.focus();
@@ -150,7 +156,9 @@ export class OnReturnDirective {
         }
       } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
         selectedEle.value = '';
-        selectedEle.blur();
+        // selectedEle.blur();
+        // allElements[indx - 1].focus();
+        allElements[0].focus();
         return setTimeout(() => {
           selectedEle.focus();
         }, 200);

@@ -7,7 +7,6 @@
   box-sizing: content-box;
   color: #262626;
   font-family: inherit;
-  font-size: 12px;
   /* font-size: inherit; */
   font-style: inherit;
   font-weight: inherit;
@@ -18,11 +17,15 @@
   text-decoration: none;
   vertical-align: top;
 }
-
+body {
+  font-size: 12px;
+}
 /* heading */
-
+.text-gray {
+  color: #939393 !important;
+}
 #template2 header {
-  padding: 30px 15px;
+  padding: 10px 10px 0px 10px;
 }
 
 #template2 header h1 {
@@ -78,7 +81,7 @@
 #template2 .item thead tr th,
 #template2 .item tfoot tr th {
   text-align: right;
-  padding: 2px 7px;
+  padding: 7px 7px;
 }
 
 #template2 .mrL2 {
@@ -89,18 +92,9 @@
   margin-right: 20px;
 }
 
-#template2 .mrB2 {
-  margin-bottom: 20px;
-}
-
-#template2 .mrB1 {
-  margin-bottom: 10px;
-}
-
 #template2 .cargo-Detail {
   margin-top: 10px;
   line-height: 20px !important;
-  padding: 0 15px 30px;
 }
 
 #template2 .product-table {
@@ -108,11 +102,12 @@
 }
 
 #template2 .item thead tr th {
-  padding: 20px 7px 0;
+  padding: 15px 7px 13px;
   border-bottom: 1px solid #666666;
   line-height: 1.2rem;
   font-weight: bold;
-  text-transform: capitalize
+  text-transform: capitalize;
+  font-weight: normal;
 }
 
 #template2 .product-table tbody tr:last-child td {
@@ -125,8 +120,8 @@
 
 #template2 .item tfoot tr:last-child th {
   border-top: 1px solid #666666;
-  padding: 7px 0px;
-  line-height: 1.2rem;
+  /* padding: 7px 0px;
+  line-height: 1.2rem; */
 }
 
 #template2 .bdrB {
@@ -137,6 +132,7 @@
     margin-top: 100px;
     padding: 0 25px;
     float: left;
+    margin-bottom: 15px;
 }
 
 #template2 .subfooter h1 {
@@ -168,20 +164,18 @@
 }
 
 #template2 .note {
-  margin-top: 20px;
+  margin-top: 10px;
   padding-left: 15px;
 }
 
 #template2 .note li {
   list-style-type: initial;
+  font-size: 10px;
 }
 
 #template2 footer {
-  margin-top: 7px;
-  /* border-top: 2px solid; */
-  /* padding: 10px 0; */
   line-height: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   overflow: hidden;
 }
 
@@ -270,7 +264,7 @@
 }
 
 .meta {
-  padding: 0 15px !important;
+  padding: 0 10px !important;
 }
 
 th[data-thead="sno"] {
@@ -279,4 +273,10 @@ th[data-thead="sno"] {
 
 img {
     max-width: 180px
+}
+.bold {
+  font-weight: bold !important;
+}
+.font-10 {
+  font-size: 10px;
 }

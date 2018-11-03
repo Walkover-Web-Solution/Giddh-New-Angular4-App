@@ -1,0 +1,31 @@
+<div class="column content-column gst-filing-container navs-list">
+    <div class="tax-engine">
+        <div class="column list-column expanded-list-column transactions-list">
+            <div class="list-header">
+                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-header>
+            </div>
+            <div class="nav-band">
+                <tabset #staticTabs id="c-tab">
+                    <tab heading="Overview" (select)="selectTab($event)">
+                        <div class="transactions-overview" *ngIf="selectedTab === 'Overview'">
+                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-overview>
+                        </div>
+                    </tab>
+                    <tab heading="Reconcilation" (select)="selectTab($event)" *ngIf="selectedGst === 'gstr2'">
+                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [selectedTab]="selectedGst"></reconcile>
+                    </tab>
+                    <tab heading="Push to GSTIN" [hidden]="selectedGst === 'gstr2'" (select)="selectTab($event)">
+                        <div *ngIf="selectedTab === 'Push to GSTIN'">
+                            <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
+                        </div>
+                    </tab>
+                    <!-- hidden not availability of API 
+                    <tab heading="File your Return" *ngIf="selectedGst !== 'gstr2'">
+                        <h1>File your return</h1>
+                    </tab>
+                     -->
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -860,8 +860,8 @@ aside-menu-account .container-fluid {
 }
 
 .scrClass {
-    overflow: hidden;
-    position: relative;
+    /* overflow: hidden;
+    position: relative; */
 }
 
 .scrItem {
@@ -2447,12 +2447,12 @@ padding: 0;
     margin: 7px;
     transition: all 0.5s ease-in-out;
     padding: 10px;
-    border: 1px solid rgba(251, 194, 168, 0.68);
+    border: 1px solid #ebedf1;
 }
 
 .account-card:hover {
     background: #fff;
-    box-shadow: 0 5px 14px 0 rgba(58, 58, 58, .18);
+    box-shadow: 0 5px 5px 0 rgba(58, 58, 58, .18);
     border-color: #ff5e01;
 }
 
