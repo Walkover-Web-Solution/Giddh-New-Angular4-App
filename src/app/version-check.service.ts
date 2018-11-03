@@ -41,7 +41,7 @@ export class VersionCheckService {
                     // If new version, do something
                     if (hashChanged) {
                         this.onVersionChange$.next(true);
-                        console.log('=== NEW VERSION IS AVAILABLE ===');
+                        console.log('==== NEW VERSION IS AVAILABLE ====');
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
                         // for an example: location.reload();
                     } else {
