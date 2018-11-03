@@ -29,7 +29,7 @@
                                     <p *ngIf="fieldsAndVisibility.header.dueDate?.display">
                                         <strong>{{(fieldsAndVisibility.header.dueDate?.label.length > 0) ? fieldsAndVisibility.header.dueDate?.label
                                             : 'Due Date'}}: </strong>
-                                        <span>10-09-2018</span>
+                                        <span class="bold">10-09-2018</span>
                                         </p>
                 
                                     <p class="mrR2" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
@@ -72,19 +72,20 @@
                             </ng-container>
                         </td>
                         <td>
+                            <p class="bold">Shipping Detail:</p>
                             <p *ngIf="fieldsAndVisibility.header.shippingDate?.display" class="mrR2">
-                                <strong>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
-                                    : 'Ship Date'}}:</strong>
+                                <span>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
+                                    : 'Ship Date'}}:</span>
                                 <span>10-09-2018</span>
                                 </p>
                             <p *ngIf="fieldsAndVisibility.header.shippedVia?.display" class="mrR2">
-                                <strong>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
-                                    : 'Ship Via'}}:</strong>
+                                <span>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
+                                    : 'Ship Via'}}:</span>
                                 <span>FedEx</span>
                                 </p>
                             <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
-                                <strong>{{(fieldsAndVisibility.header.trackingNumber?.label.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
-                                    : 'Tracking No'}}:</strong>
+                                <span>{{(fieldsAndVisibility.header.trackingNumber?.label.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
+                                    : 'Tracking No'}}:</span>
                                 <span>213456</span>
                             </p>
                         </td>
@@ -255,12 +256,9 @@
                                     All payments to be made in cash. Contact us for queries on these quotations.
                                 </li>
                             </ul>
-
                         </td>
 
-                        <td></td>
-
-                        <td style="text-align: center;vertical-align: bottom;">
+                        <td style="text-align: center;vertical-align: bottom; width: 300px;">
                             <p class="bdrB"></p>
                             <p>
                                 <strong class="font-10">{{fieldsAndVisibility.header.companyName?.label}}</strong>
