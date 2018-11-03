@@ -33,30 +33,30 @@ const INV_PAGE = [
 export class InvoicePageDDComponent implements OnInit {
 
   public navItems: INameUniqueName[] = INV_PAGE;
-  public selectedPage: string = null;
-  @Output('pageChanged') public pageChanged: EventEmitter<string> = new EventEmitter<string>();
+  public selectedType: string = null;
+  @Output('pageChanged') public pageChanged: EventEmitter<any> = new EventEmitter(null);
 
   public dropDownPages: any[] = [
     {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
     {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'},
     {name: 'Receipt', uniqueName: 'receipt', path: 'receipt'},
-    {name: 'Cr-note', uniqueName: 'cr-note', path: 'cr-note'},
-    {name: 'Dr-note', uniqueName: 'dr-note', path: 'dr-note'}
+    {name: 'Credit Note', uniqueName: 'cr-note', path: 'cr-note'},
+    {name: 'Debit Note', uniqueName: 'dr-note', path: 'dr-note'}
   ];
 
   constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
-    this.selectedPage = 'Invoice';
-    this.router.events.subscribe((event: NavigationStart) => {
-      if (event.url) {
-        if (event.url.indexOf('invoice') !== -1) {
-          this.navItems = this.removeObjFromArr('invoice');
-          this.selectedPage = INV_PAGE[0].name;
-        } else if (event.url.indexOf('proforma') !== -1) {
-          this.navItems = this.removeObjFromArr('proforma');
-          this.selectedPage = INV_PAGE[1].name;
-        }
-      }
-    });
+    // this.selectedType = 'Invoice';
+    // this.router.events.subscribe((event: NavigationStart) => {
+    //   if (event.url) {
+    //     if (event.url.indexOf('invoice') !== -1) {
+    //       this.navItems = this.removeObjFromArr('invoice');
+    //       this.selectedType = INV_PAGE[0].name;
+    //     } else if (event.url.indexOf('proforma') !== -1) {
+    //       this.navItems = this.removeObjFromArr('proforma');
+    //       this.selectedType = INV_PAGE[1].name;
+    //     }
+    //   }
+    // });
   }
 
   public ngOnInit(): void {
@@ -64,11 +64,19 @@ export class InvoicePageDDComponent implements OnInit {
       this.setUrl(this.router.routerState.snapshot.url);
     }
 
-    this.router.events.subscribe(ev => {
-      if (ev instanceof NavigationEnd) {
-        this.setUrl(ev.url);
-      }
-    });
+    // this.router.events.subscribe(ev => {
+    //   if (ev instanceof NavigationEnd) {
+    //     this.setUrl(ev.url);
+    //   }
+    // });
+  }
+
+  public changePage(page): void {
+    // this._cdRef.detectChanges();
+    this.selectedType = _.cloneDeep(page.name);
+    this.setUrl(page.path);
+    // this.pageChanged.emit(page.path);
+    // this.router.navigate(['/pages', 'invoice', page.path]);
   }
 
   private removeObjFromArr(str) {
@@ -88,30 +96,24 @@ export class InvoicePageDDComponent implements OnInit {
     this.pageChanged.emit(lastUrl);
     switch (lastUrl) {
       case 'invoice':
-        this.selectedPage = 'Invoice';
+        this.selectedType = 'Invoice';
         break;
       case 'recurring':
-        this.selectedPage = 'Recurring';
+        this.selectedType = 'Recurring';
         break;
       case 'receipt':
-        this.selectedPage = 'Receipt';
+        this.selectedType = 'Receipt';
         break;
       case 'cr-note':
-        this.selectedPage = 'Cr-note';
+        this.selectedType = 'Credit Note';
         break;
       case 'dr-note':
-        this.selectedPage = 'Dr-note';
+        this.selectedType = 'Debit Note';
         break;
       default:
-        this.selectedPage = 'Invoice';
+        this.selectedType = 'Invoice';
         break;
     }
   }
 
-  private changePage(page): void {
-    this.selectedPage = page.name;
-    this.pageChanged.emit(page.path);
-    this._cdRef.detectChanges();
-    this.router.navigate(['/pages', 'invoice', page.path]);
-  }
 }

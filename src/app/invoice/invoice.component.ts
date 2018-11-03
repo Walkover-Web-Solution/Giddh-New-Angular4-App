@@ -39,7 +39,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
   public isRecurringSelected: boolean = false;
-  public showInvoiceNav: boolean = true;
+  public showInvoiceNav: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -59,12 +59,11 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     // debugger;
-    this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((ev) => {
-      if (ev instanceof NavigationEnd) {
-        this.showInvoiceNav = this.router.routerState.snapshot.url !== '/pages/invoice/receipt';
-        this._cd.detectChanges();
-      }
-    });
+    // this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((ev) => {
+    //   if (ev instanceof NavigationEnd) {
+    //     this.showInvoiceNav = this.router.routerState.snapshot.url !== '/pages/invoice/receipt';
+    //   }
+    // });
     // this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
     //   // console.log('router.event');
     //   // debugger;
@@ -79,16 +78,16 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     // }
   }
 
-  // public pageChanged(page: string) {
-  //   this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings'].indexOf(page) > -1;
-  //   // this.showInvoiceNav = page === 'preview';
-  // }
+  public pageChanged(page: string) {
+    this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings'].indexOf(page) > -1;
+    // this._cd.detectChanges();
+    // this.showInvoiceNav = page === 'preview';
+  }
 
-  // public goToRoute(path: string) {
-  //   debugger;
-  //   this.pageChanged(path);
-  //   this.router.navigateByUrl('page/invoice/' + path);
-  // }
+  public goToRoute(path: string) {
+    this.pageChanged(path);
+    this.router.navigateByUrl('pages/invoice/' + path);
+  }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);

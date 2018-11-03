@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
@@ -44,6 +44,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public yodleeForm: FormGroup;
   public companyUniqueName: string;
+  public selectedProvider: string;
+  public isRefreshWithCredentials: boolean = true;
+  public providerAccountId: string = null;
+  public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -62,6 +67,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName = this._generalService.companyUniqueName;
+    this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -115,13 +121,18 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     //     this.accounts$ = accounts;
     //   }
     // });
+    this.needReloadingLinkedAccounts$.subscribe(a => {
+      if (a) {
+        this.closeModal();
+      }
+    });
   }
 
   public getInitialEbankInfo() {
     this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
-  public connectBank() {
+  public connectBank(selectedProvider?, providerAccountId?) {
     // get token info
     // this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
     //   if (data.status === 'success') {
@@ -130,6 +141,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     //     }
     //   }
     // });
+    if (selectedProvider) {
+      this.selectedProvider = selectedProvider;
+      this.isRefreshWithCredentials = false;
+      this.providerAccountId = providerAccountId;
+    }
     this.connectBankModel.show();
     this.connectBankModel.config.ignoreBackdropClick = true;
   }
@@ -159,6 +175,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public closeModal() {
     this.connectBankModel.hide();
     this.iframeSource = undefined;
+    this.selectedProvider = null;
+    this.isRefreshWithCredentials = true;
+    this.providerAccountId = null;
     this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
@@ -209,8 +228,12 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRefreshToken(account) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.itemAccountId));
+  public onRefreshToken(account, isUpdateAccount) {
+    if (isUpdateAccount) {
+      this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
+      return;
+    }
+    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId));
     // this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 

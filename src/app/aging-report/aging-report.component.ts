@@ -57,7 +57,7 @@ export class AgingReportComponent implements OnInit {
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
-        this.loadPaginationComponent(data);
+        setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
       }
       this.dueAmountReportData$ = of(data);
     });
