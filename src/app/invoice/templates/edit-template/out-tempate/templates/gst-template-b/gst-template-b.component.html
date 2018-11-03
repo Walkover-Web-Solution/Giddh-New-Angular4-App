@@ -25,6 +25,18 @@
                                         <span [ngClass]="{'mrL2': fieldsAndVisibility.header.invoiceNumber?.display}" *ngIf="fieldsAndVisibility.header.invoiceDate?.display">{{(fieldsAndVisibility.header.invoiceDate?.label.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
                                             : 'Date'}}: 11-09-2017</span>
                                     </p>
+
+                                    <p *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                        <strong>{{(fieldsAndVisibility.header.dueDate?.label.length > 0) ? fieldsAndVisibility.header.dueDate?.label
+                                            : 'Due Date'}}: </strong>
+                                        <span class="bold">10-09-2018</span>
+                                        </p>
+                
+                                    <p class="mrR2" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                        <strong>Attention to: </strong>
+                                        <span>Mr. Alok Gangrade</span>
+                                    </p>
+
                                     <p>
                                         <span class="mrR2" [hidden]="!fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
                                             : 'GSTIN'}}: {{companyGSTIN ? companyGSTIN : '23AAUCS7548A1Z4'}}</span>
@@ -59,53 +71,37 @@
                                 </p>
                             </ng-container>
                         </td>
-                        <td colspan="2"></td>
+                        <td>
+                            <p class="bold">Shipping Detail:</p>
+                            <p *ngIf="fieldsAndVisibility.header.shippingDate?.display" class="mrR2">
+                                <span>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
+                                    : 'Ship Date'}}:</span>
+                                <span>10-09-2018</span>
+                                </p>
+                            <p *ngIf="fieldsAndVisibility.header.shippedVia?.display" class="mrR2">
+                                <span>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
+                                    : 'Ship Via'}}:</span>
+                                <span>FedEx</span>
+                                </p>
+                            <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
+                                <span>{{(fieldsAndVisibility.header.trackingNumber?.label.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
+                                    : 'Tracking No'}}:</span>
+                                <span>213456</span>
+                            </p>
+                        </td>
                         <td class="text-right vmiddle total-amount">
                             <h2 class="">8166.00/-</h2>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <table class="cargo-Detail">
-                <tr>
-                    <td style="padding-bottom:10px;">
-                        <span class="mrR2" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                            <strong>Attention to:</strong>
-                            <span>Mr. Alok Gangrade</span>
-                        </span>
-                        <span *ngIf="fieldsAndVisibility.header.dueDate?.display">
-                            <strong>{{(fieldsAndVisibility.header.dueDate?.label.length > 0) ? fieldsAndVisibility.header.dueDate?.label
-                                : 'Due Date'}}:</strong>
-                            <span>10-09-2018</span>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span *ngIf="fieldsAndVisibility.header.shippingDate?.display" class="mrR2">
-                            <strong>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
-                                : 'Ship Date'}}:</strong>
-                            <span>10-09-2018</span>
-                        </span>
-                        <span *ngIf="fieldsAndVisibility.header.shippedVia?.display" class="mrR2">
-                            <strong>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
-                                : 'Ship Via'}}:</strong>
-                            <span>FedEx</span>
-                        </span>
-                        <span *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
-                            <strong>{{(fieldsAndVisibility.header.trackingNumber?.label.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
-                                : 'Tracking No'}}:</strong>
-                            <span>213456</span>
-                        </span>
-                    </td>
-                </tr>
-            </table>
+            
         </div>
         <div id="Template-table" class="pos-rel" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }" (click)="onClickSection('table')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
                 <i class="fa fa-pencil"></i>
             </a>
-            <span class="arrow-down"></span>
+            <!-- <span class="arrow-down"></span> -->
             <table class="item product-table" cellspacing="0" cellpadding="0" [ngStyle]="{ 'background-color': inputTemplate.tableColor}" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
                 <thead>
                     <tr>
@@ -131,6 +127,11 @@
                     </tr> -->
                 </thead>
                 <tbody>
+                    <tr class="text-right">
+                        <td colspan="6"></td>
+                        <td>Previous Due</td>
+                        <td>5000.00</td>
+                    </tr>
                     <tr>
                         <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
                         <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09-2017
@@ -161,23 +162,23 @@
                 <tfoot>
                     <tr *ngIf="fieldsAndVisibility.table.taxableAmount?.display">
                         <th [attr.colspan]="columnsVisibled-2"></th>
-                        <th class="text-left">{{fieldsAndVisibility.footer.taxableAmount?.label}}</th>
-                        <th class="text-right">7200.00</th>
+                        <th class="text-left text-gray">{{fieldsAndVisibility.footer.taxableAmount?.label}}</th>
+                        <th class="text-right text-gray">7200.00</th>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.discount?.display">
                         <th [attr.colspan]="columnsVisibled-2"></th>
-                        <th class="text-left">{{fieldsAndVisibility.table.discount?.label}}</th>
-                        <th class="text-right">800.00</th>
+                        <th class="text-left text-gray">{{fieldsAndVisibility.table.discount?.label}}</th>
+                        <th class="text-right text-gray">800.00</th>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.table.taxes?.display">
                         <th [attr.colspan]="columnsVisibled-2"></th>
-                        <th class="text-left">IGST</th>
-                        <th class="text-right">966.00</th>
+                        <th class="text-left text-gray">IGST</th>
+                        <th class="text-right text-gray">966.00</th>
                     </tr>
 
                     <tr>
                         <th class="text-left inwords" [attr.colspan]="columnsVisibled-2">
-                            <span *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                            <span class="text-gray" *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
                                 Eight Thousand One Hundred Sixty Six Only
 
                             </span>
@@ -195,11 +196,11 @@
             <table class="item" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>
-                        <th class="text-left" *ngIf="fieldsAndVisibility.table.sNo?.display">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : '#'}}</th>
-                        <th class="text-left" *ngIf="fieldsAndVisibility.table.hsnSac?.display" style="width: 50%;">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
-                        <th *ngIf="fieldsAndVisibility.table.taxableValue?.display">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
-                        <th *ngIf="fieldsAndVisibility.table.taxes?.display">IGST Rate</th>
-                        <th *ngIf="fieldsAndVisibility.table.taxes?.display">Amt.</th>
+                        <th class="text-left bold" *ngIf="fieldsAndVisibility.table.sNo?.display">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : '#'}}</th>
+                        <th class="text-left bold" *ngIf="fieldsAndVisibility.table.hsnSac?.display" style="width: 50%;">{{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}</th>
+                        <th class="bold" *ngIf="fieldsAndVisibility.table.taxableValue?.display">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
+                        <th class="bold" *ngIf="fieldsAndVisibility.table.taxes?.display">IGST Rate</th>
+                        <th class="bold" *ngIf="fieldsAndVisibility.table.taxes?.display">Amt.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -222,11 +223,12 @@
                     <tr>
                         <th class="bdrB" *ngIf="fieldsAndVisibility.table.sNo?.display"></th>
                         <th class="bdrB text-right" *ngIf="fieldsAndVisibility.table.hsnSac?.display"></th>
+                        <th class="bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display"></th>
                         <th class="bdrB text-right" *ngIf="fieldsAndVisibility.table.taxableValue?.display">
                             <strong>Total</strong>
                             <strong class="mrL2">7200.00</strong>
                         </th>
-                        <th class="bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display"></th>
+                        
                         <th class="text-right bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display">
                             <strong>966.00</strong>
                         </th>
@@ -247,23 +249,25 @@
                                 <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU</h1>
                                 <h4 [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</h4>
                             </ng-container>
-                        </td>
-                        <td colspan="1"></td>
-                        <td style="text-align: center;vertical-align: bottom;">
-                            <p class="bdrB"></p>
-                            <p>
-                                <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
-                            </p>
-                            <p *ngIf="fieldsAndVisibility.footer.slogan?.display">{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : '(Signature)'}}</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <ul class="note">
+
+                            <ul class="note clearfix">
                                 <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}</li>
+                                <li>
+                                    All payments to be made in cash. Contact us for queries on these quotations.
+                                </li>
                             </ul>
                         </td>
+
+                        <td style="text-align: center;vertical-align: bottom; width: 300px;">
+                            <p class="bdrB"></p>
+                            <p>
+                                <strong class="font-10">{{fieldsAndVisibility.header.companyName?.label}}</strong>
+                            </p>
+                            <p *ngIf="fieldsAndVisibility.footer.slogan?.display">{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : '(Signature)'}}</p>
+
+                        </td>
                     </tr>
+                    
                 </tbody>
             </table>
 

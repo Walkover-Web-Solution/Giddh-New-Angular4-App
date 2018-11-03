@@ -1,9 +1,7 @@
 #template3 * {
-  border: 0;
   box-sizing: content-box;
   color: #262626;
   font-family: inherit;
-  font-size: 12px;
   font-style: inherit;
   font-weight: inherit;
   line-height: inherit;
@@ -13,16 +11,26 @@
   text-decoration: none;
   vertical-align: top;
 }
-
-.strong {
-  font-weight: bold;
+body {
+  font-size: 12px;
+}
+.bold {
+  font-weight: bold !important;
+}
+.font-11 {
+  font-size: 11px;
+}
+.font-10 {
+  font-size: 10px;
 }
 
 .max-width-180 {
     /* max-width: 180px !important; */
 }
 
-
+.total-payment th {
+  border-top: 1px solid #939292 !important;
+}
 /* NOTE:  comment padding, max-width, border in #template3 css for java */
 
 #template3 {
@@ -91,10 +99,6 @@
   margin-bottom: 20px;
 }
 
-#template3 .mrB1 {
-  margin-bottom: 10px;
-}
-
 #template3 .meta {
   padding: 20px;
 }
@@ -103,6 +107,7 @@
   font-weight: bold;
   font-size: 18px;
   line-height: 19px;
+  margin-bottom: 4px;
 }
 
 #template3 .product-table, #template3 .tax-table {
@@ -112,9 +117,8 @@
 }
 
 #template3 .item thead tr th {
-    padding: 10px 8px 0;
+    padding: 10px 8px 8px;
     border-bottom: 1px solid #666666;
-    /* line-height: 1.2rem; */
     font-weight: bold;
 }
 
@@ -150,12 +154,11 @@
 #template3 .product-table tfoot tr:last-child th {
   border-top: 0;
 }
-
+/* 
 #template3 .product-table tfoot tr:last-child th:last-child {
   border-top: 1px solid #666;
   border-bottom: 4px double #666;
-}
-
+} */
 #template3 .tax-table p {
   color: #595959;
 }
@@ -197,6 +200,7 @@
 
 #template3 .note li {
   list-style-type: initial;
+  font-size: 10px;
 }
 
 #template3 footer {
@@ -204,6 +208,9 @@
   line-height: 20px;
   padding: 15px 0;
   margin: 8px 0 0;
+}
+#template3 footer p {
+  font-size: 10px;
 }
 
 #template3 .pos-rel {
