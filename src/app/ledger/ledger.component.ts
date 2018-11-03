@@ -147,6 +147,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public debitSelectAll: boolean = false;
   public creditSelectAll: boolean = false;
   public isBankTransactionLoading: boolean = false;
+  public customRangeSelected: boolean = false;
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -205,7 +206,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         bsRangeValue: [from, to]
       })
     });
-
+    this.customRangeSelected = true;
     this.getTransactionData();
     // Después del éxito de la entrada. llamar para transacciones bancarias
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -331,6 +332,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.fileUploadOptions = {concurrency: 0};
 
     observableCombineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+      if (!resp[0]) {
+        return;
+      }
       this.hideEledgerWrap();
       let dateObj = resp[0];
       let params = resp[1];
@@ -338,11 +342,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let universalDate = _.cloneDeep(dateObj);
         this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
         this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
-        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-          dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
-          })
-        });
+        // this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+        //   dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+        //     bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+        //   })
+        // });
         // this.advanceSearchRequest.to = universalDate[1];
         this.advanceSearchRequest.page = 0;
       }
@@ -357,41 +361,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchText = '';
         this.searchTermStream.next('');
         this.resetBlankTransaction();
-        // this.datePickerOptions = {
-        //   locale: {
-        //     applyClass: 'btn-green',
-        //     applyLabel: 'Go',
-        //     fromLabel: 'From',
-        //     format: 'D-MMM-YY',
-        //     toLabel: 'To',
-        //     cancelLabel: 'Cancel',
-        //     customRangeLabel: 'Custom range'
-        //   },
-        //   ranges: {
-        //     'Last 1 Day': [
-        //       moment().subtract(1, 'days'),
-        //       moment()
-        //     ],
-        //     'Last 7 Days': [
-        //       moment().subtract(6, 'days'),
-        //       moment()
-        //     ],
-        //     'Last 30 Days': [
-        //       moment().subtract(29, 'days'),
-        //       moment()
-        //     ],
-        //     'Last 6 Months': [
-        //       moment().subtract(6, 'months'),
-        //       moment()
-        //     ],
-        //     'Last 1 Year': [
-        //       moment().subtract(12, 'months'),
-        //       moment()
-        //     ]
-        //   },
-        //   startDate: this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0], 'DD-MM-YYYY').toDate() : moment().subtract(30, 'days'),
-        //   endDate: this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1], 'DD-MM-YYYY').toDate() : moment()
-        // };
+
         // set state details
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
@@ -452,6 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+          this._loaderService.show();
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
           } else {
@@ -591,9 +562,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public initTrxRequest(accountUnq: string) {
+    this._loaderService.show();
     // this.advanceSearchRequest = this.advanceSearchRequest || new AdvanceSearchRequest();
-    this.advanceSearchRequest.page = 0;
-    this.advanceSearchRequest.count = 15;
+    // this.advanceSearchRequest.page = 0;
+    // this.advanceSearchRequest.count = 15;
     this.advanceSearchRequest.accountUniqueName = accountUnq;
     // this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     // this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
@@ -661,9 +633,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
     this.closingBalanceBeforeReconcile = null;
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-      moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
-      this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+    if (this.customRangeSelected) {
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
+        moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+        this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+    } else {
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName));
+
+    }
   }
 
   public toggleTransactionType(event: string) {
@@ -810,6 +787,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public hideUpdateLedgerModal() {
     this.showUpdateLedgerForm = false;
     this.updateLedgerModal.hide();
+    this._loaderService.show();
   }
 
   public showShareLedgerModal() {
@@ -831,11 +809,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public saveBlankTransaction() {
+    this._loaderService.show();
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+      this._loaderService.hide();
     }
   }
 
