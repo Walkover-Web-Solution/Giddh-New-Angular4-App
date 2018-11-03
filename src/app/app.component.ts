@@ -32,8 +32,13 @@ import { VersionCheckService } from './version-check.service';
 export class AppComponent implements AfterViewInit, OnInit {
   public IAmLoaded: boolean = false;
 
-  constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute,
-              private _generalService: GeneralService, private _cdr: ChangeDetectorRef, private _versionCheckService: VersionCheckService) {
+  constructor(private store: Store<AppState>,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private _generalService: GeneralService,
+    private _cdr: ChangeDetectorRef,
+    private _versionCheckService: VersionCheckService) {
+
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
