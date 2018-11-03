@@ -590,7 +590,7 @@ export class LedgerActions {
     };
   }
 
-  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string, page: number, count: number, q: string): CustomActions {
+  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string): CustomActions {
     return {
       type: LEDGER.ADVANCE_SEARCH,
       payload: {model, accountUniqueName, from, to, page, count, q}
