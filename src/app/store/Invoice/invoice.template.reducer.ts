@@ -271,6 +271,12 @@ export const initialState: CustomTemplateState = {
             label: 'Total',
             field: 'total',
             width: '10'
+          },
+          {
+            display: true,
+            label: 'Previous Due',
+            field: 'previousDue',
+            width: '10'
           }
         ]
       },

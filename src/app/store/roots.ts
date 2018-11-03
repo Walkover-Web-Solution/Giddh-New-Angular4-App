@@ -28,6 +28,7 @@ import * as fromInventoryBranchTransfer from './InventoryBranchTransfer/Inventor
 import * as fromCompanyImportExport from './CompanyImportExport/companyImportExport';
 import * as fromReceipt from './Invoice/Receipt/receipt.reducer';
 import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
+import * as fromGstR from './GstR/GstR.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -62,6 +63,7 @@ export interface AppState {
   companyImportExport: fromCompanyImportExport.CompanyImportExportState;
   gstReconcile: fromGstReconcile.GstReconcileState;
   receipt: fromReceipt.ReceiptState;
+  gstR: fromGstR.GstRReducerState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -95,5 +97,6 @@ export const reducers: ActionReducerMap<AppState> = {
   agingreport: fromAgingReport.agingReportReducer,
   companyImportExport: fromCompanyImportExport.companyImportExportReducer,
   receipt: fromReceipt.Receiptreducer,
-  gstReconcile: fromGstReconcile.GstReconcileReducer
+  gstReconcile: fromGstReconcile.GstReconcileReducer,
+  gstR: fromGstR.GstRReducer
 };
