@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class VersionCheckService {
+
+    public  onVersionChange$: Subject<boolean> =  new Subject();
+
     // this will be replaced by actual hash post-build.js
     private currentHash = '{{POST_BUILD_ENTERS_HASH_HERE}}';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        this.onVersionChange$.next(false);
+    }
 
     /**
      * Checks in every set frequency the version of frontend application
@@ -34,7 +40,8 @@ export class VersionCheckService {
 
                     // If new version, do something
                     if (hashChanged) {
-                        console.log('==== A NEW VERSION ON APPLICATION IS AVAILABLE ====');
+                        this.onVersionChange$.next(true);
+                        console.log('=== NEW VERSION IS AVAILABLE ===');
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
                         // for an example: location.reload();
                     } else {
@@ -42,7 +49,7 @@ export class VersionCheckService {
                     }
                     // store the new hash so we wouldn't trigger versionChange again
                     // only necessary in case you did not force refresh
-                    // this.currentHash = hash;
+                    this.currentHash = hash;
                 },
                 (err) => {
                     console.error(err, 'Could not get version');

@@ -1,4 +1,4 @@
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, NavigationStart } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
@@ -9,7 +9,6 @@ import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
-import { IS_ELECTRON_WA } from './app.constant';
 
 /**
  * App Component
@@ -32,6 +31,7 @@ import { IS_ELECTRON_WA } from './app.constant';
 })
 export class AppComponent implements AfterViewInit, OnInit {
   public IAmLoaded: boolean = false;
+  private newVersionAvailableForWebApp: boolean = false;
 
   constructor(private store: Store<AppState>,
     private router: Router,
@@ -62,8 +62,16 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public ngOnInit() {
     // Need to implement for Web app only
-    if (!AppUrl.includes('localapp.giddh.com') && !IS_ELECTRON_WA) {
+    if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
       this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
+    }
+
+    if (!isElectron) {
+      this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
+        if (isChanged) {
+          this.newVersionAvailableForWebApp = _.clone(isChanged);
+        }
+      });
     }
   }
 
@@ -72,6 +80,11 @@ export class AppComponent implements AfterViewInit, OnInit {
     this._generalService.IAmLoaded.next(true);
     this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
+      console.log('the evt is :', evt);
+      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+        console.log('==== RELOADING THE APPLICATION ====');
+        return window.location.reload(true);
+      }
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
