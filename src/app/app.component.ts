@@ -9,6 +9,7 @@ import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
+import { IS_ELECTRON_WA } from './app.constant';
 
 /**
  * App Component
@@ -60,7 +61,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   public ngOnInit() {
-    if (!AppUrl.includes('localapp.giddh.com')) {
+    if (!AppUrl.includes('localapp.giddh.com') && !IS_ELECTRON_WA) {
       this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
     }
   }
