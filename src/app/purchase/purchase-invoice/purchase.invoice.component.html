@@ -1,7 +1,7 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
     <form class="">
-        <div class="row">
-            <div class="form-group col-xs-2">
+        <div class="">
+            <div class="form-group max250 pull-left mrR1">
                 <label>GSTR Form</label>
                 <div class="btn-group btn-block" dropdown>
                     <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
@@ -18,10 +18,41 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
-                <div class="row">
-                    <label>Month</label>
-                    <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
+            <div class="form-group max250 pull-left mrR1" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
+                <div class="">
+                    <ng-container *ngIf="!showSingleDatePicker">
+                        <label>From - to</label>
+                        <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
+                    </ng-container>
+                    <ng-container *ngIf="showSingleDatePicker">
+                        <label>Month</label>
+
+                        <div class="input-group">
+                            <!--  -->
+                            <input type="text" name="from" [ngModel]="selectedDateForGSTR1?.monthYear" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+                            <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                    (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                        </div>
+                        <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                            <ul class="my-dropdown-menu calendar-dropdown">
+                                <li>
+                                    <!-- [(ngModel)]="selectedDateForGSTR1" -->
+                                    <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
+                                </li>
+                                <li class="pd1 clearfix pdT pdB">
+                                    <span class="btn-group pull-left">
+                                        <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                        <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
+                                    </span>
+                                    <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
+                                </li>
+                            </ul>
+                        </div>
+                    </ng-container>
 
                     <!-- <div class="input-group">
                         <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
@@ -39,18 +70,16 @@
                             </li>
                             <li class="pd1 clearfix pdT pdB">
                                 <span class="btn-group pull-left">
-                                    <button type="button" class="btn btn-xs btn-primary mrR"
-                                            (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
-                                    <button type="button" class="btn btn-xs btn-success"
-                                            (click)="showGSTR1DatePicker = false">Done</button>
+                                    <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                    <button type="button" class="btn btn-xs btn-success" click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                                 <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
-                    </li>
-                    </ul>
-                </div> -->
+                                <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
+                            </li>
+                        </ul>
+                    </div> -->
                 </div>
             </div>
-            <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
+            <div class="form-group max250 pull-left mrR1" *ngIf="selectedGstrType.name === 'GSTR3B'">
                 <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
                 <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
@@ -76,9 +105,9 @@
 
     </div>
 -->
-            <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
+            <div class="form-group max250 pull-left" *ngIf="selectedGstrType.name">
                 <label class="d-block">&nbsp;</label>
-                <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
+                <div class="">
                     <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
                         <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
               {{ selectedGstrType.name }}
@@ -109,7 +138,7 @@
                 </div>
             </div>
             <!-- hide due to unused -->
-            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+            <div class="form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
                 <label class="d-block">&nbsp;</label>
                 <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
           class="fa fa-cog" aria-hidden="true"></i> Jio GST
