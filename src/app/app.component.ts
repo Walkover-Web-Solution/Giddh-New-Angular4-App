@@ -74,11 +74,11 @@ export class AppComponent implements AfterViewInit, OnInit {
       });
     }
 
-    const lastState = localStorage.getItem('ls');
+    const lastState = localStorage.getItem('lastState');
 
     if (lastState) {
       this.router.navigate([lastState]);
-      localStorage.removeItem('ls');
+      localStorage.removeItem('lastState');
     }
   }
 
@@ -102,7 +102,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         // return;
           const lastState = this.getLastStateFromUrl(evt.url);
 
-          localStorage.setItem('ls', lastState);
+          localStorage.setItem('lastState', lastState);
 
           return window.location.reload(true);
 
