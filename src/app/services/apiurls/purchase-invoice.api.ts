@@ -9,6 +9,8 @@ export const PURCHASE_INVOICE_API = {
   UPDATE_PURCHASE_ENTRY: COMMON + 'accounts/:accountUniqueName/' + 'ledgers/:ledgerUniqueName',
   DOWNLOAD_GSTR1_SHEET: COMMON + 'gstreturn/:report_sheet_Type?from=:from&to=:to&gstin=:company_gstin', // GET gstr1_excel_export || gstr2_excel_export
   DOWNLOAD_GSTR1_ERROR_SHEET: COMMON + 'gstreturn/:error_sheet_Type?from=:from&to=:to&gstin=:company_gstin', // GET error_sheet_Type = (gstr1_error_export || gstr2_error_export)
+  DOWNLOAD_GSTR2_EXCEL_SHEET: COMMON + 'gstreturn/gstr2-excel-export?monthYear=:month&gstin=:company_gstin', // GET gstr2_excel_export
+  DOWNLOAD_GSTR2_ERROR_SHEET: COMMON + 'gstreturn/gstr2-error-export?monthYear=:month&gstin=:company_gstin', // GET
   UPDATE_INVOICE: COMMON + 'accounts/:accountUniqueName/' + 'invoices/generate-purchase/:invoiceUniqueName', // PATCH
   DOWNLOAD_GSTR2_SHEET: COMMON + 'gstreturn/gstr2_data/file?monthYear=:month&gstin=:company_gstin', // GET
   SEND_GSTR3B_EMAIL: COMMON + 'gstreturn/gstr3b-excel-export/email?monthYear=:month&gstin=:company_gstin&detailedSheet=:isNeedDetailSheet&email=:userEmail'

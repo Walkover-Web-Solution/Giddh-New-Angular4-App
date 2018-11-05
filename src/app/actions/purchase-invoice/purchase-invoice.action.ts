@@ -88,7 +88,7 @@ export class InvoicePurchaseActions {
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
         } else {
-          this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type);
+          this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type, data.queryString.reqObj.gstType);
           this.toasty.successToast('Sheet Downloaded Successfully.');
         }
         return {type: 'EmptyAction'};
@@ -110,7 +110,7 @@ export class InvoicePurchaseActions {
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
         } else {
-          this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.gstNumber);
+          this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type, data.queryString.reqObj.gstType);
           this.toasty.successToast('Error Sheet Downloaded Successfully.');
         }
         return {type: 'EmptyAction'};
@@ -327,9 +327,13 @@ export class InvoicePurchaseActions {
     return new Blob(byteArrays, {type: contentType});
   }
 
-  public downloadFile(data: Response, month: any, gstNumber: string, type: string) {
+  public downloadFile(data: Response, month: any, gstNumber: string, type: string, gstType) {
     let blob = this.base64ToBlob(data, 'application/xls', 512);
-    return saveAs(blob, `${type}-${month.fromDate}-${month.toDate}-${gstNumber}.xlsx`);
+    if (gstType === 'GSTR1') {
+      return saveAs(blob, `${type}-${month.fromDate}-${month.toDate}-${gstNumber}.xlsx`);
+    } else {
+      return saveAs(blob, `${type}-${month.monthYear}-${gstNumber}.xlsx`);
+    }
   }
 
   public GetPurchaseInvoices(model: CommonPaginatedRequest): CustomActions {
@@ -366,10 +370,10 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public DownloadGSTR1Sheet(period: object, gstNumber: string, type: string): CustomActions {
+  public DownloadGSTR1Sheet(period: object, gstNumber: string, type: string, gstType: string): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET,
-      payload: {period, gstNumber, type}
+      payload: {period, gstNumber, type, gstType}
     };
   }
 
@@ -380,10 +384,10 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public DownloadGSTR1ErrorSheet(period: object, gstNumber: string, type: string): CustomActions {
+  public DownloadGSTR1ErrorSheet(period: object, gstNumber: string, type: string, gstType): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET,
-      payload: {period, gstNumber, type}
+      payload: {period, gstNumber, type, gstType}
     };
   }
 
