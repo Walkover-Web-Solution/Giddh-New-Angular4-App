@@ -73,13 +73,6 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       });
     }
-
-    const lastState = localStorage.getItem('lastState');
-
-    if (lastState) {
-      this.router.navigate([lastState]);
-      localStorage.removeItem('lastState');
-    }
   }
 
   public ngAfterViewInit() {
@@ -113,6 +106,13 @@ export class AppComponent implements AfterViewInit, OnInit {
       window.scrollTo(0, 0);
     });
 
+    const lastState = localStorage.getItem('lastState');
+
+    if (lastState) {
+      localStorage.removeItem('lastState');
+      return this.router.navigate([lastState]);
+    }
+
     if (location.href.includes('returnUrl')) {
       let tUrl = location.href.split('=');
       if (tUrl[1]) {
@@ -127,7 +127,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (url) {
       if (url.includes('/pages/')) {
         return url.substr(url.lastIndexOf('/') + 1, url.length);
-      } else if (url.includes('/ledger/')) {
+      } else if (url.includes('/ledger/') || url.includes('/invoice/')) {
         return url;
       }
     }
