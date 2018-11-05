@@ -292,7 +292,11 @@ export class ConnectBankModalComponent implements OnChanges {
    * refreshAccount
    */
   public refreshAccount(ev) {
-    this.refreshAccountEvent.emit(ev.value);
+    let objToSend = {
+      loginForm: []
+    };
+    objToSend.loginForm.push(this.loginForm.value);
+    this.refreshAccountEvent.emit(objToSend);
   }
 
 }
