@@ -9,8 +9,6 @@ import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
-import { StateDetailsRequest } from './models/api-models/Company';
-import { CompanyService } from './services/companyService.service';
 
 /**
  * App Component
@@ -39,7 +37,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     private router: Router,
     private _generalService: GeneralService,
     private _cdr: ChangeDetectorRef,
-    private _companyService: CompanyService,
     private _versionCheckService: VersionCheckService) {
 
     this.store.select(s => s.session).subscribe(ss => {
