@@ -73,6 +73,13 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       });
     }
+
+    const lastState = localStorage.getItem('ls');
+
+    if (lastState) {
+      this.router.navigate([lastState]);
+      localStorage.removeItem('ls');
+    }
   }
 
   public ngAfterViewInit() {
@@ -83,17 +90,22 @@ export class AppComponent implements AfterViewInit, OnInit {
 
       if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron ) {
         // need to save last state
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = this._generalService.companyUniqueName;
-        stateDetailsRequest.lastState = this.getLastStateFromUrl(evt.url);
-        this._companyService.setStateDetails(stateDetailsRequest).subscribe(res => {
-          console.log('res after reload is :', res);
-          // hard reload
-          debugger;
-          console.log('After debugger');
+        // let stateDetailsRequest = new StateDetailsRequest();
+        // stateDetailsRequest.companyUniqueName = this._generalService.companyUniqueName;
+        // stateDetailsRequest.lastState = this.getLastStateFromUrl(evt.url);
+        // this._companyService.setStateDetails(stateDetailsRequest).subscribe(res => {
+        //   console.log('res after reload is :', res);
+        //   // hard reload
+        //   debugger;
+        //   console.log('After debugger');
+        // });
+        // return;
+          const lastState = this.getLastStateFromUrl(evt.url);
+
+          localStorage.setItem('ls', lastState);
+
           return window.location.reload(true);
-        });
-        return;
+
       }
       if (!(evt instanceof NavigationEnd)) {
         return;
