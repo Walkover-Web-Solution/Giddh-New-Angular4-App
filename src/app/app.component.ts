@@ -1,4 +1,4 @@
-import { ActivatedRoute, NavigationEnd, Router, NavigationStart } from '@angular/router';
+import { NavigationEnd, Router, NavigationStart } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
@@ -9,6 +9,8 @@ import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
+import { StateDetailsRequest } from './models/api-models/Company';
+import { CompanyService } from './services/companyService.service';
 
 /**
  * App Component
@@ -35,10 +37,10 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   constructor(private store: Store<AppState>,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private _generalService: GeneralService,
     private _cdr: ChangeDetectorRef,
-    private _versionCheckService: VersionCheckService) {
+    private _versionCheckService: VersionCheckService,
+    private _companyService: CompanyService) {
 
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
@@ -78,8 +80,15 @@ export class AppComponent implements AfterViewInit, OnInit {
     this._generalService.IAmLoaded.next(true);
     this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
-      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
-        return window.location.reload(true);
+
+      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron ) {
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = this._generalService.companyUniqueName;
+        stateDetailsRequest.lastState = this.getLastStateFromUrl(evt.url);
+        this._companyService.setStateDetails(stateDetailsRequest).subscribe((res) => {
+          return window.location.reload(true);
+        });
+        return;
       }
       if (!(evt instanceof NavigationEnd)) {
         return;
@@ -95,6 +104,17 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       }
     }
+  }
+
+  private getLastStateFromUrl(url: string): string {
+    if (url) {
+      if (url.includes('/pages/')) {
+        return url.substr(url.lastIndexOf('/') + 1, url.length);
+      } else if (url.includes('/ledger/')) {
+        return url;
+      }
+    }
+    return 'home';
   }
 
 }
