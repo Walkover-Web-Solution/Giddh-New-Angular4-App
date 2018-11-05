@@ -87,6 +87,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         stateDetailsRequest.companyUniqueName = this._generalService.companyUniqueName;
         stateDetailsRequest.lastState = this.getLastStateFromUrl(evt.url);
         this._companyService.setStateDetails(stateDetailsRequest).subscribe(res => {
+          console.log('res after reload is :', res);
           // hard reload
           return window.location.reload(true);
         });
