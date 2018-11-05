@@ -89,6 +89,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         this._companyService.setStateDetails(stateDetailsRequest).subscribe(res => {
           console.log('res after reload is :', res);
           // hard reload
+          debugger;
           return window.location.reload(true);
         });
         return;
