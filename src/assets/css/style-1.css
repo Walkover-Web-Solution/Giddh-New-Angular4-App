@@ -5173,9 +5173,10 @@ bs-datepicker-container {
     /* z-index: 1 !important; */
 }
 
-.daterangepicker.show-calendar {
-    min-width: 666px;
-}
+
+/* .daterangepicker.show-calendar {
+  min-width: 666px;
+} */
 
 .panel.sFthanks.fieldset {
     display: none !important;
