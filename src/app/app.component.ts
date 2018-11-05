@@ -82,20 +82,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.router.events.subscribe((evt) => {
 
       if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron ) {
-        // need to save last state
-        // let stateDetailsRequest = new StateDetailsRequest();
-        // stateDetailsRequest.companyUniqueName = this._generalService.companyUniqueName;
-        // stateDetailsRequest.lastState = this.getLastStateFromUrl(evt.url);
-        // this._companyService.setStateDetails(stateDetailsRequest).subscribe(res => {
-        //   console.log('res after reload is :', res);
-        //   // hard reload
-        //   debugger;
-        //   console.log('After debugger');
-        // });
-        // return;
-          const lastState = this.getLastStateFromUrl(evt.url);
+          // need to save last state
+          const redirectState = this.getLastStateFromUrl(evt.url);
 
-          localStorage.setItem('lastState', lastState);
+          localStorage.setItem('lastState', redirectState);
 
           return window.location.reload(true);
 
