@@ -39,8 +39,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     private router: Router,
     private _generalService: GeneralService,
     private _cdr: ChangeDetectorRef,
-    private _versionCheckService: VersionCheckService,
-    private _companyService: CompanyService) {
+    private _companyService: CompanyService,
+    private _versionCheckService: VersionCheckService) {
 
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
@@ -82,10 +82,12 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.router.events.subscribe((evt) => {
 
       if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron ) {
+        // need to save last state
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this._generalService.companyUniqueName;
         stateDetailsRequest.lastState = this.getLastStateFromUrl(evt.url);
         this._companyService.setStateDetails(stateDetailsRequest).subscribe(res => {
+          // hard reload
           return window.location.reload(true);
         });
         return;
@@ -116,5 +118,4 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
     return 'home';
   }
-
 }
