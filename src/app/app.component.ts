@@ -90,6 +90,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           console.log('res after reload is :', res);
           // hard reload
           debugger;
+          console.log('After debugger');
           return window.location.reload(true);
         });
         return;
