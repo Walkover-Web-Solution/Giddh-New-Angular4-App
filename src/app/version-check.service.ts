@@ -39,9 +39,9 @@ export class VersionCheckService {
 
                     // If new version, do something
                     if (hashChanged) {
-                        this.onVersionChange$.next(true);
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
                         // for an example: location.reload();
+                        this.onVersionChange$.next(true);
                     }
                     // store the new hash so we wouldn't trigger versionChange again
                     // only necessary in case you did not force refresh
@@ -65,7 +65,6 @@ export class VersionCheckService {
         if (!currentHash || currentHash === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
             return false;
         }
-
         return currentHash !== newHash;
     }
 }
