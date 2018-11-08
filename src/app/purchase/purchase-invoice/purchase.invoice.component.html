@@ -18,12 +18,47 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group max250 pull-left mrR1" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
+            <div class="form-group max250 pull-left mrR1" [hidden]="!selectedGstrType.name">
+                <ng-container *ngIf="!showSingleDatePicker">
+                    <label class="d-block">From - to</label>
+                    <div class="btn-group  dropdown" dropdown [autoClose]="false" container="body" *ngIf="!showSingleDatePicker" #periodDropdown="bs-dropdown">
+                        <button id="button-nested" dropdownToggle type="button" class="form-control dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle" aria-controls="dropdown-nested">{{ selectedDateForGSTR1?.from }} - {{ selectedDateForGSTR1?.to }} <span class="caret"></span></button>
+                        <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-nested" [attachOutsideOnClick]="true" (clickOutside)="periodDropdown.hide();showGSTR1DatePicker=false">
+                            <li role="menuitem" dropdown triggers="'click'" placement="right" [autoClose]="false" container="body" #monthWise="bs-dropdown">
+                                <a dropdownToggle class="dropdown-item dropdown-toggle cp" (click)="false">
+                                    Month Wise
+                                    <div class="pull-right">
+                                        <span class="caret rotate-90"></span>
+                                    </div>
+                                    </a>
+                                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="javascript:void(0)">
+                                            <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [showWeeks]="false" [minMode]="'month'" (selectionDone)="monthChanged($event, true);monthWise.hide()"></datepicker>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="monthWise.hide()">
+                                    <label for="daterangeInput" class="d-block cp">Custom Range 
+                                    <div class="pull-right">
+                                        <span class="caret rotate-90"></span>
+                                    </div>
+                                    </label>
+                                    <!-- (applyDaterangepicker)="periodChanged($event)" -->
+                                    <!-- [options]="datePickerOptions" -->
+                                    <input id="daterangeInput" type="text" name="daterangeInput" [options]="{'autoApply': true}" #dateRangePickerCmp daterangepicker class="form-control daterangePicker" (applyDaterangepicker)="monthChanged($event, 'range')" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </ng-container>
                 <div class="">
-                    <ng-container *ngIf="!showSingleDatePicker">
-                        <label>From - to</label>
+                    <!-- <ng-container *ngIf="!showSingleDatePicker">
+                        
                         <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
-                    </ng-container>
+                    </ng-container> -->
                     <ng-container *ngIf="showSingleDatePicker">
                         <label>Month</label>
 

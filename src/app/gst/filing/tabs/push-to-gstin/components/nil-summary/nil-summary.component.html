@@ -50,8 +50,10 @@
             </div>
         </div>
 
-        <div class="mrT5 mrB5" *ngIf="(nilSummaryInProgress$ | async)">
+        <div class="filings-empty-state" *ngIf="(nilSummaryInProgress$ | async)">
             <div class="giddh-spinner vertical-center-spinner"></div>
+            <div class="empty-msg"><span>  Loading Data.  </span></div>
         </div>
+
     </div>
 </div>

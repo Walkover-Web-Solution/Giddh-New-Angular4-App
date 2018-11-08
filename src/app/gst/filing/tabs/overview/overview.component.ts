@@ -14,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public currentPeriod: string = null;
+  @Input() public currentPeriod: any = null;
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
   @Input() public isTransactionSummary: boolean = false;

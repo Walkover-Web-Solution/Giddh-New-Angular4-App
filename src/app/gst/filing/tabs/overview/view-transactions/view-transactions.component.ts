@@ -52,12 +52,12 @@ export const filterTransaction = {
 
 export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public currentPeriod: string = null;
+  @Input() public currentPeriod: any = null;
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
   @Input() public isTransactionSummary: boolean;
 
-  public viewTransaction$: Observable<TransactionSummary>;
+  public viewTransaction$: Observable<TransactionSummary> = of(null);
   public entityType = TransactionType;
   public invoiceType = InvoiceType;
   public otherEntityType = Entitytype;
@@ -74,20 +74,16 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    // this.companyGst$.subscribe(a => {
-    //   if (a) {
-    //     this.selectedGst = a;
-    //   }
-    // });
 
-    // this.activatedRoute.parent.params.subscribe(params => {
-    //   debugger;
-    //   this.currentPeriod = params['period'];
-    //   this.selectedGst = params['selectedGst'];
-    // });
+    this.activatedRoute.firstChild.params.subscribe(params => {
+      this.filterParam['entityType'] = params.entityType;
+    });
 
-    this.filterParam['monthYear'] = this.currentPeriod;
+    this.filterParam['from'] = this.currentPeriod.from;
+    this.filterParam['to'] = this.currentPeriod.to;
     this.filterParam['gstin'] = this.activeCompanyGstNumber;
+
+    this.viewFilteredTxn('page', 1);
     //
   }
 
@@ -100,7 +96,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public goBack() {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod]);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
   }
 
   /**

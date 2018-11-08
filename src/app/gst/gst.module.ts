@@ -30,9 +30,10 @@ import { NilSummaryComponent } from './filing/tabs/push-to-gstin/components/nil-
 import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-summary/hsn-summary.component';
 import { B2csSummaryComponent } from './filing/tabs/push-to-gstin/components/b2cs-summary/b2cs-summary.component';
 import { DocumentIssuedComponent } from './filing/tabs/push-to-gstin/components/document-issued/document-issued.component';
+import { FailedTransactionsComponent } from './filing/tabs/push-to-gstin/components/failed-transactions/failed-transactions.component';
 
 @NgModule({
-  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent],
+  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,

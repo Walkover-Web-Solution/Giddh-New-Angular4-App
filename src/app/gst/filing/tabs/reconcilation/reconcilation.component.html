@@ -404,19 +404,10 @@
                                 <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span></div>
                             </div>
                         </tab>
-                        <tab heading="Reconciled (1 / 39)">
-
+                        <tab>
                         </tab>
                     </tabset>
                 </div>
-
-
-
             </div>
         </div>
     </div>
-
-
-
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-    <aside-menu-account [selectedService]="selectedServiceForGSTR1" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (fireReconcileRequest)="fireGstReconcileRequest('NOT_ON_PORTAL')" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
