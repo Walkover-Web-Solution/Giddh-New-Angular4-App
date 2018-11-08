@@ -13,12 +13,15 @@ export interface GstRReducerState {
   hsnSummary: HsnSummaryResponse;
   nilSummary: NilSummaryResponse;
   b2csSummary: TransactionSummary;
-  transactionCounts: TransactionCounts[];
+  transactionCounts: TransactionCounts;
+  transactionCountsInProcess: boolean;
   hsnSummaryInProgress: boolean;
   nilSummaryInProgress: boolean;
   b2csSummaryInProgress: boolean;
-  documentIssuedResponse: DocumentIssuedResponse[];
+  documentIssuedResponse: DocumentIssuedResponse;
   documentIssuedRequestInProgress: boolean;
+  failedTransactionsSummary: any;
+  failedTransactionsSummaryInProgress: boolean;
 }
 
 export class GstOverViewResponse {
@@ -87,11 +90,21 @@ export class OverViewResult {
 }
 
 export class TransactionCounts {
-  public gstType: string;
-  public transactionCount: number;
+  public gstr1Transactions: string;
+  public gstr2Transactions: string;
+  public uncategorized: string;
 }
 
 export class DocumentIssuedResponse {
+  public page: number;
+  public count: number;
+  public totalPages: number;
+  public totalItems: number;
+  public results: DocumentIssuedResult[];
+  public size: number;
+}
+
+export class DocumentIssuedResult {
   public num: number;
   public doc: string;
   public from: string;
@@ -104,7 +117,7 @@ export class DocumentIssuedResponse {
 }
 
 const initialState: GstRReducerState = {
-  overViewDataInProgress: false,
+  overViewDataInProgress: true,
   overViewData: new GstOverViewResponse(),
   viewTransactionData: new TransactionSummary(),
   activeCompanyGst: '',
@@ -113,23 +126,27 @@ const initialState: GstRReducerState = {
   hsnSummary: null,
   nilSummary: null,
   b2csSummary: null,
-  transactionCounts: [],
+  transactionCounts: new TransactionCounts(),
   hsnSummaryInProgress: false,
   nilSummaryInProgress: false,
-  b2csSummaryInProgress: false,
-  documentIssuedResponse: [],
-  documentIssuedRequestInProgress: false
+  b2csSummaryInProgress: true,
+  documentIssuedResponse: null,
+  documentIssuedRequestInProgress: false,
+  failedTransactionsSummary: null,
+  failedTransactionsSummaryInProgress: true,
+  transactionCountsInProcess: true
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
 
   switch (action.type) {
-    case GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN:
+    case GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN: {
       return {
         ...state,
         activeCompanyGst: action.payload
       };
-    case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS: {
+    }
+    case GSTR_ACTIONS.GET_GSTR_OVERVIEW: {
       return {
         ...state,
         overViewDataInProgress: true
@@ -144,25 +161,32 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         } else {
           newState.gstR2TotalTransactions = response.body.totalTransactions;
         }
+        newState.overViewDataInProgress = false;
         newState.overViewData = response.body;
       }
       return newState;
+    }
+    case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS: {
+      // return {
+      //   ...state,
+      //   overViewDataInProgress: true
+      // };
     }
     case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.viewTransactionData = response.body;
-        newState.overViewDataInProgress = false;
       }
       return newState;
     }
-    case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY:
-     return Object.assign({}, state, {
-          nilSummaryInProgress: true,
-          hsnSummaryInProgress: true,
-          b2csSummaryInProgress: true
-      });
+    case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY: {
+      return Object.assign({}, state, {
+            nilSummaryInProgress: true,
+            hsnSummaryInProgress: true,
+            b2csSummaryInProgress: true
+        });
+    }
     case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
@@ -180,15 +204,26 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             newState.b2csSummary = response.body;
             newState.b2csSummaryInProgress = false;
             break;
+          case 'failedtransactions':
+            newState.failedTransactionsSummary = response.body;
+            newState.failedTransactionsSummaryInProgress = false;
+            break;
         }
       }
       return newState;
+    }
+    case GSTR_ACTIONS.GET_TRANSACTIONS_COUNT: {
+      return {
+        ...state,
+        transactionCountsInProcess: true
+      };
     }
     case GSTR_ACTIONS.GET_TRANSACTIONS_COUNT_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
-        newState.TransactionCounts = response.body;
+        newState.transactionCounts = response.body;
+        newState.transactionCountsInProcess = false;
       }
       return newState;
     }

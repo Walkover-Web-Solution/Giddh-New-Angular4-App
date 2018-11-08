@@ -1,6 +1,4 @@
-import { GstPageCComponent } from './gst-page-c/gst-page-c.component';
 import { RouterModule, Routes } from '@angular/router';
-import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -10,21 +8,18 @@ import { FileGstR1Component } from './gstR1/gstR1.component';
 import { FileGstR2Component } from './gstR2/gstR2.component';
 import { FileGstR3Component } from './gstR3/gstR3.component';
 import { FilingComponent } from './filing/filing.component';
-import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
-import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
 
 const GST_ROUTES: Routes = [
   { path: '', component: GstComponent },
   { path: 'gstR1', component: FileGstR1Component },
   { path: 'gstR2', component: FileGstR2Component },
   { path: 'gstR3', component: FileGstR3Component },
-  { path: 'filing-return/:selectedGst/:period', component: FilingComponent,
+  { path: 'filing-return/:selectedGst/:from/:to', component: FilingComponent,
     children: [
       { path: '', component: FilingComponent },
-      { path: 'transaction', component: FilingComponent },
+      { path: 'transaction/:entityType', component: FilingComponent },
     ]
-  },
-  { path: 'filing/transactions', component: OverviewSummaryComponent }
+  }
 ];
 
 @NgModule({

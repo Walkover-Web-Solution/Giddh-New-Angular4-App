@@ -14,6 +14,7 @@ import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.acti
 import { TransactionCounts } from 'app/store/GstR/GstR.reducer';
 import { AlertConfig } from 'ngx-bootstrap/alert';
 import { trigger, state, animate, transition, style } from '@angular/animations';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 @Component({
   templateUrl: './gst.component.html',
@@ -37,27 +38,31 @@ import { trigger, state, animate, transition, style } from '@angular/animations'
 })
 export class GstComponent implements OnInit {
   public showCalendar: boolean = false;
-  public currentPeriod: string = null;
+  public currentPeriod: any = null;
   public period: any = null;
-  public gstR1TotalTransactions$: Observable<number> = of(0);
-  public gstR2TotalTransactions$: Observable<number> = of(0);
   public activeCompanyUniqueName: string = '';
   public companies: CompanyResponse[] = [];
   public activeCompanyGstNumber = '';
   public gstAuthenticated$: Observable<boolean>;
-  public gstTransactionCounts$: Observable<TransactionCounts[]> = of([]);
+  public gstTransactionCounts$: Observable<TransactionCounts> = of(null);
   public selectedService: string;
   public GstAsidePaneState: string = 'out';
   public imgPath: string = '';
+  public isMonthSelected: boolean = true;
+  public datePickerOptions: any = {
+    alwaysShowCalendars: true,
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
+  public gstTransactionCountsInProcess$: Observable<boolean> = of(true);
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _companyActions: CompanyActions, private _route: Router, private _gstAction: GstReconcileActions) {
     this.periodChanged(new Date());
-    this.gstR1TotalTransactions$ = this.store.select(p => p.gstR.gstR1TotalTransactions).pipe(takeUntil(this.destroyed$));
-    this.gstR2TotalTransactions$ = this.store.select(p => p.gstR.gstR2TotalTransactions).pipe(takeUntil(this.destroyed$));
     this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.gstTransactionCounts$ = this.store.select(p => p.gstR.transactionCounts).pipe(takeUntil(this.destroyed$));
+    this.gstTransactionCountsInProcess$ = this.store.select(p => p.gstR.transactionCountsInProcess).pipe(takeUntil(this.destroyed$));
     this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
         if (c) {
           this.activeCompanyUniqueName = _.cloneDeep(c);
@@ -90,16 +95,12 @@ export class GstComponent implements OnInit {
     stateDetailsRequest.lastState = 'gst';
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    let dates = {
+      from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+      to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+    };
+    this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
 
-    this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
-
-    // this.gstAuthenticated$.subscribe(s => {
-    //   if (!s) {
-    //     this.toggleSettingAsidePane(null, 'RECONCILE');
-    //   } else {
-    //     this.store.dispatch(this._gstAction.GetTransactionsCount(moment(this.currentPeriod).format('MM-YYYY'), this.activeCompanyGstNumber));
-    //   }
-    // });
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
@@ -107,7 +108,21 @@ export class GstComponent implements OnInit {
    * periodChanged
    */
   public periodChanged(ev) {
-    this.currentPeriod = moment(ev).format('MMMM-YYYY');
+    if (ev && ev.picker) {
+      let dates = {
+        from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
+      this.currentPeriod = dates;
+      this.isMonthSelected = false;
+    } else {
+      let dates = {
+        from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+        to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+      };
+      this.currentPeriod = dates;
+      this.isMonthSelected = true;
+    }
     this.showCalendar = false;
   }
 
@@ -115,20 +130,7 @@ export class GstComponent implements OnInit {
    * navigateToOverview
    */
   public navigateToOverview(type) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', type, moment(this.currentPeriod).format('MM-YYYY')]);
-  }
-
-  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
-    if (event) {
-      event.preventDefault();
-    }
-
-    if (selectedService === 'RECONCILE') {
-      let checkIsAuthenticated;
-      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
-    }
-    this.selectedService = selectedService;
-    this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', type, this.currentPeriod.from, this.currentPeriod.to]);
   }
 
 }

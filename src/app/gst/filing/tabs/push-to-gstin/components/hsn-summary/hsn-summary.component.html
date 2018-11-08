@@ -2,7 +2,7 @@
     <h4 class="clearfix gstr-summary-title">HSN Summary</h4>
     <p style="padding-top:6px;" class="text-muted half">This section includes the HSN-wise summary of the items you have sold</p>
     <div id="ember1945" class="ember-view">
-        <div *ngIf="(hsnSummaryResponse$ | async) && (hsnSummaryResponse$ | async).results.length">
+        <div *ngIf="(hsnSummaryResponse$ | async) && (hsnSummaryResponse$ | async).totalItems">
             <table id="ember1946" class="transactions-table table-striped  table zi-table  ember-view">
                 <thead>
                     <tr>
@@ -82,8 +82,11 @@
             </div>
         </div>
 
-        <div class="mrT5 mrB5" *ngIf="(hsnSummaryInProgress$ | async)">
+
+
+        <div class="filings-empty-state" *ngIf="(hsnSummaryInProgress$ | async)">
             <div class="giddh-spinner vertical-center-spinner"></div>
+            <div class="empty-msg"><span>  Loading Data.  </span></div>
         </div>
     </div>
 </div>

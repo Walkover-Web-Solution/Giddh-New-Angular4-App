@@ -44,7 +44,7 @@ import { Location } from '@angular/common';
 })
 export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public data: GstReconcileInvoiceDetails = null;
-  @Input() public currentPeriod: string = null;
+  @Input() public currentPeriod: any = null;
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
   @Input() public selectedTab: string = '';
@@ -64,8 +64,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public reconcileActiveTab: string = 'NOT_ON_PORTAL';
   public selectedDateForGSTR1 = {};
   public moment = moment;
-  public accountAsideMenuState: string = 'out';
-  public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
   public pullFromGstInProgress$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -95,63 +93,18 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-    // debugger;
-  }
-
-  /**
-   * initData
-   */
-  public initComponent() {
     this.fireGstReconcileRequest('NOT_ON_PORTAL');
-    this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
-    this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o.taxes && o.taxes.length) {
-        // this.allTaxes = _.cloneDeep(o.taxes);
-      }
-    });
-
-    this.gstNotFoundOnGiddhData$.subscribe(s => {
-      console.log(s, 'NOT_ON_GIDDH');
-      // this.loadReconcilePaginationComponent(s, 'NOT_ON_GIDDH');
-    });
-
-    this.gstNotFoundOnPortalData$.subscribe(s => {
-      console.log(s, 'NOT_ON_PORTAL');
-      // this.loadReconcilePaginationComponent(s, 'NOT_ON_PORTAL');
-    });
-
-    this.gstPartiallyMatchedData$.subscribe(s => {
-      console.log(s, 'PARTIALLY_MATCHED');
-      // this.loadReconcilePaginationComponent(s, 'PARTIALLY_MATCHED');
-    });
-
-    this.gstMatchedData$.subscribe(s => {
-      console.log(s, 'MATCHED');
-      // this.loadReconcilePaginationComponent(s, 'MATCHED');
-    });
-
-    // this.gstAuthenticated$.subscribe(s => {
-    //   if (!s) {
-    //     this.toggleSettingAsidePane(null, 'RECONCILE');
-    //   } else {
-    //     //  means user logged in gst portal
-    //   }
-    // });
-    this.pullFromGstInProgress$.subscribe(s => {
-      if (s) {
-        this.toggleSettingAsidePane(null, 'RECONCILE');
-      }
-    });
   }
+
   public reconcileTabChanged(action: string) {
     this.reconcileActiveTab = action;
     this.fireGstReconcileRequest(action);
   }
 
   public reconcilePageChanged(event: any, action: string) {
-    this.fireGstReconcileRequest(action, this.selectedDateForGSTR1, event.page);
+    this.fireGstReconcileRequest(action, event.page);
   }
-  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
+  public fireGstReconcileRequest(action: string, page: number = 1, refresh: boolean = false) {
     if (!this.currentPeriod) {
       return;
     }
@@ -204,37 +157,15 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * toggleSettingAsidePane
-   */
-  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
-    if (event) {
-      event.preventDefault();
-    }
-
-    if (selectedService === 'RECONCILE') {
-      let checkIsAuthenticated;
-      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
-
-      if (checkIsAuthenticated) {
-        this.fireGstReconcileRequest(this.reconcileActiveTab, this.selectedDateForGSTR1, 1, true);
-        return;
-      }
-    }
-
-    if (selectedService) {
-      this.selectedServiceForGSTR1 = selectedService;
-    }
-    this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-  }
-
-  public ngOnDestroy() {
-    //
-  }
-
-  /**
    * ngOnChanges
    */
   public ngOnChanges() {
     //
   }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
  }

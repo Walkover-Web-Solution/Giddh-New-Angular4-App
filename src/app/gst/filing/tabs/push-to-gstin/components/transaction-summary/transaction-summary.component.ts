@@ -11,16 +11,17 @@ export class TransactionSummaryComponent implements OnInit, OnChanges {
   @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
-
-  public showTransaction = false;
+  @Input() public isTransactionSummary;
 
   constructor(private activatedRoute: ActivatedRoute) {
     //
   }
 
   public ngOnInit() {
+    this.isTransactionSummary = true;
     //
   }
+
   /**
    * ngOnChnages
   */

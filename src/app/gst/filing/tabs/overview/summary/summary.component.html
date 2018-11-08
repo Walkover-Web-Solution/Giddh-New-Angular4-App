@@ -1,9 +1,9 @@
 <div class="transactions-overview">
 
     <div class="gstr-transactions-summary">
-        <div class="text-uppercase title" *ngIf="!isTransactionSummary"> Overall Summary</div>
+        <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
         <div id="ember1233" class="ember-view" *ngIf="(gstOverviewData$ | async) && (gstOverviewData$ | async)?.transactionSummary?.totalItems">
-            <table class="table table-striped transactions-table transactions-summary-table">
+            <table class="table table-striped transactions-table transactions-summary-table" *ngIf="!(gstOverviewDataInProgress$ | async)">
                 <thead>
                     <tr class="text-uppercase">
                         <th width="20px"></th>
@@ -28,49 +28,40 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody *ngIf="!(gstOverviewDataInProgress$ | async)">
+                <tbody>
                     <tr *ngFor="let item of (gstOverviewData$ | async)?.transactionSummary.results" (click)="viewTransactions(item)">
                         <td></td>
-                        <td [ngSwitch]="item.gstReturnType">
+                        <td [ngSwitch]="true">
 
-                            <ng-container *ngSwitchCase="'b2b'">
-                                <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-bottom">
-                                <path fill="#1D1D1B" d="M64 32h256v128h32V0H32v512h128v-32H64z"></path>
-                                <path fill="#1D1D1B" d="M192 192v320.1l120-.1V392h48v120l120 .1V192H192zm256 288.1h-56V360H280v120h-56V224h224v256.1z"></path>
-                                </svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
+                                <img src="../assets/images/gst/b2b.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="'b2cl'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path d="M256 244c-58.4 0-106-47.6-106-106S197.6 32 256 32s106 47.6 106 106-47.6 106-106 106zm0-180c-40.8 0-74 33.2-74 74s33.2 74 74 74 74-33.2 74-74-33.2-74-74-74zM480 480h-32v-56.1c0-57.3-46.7-104-104-104H168c-57.3 0-104 46.7-104 104V480H32v-56.1c0-75 61-136 136-136h176c75 0 136 61 136 136V480z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
+                                <img src="../assets/images/gst/b2cs.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="'b2cs'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path d="M256 244c-58.4 0-106-47.6-106-106S197.6 32 256 32s106 47.6 106 106-47.6 106-106 106zm0-180c-40.8 0-74 33.2-74 74s33.2 74 74 74 74-33.2 74-74-33.2-74-74-74zM480 480h-32v-56.1c0-57.3-46.7-104-104-104H168c-57.3 0-104 46.7-104 104V480H32v-56.1c0-75 61-136 136-136h176c75 0 136 61 136 136V480z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
+                                <img src="../assets/images/gst/export.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="'export'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path d="M352 432H32V80h96v143.6l64-55 64 55V80h96v128h32V48H0v416h384v-64h-32v32zM224 154l-32-27.6-32 27.6V80h64v74z"></path><path d="M425.5 216.8l-22.7 22.6 48.6 48.6H288v32h161.4l-46.6 46.6 22.7 22.6 86.2-86.2z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
+                                <img src="../assets/images/gst/nil.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="'nil'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path fill="#1D1D1B" d="M500 192h-32v19.6c0 1.7-.8 3.2-2.2 4.2l-39 26.1c-3.3 2.2-7.8-.2-7.8-4.2V152h-32v84.9c0 4-4.5 6.4-7.8 4.2l-37-24.8c-1.4-.9-2.2-2.5-2.2-4.2V192h-32v197.7c0 1.7.8 3.2 2.2 4.1l72.4 48.8c2.8 1.9 4.4 5 4.4 8.3V512h32v-59.7c0-3.3 1.7-6.4 4.4-8.3l74.4-50.1c1.4-.9 2.2-2.5 2.2-4.1V192zm-32 70.2v29.4c0 1.7-.8 3.2-2.2 4.2l-39 26.1c-3.3 2.2-7.8-.2-7.8-4.2v-29.4c0-1.7.8-3.2 2.2-4.2l39-26.1c3.3-2.2 7.8.2 7.8 4.2zm-81 25.3v29.4c0 4-4.5 6.4-7.8 4.2l-37-24.8c-1.4-.9-2.2-2.5-2.2-4.2v-29.4c0-4 4.5-6.4 7.8-4.2l37 24.8c1.4.9 2.2 2.5 2.2 4.2zm-47 85.2v-30.1c0-4 4.5-6.4 7.8-4.2l37 24.8c1.4.9 2.2 2.5 2.2 4.2v30.2c0 4-4.5 6.4-7.8 4.1l-37-24.9c-1.4-.9-2.2-2.4-2.2-4.1zm79 26.3v-30.7c0-1.7.8-3.2 2.2-4.2l39-26.1c3.3-2.2 7.8.2 7.8 4.2v30.5c0 1.7-.8 3.2-2.2 4.1l-39 26.3c-3.3 2.3-7.8-.1-7.8-4.1zM199.6 80.4l-54.9 36.8c-2 1.3-4.7-.1-4.7-2.5V0h-32v114.7c0 2.4-2.7 3.8-4.7 2.5L48.4 80.4c-2.8-1.9-4.4-5-4.4-8.3V48H12v234.2c0 3.3 1.7 6.5 4.4 8.3l87.1 58.4c2.8 1.9 4.4 5 4.4 8.3V512h32V357.2c0-3.3 1.7-6.5 4.4-8.3l87.1-58.4c2.8-1.9 4.4-5 4.4-8.3V48h-32v24.1c.2 3.4-1.5 6.5-4.2 8.3zm4.4 54.3v33.4c0 3.3-1.7 6.5-4.4 8.3l-54.9 36.8c-2 1.3-4.7-.1-4.7-2.5v-50.3c0-1 .5-1.9 1.3-2.5l47.1-31.6c6.7-4.3 15.6.4 15.6 8.4zm-96 25.8v50.3c0 2.4-2.7 3.8-4.7 2.5l-54.9-36.8c-2.8-1.9-4.4-5-4.4-8.3v-33.4c0-8 8.9-12.8 15.6-8.3l47.1 31.6c.8.4 1.3 1.4 1.3 2.4zM44 265.1v-34.4c0-8 8.9-12.8 15.6-8.3l47.1 31.6c.8.6 1.3 1.5 1.3 2.5v51.3c0 2.4-2.7 3.8-4.7 2.5l-54.9-36.8c-2.7-1.9-4.4-5-4.4-8.4zm96 42.6v-51.3c0-1 .5-1.9 1.3-2.5l47.1-31.6c6.6-4.5 15.6.3 15.6 8.3V265c0 3.3-1.7 6.5-4.4 8.3l-54.9 36.8c-2 1.5-4.7 0-4.7-2.4z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/Refund Vouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
+                                <img src="../assets/images/gst/cdn.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="'CreditNote/DebitNote/Refund Vouchers'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path d="M329 192H183.5c-3 0-6.5 1.4-6.5 4.4v16.2c0 3 3.7 5.5 6.5 5.5h35.8c18 0 34.6 7.8 43.1 20h-78.9c-3 0-6.5 1.6-6.5 4.5v16.2c0 2.9 3.7 5.3 6.5 5.3H267c-5.1 17.2-24.3 29-47.5 29h-34.2c-2 0-3.7.7-4.9 1.9-1.3 1.3-2 3-2 4.9v14.4c0 1.8.7 3.5 2 4.8l93.5 96.1c1.2 1.3 2.5 1.9 3.7 1.9h26.7c2.3 0 4.1-1.8 4.8-3.6.8-2 .3-4.4-1.1-5.9l-11.8-11.5-74.3-76.1c18.6-.5 36.2-6.9 50-18.1 12-9.8 20.1-23.5 22.4-37.8H329c2.7 0 4-2 4-5.3v-16.2c0-3.8-2-4.5-4-4.5h-37c-2.2-7-5.8-13.3-11.4-20H329c2.6 0 4-2.2 4-5.5v-16.2c0-2.9-1.1-4.4-4-4.4z"></path><path fill="#1D1D1B" d="M447.3 454.5l.5-263.8c0-56-20.1-110.3-56.6-152.9l-7.7-8.9-.3-.3c-2.4-4.2-5.3-8.1-8.8-11.6-10.4-10.8-25.1-17-40-17H63.3l.3 512h385.1l-1.4-57.5zM383.8 81.3c17 26.5 27.6 56.7 30.9 88-7.4-10.2-15.5-20-24.2-29.2-11.7-12.5-23.6-23.6-35.6-33.3 7-2.7 13.4-6.8 18.9-12.2 4-4 7.4-8.5 10-13.3zM95.6 480l-.3-448h239.1c6.4 0 12.8 2.7 17.3 7.3 4.4 4.5 6.7 10.1 6.6 16.1C358.1 68 347.7 78 335.1 78h-23.3c-7.7 0-14.5 5.4-16.4 12.9-2 7.5 1.4 15.4 8.1 19.2 20.8 11.7 42.8 29.7 63.6 51.9 20 21.3 36.3 45.5 48.6 72l-.4 220.7.6 25.4H95.6z"></path></svg>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'advance-payments'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path d="M437 75C388.7 26.6 324.4 0 256 0S123.3 26.6 75 75 0 187.6 0 256s26.6 132.7 75 181 112.6 75 181 75 132.7-26.6 181-75 75-112.6 75-181-26.6-132.7-75-181zm-22.6 339.4C372.1 456.7 315.8 480 256 480c-59.8 0-116.1-23.3-158.4-65.6C55.3 372.1 32 315.8 32 256c0-59.8 23.3-116.1 65.6-158.4C139.9 55.3 196.2 32 256 32c59.8 0 116.1 23.3 158.4 65.6C456.7 139.9 480 196.2 480 256c0 59.8-23.3 116.1-65.6 158.4z"></path><path d="M319.4 128c-7.1-3.5-15.7-.6-19.2 6.5L186.1 364.8c-1.7 3.4-2 7.3-.7 10.9 1.2 3.6 3.8 6.6 7.2 8.3 2 1 4.1 1.5 6.4 1.5 5.5 0 10.4-3.1 12.8-8l114.1-230.3c3.5-7.1.6-15.7-6.5-19.2zM229 204.3c0-23.4-19-42.4-42.4-42.4s-42.4 19-42.4 42.4 19 42.4 42.4 42.4 42.4-19 42.4-42.4zm-23.8 0c0 10.2-8.3 18.5-18.5 18.5s-18.5-8.3-18.5-18.5 8.3-18.5 18.5-18.5c10.2-.1 18.5 8.3 18.5 18.5zM325.4 264.5c-23.4 0-42.4 19-42.4 42.4s19 42.4 42.4 42.4 42.4-19 42.4-42.4-19.1-42.4-42.4-42.4zm18.5 42.4c0 10.2-8.3 18.5-18.5 18.5s-18.5-8.3-18.5-18.5 8.3-18.5 18.5-18.5 18.5 8.3 18.5 18.5z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'advance-payments'">
+                                <img src="../assets/images/gst/adv.svg" class="icon text-bottom" />
                             </ng-container>
 
-                            <ng-container *ngSwitchCase="'hsnsac'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path d="M496.6 160H391.2l-99-111c-9-10.7-22.2-16.9-36.2-17-14-.2-27.3 5.8-36.5 16.3L120 160H15.7C7 160 0 167.3 0 176s7 16 15.7 16h15.7L93 468.5c1.9 6.8 8.1 11.5 15.1 11.5h296.2c7 0 13.2-4.7 15.1-11.5L481 192h15.6c8.7 0 15.7-7.8 15.7-16.5s-7-15.5-15.7-15.5zM243.5 69.4c3.1-3.5 7.3-5.4 12-5.4h.2c4.7 0 9 2.1 12.1 5.7l81.6 90.3H162.6l80.9-90.6zm151 378.6H119.7l-53-256h382.8l-55 256z"></path><path d="M191.1 335.3h129.8c8.3 0 15.1-6.7 15.1-15.1 0-8.3-6.7-15.4-15.1-15.4H191.1c-8.3 0-15.1 7.1-15.1 15.4s6.7 15.1 15.1 15.1z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'hsnsac'">
+                                <img src="../assets/images/gst/hsnsac.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="'taxPaid'">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon text-bottom"><path fill="#1D1D1B" d="M228.5 479.1l-179.5.1V33h319v175.3c11 .5 21 2.1 31 4.6V1H17v510l244.8-.1c-12.5-9-23.7-19.7-33.3-31.8z"></path><path fill="#1D1D1B" d="M359.6 239.9c-74.7 0-135.4 60.8-135.4 135.4 0 74.7 60.8 135.4 135.4 135.4S495 450.1 495 375.4c0-74.7-60.7-135.5-135.4-135.5zM256 375.4c0-57.1 46.5-103.6 103.6-103.6s103.6 46.5 103.6 103.6S416.7 479 359.6 479 256 432.5 256 375.4z"></path><path fill="#1D1D1B" d="M403.7 330.6L347.3 387 325 364.5c-6.2-6.2-16.3-6.2-22.5 0-6.2 6.2-6.2 16.3 0 22.5l33.6 33.6c3.1 3.1 7.2 4.7 11.3 4.7s8.2-1.6 11.3-4.7l67.6-67.6c6.2-6.2 6.2-16.3 0-22.5-6.3-6.2-16.4-6.2-22.6.1zM93 97h202v31H93zM93 192h144v32H93z"></path></svg>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'taxPaid'">
+                                <img src="../assets/images/gst/taxpaid.svg" class="icon text-bottom" />
                             </ng-container>
 
-
-                            <!-- <ng-container *ngSwitchDefault>
-                                <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-bottom">
-                                <path d="M426 0H86C38.6 0 0 38.6 0 86v340c0 47.4 38.6 86 86 86h340c47.4 0 86-38.6 86-86V86c0-47.4-38.6-86-86-86zM312 32v124.3l-56-49.7-56 49.7V32h112zm168 394c0 29.8-24.2 54-54 54H86c-29.8 0-54-24.2-54-54V86c0-29.8 24.2-54 54-54h82v195.7l88-78.3 88 78.3V32h82c29.8 0 54 24.2 54 54v340z"></path>
-                                </svg>
-                            </ng-container> -->
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'impg'">
+                                <img src="../assets/images/gst/impg.svg" class="icon text-bottom" />
+                            </ng-container>
                             <span style="margin-left: 5px;"> {{item?.name}}</span>
                             <ng-container *ngFor="let item of item.transactions">
                                 <div style="margin-left: 50px;" class="secondary-row "> {{item?.name}}</div>
@@ -108,14 +99,12 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="(gstOverviewDataInProgress$ | async)">
-                    <tr>
-                        <td colspan="7">
-                            <div class="giddh-spinner vertical-center-spinner"></div>
-                        </td>
-                    </tr>
-                </tbody>
             </table>
+        </div>
+
+        <div class="filings-empty-state" *ngIf="(gstOverviewDataInProgress$ | async)">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+            <div class="empty-msg"><span>  Loading Data.  </span></div>
         </div>
     </div>
 </div>

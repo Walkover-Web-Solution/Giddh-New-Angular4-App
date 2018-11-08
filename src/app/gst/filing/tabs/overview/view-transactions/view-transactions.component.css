@@ -1,3 +1,8 @@
 .filter-row {
     height: auto;
 }
+
+.back-ico {
+    position: relative;
+    top: 3px;
+}

@@ -53,13 +53,14 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, '')));
   }
 
-  public GstReconcileGetInvoices(period: string, action: string, page: string, count: string, refresh: boolean): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
+  public GstReconcileGetInvoices(period: any, action: string, page: string, count: string, refresh: boolean): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     return this._http.get(this.config.apiUrl + GST_RECONCILE_API.GET_INVOICES
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':period', encodeURIComponent(period))
+      .replace(':from', encodeURIComponent(period.from))
+      .replace(':to', encodeURIComponent(period.to))
       .replace(':action', encodeURIComponent(action))
       .replace(':page', encodeURIComponent(page))
       .replace(':count', encodeURIComponent(count))
@@ -81,7 +82,8 @@ export class GstReconcileService {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':page', requestParam.page)
       .replace(':count', requestParam.count)
-      .replace(':mmyyyy', requestParam.period)
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
       .replace(':gstin', requestParam.gstin)
       .replace(':gstType', type)
     )
@@ -101,9 +103,10 @@ export class GstReconcileService {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':page', requestParam.page)
       .replace(':count', requestParam.count)
-      .replace(':mmyyyy', requestParam.monthYear)
+      .replace(':from', requestParam.from)
+      .replace(':to', requestParam.to)
       .replace(':gstin', requestParam.gstin)
-      .replace(':entityType', requestParam.entity)
+      .replace(':entityType', requestParam.entityType)
       .replace(':gstType', type)
       .replace(':type', requestParam.type)
       .replace(':status', requestParam.status)
@@ -124,7 +127,8 @@ export class GstReconcileService {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':page', requestParam.page)
       .replace(':count', requestParam.count)
-      .replace(':mmyyyy', requestParam.period)
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
       .replace(':gstin', requestParam.gstin)
       .replace(':gstType', type)
       .replace(':gstReturnType', requestParam.gstReturnType)
@@ -143,16 +147,17 @@ export class GstReconcileService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS_COUNTS
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':mmyyyy', requestParam.period)
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
       .replace(':gstin', requestParam.gstin)
     )
       .pipe(
         map((res) => {
-          let data: BaseResponse<any, string> = res;
+          let data: BaseResponse<any, any> = res;
           data.queryString = requestParam;
           return data;
         })
-        , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+        , catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
   }
 
   public GetDocumentIssuedTransaction(requestParam: any): Observable<BaseResponse<any, string>> {
@@ -160,7 +165,8 @@ export class GstReconcileService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_DOCUMENT_ISSUED
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':mmyyyy', requestParam.period)
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
       .replace(':gstin', requestParam.gstin)
     )
       .pipe(

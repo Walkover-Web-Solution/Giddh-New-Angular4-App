@@ -18,7 +18,7 @@ import { ToasterService } from 'app/services/toaster.service';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit {
-  public currentPeriod: string = null;
+  public currentPeriod: any = null;
   public selectedGst: string = null;
   public gstNumber: string = null;
   public activeCompanyUniqueName: string = '';
@@ -26,7 +26,7 @@ export class FilingComponent implements OnInit {
   public selectedTab: string = 'Overview';
   public companies: CompanyResponse[];
   public gstAuthenticated$: Observable<boolean>;
-
+  public isTransactionSummary: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions, private gstAction: GstReconcileActions, private invoicePurchaseActions: InvoicePurchaseActions, private toasty: ToasterService) {
@@ -65,7 +65,11 @@ export class FilingComponent implements OnInit {
 
   public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.currentPeriod = params['period'];
+      let dates = {
+        from: params['from'],
+        to: params['to']
+      };
+      this.currentPeriod = dates;
       this.selectedGst = params['selectedGst'];
       this._cdr.detach();
       setTimeout(() => {
@@ -86,7 +90,12 @@ export class FilingComponent implements OnInit {
           this._cdr.detectChanges();
         }
       }, 200);
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod]);
+    if (this.selectedTab === 'Overview') {
+      this.isTransactionSummary = false;
+    } else {
+      this.isTransactionSummary = true;
+    }
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
   }
 
   /**

@@ -8,13 +8,15 @@
                 <tabset #staticTabs id="c-tab">
                     <tab heading="Overview" (select)="selectTab($event)">
                         <div class="transactions-overview" *ngIf="selectedTab === 'Overview'">
-                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-overview>
+                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary"></filing-overview>
                         </div>
                     </tab>
                     <tab heading="Reconcilation" (select)="selectTab($event)" *ngIf="selectedGst === 'gstr2'">
-                        <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [selectedTab]="selectedGst"></reconcile>
+                        <div *ngIf="selectedTab === 'Reconcilation'">
+                            <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></reconcile>
+                        </div>
                     </tab>
-                    <tab heading="Push to GSTIN" [hidden]="selectedGst === 'gstr2'" (select)="selectTab($event)">
+                    <tab heading="Push to GSTIN" *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event)">
                         <div *ngIf="selectedTab === 'Push to GSTIN'">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
