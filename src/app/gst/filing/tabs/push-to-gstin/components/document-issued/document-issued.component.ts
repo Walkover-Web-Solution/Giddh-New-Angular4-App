@@ -18,21 +18,20 @@ export class DocumentIssuedComponent implements OnInit, OnChanges {
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
 
-  public documentIssuedResponse$: Observable<DocumentIssuedResponse[]>;
-  public b2csSummaryInProgress$: Observable<boolean>;
+  public documentIssuedResponse$: Observable<DocumentIssuedResponse>;
+  public documentIssuedRequestInProgress$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
     this.documentIssuedResponse$ = this._store.select(p => p.gstR.documentIssuedResponse);
-    this.b2csSummaryInProgress$ = this._store.select(p => p.gstR.documentIssuedRequestInProgress).pipe(takeUntil(this.destroyed$));
+    this.documentIssuedRequestInProgress$ = this._store.select(p => p.gstR.documentIssuedRequestInProgress).pipe(takeUntil(this.destroyed$));
     //
   }
 
   public ngOnInit() {
     //
   }
-
 
   /**
    * ngOnChnages

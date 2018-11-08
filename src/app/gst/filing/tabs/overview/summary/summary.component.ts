@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
@@ -12,13 +12,13 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './summary.component.html',
   styleUrls: ['summary.component.css'],
 })
-export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewInit {
+export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
-  @Input() public currentPeriod: string = null;
+  @Input() public currentPeriod: any = null;
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
+  @Input() public isTransactionSummary: boolean = false;
 
-  public isTransactionSummary: boolean = false;
   public gstOverviewData$: Observable<GstOverViewResponse>;
   public companyGst$: Observable<string> = of('');
   public gstOverviewDataInProgress$: Observable<boolean>;
@@ -38,13 +38,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
         this.activeCompanyGstNumber = a;
       }
     });
-
-    // this.activatedRoute.params.subscribe(params => {
-    //   this.currentPeriod = params['period'];
-    //   this.selectedGst = params['selectedGst'];
-    // });
-
-    //
   }
 
   /**
@@ -57,30 +50,22 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       entity: obj.type,
       gstin: this.activeCompanyGstNumber,
       type: obj.gstReturnType,
-      monthYear: this.currentPeriod,
+      from: this.currentPeriod.from,
+      to: this.currentPeriod.to,
       status: ''
     };
     this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, param));
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod , 'transaction']);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to , 'transaction', param.entity]);
   }
 
-  /**
-   * ngOnChanges
-   */
   public ngOnChanges(s: SimpleChanges) {
     //
   }
 
-  /**
-   * ngViewAfterInit
-   */
   public ngAfterViewInit() {
       //
   }
 
-  /**
-   * ngOnDestroy
-   */
   public ngOnDestroy() {
     this.destroyed$.next(true);
   }

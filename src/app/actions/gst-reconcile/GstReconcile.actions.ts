@@ -172,7 +172,7 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoiceRequest(period: string, action: string, page: string, refresh: boolean = false, count: string = '10'): CustomActions {
+  public GstReconcileInvoiceRequest(period: any, action: string, page: string, refresh: boolean = false, count: string = '10'): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
       payload: {period, action, page, refresh, count}
@@ -294,6 +294,7 @@ export class GstReconcileActions {
       payload: {period, gstin}
     };
   }
+
   public GetDocumentIssuedResponse(res) {
     return {
       type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED_RESPONSE,

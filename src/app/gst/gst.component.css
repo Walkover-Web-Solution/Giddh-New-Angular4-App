@@ -357,3 +357,21 @@ hr {
     pointer-events: none;
     opacity: 0.6;
 }
+
+.daterangePicker {
+    position: absolute;
+    opacity: 0;
+    right: -160px;
+    top: 0;
+    /* visibility: hidden; */
+    pointer-events: none;
+}
+
+:host ::ng-deep .daterangepicker.opensright:after,
+:host ::ng-deep .daterangepicker.opensright:before {
+    content: none;
+}
+
+.rotate-90 {
+    transform: rotate(-90deg);
+}

@@ -1,0 +1,62 @@
+<div class="">
+    <div id="" class="">
+        <div>
+            <table id="" class="transactions-table table-striped  table zi-table  ">
+                <thead>
+                    <tr>
+                        <th style="" id="" class="">
+                            <div style="position: relative">
+                                <div class="pull-left over-flow"> TRANSACTION # </div>
+                            </div>
+                        </th>
+                        <th style="" id="" class="">
+                            <div style="position: relative">
+                                <div class=" over-flow"> TRANSACTION DATE </div>
+                            </div>
+                        </th>
+                        <th style="" id="" class="">
+                            <div style="position: relative">
+                                <div class=" over-flow"> TRANSACTION TYPE </div>
+                            </div>
+                        </th>
+                        <th style="" id="ember1950" class="">
+                            <div style="position: relative">
+                                <div class=" over-flow"> ERROR CODE </div>
+                            </div>
+                        </th>
+                        <th style="" id="ember1950" class="">
+                            <div style="position: relative">
+                                <div class=" over-flow"> ERROR MESSAGE </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="(failedTransactionsSummary$ | async) && (failedTransactionsSummary$ | async).totalItems">
+                    <tr *ngFor="let item of (failedTransactionsSummary$ | async).results">
+                        <td> {{item.supplyType}} </td>
+                        <td class="text-right"> ₹{{item.nilAmount | number: '1.2-2'}} </td>
+                        <td class="text-right"> ₹{{item.exemptAmount | number: '1.2-2'}} </td>
+                        <td class="text-right"> ₹{{item.nonGstAmount | number: '1.2-2'}} </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-center" *ngIf="(failedTransactionsSummary$ | async)?.totalPages > 1">
+                <pagination [maxSize]="5" [totalItems]="(failedTransactionsSummary$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
+            </div>
+        </div>
+
+        <div class="" *ngIf="(failedTransactionsSummary$ | async) && !(failedTransactionsSummary$ | async).totalItems">
+            <div class="filings-empty-state">
+                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span>  No Transactions Found.  </span></div>
+            </div>
+        </div>
+
+        <div class="filings-empty-state" *ngIf="(failedTransactionsSummaryInProgress$ | async)">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+            <div class="empty-msg"><span>  Loading Data.  </span></div>
+        </div>
+
+    </div>
+</div>
