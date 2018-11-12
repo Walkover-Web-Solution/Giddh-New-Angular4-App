@@ -290,7 +290,8 @@
     color: dimgray;
     display: block;
     clear: both;
-    padding: 5px 15px;
+    padding: 6px 15px;
+    line-height: 16px;
 }
 .left-sub-menu ul > li > a:hover {
     color: #FF5F00;
@@ -344,7 +345,7 @@
     position: relative;
     top: 3px;
 }
-.left_fixed_header:hover .left-sub-menu {
+.left_fixed_header > li:hover .left-sub-menu {
     opacity: 1;
     visibility: visible;
 }
