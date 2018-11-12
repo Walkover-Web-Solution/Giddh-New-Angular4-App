@@ -9,7 +9,7 @@
         <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
             <img src="assets/images/back.svg" class="icon icon-sm text-middle" />
         </a>
-        <img src="../assets/images/gst/cart.svg" class="icon gstr-icon text-middle" />
+        <img src="{{imgPath}}cart.svg" class="icon gstr-icon text-middle" />
         <div class="text-middle nav-top">
             <div class="text-middle head"> GSTR-1 ({{currentPeriod.from}} - {{currentPeriod.to}}) </div>
             <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of outward supplies of goods and services</div>
@@ -23,14 +23,15 @@
                     <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr1-error-export')">Download error sheet</a></li>
                 </ul>
             </div>
+            <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="showTaxPro">Push to GSTIN</button>
         </div>
     </div>
 
     <div class="list-style" *ngIf="selectedGst === 'gstr2'">
         <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
-            <img src="assets/images/back.svg" class="icon icon-sm text-middle" />
+            <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle" />
         </a>
-        <img src="../assets/images/gst/bag.svg" class="icon gstr-icon text-middle" />
+        <img src="{{imgPath}}bag.svg" class="icon gstr-icon text-middle" />
 
         <div class="text-middle nav-top">
             <div class="text-middle"> GSTR-2 ({{currentPeriod.from}} - {{currentPeriod.to}}) </div>
@@ -45,7 +46,7 @@
                     <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr2-error-export')">Download error sheet</a></li>
                 </ul>
             </div>
-            <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="(gstAuthenticated$ | async)">Pull from GSTIN</button>
+            <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="(gstAuthenticated$ | async) && showTaxPro">Pull from GSTIN</button>
         </div>
 
     </div>

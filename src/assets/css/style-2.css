@@ -5776,7 +5776,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     display: inline-block;
     width: 6px;
     height: 6px;
-    background-color: #2a85fb;
+    background-color: #FF5F00;
     border-radius: 50%;
     margin-right: 5px;
     vertical-align: middle;
@@ -5976,7 +5976,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .tax-engine .sub-filter-nav-bandnew ul>li.active:after {
     content: '';
     display: block;
-    border-bottom: 2px solid #2a85fb;
+    border-bottom: 2px solid #FF5F00;
     width: 55%;
     margin: auto;
 }
@@ -5997,11 +5997,13 @@ perfect-scrollbar>.ps>.ps-overlay {
 
 .gstr-transactions-summary p {
     margin-bottom: 10px;
+    font-size: 14px;
 }
 
-.tax-engine .half {
+
+/* .tax-engine .half {
     width: 50%!important;
-}
+} */
 
 .tax-engine .filings-empty-state {
     margin: 35px auto;
@@ -6202,7 +6204,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .tax-engine .sub-filter-nav-band ul>li.active:after {
     content: '';
     display: block;
-    border-bottom: 2px solid #2a85fb;
+    border-bottom: 2px solid #FF5F00;
     width: 55%;
     margin: auto;
 }
