@@ -17,7 +17,7 @@ import { AppState } from 'app/store';
   selector: 'gst-template-d',
   templateUrl: './gst-template-d.component.html',
   styleUrls: ['./gst-template-d.component.css'],
-  encapsulation: ViewEncapsulation.Native
+  encapsulation: ViewEncapsulation.None
 })
 
 export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {

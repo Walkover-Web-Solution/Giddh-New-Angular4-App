@@ -12,7 +12,7 @@ import { CustomTemplateResponse } from '../../../../../../models/api-models/Invo
   selector: 'gst-template-c',
   templateUrl: './gst-template-c.component.html',
   styleUrls: ['./gst-template-c.component.css'],
-  encapsulation: ViewEncapsulation.Native
+  encapsulation: ViewEncapsulation.None
 })
 
 export class GstTemplateCComponent implements OnInit, OnDestroy, OnChanges {

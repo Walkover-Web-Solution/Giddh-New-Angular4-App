@@ -64,10 +64,10 @@
                                         : 'Billing Address'}}</strong>
                                 </p>
                                 <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
-                                <p>24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                                <p>Green Soft Solutions<br>24 Buidling Name <br>3rd Floor, 15 A.B. Road <br>Indore (M.P.) 452000</p>
                                 <p *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                                     <strong>{{(fieldsAndVisibility.header.billingGstin?.label.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
-                                        : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
+                                    : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
                                 </p>
                             </ng-container>
                         </td>
