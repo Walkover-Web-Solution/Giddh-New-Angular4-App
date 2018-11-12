@@ -5707,6 +5707,8 @@ perfect-scrollbar>.ps>.ps-overlay {
     background: transparent;
     outline: none;
     padding-right: 10px;
+    outline: none !important;
+    box-shadow: none;
 }
 
 .hamburger_menu h4 {
