@@ -11,27 +11,44 @@
             <i class="fa fa-pencil"></i>
         </a>
         <header class="testing">
-            <div *ngIf="logoSrc" class="logo">
-                <img [src]="logoSrc" alt="" class="max-width-180" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' />
-            </div>
-            <figure class="col-xs-6">
-                <h1 *ngIf="fieldsAndVisibility.header.companyName?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</h1>
-            </figure>
-            <figure class="col-xs-6" style="float: right;" [hidden]="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
-                <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}</h2>
-            </figure>
+            
+            <table>
+                <tr>
+                    <td>
+                        <div *ngIf="logoSrc" class="logo">
+                            <img [src]="logoSrc" alt="" class="max-width-180" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' />
+                        </div>
+                    </td>
+
+                    <td>
+                        <figure [hidden]="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                            <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}</h2>
+                        </figure> 
+                    </td>
+                </tr>
+            </table>
+
+            
+            
+
             <table cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
                         <td>
                             <table class="numDetail">
                                 <tbody>
+                                    <tr>
+                                        <figure>
+                                            <h1 *ngIf="fieldsAndVisibility.header.companyName?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</h1>
+                                        </figure>
+                                    </tr>
                                     <tr [hidden]="!fieldsAndVisibility.header.gstin?.display">
                                         <td>
                                             <label>{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
                                                 : 'GSTIN'}}</label> <span class="font-10">{{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}</span>
                                         </td>
                                     </tr>
+                                    
                                     <!-- <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
                                         <td>
                                             <label>{{fieldsAndVisibility.header.pan?.label}}</label> {{companyPAN ? companyPAN : 'AAACW9768L'}}
