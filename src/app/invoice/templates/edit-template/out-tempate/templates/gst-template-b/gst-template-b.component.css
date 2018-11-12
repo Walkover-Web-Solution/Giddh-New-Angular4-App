@@ -19,6 +19,7 @@
 }
 body {
   font-size: 12px;
+  background: #fff;
 }
 /* heading */
 .text-gray {
@@ -177,6 +178,10 @@ body {
   line-height: 20px;
   padding-bottom: 10px;
   overflow: hidden;
+  float: none;
+  background: #fff;
+  display: block;
+  text-align: left;
 }
 
 #template2 footer p:first-child {
@@ -279,4 +284,7 @@ img {
 }
 .font-10 {
   font-size: 10px;
+}
+.meta tr td {
+  padding-bottom: 4px !important;
 }
