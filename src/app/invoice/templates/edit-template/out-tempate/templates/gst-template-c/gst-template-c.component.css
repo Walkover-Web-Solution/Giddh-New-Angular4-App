@@ -62,8 +62,8 @@
     /* color: #df4927; */
     font-weight: bold;
     font-size: 18px;
+    text-align: right;
 }
-
 
 /* table */
 
@@ -119,8 +119,7 @@
 
 #Template2 header {
     margin: 0 0 1em;
-    background: #f2f2f2;
-    padding: 15px 15px  10px;
+    padding: 15px 0  10px;
 }
 
 #Template2 header:after {
@@ -175,8 +174,8 @@
 }
 
 #Template2 header figure {
-    float: left;
     font-style: normal;
+    padding: 0;
 }
 
 #Template2 header figure p {
@@ -193,12 +192,12 @@
 #Template2 header img {
     max-height: 100%;
     margin-bottom: 8px;
+    float: left;
 }
 
 #Template2 header table tr td {
     border: 0;
 }
-
 
 /* article */
 

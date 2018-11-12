@@ -237,7 +237,7 @@
             </table>
         </div>
 
-        <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
+        <div id="Template-footer" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
                 <i class="fa fa-pencil"></i>
             </a>
@@ -271,7 +271,7 @@
                 </tbody>
             </table>
 
-            <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
+            <footer [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
                 <p [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                     <strong *ngIf="fieldsAndVisibility.footer.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
