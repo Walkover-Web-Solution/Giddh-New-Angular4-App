@@ -127,11 +127,9 @@ p {
 /*#default .meta tbody tr td:nth-child(2)>table tbody tr td{background: #f2f2f2;padding: 0 10px;line-height: 2rem;margin: 4px 0; display: -webkit-box;}*/
 
 #default header figure {
-    float: left;
-    font-style: normal;
-    line-height: 1.25;
-    margin: 0 0 0.3em 0;
-    width: 100%;
+  margin: 0 0 0.3em 0;
+  width: 100%;
+  padding: 0px;
 }
 
 #default header figure p {
@@ -229,6 +227,7 @@ header img {
 
 #default table.item td p {
   color: #595959;
+  font-size: 8px;
 }
 
 #default table.balance {
@@ -283,6 +282,8 @@ header img {
 
 #default .subfooter h4 {
   font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #default .docTitle {
