@@ -2,21 +2,21 @@
     <div class="tax-engine">
         <div class="column list-column expanded-list-column transactions-list">
             <div class="list-header">
-                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></filing-header>
+                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"></filing-header>
             </div>
             <div class="nav-band">
                 <tabset #staticTabs id="c-tab">
-                    <tab heading="Overview" (select)="selectTab($event)">
+                    <tab heading="Overview" (select)="selectTab($event, false)">
                         <div class="transactions-overview" *ngIf="selectedTab === 'Overview'">
                             <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary"></filing-overview>
                         </div>
                     </tab>
-                    <tab heading="Reconcilation" (select)="selectTab($event)" *ngIf="selectedGst === 'gstr2'">
+                    <tab heading="Reconcilation" (select)="selectTab($event, true)" *ngIf="selectedGst === 'gstr2'">
                         <div *ngIf="selectedTab === 'Reconcilation'">
                             <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></reconcile>
                         </div>
                     </tab>
-                    <tab heading="Push to GSTIN" *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event)">
+                    <tab heading="Push to GSTIN" *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true)">
                         <div *ngIf="selectedTab === 'Push to GSTIN'">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>

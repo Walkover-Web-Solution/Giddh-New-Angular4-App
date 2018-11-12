@@ -38,7 +38,6 @@ import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 })
 export class GstComponent implements OnInit {
   public showCalendar: boolean = false;
-  public currentPeriod: any = null;
   public period: any = null;
   public activeCompanyUniqueName: string = '';
   public companies: CompanyResponse[] = [];
@@ -55,6 +54,9 @@ export class GstComponent implements OnInit {
     endDate: moment()
   };
   public gstTransactionCountsInProcess$: Observable<boolean> = of(true);
+  public moment = moment;
+  public currentPeriod: any = null;
+  public selectedMonth: any = null;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -101,7 +103,7 @@ export class GstComponent implements OnInit {
     };
     this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
 
-    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
   }
 
   /**
@@ -115,15 +117,18 @@ export class GstComponent implements OnInit {
       };
       this.currentPeriod = dates;
       this.isMonthSelected = false;
+      this.selectedMonth = null;
     } else {
       let dates = {
         from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
         to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
       };
       this.currentPeriod = dates;
+      this.selectedMonth = ev;
       this.isMonthSelected = true;
     }
     this.showCalendar = false;
+    this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
   }
 
   /**
