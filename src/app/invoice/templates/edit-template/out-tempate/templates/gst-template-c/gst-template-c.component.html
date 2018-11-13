@@ -57,10 +57,10 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td colspan="2">
-                        </td>
+                        <!-- <td colspan="2">
+                        </td> -->
                         <td class="pull-right">
-                            <table>
+                            <table class="invoice-date-table">
                                 <tbody>
                                     <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
                                         <td>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}</td>
