@@ -27,6 +27,7 @@ export class FilingComponent implements OnInit {
   public companies: CompanyResponse[];
   public gstAuthenticated$: Observable<boolean>;
   public isTransactionSummary: boolean = false;
+  public showTaxPro: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions, private gstAction: GstReconcileActions, private invoicePurchaseActions: InvoicePurchaseActions, private toasty: ToasterService) {
@@ -81,7 +82,7 @@ export class FilingComponent implements OnInit {
     });
   }
 
-  public selectTab(e) {
+  public selectTab(e, val) {
     this._cdr.detach();
     this.selectedTab = e.heading;
     setTimeout(() => {
@@ -95,6 +96,7 @@ export class FilingComponent implements OnInit {
     } else {
       this.isTransactionSummary = true;
     }
+    this.showTaxPro = val;
     this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
   }
 

@@ -22,6 +22,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   public gstOverviewData$: Observable<GstOverViewResponse>;
   public companyGst$: Observable<string> = of('');
   public gstOverviewDataInProgress$: Observable<boolean>;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -33,6 +34,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public ngOnInit() {
+    this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     this.companyGst$.subscribe(a => {
       if (a) {
         this.activeCompanyGstNumber = a;
