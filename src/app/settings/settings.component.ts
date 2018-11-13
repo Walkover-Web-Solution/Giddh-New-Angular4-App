@@ -15,7 +15,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 
@@ -69,6 +69,14 @@ export class SettingsComponent implements OnInit {
       } else if (val.tab === 'integration' && val.code) {
         this.saveGmailAuthCode(val.code);
         // this.selectTab(1);
+      }
+    });
+
+    this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((e) => {
+      if (e instanceof NavigationEnd && e.url === '/settings?tab=permission&tabIndex=5' && e.urlAfterRedirects.includes(e.url)) {
+        if (this.staticTabs.tabs[5]) {
+          this.staticTabs.tabs[5].active = true;
+        }
       }
     });
 
@@ -140,8 +148,6 @@ export class SettingsComponent implements OnInit {
       }
 
       this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
-
-      console.log('the response form saveGmailAuthCode is :', res);
     });
   }
 
