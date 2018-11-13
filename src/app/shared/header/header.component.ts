@@ -905,6 +905,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     return false;
   }
 
+  public mouseEnteredOnCompanyName(i: number) {
+    this.hoveredIndx = i;
+  }
+
   private doEntryInDb(entity: string, item: IUlist) {
     if (entity === 'menus') {
       this.selectedPage = item.name;
