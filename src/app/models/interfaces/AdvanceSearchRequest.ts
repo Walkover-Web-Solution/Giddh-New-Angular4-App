@@ -47,6 +47,12 @@ export class AdvanceSearchRequest {
     }
     return moment().format('DD-MM-YYYY');
   }
+
+  set to(val) {
+    if (val) {
+      this.dataToSend.bsRangeValue[1] = val;
+    }
+  }
 }
 
 export class AdvanceSearchModel {
