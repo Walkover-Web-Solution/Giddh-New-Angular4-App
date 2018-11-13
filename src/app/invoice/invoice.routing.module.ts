@@ -59,14 +59,14 @@ const INVOICE_ROUTES: Routes = [
     component: InvoiceComponent,
     children: [
       {path: '', redirectTo: 'preview', pathMatch: 'full'},
-      {path: 'preview', component: InvoicePreviewComponent},
-      {path: 'generate', component: InvoiceGenerateComponent},
-      {path: 'templates', component: EditInvoiceComponent},
+      {path: 'preview/:voucherType', component: InvoicePreviewComponent},
+      {path: 'generate/:voucherType', component: InvoiceGenerateComponent},
+      {path: 'templates/:voucherType', component: EditInvoiceComponent},
       {path: 'settings', component: InvoiceSettingComponent},
       {path: 'recurring', component: RecurringComponent},
-      {path: 'receipt', component: ReceiptComponent},
-      {path: 'cr-note', component: ReceiptComponent},
-      {path: 'dr-note', component: ReceiptComponent}
+      // {path: 'receipt', component: ReceiptComponent},
+      // {path: 'cr-note', component: ReceiptComponent},
+      // {path: 'dr-note', component: ReceiptComponent}
     ]
   }
 ];
