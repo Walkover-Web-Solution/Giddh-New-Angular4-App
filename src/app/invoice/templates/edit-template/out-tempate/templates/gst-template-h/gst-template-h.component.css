@@ -40,15 +40,6 @@
   border-collapse: inherit
 }
 
-#default table {
-}
-
-#default .item th,
-#default tfoot tr th {
-  /* background: #f2f2f2; */
-  /*border: 0;*/
-}
-
 /* page */
 
 #default {
