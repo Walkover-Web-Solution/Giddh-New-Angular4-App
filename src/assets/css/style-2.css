@@ -707,7 +707,7 @@ ul.sub-list {
 }
 
 header .navbar {
-    background-color: #F7F8FA;
+    background-color: #00000014;
 }
 
 
@@ -5712,6 +5712,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .hamburger_menu h4 {
     font-size: 20px;
     text-transform: capitalize;
+    width: 250px;
 }
 
 .tax-engine .icon {
