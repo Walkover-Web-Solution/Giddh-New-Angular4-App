@@ -197,6 +197,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyList: any = [];
   public searchCmp: string = '';
   public loadAPI: Promise<any>;
+  public hoveredIndx: number;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
