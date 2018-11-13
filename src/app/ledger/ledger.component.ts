@@ -1,6 +1,6 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, skip } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
