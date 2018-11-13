@@ -234,18 +234,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       }
       return state;
     }
-    case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<string, string> = action.payload;
-      if (res.status === 'success') {
-        let indx = newState.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
-        if (indx > -1) {
-          newState.invoices.results.splice(indx, 1);
-        }
-        return Object.assign({}, state, newState);
-      }
-      return state;
-    }
+    // case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
+    //   let newState = _.cloneDeep(state);
+    //   let res: BaseResponse<string, string> = action.payload;
+    //   if (res.status === 'success') {
+    //     let indx = newState.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
+    //     if (indx > -1) {
+    //       newState.invoices.results.splice(indx, 1);
+    //     }
+    //     return Object.assign({}, state, newState);
+    //   }
+    //   return state;
+    // }
     case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<InvoiceSetting, string> = action.payload;

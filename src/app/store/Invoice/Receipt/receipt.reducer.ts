@@ -2,6 +2,7 @@ import { CustomActions } from '../../customActions';
 import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receipt.const';
 import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { INVOICE_ACTIONS } from 'app/actions/invoice/invoice.const';
 
 export interface ReceiptState {
   data: ReciptResponse;
@@ -11,6 +12,7 @@ export interface ReceiptState {
   isDeleteSuccess: boolean;
   voucher: Voucher;
   voucherDetailsInProcess: boolean;
+  base64Data: string;
 }
 
 const initialState: ReceiptState = {
@@ -20,7 +22,8 @@ const initialState: ReceiptState = {
   isDeleteInProcess: false,
   isDeleteSuccess: false,
   voucher: null,
-  voucherDetailsInProcess: false
+  voucherDetailsInProcess: false,
+  base64Data: null
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -106,6 +109,39 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         voucherDetailsInProcess: false,
         voucher: action.payload.body ? action.payload.body : null
       };
+    }
+    case INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<any, any> = action.payload;
+      if (res) {
+        newState.base64Data = res;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
+    case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, string> = action.payload;
+      if (res.status === 'success') {
+        // Just refreshing the list for now
+        newState.data = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
+    case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, string> = action.payload;
+      if (res.status === 'success') {
+        let indx = newState.data.items.findIndex((o) => o.voucherNumber === res.request);
+        if (indx > -1) {
+          newState.data.items.splice(indx, 1);
+        }
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
     default:
       return state;

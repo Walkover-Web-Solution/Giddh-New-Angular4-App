@@ -1,8 +1,9 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'invoice-generate-model',
@@ -11,22 +12,24 @@ import { ReplaySubject } from 'rxjs';
 
 export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
   @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
+  @Input() public isGenerateInvoice: boolean = true;
   public goAhead: boolean = false;
   public hasErr: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
+    private invoiceActions: InvoiceActions
   ) {
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice).pipe(
+    this.store.select(p => p.receipt.voucher).pipe(
       takeUntil(this.destroyed$),
       distinctUntilChanged())
       .subscribe((o: any) => {
           this.hasErr = false;
-          if (o && o.invoiceData && o.invoiceTemplateConditions) {
+          if (o && o.voucherDetails && o.voucherDetails.uniqueName) {
             this.goAhead = true;
           } else {
             // this.hasErr = true;
