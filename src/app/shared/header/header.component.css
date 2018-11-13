@@ -178,6 +178,9 @@
 
 .left_fixed_header.open li a .label {
     opacity: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 170px;
 }
 
 .left_fixed_header > li:hover a,
