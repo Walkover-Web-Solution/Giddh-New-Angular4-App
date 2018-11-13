@@ -1,21 +1,20 @@
 <section>
-  <div class="pd2">
-    <h3 class="modal-title" id="modal-title">Invoice</h3>
-  </div>
-  <div class="modal-body">
-    <div class="loader mrT4" *ngIf="!goAhead && !hasErr">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="pd2">
+        <h3 class="modal-title" id="modal-title">Invoice</h3>
     </div>
-    <section *ngIf="hasErr">
-      <p class="lead">Something went wrong please reload page or go <a (click)="closePopupEvent('error')"
-                                                                       href="javascript:void(0)">back</a></p>
-    </section>
-    <section *ngIf="goAhead">
-      <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent($event)"></invoice-create>
-    </section>
-  </div>
+    <div class="modal-body">
+        <div class="loader mrT4" *ngIf="!goAhead && !hasErr">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <section *ngIf="hasErr">
+            <p class="lead">Something went wrong please reload page or go <a (click)="closePopupEvent('error')" href="javascript:void(0)">back</a></p>
+        </section>
+        <section *ngIf="goAhead">
+            <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent($event)" [isGenerateInvoice]="isGenerateInvoice"></invoice-create>
+        </section>
+    </div>
 </section>

@@ -49,7 +49,7 @@ export class SalesService {
    * @param updateAccount: boolean flag to update A/c
    * {{url}}/company/{{companyUniqueName}}/accounts/{{accountUniqueName}}/vouchers/generate
    */
-  public generateGenericItem(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
+  public generateGenericItem(model: any): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
     let accountUniqueName = model.voucher.accountDetails.uniqueName;
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
