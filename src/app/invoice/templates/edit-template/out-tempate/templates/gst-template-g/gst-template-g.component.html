@@ -142,7 +142,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="meta" style="padding: 20px 20px 0;">
+        <table class="meta" style="padding: 20px 0;">
             <tbody>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.header.shippingDate?.display && fieldsAndVisibility.header.shippingAddress?.display">
@@ -319,7 +319,9 @@
             </tr>
         </table>
 
-        <table class="subfooter" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
+        <div class="clearfix" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
+
+        <table class="subfooter" >
             <tbody>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
@@ -354,6 +356,8 @@
                 </tr> -->
             </tbody>
         </table>
+
+        </div>
 
         <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
             <p class="font-10" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
