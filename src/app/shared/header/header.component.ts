@@ -70,10 +70,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
   { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
-  { type: 'MENU', name: 'GSTR1 Filing', uniqueName: '/pages/gstfiling/gstR1' },
-  { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
-  { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
-  { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/filing-return' },
+  // { type: 'MENU', name: 'GSTR1 Filing', uniqueName: '/pages/gstfiling/gstR1' },
+  // { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
+  // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
+  // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/filing-return' },
   { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
 ];
 
@@ -179,6 +179,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public user$: Observable<UserDetails>;
   public userIsCompanyUser: boolean = false;
   public userName: string;
+  public userEmail: string;
   public isProd = ENV;
   public isElectron: boolean = isElectron;
   public isTodaysDateSelected: boolean = false;
@@ -313,6 +314,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.user$.pipe(take(1)).subscribe((u) => {
       if (u) {
         let userEmail = u.email;
+        this.userEmail = _.clone(userEmail);
         // this.getUserAvatar(userEmail);
         let userEmailDomain = userEmail.replace(/.*@/, '');
         if (userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1) {
@@ -475,7 +477,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    * @param e event
    * @param pageName page router url
    */
-  public analyzeMenus(e: any, pageName: string) {
+  public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
@@ -500,7 +502,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
-    this.router.navigate([pageName]);
+      if (queryParamsObj) {
+        this.router.navigate([pageName], { queryParams: queryParamsObj });
+      } else {
+        this.router.navigate([pageName]);
+      }
   }
 
   public analyzeAccounts(e: any, acc) {
@@ -569,9 +575,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             });
           this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
           this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
+
           // slice and sort account item
-          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 6);
-          this.accountItemsFromIndexDB = _.sortBy(dbResult.aidata.accounts, [function(o) { return o.name; }]);
+          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
 
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
           this.store.dispatch(this._generalActions.setSmartList(combined));
