@@ -6411,3 +6411,7 @@ app-header {
 .form-inline sh-select .form-control {
     width: 100%;
 }
+
+.tooltip-inner {
+    max-width: 350px !important; /* the minimum width */
+}

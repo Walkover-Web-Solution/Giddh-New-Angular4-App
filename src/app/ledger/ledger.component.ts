@@ -1,6 +1,6 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, skip } from 'rxjs/operators';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -151,6 +151,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private subscribeCount: number = 0;
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
@@ -331,23 +332,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
-    observableCombineLatest(this.universalDate$, this.route.params).subscribe((resp: any[]) => {
+    observableCombineLatest(this.universalDate$, this.route.params).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
       if (!resp[0]) {
         return;
       }
+
+      this.subscribeCount++;
+
       this.hideEledgerWrap();
       let dateObj = resp[0];
       let params = resp[1];
-      if (dateObj) {
+      if (dateObj && this.subscribeCount > 1) {
+        this.customRangeSelected = true;
         let universalDate = _.cloneDeep(dateObj);
         this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
         this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
-        // this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-        //   dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-        //     bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
-        //   })
-        // });
-        // this.advanceSearchRequest.to = universalDate[1];
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+          dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+          })
+        });
+        this.advanceSearchRequest.to = universalDate[1];
         this.advanceSearchRequest.page = 0;
       }
       if (params['accountUniqueName']) {
@@ -640,7 +645,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
     } else {
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName));
-
     }
   }
 
