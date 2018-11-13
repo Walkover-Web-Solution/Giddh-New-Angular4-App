@@ -375,3 +375,7 @@ hr {
 .rotate-90 {
     transform: rotate(-90deg);
 }
+
+.ember-view:focus {
+    outline: none;
+}

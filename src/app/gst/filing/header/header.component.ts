@@ -39,6 +39,8 @@ import * as moment from 'moment/moment';
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public currentPeriod: any = null;
   @Input() public selectedGst: string = null;
+  @Input() public showTaxPro: boolean = false;
+
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
   public GstAsidePaneState: string = 'out';
@@ -46,6 +48,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public companyGst$: Observable<string> = of('');
   public activeCompanyGstNumber: string = '';
   public moment = moment;
+  public imgPath: string = '';
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -60,6 +64,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+    this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     this.companyGst$.subscribe(a => {
       if (a) {
         this.activeCompanyGstNumber = a;

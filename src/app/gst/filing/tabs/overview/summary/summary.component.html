@@ -34,33 +34,33 @@
                         <td [ngSwitch]="true">
 
                             <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
-                                <img src="../assets/images/gst/b2b.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}b2b.svg" class="icon text-bottom" />
                             </ng-container>
                             <ng-container *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
-                                <img src="../assets/images/gst/b2cs.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}b2cs.svg" class="icon text-bottom" />
                             </ng-container>
                             <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
-                                <img src="../assets/images/gst/export.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}export.svg" class="icon text-bottom" />
                             </ng-container>
                             <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
-                                <img src="../assets/images/gst/nil.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}nil.svg" class="icon text-bottom" />
                             </ng-container>
-                            <ng-container *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/Refund Vouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
-                                <img src="../assets/images/gst/cdn.svg" class="icon text-bottom" />
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
+                                <img src="{{imgPath}}cdn.svg" class="icon text-bottom" />
                             </ng-container>
                             <ng-container *ngSwitchCase="item.gstReturnType === 'advance-payments'">
-                                <img src="../assets/images/gst/adv.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}adv.svg" class="icon text-bottom" />
                             </ng-container>
 
                             <ng-container *ngSwitchCase="item.gstReturnType === 'hsnsac'">
-                                <img src="../assets/images/gst/hsnsac.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}hsnsac.svg" class="icon text-bottom" />
                             </ng-container>
                             <ng-container *ngSwitchCase="item.gstReturnType === 'taxPaid'">
-                                <img src="../assets/images/gst/taxpaid.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}taxpaid.svg" class="icon text-bottom" />
                             </ng-container>
 
                             <ng-container *ngSwitchCase="item.gstReturnType === 'impg'">
-                                <img src="../assets/images/gst/impg.svg" class="icon text-bottom" />
+                                <img src="{{imgPath}}impg.svg" class="icon text-bottom" />
                             </ng-container>
                             <span style="margin-left: 5px;"> {{item?.name}}</span>
                             <ng-container *ngFor="let item of item.transactions">
