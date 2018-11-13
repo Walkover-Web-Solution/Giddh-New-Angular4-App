@@ -321,17 +321,15 @@
             </tr>
         </table>
 
-
-
-
-
     </div>
 
     <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="fa fa-pencil"></i>
         </a>
-        <table class="subfooter" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
+        <div class="clearfix" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
+
+        <table class="subfooter">
             <tbody>
                 <tr>
                     <td [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
@@ -371,6 +369,7 @@
                 </tr> -->
             </tbody>
         </table>
+        </div>
 
         <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
             <p [ngStyle]="{ 'border-color': inputTemplate.templateColor}">

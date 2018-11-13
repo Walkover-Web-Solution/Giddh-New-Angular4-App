@@ -37,10 +37,9 @@
 /* NOTE:  comment padding, max-width, border in #gold css for java */
 body {
   font: 12px/1 'Open Sans', sans-serif;
+  background: #fff;
 }
 #gold {
-  
-  overflow: auto;
   background: #fff;
   border: 1px solid #bfbfbf;
   max-width: 8.3in;
@@ -69,8 +68,10 @@ body {
 #gold .invoice-table {
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
-    padding: 15px 20px;
     margin-bottom: 15px;
+}
+#gold .invoice-table td {
+  padding: 10px 8px !important;
 }
 
 #gold header .sub_head {
@@ -141,7 +142,7 @@ body {
 
 #gold .meta {
     margin: 2px 0 10px 0;
-    padding: 0 25px;
+    /* padding: 0 25px; */
 }
 
 #gold .meta h4 {
@@ -297,6 +298,8 @@ body {
   padding-bottom: 8px;
   overflow: hidden;
   background: #fff;
+  display: block;
+  float: none;
 }
 
 #gold footer p:first-child {
