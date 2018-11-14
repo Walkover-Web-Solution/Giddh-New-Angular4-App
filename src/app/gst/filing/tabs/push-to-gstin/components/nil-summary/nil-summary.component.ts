@@ -29,6 +29,7 @@ export class NilSummaryComponent implements OnInit, OnChanges {
   public nilSummaryResponse$: Observable<NilSummaryResponse> = of(new NilSummaryResponse());
   public nilSummaryInProgress$: Observable<boolean>;
   public request = requestParam;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -40,7 +41,7 @@ export class NilSummaryComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   public pageChanged(event) {

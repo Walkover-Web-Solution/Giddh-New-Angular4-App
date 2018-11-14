@@ -23,7 +23,7 @@ export class FilingComponent implements OnInit {
   public gstNumber: string = null;
   public activeCompanyUniqueName: string = '';
   public activeCompanyGstNumber: string = '';
-  public selectedTab: string = 'Overview';
+  public selectedTab: string = '1. Overview';
   public companies: CompanyResponse[];
   public gstAuthenticated$: Observable<boolean>;
   public isTransactionSummary: boolean = false;
@@ -82,16 +82,16 @@ export class FilingComponent implements OnInit {
     });
   }
 
-  public selectTab(e, val) {
+  public selectTab(e, val, tabHeading) {
     this._cdr.detach();
-    this.selectedTab = e.heading;
+    this.selectedTab = tabHeading;
     setTimeout(() => {
         this._cdr.reattach();
         if (!this._cdr['destroyed']) {
           this._cdr.detectChanges();
         }
       }, 200);
-    if (this.selectedTab === 'Overview') {
+    if (this.selectedTab === '1. Overview') {
       this.isTransactionSummary = false;
     } else {
       this.isTransactionSummary = true;

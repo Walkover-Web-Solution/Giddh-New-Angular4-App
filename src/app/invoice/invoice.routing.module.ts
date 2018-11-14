@@ -125,6 +125,9 @@ const INVOICE_ROUTES: Routes = [
   exports: [
     RouterModule,
     TooltipModule,
+    DownloadOrSendInvoiceOnMailComponent,
+    InvoiceGenerateModelComponent,
+    InvoiceCreateComponent
   ],
   entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
     ReceiptUpdateComponent],

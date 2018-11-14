@@ -38,7 +38,7 @@
 
         <div class="" *ngIf="(documentIssuedResponse$ | async) && !(documentIssuedResponse$ | async).totalItems">
             <div class="filings-empty-state">
-                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg"><span>  No result found.  </span></div>
             </div>
         </div>
