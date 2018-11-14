@@ -16,7 +16,15 @@
 .max-width-180 {
     /* max-width: 180px; */
 }
-
+.font-11 {
+  font-size: 11px !important;
+}
+.font-10 {
+  font-size: 10px !important;
+}
+.font-12 {
+  font-size: 12px !important;
+}
 
 /* heading */
 
@@ -38,15 +46,6 @@
   table-layout: fixed;
   width: 100%;
   border-collapse: inherit
-}
-
-#default table {
-}
-
-#default .item th,
-#default tfoot tr th {
-  /* background: #f2f2f2; */
-  /*border: 0;*/
 }
 
 /* page */

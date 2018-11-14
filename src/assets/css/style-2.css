@@ -707,7 +707,7 @@ ul.sub-list {
 }
 
 header .navbar {
-    background-color: #F7F8FA;
+    background-color: #00000014;
 }
 
 
@@ -5707,13 +5707,12 @@ perfect-scrollbar>.ps>.ps-overlay {
     background: transparent;
     outline: none;
     padding-right: 10px;
-    outline: none !important;
-    box-shadow: none;
 }
 
 .hamburger_menu h4 {
     font-size: 20px;
     text-transform: capitalize;
+    width: 250px;
 }
 
 .tax-engine .icon {
@@ -6411,4 +6410,8 @@ app-header {
 
 .form-inline sh-select .form-control {
     width: 100%;
+}
+
+.tooltip-inner {
+    max-width: 350px !important; /* the minimum width */
 }
