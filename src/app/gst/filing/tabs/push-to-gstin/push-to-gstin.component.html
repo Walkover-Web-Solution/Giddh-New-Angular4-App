@@ -4,8 +4,8 @@
         <!---->
         <div class="column list-column expanded-list-column transactions-list">
             <div class="scroll-y noscroll-x body fill">
-                <div class="sub-filter-nav-band reconciliation-type-band push-gstin">
-                    <tabset #staticTabs>
+                <div class="reconciliation-type-band push-gstin">
+                    <tabset #staticTabs class="sub-filter-nav-band">
                         <tab>
                             <ng-template tabHeading>
                                 Transaction Summary
@@ -16,7 +16,6 @@
                                     <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
                                     <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
                                 </div>
-                                {{ isTransactionSummary }}
                                 <transaction-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="true"></transaction-summary>
                             </div>
 

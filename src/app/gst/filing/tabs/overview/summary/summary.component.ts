@@ -46,6 +46,9 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
    * viewTransactions
    */
   public viewTransactions(obj) {
+    if (obj && !obj.type) {
+      return;
+    }
     let param = {
       page: 1,
       count: 20,

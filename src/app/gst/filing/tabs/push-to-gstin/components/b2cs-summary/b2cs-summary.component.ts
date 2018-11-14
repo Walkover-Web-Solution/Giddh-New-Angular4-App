@@ -29,6 +29,7 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
   public b2csSummaryResponse$: Observable<TransactionSummary>;
   public request = requestParam;
   public b2csSummaryInProgress$: Observable<boolean>;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -39,7 +40,7 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   public pageChanged(event) {
