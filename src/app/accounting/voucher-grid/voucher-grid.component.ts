@@ -224,13 +224,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * newEntryObj() to push new entry object
    */
-  public newEntryObj() {
+  public newEntryObj(byOrTo = 'to') {
     this.requestObj.transactions.push({
       amount: null,
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'to',
+      type: byOrTo,
       taxes: [],
       total: null,
       discounts: [],
@@ -435,20 +435,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
     let lastIndx = this.requestObj.transactions.length - 1;
-
     if (amount) {
       transactionObj.amount = Number(amount);
       transactionObj.total = transactionObj.amount;
-    }
 
-    if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-      this.newEntryObj();
-    }
+      if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
+        this.newEntryObj();
+      }
 
-    let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
-    this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-    let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
-    this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+      let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+      this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
+      let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+      this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+    } else {
+      this.requestObj.transactions.splice(indx, 1);
+      this.dateField.nativeElement.focus();
+      if (!this.requestObj.transactions.length) {
+        this.newEntryObj('by');
+      }
+    }
   }
 
   /**
