@@ -64,10 +64,10 @@
                                         : 'Billing Address'}}</strong>
                                 </p>
                                 <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
-                                <p>24 Buidling Name 3rd Floor, 15 A.B. Road Indore (M.P.) 452000</p>
+                                <p>Green Soft Solutions<br>24 Buidling Name <br>3rd Floor, 15 A.B. Road <br>Indore (M.P.) 452000</p>
                                 <p *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                                     <strong>{{(fieldsAndVisibility.header.billingGstin?.label.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
-                                        : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
+                                    : 'GSTIN'}}: 11AAAAAA000Z0A1</strong>
                                 </p>
                             </ng-container>
                         </td>
@@ -237,7 +237,7 @@
             </table>
         </div>
 
-        <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
+        <div id="Template-footer" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
                 <i class="fa fa-pencil"></i>
             </a>
@@ -271,7 +271,7 @@
                 </tbody>
             </table>
 
-            <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
+            <footer [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
                 <p [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                     <strong *ngIf="fieldsAndVisibility.footer.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
