@@ -857,9 +857,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
-
-    console.log('On acc selected the ev is :', ev);
-
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {
@@ -944,6 +941,17 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public addNewAccount(val, lastIdx) {
     if (val && lastIdx) {
       this.addNewRow('account');
+    }
+  }
+
+  public checkIfEnteredAmountIsZero(amount, indx, transactionType) {
+    if (!Number(amount)) {
+      if (transactionType === 'stock') {
+        this.stocksTransaction.splice(indx, 1);
+      } else if (transactionType === 'account') {
+        this.accountsTransaction.splice(indx, 1);
+      }
+      this.dateField.nativeElement.focus();
     }
   }
 
