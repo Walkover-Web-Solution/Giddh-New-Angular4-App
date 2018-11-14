@@ -379,3 +379,14 @@ hr {
 .ember-view:focus {
     outline: none;
 }
+
+.dropdown-menu>li>a:hover {
+    color: #ff5e01;
+    background: #f4f5f8;
+}
+
+.month-picker {
+    position: absolute;
+    top: 0;
+    left: 160px;
+}

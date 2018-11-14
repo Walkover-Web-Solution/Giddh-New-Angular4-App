@@ -20,6 +20,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges {
 
   public documentIssuedResponse$: Observable<DocumentIssuedResponse>;
   public documentIssuedRequestInProgress$: Observable<boolean>;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -30,7 +31,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   /**

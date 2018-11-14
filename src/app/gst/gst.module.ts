@@ -31,6 +31,8 @@ import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-
 import { B2csSummaryComponent } from './filing/tabs/push-to-gstin/components/b2cs-summary/b2cs-summary.component';
 import { DocumentIssuedComponent } from './filing/tabs/push-to-gstin/components/document-issued/document-issued.component';
 import { FailedTransactionsComponent } from './filing/tabs/push-to-gstin/components/failed-transactions/failed-transactions.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { InvoiceModule } from 'app/invoice/invoice.module';
 
 @NgModule({
   declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
@@ -49,7 +51,9 @@ import { FailedTransactionsComponent } from './filing/tabs/push-to-gstin/compone
     ElementViewChildModule,
     AlertModule,
     DecimalDigitsModule,
-    PurchaseModule
+    ModalModule,
+    PurchaseModule,
+    InvoiceModule
   ],
   providers: [Location],
   entryComponents: [

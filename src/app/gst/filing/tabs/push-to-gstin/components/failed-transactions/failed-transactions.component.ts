@@ -29,6 +29,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges {
   public failedTransactionsSummary$: Observable<any> = of(null);
   public failedTransactionsSummaryInProgress$: Observable<boolean>;
   public request = requestParam;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -40,7 +41,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   public pageChanged(event) {
