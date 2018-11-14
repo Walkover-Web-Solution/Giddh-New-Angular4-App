@@ -11,6 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal/modal.directive';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
 export const TransactionType = [
   {label: 'Invoices', value: 'invoices'},
@@ -84,7 +85,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService) {
+  constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService, private invoiceReceiptActions: InvoiceReceiptActions) {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
   }
@@ -133,9 +134,18 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * onSelectInvoice
    */
+  /**
+   * onSelectInvoice
+   */
   public onSelectInvoice(invoice) {
     // this.selectedInvoice = _.cloneDeep(invoice);
-    this._store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
+    let downloadVoucherRequestObject = {
+      voucherNumber: [invoice.voucherNumber],
+      voucherType: invoice.type,
+      accountUniqueName: invoice.account.uniqueName
+    };
+    this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+    // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
     this.loadDownloadOrSendMailComponent();
     this.downloadOrSendMailModel.show();
   }
