@@ -6,18 +6,27 @@
             </div>
             <div class="nav-band">
                 <tabset #staticTabs id="c-tab">
-                    <tab heading="Overview" (select)="selectTab($event, false)">
-                        <div class="transactions-overview" *ngIf="selectedTab === 'Overview'">
+                    <tab (select)="selectTab($event, false, '1. Overview')">
+                        <ng-template tabHeading>
+                            1. Overview
+                        </ng-template>
+                        <div class="transactions-overview" *ngIf="selectedTab === '1. Overview'">
                             <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary"></filing-overview>
                         </div>
                     </tab>
-                    <tab heading="Reconcilation" (select)="selectTab($event, true)" *ngIf="selectedGst === 'gstr2'">
-                        <div *ngIf="selectedTab === 'Reconcilation'">
+                    <tab (select)="selectTab($event, true, '2. Reconcilation')" *ngIf="selectedGst === 'gstr2'">
+                        <ng-template tabHeading>
+                            2. Reconcilation
+                        </ng-template>
+                        <div *ngIf="selectedTab === '2. Reconcilation'">
                             <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></reconcile>
                         </div>
                     </tab>
-                    <tab heading="Push to GSTIN" *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true)">
-                        <div *ngIf="selectedTab === 'Push to GSTIN'">
+                    <tab *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true, '2. Push to GSTIN')">
+                        <ng-template tabHeading>
+                            2. Push to GSTIN
+                        </ng-template>
+                        <div *ngIf="selectedTab === '2. Push to GSTIN'">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
                     </tab>

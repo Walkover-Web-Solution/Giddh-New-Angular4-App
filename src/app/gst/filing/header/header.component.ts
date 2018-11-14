@@ -84,7 +84,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
    * ngOnChanges
    */
   public ngOnChanges(s: SimpleChanges) {
-    if (s && s.selectedGst.currentValue === 'gstr2') {
+    if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
       this.gstAuthenticated$.subscribe(s => {
         if (!s && this.selectedGst === 'gstr2') {
           this.toggleSettingAsidePane(null, 'RECONCILE');
