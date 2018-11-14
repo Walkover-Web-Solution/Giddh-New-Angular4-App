@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
@@ -6,6 +6,11 @@ import { Observable, ReplaySubject, of } from 'rxjs';
 import { GstRReducerState, GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
+import { ModalDirective } from 'ngx-bootstrap/modal/modal.directive';
+import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 export const TransactionType = [
   {label: 'Invoices', value: 'invoices'},
@@ -56,6 +61,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
   @Input() public isTransactionSummary: boolean;
+  @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
+  @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
+  @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
 
   public viewTransaction$: Observable<TransactionSummary> = of(null);
   public entityType = TransactionType;
@@ -65,15 +73,24 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   public selectedEntityType: string = '';
   public companyGst$: Observable<string> = of('');
   public filterParam = filterTransaction;
+  public imgPath: string = '';
+  public modalRef: BsModalRef;
+  public modalConfig = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService) {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
+    this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
     this.activatedRoute.firstChild.params.subscribe(params => {
       this.filterParam['entityType'] = params.entityType;
@@ -111,6 +128,48 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
    */
   public ngOnChanges(s: SimpleChanges) {
     //
+  }
+
+  /**
+   * onSelectInvoice
+   */
+  public onSelectInvoice(invoice) {
+    // this.selectedInvoice = _.cloneDeep(invoice);
+    this._store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
+    this.loadDownloadOrSendMailComponent();
+    this.downloadOrSendMailModel.show();
+  }
+
+  public loadDownloadOrSendMailComponent() {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
+    let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
+    viewContainerRef.remove();
+
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+    componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
+    // componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
+    // componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
+  }
+
+  public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
+    this.downloadOrSendMailModel.hide();
+    if (userResponse.action === 'update') {
+      this._store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
+      this.invoiceGenerateModel.show();
+    } else if (userResponse.action === 'closed') {
+      this._store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }
+  }
+
+  public closeInvoiceModel(e) {
+    this.invoiceGenerateModel.hide();
+    setTimeout(() => {
+      this._store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }, 2000);
   }
 
   /**

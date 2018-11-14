@@ -28,6 +28,7 @@ export class HsnSummaryComponent implements OnInit, OnChanges {
   public request = requestParam;
   public hsnSummaryResponse$: Observable<HsnSummaryResponse> = of(new HsnSummaryResponse());
   public hsnSummaryInProgress$: Observable<boolean>;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -38,7 +39,7 @@ export class HsnSummaryComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
   public pageChanged(event) {
