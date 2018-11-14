@@ -77,7 +77,7 @@
 
         <div class="" *ngIf="(hsnSummaryResponse$ | async) && !(hsnSummaryResponse$ | async).totalItems">
             <div class="filings-empty-state">
-                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg"><span>  There is no HSN-wise summary.  </span></div>
             </div>
         </div>

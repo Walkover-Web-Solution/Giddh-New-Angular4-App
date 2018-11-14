@@ -64,9 +64,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of (b2csSummaryResponse$ | async).results">
-                        <td> {{item.type}} </td>
+                        <td> {{item.type ? item.type : '-'}} </td>
                         <td class="text-right"> ₹{{item.rate | number: '1.2-2'}} </td>
-                        <td> {{item.pos}} </td>
+                        <td> {{item.pos ? item.pos : '-'}} </td>
                         <td class="text-right"> ₹{{item.taxableAmount | number: '1.2-2'}} </td>
                         <td class="text-right"> ₹{{item.igstAmount | number: '1.2-2'}} </td>
                         <td class="text-right"> ₹{{item.cgstAmount | number: '1.2-2'}} </td>
@@ -84,7 +84,7 @@
 
         <div class="" *ngIf="(b2csSummaryResponse$ | async) && !(b2csSummaryResponse$ | async).totalItems">
             <div class="filings-empty-state">
-                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg"><span>  There is no summary of invoices with value less than 2.5 lakhs, other than B2C (Large) that you’ve issued to consumers.  </span></div>
             </div>
         </div>

@@ -5957,12 +5957,12 @@ perfect-scrollbar>.ps>.ps-overlay {
     background-color: #f7f7f7;
 }
 
-.tax-engine .sub-filter-nav-band ul>li,
+.tax-engine .sub-filter-nav-band>ul>li,
 .tax-engine .sub-filter-nav-bandnew ul>li {
     display: inline-block;
 }
 
-.tax-engine .sub-filter-nav-band ul>li>a,
+.tax-engine .sub-filter-nav-band>ul>li>a,
 .tax-engine .sub-filter-nav-bandnew ul>li>a {
     cursor: pointer;
     font-style: italic;
@@ -5971,7 +5971,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     background: none !important;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active:after,
+.tax-engine .sub-filter-nav-band>ul>li.active:after,
 .tax-engine .sub-filter-nav-bandnew ul>li.active:after {
     content: '';
     display: block;
@@ -5980,7 +5980,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     margin: auto;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active>a,
+.tax-engine .sub-filter-nav-band>ul>li.active>a,
 .tax-engine .sub-filter-nav-bandnew ul>li.active>a {
     color: #222;
     font-weight: 600;
@@ -6177,12 +6177,12 @@ perfect-scrollbar>.ps>.ps-overlay {
     margin-bottom: 0;
 }
 
-.tax-engine .sub-filter-nav-band ul>li {
+.tax-engine .sub-filter-nav-band>ul>li {
     display: inline-block;
     position: relative;
 }
 
-.tax-engine .sub-filter-nav-band ul>li>a {
+.tax-engine .sub-filter-nav-band>ul>li>a {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
@@ -6190,17 +6190,17 @@ perfect-scrollbar>.ps>.ps-overlay {
     color: #337ab7;
 }
 
-.tax-engine .sub-filter-nav-band ul>li .count {
+.tax-engine .sub-filter-nav-band>ul>li .count {
     color: #cb1119;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active>a {
+.tax-engine .sub-filter-nav-band>ul>li.active>a {
     color: #222;
     font-weight: 600;
     border: 0;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active:after {
+.tax-engine .sub-filter-nav-band>ul>li.active:after {
     content: '';
     display: block;
     border-bottom: 2px solid #FF5F00;
@@ -6336,7 +6336,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     background: #fff;
 }
 
-.tax-engine .sub-filter-nav-band ul>li.active>a .count {
+.tax-engine .sub-filter-nav-band>ul>li.active>a .count {
     color: #222;
 }
 
@@ -6396,6 +6396,15 @@ perfect-scrollbar>.ps>.ps-overlay {
     border: 0;
 }
 
+.tax-engine .gstr-transactions-summary .table>tbody>tr.row-hover:hover {
+    cursor: pointer;
+    background-color: #fafafa;
+}
+
+.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row:hover>td {
+    background-color: transparent;
+}
+
 app-header {
     position: relative;
 }
@@ -6413,5 +6422,6 @@ app-header {
 }
 
 .tooltip-inner {
-    max-width: 350px !important; /* the minimum width */
+    max-width: 350px !important;
+    /* the minimum width */
 }
