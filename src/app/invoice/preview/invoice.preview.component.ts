@@ -133,7 +133,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   };
   public selectedVoucher: string = 'sales';
 
-  private universalDate: Date[];
+  public universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -165,7 +165,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         return;
       }
       this.selectedVoucher = a.voucherType;
-      this.getVoucher(false);      
+      this.getVoucher(false);
     });
 
     // Get accounts
@@ -178,7 +178,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       });
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
-
 
     this.store.select(p => p.receipt.data).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
       if (o) {
@@ -231,7 +230,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
-      if (dateObj) {       
+      if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         // this.invoiceSearchRequest.dateRange = this.universalDate;
         this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -239,7 +238,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.isUniversalDateApplicable = true;
         this.getVoucher(true);
       }
-    })).pipe(skip(2),takeUntil(this.destroyed$)).subscribe();
+    })).pipe(skip(2), takeUntil(this.destroyed$)).subscribe();
   }
 
   public loadDownloadOrSendMailComponent() {
@@ -307,9 +306,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public deleteConfirmedInvoice() {
     this.invoiceConfirmationModel.hide();
     let model = {
-      invoiceNumber:this.selectedInvoice.voucherNumber,
-	    voucherType:this.selectedVoucher
-    }
+      invoiceNumber: this.selectedInvoice.voucherNumber,
+      voucherType: this.selectedVoucher
+    };
     this.store.dispatch(this.invoiceActions.DeleteInvoice(model, this.selectedInvoice.account.uniqueName));
   }
 
@@ -411,7 +410,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public getVoucher(isUniversalDateSelected: boolean) {
-    debugger;
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
     // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
   }

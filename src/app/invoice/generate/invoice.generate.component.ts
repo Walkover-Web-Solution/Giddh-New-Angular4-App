@@ -134,7 +134,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         return true;
       })).subscribe((o: any) => {
       if (o) {
-        // this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
+        this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
       }
     });
 

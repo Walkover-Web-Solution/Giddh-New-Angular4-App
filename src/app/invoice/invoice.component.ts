@@ -59,18 +59,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'invoice';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    // this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-    //   // console.log('router.event');
-    //   // debugger;
-    //   // if (event && event.url && event.url.includes('preview')) {
-    //   //   this.showInvoiceNav = true;
-    //   // } else {
-    //   //   this.showInvoiceNav = false;
-    //   // }
-    // });
-    // if (this.router.routerState.snapshot.url.includes('preview')) {
-    //   this.showInvoiceNav = true;
-    // }
+
   }
 
   public pageChanged(page: string) {

@@ -29,7 +29,7 @@ export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
       distinctUntilChanged())
       .subscribe((o: any) => {
           this.hasErr = false;
-          if (o && o.voucherDetails && o.voucherDetails.uniqueName) {
+          if (o && o.voucherDetails) {
             this.goAhead = true;
           } else {
             // this.hasErr = true;

@@ -135,12 +135,12 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       .subscribe((o: any) => {
           if (o && o.voucherDetails) {
             this.invFormData = _.cloneDeep(o);
-            if (o.voucherDetails.invoiceDate) {
-              let d = o.voucherDetails.invoiceDate.split('-');
+            if (o.voucherDetails.voucherDate) {
+              let d = o.voucherDetails.voucherDate.split('-');
               if (d.length === 3) {
-                this.invFormData.voucherDetails.invoiceDate = new Date(d[2], d[1] - 1, d[0]);
+                this.invFormData.voucherDetails.voucherDate = new Date(d[2], d[1] - 1, d[0]);
               } else {
-                this.invFormData.voucherDetails.invoiceDate = '';
+                this.invFormData.voucherDetails.voucherDate = '';
               }
               if (this.invFormData.voucherDetails.invoiceNumber === '##########') {
                 this.invFormData.voucherDetails.invoiceNumber = null;
@@ -293,7 +293,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     data.accountDetails['shippingDetails'].address = this.getArrayFromString(data.accountDetails['shippingDetails'].address);
 
     // convert date object
-    data.voucherDetails.invoiceDate = this.convertDateForAPI(data.voucherDetails.invoiceDate);
+    data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
     data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
     data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
 
