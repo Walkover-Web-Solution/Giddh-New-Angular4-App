@@ -157,7 +157,7 @@ export class InvoiceService {
   public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+    return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
       map((res) => {
         let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res;
         data.request = model;
