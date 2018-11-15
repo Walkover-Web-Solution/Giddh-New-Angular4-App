@@ -3,7 +3,7 @@ import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receip
 import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'app/actions/invoice/invoice.const';
-import { PreviewInvoiceResponseClass, PreviewInvoiceRequest } from 'app/models/api-models/Invoice';
+import { PreviewInvoiceResponseClass, PreviewInvoiceRequest, ILedgersInvoiceResult } from 'app/models/api-models/Invoice';
 
 export interface ReceiptState {
   data: ReciptResponse;
@@ -14,6 +14,7 @@ export interface ReceiptState {
   voucher: Voucher;
   voucherDetailsInProcess: boolean;
   base64Data: string;
+  invoiceDataHasError: boolean;
 }
 
 const initialState: ReceiptState = {
@@ -24,7 +25,8 @@ const initialState: ReceiptState = {
   isDeleteSuccess: false,
   voucher: null,
   voucherDetailsInProcess: false,
-  base64Data: null
+  base64Data: null,
+  invoiceDataHasError: false
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -153,6 +155,35 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         newState.invoiceDataHasError = true;
       }
       return {...state, ...newState};
+    }
+
+    case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
+      if (res.status === 'success') {
+        newState.voucher = res.body;
+      } else {
+        newState.invoiceDataHasError = true;
+      }
+      return {...state, ...newState};
+    }
+    case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
+      return Object.assign({}, state, {
+        voucher: null,
+        base64Data: null
+      });
+    }
+    case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, string> = action.payload;
+      if (res.status === 'success') {
+        newState.isInvoiceGenerated = true;
+        newState.ledgers.results = _.remove(newState.data.results, (item: ILedgersInvoiceResult) => {
+          return !item.isSelected;
+        });
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
     default:
       return state;

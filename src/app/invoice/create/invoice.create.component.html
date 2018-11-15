@@ -38,7 +38,7 @@
                 <div class="flex-row-child">
                     <div class="form-group size_340" *ngIf="templateHeader?.billingAddress?.display">
                         <label>{{templateHeader?.billingAddress?.label}}</label>
-                        <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.addressStr"></textarea>
+                        <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address"></textarea>
                     </div>
                     <div class="form-group">
                         <div class="mrB2" [hidden]="!templateHeader?.billingState?.display">
@@ -56,7 +56,7 @@
                 <div class="flex-row-child">
                     <div class="form-group size_340" *ngIf="templateHeader?.shippingAddress?.display">
                         <label>{{templateHeader?.shippingAddress?.label}}</label>
-                        <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.addressStr"></textarea>
+                        <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address"></textarea>
                     </div>
                     <div class="form-group">
                         <div class="mrB2" [hidden]="!templateHeader?.shippingState?.display">
