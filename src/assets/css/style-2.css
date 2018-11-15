@@ -578,6 +578,9 @@ ul.sub-list {
 
 .sub-list li a {
     font-size: 13px;
+    text-overflow: ellipsis;
+    display: block;
+    padding-right: 40px;
 }
 
 .company-list .input-group {
@@ -6424,4 +6427,8 @@ app-header {
 .tooltip-inner {
     max-width: 350px !important;
     /* the minimum width */
+}
+.permission_icon {
+    position: absolute;
+    right: 10px;
 }
