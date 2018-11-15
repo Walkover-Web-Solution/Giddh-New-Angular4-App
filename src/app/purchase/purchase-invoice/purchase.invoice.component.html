@@ -22,7 +22,9 @@
                 <ng-container *ngIf="!showSingleDatePicker">
                     <label class="d-block">From - to</label>
                     <div class="btn-group  dropdown" dropdown [autoClose]="false" container="body" *ngIf="!showSingleDatePicker" #periodDropdown="bs-dropdown">
-                        <button id="button-nested" dropdownToggle type="button" class="form-control dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle" aria-controls="dropdown-nested">{{ selectedDateForGSTR1?.from }} - {{ selectedDateForGSTR1?.to }} <span class="caret"></span></button>
+                        <button id="button-nested" dropdownToggle type="button" class="form-control dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle" aria-controls="dropdown-nested">
+                                            {{selectedDateForGSTR1.from}} - {{selectedDateForGSTR1.to}}
+                        <span class="caret"></span></button>
                         <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-nested" [attachOutsideOnClick]="true" (clickOutside)="periodDropdown.hide();showGSTR1DatePicker=false">
                             <li role="menuitem" dropdown triggers="'click'" placement="right" [autoClose]="false" container="body" #monthWise="bs-dropdown">
                                 <a dropdownToggle class="dropdown-item dropdown-toggle cp" (click)="false">
@@ -34,7 +36,7 @@
                                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:void(0)">
-                                            <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [showWeeks]="false" [minMode]="'month'" (selectionDone)="monthChanged($event, true);monthWise.hide()"></datepicker>
+                                            <datepicker [(ngModel)]="selectedMonth" [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [showWeeks]="false" [minMode]="'month'" (selectionDone)="monthChanged($event, true);monthWise.hide()"></datepicker>
                                         </a>
                                     </li>
                                 </ul>
@@ -46,8 +48,6 @@
                                         <span class="caret rotate-90"></span>
                                     </div>
                                     </label>
-                                    <!-- (applyDaterangepicker)="periodChanged($event)" -->
-                                    <!-- [options]="datePickerOptions" -->
                                     <input id="daterangeInput" type="text" name="daterangeInput" [options]="{'autoApply': true}" #dateRangePickerCmp daterangepicker class="form-control daterangePicker" (applyDaterangepicker)="monthChanged($event, 'range')" />
                                 </a>
                             </li>
@@ -64,7 +64,7 @@
 
                         <div class="input-group">
                             <!--  -->
-                            <input type="text" name="from" [ngModel]="selectedDateForGSTR1?.monthYear" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+                            <input type="text" name="from" [value]="moment(selectedMonth).format('MMMM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
                             <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
                                     (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
@@ -75,8 +75,9 @@
                         <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
                             <ul class="my-dropdown-menu calendar-dropdown">
                                 <li>
+                                    <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [showWeeks]="false" [minMode]="'month'" (selectionDone)="monthChanged($event, true)" [(ngModel)]="selectedMonth"></datepicker>
                                     <!-- [(ngModel)]="selectedDateForGSTR1" -->
-                                    <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
+                                    <!-- <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker> -->
                                 </li>
                                 <li class="pd1 clearfix pdT pdB">
                                     <span class="btn-group pull-left">
