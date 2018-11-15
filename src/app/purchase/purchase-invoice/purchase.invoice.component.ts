@@ -121,6 +121,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public datePickerOptions: any;
   public selectedRangeType: string = '';
   public isMonthSelected: boolean = false;
+  public selectedMonth: any = moment(new Date());
 
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
@@ -321,13 +322,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       };
       this.selectedDateForGSTR1 = dates;
       this.isMonthSelected = false;
+      this.selectedMonth =  moment(new Date());
     } else {
       let dates = {
         from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
         to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
       };
       this.selectedDateForGSTR1 = dates;
+      this.selectedMonth = ev;
       this.isMonthSelected = true;
+      this.selectedDateForGSTR1.monthYear = moment(ev).format('MM-YYYY');
     }
     if (this.selectedGstrType.name === 'GSTR2') {
       this.fireGstReconcileRequest(this.reconcileActiveTab, ev);
@@ -731,7 +735,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
-    let check = moment(this.selectedDateForGSTR1.monthYear, 'MM-YYYY');
+    let check = moment(this.selectedMonth, 'MM-YYYY');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
     if (!monthToSend) {
       this.toasty.errorToast('Please select a month');

@@ -79,11 +79,11 @@
                             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                                 <ul class="sub-list" *ngIf="companies$ | async">
                                     <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-                                        <a href="javascript:void(0);" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                                        <a href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
                                             {{ cmp.name }}
                                             <!-- <i *ngIf="cmp.createdBy.email !== (user$ | async)?.email" class="fa fa-users pull-right" style="line-height: 20px;"></i>                                         -->
-                                            <img class="pull-right" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
-                                            <img class="pull-right" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
+                                            <img class="pull-right permission_icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
+                                            <img class="pull-right permission_icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
                                         </a>
                                         <!-- commented by meghna 
                                             <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>

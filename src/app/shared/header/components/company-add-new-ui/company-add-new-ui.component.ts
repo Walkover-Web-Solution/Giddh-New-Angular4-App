@@ -134,6 +134,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public makeMeCaptialize(companyName: string) {
+    if (companyName) {
+      this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
+    }
+  }
+
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration
     let d, dateString, randomGenerate, strings;
