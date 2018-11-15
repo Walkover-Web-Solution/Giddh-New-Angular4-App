@@ -30,5 +30,6 @@ export const INVOICE_API_2 = {
   GENERATED_INVOICE_PREVIEW: PART_A + 'accounts/:accountUniqueName/invoice/preview',
   GET_INVOICE_TEMPLATE_DETAILS: PART_A + 'templates/:templateUniqueName',
   SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1',
-  DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',  
+  DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',
+  PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
 };

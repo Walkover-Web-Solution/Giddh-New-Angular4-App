@@ -3,6 +3,7 @@ import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receip
 import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'app/actions/invoice/invoice.const';
+import { PreviewInvoiceResponseClass, PreviewInvoiceRequest } from 'app/models/api-models/Invoice';
 
 export interface ReceiptState {
   data: ReciptResponse;
@@ -142,6 +143,16 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
+      if (res.status === 'success') {
+        newState.voucher = res.body;
+      } else {
+        newState.invoiceDataHasError = true;
+      }
+      return {...state, ...newState};
     }
     default:
       return state;
