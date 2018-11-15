@@ -154,18 +154,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       newState.isInvoiceGenerated = false;
       return Object.assign({}, state, newState);
     }
-    case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<string, string> = action.payload;
-      if (res.status === 'success') {
-        newState.isInvoiceGenerated = true;
-        newState.ledgers.results = _.remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
-          return !item.isSelected;
-        });
-        return Object.assign({}, state, newState);
-      }
-      return state;
-    }
+    // case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
+    //   let newState = _.cloneDeep(state);
+    //   let res: BaseResponse<string, string> = action.payload;
+    //   if (res.status === 'success') {
+    //     newState.isInvoiceGenerated = true;
+    //     newState.ledgers.results = _.remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
+    //       return !item.isSelected;
+    //     });
+    //     return Object.assign({}, state, newState);
+    //   }
+    //   return state;
+    // }
 
     case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
       let newState = _.cloneDeep(state);
