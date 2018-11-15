@@ -107,16 +107,16 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       });
       return Object.assign({}, state, newState);
     }
-    case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
-      if (res.status === 'success') {
-        newState.invoiceData = res.body;
-      } else {
-        newState.invoiceDataHasError = true;
-      }
-      return {...state, ...newState};
-    }
+    // case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
+    //   let newState = _.cloneDeep(state);
+    //   let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
+    //   if (res.status === 'success') {
+    //     newState.invoiceData = res.body;
+    //   } else {
+    //     newState.invoiceDataHasError = true;
+    //   }
+    //   return {...state, ...newState};
+    // }
     case INVOICE_ACTIONS.PREVIEW_INVOICE:
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
       return {...state, invoiceData: null, invoiceDataHasError: false};
