@@ -6,7 +6,7 @@ import { INVOICE_ACTIONS } from 'app/actions/invoice/invoice.const';
 import { PreviewInvoiceResponseClass, PreviewInvoiceRequest, ILedgersInvoiceResult } from 'app/models/api-models/Invoice';
 
 export interface ReceiptState {
-  data: ReciptResponse;
+  vouchers: ReciptResponse;
   isGetAllRequestInProcess: boolean;
   isGetAllRequestSuccess: boolean;
   isDeleteInProcess: boolean;
@@ -18,7 +18,7 @@ export interface ReceiptState {
 }
 
 const initialState: ReceiptState = {
-  data: null,
+  vouchers: null,
   isGetAllRequestInProcess: false,
   isGetAllRequestSuccess: false,
   isDeleteInProcess: false,
@@ -44,13 +44,13 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       let res: BaseResponse<ReciptResponse, ReciptRequestParams> = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {
-          data: res.body,
+          vouchers: res.body,
           isGetAllRequestSuccess: true,
           isGetAllRequestInProcess: false
         });
       }
       return Object.assign({}, state, {
-        data: null,
+        vouchers: null,
         isGetAllRequestSuccess: false,
         isGetAllRequestInProcess: false
       });
@@ -68,9 +68,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, ReciptDeleteRequest> = action.payload;
       if (res.status === 'success') {
-        let indx = newState.data.items.findIndex(f => f.voucherNumber === res.request.invoiceNumber);
+        let indx = newState.vouchers.items.findIndex(f => f.voucherNumber === res.request.invoiceNumber);
         if (indx > -1) {
-          newState.data.items.splice(indx, 1);
+          newState.vouchers.items.splice(indx, 1);
           newState.isDeleteSuccess = true;
           newState.isDeleteInProcess = false;
         }
@@ -87,7 +87,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, ReciptRequest> = action.payload;
       if (res.status === 'success') {
-        newState.data.items.map(a => {
+        newState.vouchers.items.map(a => {
           if (a.voucherNumber === res.request.voucher.voucherDetails.voucherNumber) {
             a = res.request;
           }
@@ -128,7 +128,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       let res: BaseResponse<string, string> = action.payload;
       if (res.status === 'success') {
         // Just refreshing the list for now
-        newState.data = null;
+        newState.vouchers = null;
         return Object.assign({}, state, newState);
       }
       return state;
@@ -138,9 +138,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, string> = action.payload;
       if (res.status === 'success') {
-        let indx = newState.data.items.findIndex((o) => o.voucherNumber === res.request);
+        let indx = newState.vouchers.items.findIndex((o) => o.voucherNumber === res.request);
         if (indx > -1) {
-          newState.data.items.splice(indx, 1);
+          newState.vouchers.items.splice(indx, 1);
         }
         return Object.assign({}, state, newState);
       }
@@ -178,7 +178,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       let res: BaseResponse<string, string> = action.payload;
       if (res.status === 'success') {
         newState.isInvoiceGenerated = true;
-        newState.ledgers.results = _.remove(newState.data.results, (item: ILedgersInvoiceResult) => {
+        newState.ledgers.results = _.remove(newState.vouchers.results, (item: ILedgersInvoiceResult) => {
           return !item.isSelected;
         });
         return Object.assign({}, state, newState);
