@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 
 import { distinctUntilChanged, takeUntil, skip } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
@@ -132,8 +132,10 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public selectedVoucher: string = 'sales';
-
   public universalDate: Date[];
+  public invoiceActionUpdated: Observable<boolean> = of(false);
+
+  private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -153,6 +155,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.invoiceSearchRequest.count = 25;
     this.invoiceSearchRequest.entryTotalBy = '';
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -179,7 +182,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.data).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
+    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
       if (o) {
         this.voucherData = _.cloneDeep(o);
         _.map(this.voucherData.items, (item: ReceiptItem) => {
@@ -231,14 +234,23 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
-        this.universalDate = _.cloneDeep(dateObj);
-        // this.invoiceSearchRequest.dateRange = this.universalDate;
-        this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.isUniversalDateApplicable = true;
-        this.getVoucher(true);
+        this.getVoucherCount++;
+        if (this.getVoucherCount > 1) {
+          this.universalDate = _.cloneDeep(dateObj);
+          this.invoiceSearchRequest.dateRange = this.universalDate;
+          this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+          this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+          this.isUniversalDateApplicable = true;
+          this.getVoucher(true);
+        }
       }
-    })).pipe(skip(2), takeUntil(this.destroyed$)).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
+
+    this.invoiceActionUpdated.subscribe((a) => {
+      if (a) {
+        this.getVoucher(this.isUniversalDateApplicable);
+      }
+    });
   }
 
   public loadDownloadOrSendMailComponent() {
@@ -309,7 +321,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       invoiceNumber: this.selectedInvoice.voucherNumber,
       voucherType: this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DeleteInvoice(model, this.selectedInvoice.account.uniqueName));
+    this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
   }
 
   public closeConfirmationPopup() {
