@@ -22,6 +22,7 @@ export interface GstRReducerState {
   documentIssuedRequestInProgress: boolean;
   failedTransactionsSummary: any;
   failedTransactionsSummaryInProgress: boolean;
+  viewTransactionInProgress: boolean;
 }
 
 export class GstOverViewResponse {
@@ -135,7 +136,8 @@ const initialState: GstRReducerState = {
   documentIssuedRequestInProgress: false,
   failedTransactionsSummary: null,
   failedTransactionsSummaryInProgress: true,
-  transactionCountsInProcess: true
+  transactionCountsInProcess: true,
+  viewTransactionInProgress: true
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -168,10 +170,10 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       return newState;
     }
     case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS: {
-      // return {
-      //   ...state,
-      //   overViewDataInProgress: true
-      // };
+      return {
+        ...state,
+        viewTransactionInProgress: true
+      };
     }
     case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
@@ -179,6 +181,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       if (response.status === 'success') {
         newState.viewTransactionData = response.body;
       }
+      newState.viewTransactionInProgress = false;
       return newState;
     }
     case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY: {

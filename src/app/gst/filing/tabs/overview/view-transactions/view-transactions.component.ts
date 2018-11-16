@@ -82,12 +82,14 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public viewTransactionInProgress$: Observable<boolean> = of(null);
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService, private invoiceReceiptActions: InvoiceReceiptActions) {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
+    this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
