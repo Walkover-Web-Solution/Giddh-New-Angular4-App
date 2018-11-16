@@ -22,13 +22,13 @@
                 <tbody>
                     <tr *ngFor="let item of (documentIssuedResponse$ | async).results; let i = index">
                         <td></td>
-                        <td>{{i}}</td>
-                        <td> {{item.doc}} </td>
-                        <td>{{item.from}}</td>
-                        <td>{{item.to}}</td>
-                        <td class="text-center">{{item.totnum}}</td>
-                        <td class="text-center">{{item.cancel}}</td>
-                        <td class="text-center">{{item.netIssue}}</td>
+                        <td>{{i + 1}}</td>
+                        <td> {{item.doc ? item.doc : '-' }} </td>
+                        <td>{{item.from ? item.from : '-'}}</td>
+                        <td>{{item.to ? item.to : '-'}}</td>
+                        <td class="text-center">{{item.totnum ? item.totnum : '-'}}</td>
+                        <td class="text-center">{{item.cancel ? item.cancel : '-'}}</td>
+                        <td class="text-center">{{item.netIssue ? item.netIssue : '-'}}</td>
                     </tr>
                 </tbody>
             </table>

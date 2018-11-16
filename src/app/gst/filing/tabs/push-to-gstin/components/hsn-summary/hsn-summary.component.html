@@ -57,9 +57,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of (hsnSummaryResponse$ | async).results">
-                        <td> {{item.hsnsac}} </td>
-                        <td> {{item.desc}} </td>
-                        <td> {{item.qty}} </td>
+                        <td> {{item.hsnsac ? item.hsnsac : '-'}} </td>
+                        <td> {{item.desc ? item.desc : '-'}} </td>
+                        <td> {{item.qty ? item.qty : '-'}} </td>
                         <td class="text-right"> ₹{{item.txval | number: '1.2-2' }} </td>
                         <td class="text-right"> ₹{{item.iamt | number: '1.2-2' }} </td>
                         <td class="text-right"> ₹{{item.camt | number: '1.2-2' }} </td>
