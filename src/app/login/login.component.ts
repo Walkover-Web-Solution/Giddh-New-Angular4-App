@@ -221,6 +221,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.forgotStep = 2;
       }
     });
+
+    this.twoWayAuthModal.onHidden.subscribe(e => {
+      if (e && e.dismissReason === 'esc') {
+        return this.resetTwoWayAuthModal();
+      }
+    });
   }
 
   public showEmailModal() {
