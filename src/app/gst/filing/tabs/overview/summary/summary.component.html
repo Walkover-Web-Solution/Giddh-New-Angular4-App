@@ -1,5 +1,10 @@
 <div class="transactions-overview">
 
+    <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
+        <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
+        <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
+    </div>
+
     <div class="gstr-transactions-summary">
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
         <div id="ember1233" class="ember-view" *ngIf="(gstOverviewData$ | async) && (gstOverviewData$ | async)?.transactionSummary?.totalItems">
@@ -64,7 +69,7 @@
                                 </ng-container>
                                 <span style="margin-left: 5px;"> {{item?.name}}</span>
                             </td>
-                            <td class="text-center"><a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
+                            <td class="text-center"><a href="javascript:void(0)"> {{ item?.transactions ? '-' : item?.totalTransactions}} </a>
                             </td>
                             <td class="text-right"> ₹{{item?.taxableAmount | number: '1.2-2'}}
                             </td>

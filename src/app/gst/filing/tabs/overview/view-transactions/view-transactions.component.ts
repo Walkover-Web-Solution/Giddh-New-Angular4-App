@@ -141,7 +141,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     // this.selectedInvoice = _.cloneDeep(invoice);
     let downloadVoucherRequestObject = {
       voucherNumber: [invoice.voucherNumber],
-      voucherType: invoice.type,
+      voucherType: invoice.voucherType,
       accountUniqueName: invoice.account.uniqueName
     };
     this._store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));

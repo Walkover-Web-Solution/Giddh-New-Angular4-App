@@ -35,9 +35,9 @@
                     <tr *ngFor="let item of (failedTransactionsSummary$ | async).results">
                         <td> {{item.transaction ? item.transaction : '-'}} </td>
                         <td> {{item.transactionDate ? item.transactionDate : '-'}} </td>
-                        <td class="text-right"> {{item.transactionType ? item.transactionType : '-'}} </td>
-                        <td class="text-right"> {{item.errorCode ? item.errorCode : '-'}} </td>
-                        <td class="text-right"> {{item.errorMessage ? item.errorMessage : '-'}} </td>
+                        <td> {{item.transactionType ? item.transactionType : '-'}} </td>
+                        <td> {{item.errorCode ? item.errorCode : '-'}} </td>
+                        <td> {{item.errorMessage ? item.errorMessage : '-'}} </td>
                     </tr>
                 </tbody>
             </table>

@@ -12,10 +12,6 @@
                             </ng-template>
 
                             <div class="subtabs-box transactions-overview">
-                                <div class="gstr-transactions-summary">
-                                    <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
-                                    <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
-                                </div>
                                 <transaction-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="true"></transaction-summary>
                             </div>
 

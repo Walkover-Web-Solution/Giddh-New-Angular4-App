@@ -9,7 +9,7 @@
                         {{ moment(selectedMonth).format('MMMM YYYY') }}
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        {{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMMM YYYY')}}
+                        {{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
                     </ng-container>
                      <span class="caret"></span>
                 </button>
@@ -91,7 +91,7 @@
                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMMM YYYY')}})
+                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
                     </ng-container>
 
                             </b> &nbsp;&nbsp;
@@ -148,7 +148,7 @@
                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMMM YYYY')}})                    </ng-container>
+                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})</ng-container>
                                 </b>
                                 <!---->
                             </div>
