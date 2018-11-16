@@ -135,8 +135,20 @@
                             <p class="mrT2">Status: <span class="text-danger fs14"><i class="fa fa-exclamation-circle"></i> {{acc.status}}</span></p>
                             <p>Reason: {{acc.reason}}</p>
                             <div class="clearfix mrT2">
-                                <button class="btn btn-default" *ngIf="card.isRefreshWithCredentials" (click)="onRefreshToken(card)">Reconnect</button>
-                                <button class="btn btn-default" *ngIf="!card.isRefreshWithCredentials" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try Again</button>
+                                <button class="btn btn-default" *ngIf="!card.isRefreshWithCredentials" (click)="onRefreshToken(card)">Reconnect</button>
+                                <button class="btn btn-default" *ngIf="card.isRefreshWithCredentials" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try Again</button>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="acc.status === 'ALREADY_ADDED'">
+                            <div class="account-number">
+                                <b>Provider Id</b>: {{card.providerAccount.providerAccountId}}
+                            </div>
+                            <p class="mrT2">Status: <span class="text-danger fs14"><i class="fa fa-exclamation-circle"></i> {{acc.status}}</span></p>
+                            <p>Reason: {{acc.reason}}</p>
+                            <div class="clearfix mrT2">
+                                <button class="btn btn-default" *ngIf="card.status !== 'INCORRECT_CREDENTIALS'" (click)="onRefreshToken(card)">Reconnect</button>
+                                <button class="btn btn-default" *ngIf="card.status === 'INCORRECT_CREDENTIALS'" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try Again</button>
                             </div>
                         </ng-container>
                     </aside>
