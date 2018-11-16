@@ -88,7 +88,20 @@ export class ConnectBankModalComponent implements OnChanges {
         }));
     };
 
-    this.loginForm = this._fb.group({
+    this.loginForm = this.initLoginForm();
+
+    this.needReloadingLinkedAccounts$.subscribe(a => {
+      if (a) {
+        this.resetBankForm();
+      }
+    });
+  }
+
+  /**
+   * initLoginForm
+   */
+  public initLoginForm() {
+    return this._fb.group({
       id: ['', Validators.required],
       forgotPasswordUrL: [''],
       loginHelp: [''],
@@ -96,12 +109,6 @@ export class ConnectBankModalComponent implements OnChanges {
       row: this._fb.array([
         this.rowArray()
       ]),
-    });
-
-    this.needReloadingLinkedAccounts$.subscribe(a => {
-      if (a) {
-        this.resetBankForm();
-      }
     });
   }
 
@@ -210,15 +217,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
       if (a && a.status === 'success') {
         let response = _.cloneDeep(a.body.loginForm[0]);
-        this.loginForm.patchValue({
-          id: response.id,
-          forgotPasswordUrL: response.forgotPasswordUrL,
-          loginHelp: response.loginHelp,
-          formType: response.formType,
-        });
-        response.row.map((item, i) => {
-          this.addInputRow(i, item);
-        });
+        this.createLoginForm(response);
         this.step = 2;
       }
     });
@@ -264,6 +263,7 @@ export class ConnectBankModalComponent implements OnChanges {
           }, 10000);
         }
       }
+
     });
   }
 
@@ -275,6 +275,13 @@ export class ConnectBankModalComponent implements OnChanges {
     if (status === 'success' || status === 'failed') {
       this.bankSyncInProgress = false;
       return true;
+    } else if (status === 'user_input_required' || status === 'addl_authentication_required') {
+        let response = _.cloneDeep(provider.loginForm[0]);
+        this.createLoginForm(response);
+        this.isRefreshWithCredentials = true;
+        this.bankSyncInProgress = false;
+        // this.refreshAccount(true);
+        return true;
     } else {
       return false;
     }
@@ -297,6 +304,22 @@ export class ConnectBankModalComponent implements OnChanges {
     };
     objToSend.loginForm.push(this.loginForm.value);
     this.refreshAccountEvent.emit(objToSend);
+  }
+
+  /**
+   * createLoginForm
+   */
+  public createLoginForm(response) {
+    this.loginForm = this.initLoginForm();
+    this.loginForm.patchValue({
+      id: response.id,
+      forgotPasswordUrL: response.forgotPasswordUrL,
+      loginHelp: response.loginHelp,
+      formType: response.formType,
+    });
+    response.row.map((item, i) => {
+      this.addInputRow(i, item);
+    });
   }
 
 }
