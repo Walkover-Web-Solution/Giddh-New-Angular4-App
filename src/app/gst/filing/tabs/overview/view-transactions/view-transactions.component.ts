@@ -24,8 +24,8 @@ export const TransactionType = [
 export const InvoiceType = [
   {label: 'All', value: 'all'},
   {label: 'B2B', value: 'b2b'},
-  {label: 'B2CL', value: 'b2cs'},
-  {label: 'B2CS', value: 'b2cl'},
+  {label: 'B2CL', value: 'b2cl'},
+  {label: 'B2CS', value: 'b2cs'},
   {label: 'Export', value: 'export'},
   {label: 'Nil', value: 'nil'},
 ];
