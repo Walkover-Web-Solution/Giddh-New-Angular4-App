@@ -18,6 +18,9 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { ActivatedRoute } from '@angular/router';
+import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -63,6 +66,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
+  public selectedVoucher: string = 'invoice';
+  public isGenerateInvoice: boolean = true;
+
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -74,7 +80,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     private modalService: BsModalService,
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _activatedRoute: ActivatedRoute,
+    private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
@@ -85,6 +93,10 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._activatedRoute.params.subscribe(a => {
+      this.setVoucherType(a.voucherType);
+    });
 
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
@@ -110,9 +122,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store.select(p => p.invoice.invoiceData).pipe(
+    this.store.select(p => p.receipt.voucher).pipe(
       takeUntil(this.destroyed$),
-      distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+      distinctUntilChanged((p: any, q: any) => {
         if (p && q) {
           return (p.templateUniqueName === q.templateUniqueName);
         }
@@ -120,9 +132,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
           return false;
         }
         return true;
-      })).subscribe((o: PreviewInvoiceResponseClass) => {
+      })).subscribe((o: any) => {
       if (o) {
-        this.getInvoiceTemplateDetails(o.templateUniqueName);
+        this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
       }
     });
 
@@ -147,6 +159,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         this.getLedgersOfInvoice();
       }
     })).subscribe();
+
   }
 
   public closeInvoiceModel(e) {
@@ -208,6 +221,12 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     });
     this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model.uniqueNames));
     this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+
+    // let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
+    // request.invoiceNumber = res.voucherNumber.join();
+    // request.voucherType = this.selectedVoucher;
+
+    // this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(res.account.uniqueName, request));
     this.showInvoiceModal();
   }
 
@@ -303,7 +322,8 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       from: this.isUniversalDateApplicable ? fromDate : o.from,
       to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
-      page: o.page
+      page: o.page,
+      voucherType: this.selectedVoucher
     };
   }
 
@@ -347,6 +367,30 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
     } else {
       this.togglePrevGenBtn = false;
+    }
+  }
+
+  /**
+   * setVoucherType
+   */
+  public setVoucherType(voucherType) {
+    switch (voucherType) {
+      case 'receipt':
+        this.selectedVoucher = 'receipt';
+        this.isGenerateInvoice = false;
+        break;
+      case 'credit note':
+        this.isGenerateInvoice = false;
+        this.selectedVoucher = 'credit note';
+        break;
+      case 'debit note':
+        this.isGenerateInvoice = false;
+        this.selectedVoucher = 'debit note';
+        break;
+      default:
+        this.isGenerateInvoice = true;
+        this.selectedVoucher = 'sales';
+        break;
     }
   }
 

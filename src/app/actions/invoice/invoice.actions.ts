@@ -144,7 +144,7 @@ export class InvoiceActions {
   @Effect()
   public DeleteInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.DELETE_INVOICE).pipe(
-      switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload)),
+      switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload.model, action.payload.accountUniqueName)),
       map(response => {
         return this.DeleteInvoiceResponse(response);
       }));
@@ -714,10 +714,10 @@ export class InvoiceActions {
     };
   }
 
-  public DeleteInvoice(model: string): CustomActions {
+  public DeleteInvoice(model: object, accountUniqueName): CustomActions {
     return {
       type: INVOICE_ACTIONS.DELETE_INVOICE,
-      payload: model
+      payload:  { model, accountUniqueName }
     };
   }
 

@@ -147,7 +147,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     // Get accountsthis
     this.routeEvent.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.store.select(p => p.receipt.data).pipe(take(1)).subscribe((o: ReciptResponse) => {
+        this.store.select(p => p.receipt.vouchers).pipe(take(1)).subscribe((o: ReciptResponse) => {
           this.getInvoiceReceipts(event.url);
         });
       }
@@ -165,7 +165,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.data).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
+    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
       if (o) {
         this.receiptData = _.cloneDeep(o);
       } else {
