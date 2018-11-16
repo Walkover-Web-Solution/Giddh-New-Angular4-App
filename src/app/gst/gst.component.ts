@@ -94,7 +94,7 @@ export class GstComponent implements OnInit {
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'gst';
+    stateDetailsRequest.lastState = 'gstfiling';
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
     let dates = {

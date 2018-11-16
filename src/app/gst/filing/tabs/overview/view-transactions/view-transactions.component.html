@@ -192,7 +192,7 @@
         </div>
 
         <div class="filings-empty-state" *ngIf="(viewTransaction$ | async) && !(viewTransaction$ | async)?.results?.length">
-            <img src="../assets/images/nofound.svg" [style.max-width.px]="150" />
+            <img src="{{imgPath}}nofound.svg" [style.max-width.px]="150" />
             <div class="empty-msg"><span>  No records found.  </span></div>
         </div>
     </div>

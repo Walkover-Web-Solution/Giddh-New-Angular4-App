@@ -40,6 +40,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public currentPeriod: any = null;
   @Input() public selectedGst: string = null;
   @Input() public showTaxPro: boolean = false;
+  @Input() public isMonthSelected: boolean = false;
 
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
@@ -85,11 +86,23 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
    */
   public ngOnChanges(s: SimpleChanges) {
     if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
-      this.gstAuthenticated$.subscribe(s => {
-        if (!s && this.selectedGst === 'gstr2') {
+      this.gstAuthenticated$.subscribe(a => {
+        if (!a && this.selectedGst === 'gstr2') {
           this.toggleSettingAsidePane(null, 'RECONCILE');
         }
       });
+    }
+
+    if (s && s.currentPeriod && s.currentPeriod.currentValue) {
+      let date = {
+        startDate: moment(this.currentPeriod.from, 'DD-MM-YYYY').startOf('month').format('DD-MM-YYYY'),
+        endDate: moment(this.currentPeriod.to, 'DD-MM-YYYY').endOf('month').format('DD-MM-YYYY')
+      };
+      if (date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to) {
+        this.isMonthSelected = true;
+      } else {
+        this.isMonthSelected = false;
+      }
     }
   }
 
