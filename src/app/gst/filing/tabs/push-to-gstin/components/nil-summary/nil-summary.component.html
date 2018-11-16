@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of (nilSummaryResponse$ | async).results">
-                        <td> {{item.supplyType}} </td>
+                        <td> {{item.supplyType ? item.supplyType : '-'}} </td>
                         <td class="text-right"> ₹{{item.nilAmount | number: '1.2-2'}} </td>
                         <td class="text-right"> ₹{{item.exemptAmount | number: '1.2-2'}} </td>
                         <td class="text-right"> ₹{{item.nonGstAmount | number: '1.2-2'}} </td>

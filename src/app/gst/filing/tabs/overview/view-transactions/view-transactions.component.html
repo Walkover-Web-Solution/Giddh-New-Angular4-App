@@ -166,18 +166,18 @@
             </thead>
             <tbody>
                 <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
-                    <td>{{item.voucherDate}}</td>
-                    <td class="btn-link" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</td>
+                    <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
+                    <td class="btn-link" (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}</td>
                     <td>
-                        {{item.accountGstin}}
+                        {{item.accountGstin ? item.accountGstin '-'}}
                     </td>
-                    <td>{{item.accountName}}</td>
-                    <td>{{item.status}}</td>
-                    <td>{{item.actionOnGstin}}</td>
+                    <td>{{item.accountName ? item.accountName : '-'}}</td>
+                    <td>{{item.status ? item.status : '-'}}</td>
+                    <td>{{item.actionOnGstin ? item.actionOnGstin : '-'}}</td>
                     <td>
-                        {{item.pos}}
+                        {{item.pos ? item.pos : '-'}}
                     </td>
-                    <td>{{item.reverseCharge}}</td>
+                    <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
                     <td align="right">₹{{item.taxableAmount | number: '1.2-2'}}</td>
                     <td align="right">₹{{item.igstAmount | number: '1.2-2'}}</td>
                     <td align="right">₹{{item.sgstAmount | number: '1.2-2'}}</td>
