@@ -91,6 +91,12 @@ export class ReceiptService implements OnInit {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
       , model, {responseType: isPreview ? 'text' : 'blob'}).pipe(
+        map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.queryString = accountUniqueName;
+        data.request = model;
+        return data;
+      }),
       catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {accountUniqueName}))
     );
   }

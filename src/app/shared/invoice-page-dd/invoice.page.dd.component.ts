@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -35,16 +35,17 @@ export class InvoicePageDDComponent implements OnInit {
   public navItems: INameUniqueName[] = INV_PAGE;
   public selectedType: string = null;
   @Output('pageChanged') public pageChanged: EventEmitter<any> = new EventEmitter(null);
+  @Output('selectVoucher') public selectVoucher: EventEmitter<any> = new EventEmitter(null);
 
   public dropDownPages: any[] = [
-    {name: 'Invoice', uniqueName: 'invoice', path: 'preview'},
+    {name: 'Invoice', uniqueName: 'invoice', path: 'sales'},
     {name: 'Recurring', uniqueName: 'recurring', path: 'recurring'},
     {name: 'Receipt', uniqueName: 'receipt', path: 'receipt'},
-    {name: 'Credit Note', uniqueName: 'cr-note', path: 'cr-note'},
-    {name: 'Debit Note', uniqueName: 'dr-note', path: 'dr-note'}
+    {name: 'Credit Note', uniqueName: 'cr-note', path: 'credit note'},
+    {name: 'Debit Note', uniqueName: 'dr-note', path: 'debit note'}
   ];
 
-  constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef) {
+  constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
     // this.selectedType = 'Invoice';
     // this.router.events.subscribe((event: NavigationStart) => {
     //   if (event.url) {
@@ -60,9 +61,16 @@ export class InvoicePageDDComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.router.routerState.snapshot.url) {
-      this.setUrl(this.router.routerState.snapshot.url);
-    }
+
+    this._activatedRoute.firstChild.params.subscribe(a => {
+      if (a) {
+        this.setUrl(a.voucherType);
+      }
+    });
+
+    // if (this.router.routerState.snapshot.url) {
+    //   this.setUrl(this.router.routerState.snapshot.url);
+    // }
 
     // this.router.events.subscribe(ev => {
     //   if (ev instanceof NavigationEnd) {
@@ -91,11 +99,10 @@ export class InvoicePageDDComponent implements OnInit {
   }
 
   private setUrl(mainUrl: string) {
-    let url = mainUrl.split('/');
-    let lastUrl = url[url.length - 1];
-    this.pageChanged.emit(lastUrl);
-    switch (lastUrl) {
-      case 'invoice':
+    // let url = mainUrl.split('/');
+    // let lastUrl = url[url.length - 1];
+    switch (mainUrl) {
+      case 'sales':
         this.selectedType = 'Invoice';
         break;
       case 'recurring':
@@ -104,15 +111,19 @@ export class InvoicePageDDComponent implements OnInit {
       case 'receipt':
         this.selectedType = 'Receipt';
         break;
-      case 'cr-note':
+      case 'credit note':
         this.selectedType = 'Credit Note';
         break;
-      case 'dr-note':
+      case 'debit note':
         this.selectedType = 'Debit Note';
         break;
       default:
         this.selectedType = 'Invoice';
         break;
+    }
+    if (mainUrl) {
+      this.selectVoucher.emit(mainUrl);
+      this.pageChanged.emit(mainUrl);
     }
   }
 
