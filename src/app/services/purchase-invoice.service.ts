@@ -184,7 +184,6 @@ export class PurchaseInvoiceService {
   public DownloadGSTR1ErrorSheet(reqObj: { period: any, gstNumber: string, type: string, gstType: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    debugger;
     // let  apiUrl = ;
     // if (reqObj.gstType === 'GSTR2') {
     //   apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);

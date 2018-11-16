@@ -9,7 +9,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher, DownloadVoucherRequest } from '../../../models/api-models/recipt';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -61,6 +61,19 @@ export class InvoiceReceiptActions {
         let success = response.status === 'success';
         this.showToaster(success ? 'Receipt Deleted Successfully' : response.message, success ? 'success' : 'error');
         return this.DeleteInvoiceReceiptResponse(response);
+      }));
+
+  @Effect()
+  private VoucherPreview$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST).pipe(
+      switchMap((action: CustomActions) => this._receiptService.DownloadVoucher(action.payload.model, action.payload.accountUniqueName)),
+      map((response: BaseResponse<any, any>) => {
+        if (response) {
+          // this.showToaster('');
+        } else {
+          this.showToaster(response.message, 'error');
+        }
+        return this.VoucherPreviewResponse(response);
       }));
 
   constructor(private action$: Actions, private _toasty: ToasterService,
@@ -125,6 +138,20 @@ export class InvoiceReceiptActions {
   public GetVoucherDetailsResponse(response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSE,
+      payload: response
+    };
+  }
+
+  public VoucherPreview(model: DownloadVoucherRequest, accountUniqueName: string) {
+     return {
+      type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST,
+      payload: {model, accountUniqueName}
+    };
+  }
+
+  public VoucherPreviewResponse(response) {
+     return {
+      type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE,
       payload: response
     };
   }

@@ -359,6 +359,7 @@ export class GenerateInvoiceRequestClass {
   public validateTax: boolean;
   public invoice: any;
   public updateAccountDetails: boolean;
+  public voucher?: any;
 }
 
 /*

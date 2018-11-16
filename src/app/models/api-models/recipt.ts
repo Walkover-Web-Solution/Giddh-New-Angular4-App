@@ -37,6 +37,7 @@ export interface ReceiptItem {
   grandTotal: number;
   balanceDue: number;
   dueDate: string;
+  isSelected?: boolean;
 }
 
 export interface ReciptResponse {
