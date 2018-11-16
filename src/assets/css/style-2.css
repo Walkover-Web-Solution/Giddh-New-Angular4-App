@@ -6081,6 +6081,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     display: inline-block;
     vertical-align: middle;
     font-size: 14px;
+    text-transform: capitalize;
 }
 
 .tax-engine .transactions-list .filter-row .filter {
@@ -6428,6 +6429,7 @@ app-header {
     max-width: 350px !important;
     /* the minimum width */
 }
+
 .permission_icon {
     position: absolute;
     right: 10px;

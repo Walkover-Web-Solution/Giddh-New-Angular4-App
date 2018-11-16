@@ -87,6 +87,7 @@ export class OverViewResult {
   public type: string;
   public pos: any;
   public name: string;
+  public transactions?: OverViewResult[];
 }
 
 export class TransactionCounts {
