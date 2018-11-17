@@ -28,13 +28,19 @@
                                 <ng-container [formGroupName]="idx">
                                     <label> {{item.get('label').value}} <sup
                     *ngIf="fields.get('isOptional').value === 'false'">*</sup></label>
-                                    <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" [disabled]="fields.get('valueEditable').value === 'false'" class="form-control" formControlName="value" *ngIf="fields.get('type').value !== 'option'" />
+                                    <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" [disabled]="fields.get('valueEditable').value === 'false'" class="form-control" formControlName="value" *ngIf="fields.get('type').value !== 'option' && fields.get('id').value !== 'image' && fields.get('type').value !== 'checkbox' && fields.get('type').value !== 'radio'"
+                                    />
                                     <select class="form-control" *ngIf="fields.get('type').value === 'option'" formControlName="value">
-                    <option [ngValue]="null" [selected]="true">Select Type</option>
-                    <option *ngFor="let list of fields.get('option')?.value" [ngValue]="list.optionValue">
-                      {{list.displayText}}
-                    </option>
-                  </select>
+                                        <option [ngValue]="null" [selected]="true">Select Type</option>
+                                        <option *ngFor="let list of fields.get('option')?.value" [ngValue]="list.optionValue">
+                                            {{list.displayText}}
+                                        </option>
+                                    </select>
+                                    <ng-container *ngIf="fields.get('id').value === 'image'">
+                                        <img class="img-responsive max150" [src]="base64StringForModel" />
+                                        <label>Enter above text</label>
+                                        <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" class="form-control" formControlName="value" />
+                                    </ng-container>
                                 </ng-container>
                             </ng-container>
                         </ng-container>

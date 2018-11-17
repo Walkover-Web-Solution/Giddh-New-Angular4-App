@@ -8,7 +8,7 @@ export const EBANKS = {
   REFRESH_ACCOUNTS: COMMON_URL + 'ebanks/refresh', // GET
   RECONNECT_ACCOUNT: COMMON_URL + 'login/:loginId/token/reconnect', // GET
   // DELETE_BANK_ACCOUNT: COMMON_URL + 'login/:loginId', // DELETE
-  DELETE_BANK_ACCOUNT: COMMON_URL + 'yodlee/yodlee-accounts?accountId=:accountId',
+  DELETE_BANK_ACCOUNT: COMMON_URL + 'yodlee/yodlee-accounts?providerAccountId=:accountId',
   // REFREST_ACCOUNT: COMMON_URL + 'login/:loginId/token/refresh', // GET (OLD)
   REFREST_ACCOUNT: COMMON_URL + 'yodlee/refresh/:ebankItemId', // GET (NEW)
   ADD_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:itemAccountId', // PUT

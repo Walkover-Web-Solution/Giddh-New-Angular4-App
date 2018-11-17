@@ -138,9 +138,12 @@
                                 <button class="btn btn-default" *ngIf="!card.isRefreshWithCredentials" (click)="onRefreshToken(card)">Reconnect</button>
                                 <button class="btn btn-default" *ngIf="card.isRefreshWithCredentials" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try Again</button>
                             </div>
+                            <button class="no-btn fs20 pos-abs bank_delete" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, card)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
                         </ng-container>
 
-                        <ng-container *ngIf="acc.status === 'ALREADY_ADDED'">
+                        <ng-container *ngIf="acc.status === 'ALREADY_ADDED' && card.status !== 'SUCCESS'">
                             <div class="account-number">
                                 <b>Provider Id</b>: {{card.providerAccount.providerAccountId}}
                             </div>
