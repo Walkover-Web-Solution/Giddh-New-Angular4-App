@@ -74,7 +74,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   // { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
   // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
   // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/filing-return' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: 'pages/aging-report'},
+  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
 ];
 
 @Component({
@@ -404,7 +404,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // end logic for cmd+k
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
-        this.selectedPage = s.toLowerCase();
+        const lastState = s.toLowerCase();
+        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+        if (lastStateName) {
+          return this.selectedPage = lastStateName.name;
+        }
         if (this.selectedPage === 'gst') {
           this.selectedPage = 'GST';
         }
