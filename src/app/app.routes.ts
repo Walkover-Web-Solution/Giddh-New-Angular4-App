@@ -50,7 +50,7 @@ export const ROUTES: Routes = [
   {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
-  {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-Invoices', pathMatch: 'full'},
+  {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
