@@ -42,7 +42,7 @@ export class ConnectBankModalComponent implements OnChanges {
   @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
   @Output() public refreshAccountEvent: EventEmitter<any> = new EventEmitter(null);
   @Input() public providerId: string = '';
-  @Input() public isRefreshWithCredentials: true;
+  @Input() public isRefreshWithCredentials: boolean = true;
 
   public url: SafeResourceUrl = null;
 
@@ -57,6 +57,8 @@ export class ConnectBankModalComponent implements OnChanges {
   public apiInInterval: any;
   public cancelRequest: boolean = false;
   public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
+  public isElectron = isElectron;
+  public base64StringForModel: SafeResourceUrl = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -141,6 +143,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this.bankSyncInProgress = false;
     this.cancelRequest = true;
     this.bankSyncInProgress = false;
+    this.isRefreshWithCredentials = true;
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -277,10 +280,14 @@ export class ConnectBankModalComponent implements OnChanges {
       return true;
     } else if (status === 'user_input_required' || status === 'addl_authentication_required') {
         let response = _.cloneDeep(provider.loginForm[0]);
+        this.providerId = provider.id;
+        if (response.formType === 'image') {
+          this.bypassSecurityTrustResourceUrl(response.row[0].field[0].value);
+        }
+        response.row[0].field[0].value = '';
         this.createLoginForm(response);
-        this.isRefreshWithCredentials = true;
+        this.isRefreshWithCredentials = false;
         this.bankSyncInProgress = false;
-        // this.refreshAccount(true);
         return true;
     } else {
       return false;
@@ -300,7 +307,8 @@ export class ConnectBankModalComponent implements OnChanges {
    */
   public refreshAccount(ev) {
     let objToSend = {
-      loginForm: []
+      loginForm: [],
+      providerAccountId: this.providerId
     };
     objToSend.loginForm.push(this.loginForm.value);
     this.refreshAccountEvent.emit(objToSend);
@@ -320,6 +328,15 @@ export class ConnectBankModalComponent implements OnChanges {
     response.row.map((item, i) => {
       this.addInputRow(i, item);
     });
+  }
+
+  /**
+   * bypassSecurityTrustResourceUrl
+   */
+  public bypassSecurityTrustResourceUrl(val) {
+    let str = 'data:application/pdf;base64,' + val;
+    console.log('chala');
+    this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
   }
 
 }
