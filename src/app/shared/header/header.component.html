@@ -211,8 +211,8 @@
                                             <li><a routerLink="contact">Vendor</a></li>
                                             <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
                                             <li><a routerLink="daybook">Daybook</a></li>
-                                            <li><a routerLink="trial-balance-and-profit-loss">Trial Balance</a></li>
-                                            <li><a routerLink="trial-balance-and-profit-loss">P&L, B/S</a></li>
+                                            <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></li>
+                                            <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }">P&L, B/S</a></li>
                                         </ul>
                     
                                         <ul>
