@@ -108,9 +108,9 @@
             </thead>
             <tbody>
 
-                <tr>
+                <tr *ngIf="fieldsAndVisibility.table.previousDue?.display">
                     <td colspan="7"></td>
-                    <td>Previous Due</td>
+                    <td>{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
                     <td>5000.00</td>
                 </tr>
                 <tr>
