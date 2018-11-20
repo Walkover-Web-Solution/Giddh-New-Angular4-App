@@ -159,10 +159,14 @@ export class OnReturnDirective {
           // target.value = ''; // No need to make the field empty
         }
       } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
+
         selectedEle.value = '';
         // selectedEle.blur();
-        // allElements[indx - 1].focus();
-        allElements[0].focus();
+        if (selectedEle.classList.contains('focus-prev-field-on-esc')) {
+          allElements[indx - 1].focus();
+        } else {
+          allElements[0].focus();
+        }
         return setTimeout(() => {
           selectedEle.focus();
         }, 200);

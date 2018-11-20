@@ -38,7 +38,7 @@
           <label>Party A/c Name:<sup>*</sup></label>
           <!-- #creditor -->
           <input #partyAccNameInputField name="party_name" type="text" onReturn placeholder="Party account"
-                 class="form-control max-height28 appearance_none upper-fields" 
+                 class="form-control max-height28 appearance_none upper-fields focus-prev-field-on-esc" 
                  (keyup)="searchAccount($event?.target?.value)"
                  (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name"
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'partyAcc'"
@@ -48,7 +48,7 @@
         <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
           <label>Ledger name:<sup>*</sup></label>
           <input name="ledger_name" type="text" onReturn placeholder="Ledger name"
-                 class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
+                 class="form-control max-height28 appearance_none upper-fields focus-prev-field-on-esc" style="max-width:200px"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="debtorAcc.name"
                  (focus)="onPartyAccFocus();selectedField='account';focusedField = 'ledgerName'"
