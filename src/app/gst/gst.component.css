@@ -376,7 +376,7 @@ hr {
     transform: rotate(-90deg);
 }
 
-.ember-view:focus {
+.content-graph:focus {
     outline: none;
 }
 

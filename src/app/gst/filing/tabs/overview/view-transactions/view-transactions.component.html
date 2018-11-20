@@ -12,7 +12,7 @@
 
                     <div class="btn-group filter" dropdown>
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
-                            {{filterParam.entityType}} <span class="caret"></span>
+                            {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngFor="let entity of entityType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('entityType', entity.value)">{{entity.label}}</a></li>
@@ -21,11 +21,11 @@
                 </div>
 
                 <div class="filter-row ember-view" *ngIf="filterParam.entityType !== 'invoices' || !filterParam.entityType">
-                    <div class="name">{{filterParam.entityType}} Type: </div>
+                    <div class="name">{{selectedFilter?.entityType}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
-                            {{filterParam.type}} <span class="caret"></span>
+                            {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngFor="let type of otherEntityType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a></li>
@@ -35,11 +35,11 @@
 
 
                 <div class="filter-row ember-view" *ngIf="filterParam.entityType === 'invoices'">
-                    <div class="name">{{filterParam.entityType}} Type: </div>
+                    <div class="name">{{selectedFilter?.entityType}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
-                            {{filterParam.type}} <span class="caret"></span>
+                            {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngFor="let type of invoiceType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a></li>
@@ -52,7 +52,7 @@
 
                     <div class="btn-group filter" dropdown>
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
-                            {{filterParam.status}} <span class="caret"></span>
+                            {{selectedFilter?.status}} <span class="caret"></span>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngFor="let item of status"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('status', item.value)">{{item.label}}</a></li>

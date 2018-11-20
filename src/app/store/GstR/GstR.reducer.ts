@@ -23,6 +23,7 @@ export interface GstRReducerState {
   failedTransactionsSummary: any;
   failedTransactionsSummaryInProgress: boolean;
   viewTransactionInProgress: boolean;
+  gstTransactionsFilter: any;
 }
 
 export class GstOverViewResponse {
@@ -137,7 +138,8 @@ const initialState: GstRReducerState = {
   failedTransactionsSummary: null,
   failedTransactionsSummaryInProgress: true,
   transactionCountsInProcess: true,
-  viewTransactionInProgress: true
+  viewTransactionInProgress: true,
+  gstTransactionsFilter: null
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -164,9 +166,9 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         } else {
           newState.gstR2TotalTransactions = response.body.totalTransactions;
         }
-        newState.overViewDataInProgress = false;
         newState.overViewData = response.body;
       }
+      newState.overViewDataInProgress = false;
       return newState;
     }
     case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS: {
@@ -227,8 +229,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.transactionCounts = response.body;
-        newState.transactionCountsInProcess = false;
       }
+      newState.transactionCountsInProcess = false;
       return newState;
     }
     case GSTR_ACTIONS.GET_DOCUMENT_ISSUED: {
@@ -244,6 +246,12 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         newState.documentIssuedResponse = response.body;
         newState.documentIssuedRequestInProgress = false;
       }
+      return newState;
+    }
+    case GSTR_ACTIONS.REQUEST_TRANSACTIONS: {
+      let response: BaseResponse<any, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      newState.gstTransactionsFilter = response;
       return newState;
     }
     default:

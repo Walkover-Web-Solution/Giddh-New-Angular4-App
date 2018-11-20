@@ -65,6 +65,7 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public selectedDateForGSTR1 = {};
   public moment = moment;
   public pullFromGstInProgress$: Observable<boolean>;
+  public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -93,6 +94,8 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
+    this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+
     this.fireGstReconcileRequest('NOT_ON_PORTAL');
   }
 

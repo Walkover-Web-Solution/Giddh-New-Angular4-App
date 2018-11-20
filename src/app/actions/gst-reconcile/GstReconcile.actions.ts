@@ -301,4 +301,11 @@ export class GstReconcileActions {
       payload: res
     };
   }
+
+  public RequestTransactions(filters) {
+     return {
+      type: GSTR_ACTIONS.REQUEST_TRANSACTIONS,
+      payload: filters
+    };
+  }
 }
