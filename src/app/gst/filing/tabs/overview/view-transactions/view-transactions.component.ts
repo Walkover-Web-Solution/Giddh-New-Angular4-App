@@ -83,6 +83,8 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     ignoreBackdropClick: true
   };
   public viewTransactionInProgress$: Observable<boolean> = of(null);
+  public transactionsFilter$: Observable<any> = of(null);
+  public selectedFilter: any = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -90,21 +92,30 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
+    this.transactionsFilter$ = this._store.select(p => p.gstR.gstTransactionsFilter).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-
-    this.activatedRoute.firstChild.params.subscribe(params => {
-      this.filterParam['entityType'] = params.entityType;
-    });
-
     this.filterParam['from'] = this.currentPeriod.from;
     this.filterParam['to'] = this.currentPeriod.to;
     this.filterParam['gstin'] = this.activeCompanyGstNumber;
 
-    this.viewFilteredTxn('page', 1);
-    //
+    this.activatedRoute.firstChild.params.subscribe(params => {
+      this.filterParam['entityType'] = params.entityType;
+      this.mapFilters();
+      this.viewFilteredTxn('page', 1);
+    });
+
+    this.transactionsFilter$.subscribe(a => {
+      if (a) {
+        _.map(a, (val, key) => {
+          this.filterParam[key] = val;
+        });
+        this.mapFilters();
+      }
+    });
   }
 
   /**
@@ -112,6 +123,11 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
    */
   public viewFilteredTxn(filter, val) {
     this.filterParam[filter] = val;
+    if (filter === 'entityType') {
+      this.filterParam.type = 'all';
+      this.filterParam.status = 'all';
+    }
+    this.mapFilters();
     this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));
   }
 
@@ -119,28 +135,11 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
   }
 
-  /**
-   * pageChanged
-   */
   public pageChanged(event) {
     this.viewFilteredTxn('page', event.page);
   }
 
-  /**
-   * ngOnChanges
-   */
-  public ngOnChanges(s: SimpleChanges) {
-    //
-  }
-
-  /**
-   * onSelectInvoice
-   */
-  /**
-   * onSelectInvoice
-   */
   public onSelectInvoice(invoice) {
-    // this.selectedInvoice = _.cloneDeep(invoice);
     let downloadVoucherRequestObject = {
       voucherNumber: [invoice.voucherNumber],
       voucherType: invoice.voucherType,
@@ -184,9 +183,20 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     }, 2000);
   }
 
-  /**
-   * ngOnDestroy
-   */
+  public mapFilters() {
+    this.selectedFilter.entityType = _.find(TransactionType, o =>  o.value === this.filterParam.entityType).label;
+    this.selectedFilter.status =  _.find(Status, o =>  o.value === this.filterParam.status).label;
+    if (this.filterParam.entityType === 'invoices') {
+      this.selectedFilter.type = _.find(InvoiceType, o =>  o.value === this.filterParam.type).label;
+    } else {
+      this.selectedFilter.type =  _.find(Entitytype, o =>  o.value === this.filterParam.type).label;
+    }
+  }
+
+  public ngOnChanges(s: SimpleChanges) {
+    //
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
   }

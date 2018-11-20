@@ -87,7 +87,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnChanges(s: SimpleChanges) {
     if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
       this.gstAuthenticated$.subscribe(a => {
-        if (!a && this.selectedGst === 'gstr2') {
+        if (!a && this.selectedGst === 'gstr2' && this.showTaxPro) {
           this.toggleSettingAsidePane(null, 'RECONCILE');
         }
       });

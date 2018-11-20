@@ -47,7 +47,7 @@
                     </ul>
                 </div>
                 <!-- 
-            <div id="ember1310" class="dropdown clearfix list-title filter-by return-sel font-large">
+            <div class="dropdown clearfix list-title filter-by return-sel font-large">
                 <a data-toggle="dropdown" class="dropdown-toggle" (click)="showCalendar = !showCalendar">
                     {{ currentPeriod }} <b class="caret"></b></a>
                 <div *ngIf="showCalendar" style="position: absolute; z-index:10; min-height:290px;">
@@ -110,16 +110,16 @@
 
 
                     <div class="content-graph" [routerLink]="['/pages', 'sales']" *ngIf="!(gstTransactionCounts$ | async)?.gstr1Transactions">
-                        <div id="ember5249" class="">
+                        <div class="">
                             <div class="row empty-return-row">
-                                <div class="col-md-4 col-sm-4 col-xs-4 text-center filing-steps cursor-pointer" data-ember-action-5250="5250">
+                                <div class="col-md-4 col-sm-4 col-xs-4 text-center filing-steps cursor-pointer">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#444" d="M412.8 173.9c0-1.3-.5-2.6-1.5-3.6l-94.7-94.7c-1-1-2.3-1.5-3.6-1.5H131.5c-2.8 0-5 2.2-5 5v118.7c0 2.8 2.2 5 5 5s5-2.2 5-5V84.2h171.7v89.7c0 2.8 2.2 5 5 5h89.7v249H136.5V254.4c0-2.8-2.2-5-5-5s-5 2.2-5 5v178.4c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5V174.1c0-.1-.1-.1-.1-.2zm-94.7-5V91.2l77.6 77.6h-77.6z"></path><path fill="#00B177" d="M144.7 231.6c28.9 1.6 55.5 13.6 77 34.5 18.8 18.4 32.2 42.8 38.3 69.6l-18.8-11c-2.4-1.4-5.4-.6-6.8 1.8-1.4 2.4-.6 5.4 1.8 6.8l28.2 16.5c.8.5 1.7.7 2.5.7 1.7 0 3.4-.9 4.3-2.5l16.5-28.2c1.4-2.4.6-5.4-1.8-6.8-2.4-1.4-5.4-.6-6.8 1.8l-9.7 16.6c-6.7-27.8-20.9-53.2-40.6-72.4-23.2-22.7-52.1-35.6-83.4-37.4-14.4-.8-28.7.8-42.5 4.9-2.7.8-4.2 3.5-3.4 6.2.8 2.7 3.5 4.2 6.2 3.4 12.6-3.8 25.8-5.3 39-4.5z"></path></svg>
                                     <div class="font-large"><b>1. Create your transactions</b></div>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-xs-4 text-center filing-steps cursor-pointer" data-ember-action-5251="5251"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#F41371" d="M230.1 153.9l20.9-19.5V248c0 2.8 2.2 5 5 5s5-2.2 5-5V133.6l20.6 22.1c1 1.1 2.3 1.6 3.7 1.6 1.2 0 2.4-.4 3.4-1.3 2-1.9 2.1-5 .2-7.1l-28.3-30.3c-.9-1-2.2-1.5-3.5-1.6-1.3 0-2.6.4-3.6 1.3l-30.3 28.3c-2 1.9-2.1 5-.2 7.1 2 2 5.1 2.1 7.1.2z"></path><path fill="#444" d="M406.5 251.5c-1-.9-2.3-1.4-3.7-1.4l-42.8 2c-1.4.1-2.7.7-3.6 1.8l-38.6 46H202.9l-42.1-46.2c-.9-1-2.1-1.6-3.4-1.6l-48.1-2.4c-1.4-.1-2.7.4-3.7 1.4-1 .9-1.6 2.3-1.6 3.6V392c0 2.8 2.2 5 5 5h294c2.8 0 5-2.2 5-5V255.2c0-1.4-.6-2.7-1.5-3.7zm-251.7 10.6l42.2 46.3c.9 1 2.3 1.6 3.7 1.6h119.5c1.5 0 2.9-.7 3.8-1.8l38.6-46.1 35.4-1.7V351H114v-91l40.8 2.1zM114 387v-26h284v26H114z"></path></svg>
+                                <div class="col-md-4 col-sm-4 col-xs-4 text-center filing-steps cursor-pointer"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#F41371" d="M230.1 153.9l20.9-19.5V248c0 2.8 2.2 5 5 5s5-2.2 5-5V133.6l20.6 22.1c1 1.1 2.3 1.6 3.7 1.6 1.2 0 2.4-.4 3.4-1.3 2-1.9 2.1-5 .2-7.1l-28.3-30.3c-.9-1-2.2-1.5-3.5-1.6-1.3 0-2.6.4-3.6 1.3l-30.3 28.3c-2 1.9-2.1 5-.2 7.1 2 2 5.1 2.1 7.1.2z"></path><path fill="#444" d="M406.5 251.5c-1-.9-2.3-1.4-3.7-1.4l-42.8 2c-1.4.1-2.7.7-3.6 1.8l-38.6 46H202.9l-42.1-46.2c-.9-1-2.1-1.6-3.4-1.6l-48.1-2.4c-1.4-.1-2.7.4-3.7 1.4-1 .9-1.6 2.3-1.6 3.6V392c0 2.8 2.2 5 5 5h294c2.8 0 5-2.2 5-5V255.2c0-1.4-.6-2.7-1.5-3.7zm-251.7 10.6l42.2 46.3c.9 1 2.3 1.6 3.7 1.6h119.5c1.5 0 2.9-.7 3.8-1.8l38.6-46.1 35.4-1.7V351H114v-91l40.8 2.1zM114 387v-26h284v26H114z"></path></svg>
                                     <div class="font-large"><b>2. Push to GSTN</b></div>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-xs-4 text-center filing-steps cursor-pointer" data-ember-action-5252="5252"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#444" d="M407.7 161.4L313 67.3c-.9-.9-2.2-1.5-3.5-1.5H127.8c-2.8 0-5 2.2-5 5v14.4h-15c-2.8 0-5 2.2-5 5v353.7c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5v-14.4h15c2.8 0 5-2.2 5-5V164.9c0-1.3-.5-2.6-1.5-3.5zm-8.5 258.1h-10V184.2c0-.3 0-.6-.1-.9v-.1c-.1-.3-.1-.5-.2-.7 0-.1-.1-.2-.1-.3-.1-.2-.2-.4-.3-.5 0-.1-.1-.2-.2-.2-.2-.2-.3-.4-.5-.6l-.1-.1L293 86.6c-.2-.2-.4-.4-.7-.5-.1 0-.1-.1-.2-.1-.2-.1-.4-.2-.5-.3-.1 0-.2-.1-.3-.1-.2-.1-.5-.2-.7-.2h-.1c-.3-.1-.6-.1-.9-.1H132.8v-9.4h174.6l91.8 91.2v252.4zM294.5 102.2l77.6 77.1h-77.6v-77.1zM103 290c0-2.8 2.2-5 5-5h4.8V95.2h171.7v89.1c0 2.8 2.2 5 5 5h89.7V285h4.8c2.8 0 5 2.2 5 5s-2.2 5-5 5h-4.8v143.8H112.8V295H108c-2.8 0-5-2.2-5-5z"></path><path fill="#8E54FF" d="M108 295h127.6c-3.2 5.8-6.7 11.4-10.4 16.7-1.6 2.3-1 5.4 1.3 7 .9.6 1.9.9 2.8.9 1.6 0 3.1-.8 4.1-2.2 4.1-6 8-12.3 11.7-18.8 5.3 12.5 15.4 20.5 19.2 23.2.9.6 1.9.9 2.9.9 1.6 0 3.1-.7 4.1-2.1 1.6-2.3 1.1-5.4-1.2-7-3.1-2.2-11.3-8.7-15.6-18.5H384c2.8 0 5-2.2 5-5s-2.2-5-5-5H271.9c4.8-3.5 8-8 8.8-13.3.2-1.2 1.7-11.7-6.6-17.9-7.3-5.5-16.1-2.6-17.1-2.2-4 1.4-7 4.1-9.2 7.5-1.9-3.2-4.5-5.9-7.8-7.6-.9-.5-9.3-4.5-17.3 0-9 5.1-8.8 15.7-8.8 16.9.2 6.3 4 12.2 10 16.5H108c-2.8 0-5 2.2-5 5s2.2 5 5 5zm152.4-34s1.5-.5 3.4-.5c1.4 0 3.1.3 4.4 1.3 3.5 2.6 2.7 8.2 2.7 8.3-.8 5-7.8 10.7-19 11.4.2-1.6.3-3.2.3-4.9 1-6.8 3.5-13.9 8.2-15.6zm-32.7-.8c1.1-.6 2.2-.8 3.3-.8 2.4 0 4.5 1 4.5 1 4.4 2.2 6.6 8.9 6.7 15.6-.2 1.7-.3 3.4-.4 4.9 0 .2-.1.4-.1.6h-.2c-11.3-2.1-17.3-8.4-17.5-13.5 0 0-.1-5.6 3.7-7.8z"></path></svg>
+                                <div class="col-md-4 col-sm-4 col-xs-4 text-center filing-steps cursor-pointer"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#444" d="M407.7 161.4L313 67.3c-.9-.9-2.2-1.5-3.5-1.5H127.8c-2.8 0-5 2.2-5 5v14.4h-15c-2.8 0-5 2.2-5 5v353.7c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5v-14.4h15c2.8 0 5-2.2 5-5V164.9c0-1.3-.5-2.6-1.5-3.5zm-8.5 258.1h-10V184.2c0-.3 0-.6-.1-.9v-.1c-.1-.3-.1-.5-.2-.7 0-.1-.1-.2-.1-.3-.1-.2-.2-.4-.3-.5 0-.1-.1-.2-.2-.2-.2-.2-.3-.4-.5-.6l-.1-.1L293 86.6c-.2-.2-.4-.4-.7-.5-.1 0-.1-.1-.2-.1-.2-.1-.4-.2-.5-.3-.1 0-.2-.1-.3-.1-.2-.1-.5-.2-.7-.2h-.1c-.3-.1-.6-.1-.9-.1H132.8v-9.4h174.6l91.8 91.2v252.4zM294.5 102.2l77.6 77.1h-77.6v-77.1zM103 290c0-2.8 2.2-5 5-5h4.8V95.2h171.7v89.1c0 2.8 2.2 5 5 5h89.7V285h4.8c2.8 0 5 2.2 5 5s-2.2 5-5 5h-4.8v143.8H112.8V295H108c-2.8 0-5-2.2-5-5z"></path><path fill="#8E54FF" d="M108 295h127.6c-3.2 5.8-6.7 11.4-10.4 16.7-1.6 2.3-1 5.4 1.3 7 .9.6 1.9.9 2.8.9 1.6 0 3.1-.8 4.1-2.2 4.1-6 8-12.3 11.7-18.8 5.3 12.5 15.4 20.5 19.2 23.2.9.6 1.9.9 2.9.9 1.6 0 3.1-.7 4.1-2.1 1.6-2.3 1.1-5.4-1.2-7-3.1-2.2-11.3-8.7-15.6-18.5H384c2.8 0 5-2.2 5-5s-2.2-5-5-5H271.9c4.8-3.5 8-8 8.8-13.3.2-1.2 1.7-11.7-6.6-17.9-7.3-5.5-16.1-2.6-17.1-2.2-4 1.4-7 4.1-9.2 7.5-1.9-3.2-4.5-5.9-7.8-7.6-.9-.5-9.3-4.5-17.3 0-9 5.1-8.8 15.7-8.8 16.9.2 6.3 4 12.2 10 16.5H108c-2.8 0-5 2.2-5 5s2.2 5 5 5zm152.4-34s1.5-.5 3.4-.5c1.4 0 3.1.3 4.4 1.3 3.5 2.6 2.7 8.2 2.7 8.3-.8 5-7.8 10.7-19 11.4.2-1.6.3-3.2.3-4.9 1-6.8 3.5-13.9 8.2-15.6zm-32.7-.8c1.1-.6 2.2-.8 3.3-.8 2.4 0 4.5 1 4.5 1 4.4 2.2 6.6 8.9 6.7 15.6-.2 1.7-.3 3.4-.4 4.9 0 .2-.1.4-.1.6h-.2c-11.3-2.1-17.3-8.4-17.5-13.5 0 0-.1-5.6 3.7-7.8z"></path></svg>
                                     <div class="font-large"><b>3. File return</b></div>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@
                 <div class="return-content " [ngClass]="{'content-disabled': !isMonthSelected}">
                     <span class="btn-toolbar pull-right mrT1" *ngIf="(gstTransactionCounts$ | async)?.gstr2Transactions"> 
                 <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateToOverview('gstr2')"> View Summary </a> </span>
-                    <!-- <button id="ember1214" class="btn btn-default"> Categorize Now </button>
+                    <!-- <button class="btn btn-default"> Categorize Now </button>
         <a href="javascript:void(0)" class="btn btn-primary" (click)="fileNow('gstr1')"> File Now </a> </span> -->
                     <div>
                         <img src="{{imgPath}}bag.svg" class="icon gstr-icon text-middle" />
@@ -159,7 +159,7 @@
                         <div class="purchase-colm">
                             <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                             <div class="line"></div>
-                            <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b> {{(gstTransactionCounts$ | async)?.gstr2Transactions}} </b></span> <span>&nbsp;Transactions</span></a></div>
+                            <div class="count"><a (click)="navigateToOverview('gstr2')"><span class="font-xxxlarge"><b> {{(gstTransactionCounts$ | async)?.gstr2Transactions}} </b></span> <span>&nbsp;Transactions</span></a></div>
                         </div>
                         <div class="purchase-colm">
                             <div class="text-muted text-uppercase font-xs"><b>Uncategorized</b></div>
@@ -174,7 +174,7 @@
 
                     <!--   -->
                     <div class="content-graph" *ngIf="!(gstTransactionCounts$ | async)?.gstr2Transactions">
-                        <div id="ember4912" class="" [routerLink]="['/pages', 'purchase', 'create']">
+                        <div class="" [routerLink]="['/pages', 'purchase', 'create']">
                             <div class="row empty-return-row">
                                 <div class="col-md-3 col-sm-3 col-xs-3 text-center filing-steps cursor-pointer"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#444" d="M412.8 173.9c0-1.3-.5-2.6-1.5-3.6l-94.7-94.7c-1-1-2.3-1.5-3.6-1.5H131.5c-2.8 0-5 2.2-5 5v118.7c0 2.8 2.2 5 5 5s5-2.2 5-5V84.2h171.7v89.7c0 2.8 2.2 5 5 5h89.7v249H136.5V254.4c0-2.8-2.2-5-5-5s-5 2.2-5 5v178.4c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5V174.1c0-.1-.1-.1-.1-.2zm-94.7-5V91.2l77.6 77.6h-77.6z"></path><path fill="#00B177" d="M144.7 231.6c28.9 1.6 55.5 13.6 77 34.5 18.8 18.4 32.2 42.8 38.3 69.6l-18.8-11c-2.4-1.4-5.4-.6-6.8 1.8-1.4 2.4-.6 5.4 1.8 6.8l28.2 16.5c.8.5 1.7.7 2.5.7 1.7 0 3.4-.9 4.3-2.5l16.5-28.2c1.4-2.4.6-5.4-1.8-6.8-2.4-1.4-5.4-.6-6.8 1.8l-9.7 16.6c-6.7-27.8-20.9-53.2-40.6-72.4-23.2-22.7-52.1-35.6-83.4-37.4-14.4-.8-28.7.8-42.5 4.9-2.7.8-4.2 3.5-3.4 6.2.8 2.7 3.5 4.2 6.2 3.4 12.6-3.8 25.8-5.3 39-4.5z"></path></svg>
                                     <div class="font-large"><b>1. Create your transactions</b></div>

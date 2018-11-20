@@ -5,6 +5,23 @@
         <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
     </div>
 
+
+    <div class="gstr-reconciliations-summary" *ngIf="!isTransactionSummary && selectedGst === 'gstr2'">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-12 text-uppercase title">Reconciliation Details</div>
+                    <div class="transaction-info col-md-3 ember-view"><span style="color: #39c296;" class="font-xxlarge over-flow">{{(gstMatchedData$ | async)?.count}}</span> <br>Matched Transactions </div>
+                    <div class="transaction-info col-md-3 ember-view"><span style="color: #f75398;" class="font-xxlarge over-flow">{{(gstPartiallyMatchedData$ | async)?.count}}</span> <br>Mismatched Transactions </div>
+                    <div class="transaction-info col-md-3 ember-view"><span style="color: #b590ff;" class="font-xxlarge over-flow">{{(gstNotFoundOnGiddhData$ | async)?.count}}</span> <br> Missing in Giddh </div>
+                    <div class="transaction-info col-md-3 ember-view"><span style="color: #fa9c00;" class="font-xxlarge over-flow">{{(gstNotFoundOnPortalData$ | async)?.count}}</span> <br>Missing in GSTN </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr style="margin: 0" *ngIf="!isTransactionSummary && selectedGst === 'gstr2'">
+
     <div class="gstr-transactions-summary">
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
         <div id="ember1233" class="ember-view" *ngIf="(gstOverviewData$ | async) && (gstOverviewData$ | async)?.transactionSummary?.totalItems">
@@ -35,7 +52,7 @@
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let item of (gstOverviewData$ | async)?.transactionSummary.results">
-                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': !item.type}">
+                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
                             <td></td>
                             <td [ngSwitch]="true">
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
@@ -69,7 +86,11 @@
                                 </ng-container>
                                 <span style="margin-left: 5px;"> {{item?.name}}</span>
                             </td>
-                            <td class="text-center"><a href="javascript:void(0)"> {{ item?.transactions ? '-' : item?.totalTransactions}} </a>
+                            <td class="text-center" *ngIf="item.gstReturnType !== 'hsnsac' && item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
+                                <a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
+                            </td>
+                            <td class="text-center" *ngIf="item.gstReturnType === 'hsnsac' || item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
+                                -
                             </td>
                             <td class="text-right"> ₹{{item?.taxableAmount | number: '1.2-2'}}
                             </td>
