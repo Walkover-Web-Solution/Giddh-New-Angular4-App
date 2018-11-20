@@ -4,7 +4,9 @@ const KEY_CODE_CONSTANTS = {
   ENTER: 13,
   SPACE: 32,
   BACKSPACE: 8,
-  ESC: 27
+  ESC: 27,
+  ARROW_DOWN: 40,
+  ARROW_UP: 38
 };
 
 @Directive({
@@ -29,7 +31,8 @@ export class OnReturnDirective {
 
   @HostListener('keydown', ['$event'])
   public onKeyDown(e: any) {
-    if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC)) {
+    // tslint:disable-next-line:max-line-length
+    if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC) || (e.which === KEY_CODE_CONSTANTS.ARROW_DOWN || e.keyCode === KEY_CODE_CONSTANTS.ARROW_DOWN) || (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.keyCode === KEY_CODE_CONSTANTS.ARROW_UP)) {
       const selectedEle = e.target;
       const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
       const nodeList = Array.from(allElements);
@@ -160,16 +163,22 @@ export class OnReturnDirective {
         }
       } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
 
-        selectedEle.value = '';
-        // selectedEle.blur();
-        if (selectedEle.classList.contains('focus-prev-field-on-esc')) {
-          allElements[indx - 1].focus();
-        } else {
-          allElements[0].focus();
+        let b: any = window.document.getElementById('get-grid-type').getAttribute('data-gridType');
+
+        if (b === 'invoice') {
+          let invDateField: any = nodeList.find((ele: any) => ele.classList.contains('invoice-date-field'));
+          invDateField.focus();
+        } else if (b === 'voucher') {
+          let vouDateField: any = nodeList.find((ele: any) => ele.classList.contains('voucher-date-field'));
+          vouDateField.focus();
         }
+
         return setTimeout(() => {
           selectedEle.focus();
-        }, 200);
+        }, 100);
+      } else if (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.which === KEY_CODE_CONSTANTS.ARROW_DOWN) {
+        selectedEle.value = '';
+        return selectedEle.setAttribute('data-changed', true);
       }
     } else if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode >= 65 && e.keyCode <= 90) {
 
