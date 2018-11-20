@@ -95,9 +95,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
 
     this.store.select(p => p.receipt.voucher).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o && o.voucherDetails) {
-        this.showEditButton = o.voucherDetails.uniqueName ? true : false;
-        // this.showEditButton = true;
+        // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
+        this.showEditButton = true;
         this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
+      } else {
+        this.showEditButton = false;
       }
     });
   }
