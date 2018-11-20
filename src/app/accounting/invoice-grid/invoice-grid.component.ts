@@ -911,7 +911,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.currentSelectedValue = '';
       this.showLedgerAccountList = true;
       this.filterByText = '';
-    }, 200);
+    }, 10);
   }
 
   public onPartyAccBlur() {

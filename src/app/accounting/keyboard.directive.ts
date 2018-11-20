@@ -163,12 +163,12 @@ export class OnReturnDirective {
         }
       } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
 
-        let b: any = window.document.getElementById('get-grid-type').getAttribute('data-gridType');
+        let gridType: any = window.document.getElementById('get-grid-type').getAttribute('data-gridType');
 
-        if (b === 'invoice') {
+        if (gridType === 'invoice') {
           let invDateField: any = nodeList.find((ele: any) => ele.classList.contains('invoice-date-field'));
           invDateField.focus();
-        } else if (b === 'voucher') {
+        } else if (gridType === 'voucher') {
           let vouDateField: any = nodeList.find((ele: any) => ele.classList.contains('voucher-date-field'));
           vouDateField.focus();
         }
@@ -177,8 +177,10 @@ export class OnReturnDirective {
           selectedEle.focus();
         }, 100);
       } else if (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.which === KEY_CODE_CONSTANTS.ARROW_DOWN) {
-        selectedEle.value = '';
-        return selectedEle.setAttribute('data-changed', true);
+        if (selectedEle.getAttribute('data-changed') === 'false') {
+          selectedEle.value = '';
+          return selectedEle.setAttribute('data-changed', true);
+        }
       }
     } else if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode >= 65 && e.keyCode <= 90) {
 
