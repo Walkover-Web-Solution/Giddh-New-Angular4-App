@@ -1,4 +1,4 @@
-<div id="ember2408" class="fill body scroll-y noscroll-x scrollbox ember-view">
+<div class="fill body scroll-y noscroll-x scrollbox">
     <div class="filter-band">
         <div class="row font-small">
             <div class="col-md-12">
@@ -7,7 +7,7 @@
                         <svg style="top: 3px;position: relative;" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-sm text-top"><path d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"></path></svg>Back
                     </a>
                 </div>
-                <div class="filter-row ember-view">
+                <div class="filter-row">
                     <div class="name">Transaction Type: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -20,7 +20,7 @@
                     </div>
                 </div>
 
-                <div class="filter-row ember-view" *ngIf="filterParam.entityType !== 'invoices' || !filterParam.entityType">
+                <div class="filter-row" *ngIf="filterParam.entityType !== 'invoices' || !filterParam.entityType">
                     <div class="name">{{selectedFilter?.entityType}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -34,7 +34,7 @@
                 </div>
 
 
-                <div class="filter-row ember-view" *ngIf="filterParam.entityType === 'invoices'">
+                <div class="filter-row" *ngIf="filterParam.entityType === 'invoices'">
                     <div class="name">{{selectedFilter?.entityType}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="filter-row ember-view">
+                <div class="filter-row">
                     <div class="name">Status: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -61,14 +61,14 @@
                 </div>
 
                 <!-- commented due to not avail in API
-                <div id="ember2441" class="filter-row ember-view">
+                <div  class="filter-row">
                     <div class="name">Action on GSTN: </div>
                     <div class="filter"><button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle "> All <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a data-ember-action="" data-ember-action-2442="2442">All</a></li>
-                            <li><a data-ember-action="" data-ember-action-2443="2443">To be Added</a></li>
-                            <li><a data-ember-action="" data-ember-action-2444="2444">To be Updated</a></li>
-                            <li><a data-ember-action="" data-ember-action-2445="2445">To be Deleted</a></li>
+                            <li><a>All</a></li>
+                            <li><a>To be Added</a></li>
+                            <li><a>To be Updated</a></li>
+                            <li><a>To be Deleted</a></li>
                         </ul>
                     </div>
                 </div>
@@ -77,86 +77,86 @@
         </div>
     </div>
     <div class="table-responsive scroll-x">
-        <table class="transactions-table table-striped  table zi-table table-hover ember-view" *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems">
+        <table class="transactions-table table-striped  table zi-table table-hover" *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems">
             <thead>
                 <tr>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Invoice Date
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Invoice #
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Customer GSTIN
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Customer Name
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Status
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Action on GSTN
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class="pull-left over-flow"> Place of supply
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-left ember-view">
+                    <th style="" class="text-left">
                         <div style="position: relative">
                             <div class=" over-flow"> Reverse Charge
                             </div>
                         </div>
                     </th>
-                    <th style="" class="text-right ember-view">
+                    <th style="" class="text-right">
                         <div style="position: relative">
                             <div class=" over-flow"> Taxable Amount
                             </div>
                         </div>
                     </th>
 
-                    <th style="" class="text-right ember-view">
+                    <th style="" class="text-right">
                         <div style="position: relative">
                             <div class=" over-flow"> IGST
                             </div>
                         </div>
                     </th>
 
-                    <th style="" class="text-right ember-view">
+                    <th style="" class="text-right">
                         <div style="position: relative">
                             <div class=" over-flow"> SGST
                             </div>
                         </div>
                     </th>
 
-                    <th style="" class="text-right ember-view">
+                    <th style="" class="text-right">
                         <div style="position: relative">
                             <div class=" over-flow"> CESS
                             </div>
                         </div>
                     </th>
 
-                    <th style="" class="text-right ember-view">
+                    <th style="" class="text-right">
                         <div style="position: relative">
                             <div class=" over-flow"> Total Amount
                             </div>
