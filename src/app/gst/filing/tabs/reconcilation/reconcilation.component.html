@@ -4,8 +4,8 @@
         <!---->
         <div class="column list-column expanded-list-column transactions-list">
             <div class="scroll-y noscroll-x body fill">
-                <div class="sub-filter-nav-band reconciliation-type-band">
-                    <tabset #staticTabs id="">
+                <div class="reconciliation-type-band">
+                    <tabset class="sub-filter-nav-band " #staticTabs id="">
                         <tab (select)="reconcileTabChanged('NOT_ON_PORTAL')">
                             <ng-template tabHeading>
                                 Missing in GSTN <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count + ')'}}</span>
@@ -127,7 +127,7 @@
                             </ng-container>
                             <ng-container *ngIf="!(gstNotFoundOnPortalData$ | async)?.count">
                                 <div class="filings-empty-state">
-                                    <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                                    <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                                     <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span></div>
                                 </div>
                             </ng-container>
@@ -258,7 +258,7 @@
 
                             <ng-container *ngIf="!(gstNotFoundOnGiddhData$ | async)?.count">
                                 <div class="filings-empty-state">
-                                    <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                                    <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                                     <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span></div>
                                 </div>
                             </ng-container>
@@ -388,7 +388,7 @@
 
                             <ng-container *ngIf="!(gstPartiallyMatchedData$ | async)?.count">
                                 <div class="filings-empty-state">
-                                    <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                                    <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                                     <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span></div>
                                 </div>
                             </ng-container>
@@ -400,7 +400,7 @@
                             </ng-template>
 
                             <div class="filings-empty-state">
-                                <img src="../assets/images/nofound.svg" [style.max-width.px]="110" />
+                                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                                 <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span></div>
                             </div>
                         </tab>

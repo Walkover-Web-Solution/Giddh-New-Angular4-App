@@ -1,3 +1,7 @@
 .nav.nav-tabs {
     background: #fff !important;
 }
+
+.push-gstin .nav.nav-tabs>li:last-child {
+    float: right;
+}
