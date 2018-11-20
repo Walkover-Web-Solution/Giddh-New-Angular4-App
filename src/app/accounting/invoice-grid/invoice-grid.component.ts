@@ -338,8 +338,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockItemBlur(ev, elem) {
-    this.selectedInput = elem;
-    this.showLedgerAccountList = false;
+    // this.selectedInput = elem;
+    // this.showLedgerAccountList = false;
     // if (!this.stockSearch) {
     //   this.searchStock('');
     //   this.stockSearch = '';
@@ -910,7 +910,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.currentSelectedValue = '';
       this.showLedgerAccountList = true;
-    }, 10);
+      this.filterByText = '';
+    }, 200);
   }
 
   public onPartyAccBlur() {

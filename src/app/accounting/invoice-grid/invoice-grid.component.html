@@ -5,7 +5,7 @@
         <span class="btn label isActive">{{data.voucherType}}</span>
         <div class="pull-right text-right mrB1">
           <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate"
-                 name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right"/> {{
+                 name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right invoice-date-field"/> {{
           displayDay }}
         </div>
       </div>
@@ -35,24 +35,24 @@
       <!-- party acc name -->
       <div class="mx-350 clearfix form-inline mrB">
         <div class="form-group">
-          <label>Party A/c Name:<sup>*</sup></label>
+          <label>Party A/c Name: <sup>*</sup></label>
           <!-- #creditor -->
           <input #partyAccNameInputField name="party_name" type="text" onReturn placeholder="Party account"
-                 class="form-control max-height28 appearance_none upper-fields focus-prev-field-on-esc" 
+                 class="form-control max-height28 appearance_none upper-fields" 
                  (keyup)="searchAccount($event?.target?.value)"
                  (keydown)="detectKey($event)" [(ngModel)]="creditorAcc.name"
-                 (focus)="onPartyAccFocus();selectedField='account';focusedField = 'partyAcc'"
-                 (blur)="onPartyAccBlur();selectedField=null;focusedField = null" style="max-width:200px"/>
+                 (focus)="onPartyAccFocus();selectedField='account';focusedField = 'partyAcc';"
+                 (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''" style="max-width:200px;"/>
         </div>
         <!-- [hidden]="!isPurchaseInvoiceSelected" -->
         <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
           <label>Ledger name:<sup>*</sup></label>
           <input name="ledger_name" type="text" onReturn placeholder="Ledger name"
-                 class="form-control max-height28 appearance_none upper-fields focus-prev-field-on-esc" style="max-width:200px"
+                 class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="debtorAcc.name"
-                 (focus)="onPartyAccFocus();selectedField='account';focusedField = 'ledgerName'"
-                 (blur)="onPartyAccBlur();selectedField=null; focusedField = null"/>
+                 (focus)="onPartyAccFocus();selectedField='account';focusedField = 'ledgerName';"
+                 (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''"/>
         </div>
       </div>
       <!-- /party acc name -->
@@ -93,8 +93,8 @@
                              [(ngModel)]="transaction.inventory.stock.name"
                              (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
                              [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
-                             (focus)="onStockFocus(i)"
-                             (blur)="filterByText = ''"
+                             (focus)="onPartyAccBlur();onStockFocus(i)"
+                             (blur)="onStockItemBlur($event, qty);filterByText = ''"
                              (keydown)="detectKey($event)"/></td>
                   <td>
                     <input onReturn type="text" class="form-control text-right" #qty
