@@ -190,7 +190,12 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
       switch (this.actionToPerform) {
         case 'DeleteAddedBank':
-          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId));
+          let deleteWithAccountId = true;
+          if (this.selectedAccount.status !== 'ALREADY_ADDED') {
+            accountId = this.selectedAccount.providerAccount.providerAccountId;
+            deleteWithAccountId = false;
+          }
+          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
           break;
         case 'UpdateDate':
           this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(this.dateToUpdate, accountId));

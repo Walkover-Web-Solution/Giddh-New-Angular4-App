@@ -2,57 +2,57 @@
     <!---->
     <h4 class="clearfix gstr-summary-title">B2C (Small) Details</h4>
     <p style="padding-top:6px;" class="text-muted half">Details of invoices with value less than 2.5 lakhs that you’ve issued to consumers other than B2C (Large) transactions.</p>
-    <div id="ember1945" class="ember-view">
+    <div class="">
         <div *ngIf="!(b2csSummaryInProgress$ | async)">
-            <table id="ember1946" class="transactions-table table-striped  table zi-table  ember-view" *ngIf="(b2csSummaryResponse$ | async) && (b2csSummaryResponse$ | async)?.results?.length">
+            <table class="transactions-table table-striped  table zi-table  " *ngIf="(b2csSummaryResponse$ | async) && (b2csSummaryResponse$ | async)?.results?.length">
                 <thead>
                     <tr>
                         <!---->
-                        <th style="" id="ember1947" class="  text-left ember-view">
+                        <th style="" class="  text-left ">
                             <div style="position: relative">
                                 <div class="pull-left over-flow"> Type </div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" id="ember1948" class="text-right ember-view">
+                        <th style="" class="text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> Rate </div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" id="ember1949" class="  ember-view">
+                        <th style="" class="  ">
                             <div style="position: relative">
                                 <div class=" over-flow"> Place of Supply </div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" id="ember1950" class="  text-right ember-view">
+                        <th style="" class="  text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> Taxable Amount </div>
                                 <!---->
                             </div>
                         </th>
 
-                        <th style="" id="ember1950" class="  text-right ember-view">
+                        <th style="" class="  text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> IGST Amount </div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" id="ember1950" class="  text-right ember-view">
+                        <th style="" class="  text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> CGST Amount </div>
                                 <!---->
                             </div>
                         </th>
 
-                        <th style="" id="ember1950" class="  text-right ember-view">
+                        <th style="" class="  text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> SGST Amount </div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" id="ember1950" class="  text-right ember-view">
+                        <th style="" class="  text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> CESS </div>
                                 <!---->

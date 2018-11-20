@@ -11,10 +11,10 @@
             <div class="col-md-10">
                 <div class="row">
                     <div class="col-md-12 text-uppercase title">Reconciliation Details</div>
-                    <div class="transaction-info col-md-3 ember-view"><span style="color: #39c296;" class="font-xxlarge over-flow">{{(gstMatchedData$ | async)?.count}}</span> <br>Matched Transactions </div>
-                    <div class="transaction-info col-md-3 ember-view"><span style="color: #f75398;" class="font-xxlarge over-flow">{{(gstPartiallyMatchedData$ | async)?.count}}</span> <br>Mismatched Transactions </div>
-                    <div class="transaction-info col-md-3 ember-view"><span style="color: #b590ff;" class="font-xxlarge over-flow">{{(gstNotFoundOnGiddhData$ | async)?.count}}</span> <br> Missing in Giddh </div>
-                    <div class="transaction-info col-md-3 ember-view"><span style="color: #fa9c00;" class="font-xxlarge over-flow">{{(gstNotFoundOnPortalData$ | async)?.count}}</span> <br>Missing in GSTN </div>
+                    <div class="transaction-info col-md-3 "><span style="color: #39c296;" class="font-xxlarge over-flow">{{(gstMatchedData$ | async)?.count}}</span> <br>Matched Transactions </div>
+                    <div class="transaction-info col-md-3 "><span style="color: #f75398;" class="font-xxlarge over-flow">{{(gstPartiallyMatchedData$ | async)?.count}}</span> <br>Mismatched Transactions </div>
+                    <div class="transaction-info col-md-3 "><span style="color: #b590ff;" class="font-xxlarge over-flow">{{(gstNotFoundOnGiddhData$ | async)?.count}}</span> <br> Missing in Giddh </div>
+                    <div class="transaction-info col-md-3 "><span style="color: #fa9c00;" class="font-xxlarge over-flow">{{(gstNotFoundOnPortalData$ | async)?.count}}</span> <br>Missing in GSTN </div>
                 </div>
             </div>
         </div>
@@ -24,11 +24,11 @@
 
     <div class="gstr-transactions-summary">
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
-        <div id="ember1233" class="ember-view" *ngIf="(gstOverviewData$ | async) && (gstOverviewData$ | async)?.transactionSummary?.totalItems">
+        <div class="" *ngIf="(gstOverviewData$ | async) && (gstOverviewData$ | async)?.transactionSummary?.totalItems">
             <table class="table table-striped transactions-table transactions-summary-table" *ngIf="!(gstOverviewDataInProgress$ | async)">
                 <thead>
                     <tr class="text-uppercase">
-                        <th width="20px"></th>
+                        <!-- <th width="20px"></th> -->
                         <th width="25%"> Description </th>
                         <th width="15%" class="text-center">
                             <div class="rates"> Total Transactions </div>
@@ -53,7 +53,7 @@
                 <tbody>
                     <ng-container *ngFor="let item of (gstOverviewData$ | async)?.transactionSummary.results">
                         <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
-                            <td></td>
+                            <!-- <td></td> -->
                             <td [ngSwitch]="true">
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
                                     <img src="{{imgPath}}b2b.svg" class="icon text-bottom" />
@@ -106,7 +106,7 @@
 
                         <ng-container *ngFor="let item of item?.transactions">
                             <tr (click)="viewTransactions(item)" class="row-hover secondary-row">
-                                <td></td>
+                                <!-- <td></td> -->
                                 <td>
                                     <div class="secondary-row "> {{item?.name}}</div>
                                 </td>

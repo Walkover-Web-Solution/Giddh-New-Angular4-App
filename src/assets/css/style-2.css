@@ -5926,7 +5926,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     border-top: 1px solid #ededed;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:nth-child(2) {
+.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:nth-child(1) {
     padding-left: 50px;
 }
 

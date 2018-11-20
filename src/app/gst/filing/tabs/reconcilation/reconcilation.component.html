@@ -11,58 +11,58 @@
                                 Missing in GSTN <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count + ')'}}</span>
                             </ng-template>
                             <ng-container *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
-                                <table id="" class="table zi-table table-fixed reconciliations-table table-hover ember-view" *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
+                                <table id="" class="table zi-table table-fixed reconciliations-table table-hover " *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
                                     <thead>
                                         <tr>
-                                            <th id="" class="cursor-pointer bulk-selection-cell ember-view"><input type="checkbox" id="2" class="cursor-pointer ember-checkbox ember-view"></th>
-                                            <th style="width:250px" id="" class="  text-left ember-view">
+                                            <th id="" class="cursor-pointer bulk-selection-cell "><input type="checkbox" id="2" class="cursor-pointer "></th>
+                                            <th style="width:250px" id="" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow"> Vendor Details </div>
                                                 </div>
                                             </th>
-                                            <th style="width:155px" id="" class="  text-left ember-view">
+                                            <th style="width:155px" id="" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow"> Transaction Date </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:130px" id="" class="  text-left ember-view">
+                                            <th style="width:130px" id="" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow"> Place of Supply </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:140px" id="" class="  text-right ember-view">
+                                            <th style="width:140px" id="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable Amount </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="" class="  text-right ember-view">
+                                            <th style="" id="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="" class="  text-right ember-view">
+                                            <th style="" id="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="" class="  text-right ember-view">
+                                            <th style="" id="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="" class="  text-right ember-view">
+                                            <th style="" id="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="" class="  text-right ember-view">
+                                            <th style="" id="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount </div>
                                                     <!---->
@@ -73,8 +73,8 @@
                                     </thead>
                                     <tbody>
                                         <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.data?.results">
-                                            <tr id="" class="cursor-pointer ember-view">
-                                                <td id="" class="cursor-pointer bulk-selection-cell ember-view"><input type="checkbox" id="" class="cursor-pointer ember-checkbox ember-view"></td>
+                                            <tr id="" class="cursor-pointer ">
+                                                <td id="" class="cursor-pointer bulk-selection-cell "><input type="checkbox" id="" class="cursor-pointer "></td>
                                                 <td class="primary-details">
                                                     <div style="white-space: nowrap;"> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoiceNumber}})</span>
                                                     </div>
@@ -82,41 +82,41 @@
                                                 <div class="actions-dropdown">
                                                     <div data-toggle="dropdown" class="btn btn-xs actions-dropdown-btn dropdown-toggle"> Actions <span class="caret"></span></div>
                                                     <ul class="dropdown-menu">
-                                                        <li><a data-ember-action="" data-ember-action-3945="3945">Create &amp; Match</a></li>
-                                                        <li><a data-ember-action="" data-ember-action-3946="3946">Reject</a></li>
-                                                        <li><a data-ember-action="" data-ember-action-3947="3947">Mark as Pending</a></li>
+                                                        <li><a>Create &amp; Match</a></li>
+                                                        <li><a>Reject</a></li>
+                                                        <li><a>Mark as Pending</a></li>
                                                     </ul>
                                                 </div> -->
                                                 </td>
-                                                <td id="" class="ember-view">
+                                                <td id="" class="">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{ item.invoiceDate }} </div>
                                                 </td>
-                                                <td id="" class="ember-view">
+                                                <td id="" class="">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{item.placeOfSupply}} ({{item.stateCode}}) </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.taxableAmount | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.igst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{item.cgst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.sgst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.cess | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.grandTotal | number: '1.2-2'}} </div>
                                                 </td>
@@ -138,59 +138,59 @@
                             </ng-template>
 
                             <ng-container *ngIf="(gstNotFoundOnGiddhData$ | async)?.count">
-                                <table id="" class="table zi-table table-fixed reconciliations-table table-hover ember-view">
+                                <table id="" class="table zi-table table-fixed reconciliations-table table-hover ">
                                     <thead>
                                         <tr>
-                                            <th id="" class="cursor-pointer bulk-selection-cell ember-view"><input type="checkbox" id="2" class="cursor-pointer ember-checkbox ember-view"></th>
-                                            <th style="width:250px" id="ember3940" class="  text-left ember-view">
+                                            <th id="" class="cursor-pointer bulk-selection-cell "><input type="checkbox" id="2" class="cursor-pointer "></th>
+                                            <th style="width:250px" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow"> Vendor Details </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:155px" id="5" class="  text-left ember-view">
+                                            <th style="width:155px" id="5" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow"> Transaction Date </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:130px" id="6" class="  text-left ember-view">
+                                            <th style="width:130px" id="6" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow"> Place of Supply </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:140px" id="7" class="  text-right ember-view">
+                                            <th style="width:140px" id="7" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable Amount </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="8" class="  text-right ember-view">
+                                            <th style="" id="8" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="9" class="  text-right ember-view">
+                                            <th style="" id="9" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember3920" class="  text-right ember-view">
+                                            <th style="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember3921" class="  text-right ember-view">
+                                            <th style="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember3922" class="  text-right ember-view">
+                                            <th style="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount </div>
                                                     <!---->
@@ -201,8 +201,8 @@
                                     </thead>
                                     <tbody>
                                         <ng-container *ngFor="let item of (gstNotFoundOnGiddhData$ | async)?.data?.results">
-                                            <tr id="" class="cursor-pointer ember-view">
-                                                <td id="" class="cursor-pointer bulk-selection-cell ember-view"><input type="checkbox" id="" class="cursor-pointer ember-checkbox ember-view"></td>
+                                            <tr id="" class="cursor-pointer ">
+                                                <td id="" class="cursor-pointer bulk-selection-cell "><input type="checkbox" id="" class="cursor-pointer "></td>
                                                 <td class="primary-details">
                                                     <div style="white-space: nowrap;"> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoiceNumber}})</span>
                                                     </div>
@@ -210,41 +210,41 @@
                                                 <div class="actions-dropdown">
                                                     <div data-toggle="dropdown" class="btn btn-xs actions-dropdown-btn dropdown-toggle"> Actions <span class="caret"></span></div>
                                                     <ul class="dropdown-menu">
-                                                        <li><a data-ember-action="" data-ember-action-3945="3945">Create &amp; Match</a></li>
-                                                        <li><a data-ember-action="" data-ember-action-3946="3946">Reject</a></li>
-                                                        <li><a data-ember-action="" data-ember-action-3947="3947">Mark as Pending</a></li>
+                                                        <li><a>Create &amp; Match</a></li>
+                                                        <li><a>Reject</a></li>
+                                                        <li><a>Mark as Pending</a></li>
                                                     </ul>
                                                 </div> -->
                                                 </td>
-                                                <td id="" class="ember-view">
+                                                <td id="" class="">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{ item.invoiceDate }} </div>
                                                 </td>
-                                                <td id="" class="ember-view">
+                                                <td id="" class="">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{item.placeOfSupply}} ({{item.stateCode}}) </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.taxableAmount | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.igst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{item.cgst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.sgst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.cess | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.grandTotal | number: '1.2-2'}} </div>
                                                 </td>
@@ -270,59 +270,59 @@
                             </ng-template>
                             <ng-container *ngIf="(gstPartiallyMatchedData$ | async)?.count">
 
-                                <table id="" class="table zi-table table-fixed reconciliations-table table-hover ember-view" *ngIf="(gstPartiallyMatchedData$ | async)?.count">
+                                <table id="" class="table zi-table table-fixed reconciliations-table table-hover " *ngIf="(gstPartiallyMatchedData$ | async)?.count">
                                     <thead>
                                         <tr>
-                                            <th id="1" class="cursor-pointer bulk-selection-cell ember-view"><input type="checkbox" id="2" class="cursor-pointer ember-checkbox ember-view"></th>
-                                            <th style="width:250px" id="4" class="  text-left ember-view">
+                                            <th id="1" class="cursor-pointer bulk-selection-cell "><input type="checkbox" id="2" class="cursor-pointer "></th>
+                                            <th style="width:250px" id="4" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow"> Vendor Details </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:155px" id="5" class="  text-left ember-view">
+                                            <th style="width:155px" id="5" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow"> Transaction Date </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:130px" id="6" class="  text-left ember-view">
+                                            <th style="width:130px" id="6" class="  text-left ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow"> Place of Supply </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="width:140px" id="7" class="  text-right ember-view">
+                                            <th style="width:140px" id="7" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable Amount </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="8" class="  text-right ember-view">
+                                            <th style="" id="8" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="9" class="  text-right ember-view">
+                                            <th style="" id="9" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember3920" class="  text-right ember-view">
+                                            <th style="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember3921" class="  text-right ember-view">
+                                            <th style="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember3922" class="  text-right ember-view">
+                                            <th style="" class="  text-right ">
                                                 <div style="position: relative">
                                                     <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount </div>
                                                     <!---->
@@ -333,8 +333,8 @@
                                     </thead>
                                     <tbody>
                                         <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.data?.results">
-                                            <tr id="" class="cursor-pointer ember-view">
-                                                <td id="" class="cursor-pointer bulk-selection-cell ember-view"><input type="checkbox" id="" class="cursor-pointer ember-checkbox ember-view"></td>
+                                            <tr id="" class="cursor-pointer ">
+                                                <td id="" class="cursor-pointer bulk-selection-cell "><input type="checkbox" id="" class="cursor-pointer "></td>
                                                 <td class="primary-details">
                                                     <div style="white-space: nowrap;"> {{item.ctin}}<span class="text-muted font-xxs"> ({{item.invoiceNumber}})</span>
                                                     </div>
@@ -342,41 +342,41 @@
                                                 <div class="actions-dropdown">
                                                     <div data-toggle="dropdown" class="btn btn-xs actions-dropdown-btn dropdown-toggle"> Actions <span class="caret"></span></div>
                                                     <ul class="dropdown-menu">
-                                                        <li><a data-ember-action="" data-ember-action-3945="3945">Create &amp; Match</a></li>
-                                                        <li><a data-ember-action="" data-ember-action-3946="3946">Reject</a></li>
-                                                        <li><a data-ember-action="" data-ember-action-3947="3947">Mark as Pending</a></li>
+                                                        <li><a>Create &amp; Match</a></li>
+                                                        <li><a>Reject</a></li>
+                                                        <li><a>Mark as Pending</a></li>
                                                     </ul>
                                                 </div> -->
                                                 </td>
-                                                <td id="" class="ember-view">
+                                                <td id="" class="">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{ item.invoiceDate }} </div>
                                                 </td>
-                                                <td id="" class="ember-view">
+                                                <td id="" class="">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{item.placeOfSupply}} ({{item.stateCode}}) </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.taxableAmount | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.igst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> {{item.cgst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.sgst | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.cess | number: '1.2-2'}} </div>
                                                 </td>
-                                                <td id="" class="text-right ember-view">
+                                                <td id="" class="text-right ">
                                                     <div> - </div>
                                                     <div class="unrecognized-value"> ₹{{item.grandTotal | number: '1.2-2'}} </div>
                                                 </td>
