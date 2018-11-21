@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 import { TallyModuleService } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { setTimeout } from 'timers';
@@ -8,7 +8,7 @@ import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
@@ -26,6 +26,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { TaxResponse } from 'app/models/api-models/Company';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},
@@ -118,10 +119,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
   public isPurchaseInvoiceSelected: boolean = false; // need to show `Ledger name` field in purchase
   public asideMenuStateForProductService: string = 'out';
+  public companyTaxesList$: Observable<TaxResponse[]>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
   private selectedStockInputField: any;
+  private taxesToRemember: any[] = [];
 
   constructor(
     private _accountService: AccountService,
@@ -199,6 +202,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       }
     });
 
+    this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -212,6 +216,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.refreshEntry();
         this.data.description = '';
         this.dateField.nativeElement.focus();
+        this.taxesToRemember = [];
       }
     });
     this.entryDate = moment().format(GIDDH_DATE_FORMAT);
@@ -381,13 +386,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (this.accountType === 'creditor') {
         setTimeout(() => {
           if (this.focusedField === 'ledgerName') {
-            console.log('ledgerName');
             this.debtorAcc = acc;
           } else if (this.focusedField === 'partyAcc') {
-            console.log('partyAcc');
             this.creditorAcc = acc;
-          } else {
-            console.log('No condition passed.');
           }
         }, 10);
         return this.accountType = null;
@@ -859,7 +860,46 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public onItemSelected(ev: IOption) {
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
+      setTimeout(() => {
+        let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount.UniqueName === ev.value);
+        let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
+        if (indexInTaxesToRemember > -1 && accIndx > -1) {
+          let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
+          this.accountsTransaction[accIndx].rate = rate;
+          this.calculateRate(accIndx, rate);
+        }
+      }, 100);
     } else if (this.selectedField === 'stock') {
+      let stockUniqueName = ev.value;
+      let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
+      if (taxIndex === -1 ) {
+        this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
+          if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
+            this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
+              stockFullDetails.body.taxes.forEach((tax: string) => {
+                let selectedTax = taxes.find((t) => t.uniqueName === tax);
+                let taxTotalValue = 0;
+                if (selectedTax) {
+                  selectedTax.taxDetail.forEach((st) => {
+                    taxTotalValue += st.taxValue;
+                  });
+                }
+                let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
+                if (taxIndx === -1) {
+                  this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue  });
+                }
+              });
+            });
+          }
+
+          // this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
+          //   console.log('TaxResponse areee :', taxes);
+          //   taxes.find((tax) => tax.uniqueName === );
+          //   this.taxesToRemember.push({ stockUniqueName, taxValue:   });
+          // });
+        });
+      }
+
       this.onSelectStock(ev.additional);
     } else if (this.selectedField === 'partyAcc') {
       this.setAccount(ev.additional);
