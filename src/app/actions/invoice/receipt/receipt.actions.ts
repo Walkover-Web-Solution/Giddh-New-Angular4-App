@@ -10,6 +10,7 @@ import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
 import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher, DownloadVoucherRequest } from '../../../models/api-models/recipt';
+import { INVOICE_ACTIONS } from '../invoice.const';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -152,6 +153,13 @@ export class InvoiceReceiptActions {
   public VoucherPreviewResponse(response) {
      return {
       type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE,
+      payload: response
+    };
+  }
+
+  public GenerateVoucher(response) {
+     return {
+      type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: response
     };
   }

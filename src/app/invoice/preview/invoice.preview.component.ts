@@ -237,7 +237,10 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.getVoucherCount++;
         if (this.getVoucherCount > 1) {
           this.universalDate = _.cloneDeep(dateObj);
-          this.invoiceSearchRequest.dateRange = this.universalDate;
+          // this.invoiceSearchRequest.dateRange = this.universalDate;
+          this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
+          this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
+
           this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
           this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
           this.isUniversalDateApplicable = true;

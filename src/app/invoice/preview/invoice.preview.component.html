@@ -2,8 +2,8 @@
     <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
 
         <div class="form-group mrR1">
-            <label class="d-block" *ngIf="selectedVoucher === 'sales' && selectedVoucher === 'recurring'">Invoice No.</label>
-            <label class="d-block" *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'recurring'">Voucher No.</label>
+            <label class="d-block" *ngIf="selectedVoucher === 'sales'">Invoice No.</label>
+            <label class="d-block" *ngIf="selectedVoucher !== 'sales'">Voucher No.</label>
             <input type="text" class="form-control" name="invoiceNumber" placeholder="By Invoice Number" [(ngModel)]="invoiceSearchRequest.invoiceNumber">
         </div>
 
@@ -42,7 +42,7 @@
         <div class="form-group mrR1">
             <label class="d-block">From - To</label>
             <div class="input-group">
-                <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" />
+                <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
                 <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
             </div>
         </div>
