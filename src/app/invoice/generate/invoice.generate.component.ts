@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -45,6 +45,8 @@ const COMPARISON_FILTER = [
 export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public showFromDatePicker: boolean = false;
@@ -68,6 +70,54 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   public endDate: Date;
   public selectedVoucher: string = 'invoice';
   public isGenerateInvoice: boolean = true;
+  public datePickerOptions: any = {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -155,6 +205,8 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
+        this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
       }
@@ -314,10 +366,11 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     if (this.universalDate && this.universalDate.length) {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-    } else {
-      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
+    // else {
+    //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    //   toDate = moment().format(GIDDH_DATE_FORMAT);
+    // }
     return {
       from: this.isUniversalDateApplicable ? fromDate : o.from,
       to: this.isUniversalDateApplicable ? toDate : o.to,
@@ -329,8 +382,8 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
 
   public bsValueChange(event: any) {
     if (event) {
-      this.ledgerSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
-      this.ledgerSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+      this.ledgerSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      this.ledgerSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
     }
   }
 

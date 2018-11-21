@@ -17,6 +17,9 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesService } from 'app/services/sales.service';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
+import { LedgerActions } from 'app/actions/ledger/ledger.actions';
+import { ReciptRequest } from 'app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
 const THEAD = [
   {
@@ -117,7 +120,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private invoiceService: InvoiceService,
     private salesService: SalesService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _ledgerActions: LedgerActions,
+    private receiptActions: InvoiceReceiptActions
   ) {
     this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
   }
@@ -299,50 +304,32 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     let accountUniqueName = this.invFormData.accountDetails.uniqueName;
     if (accountUniqueName) {
-      // if (this.isGenerateInvoice) {
-      //   model.invoice = data;
-      // } else {
-        model.voucher = data;
-        model.voucher.entries = model.voucher.entries.map((entry) => {
-          entry.voucherType = this.selectedVoucher;
-          return entry;
-        });
-        // model.voucher.accountDetails = _.cloneDeep(model.voucher.account);
-        // set voucher type
-        model.voucher.voucherDetails = {};
-        model.voucher.voucherDetails.voucherType = this.selectedVoucher;
 
-      // }
+      model.voucher = data;
+      model.voucher.entries = model.voucher.entries.map((entry) => {
+        entry.voucherType = this.selectedVoucher;
+        return entry;
+      });
+
+      model.voucher.voucherDetails.voucherType = this.selectedVoucher;
+
       model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
       model.validateTax = true;
       model.updateAccountDetails = this.updtFlag;
-      // if (this.isGenerateInvoice) {
-      //   if (this.updateMode) {
-      //     this.store.dispatch(this.invoiceActions.UpdateGeneratedInvoice(accountUniqueName, model));
-      //   } else {
-      //     this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
-      //   }
-      // } else {
 
-        this.salesService.generateGenericItem(model).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, any>) => {
-          if (response.status === 'success') {
-            // reset form and other
-            if (this.updateMode) {
-              this._toasty.successToast('Voucher Updated Succesfully');
-              this.closePopupEvent({action: 'update'});
-            } else {
-              this._toasty.successToast('Voucher Generated Succesfully');
-              this.closePopupEvent({action: 'generate'});
-            }
-          } else {
-            this._toasty.errorToast(response.message, response.code);
-          }
-
-        });
-      // }
+      if (this.updateMode) {
+        let request: ReciptRequest = {
+          voucher: model.voucher,
+          entryUniqueNames: model.uniqueNames,
+          updateAccountDetails: true
+        };
+        this.store.dispatch(this.receiptActions.UpdateInvoiceReceiptRequest(request, model.voucher.accountDetails.uniqueName));
+      } else {
+          this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: false}, [{accountUniqueName: model.voucher.accountDetails.uniqueName, entries: _.cloneDeep(model.uniqueNames)}], 'invoice'));
+      }
       this.updtFlag = false;
     } else {
-      // this._toasty.warningToast('Something went wrong, please reload the page');
+      this._toasty.warningToast('Something went wrong, please reload the page');
     }
   }
 
