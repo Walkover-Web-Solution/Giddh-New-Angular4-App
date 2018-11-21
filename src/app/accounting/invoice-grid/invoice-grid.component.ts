@@ -425,7 +425,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public searchAccount(str) {
     this.filterByText = str;
-    // this.accountSearch = str;
   }
 
   /**
