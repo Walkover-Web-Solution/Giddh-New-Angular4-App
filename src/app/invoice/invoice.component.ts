@@ -63,7 +63,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged(page: string) {
-    this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings', 'receipt', 'credit note', 'debit note', 'sales'].indexOf(page) > -1;
+    this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings', 'credit note', 'debit note', 'sales'].indexOf(page) > -1;
     // this._cd.detectChanges();
     // this.showInvoiceNav = page === 'preview';
   }
