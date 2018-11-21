@@ -48,7 +48,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public isRefreshWithCredentials: boolean = true;
   public providerAccountId: string = null;
   public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
-
+  public selectedBank: any = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -191,7 +191,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       switch (this.actionToPerform) {
         case 'DeleteAddedBank':
           let deleteWithAccountId = true;
-          if (this.selectedAccount.status !== 'ALREADY_ADDED') {
+          if (this.selectedBank.status !== 'ALREADY_ADDED') {
             accountId = this.selectedAccount.providerAccount.providerAccountId;
             deleteWithAccountId = false;
           }
@@ -222,8 +222,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.settingsLinkedAccountsActions.ReconnectAccount(account.loginId));
   }
 
-  public onDeleteAddedBank(bankName, account) {
+  public onDeleteAddedBank(bankName, account, bank) {
     if (bankName && account) {
+      this.selectedBank = _.cloneDeep(bank);
       this.selectedAccount = _.cloneDeep(account);
       this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
       this.actionToPerform = 'DeleteAddedBank';

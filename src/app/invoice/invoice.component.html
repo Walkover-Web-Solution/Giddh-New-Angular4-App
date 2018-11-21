@@ -15,7 +15,7 @@
                         <a [routerLink]="['templates', selectedVoucherType]" routerLinkActive="active">Templates</a>
                     </li>
                     <li>
-                        <a [routerLink]="['settings']" routerLinkActive="active">Settings</a>
+                        <a [routerLink]="['settings']" routerLinkActive="active" *ngIf="selectedVoucherType === 'sales'">Settings</a>
                     </li>
                 </ul>
             </div>
