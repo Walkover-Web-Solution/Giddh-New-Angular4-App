@@ -21,6 +21,13 @@
                                 <div class=" over-flow"> Quantity </div>
                             </div>
                         </th>
+
+                        <th style="" class="text-left ">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Unit </div>
+                            </div>
+                        </th>
+
                         <th style="" class="  text-right ">
                             <div style="position: relative">
                                 <div class=" over-flow"> Taxable Amount </div>
@@ -60,6 +67,7 @@
                         <td> {{item.hsnsac ? item.hsnsac : '-'}} </td>
                         <td> {{item.desc ? item.desc : '-'}} </td>
                         <td> {{item.qty ? item.qty : '-'}} </td>
+                        <td> {{item.uqc ? item.uqc : '-'}} </td>
                         <td class="text-right"> ₹{{item.txval | number: '1.2-2' }} </td>
                         <td class="text-right"> ₹{{item.iamt | number: '1.2-2' }} </td>
                         <td class="text-right"> ₹{{item.camt | number: '1.2-2' }} </td>

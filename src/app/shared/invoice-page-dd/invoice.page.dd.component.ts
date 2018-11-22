@@ -27,6 +27,13 @@ const INV_PAGE = [
     / / color: #393a3d;
       padding: 0;
     }
+    .dropdown-menu>li>a:hover {
+        color: #ff5e01;
+        background: #f4f5f8;
+    }
+    .dropdown-menu {
+          margin-top: 0;
+    }
   `]
 })
 
