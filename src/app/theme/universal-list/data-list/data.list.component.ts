@@ -6,12 +6,12 @@ import {
 } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, combineLatest } from 'rxjs';
 import { findIndex, cloneDeep, remove, uniq, find } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take, debounceTime } from 'rxjs/operators';
+import { take, debounceTime, takeUntil } from 'rxjs/operators';
 import {
   CAPS_LOCK, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW,
   ENTER, MAC_ENTER, BACKSPACE, TAB, SHIFT, CONTROL, ALT,
@@ -98,6 +98,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private smartList: IUlist[];
   private activeCompany: string;
   private searchSubject: Subject<string> = new Subject();
+  private firstTime: boolean = true;
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
@@ -128,17 +129,25 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     });
 
     // listen to smart list
-    this._store.select(p => p.general.smartCombinedList).pipe(take(1))
+    this._store.select(p => p.general.smartCombinedList).pipe(takeUntil(this.destroyed$))
     .subscribe((data: IUlist[]) => {
-      this.rawSmartComboList = data;
+      if (data) {
+        this.rawSmartComboList = data;
+      }
     });
 
     // listen to smart list
-    this._store.select(p => p.general.smartList).pipe(take(1))
+    this._store.select(p => p.general.smartList).pipe(takeUntil(this.destroyed$))
     .subscribe((data: IUlist[]) => {
-      this.smartList = data;
-      // init rows
-      this.setValueInRow(data);
+      if (data) {
+        this.smartList = data;
+
+        if (this.firstTime) {
+          // init rows
+          this.setValueInRow(data);
+        }
+        this.firstTime = false;
+      }
     });
 
     // set excluded tags
