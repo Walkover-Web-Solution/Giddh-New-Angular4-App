@@ -134,8 +134,8 @@ export class SettingsComponent implements OnInit {
   private saveGmailAuthCode(authCode: string) {
     const dataToSave = {
       code: authCode,
-      client_secret: 'C97c9WiBRHL6GyOwj9GkY5He',
-      client_id: '578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com',
+      client_secret: this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_SECRET,
+      client_id: this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID,
       grant_type: 'authorization_code',
       redirect_uri: this.getRedirectUrl(AppUrl)
     };
@@ -162,6 +162,20 @@ export class SettingsComponent implements OnInit {
       return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
     } else {
       return 'https://giddh.com/app/pages/settings?tab=integration';
+    }
+  }
+
+  private getGoogleCredentials(baseHref: string) {
+    if (baseHref === 'https://giddh.com/' || isElectron) {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
+        GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
+      };
+    } else {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
+        GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
+      };
     }
   }
 
