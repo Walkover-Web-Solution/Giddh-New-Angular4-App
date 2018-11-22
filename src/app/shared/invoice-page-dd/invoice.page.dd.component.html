@@ -7,7 +7,7 @@
         </li>
     </ul>
 </span> -->
-<div class="btn-group" dropdown>
+<div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
     <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
     {{selectedType}}
     <span class="caret"></span>

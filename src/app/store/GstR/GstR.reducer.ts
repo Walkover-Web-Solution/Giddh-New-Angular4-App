@@ -51,6 +51,7 @@ export class HsnSummaryResult {
   public csamt: number;
   public samt: number;
   public total: number;
+  public uqc: string;
 }
 
 export class NilSummaryResponse {
