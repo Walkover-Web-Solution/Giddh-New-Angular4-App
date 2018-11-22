@@ -57,7 +57,7 @@ export class SettingIntegrationComponent implements OnInit {
   public amazonSellerRes: AmazonSellerClass[];
   public isGmailIntegrated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=578717103927-mvjk3kbi9cgfa53t97m8uaqosa0mf9tt.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
+  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private isSellerAdded: Observable<boolean> = observableOf(false);
   private isSellerUpdate: Observable<boolean> = observableOf(false);
 
@@ -70,7 +70,7 @@ export class SettingIntegrationComponent implements OnInit {
     private _fb: FormBuilder
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-    this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl));
+    this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
     this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).pipe(takeUntil(this.destroyed$));
     this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
@@ -421,6 +421,18 @@ export class SettingIntegrationComponent implements OnInit {
       return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
     } else {
       return 'https://giddh.com/app/pages/settings?tab=integration';
+    }
+  }
+
+  private getGoogleCredentials(baseHref: string) {
+    if (baseHref === 'https://giddh.com/' || isElectron) {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+      };
+    } else {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+      };
     }
   }
 
