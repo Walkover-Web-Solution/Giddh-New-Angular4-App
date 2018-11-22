@@ -17,7 +17,8 @@
           <label>{{ invoiceNoHeading }}:</label> <input type="text" onReturn placeholder="Invoice no."
                                                         [(ngModel)]="data.invoiceNumberAgainstVoucher"
                                                         class="form-control max-height28 appearance_none"
-                                                        style="max-width:200px"/>
+                                                        style="max-width:200px"
+                                                        [disabled]="isSalesInvoiceSelected"/>
         </div>
 
         <!-- key not available in request
