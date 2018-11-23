@@ -203,6 +203,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
+  private indexDBReCreationDate: string = '23-11-2018';
   /**
    *
    */
@@ -573,14 +574,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (data && data.length) {
         if (dbResult) {
 
-          let indexDBCreationTime = Math.min.apply(null, [...dbResult.aidata.accounts, ...dbResult.aidata.groups, ...dbResult.aidata.menus].map(function(e) {
-            return e.time;
-          }));
-
-          if (indexDBCreationTime < moment('23-11-2018', 'DD-MM-YYYY').valueOf()) {
+          let dbRecreatedAt = localStorage.getItem('db_recreated_at');
+          if (!dbRecreatedAt || (dbRecreatedAt && Number(dbRecreatedAt) < moment(this.indexDBReCreationDate, 'DD-MM-YYYY').valueOf())) {
             // need to delete indexDB, since it is older than out date
             this._dbService.deleteAllData();
-            localStorage.setItem('idb_recreated_at', `${moment().valueOf()} - ${moment().format('DD-MM-YYYY')}`);
+            localStorage.setItem('db_recreated_at', `${moment().valueOf()}`);
             return location.reload(true);
           }
 
@@ -589,7 +587,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
             o.name = o.name.toLowerCase();
             return o.uniqueName;
-            });
+          });
           this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
           this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
 
