@@ -23,7 +23,7 @@
         </button>
                 <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
                 <button class="btn btn-default" (click)="onUpdateTemplate(template)">
-          <i class="glyphicon glyphicon-cog" tooltip="Edit template" aria-hidden="true"></i>
+          <i class="fa fa-pencil" tooltip="Edit template" aria-hidden="true"></i>
         </button>
                 <button [disabled]="template.isDefault" class="btn btn-default" (click)="onDeleteTemplate(template)">
           <i class="glyphicon glyphicon-trash" tooltip="Delete" aria-hidden="true"></i>
