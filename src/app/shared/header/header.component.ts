@@ -572,6 +572,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let data: IUlist[] = resp[1];
       if (data && data.length) {
         if (dbResult) {
+
+          let indexDBCreationTime = Math.min.apply(null, [...dbResult.aidata.accounts, ...dbResult.aidata.groups, ...dbResult.aidata.menus].map(function(e) {
+            return e.time;
+          }));
+
+          if (indexDBCreationTime < moment('23-11-2018', 'DD-MM-YYYY').valueOf()) {
+            // need to delete indexDB, since it is older than out date
+            this._dbService.deleteAllData();
+            localStorage.setItem('idb_recreated_at', `${moment().valueOf()} - ${moment().format('DD-MM-YYYY')}`);
+            return location.reload(true);
+          }
+
           // entry found check for data
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
