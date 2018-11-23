@@ -145,7 +145,7 @@
 .left_fixed_header > li > a {
     display: block;
     padding: 8px 20px;
-    color: #B7B7B7;
+    color: #EBECEE;
     /* width: 32px; */
 }
 
@@ -169,7 +169,7 @@
     padding-left: 0px;
     /* opacity: 0; */
     text-align: left;
-    color: #B7B7B7;
+    color: #EBECEE;
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: 'LatoWebSemibold';
