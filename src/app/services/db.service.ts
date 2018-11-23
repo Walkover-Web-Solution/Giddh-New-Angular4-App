@@ -32,4 +32,8 @@ export class DbService {
     return from(GIDDH_DB.addItem(key, entity, model));
   }
 
+  public deleteAllData(): void {
+    GIDDH_DB.forceDeleteDB();
+  }
+
 }
