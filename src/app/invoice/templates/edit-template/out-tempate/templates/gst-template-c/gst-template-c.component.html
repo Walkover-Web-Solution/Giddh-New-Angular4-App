@@ -11,7 +11,7 @@
             <i class="fa fa-pencil"></i>
         </a>
         <header class="testing">
-            
+
             <table>
                 <tr>
                     <td>
@@ -23,13 +23,13 @@
                     <td>
                         <figure [hidden]="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
                             <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}</h2>
-                        </figure> 
+                        </figure>
                     </td>
                 </tr>
             </table>
 
-            
-            
+
+
 
             <table cellspacing="0" cellpadding="0">
                 <tbody>
@@ -48,7 +48,7 @@
                                                 : 'GSTIN'}}</label> <span class="font-10">{{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}</span>
                                         </td>
                                     </tr>
-                                    
+
                                     <!-- <tr [hidden]="!fieldsAndVisibility.header.pan?.display">
                                         <td>
                                             <label>{{fieldsAndVisibility.header.pan?.label}}</label> {{companyPAN ? companyPAN : 'AAACW9768L'}}
@@ -174,17 +174,17 @@
                                 <tr *ngIf="fieldsAndVisibility.header.customField1?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label
-                                            : 'Custom Field1'}}: </label> <span class="font-10">2135416</span></td>
+                                            : 'Custom Field1'}}: </label> <span class="font-10">Sample 1</span></td>
                                 </tr>
                                 <tr *ngIf="fieldsAndVisibility.header.customField2?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label
-                                            : 'Custom Field2'}}: </label> <span class="font-10">32131</span></td>
+                                            : 'Custom Field2'}}: </label> <span class="font-10">Sample 2</span></td>
                                 </tr>
                                 <tr *ngIf="fieldsAndVisibility.header.customField3?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label
-                                            : 'Custom Field3'}}: </label> <span class="font-10">13213256</span></td>
+                                            : 'Custom Field3'}}: </label> <span class="font-10">Sample 3</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -309,11 +309,11 @@
                         <td colspan="2">
                             <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
                                 <p class="mb-1"><strong>*Tax to be paid on Reverse Charge</strong></p>
-                                
-                                <p class="strong font-10">Notes</p>
+
+                                <!-- <p class="strong font-10">Notes</p> -->
                                 <p class="font-10">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</p>
                                 <p>Contact us for queries on these quotations.</p>
-                              
+
                             </ng-container>
                         </td>
                         <td style="text-align: center;vertical-align: bottom;">

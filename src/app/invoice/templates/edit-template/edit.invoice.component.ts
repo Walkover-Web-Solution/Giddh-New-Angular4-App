@@ -227,7 +227,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         width: '10'
       }, {
         field: 'taxes',
-        label: 'taxes',
+        label: 'Taxes',
         display: true,
         width: '10'
       }, {
@@ -315,8 +315,8 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       uniqueName: 'system_admin',
       mobileNo: '99-99999999990'
     },
-    primaryColor: '#f63407',
-    secondaryColor: '#fff6f4',
+    // primaryColor: '#f63407',
+    // secondaryColor: '#fff6f4',
     font: 'open sans',
     topMargin: 10,
     leftMargin: 10,
@@ -517,7 +517,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         width: '10'
       }, {
         field: 'taxes',
-        label: 'taxes',
+        label: 'Taxes',
         display: true,
         width: '10'
       }, {
@@ -622,6 +622,8 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     name: 'Template I',
     type: 'invoice'
   };
+  public showinvoiceTemplatePreviewModal: boolean = false;
+  public showtemplateModal: boolean = false;
 
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
@@ -662,7 +664,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       defaultTemplate = ss.defaultTemplate;
     });
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-
+    this.showtemplateModal = true;
     this.templateModal.show();
   }
 
@@ -696,6 +698,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
           this.templateModal.hide();
+          this.showtemplateModal = false;
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
         } else {
           this._toasty.errorToast(res.message, res.code);
@@ -733,6 +736,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
           this.deleteTemplateConfirmationMessage = null;
           this.customTemplateConfirmationModal.hide();
           this.templateModal.hide();
+          this.showtemplateModal = false;
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
         } else {
           this._toasty.errorToast(res.message, res.code);
@@ -764,6 +768,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
 
     this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
     // let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    this.showinvoiceTemplatePreviewModal = true;
     this.invoiceTemplatePreviewModal.show();
   }
 
@@ -771,6 +776,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
    * onUpdateTemplate
    */
   public onUpdateTemplate(template) {
+    this.showtemplateModal = true;
     let customCreatedTemplates = null;
     let defaultTemplate = null;
 
@@ -817,6 +823,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     } else if (userResponse.response && userResponse.close === 'closeConfirmation') {
       this._invoiceUiDataService.resetCustomTemplate();
       this.templateModal.hide();
+      this.showtemplateModal = false;
     }
     this.customTemplateConfirmationModal.hide();
   }
@@ -826,6 +833,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
    */
   public onClosePreviewModal() {
     this.invoiceTemplatePreviewModal.hide();
+    this.showinvoiceTemplatePreviewModal = false;
   }
 
   public ngOnDestroy() {
