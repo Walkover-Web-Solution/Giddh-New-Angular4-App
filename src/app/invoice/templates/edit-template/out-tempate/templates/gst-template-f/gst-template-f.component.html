@@ -48,7 +48,7 @@
                             </tbody>
                         </table>
                     </td>
-                    
+
                     <!--<td>
                         <table>
                             <tbody>
@@ -172,19 +172,19 @@
                     <td *ngIf="fieldsAndVisibility.header.customField1?.display">
                         <span class="font-11">{{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label
                             : 'Custom Field1'}}</span>
-                        <p>Custom</p>
+                        <p>Sample 1</p>
                     </td>
 
                     <td *ngIf="fieldsAndVisibility.header.customField2?.display">
                         <span class="font-11">{{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label
                             : 'Custom Field2'}}</span>
-                        <p>Custom</p>
+                        <p>Sample 2</p>
                     </td>
 
                     <td *ngIf="fieldsAndVisibility.header.customField3?.display">
                         <span class="font-11">{{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label
                             : 'Custom Field3'}}</span>
-                        <p>Custom</p>
+                        <p>Sample 3</p>
                     </td>
                 </tr>
 
@@ -329,37 +329,37 @@
         </a>
         <div class="clearfix" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
 
-        <table class="subfooter">
-            <tbody>
-                <tr>
-                    <td [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
-                        <h1 *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                            <strong [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</strong>
-                        </h1>
+            <table class="subfooter">
+                <tbody>
+                    <tr>
+                        <td [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
+                            <h1 *ngIf="fieldsAndVisibility.footer.thanks?.display">
+                                <strong [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU FOR YOUR BUSINESS.</strong>
+                            </h1>
 
-                        <ul class="note">
-                            <li class="bold">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}
-                            </li>
-                            <li><strong>Notes:</strong> All payments to be made in cash. Contact us for queries on these quotations.</li>
-                        </ul>
+                            <ul class="note">
+                                <li class="bold">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}
+                                </li>
+                                <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                            </ul>
 
-                    </td>
-                    <td colspan="1"></td>
-                    <td style="text-align: center;vertical-align: bottom;">
-                        <p class="bdrB"></p>
-                        <p><strong class="font-10">{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
-                        <p *ngIf="fieldsAndVisibility.footer.slogan?.display">
-                            <small>{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label: '(Signature)'}}
+                        </td>
+                        <td colspan="1"></td>
+                        <td style="text-align: center;vertical-align: bottom;">
+                            <p class="bdrB"></p>
+                            <p><strong class="font-10">{{fieldsAndVisibility.header.companyName?.label}}</strong></p>
+                            <p *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                <small>{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label: '(Signature)'}}
                             </small>
-                        </p>
-                        <small *ngIf="fieldsAndVisibility.footer.slogan?.display" [innerHTML]="fieldsAndVisibility.footer.slogan?.label">
+                            </p>
+                            <small *ngIf="fieldsAndVisibility.footer.slogan?.display" [innerHTML]="fieldsAndVisibility.footer.slogan?.label">
                             <small *ngIf="!fieldsAndVisibility.footer.slogan?.display"> &nbsp;</small>
-                        </small>
-                        <!-- <p> <strong *ngIf="fieldsAndVisibility.footer.slogan?.display">{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : 'Company Name'}}</strong></p>
+                            </small>
+                            <!-- <p> <strong *ngIf="fieldsAndVisibility.footer.slogan?.display">{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : 'Company Name'}}</strong></p>
         <p>(Signature)</p> -->
-                    </td>
-                </tr>
-                <!-- <tr *ngIf="fieldsAndVisibility.footer.message1?.display">
+                        </td>
+                    </tr>
+                    <!-- <tr *ngIf="fieldsAndVisibility.footer.message1?.display">
                     <td colspan="3">
                         <ul class="note">
                             <li>{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}
@@ -367,8 +367,8 @@
                         </ul>
                     </td>
                 </tr> -->
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </div>
 
         <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
