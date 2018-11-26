@@ -65,13 +65,13 @@ export class FilingComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe(params => {
       let dates = {
         from: params['from'],
         to: params['to']
       };
       this.currentPeriod = dates;
-      this.selectedGst = params['selectedGst'];
+      this.selectedGst = params['return_type'];
       this._cdr.detach();
       setTimeout(() => {
           this._cdr.reattach();
@@ -97,7 +97,7 @@ export class FilingComponent implements OnInit {
       this.isTransactionSummary = true;
     }
     this.showTaxPro = val;
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to}});
   }
 
   /**

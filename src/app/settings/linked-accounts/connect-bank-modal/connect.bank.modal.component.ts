@@ -277,6 +277,7 @@ export class ConnectBankModalComponent implements OnChanges {
     let status = provider.status.toLowerCase();
     if (status === 'success' || status === 'failed') {
       this.bankSyncInProgress = false;
+      this.onCancel();
       return true;
     } else if (status === 'user_input_required' || status === 'addl_authentication_required') {
         let response = _.cloneDeep(provider.loginForm[0]);

@@ -24,6 +24,7 @@ export interface GstRReducerState {
   failedTransactionsSummaryInProgress: boolean;
   viewTransactionInProgress: boolean;
   gstTransactionsFilter: any;
+  currentPeriod: any;
 }
 
 export class GstOverViewResponse {
@@ -140,7 +141,8 @@ const initialState: GstRReducerState = {
   failedTransactionsSummaryInProgress: true,
   transactionCountsInProcess: true,
   viewTransactionInProgress: true,
-  gstTransactionsFilter: null
+  gstTransactionsFilter: null,
+  currentPeriod: {}
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -253,6 +255,13 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
       newState.gstTransactionsFilter = response;
+      return newState;
+    }
+
+    case GSTR_ACTIONS.CURRENT_PERIOD: {
+      let response: BaseResponse<any, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      newState.currentPeriod = response;
       return newState;
     }
     default:

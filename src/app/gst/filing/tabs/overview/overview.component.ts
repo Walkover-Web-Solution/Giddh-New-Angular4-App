@@ -21,6 +21,7 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public gstOverviewData$: Observable<GstOverViewResponse>;
   public showTransaction: boolean = false;
+  public filters: any = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
@@ -44,6 +45,10 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
     };
     this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
     //
+  }
+
+  public selectTxn(param) {
+    this.filters = param;
   }
 
   /**
