@@ -6135,6 +6135,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .tax-engine .table-responsive {
     display: table;
     width: 100%;
+    max-width: 100vw;
 }
 
 .tax-engine .transactions-overview .gstr-reconciliations-summary {

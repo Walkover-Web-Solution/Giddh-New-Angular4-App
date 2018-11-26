@@ -52,7 +52,7 @@
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let item of (gstOverviewData$ | async)?.transactionSummary.results">
-                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
+                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.name === 'Nil Rated Invoices'}">
                             <!-- <td></td> -->
                             <td [ngSwitch]="true">
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
@@ -86,10 +86,10 @@
                                 </ng-container>
                                 <span style="margin-left: 5px;"> {{item?.name}}</span>
                             </td>
-                            <td class="text-center" *ngIf="item.gstReturnType !== 'hsnsac' && item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
+                            <td class="text-center" *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
                                 <a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
                             </td>
-                            <td class="text-center" *ngIf="item.gstReturnType === 'hsnsac' || item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
+                            <td class="text-center" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
                                 -
                             </td>
                             <td class="text-right"> ₹{{item?.taxableAmount | number: '1.2-2'}}
