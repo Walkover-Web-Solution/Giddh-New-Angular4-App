@@ -13,6 +13,7 @@ export class AuthServiceConfig {
 
   constructor(providers: AuthServiceConfigItem[], autoLogin: boolean) {
     this.autoLogin = autoLogin;
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < providers.length; i++) {
       const element = providers[i];
       this.providers.set(element.id, element.provider);
@@ -59,27 +60,24 @@ export class AuthService {
           providerObject.signIn().then((user: SocialUser) => {
             user.provider = providerId;
             resolve(user);
-
             this._user = user;
             this._authState.next(user);
           });
         } else {
-          providerObject.initialize().then((user: SocialUser) => {
-            if (user) {
-              user.provider = providerId;
-              resolve(user);
-              this._authState.next(user);
-            } else {
-              providerObject.signIn().then((u: SocialUser) => {
+          providerObject.initialize();
+          setTimeout(() => {
+            let obj = this.providers.get(providerId);
+            if (obj.isInitialize) {
+              obj.signIn().then((u: SocialUser) => {
                 u.provider = providerId;
                 resolve(u);
                 this._user = u;
                 this._authState.next(u);
               });
+            } else {
+              reject('something went wrong');
             }
-          }).catch((err) => {
-            // this._authState.next(null);
-          });
+          }, 1000);
         }
       } else {
         reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
