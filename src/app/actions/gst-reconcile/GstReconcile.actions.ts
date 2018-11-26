@@ -308,4 +308,11 @@ export class GstReconcileActions {
       payload: filters
     };
   }
+
+  public SetSelectedPeriod(period) {
+     return {
+      type: GSTR_ACTIONS.CURRENT_PERIOD,
+      payload: period
+    };
+  }
 }

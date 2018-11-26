@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { GstRReducerState, GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { ModalDirective } from 'ngx-bootstrap/modal/modal.directive';
@@ -13,12 +13,17 @@ import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementVi
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
-export const TransactionType = [
+export const Gstr1TransactionType = [
   {label: 'Invoices', value: 'invoices'},
   {label: 'Credit Notes', value: 'credit-notes'},
   {label: 'Advance Payments', value: 'advance-payments'},
-  {label: 'Refund Vouchers', value: 'debit-notes'},
+  // {label: 'Refund Vouchers', value: 'refund-vouchers'},
   {label: 'Debit Notes', value: 'debit-notes'},
+];
+
+export const Gstr2TransactionType = [
+  {label: 'Bills / Expenses', value: 'billsAndExpenses'},
+  {label: 'Credit / Debit Notes', value: 'crdr'},
 ];
 
 export const InvoiceType = [
@@ -27,6 +32,15 @@ export const InvoiceType = [
   {label: 'B2CL', value: 'b2cl'},
   {label: 'B2CS', value: 'b2cs'},
   {label: 'Export', value: 'export'},
+  {label: 'Nil', value: 'nil'},
+];
+
+export const Gstr2InvoiceType = [
+  {label: 'All', value: 'all'},
+  {label: 'B2B', value: 'b2b'},
+  {label: 'B2BUR', value: 'b2bur'},
+  {label: 'IMP', value: 'imp'},
+  {label: 'IMPS', value: 'imps'},
   {label: 'Nil', value: 'nil'},
 ];
 
@@ -44,10 +58,10 @@ export const Status = [
 
 export const filterTransaction = {
   entityType: '',
-  type: 'all',
-  status: 'all',
-  page: '',
-  count: ''
+  type: '',
+  status: '',
+  page: 1,
+  count: 20
 };
 
 @Component({
@@ -62,17 +76,21 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
   @Input() public isTransactionSummary: boolean;
+  // @Input() public filterParam = filterTransaction;
+
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
 
   public viewTransaction$: Observable<TransactionSummary> = of(null);
-  public entityType = TransactionType;
+  public gstr1entityType = Gstr1TransactionType;
   public invoiceType = InvoiceType;
   public otherEntityType = Entitytype;
+  public gstr2InvoiceType = Gstr2InvoiceType;
   public status = Status;
   public selectedEntityType: string = '';
   public companyGst$: Observable<string> = of('');
+  public gstr2entityType = Gstr2TransactionType;
   public filterParam = filterTransaction;
   public imgPath: string = '';
   public modalRef: BsModalRef;
@@ -84,7 +102,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   };
   public viewTransactionInProgress$: Observable<boolean> = of(null);
   public transactionsFilter$: Observable<any> = of(null);
-  public selectedFilter: any = {};
+  public selectedFilter: any = filterTransaction;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -92,8 +110,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
-    this.transactionsFilter$ = this._store.select(p => p.gstR.gstTransactionsFilter).pipe(takeUntil(this.destroyed$));
-
+    this.transactionsFilter$ = this._store.select(p => p.gstR.gstTransactionsFilter).pipe(take(1));
   }
 
   public ngOnInit() {
@@ -102,38 +119,28 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     this.filterParam['to'] = this.currentPeriod.to;
     this.filterParam['gstin'] = this.activeCompanyGstNumber;
 
-    this.activatedRoute.firstChild.params.subscribe(params => {
+    this.activatedRoute.firstChild.queryParams.subscribe(params => {
       this.filterParam['entityType'] = params.entityType;
-      this.mapFilters();
+      this.filterParam['type'] = params.type;
+      this.filterParam['status'] = params.status;
       this.viewFilteredTxn('page', 1);
     });
 
-    this.transactionsFilter$.subscribe(a => {
-      if (a) {
-        _.map(a, (val, key) => {
-          this.filterParam[key] = val;
-        });
-        this.mapFilters();
-      }
-    });
   }
 
-  /**
-   * viewFilteredTxn
-   */
   public viewFilteredTxn(filter, val) {
     this.filterParam[filter] = val;
     if (filter === 'entityType') {
       this.filterParam.type = 'all';
       this.filterParam.status = 'all';
     }
-    this.mapFilters();
     this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));
+    this.mapFilters();
   }
 
   public goBack() {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
-  }
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to }});
+ }
 
   public pageChanged(event) {
     this.viewFilteredTxn('page', event.page);
@@ -162,8 +169,6 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
     let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
     componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
-    // componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-    // componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
   }
 
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
@@ -184,13 +189,39 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public mapFilters() {
-    this.selectedFilter.entityType = _.find(TransactionType, o =>  o.value === this.filterParam.entityType).label;
-    this.selectedFilter.status =  _.find(Status, o =>  o.value === this.filterParam.status).label;
-    if (this.filterParam.entityType === 'invoices') {
-      this.selectedFilter.type = _.find(InvoiceType, o =>  o.value === this.filterParam.type).label;
+    let filters = _.cloneDeep(this.filterParam);
+    if (this.selectedGst === 'gstr1') {
+      let selected = _.find(Gstr1TransactionType, o =>  o.value === filters.entityType);
+      if (selected) {
+        this.selectedFilter.entityType = selected.label;
+      }
     } else {
-      this.selectedFilter.type =  _.find(Entitytype, o =>  o.value === this.filterParam.type).label;
+      let selected = _.find(Gstr2TransactionType, o =>  o.value === filters.entityType);
+      if (selected) {
+        this.selectedFilter.entityType = selected.label;
+      }
     }
+
+    if (this.filterParam.status) {
+      let selected = _.find(Status, o =>  o.value === filters.status);
+      if (selected) {
+        this.selectedFilter.status = selected.label;
+      }
+    }
+
+    if (this.filterParam.type) {
+      let selected;
+      if (this.selectedGst === 'gstr1') {
+        selected = _.find(InvoiceType, o =>  o.value === filters.type);
+        } else {
+        selected = _.find(Gstr2InvoiceType, o =>  o.value === filters.type);
+      }
+      if (selected) {
+        this.selectedFilter.type = selected.label;
+      }
+    }
+    return this.filterParam = _.cloneDeep(filters);
+
   }
 
   public ngOnChanges(s: SimpleChanges) {

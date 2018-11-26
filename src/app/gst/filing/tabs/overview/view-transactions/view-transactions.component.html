@@ -10,17 +10,27 @@
                 <div class="filter-row">
                     <div class="name">Transaction Type: </div>
 
-                    <div class="btn-group filter" dropdown>
+                    <div class="btn-group filter" dropdown *ngIf="selectedGst === 'gstr1'">
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                            <li *ngFor="let entity of entityType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('entityType', entity.value)">{{entity.label}}</a></li>
+                            <li *ngFor="let entity of gstr1entityType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('entityType', entity.value)">{{entity.label}}</a></li>
                         </ul>
                     </div>
+
+                    <div class="btn-group filter" dropdown *ngIf="selectedGst === 'gstr2'">
+                        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
+                            {{selectedFilter?.entityType}} <span class="caret"></span>
+                        </button>
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                            <li *ngFor="let entity of gstr2entityType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('entityType', entity.value)">{{entity.label}}</a></li>
+                        </ul>
+                    </div>
+
                 </div>
 
-                <div class="filter-row" *ngIf="filterParam.entityType !== 'invoices' || !filterParam.entityType">
+                <div class="filter-row" *ngIf="filterParam.entityType !== 'invoices' && selectedGst === 'gstr1'">
                     <div class="name">{{selectedFilter?.entityType}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -34,7 +44,7 @@
                 </div>
 
 
-                <div class="filter-row" *ngIf="filterParam.entityType === 'invoices'">
+                <div class="filter-row" *ngIf="filterParam.entityType === 'invoices' && selectedGst === 'gstr1'">
                     <div class="name">{{selectedFilter?.entityType}} Type: </div>
 
                     <div class="btn-group filter" dropdown>
@@ -43,6 +53,19 @@
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li *ngFor="let type of invoiceType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!--   -->
+                <div class="filter-row" *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == 'gstr2'">
+                    <div class="name">{{selectedFilter?.entityType}} Type: </div>
+
+                    <div class="btn-group filter" dropdown>
+                        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
+                            {{selectedFilter?.type}} <span class="caret"></span>
+                        </button>
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                            <li *ngFor="let type of gstr2InvoiceType"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -142,6 +165,14 @@
                         </div>
                     </th>
 
+
+                    <th style="" class="text-right">
+                        <div style="position: relative">
+                            <div class=" over-flow"> CGST
+                            </div>
+                        </div>
+                    </th>
+
                     <th style="" class="text-right">
                         <div style="position: relative">
                             <div class=" over-flow"> SGST
@@ -180,6 +211,7 @@
                     <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
                     <td align="right">₹{{item.taxableAmount | number: '1.2-2'}}</td>
                     <td align="right">₹{{item.igstAmount | number: '1.2-2'}}</td>
+                    <td align="right">₹{{item.cgstAmount | number: '1.2-2'}}</td>
                     <td align="right">₹{{item.sgstAmount | number: '1.2-2'}}</td>
                     <td align="right">₹{{item.cessAmount | number: '1.2-2'}}</td>
                     <td align="right">₹{{item.totalAmount | number: '1.2-2'}}</td>
