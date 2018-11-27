@@ -9,8 +9,7 @@ form label {
     font-weight: normal;
 }
 
-
-	.form-inline .form-control {
+.form-inline .form-control {
     display: inline-block;
     width: auto;
     vertical-align: middle;
@@ -50,7 +49,7 @@ input.checkboxbtn {
 
 span.expand {
     display: inline-block;
-    padding: 3px 5px;
+    padding: 2px 5.8px;
     background: #eee;
     font-size: 18px;
     color: #ff5f00;
@@ -59,9 +58,8 @@ span.expand {
     height: 30px;
     cursor: pointer;
 }
-.exp11{display:none;}
-.max-980{
+/* .exp11{display:none;} */
+.max-980 {
     max-width: 980px;
     margin: 0 auto;
 }
-.openingcheck, .transcheck, .closingcheck{display:none;}
