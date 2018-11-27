@@ -30,7 +30,7 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
-import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
+import { PaginationComponent } from 'ngx-bootstrap';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
