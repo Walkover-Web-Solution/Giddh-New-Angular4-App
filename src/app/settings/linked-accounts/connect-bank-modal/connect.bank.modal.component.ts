@@ -263,7 +263,7 @@ export class ConnectBankModalComponent implements OnChanges {
         if (!validateProvider && !this.cancelRequest) {
           setTimeout(() => {
             this.getBankSyncStatus(providerId);
-          }, 10000);
+          }, 1000);
         }
       }
 
