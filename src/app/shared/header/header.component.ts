@@ -585,7 +585,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // entry found check for data
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
-            o.name = o.name.toLowerCase();
+            // o.name = o.name.toLowerCase();
             return o.uniqueName;
           });
           this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
