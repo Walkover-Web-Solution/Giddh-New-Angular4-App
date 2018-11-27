@@ -5,7 +5,7 @@ import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } fro
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import * as moment from 'moment/moment';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
@@ -13,7 +13,6 @@ import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterange
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 import { cloneDeep } from 'app/lodash-optimized';
 
 @Component({

@@ -1,16 +1,15 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { GstRReducerState, GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
+import { TransactionSummary } from 'app/store/GstR/GstR.reducer';
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
-import { ModalDirective } from 'ngx-bootstrap/modal/modal.directive';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
 export const Gstr1TransactionType = [
