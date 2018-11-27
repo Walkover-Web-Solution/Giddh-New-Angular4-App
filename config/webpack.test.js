@@ -4,18 +4,12 @@
 
 const helpers = require('./helpers');
 
-/**
- * Webpack Plugins
- */
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
 /**
  * Webpack Constants
  */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
-
+const webpack = require('webpack');
+const ENV = (process.env.ENV = process.env.NODE_ENV = 'test');
 /**
  * Webpack configuration
  *
@@ -23,7 +17,7 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
  */
 module.exports = function (options) {
   return {
-
+    mode: 'development',
     /**
      * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
      *
@@ -59,7 +53,7 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#module
      *
      * 'use:' revered back to 'loader:' as a temp. workaround for #1188
-     * See: https://github.com/AngularClass/angular2-webpack-starter/issues/1188#issuecomment-262872034
+     * See: https://github.com/AngularClass/angular-starter/issues/1188#issuecomment-262872034
      */
     module: {
 
@@ -116,15 +110,11 @@ module.exports = function (options) {
           exclude: [/\.e2e\.ts$/]
         },
 
-        /**
-         * Json loader support for *.json files.
-         *
-         * See: https://github.com/webpack/json-loader
-         */
         {
-          test: /\.json$/,
-          loader: 'json-loader',
-          exclude: [helpers.root('src/index.html')]
+          // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
+          // Removing this will cause deprecation warnings to appear.
+          test: /[\/\\]@angular[\/\\]core[\/\\].+\.js$/,
+          parser: { system: true }
         },
 
         /**
@@ -200,7 +190,7 @@ module.exports = function (options) {
        *
        * NOTE: when adding more properties make sure you include them in custom-typings.d.ts
        */
-      new DefinePlugin({
+      new webpack.DefinePlugin({
         'ENV': JSON.stringify(ENV),
         'HMR': false,
         'process.env': {
@@ -217,11 +207,11 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
        * See: https://github.com/angular/angular/issues/11580
        */
-      new ContextReplacementPlugin(
+      new webpack.ContextReplacementPlugin(
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /(.+)?angular(\\|\/)core(.+)?/,,
+        /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('src'), // location of your src
         {
           /**
@@ -229,13 +219,13 @@ module.exports = function (options) {
            */
         }
       ),
-      
+
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
        * See: https://gist.github.com/sokra/27b24881210b56bbaff7
        */
-      new LoaderOptionsPlugin({
+      new webpack.LoaderOptionsPlugin({
         debug: false,
         options: {
           /**

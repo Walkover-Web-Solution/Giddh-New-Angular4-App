@@ -83,7 +83,7 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    background: #f4f5f8;
+    background: #F7F8FA;
     font-family: 'LatoWebMedium';
     color: #333333;
     -webkit-font-smoothing: antialiased;
@@ -267,10 +267,10 @@ header .navbar-nav>li.active {
 }
 
 .header-container {
-    position: fixed;
-    top: 0;
+    position: relative;
+    /* top: 0;
     left: 0;
-    right: 0;
+    right: 0; */
     z-index: 3;
 }
 
@@ -286,8 +286,13 @@ aside-menu-account .container-fluid {
 /*header nav links override*/
 
 .navbar-inverse .navbar-nav>li>a {
-    color: #fff;
+    color: #363A41;
     line-height: 24px;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>a:focus {
+    color: #363A41 !important;
 }
 
 .navbar-inverse .navbar-text {
@@ -304,20 +309,16 @@ aside-menu-account .container-fluid {
     margin: 15px 0;
 }
 
-#cmpWrp .cText {
-    float: left;
-    margin: 8px 0 0 10px;
-}
-
 .cText span {
     display: block;
 }
 
-.cName {
+
+/* .cName {
     line-height: 20px;
     min-width: 130px;
     text-transform: uppercase;
-}
+} */
 
 .cDate {
     font-size: 11px;
@@ -670,6 +671,10 @@ aside-menu-account .container-fluid {
     margin-left: 10px;
 }
 
+.mrL15 {
+    margin-left: 15px;
+}
+
 .mrR1 {
     margin-right: 10px;
 }
@@ -855,8 +860,8 @@ aside-menu-account .container-fluid {
 }
 
 .scrClass {
-    overflow: hidden;
-    position: relative;
+    /* overflow: hidden;
+    position: relative; */
 }
 
 .scrItem {
@@ -1607,6 +1612,10 @@ li:last-child .angular-ui-tree-handle {
 
 .max350 {
     max-width: 350px;
+}
+
+.max500 {
+    max-width: 500px;
 }
 
 
@@ -2438,12 +2447,12 @@ padding: 0;
     margin: 7px;
     transition: all 0.5s ease-in-out;
     padding: 10px;
-    border: 1px solid rgba(251, 194, 168, 0.68);
+    border: 1px solid #ebedf1;
 }
 
 .account-card:hover {
     background: #fff;
-    box-shadow: 0 5px 14px 0 rgba(58, 58, 58, .18);
+    box-shadow: 0 5px 5px 0 rgba(58, 58, 58, .18);
     border-color: #ff5e01;
 }
 
@@ -2572,7 +2581,7 @@ padding: 0;
     height: 20px;
     border: 1px solid #2980b9;
     border-radius: 3px;
-    background-image: repeating-linear-gradient( -45deg, #2980b9, #2980b9 11px, #eee 10px, #eee 20px/* determines size */
+    background-image: repeating-linear-gradient(-45deg, #2980b9, #2980b9 11px, #eee 10px, #eee 20px/* determines size */
     );
     background-size: 28px 28px;
     animation: move .5s linear infinite;
@@ -3151,6 +3160,10 @@ ul.pills li:hover {
     position: relative;
 }
 
+.padd15 {
+    padding: 15px;
+}
+
 .paddingTop200 {
     padding-top: 200px !important;
 }
@@ -3445,33 +3458,36 @@ ul.pills li:hover {
 
 /* company list dropdown styles */
 
-#companyList {
+.sub_menu_nav {
     width: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    color: #fff;
     z-index: 100;
     list-style-type: none;
     padding: 0px;
+    left: 269px;
+    box-shadow: none;
+    top: 2px;
 }
 
-#companyList li {
-    padding: 10px;
+.sub_nav_menu li:not(.divider) {
+    padding: 5px 10px;
     cursor: pointer;
     position: relative;
 }
 
-#companyList li:last-child {
+.sub_nav_menu li:last-child {
     border: none;
 }
 
-#companyList li:hover {
-    background: rgba(63, 63, 63, .9);
+.sub_nav_menu ul li:not(.divider):hover {
+    /* background: rgba(63, 63, 63, .9); */
+    background: #2D9EE0;
 }
 
-#companyList li i.glyphicon-trash {
+.sub_nav_menu li i.glyphicon-trash {
     position: absolute;
     right: 10px;
-    top: 12px;
+    top: 8px;
+    color: #fff;
 }
 
 .company-list-container {
@@ -3484,14 +3500,10 @@ ul.pills li:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
-.create-company {
-    border-top: 1px solid #fff;
-    text-align: right;
-}
 
-.company-name {
+/* .company-name {
     min-width: 450px;
-}
+} */
 
 #InvoiceTemplate.no-border input {
     border: none !important;
@@ -3883,6 +3895,10 @@ tr.db-bnk-account>td.reconnectDiv {
 
 .longcode-details figure h1 {
     font-size: 18px;
+}
+
+.no-padding {
+    padding: 0px !important;
 }
 
 .padding-0 {
@@ -4596,7 +4612,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .stock-grp-list>li>a {
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     color: #616161;
 }
 
@@ -4619,7 +4635,7 @@ border-bottom: 1px solid #e0e0e0;
 .stock-items>li>a.active,
 .sub-grp>li>a.active,
 .stock-grp-list>li>a.active {
-    color: #ff5e01!important;
+    color: #ff5e01 !important;
 }
 
 .stock-grp.list {
@@ -5124,7 +5140,7 @@ strong {
 }
 
 #main {
-    padding-top: 54px;
+    /* padding-top: 54px; */
 }
 
 bs-daterangepicker-container,
@@ -5157,17 +5173,78 @@ bs-datepicker-container {
     /* z-index: 1 !important; */
 }
 
-.daterangepicker.show-calendar {
-    min-width: 666px;
+
+/* .daterangepicker.show-calendar {
+  min-width: 666px;
+} */
+
+.panel.sFthanks.fieldset {
+    display: none !important;
 }
-.panel.sFthanks.fieldset{
-    display:none !important;
+
+.panel.sFformfield.fieldset {
+    box-shadow: none !important;
 }
-.panel.sFformfield.fieldset{
-box-shadow: none !important;
-}
-#sFSection-Jkvq .sFsubmit.btn-primary{
+
+#sFSection-Jkvq .sFsubmit.btn-primary {
     font-size: 14px !important;
     background: #e5e5e5 !important;
     color: #28ab00 !important;
+}
+
+
+/* added by sarfaraz */
+
+.d-flex {
+    display: flex;
+    display: -ms-flexbox!important
+}
+
+.flex-row {
+    flex-direction: row;
+    -ms-flex-direction: row;
+}
+
+.flex-grow-1 {
+    -ms-flex-positive: 1!important;
+    flex-grow: 1!important;
+}
+
+.align-items-center {
+    align-items: center;
+    -ms-flex-align: center;
+}
+
+
+/* cmdk modal styles */
+
+.modal-dialog.universal_modal .modal-body {
+    padding: 0;
+}
+
+.modal-dialog.universal_modal .shortcuts {
+    background: #f9f9f9;
+    border-top: none;
+    margin: 0;
+    padding: 12px 16px 12px 20px;
+    color: #717274;
+    font-size: 12px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: right;
+}
+
+perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-top) .ps-indicator-top,
+perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
+    opacity: 0;
+}
+
+.sub_menu_nav li>a {
+    padding: 5px 12px;
+    color: #333333;
+    display: block;
+}
+
+.sub_menu_nav li>a:hover {
+    background: #2D9EE0;
 }

@@ -1,0 +1,3 @@
+<overview-summary *ngIf="!showTransaction" [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary"></overview-summary>
+<view-transactions *ngIf="showTransaction" [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></view-transactions>
+<!-- <router-outlet></router-outlet> -->

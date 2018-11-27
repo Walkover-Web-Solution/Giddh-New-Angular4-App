@@ -1,4 +1,5 @@
 import { IApplyTax } from '../interfaces/applyTax.interface';
+
 /**
  * Model for apply tax api request
  * API:: (Apply tax) /company/{{companyname}}/tax/assign

@@ -6,13 +6,7 @@ export class AdvanceSearchRequest {
   public page: number = 0;
   public count: number = 15;
   public accountUniqueName: string = '';
-
-  get from(): string {
-    if (this.dataToSend.bsRangeValue.length > 0) {
-      return moment(this.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY');
-    }
-    return moment().subtract(30, 'days').format('DD-MM-YYYY');
-  }
+  public sort: string = 'asc';
 
   // set from(value: string) {
   //   if (this.dataToSend.bsRangeValue.length > 0) {
@@ -22,13 +16,7 @@ export class AdvanceSearchRequest {
   //     this.dataToSend.bsRangeValue.push(moment(value, 'DD-MM-YYYY').toDate());
   //   }
   // }
-
-  get to(): string {
-    if (this.dataToSend.bsRangeValue.length > 1) {
-      return moment(this.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY');
-    }
-    return moment().format('DD-MM-YYYY');
-  }
+  public reversePage: boolean = false;
 
   // set to(value: string) {
   //   if (this.dataToSend.bsRangeValue.length > 1) {
@@ -42,16 +30,34 @@ export class AdvanceSearchRequest {
   //   }
   // }
 
-  public sort: string = 'asc';
-  public reversePage: boolean = false;
-
   constructor() {
     this.dataToSend = new AdvanceSearchModel();
+  }
+
+  get from(): string {
+    if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 0) {
+      return moment(this.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY');
+    }
+    return moment().subtract(30, 'days').format('DD-MM-YYYY');
+  }
+
+  get to(): string {
+    if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 1) {
+      return moment(this.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY');
+    }
+    return moment().format('DD-MM-YYYY');
+  }
+
+  set to(val) {
+    if (val) {
+      this.dataToSend.bsRangeValue[1] = val;
+    }
   }
 }
 
 export class AdvanceSearchModel {
-  public bsRangeValue: any[] = [moment().subtract(30, 'days').toDate(), moment().toDate()];
+  // [moment().subtract(30, 'days').toDate(), moment().toDate()]
+  public bsRangeValue: any[];
   public uniqueNames: string[] = [];
   public isInvoiceGenerated: null;
   public accountUniqueNames: string[];

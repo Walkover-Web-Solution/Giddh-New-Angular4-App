@@ -1,14 +1,14 @@
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router, NavigationStart } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
-import { ROUTES } from './app.routes';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
+import { VersionCheckService } from './version-check.service';
 
 /**
  * App Component
@@ -21,13 +21,24 @@ import { pick } from './lodash-optimized';
     './app.component.css'
   ],
   template: `
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
-  `
+  `,
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnInit {
+  public IAmLoaded: boolean = false;
+  private newVersionAvailableForWebApp: boolean = false;
 
-  constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private _generalService: GeneralService) {
+  constructor(private store: Store<AppState>,
+    private router: Router,
+    private _generalService: GeneralService,
+    private _cdr: ChangeDetectorRef,
+    private _versionCheckService: VersionCheckService) {
+
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
@@ -42,15 +53,71 @@ export class AppComponent implements AfterViewInit {
       }
       this._generalService.companyUniqueName = ss.companyUniqueName;
     });
+    this._generalService.IAmLoaded.subscribe(s => {
+      this.IAmLoaded = s;
+    });
+
+  }
+
+  public ngOnInit() {
+    // Need to implement for Web app only
+    if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
+      this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
+
+      this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
+        if (isChanged) {
+          this.newVersionAvailableForWebApp = _.clone(isChanged);
+        }
+      });
+    }
   }
 
   public ngAfterViewInit() {
+
+    this._generalService.IAmLoaded.next(true);
+    this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
+
+      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron ) {
+          // need to save last state
+          const redirectState = this.getLastStateFromUrl(evt.url);
+
+          localStorage.setItem('lastState', redirectState);
+
+          return window.location.reload(true);
+
+      }
       if (!(evt instanceof NavigationEnd)) {
-          return;
+        return;
       }
       window.scrollTo(0, 0);
-  });
+    });
+
+    const lastState = localStorage.getItem('lastState');
+
+    if (lastState) {
+      localStorage.removeItem('lastState');
+      return this.router.navigate([lastState]);
+    }
+
+    if (location.href.includes('returnUrl')) {
+      let tUrl = location.href.split('=');
+      if (tUrl[1]) {
+        if (!isElectron) {
+          this.router.navigate([tUrl[1]]);
+        }
+      }
+    }
   }
 
+  private getLastStateFromUrl(url: string): string {
+    if (url) {
+      if (url.includes('/pages/')) {
+        return url.substr(url.lastIndexOf('/') + 1, url.length);
+      } else if (url.includes('/ledger/') || url.includes('/invoice/')) {
+        return url;
+      }
+    }
+    return 'home';
+  }
 }

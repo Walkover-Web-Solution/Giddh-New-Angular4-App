@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import moment from 'moment';
+import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -73,10 +73,10 @@ export class InventoryInOutReportComponent {
   public uniqueName: string;
   public type: string;
   public COMPARISON_FILTER = [
-    {label: 'Greater Then', value: '>'},
-    {label: 'Less Then', value: '<'},
-    {label: 'Greater Then or Equals', value: '>='},
-    {label: 'Less Then or Equals', value: '<='},
+    {label: 'Greater Than', value: '>'},
+    {label: 'Less Than', value: '<'},
+    {label: 'Greater Than or Equals', value: '>='},
+    {label: 'Less Than or Equals', value: '<='},
     {label: 'Equals', value: '='}
   ];
   public PERSON_FILTER = [

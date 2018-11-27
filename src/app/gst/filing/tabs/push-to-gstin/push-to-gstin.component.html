@@ -1,0 +1,71 @@
+<div class="column content-column gst-filing-container navs-list">
+    <div class="tax-engine">
+        <!---->
+        <!---->
+        <div class="column list-column expanded-list-column transactions-list">
+            <div class="scroll-y noscroll-x body fill">
+                <div class="reconciliation-type-band push-gstin">
+                    <tabset #staticTabs class="sub-filter-nav-band">
+                        <tab>
+                            <ng-template tabHeading>
+                                Transaction Summary
+                            </ng-template>
+
+                            <div class="subtabs-box transactions-overview">
+                                <transaction-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="true"></transaction-summary>
+                            </div>
+
+                        </tab>
+
+                        <tab (select)="getSummary('hsnsac')">
+                            <ng-template tabHeading>
+                                HSN
+                            </ng-template>
+
+                            <div class="subtabs-box transactions-overview">
+                                <hsn-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></hsn-summary>
+                            </div>
+                        </tab>
+
+
+                        <tab (select)="getSummary('nil')">
+                            <ng-template tabHeading>
+                                NIL
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <nil-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></nil-summary>
+                            </div>
+                        </tab>
+
+                        <tab (select)="getSummary('b2cs')">
+                            <ng-template tabHeading>
+                                B2CS
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <b2cs-summary [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></b2cs-summary>
+                            </div>
+                        </tab>
+
+                        <tab (select)="getDocumentIssuedTxn()">
+                            <ng-template tabHeading>
+                                Document Issued
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <document-issued [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></document-issued>
+                            </div>
+                        </tab>
+
+                        <tab (select)="getSummary('failedtransactions')">
+                            <ng-template tabHeading>
+                                Failed Transactions
+                            </ng-template>
+                            <div class="subtabs-box transactions-overview">
+                                <failed-transactions [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></failed-transactions>
+                            </div>
+                        </tab>
+
+                    </tabset>
+                </div>
+            </div>
+        </div>
+    </div>

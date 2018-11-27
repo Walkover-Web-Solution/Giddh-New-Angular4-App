@@ -1,11 +1,11 @@
 <section class="h100">
-    <!-- 
-    <div class="clearfix mrB2">
-        <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
-      <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeStock$  }} Stock
-      </button>
-    </div>
-     -->
+    <!--
+  <div class="clearfix mrB2">
+      <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
+    <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeStock$  }} Stock
+    </button>
+  </div>
+   -->
     <form #filter="ngForm" class="form-inline mrB1">
         <div class="clearfix pr">
             <div class="form-group">
@@ -19,7 +19,7 @@
                 {{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
                 </label>
                 <label placement="top"
-                tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
+                       tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
                 </span> |
                     <span class="mrL1">
                 <label>C/B Qty:
@@ -27,7 +27,7 @@
                 {{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
                 </label>
                 <label tooltip-placement="top"
-                tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount}}</label>
+                       tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount}}</label>
                 </span>
                 </div>
             </div>
@@ -88,23 +88,26 @@
             </tbody>
             <tfoot *ngIf="(stockReport$ | async)?.count > 1">
                 <tr>
-                    <td colspan="14">
-                        <div class="pagination pull-right">
+                    <td colspan="14" class="text-center">
+                        <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                        <!-- <div class="pagination pull-right">
                             <ul class="list-inline">
                                 <li>
-                                    <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === 1">Prev
-                          </button>
+                                    <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === 1">
+                  Prev
+                </button>
                                 </li>
                                 <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
                                 <li>
                                     <button class="btn btn-default" (click)="nextPage()" [disabled]="(stockReport$ | async)?.page === (stockReport$ | async)?.totalPages">Next
-                          </button>
+                </button>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </td>
                 </tr>
             </tfoot>
         </table>
+
     </section>
 </section>

@@ -1,26 +1,29 @@
 <span class="pr" [ngClass]="{'open': isMenuOpen}" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">
-  <input type="number" (blur)="discountInputBlur($event)" name="" (focus)="toggleDiscountMenu()" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
-  <ul #disInptEle [style.max-height.px]="39*3" [style.min-height.px]="39" class="dropdown-menu" (click)="$event.stopPropagation()">
+  <input type="number" (blur)="discountInputBlur($event)" name="" (focus)="toggleDiscountMenu()"
+         class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true"/>
+         <!-- [style.max-height.px]="39*3" [style.min-height.px]="39" -->
+  <ul #disInptEle  class="dropdown-menu dropdown-menu-right"
+      (click)="$event.stopPropagation()">
     <li *ngFor="let item of discountAccountsList">
-      <table>
-        <tr>
-          <td class="pdL w100">{{ item.name }}</td>
-          <td class="pdR pdT w50">
-            <input type="number" class="form-control" (change)="change()" [(ngModel)]="item.amount"/>
-          </td>
-        </tr>
+      <table class="table">
+          <tr>
+              <td class="">{{item.name}}</td>
+              <td class="" [style.min-width.px]="70" [style.width.px]="70">
+                  <input type="number" class="form-control" (change)="change()" [(ngModel)]="item.amount" />
+              </td>
+          </tr>
       </table>
-    </li>
-    <li style="line-height:39px;" class="alC"><a class="btn-link" href (blur)="hideDiscountMenu()" (click)="hideDiscountMenu(); addNewDiscount($event)">Add New Discount</a></li>
-  </ul>
+</li>
+<li style="line-height:39px;" class="alC"><a class="btn-link text-left" href (blur)="hideDiscountMenu()" (click)="hideDiscountMenu(); addNewDiscount($event)">+ Add New Discount</a></li>
+</ul>
 </span>
 
 <!--quick account popup -->
 <div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm" style="width: 298px">
-    <div class="modal-content">
-      <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+    <div class="modal-dialog modal-sm" style="width: 298px">
+        <div class="modal-content">
+            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+        </div>
     </div>
-  </div>
 </div>
 <!-- modal sections -->

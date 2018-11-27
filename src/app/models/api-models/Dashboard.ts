@@ -1,5 +1,5 @@
-import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem, IChildGroups, ICbAccount, IBankAccount } from '../interfaces/dashboard.interface';
-import { IForwardBalance, IClosingBalance } from '../interfaces/ledger.interface';
+import { IBankAccount, ICbAccount, IChildGroups, IDashboardCbMainItem, IGroupHistoryGroups, IPeriodBalances } from '../interfaces/dashboard.interface';
+import { IClosingBalance, IForwardBalance } from '../interfaces/ledger.interface';
 
 /**
  * Model for Audit Dashboard api request
@@ -62,6 +62,9 @@ export class BankAccountsResponse {
   public yodleeAccounts: IBankAccount[];
   public siteName: string;
   public siteId: number;
+  public status: string;
+  public reason: string;
+  public isRefreshWithCredentials: boolean;
 }
 
 export class RefreshBankAccountResponse {

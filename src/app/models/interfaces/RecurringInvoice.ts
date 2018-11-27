@@ -10,6 +10,7 @@ export interface RecurringInvoice {
   status?: string;
   voucherTotal?: string;
   lastInvoiceDate?: string;
+  voucherType?: string;
 }
 
 export interface RecurringInvoices extends PagedResponse {

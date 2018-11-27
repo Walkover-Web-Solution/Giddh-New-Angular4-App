@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'delete-tax-confirmation-model',

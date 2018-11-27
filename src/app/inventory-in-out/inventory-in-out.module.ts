@@ -21,6 +21,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { InventoryModule } from '../inventory/inventory.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { InventoryModule } from '../inventory/inventory.module';
     BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule,
     BsDropdownModule,
     InventoryModule,
-    TabsModule
+    TabsModule,
+    DecimalDigitsModule
   ],
 })
 export class InventoryInOutModule {

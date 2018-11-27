@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'edit-template-filters',
@@ -11,8 +11,9 @@ import { Component } from '@angular/core';
   `]
 })
 
-export class EditFiltersContainersComponent {
-
+export class EditFiltersContainersComponent implements OnChanges {
+  @Input() public editMode: string;
+  @Output() public selectTab: EventEmitter<any> = new EventEmitter();
   public ifDesignSelected: boolean = true;
   public ifContentSelected: boolean = false;
   public ifEmailSelected: boolean = false;
@@ -38,6 +39,16 @@ export class EditFiltersContainersComponent {
       this.ifDesignSelected = false;
       this.ifContentSelected = false;
       this.ifEmailSelected = true;
+    }
+    this.selectTab.emit(tab);
+  }
+
+  /**
+   * ngOnChanges
+   */
+  public ngOnChanges(s) {
+    if (s.editMode && s.editMode.currentValue !== s.editMode.previousValue) {
+      this.editMode = s.editMode.currentValue;
     }
   }
 }

@@ -42,6 +42,11 @@ import { InventoryUsersActions } from './inventory/inventory.users.actions';
 import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
 import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
+import { NewVsOldInvoicesActions } from './new-vs-old-invoices.actions';
+import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
+import { AgingReportActions } from './aging-report.actions';
+import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
+import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -87,7 +92,13 @@ import { SettingsDiscountActions } from './settings/discount/settings.discount.a
       SessionActions,
       SettingsTriggersActions,
       ImportExcelActions,
-      SettingsDiscountActions
+      SettingsDiscountActions,
+      NewVsOldInvoicesActions,
+      AgingReportActions,
+      CompanyImportExportActions,
+      InvoiceReceiptActions,
+      CompanyImportExportActions,
+      GstReconcileActions
     ])
   ],
   exports: [EffectsModule]

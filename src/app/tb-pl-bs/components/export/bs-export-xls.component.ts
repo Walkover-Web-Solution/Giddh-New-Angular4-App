@@ -16,6 +16,8 @@ import { ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 })
 export class BsExportXlsComponent implements OnInit, OnDestroy {
   @Input() public fy: number;
+  @Input() public filters: any = {};
+
   public enableDownload: boolean = true;
   public imgPath: string = '';
   @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
@@ -25,7 +27,7 @@ export class BsExportXlsComponent implements OnInit, OnDestroy {
   }
 
   public downloadBsXls() {
-    let request = { fy: this.fy } as ProfitLossRequest;
+    let request = {from: this.filters.from, to: this.filters.to };
     this.store.dispatch(this._tbPlActions.DownloadBalanceSheetExcel(request));
   }
 

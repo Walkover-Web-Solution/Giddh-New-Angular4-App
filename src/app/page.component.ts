@@ -1,28 +1,30 @@
 import { CompanyActions } from './actions/company.actions';
-import { LoginActions } from './actions/login.action';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from './store/roots';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
+import { GeneralService } from './services/general.service';
 
 @Component({
   selector: 'page',
   template: `
-    <div id="main">
+    <div id="main" [ngClass]="{'menu_open':sideMenu.isopen}">
       <giddh-loader></giddh-loader>
-      <app-header></app-header>
+      <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>
       <layout-main>
         <router-outlet></router-outlet>
       </layout-main>
-      <app-footer></app-footer>
+      <!-- <app-footer></app-footer> -->
     </div>`
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
+  public sideMenu: { isopen: boolean } = { isopen: true };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) {
+
+  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location, private _generalService: GeneralService) {
   }
 
   public ngOnInit() {
@@ -30,9 +32,14 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
+    this._generalService.SetIAmLoaded(true);
     // if (this.location.path() === '/pages') {
     //   this.router.navigate(['/pages', 'home']);
     // }
+  }
+
+  public sidebarStatusChange(event) {
+    this.sideMenu.isopen = event;
   }
 
   public ngOnDestroy(): void {
