@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SettingsBunchService } from '../../../../services/settings.bunch.service';
 
@@ -20,8 +20,8 @@ export class GetBunchModalComponent implements OnChanges {
   @Output() public saveDataEvent: EventEmitter<any> = new EventEmitter(null);
 
   constructor(private _fb: FormBuilder,
-  private _toaster: ToasterService,
-  private _settingsBunchService: SettingsBunchService,
+              private _toaster: ToasterService,
+              private _settingsBunchService: SettingsBunchService,
   ) {
 
   }
@@ -50,6 +50,6 @@ export class GetBunchModalComponent implements OnChanges {
    * ngOnChanges
    */
   public ngOnChanges(s) {
-  //
+    //
   }
 }

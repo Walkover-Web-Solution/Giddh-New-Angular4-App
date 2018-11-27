@@ -1,14 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { takeUntil } from 'rxjs/operators';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { Observable } from 'rxjs/Observable';
 import { States } from '../models/api-models/Company';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../lodash-optimized';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { Router } from '@angular/router';
+import { GeneralService } from '../services/general.service';
 
 @Component({
   selector: 'welcome-component',
@@ -16,10 +18,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./welcome.component.scss']
 })
 
-export class WelcomeComponent implements OnInit, OnDestroy {
+export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
-  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = observableOf([]);
   public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
   public countryIsIndia: boolean = false;
@@ -96,21 +98,21 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-              private _router: Router) {
+              private _router: Router, private  _generalService: GeneralService) {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
       this.countryCodeList.push({value: c.value, label: c.value, additional: c.countryName});
     });
 
-    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
           this.states.push({label: `${d.name}`, value: `${d.name}`});
         });
       }
-      this.statesSource$ = Observable.of(this.states);
+      this.statesSource$ = observableOf(this.states);
     }, (err) => {
       // console.log(err);
     });
@@ -128,8 +130,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
           }
         }
       });
-    }).takeUntil(this.destroyed$).subscribe();
-    this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$)).subscribe();
+    this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -138,6 +140,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         this._router.navigate(['/onboarding']);
       }
     });
+  }
+
+  public ngAfterViewInit() {
+    this._generalService.IAmLoaded.next(true);
   }
 
   public skip() {
@@ -161,8 +167,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
    */
   public autoSelectCountryCode(country) {
     if (this.countryCodeList) {
-      let selectedCountry = _.find(this.countryCodeList, function(o) {
-       return o.additional === country;
+      let selectedCountry = _.find(this.countryCodeList, function (o) {
+        return o.additional === country;
       });
       if (selectedCountry && selectedCountry.value) {
         this.companyProfileObj.country = selectedCountry.value;

@@ -5,10 +5,15 @@ import { OutTemplateComponent } from './edit-template/out-tempate/out.template.c
 import { ContentFilterComponent } from './edit-template/filters-container/content-filters/content.filters.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { GstTemplateAComponent } from './edit-template/out-tempate/templates/gst-template-a/gst-template-a.component';
+// import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst-template-b/gst-template-b.component';
+import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
+import { GstTemplateDComponent } from './edit-template/out-tempate/templates/gst-template-d/gst-template-d.component';
 import { GstTemplateBComponent } from './edit-template/out-tempate/templates/gst-template-b/gst-template-b.component';
 import { GstTemplateCComponent } from './edit-template/out-tempate/templates/gst-template-c/gst-template-c.component';
-import { GstTemplateDComponent } from './edit-template/out-tempate/templates/gst-template-d/gst-template-d.component';
-import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
+import { GstTemplateFComponent } from './edit-template/out-tempate/templates/gst-template-f/gst-template-f.component';
+import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst-template-g/gst-template-g.component';
+import { GstTemplateHComponent } from './edit-template/out-tempate/templates/gst-template-h/gst-template-h.component';
+import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst-template-i/gst-template-i.component';
 
 @NgModule({
   imports: [
@@ -21,13 +26,19 @@ import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst
     OutTemplateComponent,
     ContentFilterComponent,
     GstTemplateAComponent,
+    GstTemplateEComponent,
+    GstTemplateDComponent,
+    GstTemplateFComponent,
     GstTemplateBComponent,
     GstTemplateCComponent,
-    GstTemplateDComponent,
-    GstTemplateEComponent
+    GstTemplateGComponent,
+    GstTemplateHComponent,
+    GstTemplateIComponent
   ],
   exports: [
     OutTemplateComponent,
     ContentFilterComponent,
-]})
-export class InvoiceTemplatesModule {}
+  ]
+})
+export class InvoiceTemplatesModule {
+}

@@ -1,10 +1,10 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ActivatedRoute } from '@angular/router';
@@ -23,7 +23,8 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
       background: #fff;
       min-height: 100vh;
     }
-    :host ::ng-deep .nav-tabs>li{
+
+    :host ::ng-deep .nav-tabs > li {
       width: 50%;
       text-align: center;
       background: #f5f5f5;
@@ -46,10 +47,10 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterV
               private _inventoryAction: InventoryAction,
               private sideBarAction: SidebarAction) {
     this.store.dispatch(this._inventoryAction.GetStock());
-    this.stocksList$ = this.store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).takeUntil(this.destroyed$);
-    this.inventoryUsers$ = this.store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).takeUntil(this.destroyed$);
+    this.stocksList$ = this.store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
+    this.inventoryUsers$ = this.store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
     this.sidebarRect = window.screen.height;
-    this.store.take(1).subscribe(state => {
+    this.store.pipe(take(1)).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
         this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
       }

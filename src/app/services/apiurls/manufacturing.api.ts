@@ -1,4 +1,3 @@
-
 let COMMON_URL = 'company/:companyUniqueName/stock/:stockUniqueName/manufacture';
 export const MANUFACTURING_API = {
   GET: COMMON_URL + '/:manufacturingUniqueName',

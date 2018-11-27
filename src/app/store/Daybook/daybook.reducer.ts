@@ -1,4 +1,3 @@
-import { Action } from '@ngrx/store';
 import { CustomActions } from '../customActions';
 import { DayBookResponseModel } from 'app/models/api-models/Daybook';
 import { DaybookActions } from 'app/actions/daybook/daybook.actions';
@@ -31,13 +30,13 @@ export function daybookReducer(state = initialState, action: CustomActions): Day
         if (data.entries.length < 1) {
           noData = true;
         }
-        return { ...state, data, noData, showLoader };
+        return {...state, data, noData, showLoader};
       } else {
-        return { ...state, showLoader: false, data: null, noData: true };
+        return {...state, showLoader: false, data: null, noData: true};
       }
     }
     case DaybookActions.GET_DAYBOOK_REQUEST: {
-      return { ...state, showLoader: true };
+      return {...state, showLoader: true};
     }
     default: {
       return state;

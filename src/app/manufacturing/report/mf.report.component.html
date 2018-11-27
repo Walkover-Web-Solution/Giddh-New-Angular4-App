@@ -12,7 +12,7 @@
                     <div class="form-group col-xs-3">
                         <div class="row">
                             <label class="d-block">Final Product</label>
-                            <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown" [ItemHeight]="33"></sh-select>
+                            <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown" [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
                         </div>
                     </div>
                     <div class="form-group col-xs-3">
@@ -20,7 +20,8 @@
                         <div class="input-group">
                             <input name="dateRange" #dp placeholder="Date range picker" type="text" class="form-control" [ngModel]="mfStockSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required>
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" (click)="dp.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default" (click)="dp.isOpen = true"><i
+                                  class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </div>
                     </div>
@@ -40,7 +41,7 @@
                     <div class="form-group col-xs-1">
                         <div class="row">
                             <label class="d-block">Value</label>
-                            <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"/>
+                            <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                         </div>
                     </div>
                     <div class="form-group pull-left mrL2">

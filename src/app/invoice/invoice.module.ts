@@ -14,6 +14,9 @@ import { InvoiceRoutingModule } from './invoice.routing.module';
   declarations: [],
   imports: [
     InvoiceRoutingModule,
+  ],
+  exports: [
+    InvoiceRoutingModule
   ]
 })
 export class InvoiceModule {

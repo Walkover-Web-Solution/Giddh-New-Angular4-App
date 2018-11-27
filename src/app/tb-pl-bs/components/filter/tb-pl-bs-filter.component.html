@@ -20,7 +20,7 @@
                         </div>
 
                         <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value =='1'">
-                            <br />
+                            <br/>
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker mrR1" />
                         </div>
                         <div class="form-group">
@@ -44,8 +44,8 @@
             <tb-export-csv *ngIf="tbExportCsv" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
             <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mrR1"></tb-export-xls>
             <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value" [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right mrR1"></tb-export-pdf>
-            <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
-            <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
+            <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" [filters]="filterForm.value" class="pull-right"></pl-export-xls>
+            <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" [filters]="filterForm.value" class="pull-right"></bs-export-xls>
         </div>
         <!-- end of second coloumn -->
     </div>

@@ -10,9 +10,12 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
-import { ClickOutsideModule } from 'ng-click-outside';
-
+import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -24,7 +27,10 @@ import { ClickOutsideModule } from 'ng-click-outside';
     ImportWizardComponent
   ],
   exports: [ImportComponent],
-  providers: [],
+  providers: [{
+    provide: PERFECT_SCROLLBAR_CONFIG,
+    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+  }],
   imports: [
     CommonModule,
     FormsModule,
@@ -32,7 +38,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
     LaddaModule,
     ShSelectModule,
     TooltipModule,
-    BsDropdownModule
+    BsDropdownModule,
+    PerfectScrollbarModule
   ],
 })
 export class ImportExcelModule {

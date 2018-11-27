@@ -1,41 +1,49 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { decimalDigits } from '../../../shared/helpers';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
+import { AppState } from 'app/store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'connect-bank-modal',
   templateUrl: './connect.bank.modal.component.html',
   styles: [`iframe {
-              width: 100%;
-              height: 400px;
-          }
-          .connect-page .page-title {
-                margin-top: 0;
-          }
-          .provider_ico {
-            margin-right: 10px;
-            max-width: 16px;
-            max-height: 16px;
-            float: left;
-            object-fit: contain;
-          }
-          .provider_ico img {
-            width: 100%;
-            height: auto;
-          }
-          `]
+    width: 100%;
+    height: 400px;
+  }
+
+  .connect-page .page-title {
+    margin-top: 0;
+  }
+
+  .provider_ico {
+    margin-right: 10px;
+    max-width: 16px;
+    max-height: 16px;
+    float: left;
+    object-fit: contain;
+  }
+
+  .provider_ico img {
+    width: 100%;
+    height: auto;
+  }
+  `]
 })
 
 export class ConnectBankModalComponent implements OnChanges {
 
   @Input() public sourceOfIframe: string;
   @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
+  @Output() public refreshAccountEvent: EventEmitter<any> = new EventEmitter(null);
+  @Input() public providerId: string = '';
+  @Input() public isRefreshWithCredentials: boolean = true;
+  @Input() public providerAccountId: number = null;
 
   public url: SafeResourceUrl = null;
 
@@ -49,34 +57,54 @@ export class ConnectBankModalComponent implements OnChanges {
   public bankSyncInProgress: boolean;
   public apiInInterval: any;
   public cancelRequest: boolean = false;
+  public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
+  public isElectron = isElectron;
+  public base64StringForModel: SafeResourceUrl = '';
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(public sanitizer: DomSanitizer,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
     private _fb: FormBuilder,
-    private _toaster: ToasterService
+    private _toaster: ToasterService,
+    private store: Store<AppState>
   ) {
+    this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
     this.dataSource = (text$: Observable<any>): Observable<any> => {
-      return text$
-        .debounceTime(300)
-        .distinctUntilChanged()
-        .switchMap((term: string) => {
+      return text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term: string) => {
           if (term.startsWith(' ', 0)) {
             return [];
           }
-          return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).catch(e => {
+          return this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).pipe(catchError(e => {
             return [];
-          });
-        })
-        .map((res) => {
+          }));
+        }),
+        map((res) => {
           if (res.status === 'success') {
             let data = res.body.provider;
             this.dataSourceBackup = res;
             return data;
           }
-        });
+        }));
     };
 
-    this.loginForm = this._fb.group({
+    this.loginForm = this.initLoginForm();
+
+    this.needReloadingLinkedAccounts$.subscribe(a => {
+      if (a && this.isRefreshWithCredentials) {
+        this.resetBankForm();
+      }
+    });
+  }
+
+  /**
+   * initLoginForm
+   */
+  public initLoginForm() {
+    return this._fb.group({
       id: ['', Validators.required],
       forgotPasswordUrL: [''],
       loginHelp: [''],
@@ -88,18 +116,26 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public ngOnChanges(changes) {
-    this.isIframeLoading = true;
-    if (changes.sourceOfIframe.currentValue) {
-      this.iframeSrc = this.sourceOfIframe;
-      this.isIframeLoading = false;
-      this.getIframeUrl(this.iframeSrc);
+    // this.isIframeLoading = true;
+    // if (changes.sourceOfIframe.currentValue) {
+    //   this.iframeSrc = this.sourceOfIframe;
+    //   this.isIframeLoading = false;
+    //   this.getIframeUrl(this.iframeSrc);
+    // }
+
+    if (changes.providerId && changes.providerId.currentValue) {
+      this.step = 2;
+      this.providerId = _.cloneDeep(changes.providerId.currentValue);
+      this.getProviderLoginForm(this.providerId);
     }
   }
+
   public getIframeUrl(path) {
     if (!this.url) {
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(path);
     }
   }
+
   public onCancel() {
     this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
@@ -108,6 +144,8 @@ export class ConnectBankModalComponent implements OnChanges {
     this.selectedProvider = {};
     this.bankSyncInProgress = false;
     this.cancelRequest = true;
+    this.bankSyncInProgress = false;
+    this.isRefreshWithCredentials = true;
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -139,9 +177,10 @@ export class ConnectBankModalComponent implements OnChanges {
       name: [''],
       maxLength: [''],
       type: [''],
-      value: [''],
+      value: [null],
       isOptional: [false],
-      valueEditable: [true]
+      valueEditable: [true],
+      option: []
     });
   }
 
@@ -179,18 +218,11 @@ export class ConnectBankModalComponent implements OnChanges {
    * getProviderLoginForm
    */
   public getProviderLoginForm(providerId) {
+    this.loginForm.reset();
     this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
       if (a && a.status === 'success') {
         let response = _.cloneDeep(a.body.loginForm[0]);
-        this.loginForm.patchValue({
-          id: response.id,
-          forgotPasswordUrL: response.forgotPasswordUrL,
-          loginHelp: response.loginHelp,
-          formType: response.formType,
-        });
-        response.row.map((item, i) => {
-          this.addInputRow(i, item);
-        });
+        this.createLoginForm(response);
         this.step = 2;
       }
     });
@@ -231,11 +263,12 @@ export class ConnectBankModalComponent implements OnChanges {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
         if (!validateProvider && !this.cancelRequest) {
-            setTimeout(() => {
-              this.getBankSyncStatus(providerId);
-            }, 10000);
+          setTimeout(() => {
+            this.getBankSyncStatus(providerId);
+          }, 1000);
         }
       }
+
     });
   }
 
@@ -244,12 +277,24 @@ export class ConnectBankModalComponent implements OnChanges {
    */
   public validateProviderResponse(provider) {
     let status = provider.status.toLowerCase();
-      if (status === 'success' || status === 'failed') {
+    if (status === 'success' || status === 'failed') {
+      this.bankSyncInProgress = false;
+      this.onCancel();
+      return true;
+    } else if (status === 'user_input_required' || status === 'addl_authentication_required') {
+        let response = _.cloneDeep(provider.loginForm[0]);
+        this.providerId = provider.id;
+        if (response.formType === 'image') {
+          this.bypassSecurityTrustResourceUrl(response.row[0].field[0].value);
+        }
+        response.row[0].field[0].value = '';
+        this.createLoginForm(response);
+        this.isRefreshWithCredentials = false;
         this.bankSyncInProgress = false;
         return true;
-      } else {
-        return false;
-      }
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -258,6 +303,44 @@ export class ConnectBankModalComponent implements OnChanges {
   public resetBankForm() {
     this.step = 1;
     this.selectedProvider = {};
+  }
+
+  /**
+   * refreshAccount
+   */
+  public refreshAccount(ev) {
+    let objToSend = {
+      loginForm: [],
+      providerAccountId: this.providerId
+    };
+    objToSend.loginForm.push(this.loginForm.value);
+    this.refreshAccountEvent.emit(objToSend);
+    this.getBankSyncStatus(this.providerAccountId);
+  }
+
+  /**
+   * createLoginForm
+   */
+  public createLoginForm(response) {
+    this.loginForm = this.initLoginForm();
+    this.loginForm.patchValue({
+      id: response.id,
+      forgotPasswordUrL: response.forgotPasswordUrL,
+      loginHelp: response.loginHelp,
+      formType: response.formType,
+    });
+    response.row.map((item, i) => {
+      this.addInputRow(i, item);
+    });
+  }
+
+  /**
+   * bypassSecurityTrustResourceUrl
+   */
+  public bypassSecurityTrustResourceUrl(val) {
+    let str = 'data:application/pdf;base64,' + val;
+    // console.log('chala');
+    this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
   }
 
 }

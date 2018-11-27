@@ -1,10 +1,10 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TaxResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
-import { Action, ActionReducer } from '@ngrx/store';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
+import * as moment from 'moment/moment';
 
 /**
  * Keeping Track of the CompanyState
@@ -12,6 +12,8 @@ import { CustomActions } from '../customActions';
 export interface CurrentCompanyState {
   taxes: TaxResponse[];
   isTaxesLoading: boolean;
+  activeFinancialYear: object;
+  dateRangePickerConfig: any;
 }
 
 /**
@@ -19,7 +21,56 @@ export interface CurrentCompanyState {
  */
 const initialState: CurrentCompanyState = {
   taxes: null,
-  isTaxesLoading: false
+  isTaxesLoading: false,
+  activeFinancialYear: null,
+  dateRangePickerConfig: {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  }
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -78,6 +129,20 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case CompanyActions.SET_ACTIVE_FINANCIAL_YEAR: {
+      let res = action.payload;
+      let newState = _.cloneDeep(state);
+      let dateRangePickerConfig = _.cloneDeep(newState.dateRangePickerConfig);
+      dateRangePickerConfig.ranges['This Financial Year to Date'][0] = moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+      dateRangePickerConfig.ranges['Last Financial Year'] = [
+        moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year'),
+        moment(_.clone(res.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year')
+      ];
+      return Object.assign({}, state, {
+        dateRangePickerConfig
+      });
+
     }
     default:
       return state;

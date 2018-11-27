@@ -10,18 +10,19 @@
   <!--end loader-->
 
   <!-- result -->
-  <section class="" *ngIf="!(searchLoader$ | async) && (search$ | async)">
-    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)"
+  <section class="" [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
+    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)"
                    (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()"></search-filter>
     <table class="table table-bordered basic mrT1">
       <thead>
       <tr>
         <th [style.width.px]="25">
           <div>
-            <input type="checkbox" (change)="toggleSelectAll(isAllChecked)" [(ngModel)]="isAllChecked">
+            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked"
+                   [(ngModel)]="isAllChecked">
           </div>
         </th>
-        <th>#</th>
+        <!-- <th>#</th> -->
         <th>
           <div (click)="sortType = 'name'; sortReverse = !sortReverse">
             Name
@@ -76,8 +77,10 @@
       </thead>
       <tbody>
       <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-        <td><input type="checkbox" (change)="toggleSelection(item)" [(ngModel)]="item.isSelected"></td>
-        <td>{{i+1}}</td>
+        <!-- [(ngModel)]="item.isSelected" -->
+        <td><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1"
+                   (change)="toggleSelection($event, item)"></td>
+        <!-- <td>{{i+1}}</td> -->
         <td>{{item.name}}</td>
         <td>{{item.uniqueName}}</td>
         <td>{{item.parent}}</td>
@@ -104,6 +107,17 @@
         </td>
       </tr>
       </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm"
+                        [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                        (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
+      </tfoot>
     </table>
   </section>
   <!-- end pd div -->
@@ -122,8 +136,8 @@
           <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
         </div>
         <div class="modal-body pdL2 pdR2 clearfix">
-          <!-- 		<h1 class="mrB1" ng-if="messageBody.type == 'Email'">Enter Subject:</h1>
-        <input ng-if="messageBody.type == 'Email'" class="form-control mrB1" type="text" ng-model="messageBody.subject" placeholder="Enter subject here"/> -->
+          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+          <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here"/>
           <h1 class="mrB1">Type message body:</h1>
           <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
                     placeholder="start typing your message here"></textarea>

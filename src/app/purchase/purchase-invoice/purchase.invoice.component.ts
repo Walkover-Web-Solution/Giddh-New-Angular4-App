@@ -1,53 +1,64 @@
-import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { BsDropdownConfig } from 'ngx-bootstrap';
+import { BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
 import * as  moment from 'moment/moment';
 import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AppState } from '../../store';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
-import 'rxjs/add/operator/distinct';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/map';
+
 import { AccountService } from '../../services/account.service';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
-import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { ReconcileActionState } from '../../store/GstReconcile/GstReconcile.reducer';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 const otherFiltersOptions = [
-  { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
-  { name: 'GSTIN Filled', uniqueName: 'GSTIN Filled' },
-  { name: 'Invoice Empty', uniqueName: 'Invoice Empty' },
-  { name: 'Invoice Filled', uniqueName: 'Invoice Filled' }
+  {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
+  {name: 'GSTIN Filled', uniqueName: 'GSTIN Filled'},
+  {name: 'Invoice Empty', uniqueName: 'Invoice Empty'},
+  {name: 'Invoice Filled', uniqueName: 'Invoice Filled'}
 ];
 
 const gstrOptions = [
-  { name: 'GSTR1', uniqueName: 'gstr1-excel-export' },
-  { name: 'GSTR2', uniqueName: 'gstr2-excel-export' },
-  { name: 'GSTR3B', uniqueName: 'gstr3-excel-export' }
+  {name: 'GSTR1', uniqueName: 'gstr1-excel-export'},
+  {name: 'GSTR2', uniqueName: 'gstr2-excel-export'},
+  {name: 'GSTR3B', uniqueName: 'gstr3-excel-export'}
 ];
 
 const purchaseReportOptions = [
-  { name: 'Credit Note', uniqueName: 'Credit Note' },
-  { name: 'Debit Note', uniqueName: 'Debit Note' }
+  {name: 'Credit Note', uniqueName: 'Credit Note'},
+  {name: 'Debit Note', uniqueName: 'Debit Note'}
 ];
 
 const fileGstrOptions = [
-  { name: 'Download Sheet', uniqueName: 'Download Sheet' },
-  { name: 'Use JIOGST API', uniqueName: 'Use JIOGST API' }
+  {name: 'Download Sheet', uniqueName: 'Download Sheet'},
+  {name: 'Use JIOGST API', uniqueName: 'Use JIOGST API'}
 ];
 
 @Component({
   selector: 'invoice-purchase',
   templateUrl: './purchase.invoice.component.html',
   styleUrls: ['purchase.invoice.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }],
+  providers: [
+    {
+      provide: BsDropdownConfig, useValue: {autoClose: true},
+    },
+    {
+      provide: AlertConfig, useValue: {}
+    }],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -62,80 +73,60 @@ const fileGstrOptions = [
   ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
+  @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
+  @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
+  @ViewChild('pgPartiallyMatched') public pgPartiallyMatched: ElementViewContainerRef;
+  @ViewChild('pgMatched') public pgMatched: ElementViewContainerRef;
+
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
   public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
   public allTaxes: ITaxResponse[] = [];
-  public selectedDateForGSTR1 = {};
+  public selectedDateForGSTR1: any = {};
   public selectedEntryTypeValue: string = '';
   public moment = moment;
-  public selectedGstrType = { name: '', uniqueName: '' };
+  public selectedGstrType = {name: '', uniqueName: ''};
   public showGSTR1DatePicker: boolean = false;
   public accountAsideMenuState: string = 'out';
   public dropdownHeading: string = 'Select taxes';
   public isSelectedAllTaxes: boolean = false;
   public purchaseInvoiceObject: IInvoicePurchaseItem = new IInvoicePurchaseItem();
   public purchaseInvoiceRequestObject: GeneratePurchaseInvoiceRequest = new GeneratePurchaseInvoiceRequest();
-
-  public datePickerOptions: any = {
-    locale: {
-      applyClass: 'btn-green',
-      applyLabel: 'Go',
-      fromLabel: 'From',
-      format: 'D-MMM-YY',
-      toLabel: 'To',
-      cancelLabel: 'Cancel',
-      customRangeLabel: 'Custom range'
-    },
-    ranges: {
-      'Last 1 Day': [
-        moment().subtract(1, 'days'),
-        moment()
-      ],
-      'Last 7 Days': [
-        moment().subtract(6, 'days'),
-        moment()
-      ],
-      'Last 30 Days': [
-        moment().subtract(29, 'days'),
-        moment()
-      ],
-      'Last 6 Months': [
-        moment().subtract(6, 'months'),
-        moment()
-      ],
-      'Last 1 Year': [
-        moment().subtract(12, 'months'),
-        moment()
-      ]
-    }
-  };
-  public otherFilters: any[] = otherFiltersOptions;
   public gstrOptions: any[] = gstrOptions;
-  public purchaseReportOptions: any[] = purchaseReportOptions;
-  public fileGstrOptions: any[] = fileGstrOptions;
   public activeCompanyUniqueName: string;
   public activeCompanyGstNumber: string;
   public companies: CompanyResponse[];
   public isDownloadingFileInProgress: boolean = false;
-  public mainInput = {
-    start: moment().subtract(12, 'month'),
-    end: moment().subtract(6, 'month')
-  };
-  public singleDate: any;
   public timeCounter: number = 10; // Max number of seconds to wait
-  public eventLog = '';
   public selectedRowIndex: number = null;
   public isReverseChargeSelected: boolean = false;
-  public stateList = StateList;
   public generateInvoiceArr: IInvoicePurchaseItem[] = [];
   public invoiceSelected: boolean = false;
   public editMode: boolean = false;
   public pageChnageState: boolean = false;
   public userEmail: string = '';
-  public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO';
+  public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
+  public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
+  public gstAuthenticated$: Observable<boolean>;
+  public gstFoundOnGiddh$: Observable<boolean>;
+  public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
+  public gstMatchedData$: Observable<ReconcileActionState>;
+  public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
+  public reconcileActiveTab: string = 'NOT_ON_PORTAL';
+
+  public datePickerOptions$: Observable<any> = of(null);
+  public activeFinancialYear: ActiveFinancialYear;
+  public singleDatePickerOptions$: Observable<any> = of(null);
+  public showSingleDatePicker: boolean = false;
+  public datePickerOptions: any;
+  public selectedRangeType: string = '';
+  public isMonthSelected: boolean = false;
+  public selectedMonth: any = moment(new Date());
+
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private router: Router,
     private location: Location,
@@ -144,18 +135,21 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private toasty: ToasterService,
     private companyActions: CompanyActions,
     private purchaseInvoiceService: PurchaseInvoiceService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private _reconcileActions: GstReconcileActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private settingsProfileActions: SettingsProfileActions
   ) {
     this.purchaseInvoiceObject.TaxList = [];
     this.purchaseInvoiceRequestObject.entryUniqueName = [];
     this.purchaseInvoiceRequestObject.taxes = [];
-    this.selectedDateForGSTR1 = moment();
-    this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
+
+    this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
       if (c) {
         this.activeCompanyUniqueName = _.cloneDeep(c);
       }
     });
-    this.store.select(p => p.session.companies).take(1).subscribe((c) => {
+    this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
       if (c.length) {
         let companies = this.companies = _.cloneDeep(c);
         if (this.activeCompanyUniqueName) {
@@ -170,15 +164,44 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.RefreshCompanies());
       }
     });
+    this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
+    this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
+    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+      let gstr1DatePicker = _.cloneDeep(a);
+      gstr1DatePicker.opens = 'right';
+      delete gstr1DatePicker.ranges['This Month to Date'];
+      delete gstr1DatePicker.ranges['This Financial Year to Date'];
+      delete gstr1DatePicker.ranges['This Year to Date'];
+      delete gstr1DatePicker.ranges['Last Financial Year'];
+      delete gstr1DatePicker.ranges['Last Year'];
+      delete gstr1DatePicker.ranges['This Quarter to Date'];
+      this.datePickerOptions$ = of(_.cloneDeep(gstr1DatePicker));
+      this.selectedDateForGSTR1 = {
+        from: moment(a.startDate._d).format(GIDDH_DATE_FORMAT),
+        to: moment(a.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
+
+      let singleDatePickerOptions = _.cloneDeep(gstr1DatePicker);
+      singleDatePickerOptions.singleDatePicker = true;
+      singleDatePickerOptions.startView = 'months';
+      singleDatePickerOptions.minViewMode = 'months';
+      this.singleDatePickerOptions$ = of(singleDatePickerOptions);
+      this.datePickerOptions = gstr1DatePicker;
+    });
+    this.setCurrentMonth();
   }
 
   public ngOnInit() {
 
     let paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     paginationRequest.page = 1;
-
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
-    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.purchaseInvoices && o.purchaseInvoices.items) {
         this.allPurchaseInvoices = _.cloneDeep(o.purchaseInvoices);
         this.allPurchaseInvoicesBackup = _.cloneDeep(o.purchaseInvoices);
@@ -186,17 +209,41 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.isDownloadingFileInProgress = o.isDownloadingFile;
       if (o.invoiceGenerateSuccess) {
         this.generateInvoiceArr = [];
-        let event = { itemsPerPage: 10, page: this.allPurchaseInvoices.page };
+        let event = {itemsPerPage: 10, page: this.allPurchaseInvoices.page};
         this.pageChanged(event);
       }
     });
     this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
-    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.taxes && o.taxes.length) {
         this.allTaxes = _.cloneDeep(o.taxes);
       }
     });
 
+    this.gstNotFoundOnGiddhData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s, 'NOT_ON_GIDDH');
+    });
+
+    this.gstNotFoundOnPortalData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s, 'NOT_ON_PORTAL');
+    });
+
+    this.gstPartiallyMatchedData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s, 'PARTIALLY_MATCHED');
+    });
+
+    this.gstMatchedData$.subscribe(s => {
+      this.loadReconcilePaginationComponent(s, 'MATCHED');
+    });
+
+    this.gstAuthenticated$.subscribe(s => {
+      if (!s) {
+        // commented due to not tested yet
+        // this.toggleSettingAsidePane(null, 'RECONCILE');
+      } else {
+        //  means user logged in gst portal
+      }
+    });
   }
 
   public selectedDate(value: any, dateInput: any) {
@@ -251,6 +298,44 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public onSelectGstrOption(gstrType) {
     this.selectedGstrType = gstrType;
+    if (gstrType.name !== 'GSTR1') {
+      this.showSingleDatePicker = true;
+    } else {
+      this.showSingleDatePicker = false;
+    }
+    if (gstrType.name === 'GSTR2') {
+      this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+      this.fireGstReconcileRequest('NOT_ON_PORTAL');
+    }
+
+    if (gstrType.name === 'GSTR2' || gstrType.name === 'GSTR3B') {
+      this.setCurrentMonth();
+    }
+  }
+
+  public monthChanged(ev, isMonth?: string) {
+
+    if (ev && ev.picker) {
+      let dates = {
+        from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+      };
+      this.selectedDateForGSTR1 = dates;
+      this.isMonthSelected = false;
+      this.selectedMonth =  moment(new Date());
+    } else {
+      let dates = {
+        from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+        to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+      };
+      this.selectedDateForGSTR1 = dates;
+      this.selectedMonth = ev;
+      this.isMonthSelected = true;
+      this.selectedDateForGSTR1.monthYear = moment(ev).format('MM-YYYY');
+    }
+    if (this.selectedGstrType.name === 'GSTR2') {
+      this.fireGstReconcileRequest(this.reconcileActiveTab, ev);
+    }
   }
 
   /**
@@ -306,9 +391,9 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       let monthToSend = check.format('MM') + '-' + check.format('YYYY');
       if (this.activeCompanyGstNumber) {
         if (typeOfSheet === 'gstr1-excel-export' || 'gstr2-excel-export') {
-          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(monthToSend, this.activeCompanyGstNumber, typeOfSheet));
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(this.selectedDateForGSTR1, this.activeCompanyGstNumber, typeOfSheet, this.selectedGstrType.name ));
         } else if (typeOfSheet === 'gstr1-error-export' || 'gstr2-error-export') {
-          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1ErrorSheet(monthToSend, this.activeCompanyGstNumber, typeOfSheet));
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.selectedDateForGSTR1, this.activeCompanyGstNumber, typeOfSheet, this.selectedGstrType.name));
         }
       } else {
         this.toasty.errorToast('GST number not found.');
@@ -319,11 +404,11 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public setCurrentMonth() {
-    this.selectedDateForGSTR1 = moment();
+    this.selectedDateForGSTR1.monthYear = moment().format('MM-YYYY');
   }
 
   public clearDate() {
-    this.selectedDateForGSTR1 = {};
+    this.selectedDateForGSTR1.monthYear = moment();
   }
 
   /**
@@ -445,10 +530,21 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * toggleSettingAsidePane
    */
-  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO'): void {
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
     if (event) {
       event.preventDefault();
     }
+
+    if (selectedService === 'RECONCILE') {
+      let checkIsAuthenticated;
+      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
+
+      if (checkIsAuthenticated) {
+        this.fireGstReconcileRequest(this.reconcileActiveTab, this.selectedDateForGSTR1, 1, true);
+        return;
+      }
+    }
+
     if (selectedService) {
       this.selectedServiceForGSTR1 = selectedService;
     }
@@ -456,8 +552,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * SelectAllTaxes
-  */
+   * SelectAllTaxes
+   */
   public selectAllTaxes(event) {
     if (event.target.checked) {
       this.purchaseInvoiceObject.isAllTaxSelected = true;
@@ -471,8 +567,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * KeepCountofSelectedOptions
-  */
+   * KeepCountofSelectedOptions
+   */
   public makeCount() {
     let count: number = 0;
     let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
@@ -484,9 +580,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
     return count;
   }
+
   /**
-  * selectTaxOption
-  */
+   * selectTaxOption
+   */
   public selectTax(event, tax, idx) {
     if (event.target.checked) {
       // console.log(tax);
@@ -501,15 +598,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * toggle dropdown heading
-  */
+   * toggle dropdown heading
+   */
   public onDDShown() {
     this.dropdownHeading = 'Selected Taxes';
   }
 
   /**
-  * toggle dropdown heading
-  */
+   * toggle dropdown heading
+   */
   public onDDHidden(uniqueName: string, accountUniqueName: string) {
     let taxUniqueNames: string[] = [];
     this.dropdownHeading = 'Select Taxes';
@@ -531,6 +628,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     if (this.intervalId && this.intervalId._state === 'running') {
       this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
     }
+    this.store.dispatch(this._reconcileActions.ResetGstReconcileState());
   }
 
   /**
@@ -581,6 +679,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
   }
 
+  public reconcileTabChanged(action: string) {
+    this.reconcileActiveTab = action;
+    this.fireGstReconcileRequest(action);
+  }
+
+  public reconcilePageChanged(event: any, action: string) {
+    this.fireGstReconcileRequest(action, this.selectedDateForGSTR1, event.page);
+  }
+
   /**
    * resetStateOnPageChange
    */
@@ -596,7 +703,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * COMMENTED DUE TO PHASE-2
    * validateGstin
-  */
+   */
   // public validateGstin(val, idx) {
   //   if (val && val.length === 15) {
   //     let code = val.substr(0, 2);
@@ -628,14 +735,14 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
-    let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
+    let check = moment(this.selectedMonth, 'MM-YYYY');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
     if (!monthToSend) {
       this.toasty.errorToast('Please select a month');
     } else if (!this.activeCompanyGstNumber) {
       this.toasty.errorToast('No GST Number found for selected company');
     } else {
-      this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet,  this.userEmail));
+      this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
       this.userEmail = '';
     }
   }
@@ -646,10 +753,60 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public fileJioGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
     let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
-      if (this.activeCompanyGstNumber) {
-        this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber, Via));
-      } else {
-        this.toasty.errorToast('GST number not found.');
-      }
+    if (this.activeCompanyGstNumber) {
+      this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.selectedDateForGSTR1, this.activeCompanyGstNumber, Via));
+    } else {
+      this.toasty.errorToast('GST number not found.');
+    }
+  }
+
+  public fireGstReconcileRequest(action: string, selectedDateForGSTR1 = this.selectedDateForGSTR1, page: number = 1, refresh: boolean = false) {
+    // commented due to not tested yet by alok sir
+    // this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
+    //   this.moment(selectedDateForGSTR1).format('MMYYYY'), action, page.toString(), refresh)
+    // );
+  }
+
+  public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
+
+    if (s.count === 0) {
+      return;
+    }
+
+    if (action !== this.reconcileActiveTab) {
+      return;
+    }
+
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+    let viewContainerRef = null;
+    switch (this.reconcileActiveTab) {
+      case 'NOT_ON_GIDDH':
+        viewContainerRef = this.pgGstNotFoundOnGiddh.viewContainerRef;
+        break;
+      case 'NOT_ON_PORTAL':
+        viewContainerRef = this.pgGstNotFoundOnPortal.viewContainerRef;
+        break;
+      case 'MATCHED':
+        viewContainerRef = this.pgMatched.viewContainerRef;
+        break;
+      case 'PARTIALLY_MATCHED':
+        viewContainerRef = this.pgPartiallyMatched.viewContainerRef;
+        break;
+    }
+
+    viewContainerRef.remove();
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as PaginationComponent;
+
+    componentInstance.totalItems = s.data.totalItems;
+    componentInstance.itemsPerPage = s.data.count;
+    componentInstance.maxSize = 5;
+    componentInstance.writeValue(s.data.page);
+    componentInstance.boundaryLinks = true;
+    componentInstance.pageChanged.subscribe(e => {
+      this.reconcilePageChanged(e, this.reconcileActiveTab);
+    });
   }
 }

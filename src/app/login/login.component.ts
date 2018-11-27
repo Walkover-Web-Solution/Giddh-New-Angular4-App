@@ -1,22 +1,22 @@
+import { take, takeUntil } from 'rxjs/operators';
 import { LoginActions } from '../actions/login.action';
 import { AppState } from '../store';
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
+import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from '../theme/ng-social-login-module/index';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { DOCUMENT } from '@angular/platform-browser';
 import { ToasterService } from '../services/toaster.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'login',
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
-  @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
+  // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isResetPasswordInSuccess$: Observable<boolean>;
   public showForgotPassword: boolean = false;
   public forgotStep: number = 0;
+  public apkVersion: string;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -71,52 +72,53 @@ export class LoginComponent implements OnInit, OnDestroy {
     private loginAction: LoginActions,
     private authService: AuthService,
     @Inject(DOCUMENT) private document: Document,
-    private _toaster: ToasterService
-    ) {
+    private _toaster: ToasterService,
+    private _authService: AuthenticationService
+  ) {
     this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.isVerifyEmailInProcess$ = store.select(state => {
       return state.login.isVerifyEmailInProcess;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.isLoginWithMobileInProcess$ = store.select(state => {
       return state.login.isLoginWithMobileInProcess;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.isVerifyMobileInProcess$ = store.select(state => {
       return state.login.isVerifyMobileInProcess;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
 
     this.isLoginWithMobileSubmited$ = store.select(state => {
       return state.login.isLoginWithMobileSubmited;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.isLoginWithEmailSubmited$ = store.select(state => {
       return state.login.isLoginWithEmailSubmited;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     store.select(state => {
       return state.login.isVerifyEmailSuccess;
-    }).takeUntil(this.destroyed$).subscribe((value) => {
+    }).pipe(takeUntil(this.destroyed$)).subscribe((value) => {
       if (value) {
         // this.router.navigate(['home']);
       }
     });
     store.select(state => {
       return state.login.isVerifyMobileSuccess;
-    }).takeUntil(this.destroyed$).subscribe((value) => {
+    }).pipe(takeUntil(this.destroyed$)).subscribe((value) => {
       if (value) {
         // this.router.navigate(['home']);
       }
     });
     this.isLoginWithPasswordInProcess$ = store.select(state => {
       return state.login.isLoginWithPasswordInProcess;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.isForgotPasswordInProgress$ = store.select(state => {
       return state.login.isForgotPasswordInProcess;
-    }).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
     this.isResetPasswordInSuccess$ = store.select(state => {
       return state.login.isResetPasswordInSuccess;
-    }).takeUntil(this.destroyed$);
-    this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
+    }).pipe(takeUntil(this.destroyed$));
+    this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
       this.countryCodeList.push({ value: c.countryName, label: c.value });
@@ -129,6 +131,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+
+    this.emailVerifyModal.config = { backdrop: 'static'};
+    this.twoWayAuthModal.config = { backdrop: 'static'};
+    this.mobileVerifyModal.config = { backdrop: 'static'};
+
+    this.getElectronAppVersion();
     this.document.body.classList.remove('unresponsive');
     this.generateRandomBanner();
     this.mobileVerifyForm = this._fb.group({
@@ -161,7 +169,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
-      this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
+      this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
         this.isSocialLogoutAttempted$.subscribe((res) => {
           if (!res && user) {
             switch (user.provider) {
@@ -206,18 +214,24 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loginUsing = 'userName';
       }
     });
-    this.isForgotPasswordInProgress$.subscribe (a => {
+    this.isForgotPasswordInProgress$.subscribe(a => {
       if (!a) {
         this.forgotStep = 1;
       } else {
         this.forgotStep = 2;
       }
     });
+
+    this.twoWayAuthModal.onHidden.subscribe(e => {
+      if (e && e.dismissReason === 'esc') {
+        return this.resetTwoWayAuthModal();
+      }
+    });
   }
 
   public showEmailModal() {
     this.emailVerifyModal.show();
-    this.emailVerifyModal.onShow.takeUntil(this.destroyed$).subscribe(() => {
+    this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.isSubmited = false;
     });
   }
@@ -243,7 +257,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public verifyTwoWayCode() {
     let user: VerifyEmailResponseModel;
-    this.userDetails$.take(1).subscribe(p => user = p);
+    this.userDetails$.pipe(take(1)).subscribe(p => user = p);
     let data = new VerifyMobileModel();
     data.countryCode = Number(user.countryCode);
     data.mobileNumber = user.contactNumber;
@@ -390,7 +404,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public forgotPassword(userId) {
-    this.resetPasswordForm.patchValue({uniqueKey: userId});
+    this.resetPasswordForm.patchValue({ uniqueKey: userId });
     this.userUniqueKey = userId;
     this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
   }
@@ -406,5 +420,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.resetPasswordForm.reset();
     this.forgotStep = 1;
     this.userUniqueKey = null;
+  }
+
+  private getElectronAppVersion() {
+    this._authService.GetElectronAppVersion().subscribe((res: string) => {
+      if (res) {
+        let version = res.split('files')[0];
+        let versNum = version.split(' ')[1];
+        this.apkVersion = versNum;
+      }
+    });
   }
 }
