@@ -59,12 +59,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
   @Input() public isV2: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private _selectedCompany: CompanyResponse;
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions, private _toaster: ToasterService) {
     this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).pipe(takeUntil(this.destroyed$));
   }
-
-  private _selectedCompany: CompanyResponse;
 
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
