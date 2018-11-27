@@ -13,7 +13,6 @@ import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterange
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-
 import { cloneDeep } from 'app/lodash-optimized';
 
 @Component({
