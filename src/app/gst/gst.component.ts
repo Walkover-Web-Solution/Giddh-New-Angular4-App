@@ -109,7 +109,6 @@ export class GstComponent implements OnInit {
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getCurrentPeriod$.subscribe(a => {
-      debugger;
       if (a && a.from) {
         let date = {
           startDate: moment(a.from, 'DD-MM-YYYY').startOf('month').format('DD-MM-YYYY'),
