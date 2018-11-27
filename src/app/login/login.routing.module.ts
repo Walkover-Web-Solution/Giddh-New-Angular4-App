@@ -13,4 +13,5 @@ import { UserAuthenticated } from '../decorators/UserAuthenticated';
   ],
   exports: [RouterModule]
 })
-export class LoginRoutingModule { }
+export class LoginRoutingModule {
+}

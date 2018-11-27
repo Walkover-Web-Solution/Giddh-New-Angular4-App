@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import * as jsPDF from 'jspdf';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
@@ -69,8 +69,9 @@ class FormatPdf implements IFormatable {
   }
 
   public setFooter(data: any[]) {
+    this.pdf.setFontSize(8);
     this.pdf.line(10, this.colY += 5, 200, this.colY);
-    this.pdf.text(10, this.colY + 5, 'TOTAL', );
+    this.pdf.text(10, this.colY + 5, 'TOTAL');
     this.pdf.text(70, this.colY + 5, data[0].toString());
     this.pdf.text(105, this.colY + 5, data[1].toString());
     this.pdf.text(140, this.colY + 5, data[2].toString());
@@ -192,9 +193,13 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
       theme: 'plain',
       margin: {
         top: this.selectedCompany.address ? 110 + (this.selectedCompany.address.split('\n').length * 15) : 110 + 15
-
       },
       drawCell: (cell, data) => {
+
+        pdf.setFontSize(8);
+        if (!isNaN(cell.raw) || cell.raw.indexOf('Cr.') > -1 || cell.raw.indexOf('Dr.') > -1) {
+          cell.text = cell.text[0] ? String(cell.raw) : [String(cell.text)];
+        }
         if (data.column.name === 'name') {
           // console.log(cell, data);
         }

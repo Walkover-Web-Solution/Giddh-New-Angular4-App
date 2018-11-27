@@ -19,7 +19,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
-import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, PaginationModule, PaginationComponent } from 'ngx-bootstrap';
 import { AsideCustomStockComponent } from 'app/inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from 'app/inventory/components/aside-inventory.components/aside-inventory.components';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
@@ -82,7 +82,11 @@ import { BranchHeaderComponent } from './components/branch/branchHeader/branch.h
     Daterangepicker,
     TextCaseChangeModule,
     BsDropdownModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    PaginationModule
+  ],
+  entryComponents: [
+    PaginationComponent
   ],
 })
 export class InventoryModule {

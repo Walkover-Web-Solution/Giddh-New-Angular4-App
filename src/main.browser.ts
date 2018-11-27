@@ -3,50 +3,36 @@
  */
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { environment } from 'environments/environment';
-
 /**
  * App Module
  * our top level module that holds all of our components
  */
 import { AppModule } from './app';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/skip';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/debounce';
+import { Observable } from 'rxjs';
 
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs';
 
 const debuggerOn = true;
 
-Observable.prototype.debug = function(message: string) {
-  return this.do(
-    nextValue => {
+const debug = <T>() => (source: Observable<T>) => new Observable<T>((subscriber) => {
+  source.subscribe({
+    next(value) {
       if (debuggerOn) {
-        // console.log(message, nextValue);
+        subscriber.next(value);
       }
     },
-    error => {
+    error(err) {
       if (debuggerOn) {
-        console.error(message, error);
+        subscriber.error(err);
       }
     },
-    () => {
+    complete() {
       if (debuggerOn) {
-        console.error('Observable completed - ', message);
+        subscriber.complete();
       }
-    }
-  );
-};
-
-declare module 'rxjs/Observable' {
-  // tslint:disable-next-line:no-shadowed-variable
-  interface Observable<T> {
-    // tslint:disable-next-line:variable-name
-    debug: (...any) => Observable<T>;
-  }
-}
+    },
+  });
+});
 
 /**
  * Bootstrap our Angular app with a top level NgModule

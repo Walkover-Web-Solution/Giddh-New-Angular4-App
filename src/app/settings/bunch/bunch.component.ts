@@ -1,37 +1,32 @@
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
-import * as moment from 'moment/moment';
 import { ToasterService } from '../../services/toaster.service';
-import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { ModalDirective, BsDropdownConfig } from 'ngx-bootstrap';
-import { CompanyAddComponent } from '../../shared/header/components';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
-import { Observable } from 'rxjs/Observable';
+import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsBunchService } from '../../services/settings.bunch.service';
 
 export const IsyncData = [
-  { label: 'Debtors', value: 'debtors' },
-  { label: 'Creditors', value: 'creditors' },
-  { label: 'Inventory', value: 'inventory' },
-  { label: 'Taxes', value: 'taxes' },
-  { label: 'Bank', value: 'bank' }
+  {label: 'Debtors', value: 'debtors'},
+  {label: 'Creditors', value: 'creditors'},
+  {label: 'Inventory', value: 'inventory'},
+  {label: 'Taxes', value: 'taxes'},
+  {label: 'Bank', value: 'bank'}
 ];
 
 @Component({
   selector: 'setting-bunch',
   templateUrl: './bunch.component.html',
   styleUrls: ['./bunch.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+  providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
 })
 
 export class BunchComponent implements OnInit, OnDestroy {
@@ -45,7 +40,7 @@ export class BunchComponent implements OnInit, OnDestroy {
   public companies$: Observable<CompanyResponse[]>;
   public branches$: Observable<CompanyResponse[]>;
   public selectedCompanies: string[] = [];
-  public isAllSelected$: Observable<boolean> = Observable.of(false);
+  public isAllSelected$: Observable<boolean> = observableOf(false);
   public confirmationMessage: string = '';
   public parentCompanyName: string = null;
   public selectedBranch: string = null;
@@ -68,7 +63,7 @@ export class BunchComponent implements OnInit, OnDestroy {
     private _toasterService: ToasterService
   ) {
 
-    this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+    this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o && !_.isEmpty(o)) {
         let companyInfo = _.cloneDeep(o);
         this.currentBranch = companyInfo.name;
@@ -98,9 +93,9 @@ export class BunchComponent implements OnInit, OnDestroy {
             }
           });
         });
-        this.companies$ = Observable.of(_.orderBy(companiesWithSuperAdminRole, 'name'));
+        this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
       }
-    })).takeUntil(this.destroyed$).subscribe();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
 
   }
 
@@ -130,7 +125,7 @@ export class BunchComponent implements OnInit, OnDestroy {
   }
 
   public hideBunchModal() {
-    this.isAllSelected$ = Observable.of(false);
+    this.isAllSelected$ = observableOf(false);
     this.selectedBunch = {};
     this.bunchModal.hide();
     this.mode = 'create';
@@ -171,7 +166,7 @@ export class BunchComponent implements OnInit, OnDestroy {
   public saveBunch(data) {
     let dataToSend = _.cloneDeep(data);
     if (this.mode === 'create' || !this.mode) {
-        this.createBunch(dataToSend);
+      this.createBunch(dataToSend);
     } else {
       this.updateBunch(dataToSend);
     }
@@ -271,11 +266,11 @@ export class BunchComponent implements OnInit, OnDestroy {
   }
 
   private isAllCompaniesSelected() {
-    this.companies$.take(1).subscribe((companies) => {
+    this.companies$.pipe(take(1)).subscribe((companies) => {
       if (companies.length === this.selectedCompanies.length) {
-        this.isAllSelected$ = Observable.of(true);
+        this.isAllSelected$ = observableOf(true);
       } else {
-        this.isAllSelected$ = Observable.of(false);
+        this.isAllSelected$ = observableOf(false);
       }
     });
   }

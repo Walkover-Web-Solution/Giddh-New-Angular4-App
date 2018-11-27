@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { takeUntil } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { LoaderState } from './loader';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'giddh-loader',
@@ -23,7 +23,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.loaderService.loaderState.takeUntil(this.destroyed$).subscribe((state: LoaderState) => {
+    this.loaderService.loaderState.pipe(takeUntil(this.destroyed$)).subscribe((state: LoaderState) => {
       if (state.show) {
         this.showLoader = true;
       } else {
@@ -32,6 +32,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
       this.cdref.detectChanges();
     });
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

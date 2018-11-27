@@ -1,10 +1,14 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'app/models/api-models/Company';
 import { ITaxList } from 'app/models/api-models/Sales';
-import { findIndex, forEach, indexOf, each, find } from 'app/lodash-optimized';
+import { each, find, findIndex, indexOf } from 'app/lodash-optimized';
 import * as moment from 'moment';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject, Observable } from 'rxjs';
 import { ITaxDetail } from 'app/models/interfaces/tax.interface';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/store';
+import { takeUntil } from 'rxjs/operators';
+import { of as observableOf } from 'rxjs';
 
 @Component({
   selector: 'sales-tax-list',
@@ -33,40 +37,55 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public applicableTaxes: any[];
   @Input() public taxListAutoRender: ITaxList[];
   @Input() public showTaxPopup: boolean = false;
+  @Input() public TaxSum: any;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @ViewChild('taxListUl') public taxListUl: ElementRef;
+  public companyTaxesList$: Observable<TaxResponse[]>;
 
   public sum: number = 0;
   public taxList: ITaxList[] = [];
   public selectedTax: string[] = [];
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor() {
+  constructor(private store: Store<AppState>) {
     //
+
+    // get tax list and assign values to local vars
+    this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+      if (o) {
+        this.companyTaxesList$ = observableOf(o);
+        this.taxes = o;
+        this.makeTaxList();
+      } else {
+        this.companyTaxesList$ = observableOf([]);
+        this.taxes = [];
+      }
+    });
   }
 
   public ngOnDestroy() {
-    this.sum = 0;
-    this.taxAmountSumEvent.unsubscribe();
-    this.selectedTaxEvent.unsubscribe();
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    // this.sum = 0;
+    // this.taxAmountSumEvent.unsubscribe();
+    // this.selectedTaxEvent.unsubscribe();
+    // this.destroyed$.next(true);
+    // this.destroyed$.complete();
   }
 
   public ngOnInit(): void {
-    this.makeTaxList();
-    this.distendFn();
+    // this.makeTaxList();
+    // this.distendFn();
   }
-  public ngOnChanges(changes: SimpleChanges): void {
-    if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
-      this.makeTaxList();
-      this.distendFn();
-    }
 
-    if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
-      this.distendFn();
-    }
+  public ngOnChanges(changes: SimpleChanges): void {
+    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
+    //   this.makeTaxList();
+    //   this.distendFn();
+    // }
+
+    // if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
+    //   this.distendFn();
+    // }
 
     if ('applicableTaxes' in changes && changes.applicableTaxes.currentValue !== changes.applicableTaxes.previousValue) {
       this.applicableTaxesFn();
@@ -101,8 +120,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     // set values
     this.sum = this.calculateSum();
     this.selectedTax = this.getSelectedTaxes();
-
-    // emit events
     this.selectedTaxEvent.emit(this.selectedTax);
     this.taxAmountSumEvent.emit(this.sum);
   }
@@ -114,7 +131,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         item.isDisabled = false;
         return item;
       });
-    }else {
+    } else {
       this.taxList.map((item: ITaxList) => {
         item.isChecked = false;
         item.isDisabled = false;
@@ -125,7 +142,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getIsTaxApplicable(tax: string) {
-    let o: TaxResponse = find(this.taxes, (item: TaxResponse) => item.uniqueName === tax );
+    let o: TaxResponse = find(this.taxes, (item: TaxResponse) => item.uniqueName === tax);
     if (o) {
       return this.isTaxApplicable(o);
     } else {
@@ -186,9 +203,9 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
    */
   private getItemIsCheckedOrNot(uniqueName: string): boolean {
     if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
-      let idx = findIndex(this.taxListAutoRender, (tax: ITaxList) => tax.uniqueName === uniqueName );
+      let idx = findIndex(this.taxListAutoRender, (tax: ITaxList) => tax.uniqueName === uniqueName);
       return (idx !== -1) ? true : false;
-    }else {
+    } else {
       return false;
     }
   }

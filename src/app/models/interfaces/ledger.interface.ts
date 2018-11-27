@@ -117,6 +117,8 @@ export interface ITransactionItem {
   unconfirmedEntry: boolean;
   selectedAccount?: IFlattenAccountsResultItem | any;
   convertedAmount?: string;
+  isChecked?: boolean;
+  voucherName?: string;
 }
 
 /**

@@ -1,32 +1,31 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
-import * as path from 'path';
+import { app, ipcMain } from 'electron';
 import setMenu from './AppMenuManager';
 import { log } from './util';
 import WindowManager from './WindowManager';
 
 let windowManager: WindowManager = null;
-if (app.makeSingleInstance((commandLine: any[], workingDirectory: string) => {
-  // someone tried to run a second instance, we should focus our window
-  if (windowManager != null) {
-    windowManager.focusFirstWindow();
-  }
-  return true;
-})) {
-  app.quit();
-} else {
-  // tslint:disable-next-line:no-var-requires
-  // require('electron-debug')();
+// if (app.makeSingleInstance((commandLine: any[], workingDirectory: string) => {
+//   // someone tried to run a second instance, we should focus our window
+//   if (windowManager != null) {
+//     windowManager.focusFirstWindow();
+//   }
+//   return true;
+// })) {
+//   app.quit();
+// } else {
+// tslint:disable-next-line:no-var-requires
+// require('electron-debug')();
 
-  app.on('ready', () => {
-    ipcMain.on('log.error', (event: any, arg: any) => {
-      log(arg);
-    });
-
-    setMenu();
-    windowManager = new WindowManager();
-    windowManager.openWindows();
+app.on('ready', () => {
+  ipcMain.on('log.error', (event: any, arg: any) => {
+    log(arg);
   });
-}
+
+  setMenu();
+  windowManager = new WindowManager();
+  windowManager.openWindows();
+});
+// }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -93,3 +92,6 @@ if (app.makeSingleInstance((commandLine: any[], workingDirectory: string) => {
 //     detail: 'It\'s my pleasure to make your life better.'
 //   });
 // });
+ipcMain.on('open-url', (event, arg) => {
+  windowManager.openWindows(arg);
+});

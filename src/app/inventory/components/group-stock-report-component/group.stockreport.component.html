@@ -1,11 +1,11 @@
 <section class="h100">
-    <!-- 
-    <div class="clearfix mrB">
-        <button class="btn btn-link btn-xs gico-wrap" (click)="goToManageGroup()">
-      <i class="icon-edit" aria-hidden="true"></i> Edit
-      </button>
-    </div>
-     -->
+    <!--
+  <div class="clearfix mrB">
+      <button class="btn btn-link btn-xs gico-wrap" (click)="goToManageGroup()">
+    <i class="icon-edit" aria-hidden="true"></i> Edit
+    </button>
+  </div>
+   -->
     <form class="fb__1-container mrB1" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
         <div class="form-group">
             <!-- <label class="d-block">From - To</label> -->
@@ -82,20 +82,21 @@
             </tbody>
             <tfoot *ngIf="(groupStockReport$ | async)?.count > 0">
                 <tr>
-                    <td colspan="14">
-                        <div class="pagination pull-right">
+                    <td colspan="14" class="text-center">
+                        <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                        <!-- <div class="pagination pull-right">
                             <ul class="list-inline">
                                 <li>
                                     <button class="btn btn-default" (click)="prevPage()" [disabled]="(groupStockReport$ | async)?.page === 1">Prev
-                          </button>
+                </button>
                                 </li>
                                 <li>{{(groupStockReport$ | async)?.page}}/{{(groupStockReport$ | async)?.totalPages}}</li>
                                 <li>
                                     <button class="btn btn-default" (click)="nextPage()" [disabled]="(groupStockReport$ | async)?.page === (groupStockReport$ | async)?.totalPages">Next
-                          </button>
+                </button>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </td>
                 </tr>
             </tfoot>

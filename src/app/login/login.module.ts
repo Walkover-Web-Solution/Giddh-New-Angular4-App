@@ -19,4 +19,5 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
   ],
   declarations: [LoginComponent]
 })
-export class LoginModule { }
+export class LoginModule {
+}

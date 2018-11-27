@@ -46,8 +46,8 @@
                 </div>
                 <div class="col-xs-4" style="font-size:11px;padding-top:15px">
                     <!-- <div class="text-center">
-                        <div>10,340 Dr.</div>
-                    </div> -->
+              <div>10,340 Dr.</div>
+          </div> -->
                 </div>
                 <div class="col-xs-4 text-right">
                     <div style="font-size:12px;color:#262626">
@@ -177,7 +177,7 @@
                                     </tr>
                                     <!-- ng-if="ledger.hasCredit" -->
                                     <!-- ng-class="{compoundEntry: ledger.isCompoundEntry}"
-                         ng-click="checkCompEntry(ledger)" -->
+     ng-click="checkCompEntry(ledger)" -->
                                     <!-- uib-tooltip="Total : {{ledger.total.amount}} {{ledger.total.type}}" tooltip-placement="top" -->
                                     <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers" (click)="checkCompEntry(ledger)" [ngClass]="{compoundEntry: ledger.isCompoundEntry}">
                                         <td colspan="100%" style="padding:0; border:0">
@@ -308,7 +308,8 @@
                 <div class="row text-center">
                     <div class="col-sm-12">
                         <h3 class="arvo">Giddh <strong>automates the accounting</strong> on behalf of <span class="companyName"><strong>{{ledgerData.companyName}}</strong></span>.</h3>
-                        <h4 class="arvo">We would love to extend our support via <a href="https://muneem.co" target="_blank" class="green" style="text-decoration: underline;">Muneem</a> for any query related to your ledger with <span class="companyName">{{ledgerData.companyName}}</span>.</h4>
+                        <h4 class="arvo">We would love to extend our support via <a href="https://muneem.co" target="_blank" class="green" style="text-decoration: underline;">Muneem</a> for any query related to your ledger with <span class="companyName">{{ledgerData.companyName}}</span>.
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -366,15 +367,17 @@
                                 </div>
 
                                 <!-- <div class="control-group">
-                                    <div class="form-group">
-                                        <div theme="'light'" ="cForm.myRecaptchaResponse">
-                                        </div>
-                                        <div vc-recaptcha theme="'light'" key="captchaKey" ng-model="cForm.myRecaptchaResponse">
-                                        </div>
-                                    </div>
-                                </div> -->
+                    <div class="form-group">
+                        <div theme="'light'" ="cForm.myRecaptchaResponse">
+                        </div>
+                        <div vc-recaptcha theme="'light'" key="captchaKey" ng-model="cForm.myRecaptchaResponse">
+                        </div>
+                    </div>
+                </div> -->
                                 <!-- [disabled]="contactForm.invalid" -->
-                                <button (click)="submitForm(cForm)" class="btn btn-default btn-lg" [disabled]="true" type="submit">Submit</button>
+                                <button (click)="submitForm(cForm)" class="btn btn-default btn-lg" [disabled]="true" type="submit">
+                  Submit
+                </button>
 
                             </form>
 
@@ -389,14 +392,14 @@
 
                             <div class="social">
                                 <!-- <a ng-repeat="list in socialList" href="{{list.url}}">
-                                <div class="scicn {{list.class}}">{{list.name}}</div>
-                            </a> -->
+                <div class="scicn {{list.class}}">{{list.name}}</div>
+            </a> -->
                             </div>
                             <div class="inconsolata">
                                 <p>405-406, Capt. C. S. Naidu Arcade,</p>
                                 <p>Near Greater Kailash Hospital, 10/2 Old Palasia,</p>
                                 <p>Indore, Madhya Pradesh 452018</p>
-                                <p class="mrT3">Sales : <a class="white" href="mailto:shubhendra@giddh.com">shubhendra@giddh.com</a><br /> Support : <a class="white" href="mailto:support@giddh.com">support@giddh.com</a><br>
+                                <p class="mrT3">Sales : <a class="white" href="mailto:shubhendra@giddh.com">shubhendra@giddh.com</a><br/> Support : <a class="white" href="mailto:support@giddh.com">support@giddh.com</a><br>
                                     <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:07939593939">079 39 59 3939</a>
                                     <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:08033037089">080 33 03 7089</a>
                                 </p>
@@ -410,7 +413,7 @@
             </section>
         </section>
         <!-- end of contact -->
-        <app-footer></app-footer>
+        <!-- <app-footer></app-footer> -->
     </section>
     <!-- end of footer -->
 

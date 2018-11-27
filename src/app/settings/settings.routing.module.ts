@@ -13,4 +13,5 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
   ],
   exports: [RouterModule]
 })
-export class SettingRountingModule { }
+export class SettingRountingModule {
+}

@@ -1,5 +1,5 @@
 import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -69,7 +69,8 @@ export class LedgerVM {
           discounts: [],
           selectedAccount: null,
           applyApplicableTaxes: true,
-          isInclusiveTax: true
+          isInclusiveTax: true,
+          isChecked: false
         },
         {
           id: uuid.v4(),
@@ -83,7 +84,8 @@ export class LedgerVM {
           discounts: [],
           selectedAccount: null,
           applyApplicableTaxes: true,
-          isInclusiveTax: true
+          isInclusiveTax: true,
+          isChecked: false
         }],
       voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -175,7 +177,8 @@ export class LedgerVM {
       discounts: [],
       selectedAccount: null,
       applyApplicableTaxes: true,
-      isInclusiveTax: true
+      isInclusiveTax: true,
+      isChecked: false
     };
   }
 
@@ -218,6 +221,7 @@ export class LedgerVM {
           }
           // push transaction
           item.transactions.map(transaction => {
+            transaction.isChecked = false;
             if (transaction.type === bankTxn.type) {
               transaction.amount = bankTxn.amount;
               transaction.id = item.transactionId;
@@ -229,7 +233,7 @@ export class LedgerVM {
         });
         this.bankTransactionsData.push(item);
       });
-    }else {
+    } else {
       this.bankTransactionsData = [];
       this.showEledger = false;
     }
@@ -298,6 +302,7 @@ export class TransactionVM {
   public inventory?: IInventory | any;
   public currency?: string;
   public convertedAmount?: number;
+  public isChecked: boolean = false;
 }
 
 export interface IInventory {

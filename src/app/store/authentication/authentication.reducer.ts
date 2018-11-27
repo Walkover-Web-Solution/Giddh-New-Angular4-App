@@ -115,10 +115,10 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
 
   switch (action.type) {
     case LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return { ...state, needsToRedirectToLedger: false };
+      return {...state, needsToRedirectToLedger: false};
     }
     case LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return { ...state, needsToRedirectToLedger: true };
+      return {...state, needsToRedirectToLedger: true};
     }
     case LoginActions.SignupWithEmailResponce:
       if (action.payload.status === 'success') {
@@ -346,26 +346,26 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
           isSignupWithPasswordSuccess: true,
           signupVerifyEmail: res.request.email
         });
-    }
+      }
       return state;
     }
     case LoginActions.forgotPasswordRequest:
-    return Object.assign({}, state, {
-      isForgotPasswordInProcess: false
-    });
+      return Object.assign({}, state, {
+        isForgotPasswordInProcess: false
+      });
     case LoginActions.forgotPasswordResponse: {
       let res: BaseResponse<any, any> = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {
           isForgotPasswordInProcess: true,
         });
-    }
+      }
       return state;
     }
     case LoginActions.resetPasswordRequest:
-    return Object.assign({}, state, {
-      isResetPasswordInSuccess: false
-    });
+      return Object.assign({}, state, {
+        isResetPasswordInSuccess: false
+      });
     case LoginActions.resetPasswordResponse: {
       let res: BaseResponse<any, any> = action.payload;
       if (res.status === 'success') {
@@ -373,7 +373,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
           isResetPasswordInSuccess: true,
           isForgotPasswordInProcess: false
         });
-    }
+      }
       return state;
     }
     default:
@@ -383,6 +383,15 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
 
 export function SessionReducer(state: SessionState = sessionInitialState, action: CustomActions): SessionState {
   switch (action.type) {
+    case LoginActions.renewSessionResponse: {
+      let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body
+        });
+      }
+      return state;
+    }
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
       if (data.status === 'success') {
@@ -503,9 +512,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       return s;
     }
     case CompanyActions.CREATE_COMPANY:
-      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
+      return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
+      return Object.assign({}, state, {isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false});
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
@@ -593,6 +602,19 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       }
       return state;
     }
+    case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        let d = _.cloneDeep(state);
+        let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
+        if (currentCompanyIndx !== -1) {
+          d.companies[currentCompanyIndx].country = response.body.country;
+          return Object.assign({}, state, d);
+        }
+      }
+      return state;
+    }
+
     case LoginActions.LoginWithPasswdResponse: {
       let res: BaseResponse<any, any> = action.payload;
       if (res.status === 'success') {
@@ -600,7 +622,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           user: res.body,
           isLoginWithPasswordInProcess: false
         });
-    }
+      }
       return state;
     }
     default:

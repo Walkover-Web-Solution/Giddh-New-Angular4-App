@@ -2,23 +2,23 @@ header {
   background: #27273b;
   padding: 10px 0;
   .navbar-brand {
-      height: auto;
-      padding: 0;
-      img {
-          max-width: 140px;
-      }
+    height: auto;
+    padding: 0;
+    img {
+      max-width: 140px;
+    }
   }
   .navbar-nav {
-      margin-top: 2px;
-      li {
-          a {
-              color: #fff;
-              padding: 10px 15px;
-              &:hover {
-                  background: #ff5f00;
-                  border-radius: 2px;
-              }
-          }
+    margin-top: 2px;
+    li {
+      a {
+        color: #fff;
+        padding: 10px 15px;
+        &:hover {
+          background: #ff5f00;
+          border-radius: 2px;
+        }
       }
+    }
   }
 }

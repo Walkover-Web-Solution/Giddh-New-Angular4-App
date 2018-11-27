@@ -1,8 +1,6 @@
-import { Injectable, Inject, Optional } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
@@ -32,7 +30,7 @@ export class InvoiceUiDataService {
   private companyAddress: string;
   private _: any;
 
-  constructor( @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+  constructor(@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this._ = config._;
     _ = config._;
     //
@@ -176,7 +174,7 @@ export class InvoiceUiDataService {
           };
         }
 
-        selectedTemplate = this.BRToNewLine(selectedTemplate);
+        // selectedTemplate = this.BRToNewLine(selectedTemplate);
         // console.log('THe selected template is :', selectedTemplate);
 
         this.customTemplate.next(_.cloneDeep(selectedTemplate));
@@ -191,7 +189,7 @@ export class InvoiceUiDataService {
         };
       }
 
-      selectedTemplate = this.BRToNewLine(selectedTemplate);
+      // selectedTemplate = this.BRToNewLine(selectedTemplate);
       // console.log('THe selected template is :', selectedTemplate);
 
       this.customTemplate.next(_.cloneDeep(selectedTemplate));

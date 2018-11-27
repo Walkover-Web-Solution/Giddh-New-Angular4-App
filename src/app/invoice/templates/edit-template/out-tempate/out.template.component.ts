@@ -1,7 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
@@ -14,9 +15,9 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../
   styleUrls: ['out.template.component.css']
 })
 
-export class OutTemplateComponent implements OnInit, OnDestroy {
+export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() public isPreviewMode: boolean = false;
+  @Input() public isPreviewMode: boolean = true;
   public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
   public logoSrc: string;
@@ -35,13 +36,13 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     let companies = null;
     let defaultTemplate = null;
 
-    this.store.select(s => s.session).take(1).subscribe(ss => {
+    this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
       this.companyUniqueName = ss.companyUniqueName;
     });
 
-    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+    this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
     });
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -87,6 +88,18 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
         this.templateUISectionVisibility = _.cloneDeep(info);
       });
     }
+
+    this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+      if (this.isPreviewMode) {
+        this.templateUISectionVisibility = {
+          header: true,
+          table: true,
+          footer: true
+        };
+      } else {
+        this.templateUISectionVisibility = _.cloneDeep(info);
+      }
+    });
   }
 
   public onClickSection(sectionName: string) {
@@ -98,5 +111,24 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  /**
+   * ngOnChanges
+   */
+  public ngOnChanges(s: SimpleChanges) {
+    if (s && s.isPreviewMode.currentValue) {
+      this.templateUISectionVisibility = {
+        header: true,
+        table: true,
+        footer: true
+      };
+    } else if (s && s.isPreviewMode && !s.isPreviewMode.currentValue && s.isPreviewMode.currentValue !== s.isPreviewMode.previousValue) {
+        this.templateUISectionVisibility = {
+          header: true,
+          table: false,
+          footer: false
+        };
+    }
   }
 }

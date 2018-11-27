@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <tabset id="settingTab" #staticTabsTBPL>
+    <tabset id="settingTab" #staticTabsTBPL>
         <tab heading="Trial Balance" (select)="CanTBLoad = true; CanNewTBLoad = false">
             <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
         </tab>
@@ -11,6 +11,9 @@
         </tab>
         <tab *ngIf="CanNewTBLoadOnThisEnv || isWalkoverCompany" heading="Trial Balance New" (select)="CanNewTBLoad = true; CanTBLoad = false">
             <tb *ngIf="CanNewTBLoad" [isV2]="true" [selectedCompany]="selectedCompany"></tb>
+        </tab>
+        <tab heading="Synram Design">
+            <tb-synram></tb-synram>
         </tab>
     </tabset>
 </div>

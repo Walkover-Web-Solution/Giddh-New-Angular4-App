@@ -15,6 +15,7 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
           {path: 'account', component: ImportWizardComponent},
           {path: 'entries', component: ImportWizardComponent},
           {path: 'trial-balance', component: ImportWizardComponent},
+          {path: 'stock', component: ImportWizardComponent},
         ]
       }
     ])

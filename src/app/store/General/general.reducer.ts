@@ -12,19 +12,30 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
+import { IUlist } from '../../models/interfaces/ulist.interface';
+import { INameUniqueName } from '../../models/api-models/Inventory';
+import { cloneDeep } from '../../lodash-optimized';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   flattenAccounts: IFlattenAccountsResultItem[];
   states: States[];
   addAndManageClosed: boolean;
+  flattenGroups: IFlattenGroupsAccountsDetail[];
+  smartCombinedList: IUlist[];
+  smartList: IUlist[];
 }
 
 const initialState: GeneralState = {
   groupswithaccounts: null,
   flattenAccounts: null,
   states: null,
-  addAndManageClosed: false
+  addAndManageClosed: false,
+  flattenGroups: [],
+  smartCombinedList: [],
+  smartList: []
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -48,9 +59,16 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
     case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
       let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
       if (result.status === 'success') {
+        let arr = result.body.results;
+        arr.map((item: any) => {
+          let o: any = provideStrings(item.parentGroups);
+          item.nameStr = o.nameStr;
+          item.uNameStr = o.uNameStr;
+          return item;
+        });
         return {
           ...state,
-          flattenAccounts: result.body.results
+          flattenAccounts: arr
         };
       }
       return state;
@@ -65,6 +83,45 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       }
       return state;
     }
+    // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
+    case GENERAL_ACTIONS.RESET_SMART_LIST: {
+      return {...state, smartList: []};
+    }
+
+    case GENERAL_ACTIONS.SET_SMART_LIST: {
+      let data: IUlist[] = action.payload;
+      return {...state, smartList: data};
+    }
+
+    case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
+      return {...state, smartCombinedList: []};
+    }
+
+    case GENERAL_ACTIONS.SET_COMBINED_LIST: {
+      let data: IUlist[] = action.payload;
+      return {...state, smartCombinedList: data};
+    }
+
+    case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
+      return {...state, flattenGroups: []};
+    }
+
+    case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
+      let result: BaseResponse<IPaginatedResponse, string> = action.payload;
+      if (result.status === 'success') {
+        let arr = result.body.results;
+        arr.map((item: any) => {
+          let o: any = provideStrings(item.parentGroups);
+          item.nameStr = o.nameStr;
+          item.uNameStr = o.uNameStr;
+          return item;
+        });
+        return { ...state, flattenGroups: arr };
+      }
+      return state;
+    }
+
+    // END NEW LOGIC
 
     // groups with accounts actions
     case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
@@ -82,7 +139,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
       let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
       if (activeGrpData.status === 'success') {
-        Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+        Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
         return {
@@ -329,7 +386,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
 };
 
 const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-  aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+                           aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
   if (result) {
     return result;
   }
@@ -421,4 +478,21 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
       }
     }
   }
+};
+
+// consume array and return array on string
+const provideStrings = (arr: any[]) => {
+  let o = { nameStr: [], uNameStr: [] };
+  let b = { nameStr: '', uNameStr: ''};
+  try {
+    arr.forEach((item: INameUniqueName) => {
+      o.nameStr.push(item.name);
+      o.uNameStr.push(item.uniqueName);
+    });
+    b.nameStr = o.nameStr.join(', ');
+    b.uNameStr = o.uNameStr.join(', ');
+  } catch (error) {
+    //
+  }
+  return b;
 };
