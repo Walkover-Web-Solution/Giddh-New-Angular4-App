@@ -336,11 +336,11 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
       if (this.mode === 'sender') {
         value.transactions = value.transactions.map(trx => {
-          let linkedStocks: any = this.manufacturingDetails.controls.linkedStocks;
+          let linkedStocks: any = this.removeBlankLinkedStock(this.manufacturingDetails.controls.linkedStocks);
           trx.manufacturingDetails = {
             manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
             manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
-            linkedStocks: linkedStocks.controls.map(l => l.value),
+            linkedStocks: linkedStocks.map(l => l),
           };
           return trx;
         });
@@ -353,5 +353,22 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
   public async getStockDetails(stockItem: IStocksItem) {
     return await this._inventoryService.GetStockDetails(stockItem.stockGroup.uniqueName, stockItem.uniqueName).toPromise();
+  }
+
+  /**
+   * removeBlankLinkedStock
+   */
+  public removeBlankLinkedStock(linkedStocks) {
+    const manufacturingDetailsContorl = this.manufacturingDetails;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    let rawArr = control.getRawValue();
+    _.forEach(rawArr, (o, i) => {
+      if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
+        rawArr = _.without(rawArr, o);
+        control.removeAt(i);
+      }
+    });
+    linkedStocks = _.cloneDeep(rawArr);
+    return linkedStocks;
   }
 }
