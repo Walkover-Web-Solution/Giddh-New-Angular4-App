@@ -46,7 +46,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
   { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
   { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
-  { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
+  // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
   { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
   { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' },
   { type: 'MENU', name: 'Search', uniqueName: '/pages/search' },
@@ -203,7 +203,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '23-11-2018';
+  private indexDBReCreationDate: string = '28-11-2018';
   /**
    *
    */
