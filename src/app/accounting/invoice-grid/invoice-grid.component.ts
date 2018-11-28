@@ -460,7 +460,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.showLedgerAccountList = false;
     this.showStockList.emit(false);
     this.showConfirmationBox = true;
-    if (this.data.description.trim() !== '') {
+    if (this.data.description.length > 1) {
       this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
       setTimeout(() => {
         submitBtnEle.focus();

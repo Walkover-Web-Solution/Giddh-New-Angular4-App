@@ -464,7 +464,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.showStockList = false;
     if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
-      if (this.requestObj.description.trim() !== '') {
+      if (this.requestObj.description.length > 1) {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
         setTimeout(() => {
           submitBtnEle.focus();
