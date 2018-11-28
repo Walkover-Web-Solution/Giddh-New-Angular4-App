@@ -2,7 +2,7 @@
     <div class="tax-engine">
         <div class="column list-column expanded-list-column transactions-list">
             <div class="list-header">
-                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"></filing-header>
+                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro" [fileReturn]="fileReturn"></filing-header>
             </div>
             <div class="nav-band">
                 <tabset #staticTabs id="c-tab">
@@ -30,11 +30,17 @@
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
                     </tab>
-                    <!-- hidden not availability of API 
-                    <tab heading="File your Return" *ngIf="selectedGst !== 'gstr2'">
-                        <h1>File your return</h1>
+                    <!-- Assigned by meghna  -->
+                    <tab *ngIf="selectedGst !== 'gstr2'" (select)="selectTab($event, true, '3. File your Return')">
+                        <ng-template tabHeading>
+                            3. File your Return
+                        </ng-template>
+                        <div class="transactions-overview">
+                            <div class="gstr-transactions-summary mrT4 mrB4 text-center">
+                                <button class="btn btn-primary btn-lg" (click)="fileReturn=true">File your Return</button>
+                            </div>
+                        </div>
                     </tab>
-                     -->
                 </tabset>
             </div>
         </div>

@@ -95,9 +95,9 @@ export class OverViewResult {
 }
 
 export class TransactionCounts {
-  public gstr1Transactions: string;
-  public gstr2Transactions: string;
-  public uncategorized: string;
+  public gstr1Transactions: number;
+  public gstr2Transactions: number;
+  public uncategorized: number;
 }
 
 export class DocumentIssuedResponse {
@@ -232,6 +232,12 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.transactionCounts = response.body;
+      } else {
+        newState.transactionCounts = {
+          gstr1Transactions: 0,
+          gstr2Transactions: 0,
+          uncategorized: 0,
+        };
       }
       newState.transactionCountsInProcess = false;
       return newState;

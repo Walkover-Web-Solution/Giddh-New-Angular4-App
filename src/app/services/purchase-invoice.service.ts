@@ -295,9 +295,9 @@ export class PurchaseInvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url;
     if (reqObj.via && reqObj.via === 'JIO_GST') {
-      url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.fromDate).replace(':to', reqObj.period.toDate).replace(':company_gstin', reqObj.gstNumber);
+      url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
     } else if (reqObj.via === 'TAX_PRO') {
-      url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.fromDate).replace(':to', reqObj.period.toDate).replace(':company_gstin', reqObj.gstNumber);
+      url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
     }
     return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
