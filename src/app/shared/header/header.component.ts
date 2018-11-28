@@ -90,6 +90,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
   public imgPath: string = '';
+  public isLedgerAccSelected: boolean = false;
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -193,7 +194,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public menuItemsFromIndexDB = [];
   public accountItemsFromIndexDB = [];
   public selectedPage: any = '';
-  public selectedLedger: any = {};
+  public selectedLedgerName: string;
   public companyList: any = [];
   public searchCmp: string = '';
   public loadAPI: Promise<any>;
@@ -405,12 +406,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // end logic for cmd+k
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
+        this.isLedgerAccSelected = false;
         const lastState = s.toLowerCase();
         const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
-        }
-        if (this.selectedPage === 'gst') {
+        } else if (lastState.includes('ledger/')) {
+          this.isLedgerAccSelected = true;
+          this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+          return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
+        } else if (this.selectedPage === 'gst') {
           this.selectedPage = 'GST';
         }
     });
@@ -484,6 +489,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    * @param pageName page router url
    */
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
+    this.isLedgerAccSelected = false;
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
@@ -588,7 +594,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // o.name = o.name.toLowerCase();
             return o.uniqueName;
           });
-          this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+
+          if (window.screen.width > 1366 && window.screen.height > 768) {
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+          } else {
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+          }
+
           this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
 
           // slice and sort account item
