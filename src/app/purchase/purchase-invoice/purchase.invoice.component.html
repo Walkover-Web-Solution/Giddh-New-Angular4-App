@@ -1,7 +1,7 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
     <form class="">
-        <div class="row">
-            <div class="form-group col-xs-2">
+        <div class="">
+            <div class="form-group max250 pull-left mrR1">
                 <label>GSTR Form</label>
                 <div class="btn-group btn-block" dropdown>
                     <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
@@ -18,10 +18,79 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group col-xs-2" [attachOutsideOnClick]="true" (clickOutside)="showGSTR1DatePicker=false;" [hidden]="!selectedGstrType.name">
-                <div class="row">
-                    <label>Month</label>
-                    <div class="input-group">
+            <div class="form-group max250 pull-left mrR1" [hidden]="!selectedGstrType.name">
+                <ng-container *ngIf="!showSingleDatePicker">
+                    <label class="d-block">From - to</label>
+                    <div class="btn-group  dropdown" dropdown [autoClose]="false" container="body" *ngIf="!showSingleDatePicker" #periodDropdown="bs-dropdown">
+                        <button id="button-nested" dropdownToggle type="button" class="form-control dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle" aria-controls="dropdown-nested">
+                                            {{selectedDateForGSTR1.from}} - {{selectedDateForGSTR1.to}}
+                        <span class="caret"></span></button>
+                        <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-nested" [attachOutsideOnClick]="true" (clickOutside)="periodDropdown.hide();showGSTR1DatePicker=false">
+                            <li role="menuitem" dropdown triggers="'click'" placement="right" [autoClose]="false" container="body" #monthWise="bs-dropdown">
+                                <a dropdownToggle class="dropdown-item dropdown-toggle cp" (click)="false">
+                                    Month Wise
+                                    <div class="pull-right">
+                                        <span class="caret rotate-90"></span>
+                                    </div>
+                                    </a>
+                                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="javascript:void(0)">
+                                            <datepicker [(ngModel)]="selectedMonth" [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [showWeeks]="false" [minMode]="'month'" (selectionDone)="monthChanged($event, true);monthWise.hide()"></datepicker>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="monthWise.hide()">
+                                    <label for="daterangeInput" class="d-block cp">Custom Range 
+                                    <div class="pull-right">
+                                        <span class="caret rotate-90"></span>
+                                    </div>
+                                    </label>
+                                    <input id="daterangeInput" type="text" name="daterangeInput" [options]="{'autoApply': true}" #dateRangePickerCmp daterangepicker class="form-control daterangePicker" (applyDaterangepicker)="monthChanged($event, 'range')" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </ng-container>
+                <div class="">
+                    <!-- <ng-container *ngIf="!showSingleDatePicker">
+                        
+                        <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
+                    </ng-container> -->
+                    <ng-container *ngIf="showSingleDatePicker">
+                        <label>Month</label>
+
+                        <div class="input-group">
+                            <!--  -->
+                            <input type="text" name="from" [value]="moment(selectedMonth).format('MMMM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+                            <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                    (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                        </div>
+                        <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                            <ul class="my-dropdown-menu calendar-dropdown">
+                                <li>
+                                    <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [showWeeks]="false" [minMode]="'month'" (selectionDone)="monthChanged($event, true)" [(ngModel)]="selectedMonth"></datepicker>
+                                    <!-- [(ngModel)]="selectedDateForGSTR1" -->
+                                    <!-- <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker> -->
+                                </li>
+                                <li class="pd1 clearfix pdT pdB">
+                                    <span class="btn-group pull-left">
+                                        <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                        <button type="button" class="btn btn-xs btn-success" (click)="showGSTR1DatePicker = false">Done</button>
+                                    </span>
+                                    <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
+                                </li>
+                            </ul>
+                        </div>
+                    </ng-container>
+
+                    <!-- <div class="input-group">
                         <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
@@ -29,26 +98,24 @@
                                 <i class="glyphicon glyphicon-calendar"></i>
                             </button>
                         </span>
-                    </div>
-                    <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                    </div> -->
+                    <!-- <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
                         <ul class="my-dropdown-menu calendar-dropdown">
                             <li>
                                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
                             </li>
                             <li class="pd1 clearfix pdT pdB">
                                 <span class="btn-group pull-left">
-                                    <button type="button" class="btn btn-xs btn-primary mrR"
-                                            (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
-                                    <button type="button" class="btn btn-xs btn-success"
-                                            (click)="showGSTR1DatePicker = false">Done</button>
+                                    <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                    <button type="button" class="btn btn-xs btn-success" click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
-                                <!-- <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button> -->
+                                <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <div class="col-xs-2 form-group" *ngIf="selectedGstrType.name === 'GSTR3B'">
+            <div class="form-group max250 pull-left mrR1" *ngIf="selectedGstrType.name === 'GSTR3B'">
                 <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
                 <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
@@ -74,9 +141,9 @@
 
     </div>
 -->
-            <div class="inline col-xs-2 form-group pdR2" *ngIf="selectedGstrType.name">
+            <div class="form-group max250 pull-left" *ngIf="selectedGstrType.name">
                 <label class="d-block">&nbsp;</label>
-                <div class="" [ngClass]="{'row': selectedGstrType.name === 'GSTR3B'}">
+                <div class="">
                     <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown [isDisabled]="!selectedGstrType.name">
                         <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
               {{ selectedGstrType.name }}
@@ -107,7 +174,7 @@
                 </div>
             </div>
             <!-- hide due to unused -->
-            <div class="col-xs-2 form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
+            <div class="form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
                 <label class="d-block">&nbsp;</label>
                 <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i
           class="fa fa-cog" aria-hidden="true"></i> Jio GST

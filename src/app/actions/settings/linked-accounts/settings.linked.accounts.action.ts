@@ -54,7 +54,7 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public DeleteAccount$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT).pipe(
-      switchMap((action: CustomActions) => this._settingsLinkedAccountsService.DeleteBankAccount(action.payload)),
+      switchMap((action: CustomActions) => this._settingsLinkedAccountsService.DeleteBankAccount(action.payload.loginId, action.payload.deleteWithAccountId)),
       map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE,
         payload: res
@@ -66,7 +66,7 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public RefreshAccount$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT).pipe(
-      switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshBankAccount(action.payload)),
+      switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshBankAccount(action.payload.ebankItemId, action.payload.requestObj)),
       map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE,
         payload: res
@@ -158,10 +158,10 @@ export class SettingsLinkedAccountsActions {
     };
   }
 
-  public DeleteBankAccount(loginId: number) {
+  public DeleteBankAccount(loginId: number, deleteWithAccountId) {
     return {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT,
-      payload: loginId
+      payload: { loginId, deleteWithAccountId }
     };
   }
 
@@ -172,10 +172,10 @@ export class SettingsLinkedAccountsActions {
     };
   }
 
-  public RefreshBankAccount(ebankItemId: string) {
+  public RefreshBankAccount(ebankItemId: string, requestObj?) {
     return {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT,
-      payload: ebankItemId
+      payload: { ebankItemId, requestObj }
     };
   }
 

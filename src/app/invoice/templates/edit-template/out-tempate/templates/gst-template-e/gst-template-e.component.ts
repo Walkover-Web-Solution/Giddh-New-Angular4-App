@@ -17,7 +17,7 @@ import { SettingsProfileActions } from 'app/actions/settings/profile/settings.pr
   selector: 'gst-template-e',
   templateUrl: './gst-template-e.component.html',
   styleUrls: ['./gst-template-e.component.css'],
-  encapsulation: ViewEncapsulation.Native
+  // encapsulation: ViewEncapsulation.None
 })
 
 export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {

@@ -85,8 +85,12 @@ export class InvoiceService {
       url = url + 'page=' + model.page + '&';
     }
     if ((model.count)) {
-      url = url + 'count=' + model.count;
+      url = url + 'count=' + model.count + '&';
     }
+    if ((model.voucherType)) {
+      url = url + 'voucherType=' + model.voucherType;
+    }
+
     return url;
   }
 
@@ -153,7 +157,7 @@ export class InvoiceService {
   public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+    return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
       map((res) => {
         let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res;
         data.request = model;
@@ -196,9 +200,9 @@ export class InvoiceService {
 
   /**
    * Delete invoice
-   * URL:: company/:companyUniqueName/invoices/:invoiceUniqueName
+   * URL:: company/:companyUniqueName/accounts/:accountUniqueName:/vouchers/
    */
-  public DeleteInvoice(invoiceNumber: string): Observable<BaseResponse<string, string>> {
+  public DeleteInvoice(model: object, accountUniqueName): Observable<BaseResponse<string, string>> {
     let sessionId = this._generalService.sessionId;
     let args: any = {headers: {}};
     if (sessionId) {
@@ -210,16 +214,16 @@ export class InvoiceService {
 
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._httpClient.request('delete', this.config.apiUrl + INVOICE_API.DELETE_INVOICE.replace(':companyUniqueName', this.companyUniqueName), {body: {invoiceNumber}, headers: args.headers}).pipe(
+    return this._httpClient.request('delete', this.config.apiUrl + INVOICE_API_2.DELETE_VOUCHER.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), {body: model, headers: args.headers}).pipe(
       map((res) => {
         // let data: BaseResponse<string, string> = res;
         let data: any = res;
         console.log('the data is :', data);
-        data.request = invoiceNumber;
-        data.queryString = {invoiceNumber};
+        data.request = model;
+        data.queryString = {model};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceNumber)));
+      catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)));
   }
 
   /**

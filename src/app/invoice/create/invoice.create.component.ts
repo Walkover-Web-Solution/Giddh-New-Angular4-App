@@ -14,6 +14,12 @@ import { OtherSalesItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { SalesService } from 'app/services/sales.service';
+import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { ActivatedRoute } from '@angular/router';
+import { LedgerActions } from 'app/actions/ledger/ledger.actions';
+import { ReciptRequest } from 'app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
 const THEAD = [
   {
@@ -87,7 +93,8 @@ const THEAD = [
 export class InvoiceCreateComponent implements OnInit, OnDestroy {
   @Input() public showCloseButton: boolean;
   @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
-  public invFormData: PreviewInvoiceResponseClass;
+  @Input() public isGenerateInvoice: boolean = true;
+  public invFormData: any; // PreviewInvoiceResponseClass
   public tableCond: ISection;
   public headerCond: ISection;
   public templateHeader: any = {};
@@ -103,6 +110,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public autoFillShipping: boolean = false;
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public maxDueDate: Date;
+  public selectedVoucher: string = 'invoice';
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -110,35 +118,45 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _toasty: ToasterService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private salesService: SalesService,
+    private _activatedRoute: ActivatedRoute,
+    private _ledgerActions: LedgerActions,
+    private receiptActions: InvoiceReceiptActions
   ) {
     this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.invoiceData).pipe(
+    this._activatedRoute.params.subscribe(a => {
+      if (a) {
+        this.selectedVoucher = a.voucherType;
+      }
+    });
+
+    this.store.select(p => p.receipt.voucher).pipe(
       takeUntil(this.destroyed$),
       distinctUntilChanged())
-      .subscribe((o: PreviewInvoiceResponseClass) => {
-          if (o && o.invoiceDetails) {
+      .subscribe((o: any) => {
+          if (o && o.voucherDetails) {
             this.invFormData = _.cloneDeep(o);
-            if (o.invoiceDetails.invoiceDate) {
-              let d = o.invoiceDetails.invoiceDate.split('-');
+            if (o.voucherDetails.voucherDate) {
+              let d = o.voucherDetails.voucherDate.split('-');
               if (d.length === 3) {
-                this.invFormData.invoiceDetails.invoiceDate = new Date(d[2], d[1] - 1, d[0]);
+                this.invFormData.voucherDetails.voucherDate = new Date(d[2], d[1] - 1, d[0]);
               } else {
-                this.invFormData.invoiceDetails.invoiceDate = '';
+                this.invFormData.voucherDetails.voucherDate = '';
               }
-              if (this.invFormData.invoiceDetails.invoiceNumber === '##########') {
-                this.invFormData.invoiceDetails.invoiceNumber = null;
+              if (this.invFormData.voucherDetails.invoiceNumber === '##########') {
+                this.invFormData.voucherDetails.invoiceNumber = null;
               }
             }
-            if (o.invoiceDetails.dueDate) {
-              let d = o.invoiceDetails.dueDate.split('-');
+            if (o.voucherDetails.dueDate) {
+              let d = o.voucherDetails.dueDate.split('-');
               if (d.length === 3) {
-                this.invFormData.invoiceDetails.dueDate = new Date(d[2], d[1] - 1, d[0]);
+                this.invFormData.voucherDetails.dueDate = new Date(d[2], d[1] - 1, d[0]);
               } else {
-                this.invFormData.invoiceDetails.dueDate = '';
+                this.invFormData.voucherDetails.dueDate = '';
               }
             }
             // if address found prepare local var due to array and string issue
@@ -219,11 +237,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   }
 
   public prepareAddressForUI(type: string) {
-    this.invFormData.account[type].addressStr = this.getStringFromArr(this.invFormData.account[type].address);
+    this.invFormData.accountDetails[type].address = this.getStringFromArr(this.invFormData.accountDetails[type].address);
   }
 
   public prepareAddressForAPI(type: string) {
-    this.invFormData.account[type].address = this.getArrayFromString(this.invFormData.account[type].addressStr);
+    this.invFormData.accountDetails[type].address = this.getArrayFromString(this.invFormData.accountDetails[type].address);
   }
 
   public prepareTemplateHeader() {
@@ -268,7 +286,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
   public onSubmitInvoiceForm() {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
-    let data: PreviewInvoiceResponseClass = _.cloneDeep(this.invFormData);
+    let data: any = _.cloneDeep(this.invFormData);
 
     // replace /n to br in case of message
     // if (data.other.message2 && data.other.message2.length > 0) {
@@ -276,28 +294,42 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     // }
 
     // convert address string to array
-    data.account['billingDetails'].address = this.getArrayFromString(data.account['billingDetails'].addressStr);
-    data.account['shippingDetails'].address = this.getArrayFromString(data.account['shippingDetails'].addressStr);
+    data.accountDetails['billingDetails'].address = this.getArrayFromString(data.accountDetails['billingDetails'].address);
+    data.accountDetails['shippingDetails'].address = this.getArrayFromString(data.accountDetails['shippingDetails'].address);
 
     // convert date object
-    data.invoiceDetails.invoiceDate = this.convertDateForAPI(data.invoiceDetails.invoiceDate);
-    data.invoiceDetails.dueDate = this.convertDateForAPI(data.invoiceDetails.dueDate);
-    data.other.shippingDate = this.convertDateForAPI(data.other.shippingDate);
+    data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
+    data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
 
-    let accountUniqueName = this.invFormData.account.uniqueName;
+    let accountUniqueName = this.invFormData.accountDetails.uniqueName;
     if (accountUniqueName) {
-      model.invoice = data;
+
+      model.voucher = data;
+      model.voucher.entries = model.voucher.entries.map((entry) => {
+        entry.voucherType = this.selectedVoucher;
+        return entry;
+      });
+
+      model.voucher.voucherDetails.voucherType = this.selectedVoucher;
+
       model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
       model.validateTax = true;
       model.updateAccountDetails = this.updtFlag;
+
       if (this.updateMode) {
-        this.store.dispatch(this.invoiceActions.UpdateGeneratedInvoice(accountUniqueName, model));
+        let request: ReciptRequest = {
+          voucher: model.voucher,
+          entryUniqueNames: model.uniqueNames,
+          updateAccountDetails: true
+        };
+        this.store.dispatch(this.receiptActions.UpdateInvoiceReceiptRequest(request, model.voucher.accountDetails.uniqueName));
       } else {
-        this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+          this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: false}, [{accountUniqueName: model.voucher.accountDetails.uniqueName, entries: _.cloneDeep(model.uniqueNames)}], 'invoice'));
       }
       this.updtFlag = false;
     } else {
-      // this._toasty.warningToast('Something went wrong, please reload the page');
+      this._toasty.warningToast('Something went wrong, please reload the page');
     }
   }
 

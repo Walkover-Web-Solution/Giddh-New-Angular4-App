@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
-  @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
+  // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -131,6 +131,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+
+    this.emailVerifyModal.config = { backdrop: 'static'};
+    this.twoWayAuthModal.config = { backdrop: 'static'};
+    this.mobileVerifyModal.config = { backdrop: 'static'};
+
     this.getElectronAppVersion();
     this.document.body.classList.remove('unresponsive');
     this.generateRandomBanner();
@@ -214,6 +219,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.forgotStep = 1;
       } else {
         this.forgotStep = 2;
+      }
+    });
+
+    this.twoWayAuthModal.onHidden.subscribe(e => {
+      if (e && e.dismissReason === 'esc') {
+        return this.resetTwoWayAuthModal();
       }
     });
   }

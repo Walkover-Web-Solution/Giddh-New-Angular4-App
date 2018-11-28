@@ -11,7 +11,9 @@ import { ContactService } from '../services/contact.service';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
+import { StateDetailsRequest } from 'app/models/api-models/Company';
+import { CompanyActions } from 'app/actions/company.actions';
 
 @Component({
   selector: 'aging-report',
@@ -50,14 +52,15 @@ export class AgingReportComponent implements OnInit {
     private _toasty: ToasterService,
     private router: Router, private _agingReportActions: AgingReportActions,
     private _contactService: ContactService,
-    private componentFactoryResolver: ComponentFactoryResolver) {
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private _companyActions: CompanyActions) {
     this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
-        this.loadPaginationComponent(data);
+        setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
       }
       this.dueAmountReportData$ = of(data);
     });
@@ -89,6 +92,14 @@ export class AgingReportComponent implements OnInit {
   }
 
   public ngOnInit() {
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'aging-report';
+
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
     this.getSundrydebtorsAccounts();
     this.store.dispatch(this._agingReportActions.GetDueRange());
     this.agingDropDownoptions$.subscribe(p => {

@@ -64,6 +64,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
   public sampleTemplates: CustomTemplateResponse[];
+  public companyUniqueName: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -79,6 +80,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
+      this.companyUniqueName = ss.companyUniqueName;
     });
 
     this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
@@ -126,8 +128,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
         });
         // debugger;
         this._invoiceUiDataService.setFieldsAndVisibility(op);
+
+        if (this.customTemplate.logoUniqueName) {
+          this.logoAttached = true;
+          this.isFileUploaded = false;
+          let preview: any = document.getElementById('logoImage');
+          preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+        }
       }
     });
+
   }
 
   /**

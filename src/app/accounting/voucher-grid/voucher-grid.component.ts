@@ -23,6 +23,7 @@ import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},
@@ -36,7 +37,19 @@ const CustomShortcode = [
 @Component({
   selector: 'account-as-voucher',
   templateUrl: './voucher-grid.component.html',
-  styleUrls: ['../accounting.component.css']
+  styleUrls: ['../accounting.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -54,6 +67,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
+  @ViewChild('narrationBox') public narrationBox: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showLedgerAccountList: boolean = false;
@@ -92,7 +106,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectedField: 'account' | 'stock';
 
   public chequeDetailForm: FormGroup;
+  public asideMenuStateForProductService: string = 'out';
 
+  private selectedAccountInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
 
@@ -208,13 +224,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * newEntryObj() to push new entry object
    */
-  public newEntryObj() {
+  public newEntryObj(byOrTo = 'to') {
     this.requestObj.transactions.push({
       amount: null,
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
-      type: 'to',
+      type: byOrTo,
       taxes: [],
       total: null,
       discounts: [],
@@ -419,29 +435,36 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
     let lastIndx = this.requestObj.transactions.length - 1;
-
     if (amount) {
       transactionObj.amount = Number(amount);
       transactionObj.total = transactionObj.amount;
-    }
 
-    if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-      this.newEntryObj();
-    }
+      if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
+        this.newEntryObj();
+      }
 
-    let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
-    this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-    let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
-    this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+      let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+      this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
+      let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+      this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+    } else {
+      this.requestObj.transactions.splice(indx, 1);
+      this.dateField.nativeElement.focus();
+      if (!this.requestObj.transactions.length) {
+        this.newEntryObj('by');
+      }
+    }
   }
 
   /**
    * openConfirmBox() to save entry
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
+    this.showLedgerAccountList = false;
+    this.showStockList = false;
     if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
-      if (this.requestObj.description.trim() !== '') {
+      if (this.requestObj.description.length > 1) {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
         setTimeout(() => {
           submitBtnEle.focus();
@@ -449,7 +472,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
   }
 
@@ -473,17 +496,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (foundContraEntry && data.voucherType !== 'Contra') {
       this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
     if (!foundContraEntry && data.voucherType === 'Contra') {
       this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
 
     // This suggestion was given by Sandeep
     if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
       this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
-      return;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
 
     if (this.totalCreditAmount === this.totalDebitAmount) {
@@ -499,9 +522,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       } else {
         const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
         this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
+        setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+      setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
   }
 
@@ -622,7 +647,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       return validEntry;
     } else {
       this._toaster.errorToast("Particular can't be blank");
-      return false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
     }
 
   }
@@ -786,8 +811,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
-    console.log('ev :', ev);
-    console.log('this.selectedField is :', this.selectedField);
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {
@@ -802,8 +825,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getStock
    */
-  public getStock(parentGrpUnqName?, q?: string) {
-    if (this.allStocks && this.allStocks.length) {
+  public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false) {
+    if (this.allStocks && this.allStocks.length && !forceRefresh) {
       // this.inputForList = _.cloneDeep(this.allStocks);
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
@@ -858,12 +881,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public showQuickAccountModal() {
-    this.loadQuickAccountComponent();
-    this.quickAccountModal.show();
+    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    this.selectedAccountInputField = selectedField;
+    if (this.selectedField === 'account') {
+      this.loadQuickAccountComponent();
+      this.quickAccountModal.show();
+    } else if (this.selectedField === 'stock') {
+      this.asideMenuStateForProductService = 'in';
+    }
   }
 
   public hideQuickAccountModal() {
     this.quickAccountModal.hide();
+    this.dateField.nativeElement.focus();
+    return setTimeout(() => {
+      this.selectedAccountInputField.value = '';
+      this.selectedAccountInputField.focus();
+    }, 200);
+  }
+
+  public closeCreateStock() {
+    this.asideMenuStateForProductService = 'out';
+    // after creating stock, get all stocks again
+    this.getStock(null, null, true);
+    this.selectedAccountInputField.value = '';
+    this.filterByText = '';
+    this.dateField.nativeElement.focus();
+    setTimeout(() => {
+      this.selectedAccountInputField.focus();
+    }, 200);
   }
 
   private deleteRow(idx: number) {

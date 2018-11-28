@@ -24,6 +24,8 @@ export interface IEbankAccount {
   showAccList?: boolean;
   itemAccountId?: number;
   giddhAccount?: any;
+  status?: string;
+  providerAccount: { providerAccountId: number};
 }
 
 export interface IAccessTokenResponse {

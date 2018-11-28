@@ -7,6 +7,8 @@ import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegra
 import { CustomActions } from '../customActions';
 import { RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { INVOICE_RECEIPT_ACTIONS } from 'app/actions/invoice/receipt/receipt.const';
+import { LEDGER } from 'app/actions/ledger/ledger.const';
 
 export interface InvoiceState {
   invoices: GetAllInvoicesPaginatedResponse;
@@ -107,16 +109,16 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       });
       return Object.assign({}, state, newState);
     }
-    case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
-      if (res.status === 'success') {
-        newState.invoiceData = res.body;
-      } else {
-        newState.invoiceDataHasError = true;
-      }
-      return {...state, ...newState};
-    }
+    // case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
+    //   let newState = _.cloneDeep(state);
+    //   let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
+    //   if (res.status === 'success') {
+    //     newState.invoiceData = res.body;
+    //   } else {
+    //     newState.invoiceDataHasError = true;
+    //   }
+    //   return {...state, ...newState};
+    // }
     case INVOICE_ACTIONS.PREVIEW_INVOICE:
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
       return {...state, invoiceData: null, invoiceDataHasError: false};
@@ -158,7 +160,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, string> = action.payload;
       if (res.status === 'success') {
-        newState.isInvoiceGenerated = true;
+        // newState.isInvoiceGenerated = true;
         newState.ledgers.results = _.remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
           return !item.isSelected;
         });
@@ -234,18 +236,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       }
       return state;
     }
-    case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<string, string> = action.payload;
-      if (res.status === 'success') {
-        let indx = newState.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
-        if (indx > -1) {
-          newState.invoices.results.splice(indx, 1);
-        }
-        return Object.assign({}, state, newState);
-      }
-      return state;
-    }
+    // case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
+    //   let newState = _.cloneDeep(state);
+    //   let res: BaseResponse<string, string> = action.payload;
+    //   if (res.status === 'success') {
+    //     let indx = newState.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
+    //     if (indx > -1) {
+    //       newState.invoices.results.splice(indx, 1);
+    //     }
+    //     return Object.assign({}, state, newState);
+    //   }
+    //   return state;
+    // }
     case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<InvoiceSetting, string> = action.payload;
@@ -440,6 +442,71 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         };
       }
       return {...state, recurringInvoiceData: {...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false}};
+    }
+    case INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE: {
+      return Object.assign({}, state, {
+        isInvoiceGenerated: true
+      });
+    }
+    case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
+      let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
+      // Check if requested form ledger
+      if (res.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
+        return state;
+      }
+      if (res.status === 'success' && reqObj.length > 0) {
+        // check for failed entries
+        if (_.isArray(res.body) && res.body.length > 0) {
+          let failedEntriesArr: string[] = [];
+          let needToRemoveEleArr: string[] = [];
+          _.forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+            _.forEach(item.failedEntries, (uniqueName: string) => {
+              failedEntriesArr.push(uniqueName);
+              newState.ledgers.results = _.map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                if (o.uniqueName === uniqueName) {
+                  o.hasGenerationErr = true;
+                  o.errMsg = item.reason;
+                }
+                return o;
+              });
+            });
+          });
+          _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+            _.forEach(item.entries, (uniqueName: string) => {
+              // find index and push
+              if (_.indexOf(failedEntriesArr, uniqueName) === -1) {
+                needToRemoveEleArr.push(uniqueName);
+              }
+            });
+          });
+
+          _.forEach(needToRemoveEleArr, (uniqueName: string) => {
+            newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+              return o.uniqueName !== uniqueName;
+            });
+          });
+
+        } else if (typeof res.body === 'string') {
+          _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+            _.forEach(item.entries, (uniqueName: string) => {
+              newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                return o.uniqueName !== uniqueName;
+              });
+            });
+          });
+          if (newState.ledgers.results.length === 0) {
+            newState.isBulkInvoiceGeneratedWithoutErrors = true;
+          }
+        }
+        newState.isBulkInvoiceGenerated = true;
+        newState.isInvoiceGenerated = true;
+        return Object.assign({}, state, newState);
+      }
+      newState.isBulkInvoiceGenerated = true;
+      newState.isInvoiceGenerated = true;
+      return Object.assign({}, state, newState);
     }
     default: {
       return state;

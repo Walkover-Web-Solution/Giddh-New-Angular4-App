@@ -47,9 +47,10 @@ export const ROUTES: Routes = [
   {path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full'},
   {path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
-  {path: 'gst', redirectTo: 'pages/gst', pathMatch: 'full'},
+  {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
+  {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -76,9 +77,9 @@ export const ROUTES: Routes = [
       {path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule'},
       {path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule'},
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
-      {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule'},
+      {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization]},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
-      {path: 'gst', loadChildren: './gst/gst.module#GstModule'},
+      {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GST_RECONCILE_ACTIONS } from './GstReconcile.const';
+import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
 import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
@@ -66,6 +66,91 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect() private GetOverView$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GSTR_OVERVIEW)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstrOverview(action.payload.type , action.payload.model)
+          .pipe(
+            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+              if (response.status === 'success') {
+                // this._toasty.successToast('su');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetOverViewResponse(response);
+            }));
+      }));
+
+  @Effect() private GetSummaryTransaction$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetSummaryTransaction(action.payload.type , action.payload.model)
+          .pipe(
+            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+              if (response.status === 'success') {
+                // this._toasty.successToast('su');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetSummaryTransactionResponse(response);
+            }));
+      }));
+
+  @Effect() private GetReturnSummary$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GST_RETURN_SUMMARY)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstReturnSummary(action.payload.type , action.payload.requestParam)
+          .pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetReturnSummaryResponse(response);
+            }));
+      }));
+
+  @Effect() private GetTransactionsCount$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_TRANSACTIONS_COUNT)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetTransactionCount(action.payload)
+          .pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetTransactionsCountResponse(response);
+            }));
+      }));
+
+  @Effect() private GetDocumentIssued$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_DOCUMENT_ISSUED)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetDocumentIssuedTransaction(action.payload)
+          .pipe(
+            map((response: BaseResponse<any, string>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetDocumentIssuedResponse(response);
+            }));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -87,7 +172,7 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoiceRequest(period: string, action: string, page: string, refresh: boolean = false, count: string = '10'): CustomActions {
+  public GstReconcileInvoiceRequest(period: any, action: string, page: string, refresh: boolean = false, count: string = '10'): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
       payload: {period, action, page, refresh, count}
@@ -118,6 +203,116 @@ export class GstReconcileActions {
   public ResetGstReconcileState() {
     return {
       type: GST_RECONCILE_ACTIONS.RESET_GST_RECONCILE_STATE
+    };
+  }
+
+  public showPullFromGstInModal() {
+    return {
+      type: GST_RECONCILE_ACTIONS.PULL_FROM_GSTIN
+    };
+  }
+
+  /**
+   * GetOverView
+   */
+  public GetOverView(type, model) {
+    return {
+      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW,
+      payload: { type, model }
+    };
+  }
+  public GetOverViewResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE,
+      payload: res
+    };
+  }
+
+  /**
+   * GetSummaryTransaction
+   */
+  public GetSummaryTransaction(type, model) {
+    return {
+      type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS,
+      payload: { type, model }
+    };
+  }
+
+   /**
+   * viewSummaryTransaction
+   */
+  public GetSummaryTransactionResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE,
+      payload: res
+    };
+  }
+
+  public SetActiveCompanyGstin(gstIn) {
+    return {
+      type: GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN,
+      payload: gstIn
+    };
+  }
+
+  public GetReturnSummary(type, requestParam) {
+    return {
+      type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY,
+      payload: { type, requestParam }
+    };
+  }
+  public GetReturnSummaryResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE,
+      payload: res
+    };
+  }
+
+  /**
+   * getTransactionsCount
+   */
+  public GetTransactionsCount(period, gstin) {
+    return {
+      type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT,
+      payload: {period, gstin}
+    };
+  }
+
+  /**
+   * GetTransactionsCountResponse
+   */
+  public GetTransactionsCountResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT_RESPONSE,
+      payload: res
+    };
+  }
+
+  public GetDocumentIssued(period, gstin) {
+    return {
+      type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED,
+      payload: {period, gstin}
+    };
+  }
+
+  public GetDocumentIssuedResponse(res) {
+    return {
+      type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED_RESPONSE,
+      payload: res
+    };
+  }
+
+  public RequestTransactions(filters) {
+     return {
+      type: GSTR_ACTIONS.REQUEST_TRANSACTIONS,
+      payload: filters
+    };
+  }
+
+  public SetSelectedPeriod(period) {
+     return {
+      type: GSTR_ACTIONS.CURRENT_PERIOD,
+      payload: period
     };
   }
 }

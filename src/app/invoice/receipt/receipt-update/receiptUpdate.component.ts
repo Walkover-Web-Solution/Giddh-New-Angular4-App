@@ -64,7 +64,7 @@ const THEAD = [
   },
   {
     display: true,
-    label: 'taxes',
+    label: 'Taxes',
     field: 'taxes'
   },
   {
@@ -89,9 +89,9 @@ export class ReceiptUpdateComponent implements OnInit, OnDestroy {
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public customThead: IContent[] = THEAD;
   public autoFillShipping: boolean = false;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   @Input() public activatedInvoice: string;
   @Input() public selectedReceipt: ReceiptItem;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _cdRef: ChangeDetectorRef,
               private receiptActions: InvoiceReceiptActions) {

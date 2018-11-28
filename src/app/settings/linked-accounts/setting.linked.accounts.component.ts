@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
@@ -44,6 +44,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public yodleeForm: FormGroup;
   public companyUniqueName: string;
+  public selectedProvider: string;
+  public isRefreshWithCredentials: boolean = true;
+  public providerAccountId: string = null;
+  public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
+  public selectedBank: any = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -62,6 +67,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName = this._generalService.companyUniqueName;
+    this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -82,7 +88,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o) {
+      if (o && this.isRefreshWithCredentials) {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
       }
     });
@@ -105,31 +111,24 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
     });
 
-    // get flatternaccounts
-    // this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-    //   if (data.status === 'success') {
-    //     let accounts: IOption[] = [];
-    //     data.body.results.map(d => {
-    //       accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
-    //     });
-    //     this.accounts$ = accounts;
-    //   }
-    // });
+    this.needReloadingLinkedAccounts$.subscribe(a => {
+      // if (a && this.isRefreshWithCredentials) {
+      //   this.closeModal();
+      // }
+    });
   }
 
   public getInitialEbankInfo() {
     this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
-  public connectBank() {
+  public connectBank(selectedProvider?, providerAccountId?) {
     // get token info
-    // this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
-    //   if (data.status === 'success') {
-    //     if (data.body.connectUrl) {
-    //       this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
-    //     }
-    //   }
-    // });
+    if (selectedProvider) {
+      this.selectedProvider = selectedProvider;
+      this.isRefreshWithCredentials = false;
+      this.providerAccountId = providerAccountId;
+    }
     this.connectBankModel.show();
     this.connectBankModel.config.ignoreBackdropClick = true;
   }
@@ -159,6 +158,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public closeModal() {
     this.connectBankModel.hide();
     this.iframeSource = undefined;
+    this.selectedProvider = null;
+    this.isRefreshWithCredentials = true;
+    this.providerAccountId = null;
     this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
@@ -171,7 +173,12 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
       switch (this.actionToPerform) {
         case 'DeleteAddedBank':
-          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId));
+          let deleteWithAccountId = true;
+          if (this.selectedBank.status !== 'ALREADY_ADDED') {
+            accountId = this.selectedAccount.providerAccount.providerAccountId;
+            deleteWithAccountId = false;
+          }
+          this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
           break;
         case 'UpdateDate':
           this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(this.dateToUpdate, accountId));
@@ -198,8 +205,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.settingsLinkedAccountsActions.ReconnectAccount(account.loginId));
   }
 
-  public onDeleteAddedBank(bankName, account) {
+  public onDeleteAddedBank(bankName, account, bank) {
     if (bankName && account) {
+      this.selectedBank = _.cloneDeep(bank);
       this.selectedAccount = _.cloneDeep(account);
       this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
       this.actionToPerform = 'DeleteAddedBank';
@@ -209,9 +217,17 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRefreshToken(account) {
-    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.itemAccountId));
-    // this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+  public onRefreshToken(account, isUpdateAccount) {
+    if (isUpdateAccount) {
+      if (!this.providerAccountId) {
+        this.providerAccountId = account.providerAccountId;
+        delete account['providerAccountId'];
+      }
+      // this.selectedProvider = this.providerAccountId;
+      this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
+      return;
+    }
+    this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
   }
 
   public onAccountSelect(account, data) {

@@ -13,10 +13,6 @@ export class PublicPageHandlerComponent {
   constructor(
     public route: ActivatedRoute,
     private router: Router) {
-    console.log('the.route is :', route);
-    console.log('the.router is :', router);
-    console.log('this.router.routerState.snapshot.url is :', this.router.routerState.snapshot.url);
-
     if (this.router.routerState.snapshot.url.includes('create-invoice')) {
       this.router.navigate(['/create-invoice']);
     } else if (this.router.routerState.snapshot.url.includes('signup')) {

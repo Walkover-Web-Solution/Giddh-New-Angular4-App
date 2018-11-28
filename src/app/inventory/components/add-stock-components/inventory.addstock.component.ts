@@ -304,6 +304,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         } else {
           this.addStockForm.patchValue({isFsStock: false});
         }
+
+        this.companyTaxesList$.subscribe((tax) => {
+          _.forEach(tax, (o) => {
+            o.isChecked = false;
+          });
+        });
+
         if (a.taxes.length) {
           this.addStockForm.get('taxes').patchValue([]);
           this.mapSavedTaxes(a.taxes);
@@ -909,11 +916,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           });
         }
         this.isUpdatingStockForm = false;
-        this.companyTaxesList$.subscribe(a => {
-          _.forEach(a, (o) => {
-            o.isChecked = false;
-          });
-        });
       }
     }
   }

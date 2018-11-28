@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 import { TallyModuleService } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { setTimeout } from 'timers';
@@ -8,7 +8,7 @@ import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
@@ -26,6 +26,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { TaxResponse } from 'app/models/api-models/Company';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},
@@ -69,6 +70,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+  @ViewChild('partyAccNameInputField') public partyAccNameInputField: ElementRef;
 
   // public showAccountList: boolean = true;
   public TransactionType: 'by' | 'to' = 'by';
@@ -117,9 +119,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
   public isPurchaseInvoiceSelected: boolean = false; // need to show `Ledger name` field in purchase
   public asideMenuStateForProductService: string = 'out';
+  public companyTaxesList$: Observable<TaxResponse[]>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
+  private selectedStockInputField: any;
+  private taxesToRemember: any[] = [];
 
   constructor(
     private _accountService: AccountService,
@@ -197,6 +202,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       }
     });
 
+    this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -210,6 +216,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.refreshEntry();
         this.data.description = '';
         this.dateField.nativeElement.focus();
+        this.taxesToRemember = [];
       }
     });
     this.entryDate = moment().format(GIDDH_DATE_FORMAT);
@@ -336,8 +343,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onStockItemBlur(ev, elem) {
-    this.selectedInput = elem;
-    this.showLedgerAccountList = false;
+    // this.selectedInput = elem;
+    // this.showLedgerAccountList = false;
     // if (!this.stockSearch) {
     //   this.searchStock('');
     //   this.stockSearch = '';
@@ -363,6 +370,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public onAccountBlur(ele) {
     this.selectedInput = ele;
     this.showLedgerAccountList = false;
+    this.filterByText = '';
     // if (ev.target.value === 0) {
     //   ev.target.focus();
     //   ev.preventDefault();
@@ -378,13 +386,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (this.accountType === 'creditor') {
         setTimeout(() => {
           if (this.focusedField === 'ledgerName') {
-            console.log('ledgerName');
             this.debtorAcc = acc;
           } else if (this.focusedField === 'partyAcc') {
-            console.log('partyAcc');
             this.creditorAcc = acc;
-          } else {
-            console.log('No condition passed.');
           }
         }, 10);
         return this.accountType = null;
@@ -421,7 +425,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public searchAccount(str) {
     this.filterByText = str;
-    // this.accountSearch = str;
   }
 
   /**
@@ -454,8 +457,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * openConfirmBox() to save entry
    */
   public openConfirmBox(submitBtnEle: HTMLButtonElement) {
+    this.showLedgerAccountList = false;
+    this.showStockList.emit(false);
     this.showConfirmationBox = true;
-    if (this.data.description.trim() !== '') {
+    if (this.data.description.length > 1) {
       this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
       setTimeout(() => {
         submitBtnEle.focus();
@@ -664,7 +669,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public saveEntry() {
     if (!this.creditorAcc.uniqueName) {
-      return this._toaster.errorToast("Party A/c Name can't be blank.");
+      this._toaster.errorToast("Party A/c Name can't be blank.");
+      return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
     }
     let data = _.cloneDeep(this.data);
 
@@ -786,8 +792,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string) {
-    if (this.allStocks && this.allStocks.length) {
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false) {
+    if (this.allStocks && this.allStocks.length && !forceRefresh) {
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
       this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -851,12 +857,48 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
-
-    console.log('On acc selected the ev is :', ev);
-
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
+      setTimeout(() => {
+        let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount.UniqueName === ev.value);
+        let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
+        if (indexInTaxesToRemember > -1 && accIndx > -1) {
+          let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
+          this.accountsTransaction[accIndx].rate = rate;
+          this.calculateRate(accIndx, rate);
+        }
+      }, 100);
     } else if (this.selectedField === 'stock') {
+      let stockUniqueName = ev.value;
+      let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
+      if (taxIndex === -1 ) {
+        this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
+          if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
+            this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
+              stockFullDetails.body.taxes.forEach((tax: string) => {
+                let selectedTax = taxes.find((t) => t.uniqueName === tax);
+                let taxTotalValue = 0;
+                if (selectedTax) {
+                  selectedTax.taxDetail.forEach((st) => {
+                    taxTotalValue += st.taxValue;
+                  });
+                }
+                let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
+                if (taxIndx === -1) {
+                  this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue  });
+                }
+              });
+            });
+          }
+
+          // this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
+          //   console.log('TaxResponse areee :', taxes);
+          //   taxes.find((tax) => tax.uniqueName === );
+          //   this.taxesToRemember.push({ stockUniqueName, taxValue:   });
+          // });
+        });
+      }
+
       this.onSelectStock(ev.additional);
     } else if (this.selectedField === 'partyAcc') {
       this.setAccount(ev.additional);
@@ -887,8 +929,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public showQuickAccountModal() {
-    this.loadQuickAccountComponent();
-    this.quickAccountModal.show();
+    this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
+    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    this.selectedStockInputField = selectedField;
+    // this.loadQuickAccountComponent();
+    // this.quickAccountModal.show();
   }
 
   public hideQuickAccountModal() {
@@ -904,6 +949,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.currentSelectedValue = '';
       this.showLedgerAccountList = true;
+      this.filterByText = '';
     }, 10);
   }
 
@@ -915,17 +961,37 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     //   this.currentSelectedValue = '';
     //   this.showLedgerAccountList = false;
     // }, 200);
+    this.filterByText = '';
     this.currentSelectedValue = '';
     this.showLedgerAccountList = false;
   }
 
   public closeCreateStock() {
     this.asideMenuStateForProductService = 'out';
+    // after creating stock, get all stocks again
+    this.getFlattenGrpofAccounts(null, null, true);
+    this.selectedStockInputField.value = '';
+    this.filterByText = '';
+    this.partyAccNameInputField.nativeElement.focus();
+    setTimeout(() => {
+      this.selectedStockInputField.focus();
+    }, 200);
   }
 
   public addNewAccount(val, lastIdx) {
     if (val && lastIdx) {
       this.addNewRow('account');
+    }
+  }
+
+  public checkIfEnteredAmountIsZero(amount, indx, transactionType) {
+    if (!Number(amount)) {
+      if (transactionType === 'stock') {
+        this.stocksTransaction.splice(indx, 1);
+      } else if (transactionType === 'account') {
+        this.accountsTransaction.splice(indx, 1);
+      }
+      this.dateField.nativeElement.focus();
     }
   }
 

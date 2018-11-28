@@ -53,8 +53,8 @@
                                 : 'Invoice No.'}} #20170911-1</strong>
                             <span *ngIf="fieldsAndVisibility.header.dueDate?.display"> due on July 15, 2017</span>
                             <strong *ngIf="fieldsAndVisibility.header.customerName?.display"> for Green Soft Solutions </strong>
-                            <span>at 24 Building Name, 3rd Floor, 15 A.B. Road, Indore (M.P.) 452000</span>
-                            <span>[{{fieldsAndVisibility.header.gstin?.label}}: 11AAAAAA000Z0A1]</span> and the total amount is
+                            <span>at 24 Building Name, 3rd Floor, 15 A.B. Road, Indore (M.P.) 452000 </span>
+                            <span class="bold">[{{fieldsAndVisibility.header.gstin?.label}}: 11AAAAAA000Z0A1] </span> and the total amount is
                             <strong [ngStyle]="{ 'color': inputTemplate.templateColor}">INR 8332.00</strong>.</p>
                     </td>
                 </tr>
@@ -81,6 +81,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr *ngIf="fieldsAndVisibility.table.previousDue?.display">
+                    <td colspan="6"></td>
+                    <td>{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
+                    <td>5000.00</td>
+                </tr>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
                     <td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09-2017
@@ -133,9 +138,9 @@
                     <th class="text-right inwords">923.00</th>
                 </tr> -->
 
-                <tr>
+                <tr class="total-payment">
                     <th [attr.colspan]="columnsVisibled -2" class="text-left inwords">
-                        <span *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                        <span class="inwords" *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
                             Eight Thousand Three Hundred Thirty Two Only
                         </span>
                     </th>
@@ -176,11 +181,11 @@
             <tfoot>
                 <tr>
                     <th class="bdrB text-right" *ngIf="fieldsAndVisibility.table.hsnSac?.display"></th>
+                    <th class="bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display"></th>
                     <th class="bdrB text-right" *ngIf="fieldsAndVisibility.table.taxableValue?.display">
                         <strong>Total</strong>
                         <strong class="mrL2">7200.00</strong>
                     </th>
-                    <th class="bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display"></th>
                     <th class="text-right bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display">
                         <strong>966.00</strong>
                     </th>
@@ -235,9 +240,16 @@
             <tbody>
                 <tr>
                     <td colspan="2" style="vertical-align: bottom;">
-                        <h1 class="strong" [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display">THANK YOU
+                        <h1 class="bold" [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display">THANK YOU
                             <span class="normal" [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</span>
                         </h1>
+
+                        <ul class="note">
+                            <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</li>
+                            <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                        </ul>
+
+
                         <!-- <h1 class="primary-clr">
                             <span *ngIf="fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></span>
                             <span *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK
@@ -247,19 +259,13 @@
                     <td style="text-align: center;vertical-align: bottom;">
                         <p class="bdrB"></p>
                         <p>
-                            <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
+                            <strong class="font-10">{{fieldsAndVisibility.header.companyName?.label}}</strong>
                         </p>
                         <small *ngIf="fieldsAndVisibility.footer.slogan?.display"> {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : '(Signature)'}}</small>
                         <!-- <p *ngIf="fieldsAndVisibility.footer.slogan?.display">(Signature)</p> -->
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <ul class="note">
-                            <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</li>
-                        </ul>
-                    </td>
-                </tr>
+                
             </tbody>
         </table>
 

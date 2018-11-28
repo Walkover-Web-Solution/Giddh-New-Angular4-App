@@ -23,7 +23,7 @@
     <!-- end of auth tab tab -->
 
     <!-- start Wallet tab tab -->
-    <!-- ============================== commented by alok sir ================================
+    <!-- ============================== commented by alok sir ================================ 
     <tab heading="Wallet" (select)="getSubscriptionList()">
         <div class="box clearfix mrT2">
             <h1 class="section_head pdT0">Payment details</h1>
@@ -135,7 +135,7 @@
                     <tr ng-repeat="value in subListData">
                         <td ng-bind-html="value.companyName"></td>
                         <td>
-                            //<switch ng-change="changeCallback" name="autopay" on="On" off="Off" ng-model="value.autoDeduct" class="wide"></switch>
+                           <switch ng-change="changeCallback" name="autopay" on="On" off="Off" ng-model="value.autoDeduct" class="wide"></switch>
     </td>
     <td ng-bind-html="value.servicePlan.amount"></td>
     <td ng-bind-html="value.subscriptionDate | moment: 'format': 'MMM DD, YYYY' "></td>
@@ -303,7 +303,7 @@
       </div>
     </tab>
     <!-- Subscribtion tab starts here -->
-    <!-- <tab heading="Subscription" [active]="">
+    <tab heading="Subscription" [active]="">
       <div class="box clearfix mrT2 mrL2 no-padding">
         <div class="table-responsive">
           <table class="table basic table-bordered mr0">
@@ -320,7 +320,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Professional</td>
+                  <td><a href="javascript:void(0)" class="professional-name">Professional</a></td>
                   <td>01/04/2018</td>
                   <td>Yearly</td>
                   <td>40,000</td>
@@ -329,7 +329,7 @@
                   <td><a href="#" class="text-green">Active</a></td>
                 </tr>
                 <tr>
-                  <td>Professional</td>
+                  <td><a href="javascript:void(0)" class="professional-name">Professional</a></td>
                   <td>07/06/2018</td>
                   <td>Yearly</td>
                   <td>40,000</td>
@@ -338,7 +338,7 @@
                   <td><a href="#" class="text-green">Active</a></td>
                   </tr>
                   <tr>
-                    <td>Student</td>
+                    <td><a href="javascript:void(0)" class="professional-name">Student</a></td>
                     <td>01/04/2018</td>
                     <td>FREE</td>
                     <td>10,000</td>
@@ -463,8 +463,8 @@
                       <div class="head-title">
                         <h3>Companies Name + Total Transactions (till today)</h3>
                       </div>
-                      <div class="inner-box2">
-                      <div class="mrB">
+                      <div class="clearfix">
+                      <div class="mt-1 mb-1 mr-2 ml-2">
                         <input type="search" class="form-control" placeholder="Search Company" name="" id="">
                       </div>
 
@@ -485,7 +485,7 @@
       </div>
 
 
-    </tab>     -->
+    </tab> 
      <!-- Subscription tab ends here -->
 
     <!-- end of session tab -->
