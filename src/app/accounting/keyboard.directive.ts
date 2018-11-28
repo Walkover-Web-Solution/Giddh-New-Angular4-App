@@ -1,5 +1,14 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
+const KEY_CODE_CONSTANTS = {
+  ENTER: 13,
+  SPACE: 32,
+  BACKSPACE: 8,
+  ESC: 27,
+  ARROW_DOWN: 40,
+  ARROW_UP: 38
+};
+
 @Directive({
   selector: '[onReturn]'
 })
@@ -14,21 +23,29 @@ export class OnReturnDirective {
 
   constructor(private _el: ElementRef) {
     this.el = this._el;
+
+    setTimeout(() => {
+      this.clickCount = 0;
+    }, 5000);
   }
 
   @HostListener('keydown', ['$event'])
   public onKeyDown(e: any) {
-
-    if ((e.which === 13 || e.keyCode === 13) || (e.which === 8 || e.keyCode === 8) || (e.which === 32 || e.keyCode === 32)) {
+    // tslint:disable-next-line:max-line-length
+    if ((e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) || (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) || (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) || (e.which === KEY_CODE_CONSTANTS.ESC || e.keyCode === KEY_CODE_CONSTANTS.ESC) || (e.which === KEY_CODE_CONSTANTS.ARROW_DOWN || e.keyCode === KEY_CODE_CONSTANTS.ARROW_DOWN) || (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.keyCode === KEY_CODE_CONSTANTS.ARROW_UP)) {
       const selectedEle = e.target;
-      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"]');
+      const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
       const nodeList = Array.from(allElements);
       const indx = nodeList.findIndex((ele) => ele === selectedEle);
 
       // nodeList[indx + 1].focus();
-      if (e.which === 13 || e.keyCode === 13) {
+      if (e.which === KEY_CODE_CONSTANTS.ENTER || e.keyCode === KEY_CODE_CONSTANTS.ENTER) {
 
-        selectedEle.setAttribute('data-changed', false);
+        if (e.ctrlKey) {
+          return selectedEle.setAttribute('data-changed', true);
+        } else {
+          selectedEle.setAttribute('data-changed', false);
+        }
 
         let target = allElements[indx + 1];
 
@@ -100,7 +117,7 @@ export class OnReturnDirective {
           }
         }
 
-      } else if (e.which === 8 || e.keyCode === 8) {
+      } else if (e.which === KEY_CODE_CONSTANTS.BACKSPACE || e.keyCode === KEY_CODE_CONSTANTS.BACKSPACE) {
 
         let target = allElements[indx - 1];
 
@@ -130,16 +147,39 @@ export class OnReturnDirective {
             if (target.disabled) {
               // console.log('yes if');
               target = allElements[indx - 2];
+              if (target.disabled) {
+                target = allElements[indx - 3];
+              }
               return target.focus();
             } else {
               return target.focus();
             }
           }
         }
-      } else if (e.which === 32 || e.keyCode === 32) {
+      } else if (e.which === KEY_CODE_CONSTANTS.SPACE || e.keyCode === KEY_CODE_CONSTANTS.SPACE) {
         const target = allElements[indx];
         if (target) {
           // target.value = ''; // No need to make the field empty
+        }
+      } else if (e.which === KEY_CODE_CONSTANTS.ESC) {
+
+        let gridType: any = window.document.getElementById('get-grid-type').getAttribute('data-gridType');
+
+        if (gridType === 'invoice') {
+          let invDateField: any = nodeList.find((ele: any) => ele.classList.contains('invoice-date-field'));
+          invDateField.focus();
+        } else if (gridType === 'voucher') {
+          let vouDateField: any = nodeList.find((ele: any) => ele.classList.contains('voucher-date-field'));
+          vouDateField.focus();
+        }
+
+        return setTimeout(() => {
+          selectedEle.focus();
+        }, 100);
+      } else if (e.which === KEY_CODE_CONSTANTS.ARROW_UP || e.which === KEY_CODE_CONSTANTS.ARROW_DOWN) {
+        if (selectedEle.getAttribute('data-changed') === 'false') {
+          selectedEle.value = '';
+          return selectedEle.setAttribute('data-changed', true);
         }
       }
     } else if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode >= 65 && e.keyCode <= 90) {

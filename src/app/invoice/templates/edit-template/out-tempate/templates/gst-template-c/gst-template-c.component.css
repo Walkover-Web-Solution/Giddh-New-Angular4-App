@@ -1,27 +1,45 @@
-* {
+/* * {
     border: 0;
     box-sizing: content-box;
     color: #262626;
     font-family: inherit;
-    font-size: 12px;
     font-style: inherit;
     font-weight: inherit;
-    line-height: inherit;
+    line-height: initial;
     list-style: none;
     margin: 0;
     padding: 0;
     text-decoration: none;
     vertical-align: top;
-}
+} */
 
+.strong {
+    font-weight: bold;
+}
+.font-11 {
+    font-size: 11px !important;
+}
+.font-10 {
+    font-size: 10px !important;
+}
+.font-12 {
+    font-size: 12px !important;
+}
+.mrT10 {
+    margin-top: 10px;
+}
 .mrT20 {
     margin-top: 20px;
 }
-
 .mrT60 {
     margin-top: 60px;
 }
-
+.mb-1 {
+    margin-bottom: 10px;
+}
+.mb-2 {
+    margin-bottom: 20px;
+}
 .max-width-180 {
     /* max-width: 180px !important; */
 }
@@ -35,7 +53,7 @@
 
 #Template2 header h1 {
     /* color: #df4927; */
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     
 }
@@ -44,26 +62,28 @@
     /* color: #df4927; */
     font-weight: bold;
     font-size: 18px;
+    text-align: right;
 }
-
 
 /* table */
 
 #Template2 table {
-    font-size: 93%;
     table-layout: fixed;
     width: 100%;
 }
-
-#Template2 table {}
 
 #Template2 .item th,
 #Template2 tfoot tr td {
     background: rgba(223, 73, 39, 0.05);
     border: 0;
-    font-weight: bold;
+    font-weight: normal;
 }
-
+#Template2 .item th, #Template2 .item td {
+    font-size: 10px;
+}
+#Template2 tfoot tr td {
+    font-size: 11px;
+}
 
 /* page */
 
@@ -85,12 +105,7 @@
     margin: 0 auto;
     overflow: hidden;
     padding: 0.1in;
-}
-
-
-/* width: 8.5in; */
-
-#Template2 body {
+    font-size: 12px;
     background: #FFF;
     border-radius: 1px;
     box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
@@ -100,15 +115,17 @@
 /* header */
 
 #Template2 header {
-    margin: 0 0 1em;
-    background: #f2f2f2;
-    padding: 0.23in 0.23in 0.03in
+    padding: 10px 0 10px;
 }
 
 #Template2 header:after {
     clear: both;
     content: "";
     display: table;
+}
+.invoice-date-table {
+    float: right;
+    width: 140px !important;
 }
 
 .pull-right tr td {
@@ -146,45 +163,40 @@
 
 #Template2 .meta tbody tr td:nth-child(2)>table tbody tr td {
     background: #f2f2f2;
-    padding: 0 10px;
-    line-height: 2rem;
-    margin: 4px 0;
-    display: -webkit-box;
+    line-height: initial;
+    padding: 7px;
+    display: block;
+}
+.table-address tr {
+    margin-bottom: 5px;
+    display: block;
 }
 
 #Template2 header figure {
-    float: left;
     font-style: normal;
-    line-height: 1.25;
-    margin: 0 0 0.3em 0;
+    padding: 0;
 }
 
 #Template2 header figure p {
     margin: 0 0 0.25em;
 }
 
-#Template2 header span {
-    display: block;
-    float: right;
-}
-
-#Template2 header span {
+/* #Template2 header span {
     margin: 0 0 1em 1em;
     max-height: 25%;
     max-width: 60%;
     position: relative;
-}
+} */
 
 #Template2 header img {
     max-height: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    float: left;
 }
 
 #Template2 header table tr td {
     border: 0;
-    padding: 4px 0;
 }
-
 
 /* article */
 
@@ -232,8 +244,7 @@ table.inventory {
 #Template2 table.item th,
 #Template2 table.item tfoot td {
     text-align: right;
-    padding: 14px 7px;
-    line-height: 1.2rem;
+    padding: 13px 7px;
     vertical-align: middle;
 }
 
@@ -244,14 +255,16 @@ table.inventory {
 #Template2 table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid rgba(89, 89, 89, 0.6);
+    border-top: 1px solid #D6D6D6;
     text-align: right;
-    line-height: 1.2rem;
+    line-height: 1rem;
     vertical-align: middle;
+    font-size: 10px;
 }
 
 #Template2 table.item td p {
     color: #595959;
+    font-size: 8px;
 }
 
 
@@ -268,6 +281,8 @@ table.inventory {
     width: 50%;
     text-align: right;
     padding: 4px;
+    font-weight: normal;
+    font-size: 11px;
 }
 
 
@@ -288,8 +303,8 @@ table.inventory {
 /*footer*/
 
 #Template2 footer {
-    border-top: 2px solid;
-    padding: 10px 0;
+    border-top: 1px solid;
+    padding: 19px 0 4px;
     margin: 8px 0 0;
     background: #fff;
 }
@@ -304,12 +319,12 @@ table.inventory {
 
 #Template2 .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #595959;
     margin: 3px 0;
 }
 
 #Template2 .subfooter h4 {
-    font-size: 17px;
+    font-size: 14px;
     /* color: #df4927; */
     margin: 10px 0 0
 }
@@ -369,5 +384,5 @@ img {
 }
 
 footer p {
-    font-size: 14px;
+    font-size: 10px;
 }

@@ -18,7 +18,7 @@
                 <p>Enter your company name to start hassle free accounting with Giddh.</p>
                 <label for="name" class="m-t-40">Company Name <sup>*</sup></label>
                 <input name="name" id="name" type="text" required placeholder="Name" [(ngModel)]="company.name"
-                       class="form-control">
+                       class="form-control" (blur)="makeMeCaptialize(company.name)">
                 <!-- /btn-account -->
 
               </div>

@@ -9,6 +9,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
 import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
+import { GSTR_API } from './apiurls/gstR.api';
 
 @Injectable()
 export class GstReconcileService {
@@ -52,13 +53,14 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<string, VerifyOtpRequest>(e, '')));
   }
 
-  public GstReconcileGetInvoices(period: string, action: string, page: string, count: string, refresh: boolean): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
+  public GstReconcileGetInvoices(period: any, action: string, page: string, count: string, refresh: boolean): Observable<BaseResponse<GstReconcileInvoiceResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     return this._http.get(this.config.apiUrl + GST_RECONCILE_API.GET_INVOICES
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':period', encodeURIComponent(period))
+      .replace(':from', encodeURIComponent(period.from))
+      .replace(':to', encodeURIComponent(period.to))
       .replace(':action', encodeURIComponent(action))
       .replace(':page', encodeURIComponent(page))
       .replace(':count', encodeURIComponent(count))
@@ -71,5 +73,108 @@ export class GstReconcileService {
           return data;
         })
         , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+  }
+
+  public GetGstrOverview(type: string, requestParam: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':page', requestParam.page)
+      .replace(':count', requestParam.count)
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
+      .replace(':gstin', requestParam.gstin)
+      .replace(':gstType', type)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          data.queryString = {requestParam, type};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+  }
+
+  public GetSummaryTransaction(type: string, requestParam: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':page', requestParam.page)
+      .replace(':count', requestParam.count)
+      .replace(':from', requestParam.from)
+      .replace(':to', requestParam.to)
+      .replace(':gstin', requestParam.gstin)
+      .replace(':entityType', requestParam.entityType)
+      .replace(':gstType', type)
+      .replace(':type', requestParam.type)
+      .replace(':status', requestParam.status)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          data.queryString = {requestParam, type};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+  }
+
+  public GetGstReturnSummary(type: string, requestParam: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_RETURN_SUMMARY
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':page', requestParam.page)
+      .replace(':count', requestParam.count)
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
+      .replace(':gstin', requestParam.gstin)
+      .replace(':gstType', type)
+      .replace(':gstReturnType', requestParam.gstReturnType)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<any, string> = res;
+          data.queryString = {requestParam, type};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+  }
+
+  public GetTransactionCount(requestParam: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS_COUNTS
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
+      .replace(':gstin', requestParam.gstin)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<any, any> = res;
+          data.queryString = requestParam;
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+  }
+
+  public GetDocumentIssuedTransaction(requestParam: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GET_DOCUMENT_ISSUED
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':from', requestParam.period.from)
+      .replace(':to', requestParam.period.to)
+      .replace(':gstin', requestParam.gstin)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<any, string> = res;
+          data.queryString = requestParam;
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
   }
 }

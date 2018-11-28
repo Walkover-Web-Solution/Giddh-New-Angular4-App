@@ -3,32 +3,42 @@
   box-sizing: content-box;
   color: #262626;
   font-family: inherit;
-  font-size: 12px;
   font-style: inherit;
   font-weight: inherit;
-  line-height: inherit;
   list-style: none;
   margin: 0;
   padding: 0;
   text-decoration: none;
   vertical-align: top;
 }
-
-.max-width-180 {
-    /* max-width: 180px; */
+.strong {
+  font-weight: bold;
 }
-
-
+.font-11 {
+  font-size: 11px !important;
+}
+.font-10 {
+  font-size: 10px !important;
+}
+.font-12 {
+  font-size: 12px !important;
+}
+.pb-1 {
+  padding-bottom: 10px;
+}
+p {
+  line-height: 17px;
+}
 /* heading */
 
 #default header h1 {
   /* color: #df4927; */
-  font-size: 16px;
+  font-size: 14px;
 }
 
 #default header h2 {
   /* color: #df4927; */
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -39,15 +49,6 @@
   table-layout: fixed;
   width: 100%;
   border-collapse: inherit
-}
-
-#default table {
-}
-
-#default .item th,
-#default tfoot tr th {
-  /* background: #f2f2f2; */
-  /*border: 0;*/
 }
 
 /* page */
@@ -62,6 +63,7 @@
 
 #default body {
   box-sizing: border-box;
+  font-size: 12px;
   margin: 0 auto;
   overflow: hidden;
   padding: 0.1in;
@@ -76,7 +78,7 @@
 #default header {
   margin: 0;
   background: #fff;
-  padding: 0.23in 0.23in 0.03in;
+  padding: 10px;
 }
 
 #default header:after {
@@ -95,7 +97,7 @@
 }
 
 #default .meta {
-  padding: 0 0.23in 0.03in;
+  padding: 0 10px;
   /* margin-bottom: 10px; */
 }
 
@@ -125,11 +127,9 @@
 /*#default .meta tbody tr td:nth-child(2)>table tbody tr td{background: #f2f2f2;padding: 0 10px;line-height: 2rem;margin: 4px 0; display: -webkit-box;}*/
 
 #default header figure {
-    float: left;
-    font-style: normal;
-    line-height: 1.25;
-    margin: 0 0 0.3em 0;
-    width: 100%;
+  margin: 0 0 0.3em 0;
+  width: 100%;
+  padding: 0px;
 }
 
 #default header figure p {
@@ -213,22 +213,21 @@ header img {
 
 #default table.item tr th,
 #default table.item tfoot tr th {
-  font-weight: bold;
-}
-
-#default table.item tfoot tr th {
-  border-top: 1px solid rgba(89, 89, 89, 0.6);
+  font-size: 10px;
 }
 
 #default table.item td {
   border-radius: 0;
   padding: 7px;
-  border-top: 1px solid rgba(89, 89, 89, 0.6);
+  border-top: 1px solid #D6D6D6;
   line-height: 1.2rem;
+  font-size: 10px;
+  vertical-align: middle;
 }
 
 #default table.item td p {
   color: #595959;
+  font-size: 8px;
 }
 
 #default table.balance {
@@ -242,6 +241,7 @@ header img {
   width: 50%;
   text-align: right;
   padding: 0 2px;
+  font-size: 11px;
 }
 
 /* aside */
@@ -260,8 +260,8 @@ header img {
 /*footer*/
 
 #default footer {
-  border-top: 2px solid;
-  padding: 10px;
+  border-top: 1px solid;
+  padding: 16px 0px 10px 0;
   margin: 8px 0 0;
   background: #fff;
 }
@@ -271,19 +271,19 @@ header img {
 }
 
 #default .subfooter {
-  padding: 0 20px;
+  padding: 0 10px;
 }
 
 #default .subfooter hr {
   width: 100%;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #595959;
   margin: 3px 0;
 }
 
 #default .subfooter h4 {
-  font-size: 17px;
-  /* color: #df4927; */
-  margin: 10px 0 0
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #default .docTitle {
@@ -298,8 +298,8 @@ header img {
   text-align: center;
   position: absolute;
   right: 0;
-  left: -21px;
-  width: 105.5%;
+  left: 0;
+  width: 100%;
 }
 
 #default .docTitle h2:after {
@@ -347,6 +347,7 @@ header img {
   height: 2px;
   top: 50%;
   width: 100%;
+  height: 1px;
 }
 
 strong {

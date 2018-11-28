@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -18,6 +18,9 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { ActivatedRoute } from '@angular/router';
+import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -42,6 +45,8 @@ const COMPARISON_FILTER = [
 export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public showFromDatePicker: boolean = false;
@@ -63,6 +68,57 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
+  public selectedVoucher: string = 'invoice';
+  public isGenerateInvoice: boolean = true;
+  public datePickerOptions: any = {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().startOf('month').subtract(1, 'month'),
+        moment().endOf('month').subtract(1, 'month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
+        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
+
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -74,7 +130,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     private modalService: BsModalService,
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _activatedRoute: ActivatedRoute,
+    private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
@@ -85,6 +143,10 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._activatedRoute.params.subscribe(a => {
+      this.setVoucherType(a.voucherType);
+    });
 
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
@@ -110,9 +172,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store.select(p => p.invoice.invoiceData).pipe(
+    this.store.select(p => p.receipt.voucher).pipe(
       takeUntil(this.destroyed$),
-      distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+      distinctUntilChanged((p: any, q: any) => {
         if (p && q) {
           return (p.templateUniqueName === q.templateUniqueName);
         }
@@ -120,9 +182,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
           return false;
         }
         return true;
-      })).subscribe((o: PreviewInvoiceResponseClass) => {
+      })).subscribe((o: any) => {
       if (o) {
-        this.getInvoiceTemplateDetails(o.templateUniqueName);
+        this.getInvoiceTemplateDetails(o.templateDetails.templateUniqueName);
       }
     });
 
@@ -143,10 +205,13 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
+        this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
       }
     })).subscribe();
+
   }
 
   public closeInvoiceModel(e) {
@@ -208,6 +273,12 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     });
     this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model.uniqueNames));
     this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+
+    // let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
+    // request.invoiceNumber = res.voucherNumber.join();
+    // request.voucherType = this.selectedVoucher;
+
+    // this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(res.account.uniqueName, request));
     this.showInvoiceModal();
   }
 
@@ -295,22 +366,24 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     if (this.universalDate && this.universalDate.length) {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-    } else {
-      fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-      toDate = moment().format(GIDDH_DATE_FORMAT);
     }
+    // else {
+    //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    //   toDate = moment().format(GIDDH_DATE_FORMAT);
+    // }
     return {
       from: this.isUniversalDateApplicable ? fromDate : o.from,
       to: this.isUniversalDateApplicable ? toDate : o.to,
       count: o.count,
-      page: o.page
+      page: o.page,
+      voucherType: this.selectedVoucher
     };
   }
 
   public bsValueChange(event: any) {
     if (event) {
-      this.ledgerSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
-      this.ledgerSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+      this.ledgerSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      this.ledgerSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
     }
   }
 
@@ -347,6 +420,30 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
     } else {
       this.togglePrevGenBtn = false;
+    }
+  }
+
+  /**
+   * setVoucherType
+   */
+  public setVoucherType(voucherType) {
+    switch (voucherType) {
+      case 'receipt':
+        this.selectedVoucher = 'receipt';
+        this.isGenerateInvoice = false;
+        break;
+      case 'credit note':
+        this.isGenerateInvoice = false;
+        this.selectedVoucher = 'credit note';
+        break;
+      case 'debit note':
+        this.isGenerateInvoice = false;
+        this.selectedVoucher = 'debit note';
+        break;
+      default:
+        this.isGenerateInvoice = true;
+        this.selectedVoucher = 'sales';
+        break;
     }
   }
 

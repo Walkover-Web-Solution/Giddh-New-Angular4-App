@@ -119,6 +119,9 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public singleDatePickerOptions$: Observable<any> = of(null);
   public showSingleDatePicker: boolean = false;
   public datePickerOptions: any;
+  public selectedRangeType: string = '';
+  public isMonthSelected: boolean = false;
+  public selectedMonth: any = moment(new Date());
 
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
@@ -179,8 +182,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       delete gstr1DatePicker.ranges['This Quarter to Date'];
       this.datePickerOptions$ = of(_.cloneDeep(gstr1DatePicker));
       this.selectedDateForGSTR1 = {
-        fromDate: moment(a.startDate._d).format(GIDDH_DATE_FORMAT),
-        toDate: moment(a.endDate._d).format(GIDDH_DATE_FORMAT)
+        from: moment(a.startDate._d).format(GIDDH_DATE_FORMAT),
+        to: moment(a.endDate._d).format(GIDDH_DATE_FORMAT)
       };
 
       let singleDatePickerOptions = _.cloneDeep(gstr1DatePicker);
@@ -310,17 +313,25 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public monthChanged(ev) {
-    let data = ev ? _.cloneDeep(ev) : null;
-    if (data && data.picker) {
+  public monthChanged(ev, isMonth?: string) {
+
+    if (ev && ev.picker) {
       let dates = {
-        fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-        toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+        from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+        to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
       this.selectedDateForGSTR1 = dates;
+      this.isMonthSelected = false;
+      this.selectedMonth =  moment(new Date());
     } else {
-
-      this.selectedDateForGSTR1.monthYear = _.cloneDeep(moment(data).format('MM-YYYY'));
+      let dates = {
+        from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+        to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+      };
+      this.selectedDateForGSTR1 = dates;
+      this.selectedMonth = ev;
+      this.isMonthSelected = true;
+      this.selectedDateForGSTR1.monthYear = moment(ev).format('MM-YYYY');
     }
     if (this.selectedGstrType.name === 'GSTR2') {
       this.fireGstReconcileRequest(this.reconcileActiveTab, ev);
@@ -724,7 +735,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
-    let check = moment(this.selectedDateForGSTR1.monthYear, 'MM-YYYY');
+    let check = moment(this.selectedMonth, 'MM-YYYY');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
     if (!monthToSend) {
       this.toasty.errorToast('Please select a month');

@@ -227,12 +227,28 @@ export class LedgerService {
       catchError((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, {accountUniqueName})));
   }
 
-  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: number = 1, count: number = 15, q: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    let request = '';
+
+    if (from) {
+      request += '&from=' + from;
+    }
+    if (to) {
+      request += '&to=' + to;
+    }
+    if (page) {
+      request += '&page=' + page;
+    }
+    if (count) {
+      request += '&count=' + count;
+    }
+    if (q) {
+      request += '&q=' + q;
+    }
     return this._http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      .replace(':fromDate', from).replace(':toDate', to).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':q', encodeURIComponent(q.toString())), model).pipe(
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
       map((res) => {
         let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
         data.request = model;

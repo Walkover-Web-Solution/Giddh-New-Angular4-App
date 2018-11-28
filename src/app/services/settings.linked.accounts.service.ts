@@ -71,10 +71,16 @@ export class SettingsLinkedAccountsService {
   /**
    * Delete account
    */
-  public DeleteBankAccount(loginId: string): Observable<BaseResponse<any, string>> {
+  public DeleteBankAccount(loginId: string, deleteWithAccountId): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', loginId)).pipe(map((res) => {
+    let param;
+    if (deleteWithAccountId) {
+      param = 'accountId=' + loginId;
+    } else {
+      param = 'providerAccountId=' + loginId;
+    }
+    return this._http.delete(this.config.apiUrl + EBANKS.DELETE_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName) + param).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {loginId};
       return data;
@@ -84,12 +90,12 @@ export class SettingsLinkedAccountsService {
   /**
    * Refresh account
    */
-  public RefreshBankAccount(ebankItemId: string): Observable<BaseResponse<any, string>> {
+  public RefreshBankAccount(ebankItemId: string, requestObj): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':ebankItemId', ebankItemId)).pipe(map((res) => {
+    return this._http.put(this.config.apiUrl + EBANKS.REFREST_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':ebankItemId', ebankItemId), requestObj).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {ebankItemId};
+      data.queryString = {ebankItemId, requestObj};
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }

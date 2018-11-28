@@ -62,6 +62,9 @@ export class BankAccountsResponse {
   public yodleeAccounts: IBankAccount[];
   public siteName: string;
   public siteId: number;
+  public status: string;
+  public reason: string;
+  public isRefreshWithCredentials: boolean;
 }
 
 export class RefreshBankAccountResponse {

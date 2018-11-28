@@ -165,11 +165,11 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    let  apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.fromDate).replace(':to', reqObj.period.toDate).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber);
-    if (reqObj.gstType === 'GSTR2') {
-      apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_EXCEL_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);
-    }
-    return this._http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+    let  apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber);
+    // if (reqObj.gstType === 'GSTR2') {
+    //   apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_EXCEL_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);
+    // }
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
@@ -184,13 +184,12 @@ export class PurchaseInvoiceService {
   public DownloadGSTR1ErrorSheet(reqObj: { period: any, gstNumber: string, type: string, gstType: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    // let  apiUrl = ;
+    // if (reqObj.gstType === 'GSTR2') {
+    //   apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);
+    // }
 
-    let  apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.fromDate).replace(':to', reqObj.period.toDate).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber);
-    if (reqObj.gstType === 'GSTR2') {
-      apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);
-    }
-
-    return this._http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':error_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
       return data;
@@ -296,9 +295,9 @@ export class PurchaseInvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url;
     if (reqObj.via && reqObj.via === 'JIO_GST') {
-      url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.fromDate).replace(':to', reqObj.period.toDate).replace(':company_gstin', reqObj.gstNumber);
+      url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
     } else if (reqObj.via === 'TAX_PRO') {
-      url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.fromDate).replace(':to', reqObj.period.toDate).replace(':company_gstin', reqObj.gstNumber);
+      url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
     }
     return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
