@@ -5715,7 +5715,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .hamburger_menu h4 {
     font-size: 20px;
     text-transform: capitalize;
-    width: 250px;
+    width: auto;
 }
 
 .tax-engine .icon {

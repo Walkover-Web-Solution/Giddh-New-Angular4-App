@@ -182,9 +182,9 @@
                         <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
                         <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                         <li *ngFor="let acc of accountItemsFromIndexDB">
-                            <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [ngClass]="{'active': selectedLedger?.name === acc.name}">
+                            <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
                                 <span class="icon-dashboard"></span>
-                                <span class="label">{{acc.name}} 
+                                <span class="label">{{acc.name}}
                                     <span class="txtLwc">a/c</span>
                                 </span>
                             </a>
@@ -275,7 +275,7 @@
                         <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
-                        <h4 class="inline text-capitalize">{{selectedPage}}</h4>
+                        <h4 class="inline text-capitalize">{{selectedPage}} <span *ngIf="isLedgerAccSelected" class="txtLwc">a/c</span></h4>
                     </li>
                     
                     <!-- books search -->
