@@ -71,6 +71,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('partyAccNameInputField') public partyAccNameInputField: ElementRef;
+  @ViewChild('submitButton') public submitButton: ElementRef;
+  @ViewChild('resetButton') public resetButton: ElementRef;
+  @ViewChild('narrationBox') public narrationBox: ElementRef;
 
   // public showAccountList: boolean = true;
   public TransactionType: 'by' | 'to' = 'by';
@@ -1001,6 +1004,22 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.accountsTransaction.splice(indx, 1);
       }
       this.dateField.nativeElement.focus();
+    }
+  }
+
+  public keyUpOnSubmitButton(e) {
+    if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
+      return setTimeout(() => this.resetButton.nativeElement.focus(), 200);
+    }
+  }
+
+  public keyUpOnResetButton(e) {
+    if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
+      return setTimeout(() => this.submitButton.nativeElement.focus(), 200);
+    }
+    if (e && (e.keyCode === 13 || e.which === 13)) {
+      this.showConfirmationBox = false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 200);
     }
   }
 
