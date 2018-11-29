@@ -56,6 +56,9 @@ export interface SessionState {
   applicationDate: any;
   companyUniqueName: string;                   // current user | null
   companies: CompanyResponse[];
+  subscriptions: any;
+  transactions: any;
+  companyTransactions: any;
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
   isCompanyCreationSuccess: boolean;
@@ -103,6 +106,9 @@ const sessionInitialState: SessionState = {
   applicationDate: null,
   companyUniqueName: '',
   companies: [],
+  subscriptions: null,
+  transactions: null,
+  companyTransactions: null,
   isCompanyCreated: false,
   isCompanyCreationInProcess: false,
   isCompanyCreationSuccess: false,
@@ -621,6 +627,33 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         return Object.assign({}, state, {
           user: res.body,
           isLoginWithPasswordInProcess: false
+        });
+      }
+      return state;
+    }
+    case LoginActions.SubscribedCompaniesResponse: {
+      let data: BaseResponse<any, string> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          subscriptions: data.body
+        });
+      }
+      return state;
+    }
+    case LoginActions.SubscribedUserTransactionsResponse: {
+      let data: BaseResponse<any, string> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          transactions: data.body
+        });
+      }
+      return state;
+    }
+    case LoginActions.SubscribedCompanyTransactionsResponse: {
+      let data: BaseResponse<any, string> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          companyTransactions: data.body
         });
       }
       return state;

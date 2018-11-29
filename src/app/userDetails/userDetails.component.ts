@@ -41,6 +41,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public disableRazorPay: boolean = false;
   public coupRes: GetCouponResp = new GetCouponResp();
   public contactNo$: Observable<string>;
+  public subscriptions$:any;
+  public subscriptions: any;
+  public transactions$: any;
+  public transactions: any;
+  public companyTransactions$: any;
+  public companyTransactions: any;
   public countryCode$: Observable<string>;
   public isAddNewMobileNoInProcess$: Observable<boolean>;
   public isAddNewMobileNoSuccess$: Observable<boolean>;
@@ -56,7 +62,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public userSessionId: any = null;
   public modalRef: BsModalRef;
-  
+  public subscriptionStatus = {
+    true: 'Active',
+    false: 'Renew'
+  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
@@ -77,6 +86,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
     this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
     this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).pipe(takeUntil(this.destroyed$));
+    this.subscriptions$ = this.store.select(s =>  s.session.subscriptions);
+    this.transactions$ = this.store.select(s =>  s.session.transactions);
+    this.companyTransactions$ = this.store.select(s =>  s.session.companyTransactions);
 
     this.authenticateTwoWay$ = this.store.select(s => {
       if (s.session.user) {
@@ -101,6 +113,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.contactNo$.subscribe(s => this.phoneNumber = s);
     this.countryCode$.subscribe(s => this.countryCode = s);
     this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);
+    this.subscriptions$.subscribe(s => this.subscriptions = s);
+    this.transactions$.subscribe(s => this.transactions = s);
+    this.companyTransactions$.subscribe(s => this.companyTransactions = s);
     this.isVerifyAddNewMobileNoSuccess$.subscribe(s => {
       if (s) {
         this.oneTimePassword = '';
@@ -147,7 +162,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._sessionAction.getAllSession());
       }
     });
-
+    this.getSubscriptionList();
+    this.getSubscriptionTransactionList();
   }
 
   public addNumber(no: string) {
@@ -173,6 +189,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   public getSubscriptionList() {
     this.store.dispatch(this._loginAction.SubscribedCompanies());
+  }
+
+  public getSubscriptionTransactionList() {
+    this.store.dispatch(this._loginAction.SubscribedUserTransactions( this.subscriptions && this.subscriptions[0]));
+  }
+  public getCompanyTransactions(companyName) {
+    this.store.dispatch(this._loginAction.SubscribedCompanyTransactions( this.subscriptions && this.subscriptions[0], companyName));
   }
 
   public changeTwoWayAuth() {
@@ -252,7 +275,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           this.disableRazorPay = false;
           return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
         }
-      case 'discount_amount': 
+      case 'discount_amount':
         diff = this.amount - this.discount;
         if (diff < 100) {
           this.disableRazorPay = true;
@@ -325,11 +348,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._sessionAction.deleteAllSession());
   }
 
-  public openModal(template: TemplateRef<any>) {
+  public openModal(template: TemplateRef<any>, company, subscription) {
+    this.getCompanyTransactions(company.uniqueName);
     this.modalRef = this.modalService.show(
       template,
       Object.assign({}, { class: 'subscription_modal'})
     );
+    let cont = {
+      subscription,
+      company
+    }
+    this.modalRef.content = cont;
   }
 }
 

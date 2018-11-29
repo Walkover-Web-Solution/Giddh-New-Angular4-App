@@ -66,6 +66,10 @@ export class LoginActions {
   public static FetchUserDetailsResponse = 'FetchUserDetailsResponse';
   public static SubscribedCompanies = 'SubscribedCompanies';
   public static SubscribedCompaniesResponse = 'SubscribedCompaniesResponse';
+  public static SubscribedUserTransactions = 'SubscribedUserTransactions';
+  public static SubscribedUserTransactionsResponse = 'SubscribedUserTransactionsResponse';
+  public static SubscribedCompanyTransactions = 'SubscribedCompanyTransactions';
+  public static SubscribedCompanyTransactionsResponse = 'SubscribedCompanyTransactionsResponse';
   public static AddBalance = 'AddBalance';
   public static AddBalanceResponse = 'AddBalanceResponse';
   public static ResetTwoWayAuthModal = 'ResetTwoWayAuthModal';
@@ -458,6 +462,17 @@ export class LoginActions {
       switchMap((action: CustomActions) => this.auth.GetSubScribedCompanies()),
       map(response => this.SubscribedCompaniesResponse(response)));
 
+ @Effect()
+  public SubscribedUserTransactions$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SubscribedUserTransactions).pipe(
+      switchMap((action: CustomActions) => this.auth.GetSubScribedUserTransaction(action.payload)),
+      map(response => this.SubscribedUserTransactionsResponse(response)));
+ @Effect()
+  public SubscribedCompanyTransactions$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SubscribedCompanyTransactions).pipe(
+      switchMap((action: CustomActions) => this.auth.GetSubScribedCompanyTransaction(action.payload)),
+      map(response => this.SubscribedCompanyTransactionsResponse(response)));
+
   @Effect()
   public AddBalance$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddBalance).pipe(
@@ -837,13 +852,39 @@ export class LoginActions {
     };
   }
 
-  public SubscribedCompaniesResponse(response): CustomActions {
+  public SubscribedCompaniesResponse(resp: BaseResponse<any, any>): CustomActions {
     return {
       type: LoginActions.SubscribedCompaniesResponse,
-      payload: {}
+      payload: resp
     };
   }
 
+  public SubscribedUserTransactions(subscription): CustomActions {
+    return {
+      type: LoginActions.SubscribedUserTransactions,
+      payload: subscription
+    };
+  }
+
+  public SubscribedUserTransactionsResponse(resp: BaseResponse<any, any>): CustomActions {
+    return {
+      type: LoginActions.SubscribedUserTransactionsResponse,
+      payload: resp
+    };
+  }
+
+  public SubscribedCompanyTransactions(subscription, company): CustomActions {
+    return {
+      type: LoginActions.SubscribedCompanyTransactions,
+      payload: { subscription, company }
+    };
+  }
+  public SubscribedCompanyTransactionsResponse(resp: BaseResponse<any, any>): CustomActions {
+    return {
+      type: LoginActions.SubscribedCompanyTransactionsResponse,
+      payload: resp
+    };
+  }
   public AddBalance(): CustomActions {
     return {
       type: LoginActions.AddBalance
