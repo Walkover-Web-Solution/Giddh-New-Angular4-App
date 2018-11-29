@@ -71,6 +71,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
   @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
   @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
+  @ViewChild('submitButton') public submitButton: ElementRef;
+  @ViewChild('resetButton') public resetButton: ElementRef;
 
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
@@ -442,24 +444,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
     let lastIndx = this.requestObj.transactions.length - 1;
-    if (amount) {
-      transactionObj.amount = Number(amount);
-      transactionObj.total = transactionObj.amount;
-
-      if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-        this.newEntryObj();
-      }
-
-      let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
-      this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-      let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
-      this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
-    } else {
+    if (amount === 0 || amount === '0') {
       this.requestObj.transactions.splice(indx, 1);
       this.dateField.nativeElement.focus();
       if (!this.requestObj.transactions.length) {
         this.newEntryObj('by');
       }
+    } else {
+      transactionObj.amount = Number(amount);
+      transactionObj.total = transactionObj.amount;
+      if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
+        this.newEntryObj();
+      }
+      let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+      this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
+      let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+      this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
     }
   }
 
@@ -930,6 +930,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
           this.chqFormSubmitBtn.nativeElement.focus();
         }
       }, 100);
+    }
+  }
+
+  public keyUpOnSubmitButton(e) {
+    if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
+      return setTimeout(() => this.resetButton.nativeElement.focus(), 200);
+    }
+  }
+
+  public keyUpOnResetButton(e) {
+    if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
+      return setTimeout(() => this.submitButton.nativeElement.focus(), 200);
+    }
+    if (e && (e.keyCode === 13 || e.which === 13)) {
+      this.showConfirmationBox = false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 200);
     }
   }
 

@@ -179,7 +179,7 @@
         <div class="col-xs-4">
           <div class="form-group">
             <label>Narration:</label>
-            <textarea onReturn id="invoice-narration" class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
+            <textarea #narrationBox onReturn id="invoice-narration" class="form-control appearance_none" name="narration" (keyup.enter)="openConfirmBox(submitButton)"
                       (keydown.tab)="openConfirmBox(submitButton)" [(ngModel)]="data.description" resize="false"
                       rows="6"></textarea>
           </div>
@@ -189,8 +189,8 @@
           <div class="">
             <h1>Accept?</h1>
             <div class="pdT2">
-              <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button>
-              <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
+              <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)" (click)="saveEntry();">Yes</button>
+              <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)">No</button>
               <br/>
               <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
             </div>
