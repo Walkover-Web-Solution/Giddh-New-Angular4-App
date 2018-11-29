@@ -125,6 +125,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   private allStocks: any[];
   private selectedStockInputField: any;
   private taxesToRemember: any[] = [];
+  private isAccountListFiltered: boolean = false;
 
   constructor(
     private _accountService: AccountService,
@@ -359,6 +360,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     this.inputForList = _.cloneDeep(this.flattenAccounts);
     this.selectedField = 'account';
+
+    if (this.isAccountListFiltered) {
+      this.refreshAccountListData();
+    }
     // this.selectedParticular = elem;
     // this.selectRow(true, indx);
     // this.filterAccount(trxnType);
@@ -940,9 +945,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.quickAccountModal.hide();
   }
 
-  public onPartyAccFocus() {
+  public onPartyAccFocus(accCategory: string = null) {
     this.showConfirmationBox = false;
     this.getFlattenGrpAccounts(null, false);
+    this.refreshAccountListData(accCategory);
     this.accountType = 'creditor';
     this.isPartyACFocused = true;
     this.selectedField = 'partyAcc';
@@ -953,7 +959,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }, 10);
   }
 
-  public onPartyAccBlur() {
+  public onPartyAccBlur(needRefreshAccounts: boolean = false) {
     // this.showAccountList.emit(false);
     // selectedInput=creditor;
     // this.isPartyACFocused = false;
@@ -964,6 +970,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.filterByText = '';
     this.currentSelectedValue = '';
     this.showLedgerAccountList = false;
+    if (needRefreshAccounts) {
+      this.refreshAccountListData();
+    }
   }
 
   public closeCreateStock() {
@@ -1002,12 +1011,19 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  private refreshAccountListData() {
+  private refreshAccountListData(groupUniqueName: string = null) {
     this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
           if (data.status === 'success') {
-            this._tallyModuleService.setFlattenAccounts(data.body.results);
+            if (groupUniqueName) {
+              const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results.filter((acc) => acc.parentGroups.findIndex((g) => g.uniqueName === groupUniqueName) > -1);
+              this._tallyModuleService.setFlattenAccounts(filteredAccounts);
+              this.isAccountListFiltered = true;
+            } else {
+              this._tallyModuleService.setFlattenAccounts(data.body.results);
+              this.isAccountListFiltered = false;
+            }
           }
         });
       }
