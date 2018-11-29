@@ -376,8 +376,8 @@ hr {
     transform: rotate(-90deg);
 }
 
-.content-graph:focus {
-    outline: none;
+:focus {
+    outline: none !important;
 }
 
 .dropdown-menu>li>a:hover {
