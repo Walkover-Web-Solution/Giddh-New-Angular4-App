@@ -32,6 +32,7 @@ import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
 import { EventEmitter } from '@angular/core';
 import { WindowRef } from '../helpers/window.object';
+import { AccountResponse } from 'app/models/api-models/Account';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -199,6 +200,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public searchCmp: string = '';
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
+  public activeAccount$: Observable<AccountResponse>;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -242,6 +244,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     })).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
@@ -413,8 +416,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           return this.selectedPage = lastStateName.name;
         } else if (lastState.includes('ledger/')) {
           this.isLedgerAccSelected = true;
-          this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-          return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
+          if (this.isLedgerAccSelected) {
+            this.activeAccount$.subscribe(acc => {
+              if (acc) {
+                this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+                return this.selectedPage = 'ledger - ' + acc.name;
+              }
+            });
+          }
+          // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+          // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
         } else if (this.selectedPage === 'gst') {
           this.selectedPage = 'GST';
         }
