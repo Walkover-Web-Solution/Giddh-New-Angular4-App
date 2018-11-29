@@ -595,7 +595,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             return o.uniqueName;
           });
 
-          if (window.screen.width > 1366 && window.screen.height > 768) {
+          if (window.innerWidth > 1366 && window.innerHeight > 768) {
             this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
           } else {
             this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
