@@ -535,8 +535,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function(obj: any, idx) {
-      if (obj && !obj.particular) {
+    _.forEach(transactions, function(obj: any) {
+      if (obj && !obj.particular && !obj.amount) {
         transactions = _.without(transactions, obj);
       }
     });
@@ -692,6 +692,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     _.forEach(data.transactions, (element: any) => {
       element.type = (element.type === 'by') ? 'debit' : 'credit';
     });
+
+    if (data.voucherType === 'Sales') {
+      _.forEach(data.transactions, (element: any) => {
+        if (!element.particular) {
+          element.particular = 'sales';
+        }
+      });
+    }
+
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     // data.transactions = this.validateTransaction(data.transactions, 'stock');
     // let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
@@ -1009,17 +1018,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public keyUpOnSubmitButton(e) {
     if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-      return setTimeout(() => this.resetButton.nativeElement.focus(), 200);
+      return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+    }
+    if (e && (e.keyCode === 8 || e.which === 8)) {
+      this.showConfirmationBox = false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
     }
   }
 
   public keyUpOnResetButton(e) {
     if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-      return setTimeout(() => this.submitButton.nativeElement.focus(), 200);
+      return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
     }
     if (e && (e.keyCode === 13 || e.which === 13)) {
       this.showConfirmationBox = false;
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 200);
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
     }
   }
 
