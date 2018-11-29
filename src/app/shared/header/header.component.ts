@@ -204,7 +204,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '28-11-2018';
+  private indexDBReCreationDate: string = '29-11-2018';
   /**
    *
    */
@@ -529,7 +529,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
+    // '/pages/trial-balance-and-profit-loss'
+    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
     const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
     let menuList: IUlist[] = [];
