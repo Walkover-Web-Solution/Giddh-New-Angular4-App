@@ -177,92 +177,93 @@
     </ul>
 
     <!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true"> -->
-        <div class="nav_wrapper">
-                <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-                        <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
-                        <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
-                        <li *ngFor="let acc of accountItemsFromIndexDB">
-                            <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
-                                <span class="icon-dashboard"></span>
-                                <span class="label">{{acc.name}}
-                                    <span class="txtLwc">a/c</span>
-                                </span>
-                            </a>
-                        </li>
-                        <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts" placement="right">Show more...</h6>
-                    </ul>
-            
-                    <ul class="left_fixed_header mrT4 mrB2" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-                        <h6 class="mrB1">MENU</h6>
-                        <li *ngFor="let menu of menuItemsFromIndexDB">
-                            <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
-                                <span class="icon-dashboard"></span>
-                                <span class="label">{{menu.name}}</span>
-                            </a>
-                        </li>
-            
-                        <li>
-                            <a href="javascript:void(0)">Others <i class="fa fa-angle-right pull-right"></i></a>
-                    
-                            <ul class="left-sub-menu">
-                                <li>
-                                    <div class="clearfix">
-                                        <ul>
-                                            <li><a href="#"><strong>General</strong></a></li>
-                                            <li><a routerLink="contact">Customer</a></li>
-                                            <li><a routerLink="contact">Vendor</a></li>
-                                            <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
-                                            <li><a routerLink="daybook">Daybook</a></li>
-                                            <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></li>
-                                            <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }">P&L, B/S</a></li>
-                                        </ul>
-                    
-                                        <ul>
-                                            <li><a href="#"><strong>Invoice</strong></a></li>
-                                            <li><a routerLink="sales">Sales</a></li>
-                                            <li><a routerLink="purchase/create">Purchase</a></li>
-                                            <li><a routerLink="invoice/preview/credit note">Dr/Cr Note</a></li>
-                                            <li><a routerLink="invoice/templates/sales">Template</a></li>
-                                            <li><a routerLink="invoice/preview/sales">Invoice Management</a></li>
-                                        </ul>
-                    
-                                        <ul>
-                                            <li><a href="#"><strong>Inventory</strong></a></li>
-                                            <li><a routerLink="inventory">Inventory</a></li>
-                                            <li><a routerLink="manufacturing/report">Manufacturing</a></li>
-                                            <li><a routerLink="">Job Work *</a></li>
-                                            <li><a routerLink="">Branch Transfer *</a></li>
-                                            <li><a routerLink="">Warehouse *<small>(coming soon)</small></a></li>
-                                        </ul>
-                    
-                                        <ul>
-                                            <li><a href="#"><strong>Settings</strong></a></li>
-                                            <li><a routerLink="permissions/list">Permission</a></li>
-                                            <li><a routerLink="import/select">Import Data</a></li>
-                                            <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'integration', tabIndex: 1 }">Integration</a></li>
-                                            <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></li>
-                                        </ul>
-                    
-                                        <ul>
-                                            <li><a href="#"><strong>Others</strong></a></li>
-                                            <li><a routerLink="audit-logs">Audit Log</a></li>
-                                            <li><a routerLink="search">Search</a></li>
-                                            <li><a routerLink="gstfiling">GSTR</a></li>
-                                            <li><a routerLink="home">Dashboard</a></li>
-                                        </ul>
-                    
-                                    </div>
-                                </li>
+    <div class="nav_wrapper">
+        <ul class="left_fixed_header mrT3" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+            <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+            <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
+            <li *ngFor="let acc of accountItemsFromIndexDB">
+                <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
+                    <span class="icon-dashboard"></span>
+                    <span class="label">{{acc.name}}
+                                    <span class="txtUpc">A/</span>
+                    <span class="txtLwc">c</span>
+                    </span>
+                </a>
+            </li>
+            <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts" placement="right">Show more...</h6>
+        </ul>
+
+        <ul class="left_fixed_header mrT4 mrB2" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+            <h6 class="mrB1">MENU</h6>
+            <li *ngFor="let menu of menuItemsFromIndexDB">
+                <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
+                    <span class="icon-dashboard"></span>
+                    <span class="label">{{menu.name}}</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="javascript:void(0)">Others <i class="fa fa-angle-right pull-right"></i></a>
+
+                <ul class="left-sub-menu">
+                    <li>
+                        <div class="clearfix">
+                            <ul>
+                                <li><a href="#"><strong>General</strong></a></li>
+                                <li><a routerLink="contact">Customer</a></li>
+                                <li><a routerLink="contact">Vendor</a></li>
+                                <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
+                                <li><a routerLink="daybook">Daybook</a></li>
+                                <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></li>
+                                <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }">P&L, B/S</a></li>
                             </ul>
-                        </li>
-                    </ul>
-            
-        </div>
+
+                            <ul>
+                                <li><a href="#"><strong>Invoice</strong></a></li>
+                                <li><a routerLink="sales">Sales</a></li>
+                                <li><a routerLink="purchase/create">Purchase</a></li>
+                                <li><a routerLink="invoice/preview/credit note">Dr/Cr Note</a></li>
+                                <li><a routerLink="invoice/templates/sales">Template</a></li>
+                                <li><a routerLink="invoice/preview/sales">Invoice Management</a></li>
+                            </ul>
+
+                            <ul>
+                                <li><a href="#"><strong>Inventory</strong></a></li>
+                                <li><a routerLink="inventory">Inventory</a></li>
+                                <li><a routerLink="manufacturing/report">Manufacturing</a></li>
+                                <li><a routerLink="">Job Work *</a></li>
+                                <li><a routerLink="">Branch Transfer *</a></li>
+                                <li><a routerLink="">Warehouse *<small>(coming soon)</small></a></li>
+                            </ul>
+
+                            <ul>
+                                <li><a href="#"><strong>Settings</strong></a></li>
+                                <li><a routerLink="permissions/list">Permission</a></li>
+                                <li><a routerLink="import/select">Import Data</a></li>
+                                <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'integration', tabIndex: 1 }">Integration</a></li>
+                                <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></li>
+                            </ul>
+
+                            <ul>
+                                <li><a href="#"><strong>Others</strong></a></li>
+                                <li><a routerLink="audit-logs">Audit Log</a></li>
+                                <li><a routerLink="search">Search</a></li>
+                                <li><a routerLink="gstfiling">GSTR</a></li>
+                                <li><a routerLink="home">Dashboard</a></li>
+                            </ul>
+
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
 
     <!-- </perfect-scrollbar> -->
 
-    
-    
+
+
 </div>
 
 <header class="clearfix header-container">
@@ -275,9 +276,9 @@
                         <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
-                        <h4 class="inline text-capitalize">{{selectedPage}} <span *ngIf="isLedgerAccSelected" class="txtLwc">a/c</span></h4>
+                        <h4 class="inline text-capitalize">{{selectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
                     </li>
-                    
+
                     <!-- books search -->
                     <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
                     <div class="ledger_search form-inline">
@@ -415,14 +416,14 @@
 </div>
 
 
-            <!-- <li [checkPermission]="['MENU', 'DASHBOARD']">
+<!-- <li [checkPermission]="['MENU', 'DASHBOARD']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/home')">
                         <span class="icon-dashboard"></span>
                         <span class="label">Dashboard</span>
                     </a>
                 </li> -->
-            <!-- <li class="divider"></li> -->
-            <!-- <li [checkPermission]="['MENU', 'INVOICE']">
+<!-- <li class="divider"></li> -->
+<!-- <li [checkPermission]="['MENU', 'INVOICE']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/sales')">
                         <span class="icon-sales"></span>
                         <span class="label">Sales</span>
@@ -440,8 +441,8 @@
                         <span class="label">Journal Voucher</span>
                     </a>
                 </li> -->
-            <!-- <li class="divider"></li> -->
-            <!-- <li [checkPermission]="['MENU', 'LEDGER']">
+<!-- <li class="divider"></li> -->
+<!-- <li [checkPermission]="['MENU', 'LEDGER']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/daybook')">
                         <span class="icon-daybook"></span>
                         <span class="label">Daybook</span>
@@ -467,9 +468,9 @@
                         <span class="label">Taxes</span>
                     </a>
                 </li> -->
-            <!-- <li class="divider"></li> -->
+<!-- <li class="divider"></li> -->
 
-            <!-- <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
+<!-- <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/inventory')">
                         <span class="icon-inventory"></span>
                         <span class="label">Inventory</span>
@@ -481,9 +482,9 @@
                         <span class="label">Manufacturing</span>
                     </a>
                 </li> -->
-            <!-- <li class="divider"></li> -->
+<!-- <li class="divider"></li> -->
 
-            <!-- <li [checkPermission]="['MENU', 'SEARCH']">
+<!-- <li [checkPermission]="['MENU', 'SEARCH']">
                     <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/search')">
                         <span class="icon-search"></span>
                         <span class="label">Search</span>
