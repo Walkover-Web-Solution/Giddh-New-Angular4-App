@@ -68,6 +68,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('narrationBox') public narrationBox: ElementRef;
+  @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
+  @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
+  @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
+
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showLedgerAccountList: boolean = false;
@@ -152,7 +156,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public ngOnInit() {
 
     this.chequeDetailForm = this.fb.group({
-      chequeClearanceDate: ['', [Validators.required]],
+      chequeClearanceDate: [''],
       chequeNumber: ['', [Validators.required]]
     }),
 
@@ -357,6 +361,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public openChequeDetailForm(account) {
     this.chequeEntryModal.show();
+    return setTimeout(() => {
+      this.chequeNumberInput.nativeElement.focus();
+    }, 200);
   }
 
   /**
@@ -910,6 +917,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.selectedAccountInputField.focus();
     }, 200);
+  }
+
+  public onCheckNumberFieldKeyDown(e, fieldType: string) {
+    if (e && (e.keyCode === 13 || e.which === 13)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return setTimeout(() => {
+        if (fieldType === 'chqNumber') {
+          this.chequeClearanceDateInput.nativeElement.focus();
+        } else if (fieldType === 'chqDate') {
+          this.chqFormSubmitBtn.nativeElement.focus();
+        }
+      }, 100);
+    }
   }
 
   private deleteRow(idx: number) {
