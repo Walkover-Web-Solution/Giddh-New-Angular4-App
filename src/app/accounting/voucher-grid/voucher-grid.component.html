@@ -138,8 +138,8 @@
           <div class="">
             <h1>Accept?</h1>
             <div class="pdT2">
-              <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button>
-              <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
+              <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)" (click)="saveEntry();">Yes</button>
+              <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)">No</button>
               <br/>
               <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
 
